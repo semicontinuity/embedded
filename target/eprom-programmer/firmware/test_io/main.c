@@ -1,0 +1,75 @@
+// =============================================================================
+// Tests all I/O pins
+// =============================================================================
+
+#include <avr/io.h>
+#include <util/delay.h>
+#include <stdint.h>
+
+/** Preserved during reset */
+volatile uint8_t pin_number __attribute__((section(".noinit")));
+
+
+static void application__init(void) {
+    DDRA = 0xFF;
+    DDRB = 0xFF;
+    DDRC = 0xFF;
+    DDRD = 0xFF;
+}
+
+
+int main(void) {
+    _delay_ms(50);
+    application__init();
+
+
+    PORTA = 0;
+    PORTB = 0;
+    PORTC = 0;
+    PORTD = 0;
+
+    if (pin_number > 0x1F)
+        pin_number = 0;
+
+    switch (pin_number++) {
+    case 0x00: PORTD |= (1<<0); break;
+    case 0x01: PORTD |= (1<<1); break;
+    case 0x02: PORTD |= (1<<2); break;
+    case 0x03: PORTD |= (1<<3); break;
+    case 0x04: PORTD |= (1<<4); break;
+    case 0x05: PORTD |= (1<<5); break;
+    case 0x06: PORTD |= (1<<6); break;
+    case 0x07: PORTD |= (1<<7); break;
+
+    case 0x08: PORTB |= (1<<0); break;
+    case 0x09: PORTB |= (1<<1); break;
+    case 0x0A: PORTB |= (1<<2); break; 
+    case 0x0B: PORTB |= (1<<3); break; 
+    case 0x0C: PORTB |= (1<<4); break;
+    case 0x0D: PORTB |= (1<<5); break;
+    case 0x0E: PORTB |= (1<<6); break;
+    case 0x0F: PORTB |= (1<<7); break;
+
+    case 0x10: PORTC |= (1<<0); break;
+    case 0x11: PORTC |= (1<<1); break;
+    case 0x12: PORTC |= (1<<2); break;
+    case 0x13: PORTC |= (1<<3); break;
+    case 0x14: PORTC |= (1<<4); break;
+    case 0x15: PORTC |= (1<<5); break;
+    case 0x16: PORTC |= (1<<6); break;
+    case 0x17: PORTC |= (1<<7); break;
+
+    case 0x18: PORTD |= (1<<0); break;
+    case 0x19: PORTD |= (1<<1); break;
+    case 0x1A: PORTD |= (1<<2); break;
+    case 0x1B: PORTD |= (1<<3); break;
+    case 0x1C: PORTD |= (1<<4); break;
+    case 0x1D: PORTD |= (1<<5); break;
+    case 0x1E: PORTD |= (1<<6); break;
+    case 0x1F: PORTD |= (1<<7); break;
+    }
+
+
+    while (1);
+}
+
