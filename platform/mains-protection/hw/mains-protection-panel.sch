@@ -5516,6 +5516,7 @@ Source: AVX .. aphvc.pdf</description>
 <text x="5.08" y="193.04" size="2.54" layer="94">based on</text>
 <text x="83.82" y="66.04" size="2.54" layer="94">Calculate values of resistors according to the desired brightness</text>
 <text x="119.38" y="142.24" size="2.54" layer="94">The firmware is for ATMEGA48</text>
+<text x="165.1" y="114.3" size="1.778" layer="94">LED is moved to PD3+PD4 to free up serial port</text>
 </plain>
 <instances>
 <instance part="IC1" gate="G$1" x="137.16" y="106.68"/>

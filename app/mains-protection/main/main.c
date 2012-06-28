@@ -455,10 +455,6 @@ INLINE void update_voltage(uint16_t value) {
 
 INLINE void on_voltage_measured (uint16_t reading) {
 
-#ifdef DEBUG__MEASURE_VOLTAGE_ON_KEY_PRESS
-    zero_cross_detector__stop();
-#endif
-
 /*
     voltage_integral += MAKE_WORD(ADCL, ADCH);
 
@@ -479,6 +475,11 @@ INLINE void on_voltage_measured (uint16_t reading) {
     uint16_t mult = (uint16_t)52650UL;
     uint16_t voltage;
     MultiU16X16toH16(voltage, reading, mult);
+
+#ifdef DEBUG__MEASURE_VOLTAGE_ON_KEY_PRESS
+    zero_cross_detector__stop();
+    update_voltage(voltage);    
+#endif
 
 #ifdef ENABLE_VOLTAGE_MONITOR
 
@@ -515,10 +516,7 @@ INLINE void on_voltage_measured (uint16_t reading) {
         update_voltage(voltage_integral >> 6);
         voltage_integral = 0;
     }
-#else
-    update_voltage(voltage>> 6);    
 #endif
-
 }
 
 
@@ -562,8 +560,7 @@ int main(void)
     zero_cross_detector__start();
 #endif
 
-    //sleep_enable(); // IDLE mode by default
-    //system_timer__loop();
-for(;;);
+    sleep_enable(); // IDLE mode by default
+    system_timer__loop();
     return 0;
 }

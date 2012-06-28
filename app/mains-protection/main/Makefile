@@ -11,9 +11,9 @@ CINCS += -I../../../cpu/avr/util
 vpath %.c  ../../../platform/mains-protection ../../../cpu/avr ../../../cpu/avr/drivers ../../../cpu/avr/util
 
 
-#CDEFS += -DENABLE_VOLTAGE_MONITOR
-#CDEFS += -DENABLE_VOLTAGE_AVERAGING
-CDEFS += -DDEBUG__MEASURE_VOLTAGE_ON_KEY_PRESS
+CDEFS += -DENABLE_VOLTAGE_MONITOR
+CDEFS += -DENABLE_VOLTAGE_AVERAGING
+#CDEFS += -DDEBUG__MEASURE_VOLTAGE_ON_KEY_PRESS
 
 
 # Compile all sources in one compilation util (because of the absent link-time optimizations)
