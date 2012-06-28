@@ -1,0 +1,13 @@
+// Direction:	Output
+// AVR port:	PB
+#define DISPLAY_SEGMENTS_PORT     (PORTB)
+#define DISPLAY_SEGMENTS_DIR      (DDRB)
+
+#define DISPLAY_SEGMENT_A_PIN	(0)
+#define DISPLAY_SEGMENT_B_PIN	(5)
+#define DISPLAY_SEGMENT_C_PIN	(2)
+#define DISPLAY_SEGMENT_D_PIN	(1)
+#define DISPLAY_SEGMENT_E_PIN	(6)
+#define DISPLAY_SEGMENT_F_PIN	(4)
+#define DISPLAY_SEGMENT_G_PIN	(3)
+#define DISPLAY_SEGMENT_DP_PIN	(7)
