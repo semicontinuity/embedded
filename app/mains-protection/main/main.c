@@ -33,6 +33,7 @@
 
 #include "cpu/avr/util/bcd.h"
 #include "cpu/avr/util/mult16x16.h"
+#include "cpu/avr/drivers/display_segment.h"
 #include "cpu/avr/drivers/display_segment_3_thread.h"
 #include "cpu/avr/drivers/display_segment_3_numeric.h"
 
@@ -61,13 +62,14 @@
 #define MODE__EDIT_VOLTAGE_MIN  (2)
 #define MODE__EDIT_ON_DELAY     (3)
 #define MODE__EDIT_ANGLE        (4)
+#define MODE__EDIT_BUZZER       (5)
 
 #define is_voltage_display_mode() (!mode)
 
 
-//#define seconds_to_turn_on GPIOR1
-volatile uint8_t  seconds_to_turn_on;
-//register uint8_t  seconds_to_turn_on asm("r14");
+//#define time_to_turn_on GPIOR1
+volatile uint8_t  time_to_turn_on;
+//register uint8_t  time_to_turn_on asm("r14");
 
 
 #ifdef ENABLE_VOLTAGE_AVERAGING
@@ -101,16 +103,19 @@ uint16_t voltage_max;
 uint16_t voltage_min;
 
 //register uint8_t on_delay       asm("r12");
-uint8_t on_delay;
+uint16_t on_delay;
 
 //register uint8_t angle          asm("r13");
 uint8_t angle;
+
+uint8_t buzzer;
 
 
 uint16_t t_voltage_max;
 uint16_t t_voltage_min;
 uint8_t  t_on_delay;
 uint8_t  t_angle;
+uint8_t  t_buzzer;
 
 // =============================================================================
 // Data in EEPROM.
@@ -119,8 +124,9 @@ uint8_t  t_angle;
 
 uint8_t  EEMEM          ee_voltage_max	= (uint8_t)(280 - 256);
 uint8_t  EEMEM          ee_voltage_min  = (uint8_t)(180 - 256);
-uint8_t  EEMEM          ee_on_delay     = 60;
+uint8_t  EEMEM          ee_on_delay     = 6;
 uint8_t  EEMEM          ee_angle        = 130;
+uint8_t  EEMEM          ee_buzzer       = 1;
 
 
 // =============================================================================
@@ -132,9 +138,7 @@ inline void to_load_off_state(void) {
     state = new_state;
     relay__on(); // Relay on = disconnect load
     if (is_voltage_display_mode()) led_thread__mode__set(new_state);
-#ifdef ENABLE_BUZZER
-    buzzer__start();
-#endif
+    if (buzzer) buzzer__start();
 }
 
 inline void to_load_on_state(void) {                
@@ -150,18 +154,14 @@ inline void to_persistent_off_state(void) {
     state = new_state;
     led_thread__mode__set(new_state);
     relay__on(); // Relay on = disconnect load
-#ifdef ENABLE_BUZZER
     buzzer__stop();
-#endif
 }
 
 inline void to_on_delay_state(void) {
     uint8_t new_state = STATE__ON_DELAY;
     state = new_state;
     if (is_voltage_display_mode()) led_thread__mode__set(new_state);
-#ifdef ENABLE_BUZZER
     buzzer__stop();
-#endif
 }
 
 // =============================================================================
@@ -173,6 +173,7 @@ inline void model__init(void) {
    t_voltage_min  = voltage_min  = 256 + (int8_t)eeprom_read_byte(&ee_voltage_min);
    t_on_delay     = on_delay     = eeprom_read_byte(&ee_on_delay);
    t_angle        = angle        = eeprom_read_byte(&ee_angle);
+   t_buzzer       = buzzer       = eeprom_read_byte(&ee_buzzer);
 
 #ifdef ENABLE_VOLTAGE_MONITOR
    if (on_delay) {
@@ -218,6 +219,13 @@ inline void write_angle(void) {
     }
 }
 
+inline void write_buzzer(void) {
+    if (t_buzzer != buzzer) {
+        eeprom_write_byte(&ee_buzzer, t_buzzer);
+        buzzer = t_buzzer;
+    }
+}
+
 // =============================================================================
 // Displaying voltage and parameters
 // =============================================================================
@@ -243,8 +251,10 @@ inline void display_voltage_min(void) {
 
 inline void display_on_delay(void) {
     // display message "OFF" if t_on_delay is 0
-    if (t_on_delay)
-        display_bcd(t_on_delay);
+    if (t_on_delay) {
+        uint16_t number = uint9_to_bcd(t_on_delay) << 4;
+        numeric_display__set(number);
+    }
     else
         numeric_display__set(0x0FF);
 }
@@ -252,6 +262,21 @@ inline void display_on_delay(void) {
 inline void display_angle(void) {
     display_bcd(t_angle);
 }
+
+inline void display_buzzer(void) {
+    // display message "On" or "OFF" 
+    if (t_buzzer) {
+       display_thread__segments[0] = DISPLAY_SEGMENT_VALUE_EMPTY;
+       display_thread__segments[1] = DISPLAY_SEGMENT_VALUE_0;
+       display_thread__segments[2] = DISPLAY_SEGMENT_VALUE_n;
+    }
+    else {
+       display_thread__segments[0] = DISPLAY_SEGMENT_VALUE_0;
+       display_thread__segments[1] = DISPLAY_SEGMENT_VALUE_F;
+       display_thread__segments[2] = DISPLAY_SEGMENT_VALUE_F;
+    }
+}
+
 
 // =============================================================================
 // Switching UI modes
@@ -292,6 +317,14 @@ inline void to_edit_angle_mode(void) {
     display_thread__blink__on(); // optimizable (blink is already on)
 }
 
+inline void to_edit_buzzer_mode(void) {
+    mode = MODE__EDIT_BUZZER;
+    led_thread__mode__set(LED_THREAD__MODE__RED_BLACK);
+    display_buzzer();
+    display_thread__blink__on(); // optimizable (blink is already on)
+}
+
+
 // =============================================================================
 // UI Controller
 // =============================================================================
@@ -317,7 +350,7 @@ inline void ui_controller__run(void) {
         }
         if (button3__was_just_pressed()) { // Try to turn on manually
 #ifdef ENABLE_VOLTAGE_MONITOR
-            seconds_to_turn_on = 0; // after next voltage measurument, if it is ok, turn on.
+            time_to_turn_on = 0; // after next voltage measurument, if it is ok, turn on.
             to_on_delay_state();    // optimizable (always in Display Voltage mode)
 #else
             to_load_on_state();
@@ -341,7 +374,7 @@ inline void ui_controller__run(void) {
                 display_voltage_max();
             }
             if (button2__was_just_released() | button3__was_just_released()) {
-                display_thread__blink__off();
+                display_thread__blink__on();
             }
         }
         break;
@@ -362,7 +395,7 @@ inline void ui_controller__run(void) {
                 display_voltage_min();
             }
             if (button2__was_just_released() | button3__was_just_released()) {
-                display_thread__blink__off();
+                display_thread__blink__on();
             }
         }
         break;
@@ -377,20 +410,20 @@ inline void ui_controller__run(void) {
                 display_thread__blink__off();
                 display_on_delay();
             }
-            if (button3__was_just_pressed_or_repeated() && (t_on_delay < 255)) {
+            if (button3__was_just_pressed_or_repeated() && (t_on_delay < 60)) {
                 ++t_on_delay;
                 display_thread__blink__off();
                 display_on_delay();
             }
             if (button2__was_just_released() | button3__was_just_released()) {
-                display_thread__blink__off();
+                display_thread__blink__on();
             }
         }
         break;
     case MODE__EDIT_ANGLE:    
         if (button1__was_just_pressed()) {
             write_angle();
-            to_voltage_display_mode();
+            to_edit_buzzer_mode();
         }
         else {
             if (button2__was_just_pressed_or_repeated() && (t_angle > 2)) {
@@ -404,7 +437,23 @@ inline void ui_controller__run(void) {
                 display_angle();
             }
             if (button2__was_just_released() | button3__was_just_released()) {
-                display_thread__blink__off();
+                display_thread__blink__on();
+            }
+        }
+        break;
+    case MODE__EDIT_BUZZER:    
+        if (button1__was_just_pressed()) {
+            write_buzzer();
+            to_voltage_display_mode();
+        }
+        else {
+            if (button2__was_just_pressed_or_repeated() && (t_buzzer > 0)) {
+                t_buzzer = 0;
+                display_buzzer();
+            }
+            if (button3__was_just_pressed_or_repeated() && (t_buzzer == 0)) {
+                t_buzzer = 1;
+                display_buzzer();
             }
         }
         break;
@@ -433,10 +482,11 @@ INLINE void on_phase_off(void) {
 }
 
 INLINE void on_second_tick(void) {
-    if (seconds_to_turn_on > 0) --seconds_to_turn_on;
 }
 
 INLINE void on_ten_seconds_tick(void) {
+    if (time_to_turn_on > 0) --time_to_turn_on;
+
 //    display_bcd(frequency);
 //    numeric_display__add_comma_to_second_digit();
 //    frequency_counter__reset();
@@ -472,7 +522,7 @@ INLINE void on_voltage_measured (uint16_t reading) {
 //    uint16_t voltage = (temp) >> 16;
 
 
-    uint16_t mult = (uint16_t)52650UL;
+    uint16_t mult = (uint16_t)VOLTAGE_MULTIPLIER;
     uint16_t voltage;
     MultiU16X16toH16(voltage, reading, mult);
 
@@ -496,10 +546,10 @@ INLINE void on_voltage_measured (uint16_t reading) {
 //        debug__write('.');
         if (state == STATE__LOAD_OFF) {
             to_on_delay_state();
-            seconds_to_turn_on = on_delay;
+            time_to_turn_on = on_delay;
         }
         else {
-            if (state == STATE__ON_DELAY && seconds_to_turn_on == 0) {
+            if (state == STATE__ON_DELAY && time_to_turn_on == 0) {
                 to_load_on_state();
             }
         }
@@ -537,9 +587,7 @@ int main(void)
     buttons__init();
 
     relay__init();
-#ifdef ENABLE_BUZZER
     buzzer__init();
-#endif
 
     model__init();
     ui_controller__init();
