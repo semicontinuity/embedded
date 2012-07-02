@@ -6,11 +6,13 @@
 
 #include "cpu/avr/gpio.h"
 
-#include "mcp251x/bitdefs.h"
-#include "mcp251x/registers.h"
-#include "mcp251x/operations.h"
-#include "mcp251x/opmodes.h"
-#include "mcp251x/struct.h"
+#include "cpu/avr/drivers/mcp251x/bitdefs.h"
+#include "cpu/avr/drivers/mcp251x/registers.h"
+#include "cpu/avr/drivers/mcp251x/operations.h"
+#include "cpu/avr/drivers/mcp251x/opmodes.h"
+#include "cpu/avr/drivers/mcp251x/struct.h"
+
+
 
 #define CANP_DEVICE_NET			(0x01)
 #define CANP_DEVICE_ADDR		(0x01)

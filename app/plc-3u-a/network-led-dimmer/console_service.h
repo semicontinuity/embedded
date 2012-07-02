@@ -4,8 +4,8 @@
 #include "device.h"
 #include "cpu/avr/usart0.h"
 
-static void console_service__init(void) {
-//    CONFIGURE_AS_OUTPUT(TX);
+
+inline void console_service__init(void) {
     usart__rate__set(USART_BAUD_RATE);
     usart__init();
     usart__out__enabled__set();

@@ -1,13 +1,11 @@
 #include "device.h"
-#include "dimmer.h"
+#include "platform/plc-3u-a/pwm.h"
 
 #include <avr/interrupt.h>
 
  __attribute__ ((noreturn))
 void main(void)
 {
-    pwm_init();
-
     colors[0] = 0;
     colors[1] = 50;
     colors[2] = 100;
@@ -15,7 +13,9 @@ void main(void)
     colors[4] = 200;
     colors[5] = 255;
 
-    pwm_start();
+
+    pwm__init();
+    pwm__start();
 
     sei();
     while(1);

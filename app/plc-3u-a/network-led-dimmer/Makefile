@@ -15,7 +15,7 @@ SRC += main.c
 SRC += console_service.c
 SRC += parse.c
 
-SRC += platform/plc-3u-a/dimmer.c
+SRC += platform/plc-3u-a/pwm.c
 SRC += cpu/avr/drivers/mcp251x/operations.c
 SRC += cpu/avr/util/debug.c
 

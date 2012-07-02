@@ -1,5 +1,5 @@
-#ifndef __CPU_AVR_SIGNAL_H
-#define __CPU_AVR_SIGNAL_H
+#ifndef __CPU_AVR_SPI_H
+#define __CPU_AVR_SPI_H
 
 #include <avr/sfr_defs.h>
 #include <avr/io.h>
