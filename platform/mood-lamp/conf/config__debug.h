@@ -1,0 +1,1 @@
+#define debug_putc uart_transmit_char_polled
