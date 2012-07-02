@@ -2,7 +2,7 @@
 #define __DEVICE_H
 
 // MCU peripherals
-#include "cpu/avr/mx8__timer0.h"
+#include "cpu/avr/timer0.h"
 
 // user signals
 #include "signal__led_r.h"

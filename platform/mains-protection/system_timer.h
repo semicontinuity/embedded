@@ -21,7 +21,7 @@
 #include <stdint.h>
 #include "device.h"
 #include "cpu/avr/gpio.h"
-#include "cpu/avr/mx8__timer2.h"
+#include "cpu/avr/timer2.h"
 
 
 INLINE void on_phase_on(void);

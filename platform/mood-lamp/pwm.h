@@ -3,7 +3,7 @@
 
 #include "device.h"
 #include "cpu/avr/gpio.h"
-#include "cpu/avr/mx8__timer0.h"
+#include "cpu/avr/timer0.h"
 #include <stdint.h>
 
 

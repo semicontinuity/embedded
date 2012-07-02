@@ -33,7 +33,7 @@
     PWM_DIR |= _BV(PWM_0_PIN)|_BV(PWM_1_PIN)|_BV(PWM_2_PIN)|_BV(PWM_3_PIN)|_BV(PWM_4_PIN)|_BV(PWM_5_PIN);\
 } while(0)
 
-#include "cpu/avr/m8__timer0.h"
+#include "cpu/avr/timer0.h"
 
 #define pwm_start() do {\
     timer0__overflow_interrupt_enable();\

@@ -15,7 +15,7 @@
 
 #include "device.h"
 #include "cpu/avr/gpio.h"
-#include "cpu/avr/mx8__timer0.h"
+#include "cpu/avr/timer0.h"
 
 inline void buzzer__init(void) {
     USE_AS_OUTPUT(BUZZER);

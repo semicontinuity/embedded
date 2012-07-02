@@ -1,20 +1,7 @@
-#ifndef __MX8__TIMER0_H
-#define __MX8__TIMER0_H
+#ifndef __CPU_AVR_TIMER0_MX8_H
+#define __CPU_AVR_TIMER0_MX8_H
 
 #include <avr/io.h>
-
-
-// Timer 0 counts always from 0 to 255
-// There are the following 8 modes:
-//
-#define TIMER0_MODE_STOPPED		(0)
-#define TIMER0_MODE_RUN_NO_PRESCALER	(                        _BV(CS00))
-#define TIMER0_MODE_RUN_PRESCALER_8	(            _BV(CS01)            )
-#define TIMER0_MODE_RUN_PRESCALER_64	(            _BV(CS01) | _BV(CS00))
-#define TIMER0_MODE_RUN_PRESCALER_256	(_BV(CS02)                        )
-#define TIMER0_MODE_RUN_PRESCALER_1024	(_BV(CS02)             | _BV(CS00))
-#define TIMER0_MODE_RUN_EXT_CLK_FALLING	(_BV(CS02) | _BV(CS01)            )
-#define TIMER0_MODE_RUN_EXT_CLK_RISING	(_BV(CS02) | _BV(CS01) | _BV(CS00))
 
 
 #define timer0__overflow_interrupt_enable() do {\
