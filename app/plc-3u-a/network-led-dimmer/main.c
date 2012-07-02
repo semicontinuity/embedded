@@ -5,6 +5,7 @@
 #include "platform/plc-3u-a/can.h"
 #include "platform/plc-3u-a/pwm.h"
 #include "console_service.h"
+#include "can_service.h"
 
 __attribute__ ((noreturn))
 int main(void)
@@ -18,6 +19,9 @@ int main(void)
 
     can__init();
     can__start();
+
+    can_service__init();
+    can_service__start();
 
     sei();
     console_service__run();

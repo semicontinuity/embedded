@@ -23,7 +23,7 @@ extern mcp251x_message_id rxm0_1[2];
 
 
 
-static inline void can__init(void) {
+inline void can__init(void) {
     // Rely on HW reset 
     STROBED_LOW (SS, mcp251x_reset());
     _delay_us(50); // >2
@@ -37,11 +37,7 @@ static inline void can__init(void) {
 }
 
 
-static inline void can__start(void) {
-    // enable external interrupt from INT1 pin, falling edge
-    MCUCR = _BV(ISC11);
-    GICR  = _BV(INT1);
-    STROBED_LOW (SS, mcp251x_write_byte (MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)));
+inline void can__start(void) {
     STROBED_LOW (SS, mcp251x_write_byte (MCP251X_REGISTER_CANCTRL, MCP251X_OPMODE_NORMAL));
 }
 
