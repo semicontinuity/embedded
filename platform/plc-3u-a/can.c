@@ -8,16 +8,16 @@
 
 
 // RX Filters 0-2
-extern mcp251x_message_id rxf0_2[3] = {
+mcp251x_message_id rxf0_2[3] = {
     RXF0, RXF1, RXF2
 };
 
 // RX Filters 3-5
-extern mcp251x_message_id rxf3_5[3] = {
+mcp251x_message_id rxf3_5[3] = {
     RXF3, RXF4, RXF5
 };
 
 // RX Masks 0 and 1
-extern mcp251x_message_id rxm0_1[2] = {
+mcp251x_message_id rxm0_1[2] = {
     RXM0, RXM1
 };

@@ -1,6 +1,7 @@
 #ifndef __CONFIG__CAN_H
 #define __CONFIG__CAN_H
 
+#include "cpu/avr/drivers/mcp251x/canp.h"
 
 // Filters and mask for RX Buffer 0
 #define RXM0	CANP_MASK	(0, 0, 0, CANP_COMPARE_HOST_NET,	CANP_COMPARE_HOST_ADDR,	0, 0, 0)
