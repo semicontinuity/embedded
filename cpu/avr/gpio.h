@@ -35,4 +35,11 @@
 #define IS_1(signal)                 (bit_is_set (PIN_REG(CONCAT(signal,__PORT)), signal##__PIN))
 
 
+
+#define STROBED_LOW(signal, op) do {\
+    OUT_0(signal);\
+    op;\
+    OUT_1(signal);\
+} while(0)
+
 #endif // __GPIO_H

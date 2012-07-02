@@ -6,7 +6,7 @@
 #include "cpu/avr/timer0.h"
 
 
-extern volatile uint8_t colors[6];
+extern volatile uint8_t colors[8];
 
 
 inline void pwm__init(void) {

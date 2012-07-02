@@ -1,15 +1,18 @@
 #include "device.h"
+#include "stdint.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include "avr/cpu/util/debug.h"
-#include "dimmer.h"
+#include "cpu/avr/gpio.h"
+#include "cpu/avr/util/debug.h"
+#include "platform/plc-3u-a/pwm.h"
 
-#include "avr/cpu/drivers/mcp251x/instructions.h"
-#include "avr/cpu/drivers/mcp251x/registers.h"
-#include "avr/cpu/drivers/mcp251x/operations.h"
-#include "avr/cpu/drivers/mcp251x/struct.h"
-#include "avr/cpu/drivers/mcp251x/interrupt-codes.h"
+#include "cpu/avr/drivers/mcp251x/bitdefs.h"
+#include "cpu/avr/drivers/mcp251x/instructions.h"
+#include "cpu/avr/drivers/mcp251x/registers.h"
+#include "cpu/avr/drivers/mcp251x/operations.h"
+#include "cpu/avr/drivers/mcp251x/struct.h"
+#include "cpu/avr/drivers/mcp251x/interrupt-codes.h"
 
 
 #define COPY_8_BYTES(dst_start, src_start)	do {	\
@@ -22,7 +25,7 @@
     *dst++ = *src++;	\
     *dst++ = *src++;	\
     *dst++ = *src++;	\
-    *dst++ = *src++;	\
+    *dst = *src;	\
 } while(0)
 
 
@@ -30,7 +33,7 @@ static volatile mcp251x_message_buffer buffer;
 
 
 static void handle_rx(void) {
-    WITH_SS (mcp251x_read_bytes((uint8_t*)&buffer.header, MCP251X_REGISTER_RXB0SIDH, sizeof(mcp251x_frame_header)));
+    STROBED_LOW (SS, mcp251x_read_bytes((uint8_t*)&buffer.header, MCP251X_REGISTER_RXB0SIDH, sizeof(mcp251x_frame_header)));
     uint8_t slot = CANP_SLOT_BITS(buffer.header.id);    
 
     // Assume that extended frame was received.
@@ -44,16 +47,16 @@ static void handle_rx(void) {
         if (CANP_AUX_BITS(buffer.header.id)) {
             // Read ROM
             memcpy_P((void*)buffer.data, (PGM_VOID_P)(slot * 8), buffer.header.dlc);
-            WITH_SS (mcp2515_load_tx_buffer ((uint8_t*)&buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, sizeof(buffer)));
-            WITH_SS (mcp2515_request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
+            STROBED_LOW (SS, mcp2515_load_tx_buffer ((uint8_t*)&buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, sizeof(buffer)));
+            STROBED_LOW (SS, mcp2515_request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
             // TODO: check TXREQ
         }
         else {
             // Read RAM request
             if (slot == 0) {
                 COPY_8_BYTES(buffer.data, colors);
-                WITH_SS (mcp2515_load_tx_buffer ((uint8_t*)&buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, sizeof(buffer)));
-                WITH_SS (mcp2515_request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
+                STROBED_LOW (SS, mcp2515_load_tx_buffer ((uint8_t*)&buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, sizeof(buffer)));
+                STROBED_LOW (SS, mcp2515_request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
                 // TODO: check TXREQ
             }
         }
@@ -61,7 +64,7 @@ static void handle_rx(void) {
     else {
         // Received PUT request
         if (!CANP_AUX_BITS(buffer.header.id) && slot == 0) {
-            WITH_SS (mcp251x_read_bytes((uint8_t*)buffer.data, MCP251X_REGISTER_RXB0D0, sizeof(buffer.data)));
+            STROBED_LOW (SS, mcp251x_read_bytes((uint8_t*)buffer.data, MCP251X_REGISTER_RXB0D0, sizeof(buffer.data)));
             COPY_8_BYTES(colors, buffer.data);
         }        
     }
