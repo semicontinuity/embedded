@@ -17,11 +17,11 @@
 #define TIMER0_MODE_RUN_T0_RISING	(_BV(CS02) | _BV(CS01) | _BV(CS00))
 
 
-#define timer0__interrupt_enable() do {\
+#define timer0__overflow_interrupt_enable() do {\
     TIMSK  |= _BV(TOIE0); 	/* enable interrupts on timer 0 overflow */ \
 } while(0)
 
-#define timer0__interrupt_disable() do {\
+#define timer0__overflow_interrupt_disable() do {\
     TIMSK  &= ~_BV(TOIE0); 	/* disable interrupts on timer 0 overflow */ \
 } while(0)
 

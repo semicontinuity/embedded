@@ -506,6 +506,7 @@ $(TARGET).elf: $(OBJ)
 $(OBJDIR)/%.o : %.c
 	@echo
 	@echo $(MSG_COMPILING) $<
+	@mkdir -p $(dir $@)
 	$(CC) -c $(ALL_CFLAGS) $< -o $@
 
 

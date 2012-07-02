@@ -1,0 +1,20 @@
+#ifndef __MCP251X_MESSAGE_BUFFER_OFFSETS_H
+#define __MCP251X_MESSAGE_BUFFER_OFFSETS_H
+
+// Offsets inside message buffer, relative to *CTRL register
+#define MCP251X_OFFSET_CTRL		(0x00)
+#define MCP251X_OFFSET_SIDH		(0x01)
+#define MCP251X_OFFSET_SIDL		(0x02)
+#define MCP251X_OFFSET_EID8		(0x03)
+#define MCP251X_OFFSET_EID0		(0x04)
+#define MCP251X_OFFSET_DLC		(0x05)
+#define MCP251X_OFFSET_D0		(0x06)
+#define MCP251X_OFFSET_D1		(0x07)
+#define MCP251X_OFFSET_D2		(0x08)
+#define MCP251X_OFFSET_D3		(0x09)
+#define MCP251X_OFFSET_D4		(0x0A)
+#define MCP251X_OFFSET_D5		(0x0B)
+#define MCP251X_OFFSET_D6		(0x0C)
+#define MCP251X_OFFSET_D7		(0x0D)
+
+#endif

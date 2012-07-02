@@ -1,0 +1,9 @@
+#ifndef __MCP251X_CLOCK_PRESCALERS_H
+#define __MCP251X_CLOCK_PRESCALERS_H
+
+#define MCP251X_SCLK_DIV_1		(0x00)
+#define MCP251X_SCLK_DIV_2		(0x01)
+#define MCP251X_SCLK_DIV_4		(0x02)
+#define MCP251X_SCLK_DIV_8		(0x03)
+
+#endif
