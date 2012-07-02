@@ -1,5 +1,5 @@
-#ifndef __MCP251X_OPERATIONS_H
-#define __MCP251X_OPERATIONS_H
+#ifndef __CPU__AVR__DRIVERS__MCP251X__OPERATIONS_H
+#define __CPU__AVR__DRIVERS__MCP251X__OPERATIONS_H
 
 #include "device.h"
 

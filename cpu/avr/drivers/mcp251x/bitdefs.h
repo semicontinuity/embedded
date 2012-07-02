@@ -1,5 +1,5 @@
-#ifndef __MCP251X_FLAGS_H
-#define __MCP251X_FLAGS_H
+#ifndef __CPU__AVR__DRIVERS__MCP251X__BITDEFS_H
+#define __CPU__AVR__DRIVERS__MCP251X__BITDEFS_H
 
 // Bit definitions for register CANSTAT
 #define MCP251X_ICOD0		(1)

@@ -1,5 +1,5 @@
-#ifndef __MCP251X_STRUCT_H
-#define __MCP251X_STRUCT_H
+#ifndef __CPU__AVR__DRIVERS__MCP251X__STRUCT_H
+#define __CPU__AVR__DRIVERS__MCP251X__STRUCT_H
 
 #include <stdint.h>
 
