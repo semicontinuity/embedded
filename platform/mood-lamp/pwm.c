@@ -12,7 +12,7 @@
 // ----+          +------+---- ...   --+-----------
 
 #include "device.h"
-#include "gpio.h"
+#include "cpu/avr/gpio.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
