@@ -32,27 +32,30 @@
 // =============================================================================
 // usart__rate__set
 // =============================================================================
-#define UBRR_VALUE(baud) ((F_CPU/8/(baud) - 1)/2)
+inline static uint16_t UBRR_VALUE(uint32_t rate) {
+    return (uint16_t)((F_CPU/8/(rate) - 1)/2);
+}
+
 
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__)
 
-inline void usart__rate__set(uint16_t rate) {
-    UBRR0H = (uint8_t)(UBRR_VALUE(rate)/256);
+inline void usart__rate__set(uint32_t rate) {
+    UBRR0H = (uint8_t)(UBRR_VALUE(rate)>>8);
     UBRR0L = (uint8_t)(UBRR_VALUE(rate));
 }
 
 #elif defined(__AVR_ATmega8__)
 
-inline void usart__rate__set(uint16_t rate) {
-    UBRRH = (uint8_t)(UBRR_VALUE(rate)/256);
+inline void usart__rate__set(uint32_t rate) {
+    UBRRH = (uint8_t)(UBRR_VALUE(rate)>>8);
     UBRRL = (uint8_t)(UBRR_VALUE(rate));
 }
 
 #elif defined(__AVR_AT90S2313__)
 
-inline void usart__rate__set(uint8_t rate) {
-    UBRR=(UBRR_VALUE(rate));
+inline void usart__rate__set(uint32_t rate) {
+    UBRR=(uint8_t)(UBRR_VALUE(rate));
 }
 
 #else
