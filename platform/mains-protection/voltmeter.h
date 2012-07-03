@@ -12,7 +12,7 @@
 #define __VOLTMETER_H
 
 #include <stdint.h>
-#include "gpio.h"
+#include "cpu/avr/gpio.h"
 
 /**
  * Initialize the voltmeter.

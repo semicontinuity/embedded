@@ -14,7 +14,6 @@
 #include "cpu/avr/drivers/display_segment_3_thread.h"
 #include "cpu/avr/drivers/display_segment.h"
 
-
 uint8_t const DIGITS[] = {
     DISPLAY_SEGMENT_VALUE_0,
     DISPLAY_SEGMENT_VALUE_1,

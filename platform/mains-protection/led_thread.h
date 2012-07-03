@@ -22,10 +22,8 @@
 #define LED_THREAD__MODE__RED_GREEN     (LED_THREAD__RED          | LED_THREAD__GREEN<<4)
 #define LED_THREAD__MODE__RED           (LED_THREAD__RED          | LED_THREAD__RED<<4  )
 
-INLINE void led_thread__init(void) {
-    led_green__init();
-    led_red__init();
-}
+
+INLINE void led_thread__init(void);
 
 /**
  * Set the LED color to black.

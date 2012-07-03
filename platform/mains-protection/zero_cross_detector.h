@@ -6,6 +6,7 @@
 #ifndef __ZERO_CROSS_DETECTOR_H
 #define __ZERO_CROSS_DETECTOR_H
 
+#include <avr/io.h>
 
 inline void zero_cross_detector__init(void) {
     // INT0 is on PD2, configure internal pull-up.

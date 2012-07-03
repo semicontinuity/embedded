@@ -11,6 +11,11 @@
 volatile uint8_t led_thread__mode;
 
 
+INLINE void led_thread__init(void) {
+    led_green__init();
+    led_red__init();
+}
+
 /**
  * Set the LED color to black.
  * The change is effective immediately.

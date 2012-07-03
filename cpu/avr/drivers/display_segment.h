@@ -25,6 +25,7 @@
 
 #include "device.h"
 #include <stdint.h>
+#include <avr/sfr_defs.h>
 
 
 #define DISPLAY_SEGMENT_VALUE_EMPTY	(~0)

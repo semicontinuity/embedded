@@ -20,6 +20,7 @@
 #include <stdint.h>
 #include "cpu/avr/drivers/display_segment_3_thread.h"
 #include "cpu/avr/drivers/display_segment_3.h"
+#include "cpu/avr/drivers/display_segment.h"
 
 /**
  * The data to be displayed.

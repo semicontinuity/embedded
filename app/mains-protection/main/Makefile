@@ -4,11 +4,7 @@ OPT = 3 -mcall-prologues
 
 CINCS += -I../../../
 CINCS += -I../../../platform/mains-protection
-CINCS += -I../../../platform/mains-protection/conf
-CINCS += -I../../../cpu/avr
-CINCS += -I../../../cpu/avr/drivers
-CINCS += -I../../../cpu/avr/util
-vpath %.c  ../../../platform/mains-protection ../../../cpu/avr ../../../cpu/avr/drivers ../../../cpu/avr/util
+vpath %.c  ../../..
 
 
 CDEFS += -DENABLE_VOLTAGE_MONITOR
@@ -27,17 +23,18 @@ SRC += __all__.c
 else
 
 CDEFS += -DINLINE=
+
 SRC += main.c
-SRC += system_timer.c
-SRC += display_thread.c
-SRC += numeric_display.c
-#SRC += frequency_counter.c
-SRC += voltmeter.c
-SRC += buttons.c
-SRC += bcd.c
-SRC += led_thread.c
-SRC += zero_cross_detector.c
-SRC += buzzer.c
+SRC += cpu/avr/util/bcd.c
+SRC += cpu/avr/drivers/display_segment_3_numeric.c
+SRC += cpu/avr/drivers/display_segment_3_thread.c
+SRC += platform/mains-protection/system_timer.c
+SRC += platform/mains-protection/voltmeter.c
+SRC += platform/mains-protection/buttons.c
+SRC += platform/mains-protection/led_thread.c
+SRC += platform/mains-protection/zero_cross_detector.c
+SRC += platform/mains-protection/buzzer.c
+#SRC += platform/mains-protection/frequency_counter.c
 
 endif
 
