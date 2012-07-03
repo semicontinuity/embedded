@@ -1,10 +1,11 @@
 TARGET = can_router
 MCU = atmega88
 OPT = 3 -mcall-prologues
+ROOT = ../../../..
 
-CINCS += -I../../../
-CINCS += -I../../../platform/plc-6u-a
-vpath %.c  ../../../
+CINCS += -I$(ROOT)
+CINCS += -I$(ROOT)/platform/plc-6u-a
+vpath %.c  $(ROOT)
 
 
 # Compile all sources in one compilation util (because of the absent link-time optimizations)
@@ -30,4 +31,4 @@ SRC += cpu/avr/drivers/mcp251x/operations.c
 endif
 
 
-include ../../../cpu/avr/Makefile
+include $(ROOT)/cpu/avr/Makefile

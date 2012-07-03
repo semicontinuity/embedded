@@ -1,10 +1,11 @@
 TARGET = test
 MCU = atmega8
 OPT = 3 -mcall-prologues
+ROOT = ../../../..
 
-CINCS += -I../../../
-CINCS += -I../../../platform/plc-3u-a/
-vpath %.c  ../../..
+CINCS += -I$(ROOT)
+CINCS += -I$(ROOT)/platform/plc-3u-a/
+vpath %.c  $(ROOT)
 
 
 SRC += main.c
@@ -21,4 +22,4 @@ SRC += cpu/avr/util/debug.c
 CDEFS += -Ddebug__putc=usart__out__write
 
 
-include ../../../cpu/avr/Makefile
+include $(ROOT)/cpu/avr/Makefile

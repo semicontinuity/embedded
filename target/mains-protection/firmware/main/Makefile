@@ -1,10 +1,11 @@
 TARGET = main
 MCU = atmega48
 OPT = 3 -mcall-prologues
+ROOT = ../../../..
 
-CINCS += -I../../../
-CINCS += -I../../../platform/mains-protection
-vpath %.c  ../../..
+CINCS += -I$(ROOT)
+CINCS += -I$(ROOT)/platform/mains-protection
+vpath %.c  $(ROOT)
 
 
 CDEFS += -DENABLE_VOLTAGE_MONITOR
@@ -39,4 +40,4 @@ SRC += platform/mains-protection/buzzer.c
 endif
 
 
-include ../../../cpu/avr/Makefile
+include $(ROOT)/cpu/avr/Makefile
