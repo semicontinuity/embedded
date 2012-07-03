@@ -19,7 +19,7 @@ WHOLE_PROGRAM=1
 
 ifeq ($(WHOLE_PROGRAM),1)
 
-CDEFS += -DINLINE=inline
+CDEFS += -DINLINE=inline static
 SRC += __all__.c
 
 else
