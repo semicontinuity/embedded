@@ -2,9 +2,10 @@ TARGET = main
 MCU = atmega48
 OPT = 3 -mcall-prologues
 ROOT = ../../../..
+BSP = ../../bsp
 
+CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
-CINCS += -I$(ROOT)/platform/mains-protection
 vpath %.c  $(ROOT)
 
 
@@ -29,12 +30,12 @@ SRC += main.c
 SRC += cpu/avr/util/bcd.c
 SRC += cpu/avr/drivers/display_segment_3_numeric.c
 SRC += cpu/avr/drivers/display_segment_3_thread.c
-SRC += platform/mains-protection/system_timer.c
-SRC += platform/mains-protection/voltmeter.c
-SRC += platform/mains-protection/buttons.c
-SRC += platform/mains-protection/led_thread.c
-SRC += platform/mains-protection/zero_cross_detector.c
-SRC += platform/mains-protection/buzzer.c
+SRC += $(BSP)/system_timer.c
+SRC += $(BSP)/voltmeter.c
+SRC += $(BSP)/buttons.c
+SRC += $(BSP)/led_thread.c
+SRC += $(BSP)/zero_cross_detector.c
+SRC += $(BSP)/buzzer.c
 #SRC += platform/mains-protection/frequency_counter.c
 
 endif

@@ -1,5 +1,5 @@
 #include "device.h"
-#include "platform/plc-3u-a/can.h"
+#include "can.h"
 
 #include "cpu/avr/drivers/mcp251x/bitdefs.h"
 #include "cpu/avr/drivers/mcp251x/registers.h"

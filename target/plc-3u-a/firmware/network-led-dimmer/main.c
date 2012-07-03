@@ -2,8 +2,8 @@
 
 #include "device.h"
 
-#include "platform/plc-3u-a/can.h"
-#include "platform/plc-3u-a/pwm.h"
+#include "can.h"
+#include "pwm.h"
 #include "console_service.h"
 #include "can_service.h"
 

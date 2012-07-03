@@ -3,10 +3,10 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#include "pwm.h"
+
 #include "cpu/avr/gpio.h"
 #include "cpu/avr/util/debug.h"
-#include "platform/plc-3u-a/pwm.h"
-
 #include "cpu/avr/drivers/mcp251x/bitdefs.h"
 #include "cpu/avr/drivers/mcp251x/instructions.h"
 #include "cpu/avr/drivers/mcp251x/registers.h"

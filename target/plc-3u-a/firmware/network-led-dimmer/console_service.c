@@ -1,5 +1,6 @@
 #include "device.h"
 #include "console_service.h"
+#include "parse.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -9,8 +10,6 @@
 #include "cpu/avr/drivers/mcp251x/operations.h"
 #include "cpu/avr/util/debug.h"
 #include "cpu/avr/usart0.h"
-
-#include "parse.h"
 
 
 uint8_t input_buffer[16];

@@ -2,13 +2,14 @@ TARGET = test
 MCU = atmega8
 OPT = 3 -mcall-prologues
 ROOT = ../../../..
+BSP = ../../bsp/
 
+CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
-CINCS += -I$(ROOT)/platform/plc-3u-a/
 vpath %.c $(ROOT)
 
 
 SRC += main.c
-SRC += platform/plc-3u-a/pwm.c
+SRC += $(BSP)/pwm.c
 
 include $(ROOT)/cpu/avr/Makefile

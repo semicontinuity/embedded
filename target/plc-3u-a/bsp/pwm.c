@@ -12,7 +12,7 @@
 // ----+          +------+---- ...   --+-----------
 
 #include "device.h"
-#include "platform/plc-3u-a/pwm.h"
+#include "pwm.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
