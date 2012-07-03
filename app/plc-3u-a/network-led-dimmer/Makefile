@@ -3,14 +3,14 @@ MCU = atmega8
 OPT = 3 -mcall-prologues
 
 CINCS += -I../../../
-CINCS += -I../../../platform/plc-3u-a/conf/
+CINCS += -I../../../platform/plc-3u-a/
 vpath %.c  ../../..
 
 
 SRC += main.c
+SRC += can_service.c
 SRC += console_service.c
 SRC += parse.c
-SRC += can_service.c
 
 SRC += platform/plc-3u-a/can.c
 SRC += platform/plc-3u-a/pwm.c

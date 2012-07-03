@@ -7,7 +7,7 @@
 #include "console_service.h"
 #include "can_service.h"
 
-__attribute__ ((noreturn))
+//__attribute__ ((noreturn))
 int main(void)
 {
     console_service__init();
