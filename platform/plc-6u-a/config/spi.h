@@ -1,8 +1,10 @@
 #ifndef __CONFIG__SPI_H
 #define __CONFIG__SPI_H
 
-#include "cpu/avr/spi.h"
+#include <avr/sfr_defs.h>
 #include "cpu/avr/gpio.h"
+#include "cpu/avr/spi.h"
+
 
 // Initialize SPI unit
 // SS Must be configured as output for proper SPI operation, even if it is not use to select the chip.
@@ -14,14 +16,15 @@
 // - CPOL=0: SCK is low when idle 
 // - CPHA=0: Sample on leading edge, setup on trailing edge
 // - SPR0=0, SPR1=0, combined with SPI2X=0: Set clock rate fck/4
+// ( SPR0=1, SPR1=0, combined with SPI2X=0: Set clock rate fck/16)
 // ( SPR0=1, SPR1=1, combined with SPI2X=0: Set clock rate fck/128)
 
 static inline void spi__init(void) {
-    CONFIGURE_AS_OUTPUT(SS);
-    DRIVE_HIGH(SS);
+    USE_AS_OUTPUT(SS);
+    OUT_1(SS);
 //    CONFIGURE_AS_OUTPUT(MOSI);
 //    CONFIGURE_AS_OUTPUT(SCK);
-    SPCR=_BV(SPE)|_BV(MSTR)|_BV(SPR0);
+    SPCR=_BV(SPE)|_BV(MSTR)|_BV(SPR1)|_BV(SPR0);
 }
 
 #endif

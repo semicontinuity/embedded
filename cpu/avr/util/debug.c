@@ -7,20 +7,19 @@
 
 // The user must define "debug__putc" that prints one character debug output
 
-void debug__print_string_progmem(const char *str PROGMEM)
+void debug__print_string_progmem(const char * PROGMEM str)
 {
     for(;;)
     {
-        uint8_t data = pgm_read_byte(str);
+        uint8_t data = pgm_read_byte(str++);
         if (data == 0) break;
         debug__putc(data);
-        str++;
     }
 }
 
 
 // Prefer to spend flash and CPU, save RAM.
-void debug__print_byte_as_hex(uint8_t value)
+void debug__print_byte_as_hex(const uint8_t value)
 {
     uint8_t temp1 = value >> 4;
     if (temp1 > 9) temp1 += ('A' - ('9' + 1));

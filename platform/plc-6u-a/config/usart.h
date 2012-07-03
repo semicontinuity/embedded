@@ -1,0 +1,1 @@
+#define USART_BAUD_RATE (250000UL)

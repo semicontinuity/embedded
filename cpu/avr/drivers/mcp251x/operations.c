@@ -1,6 +1,7 @@
 #include "device.h"
 
 #include <stdint.h>
+#include <avr/pgmspace.h>
 
 #include "cpu/avr/drivers/mcp251x/operations.h"
 #include "cpu/avr/drivers/mcp251x/instructions.h"
@@ -30,6 +31,18 @@ void mcp251x_write_bytes (uint8_t* buffer, const uint8_t address, uint8_t count)
     do
     {
         spi__exchange(*buffer++);
+    }
+    while (--count > 0);
+}
+
+
+void mcp251x_write_bytes_progmem (uint8_t * PROGMEM buffer, const uint8_t address, uint8_t count)
+{
+    spi__exchange(MCP251X_INSTRUCTION_WRITE);
+    spi__exchange(address);
+    do
+    {
+        spi__exchange(pgm_read_byte(buffer++));
     }
     while (--count > 0);
 }

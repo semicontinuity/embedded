@@ -1,12 +1,7 @@
 #include "device.h"
-#include "platform/plc-3u-a/can.h"
-
-#include "cpu/avr/drivers/mcp251x/bitdefs.h"
-#include "cpu/avr/drivers/mcp251x/registers.h"
-#include "cpu/avr/drivers/mcp251x/opmodes.h"
+#include "platform/plc-6u-a/can.h"
 #include "cpu/avr/drivers/mcp251x/struct.h"
 #include <avr/pgmspace.h>
-
 
 // RX Filters 0-2
 mcp251x_message_id rxf0_2[3] PROGMEM = {

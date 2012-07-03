@@ -16,8 +16,8 @@
 //   Blocking write
 // =============================================================================
 
-#ifndef __CPU_AVR_UART0_H
-#define __CPU_AVR_UART0_H
+#ifndef __CPU_AVR_USART0_H
+#define __CPU_AVR_USART0_H
 
 #include "device.h"
 
@@ -35,7 +35,14 @@
 #define UBRR_VALUE(baud) ((F_CPU/8/(baud) - 1)/2)
 
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__) || defined(__AVR_ATmega8__)
+    defined(__AVR_ATmega168__)
+
+inline void usart__rate__set(uint16_t rate) {
+    UBRR0H = (uint8_t)(UBRR_VALUE(rate)/256);
+    UBRR0L = (uint8_t)(UBRR_VALUE(rate));
+}
+
+#elif defined(__AVR_ATmega8__)
 
 inline void usart__rate__set(uint16_t rate) {
     UBRRH = (uint8_t)(UBRR_VALUE(rate)/256);
@@ -67,7 +74,7 @@ inline void usart__init(void) {
 //  USBS=0	1 stop bit
 //  UCSZ=011	8 bit
 //  UCPOL0=0	Polarity: Rising, 0 for Asynch.
-    UCSR0C = (0<<UMSEL01)|(0<<UMSEL00)|(0<<UPM01)|(0<<UPM00)|(0<<USBS)|(3<<UCSZ0)|(0<<UCPOL);
+    UCSR0C = (0<<UMSEL01)|(0<<UMSEL00)|(0<<UPM01)|(0<<UPM00)|(0<<USBS0)|(3<<UCSZ00)|(0<<UCPOL0);
 #elif defined(__AVR_ATmega8__)
     UCSRC = (1<<URSEL)|(0<<UMSEL)|(0<<UPM1)|(0<<UPM0)|(0<<USBS)|(3<<UCSZ0)|(0<<UCPOL);
 #else
@@ -149,11 +156,9 @@ inline void usart__out__write(char c) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) 
     loop_until_bit_is_set(UCSR0A, UDRE0);
-    UCSR0C = (0<<UMSEL01)|(0<<UMSEL00)|(0<<UPM01)|(0<<UPM00)|(0<<USBS)|(3<<UCSZ0)|(0<<UCPOL);
-    UDR = c;
+    UDR0 = c;
 #elif defined(__AVR_ATmega8__)
     loop_until_bit_is_set(UCSRA, UDRE);
-    UCSRC = (1<<URSEL)|(0<<UMSEL)|(0<<UPM1)|(0<<UPM0)|(0<<USBS)|(3<<UCSZ0)|(0<<UCPOL);
     UDR = c;
 #else
     #error "Unsupported MCU"

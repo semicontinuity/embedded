@@ -2,14 +2,16 @@
 #define __CPU__AVR__DRIVERS__MCP251X__OPERATIONS_H
 
 #include "device.h"
-
 #include <stdint.h>
+#include <avr/pgmspace.h>
+
 
 
 void mcp251x_reset (void);
 
 void mcp251x_write_byte (const uint8_t address, const uint8_t data);
 void mcp251x_write_bytes (uint8_t* buffer, const uint8_t address, uint8_t count);
+void mcp251x_write_bytes_progmem (uint8_t * PROGMEM buffer, const uint8_t address, uint8_t count);
 
 uint8_t mcp251x_read_byte (const uint8_t address);
 void mcp251x_read_bytes (uint8_t* buffer, const uint8_t address, uint8_t count);

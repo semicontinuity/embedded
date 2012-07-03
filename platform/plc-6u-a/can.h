@@ -8,6 +8,8 @@
 #include "cpu/avr/drivers/mcp251x/opmodes.h"
 #include "cpu/avr/drivers/mcp251x/struct.h"
 #include "cpu/avr/drivers/mcp251x/operations.h"
+#include <avr/pgmspace.h>
+
 
 // RX Filters 0-2
 extern mcp251x_message_id rxf0_2[3] PROGMEM;
@@ -19,7 +21,7 @@ extern mcp251x_message_id rxf3_5[3] PROGMEM;
 extern mcp251x_message_id rxm0_1[2] PROGMEM;
 
 
-inline static void can__init(void) {
+static inline void can__init(void) {
     // Rely on HW reset 
     MCP251X_SPI_COMM (mcp251x_reset());
     _delay_us(50); // >2

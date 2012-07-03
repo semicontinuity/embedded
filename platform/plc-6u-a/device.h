@@ -1,0 +1,14 @@
+#ifndef __DEVICE_H
+#define __DEVICE_H
+
+#define F_CPU 20000000UL
+
+#include "signal/slot0_select.h"
+
+
+#include "config/usart.h"
+#include "config/spi.h"
+#include "config/can_selector.h"
+#include "config/can.h"
+
+#endif
