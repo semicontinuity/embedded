@@ -2,7 +2,7 @@ TARGET = test
 MCU = atmega48
 OPT = 3 -mcall-prologues
 ROOT = ../../../..
-BSP = ../../bsp
+BSP = ../../bsp/
 
 CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
