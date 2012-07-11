@@ -1,20 +1,21 @@
 #include "device.h"
 
+#include <stdint.h>
 #include <avr/pgmspace.h>
 #include <avr/io.h>
 
 #include "cpu/avr/usart0.h"
 
 
-const prog_uint8_t MESSAGE[]={
+const uint8_t PROGMEM MESSAGE[]={
  'A','T','+','C','M','S','S','='
 };
 
 
 void sendSms(uint8_t index)
 {
-    prog_uint8_t* ptr = MESSAGE;
-    prog_uint8_t* end = (prog_uint8_t*)(MESSAGE + sizeof(MESSAGE));
+    const uint8_t* PROGMEM ptr = MESSAGE;
+    const uint8_t* PROGMEM end = MESSAGE + sizeof(MESSAGE);
     while (ptr <= end)
     {
         usart__out__write(pgm_read_byte(ptr));

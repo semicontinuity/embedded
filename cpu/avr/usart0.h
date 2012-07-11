@@ -40,21 +40,21 @@ inline static uint16_t UBRR_VALUE(uint32_t rate) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__)
 
-inline void usart__rate__set(uint32_t rate) {
+inline static void usart__rate__set(uint32_t rate) {
     UBRR0H = (uint8_t)(UBRR_VALUE(rate)>>8);
     UBRR0L = (uint8_t)(UBRR_VALUE(rate));
 }
 
 #elif defined(__AVR_ATmega8__)
 
-inline void usart__rate__set(uint32_t rate) {
+inline static void usart__rate__set(uint32_t rate) {
     UBRRH = (uint8_t)(UBRR_VALUE(rate)>>8);
     UBRRL = (uint8_t)(UBRR_VALUE(rate));
 }
 
 #elif defined(__AVR_AT90S2313__)
 
-inline void usart__rate__set(uint32_t rate) {
+inline static void usart__rate__set(uint32_t rate) {
     UBRR=(uint8_t)(UBRR_VALUE(rate));
 }
 
@@ -67,7 +67,7 @@ inline void usart__rate__set(uint32_t rate) {
 // usart_init
 // =============================================================================
 
-inline void usart__init(void) {
+inline static void usart__init(void) {
 //           Asynch UART               No parity             1 stopbit  8 bit(+reg B)   polarity
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) 
@@ -106,7 +106,7 @@ inline void usart__in__enabled__set(void) {
 // usart__in__complete__set
 // =============================================================================
 
-inline void usart__in__complete__set(void) {
+inline static void usart__in__complete__set(void) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) 
     set_bit_in_reg(UCSR0B, RXCIE0);
@@ -122,7 +122,7 @@ inline void usart__in__complete__set(void) {
 // usart__out__enabled__set
 // =============================================================================
 
-inline void usart__out__enabled__set(void) {
+inline static void usart__out__enabled__set(void) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) 
     set_bit_in_reg(UCSR0B, TXEN0);
@@ -137,7 +137,7 @@ inline void usart__out__enabled__set(void) {
 // usart_in__read
 // =============================================================================
 
-inline char usart__in__read(void) {
+inline static char usart__in__read(void) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) 
     loop_until_bit_is_set(UCSR0A, RXC0);
@@ -155,7 +155,7 @@ inline char usart__in__read(void) {
 // usart_out__write
 // =============================================================================
 
-inline void usart__out__write(char c) {
+inline static void usart__out__write(char c) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) 
     loop_until_bit_is_set(UCSR0A, UDRE0);

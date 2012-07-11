@@ -8,5 +8,6 @@
 #include "route.c"
 #include "main.c"
 
-#include "target/plc-6u-a/bsp/can.c"
+#include "can.c"
+
 #include "cpu/avr/drivers/mcp251x/operations.c"

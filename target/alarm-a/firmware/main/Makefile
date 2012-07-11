@@ -6,7 +6,7 @@ BSP = ../../bsp
 
 CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
-vpath %.c  $(ROOT)
+vpath %.c  $(BSP) $(ROOT)
 
 
 # Compile all sources in one compilation util (because of the absent link-time optimizations)

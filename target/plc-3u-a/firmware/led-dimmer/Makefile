@@ -6,10 +6,12 @@ BSP = ../../bsp/
 
 CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
-vpath %.c $(ROOT)
+vpath %.c $(BSP) $(ROOT)
 
-
+# Firmware
 SRC += main.c
-SRC += $(BSP)/pwm.c
+
+# BSP
+SRC += pwm.c
 
 include $(ROOT)/cpu/avr/Makefile

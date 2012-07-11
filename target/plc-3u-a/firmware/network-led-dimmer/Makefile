@@ -6,17 +6,20 @@ BSP = ../../bsp/
 
 CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
-vpath %.c  $(ROOT)
+vpath %.c $(BSP) $(ROOT)
 
 
+# Firmware
 SRC += main.c
 SRC += can_service.c
 SRC += console_service.c
 SRC += parse.c
 
-SRC += $(BSP)/can.c
-SRC += $(BSP)/pwm.c
+# BSP
+SRC += can.c
+SRC += pwm.c
 
+# Library
 SRC += cpu/avr/drivers/mcp251x/operations.c
 SRC += cpu/avr/util/debug.c
 
