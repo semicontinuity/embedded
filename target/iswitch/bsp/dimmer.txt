@@ -1,0 +1,47 @@
+r0	temp (print)
+r1	param (print)
+r2	current_control_register
+r3
+r4
+r5
+r6
+r7
+r8	[CAN message]	opcode	action(1)		set(2)	get(3)	invoke(4)
+r9	[CAN message]			channel			channel	channel					SPMSCR
+r10	[CAN message]			logical_button	value			address	address	address
+r11 [CAN message]			action							()		()		(exec_spm)
+	r10:r11 current step
+r12 [CAN message]											address			flashAL
+r13 [CAN message]											address			flashAH
+	r12:r13 current limit
+r14 [CAN message]											data			dataL
+r15 [CAN message]															dataH
+	r14:r15 current brightness
+r16 temp
+r17 temp
+r18 temp (delay,mcp251x)
+r19	keyboard_state
+r20 current_limit*
+r21 current_step*
+r22	previous_buttons_state, change_flags, current_brightness*
+r23	current_buttons_state,
+r24	channel_0_control, current_state_register*
+r25	channel_1_control, current_timeout_register*
+r26 temp ptr
+r27 temp ptr
+r28
+r29
+r30 temp ptr
+r31	temp ptr
+
+
+Used interrupts
+
+INT0/1? (zero cross)
+TIM0_xxx (dimmer timer)
+TIM2_xxx (dimmer timer)
+TIM1_COMPA (keyboard driver)
+Pin change interrupt 1 (keys)?
+Pin change interrupt 2 (CAN controller)?
+
+
