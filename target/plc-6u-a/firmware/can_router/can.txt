@@ -1,0 +1,70 @@
+CAN Protocol
+--------------------------------------------------------------------------------
+
+Message header layout:
+
+SID10 ..     SID3 SID2..0 IDE EID17 EID15  ..    EID8 EID7    ..   EID0
++-+-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+
+|10            3| |2 1 0| |1| |   | |               | |               |
++-+-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+
+|  Long Tag - 11 bits   |           |  Parameter (16 bits)            |
++-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
+|short|   cpty  | | cpty|     |o|a| | host| host    | | slot          |
+| tag | address | | net |     |w|u| |  net| address | |               |
++-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
+
+- Parameter (16 bit): A virtual address, assigned to the 8-byte data item (parameter's value).
+  Consists of:
+  - host subnet and address: identifies the CAN node that hosts the addressed slot.
+  - slot: identifies a parameter within the node.
+
+
+- Short tag (3 bits): used to tag the specific type of traffic. also specifies traffic priority.
+- Counterparty subnet and address: identifies the node, that is a counterparty in the current transaction.
+
+- Owner (1 bit): Set for a packet with the payload, transmitted by the owner of the parameter (from the owner to the client)
+                 Reset for a packet with the payload, transmitted by the non-owner of the parameter (from the client to the owner)
+
+- Auxillary: Auxillary bit, for now used to distinguish ROM (1) and RAM (0) queries. Can also be used to mark broadcast traffic.
+
+The router must examine RTR and OWNER bits, to identify the destination network of the packet.
+
+
+Examples:
+
+
+Client node 001.00001 sets the value of the parameter 010.00010.00000:
+
+ 0 1 1 0 0 0 0 1   0 0 1       0 0   0 1 0 0 0 0 1 0   0 0 0 0 0 0 0 0  (RTR=0: payload)
++-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
+|short|   cpty  | | cpty|     |o|a| | host| host    | | slot          |
+| tag | address | | net |     |w|u| |  net| address | |               | 
++-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
+Router sees that RTR==0 && Owner==0 => destination net is host net
+
+
+
+Query for the value of the parameter 010.00010.00000 from the node 001.00001:
+
+ 0 1 1 0 0 0 0 1   0 0 1       1 0   0 1 0 0 0 0 1 0   0 0 0 0 0 0 0 0  (RTR=1: no payload)
++-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
+|short|   cpty  | | cpty|     |o|a| | host| host    | | slot          |
+| tag | address | | net |     |w|u| |  net| address | |               | 
++-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
+Router sees RTR==1 => destination net is host net
+Owner bit is set to 1 so that query and response headers are the same (to use CAN extender chips)
+If RTR==1 && Owner==0 => semantics undefined yet (
+  e.g: notification to client(s) to invalidate their local copies of the specified parameter?
+  e.g: (non) acknowledgement of the reception of the new value of the parameter
+)
+
+
+The node 010.00010 replies to the node 001.00001 with the value of the parameter 010.00010.00000:
+
+ 0 1 1 0 0 0 0 1   0 0 1       1 0   0 1 0 0 0 0 1 0   0 0 0 0 0 0 0 0  (RTR=0: payload)
++-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
+|short|   cpty  | | cpty|     |o|a| | host| host    | | slot          |
+| tag | address | | net |     |w|u| |  net| address | |               | 
++-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
+Router sees RTR==0 && Owner==1 => destination net is counterparty net
+
