@@ -1,0 +1,5 @@
+motion-sensor-controller is a 3U DIN-rail-mounted device,
+that consists of a base board with ATMega48 MCU and 2 riser boards with 3x RJ-45 connectors each.
+
+The purpose of the device is to interface up to 6 motion sensors.
+  
