@@ -33,9 +33,9 @@
 
 #include "cpu/avr/util/bcd.h"
 #include "cpu/avr/util/mult16x16.h"
-#include "cpu/avr/drivers/display_segment.h"
-#include "cpu/avr/drivers/display_segment_3_thread.h"
-#include "cpu/avr/drivers/display_segment_3_numeric.h"
+#include "cpu/avr/drivers/display/segment/values.h"
+#include "cpu/avr/drivers/display/segment/dynamic3_thread.h"
+#include "cpu/avr/drivers/display/segment/dynamic3_numeric.h"
 
 #include "buttons.h"
 #include "buzzer.h"
@@ -133,7 +133,7 @@ uint8_t  EEMEM          ee_buzzer       = 1;
 // Switching states
 // =============================================================================
 
-inline void to_load_off_state(void) {                
+inline static void to_load_off_state(void) {                
     uint8_t new_state = STATE__LOAD_OFF;
     state = new_state;
     relay__on(); // Relay on = disconnect load
@@ -141,14 +141,14 @@ inline void to_load_off_state(void) {
     if (buzzer) buzzer__start();
 }
 
-inline void to_load_on_state(void) {                
+inline static void to_load_on_state(void) {                
     uint8_t new_state = STATE__LOAD_ON;
     state = new_state;
     relay__off(); // Relay off = reconnect load
     if (is_voltage_display_mode()) led_thread__mode__set(new_state);
 }
 
-inline void to_persistent_off_state(void) {
+inline static void to_persistent_off_state(void) {
     // Always invoked in Voltage Display mode.
     uint8_t new_state = STATE__PERSISTENT_OFF;
     state = new_state;
@@ -157,7 +157,7 @@ inline void to_persistent_off_state(void) {
     buzzer__stop();
 }
 
-inline void to_on_delay_state(void) {
+inline static void to_on_delay_state(void) {
     uint8_t new_state = STATE__ON_DELAY;
     state = new_state;
     if (is_voltage_display_mode()) led_thread__mode__set(new_state);
@@ -168,7 +168,7 @@ inline void to_on_delay_state(void) {
 // Reading parameters from EEPROM
 // =============================================================================
 
-inline void model__init(void) {
+inline static void model__init(void) {
    t_voltage_max  = voltage_max  = 256 + (int8_t)eeprom_read_byte(&ee_voltage_max);
    t_voltage_min  = voltage_min  = 256 + (int8_t)eeprom_read_byte(&ee_voltage_min);
    t_on_delay     = on_delay     = eeprom_read_byte(&ee_on_delay);
@@ -191,35 +191,35 @@ inline void model__init(void) {
 // Writing parameters to EEPROM
 // =============================================================================
 
-inline void write_voltage_max(void) {
+inline static void write_voltage_max(void) {
     if (t_voltage_max != voltage_max) {
         eeprom_write_byte(&ee_voltage_max, (uint8_t)(t_voltage_max - 256));
         voltage_max = t_voltage_max;
     }
 }
 
-inline void write_voltage_min(void) {
+inline static void write_voltage_min(void) {
     if (t_voltage_min != voltage_min) {
         eeprom_write_byte(&ee_voltage_min, (uint8_t)(t_voltage_min - 256));
         voltage_min = t_voltage_min;
     }
 }
 
-inline void write_on_delay(void) {
+inline static void write_on_delay(void) {
     if (t_on_delay != on_delay) {
         eeprom_write_byte(&ee_on_delay, t_on_delay);
         on_delay = t_on_delay;
     }
 }
 
-inline void write_angle(void) {
+inline static void write_angle(void) {
     if (t_angle != angle) {
         eeprom_write_byte(&ee_angle, t_angle);
         angle = t_angle;
     }
 }
 
-inline void write_buzzer(void) {
+inline static void write_buzzer(void) {
     if (t_buzzer != buzzer) {
         eeprom_write_byte(&ee_buzzer, t_buzzer);
         buzzer = t_buzzer;
@@ -230,26 +230,26 @@ inline void write_buzzer(void) {
 // Displaying voltage and parameters
 // =============================================================================
 
-inline void display_bcd(const uint16_t number) {
+inline static void display_bcd(const uint16_t number) {
     numeric_display__set(uint9_to_bcd(number));
 }
 
 // Can be run concurrently, so the displayed voltage can be wrong
 // But the chance is very low,
 // and in a second the displayed value is overwritten anyway.
-inline void display_voltage(void) {
+inline static void display_voltage(void) {
     numeric_display__set(voltage_bcd);
 }
 
-inline void display_voltage_max(void) {
+inline static void display_voltage_max(void) {
     display_bcd(t_voltage_max);
 }
 
-inline void display_voltage_min(void) {
+inline static void display_voltage_min(void) {
     display_bcd(t_voltage_min);
 }
 
-inline void display_on_delay(void) {
+inline static void display_on_delay(void) {
     // display message "OFF" if t_on_delay is 0
     if (t_on_delay) {
         uint16_t number = uint9_to_bcd(t_on_delay) << 4;
@@ -259,11 +259,11 @@ inline void display_on_delay(void) {
         numeric_display__set(0x0FF);
 }
 
-inline void display_angle(void) {
+inline static void display_angle(void) {
     display_bcd(t_angle);
 }
 
-inline void display_buzzer(void) {
+inline static void display_buzzer(void) {
     // display message "On" or "OFF" 
     if (t_buzzer) {
        display_thread__segments[0] = DISPLAY_SEGMENT_VALUE_EMPTY;
@@ -282,42 +282,42 @@ inline void display_buzzer(void) {
 // Switching UI modes
 // =============================================================================
 
-inline void to_voltage_display_mode(void) {
+inline static void to_voltage_display_mode(void) {
     mode = MODE__DISPLAY_VOLTAGE;
     led_thread__mode__set(state);
     display_voltage();
     display_thread__blink__off();
 }
 
-inline void to_edit_voltage_max_mode(void) {
+inline static void to_edit_voltage_max_mode(void) {
     mode = MODE__EDIT_VOLTAGE_MAX;
     led_thread__set_red();
     display_voltage_max();
     display_thread__blink__on();
 }
 
-inline void to_edit_voltage_min_mode(void) {
+inline static void to_edit_voltage_min_mode(void) {
     mode = MODE__EDIT_VOLTAGE_MIN;
     led_thread__set_green();
     display_voltage_min();
     display_thread__blink__on(); // optimizable (blink is already on)
 }
 
-inline void to_edit_on_delay_mode(void) {
+inline static void to_edit_on_delay_mode(void) {
     mode = MODE__EDIT_ON_DELAY;
     led_thread__mode__set(LED_THREAD__MODE__RED_GREEN);
     display_on_delay();
     display_thread__blink__on(); // optimizable (blink is already on)
 }
 
-inline void to_edit_angle_mode(void) {
+inline static void to_edit_angle_mode(void) {
     mode = MODE__EDIT_ANGLE;
     led_thread__set_black();
     display_angle();
     display_thread__blink__on(); // optimizable (blink is already on)
 }
 
-inline void to_edit_buzzer_mode(void) {
+inline static void to_edit_buzzer_mode(void) {
     mode = MODE__EDIT_BUZZER;
     led_thread__mode__set(LED_THREAD__MODE__RED_BLACK);
     display_buzzer();
@@ -329,12 +329,12 @@ inline void to_edit_buzzer_mode(void) {
 // UI Controller
 // =============================================================================
 
-inline void ui_controller__init(void) {
+inline static void ui_controller__init(void) {
     to_voltage_display_mode(); // optimizable (blink is off, etc.)
 }
 
 
-inline void ui_controller__run(void) {
+inline static void ui_controller__run(void) {
     switch (mode) {
     case MODE__DISPLAY_VOLTAGE:
 #ifdef DEBUG__MEASURE_VOLTAGE_ON_KEY_PRESS

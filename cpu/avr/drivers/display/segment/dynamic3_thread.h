@@ -16,8 +16,8 @@
 // Call display_thread__phase_on() and display_thread__phase_off() periodically.
 // =============================================================================
 
-#ifndef __DISPLAY_SEGMENT_3_THREAD_H
-#define __DISPLAY_SEGMENT_3_THREAD_H
+#ifndef __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__DYNAMIC3_THREAD_H
+#define __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__DYNAMIC3_THREAD_H
 
 #include <stdint.h>
 

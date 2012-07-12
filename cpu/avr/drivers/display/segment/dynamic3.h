@@ -7,8 +7,8 @@
 // - selecting and deselecting individual digits
 // - setting the value of segments to be displayed on selected digits.
 // =============================================================================
-#ifndef __DISPLAY_SEGMENT_3_H
-#define __DISPLAY_SEGMENT_3_H
+#ifndef __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__DYNAMIC3_H
+#define __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__DYNAMIC3_H
 
 #include "device.h"
 #include "cpu/avr/gpio.h"

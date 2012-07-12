@@ -6,8 +6,8 @@
 // - adding comma
 // =============================================================================
 
-#ifndef __DISPLAY_SEGMENT_3_NUMERIC_H
-#define __DISPLAY_SEGMENT_3_NUMERIC_H
+#ifndef __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__DYNAMIC3_NUMERIC_H
+#define __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__DYNAMIC3_NUMERIC_H
 
 #include <stdint.h>
 

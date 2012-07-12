@@ -10,9 +10,9 @@
 
 #include "device.h"
 
-#include "cpu/avr/drivers/display_segment_3_numeric.h"
-#include "cpu/avr/drivers/display_segment_3_thread.h"
-#include "cpu/avr/drivers/display_segment.h"
+#include "cpu/avr/drivers/display/segment/dynamic3_numeric.h"
+#include "cpu/avr/drivers/display/segment/dynamic3_thread.h"
+#include "cpu/avr/drivers/display/segment/values.h"
 
 uint8_t const DIGITS[] = {
     DISPLAY_SEGMENT_VALUE_0,

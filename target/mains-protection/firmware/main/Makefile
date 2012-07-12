@@ -40,8 +40,8 @@ SRC += buzzer.c
 
 # Library
 SRC += cpu/avr/util/bcd.c
-SRC += cpu/avr/drivers/display_segment_3_numeric.c
-SRC += cpu/avr/drivers/display_segment_3_thread.c
+SRC += cpu/avr/drivers/display/segment/dynamic3_numeric.c
+SRC += cpu/avr/drivers/display/segment/dynamic3_thread.c
 
 endif
 

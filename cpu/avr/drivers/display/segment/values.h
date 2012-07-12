@@ -20,8 +20,8 @@
 // they depent on the board layout.
 // =============================================================================
 
-#ifndef __DISPLAY_SEGMENT_H
-#define __DISPLAY_SEGMENT_H
+#ifndef __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__VALUES_H
+#define __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__VALUES_H
 
 #include "device.h"
 #include <stdint.h>
