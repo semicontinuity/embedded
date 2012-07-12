@@ -3,6 +3,7 @@
 
 #include "device.h"
 #include "cpu/avr/usart0.h"
+#include "cpu/avr/usart0__rx_polled.h"
 
 
 inline void console_service__init(void) {

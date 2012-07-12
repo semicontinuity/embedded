@@ -9,15 +9,12 @@
 // usart_init:
 //   Initialize the USART to typical mode: Async, 8 bit, no parity, 1 stop bit.
 //
-// usart_in__read:
-//   Blocking read
-//
 // usart_out__write:
 //   Blocking write
 // =============================================================================
 
-#ifndef __CPU_AVR_USART0_H
-#define __CPU_AVR_USART0_H
+#ifndef __CPU__AVR__USART0_H
+#define __CPU__AVR__USART0_H
 
 #include "device.h"
 
@@ -103,10 +100,10 @@ inline void usart__in__enabled__set(void) {
 
 
 // =============================================================================
-// usart__in__complete__set
+// usart__in__complete_interrupt_enabled__set
 // =============================================================================
 
-inline static void usart__in__complete__set(void) {
+inline static void usart__in__complete_interrupt_enabled__set(void) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) 
     set_bit_in_reg(UCSR0B, RXCIE0);
@@ -128,23 +125,6 @@ inline static void usart__out__enabled__set(void) {
     set_bit_in_reg(UCSR0B, TXEN0);
 #elif defined(__AVR_ATmega8__)
     set_bit_in_reg(UCSRB, TXEN);
-#else
-    #error "Unsupported MCU"
-#endif
-}
-
-// =============================================================================
-// usart_in__read
-// =============================================================================
-
-inline static char usart__in__read(void) {
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__) 
-    loop_until_bit_is_set(UCSR0A, RXC0);
-    return UDR0;
-#elif defined(__AVR_ATmega8__)
-    loop_until_bit_is_set(UCSRA, RXC);
-    return UDR;
 #else
     #error "Unsupported MCU"
 #endif
