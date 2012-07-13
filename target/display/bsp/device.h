@@ -6,7 +6,7 @@
 #define F_CPU (8000000UL)
 
 
-#include "config__mt12864.h"
-#include "config__uart.h"
+#include "signal/mt12864.h"
+#include "config/usart.h"
 
 #endif

@@ -5,7 +5,59 @@
 #define __CPU__AVR__DRIVERS__DISPLAY__MT12864__DRIVER_H
 
 #include "device.h"
-#include <avr/pgmspace.h>
+
+#include "cpu/avr/gpio.h"
+
+#define mt12864_clear_line_E   OUT_0(MT12864_E)
+#define mt12864_clear_line_RW  OUT_0(MT12864_RW)
+#define mt12864_clear_line_A0  OUT_0(MT12864_A0)
+#define mt12864_clear_line_RES OUT_0(MT12864_RES)
+#define mt12864_clear_line_CS1 OUT_0(MT12864_CS1)
+#define mt12864_clear_line_CS2 OUT_0(MT12864_CS2)
+
+#define mt12864_set_line_E     OUT_1(MT12864_E)
+#define mt12864_set_line_RW    OUT_1(MT12864_RW)
+#define mt12864_set_line_A0    OUT_1(MT12864_A0)
+#define mt12864_set_line_RES   OUT_1(MT12864_RES)
+#define mt12864_set_line_CS1   OUT_1(MT12864_CS1)
+#define mt12864_set_line_CS2   OUT_1(MT12864_CS2)
+
+// This ternary construct is more efficient - compiles to 10 bytes
+//#define mt12864_clear_cs(chip) (chip == 0) ? ({mt12864_clear_line_CS1; 0;}) : ({mt12864_clear_line_CS2; 0;})
+//#define mt12864_clear_cs(chip) ((chip == 0) ? OUT_0_RAW(MT12864_CS1) : OUT_0_RAW(MT12864_CS2))
+#define mt12864_clear_cs(chip) do { if (chip == 0) {mt12864_clear_line_CS1;}; if (chip) {mt12864_clear_line_CS2;}} while(0)
+
+#define mt12864_set_cs {mt12864_set_line_CS1; mt12864_set_line_CS2; }
+
+
+
+#define mt12864_configure_ports() do {\
+  USE_AS_OUTPUT(MT12864_E);\
+  USE_AS_OUTPUT(MT12864_RW);\
+  USE_AS_OUTPUT(MT12864_A0);\
+  USE_AS_OUTPUT(MT12864_CS2);\
+  USE_AS_OUTPUT(MT12864_CS1);\
+  USE_AS_OUTPUT(MT12864_RES);\
+} while(0)
+
+#define mt12864_clear_all_control_lines() do {\
+  mt12864_clear_line_E;\
+  mt12864_clear_line_RW;\
+  mt12864_clear_line_A0;\
+  mt12864_clear_line_CS2;\
+  mt12864_clear_line_CS1;\
+} while(0)
+
+/*--------------------------------------------------------------------------------------------*/
+/* LCD data bus is connected to Port A.                                                       */
+/*--------------------------------------------------------------------------------------------*/
+#define LCD_Data_Bus_to_Output()        do { USE_PORT_AS_OUTPUT(MT12864_DATA); } while(0)
+#define LCD_Data_Bus_To_Input()         do { USE_PORT_AS_INPUT(MT12864_DATA); ENABLE_PULLUPS(MT12864_DATA);} while(0)
+#define Put_Data_to_LCD_Data_Bus(data)  OUT(MT12864_DATA, data)
+#define Get_Data_from_LCD_Data_Bus()    IN(MT12864_DATA)
+
+
+
 
 
 #define MT12864_CMD_DISPLAY_OFF                  (0x3E)

@@ -8,8 +8,8 @@
 #include <stdint.h>
 #include <avr/io.h>
 #include <compat/deprecated.h>
-
 #include <util/delay.h>
+#include <avr/pgmspace.h>
 
 
 #define SMALL_DELAY (F_CPU/1000000)

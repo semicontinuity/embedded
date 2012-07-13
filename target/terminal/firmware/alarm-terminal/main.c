@@ -129,6 +129,7 @@ int main(void)
 {
     wdt_enable (WDTO_2S);
 
+    mt12864_backlight_init();
     terminal_init();
     keyboard_init();
 
