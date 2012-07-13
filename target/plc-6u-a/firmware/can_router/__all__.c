@@ -10,4 +10,4 @@
 
 #include "can.c"
 
-#include "cpu/avr/drivers/mcp251x/operations.c"
+#include "cpu/avr/drivers/net/can/mcp251x/operations.c"

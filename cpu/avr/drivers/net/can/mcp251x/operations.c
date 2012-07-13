@@ -3,8 +3,8 @@
 #include <stdint.h>
 #include <avr/pgmspace.h>
 
-#include "cpu/avr/drivers/mcp251x/operations.h"
-#include "cpu/avr/drivers/mcp251x/instructions.h"
+#include "cpu/avr/drivers/net/can/mcp251x/operations.h"
+#include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
 #include "cpu/avr/spi_polled.h"
 
 // TODO: possible SPI failures not taken into account

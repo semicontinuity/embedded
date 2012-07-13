@@ -16,9 +16,9 @@
 #include "cpu/avr/bitops.h"
 
 // debugging
-#include "cpu/avr/drivers/mcp251x/registers.h"
-#include "cpu/avr/drivers/mcp251x/instructions.h"
-#include "cpu/avr/drivers/mcp251x/operations.h"
+#include "cpu/avr/drivers/net/can/mcp251x/registers.h"
+#include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
+#include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 
 /*
  *****************************************************************************************************

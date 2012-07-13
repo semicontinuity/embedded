@@ -8,6 +8,8 @@ CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)
 
+CDEFS += -DINLINE=
+
 
 # Firmware
 SRC += main.c
@@ -20,7 +22,7 @@ SRC += can.c
 SRC += pwm.c
 
 # Library
-SRC += cpu/avr/drivers/mcp251x/operations.c
+SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
 SRC += cpu/avr/util/debug.c
 
 

@@ -4,9 +4,9 @@
 #include "device.h"
 #include <avr/io.h>
 #include "cpu/avr/gpio.h"
-#include "cpu/avr/drivers/mcp251x/bitdefs.h"
-#include "cpu/avr/drivers/mcp251x/registers.h"
-#include "cpu/avr/drivers/mcp251x/operations.h"
+#include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
+#include "cpu/avr/drivers/net/can/mcp251x/registers.h"
+#include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 
 
 inline void can_service__init(void) {

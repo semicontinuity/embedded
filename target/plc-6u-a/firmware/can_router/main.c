@@ -12,10 +12,6 @@
 #include "cpu/avr/gpio.h"
 #include "cpu/avr/usart0.h"
 
-//#include "mcp251x/bitdefs.h"
-//#include "mcp251x/registers.h"
-//#include "mcp251x/operations.h"
-
 
 /**
  * Initial configuration of usart_tx_thread: bind to 'usart_tx_q'

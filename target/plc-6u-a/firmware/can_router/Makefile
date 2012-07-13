@@ -33,7 +33,7 @@ SRC += main.c
 SRC += can.c
 
 # Library
-SRC += cpu/avr/drivers/mcp251x/operations.c
+SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
 
 endif
 

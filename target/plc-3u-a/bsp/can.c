@@ -1,10 +1,10 @@
 #include "device.h"
 #include "can.h"
 
-#include "cpu/avr/drivers/mcp251x/bitdefs.h"
-#include "cpu/avr/drivers/mcp251x/registers.h"
-#include "cpu/avr/drivers/mcp251x/opmodes.h"
-#include "cpu/avr/drivers/mcp251x/struct.h"
+#include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
+#include "cpu/avr/drivers/net/can/mcp251x/registers.h"
+#include "cpu/avr/drivers/net/can/mcp251x/opmodes.h"
+#include "cpu/avr/drivers/net/can/mcp251x/struct.h"
 #include <avr/pgmspace.h>
 
 

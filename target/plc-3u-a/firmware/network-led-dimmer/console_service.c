@@ -7,15 +7,16 @@
 #include <util/delay.h>
 
 #include "cpu/avr/gpio.h"
-#include "cpu/avr/drivers/mcp251x/operations.h"
-#include "cpu/avr/util/debug.h"
+#include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 #include "cpu/avr/usart0.h"
+#include "cpu/avr/util/debug.h"
 
 
 uint8_t input_buffer[16];
 uint16_t input_length;
 
-static void readLine (void)
+
+inline void readLine (void)
 {
     input_length=0;
     while(1)

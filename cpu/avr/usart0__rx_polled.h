@@ -7,8 +7,8 @@
 //   Blocking read
 // =============================================================================
 
-#ifndef __CPU__AVR__USART0_RX_POLLING_H
-#define __CPU__AVR__USART0_RX_POLLING_H
+#ifndef __CPU__AVR__USART0_RX_POLLED_H
+#define __CPU__AVR__USART0_RX_POLLED_H
 
 #include "device.h"
 
@@ -21,7 +21,7 @@
 // usart__in__read
 // =============================================================================
 
-inline static char usart__in__read(void) {
+inline uint8_t usart__in__read(void) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) 
     loop_until_bit_is_set(UCSR0A, RXC0);

@@ -1,6 +1,6 @@
 #include "device.h"
 #include "can.h"
-#include "cpu/avr/drivers/mcp251x/struct.h"
+#include "cpu/avr/drivers/net/can/mcp251x/struct.h"
 #include <avr/pgmspace.h>
 
 

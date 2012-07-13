@@ -7,12 +7,12 @@
 
 #include "cpu/avr/gpio.h"
 #include "cpu/avr/util/debug.h"
-#include "cpu/avr/drivers/mcp251x/bitdefs.h"
-#include "cpu/avr/drivers/mcp251x/instructions.h"
-#include "cpu/avr/drivers/mcp251x/registers.h"
-#include "cpu/avr/drivers/mcp251x/operations.h"
-#include "cpu/avr/drivers/mcp251x/struct.h"
-#include "cpu/avr/drivers/mcp251x/interrupt-codes.h"
+#include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
+#include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
+#include "cpu/avr/drivers/net/can/mcp251x/registers.h"
+#include "cpu/avr/drivers/net/can/mcp251x/operations.h"
+#include "cpu/avr/drivers/net/can/mcp251x/struct.h"
+#include "cpu/avr/drivers/net/can/mcp251x/interrupt-codes.h"
 
 
 #define COPY_8_BYTES(dst_start, src_start)	do {	\
