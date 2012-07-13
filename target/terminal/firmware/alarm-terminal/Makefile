@@ -37,8 +37,7 @@ SRC += main.c
 # BSP
 SRC += keypad.c
 SRC += password-processing.c
-SRC += lcd-print-string-progmem.c
-SRC += lcd-backlight-fading.c
+SRC += lcd_backlight_service.c
 
 # Library
 SRC += cpu/avr/drivers/display/mt12864/terminal.c

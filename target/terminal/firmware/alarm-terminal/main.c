@@ -6,12 +6,9 @@
 #include <util/delay.h>
 #include <compat/deprecated.h>
 
-#include "terminal.h"
 #include "keypad.h"
 #include "password-processing.h"
-#include "lcd-print-string-progmem.h"
-#include "lcd-backlight.h"
-#include "lcd-backlight-fading.h"
+#include "lcd_backlight_service.h"
 
 #include "cpu/avr/drivers/display/mt12864/terminal.h"
 #include "cpu/avr/drivers/display/mt12864/text-output.h"
@@ -44,7 +41,7 @@ void state_change_pulse_run(void)
 void keyEvent (uint8_t keyevent)
 {
     handlePasswordEntryEvent (keyevent);
-    lcd_backlight_request();
+    lcd_backlight_service__signal();
 }
 
 
@@ -82,7 +79,7 @@ ISR(PERIODIC_INTERRUPT_VECT)
     wdt_reset();
 
     keypad__run(); // contains delay!
-    lcd_backlight_run();
+    lcd_backlight_service__run();
     state_change_pulse_run();
 
     // need to filter out noise that can be caused by mains transients
@@ -129,7 +126,7 @@ int main(void)
 {
     wdt_enable (WDTO_2S);
 
-    mt12864_backlight_init();
+    lcd_backlight_service__init();
     terminal_init();
     keypad__init();
 

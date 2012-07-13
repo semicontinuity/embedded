@@ -3,12 +3,12 @@
 
 #define F_CPU 12000000UL
 
+#include "config/lcd_backlight_service.h"
+
 #include "signal/mt12864.h"
-#include "signal/lcd_backlight.h"
 #include "signal/keypad.h"
 
 #include "cpu/avr/gpio.h"
-#include "lcd-backlight-config.h"
 #include "sensors-config.h"
 
 
