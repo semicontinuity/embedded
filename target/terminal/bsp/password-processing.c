@@ -1,55 +1,39 @@
-#include <avr/pgmspace.h>
-#include "keyboard-scanner.h"
+#include "device.h"
+#include "keypad.h"
+#include <stdint.h>
 
+// The application must implement these callbacks
+// ----------------------------------------------
+void correctPasswordEntered(void);
+void incorrectPasswordEntered(void);
+void passwordCharTyped(uint8_t c);
 
-//char SCAN2ASCII[] = {
-//    'D', 'C', 'B', 'A', '*', '7', '4', '1', '0', '8', '5', '2', '#', '9', '6', '3'
-//};
-
-
-#define PASSWORD_LENGTH         (8)
-char secretPassword[PASSWORD_LENGTH] = {
-        KEYEVENT_7_PRESSED,
-        KEYEVENT_7_PRESSED,
-        KEYEVENT_2_PRESSED,
-        KEYEVENT_0_PRESSED,
-        KEYEVENT_0_PRESSED,
-        KEYEVENT_1_PRESSED,
-        KEYEVENT_7_PRESSED,
-        KEYEVENT_9_PRESSED
-};
-
+// PASSWORD and PASSWORD_LENGTH are passwed during the build
+char secretPassword[PASSWORD_LENGTH] = {PASSWORD};
 char password[PASSWORD_LENGTH];
 char enteredPasswordLength;
 
 
-unsigned char passwordMatches (void)
-{
+unsigned char passwordMatches(void) {
     if (enteredPasswordLength != PASSWORD_LENGTH) return 0;
     for (unsigned char i = 0; i < PASSWORD_LENGTH; i++)
     {
         if (password[i] != secretPassword[i]) return 0;
     }
-//    print('Y');
     return 1;
 }
 
-void correctPasswordEntered (void);
-void incorrectPasswordEntered (void);
-void passwordCharTyped(uint8_t c);
 
-void passwordEntered (void)
-{
-//    print('?');
-    if (!passwordMatches ())
+
+void passwordEntered(void) {
+    if (!passwordMatches())
         incorrectPasswordEntered();
     else
         correctPasswordEntered();
 }
 
-void handlePasswordEntryEvent (uint8_t keyevent)
-{
-//    print (SCAN2ASCII[keyevent>>1]);
+
+void handlePasswordEntryEvent(uint8_t keyevent) {
     if (keyevent == KEYEVENT_POUND_PRESSED)
     {
         passwordEntered ();

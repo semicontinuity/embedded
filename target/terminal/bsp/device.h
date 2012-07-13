@@ -5,9 +5,9 @@
 
 #include "signal/mt12864.h"
 #include "signal/lcd_backlight.h"
+#include "signal/keypad.h"
 
 #include "cpu/avr/gpio.h"
-#include "keyboard-connection.h"
 #include "lcd-backlight-config.h"
 #include "sensors-config.h"
 

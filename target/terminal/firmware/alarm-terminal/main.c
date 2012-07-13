@@ -7,7 +7,7 @@
 #include <compat/deprecated.h>
 
 #include "terminal.h"
-#include "keyboard-scanner.h"
+#include "keypad.h"
 #include "password-processing.h"
 #include "lcd-print-string-progmem.h"
 #include "lcd-backlight.h"
@@ -81,8 +81,8 @@ ISR(PERIODIC_INTERRUPT_VECT)
 {       
     wdt_reset();
 
-    scanKeyboard ();
-    lcd_backlight_run ();
+    keypad__run(); // contains delay!
+    lcd_backlight_run();
     state_change_pulse_run();
 
     // need to filter out noise that can be caused by mains transients
@@ -131,7 +131,7 @@ int main(void)
 
     mt12864_backlight_init();
     terminal_init();
-    keyboard_init();
+    keypad__init();
 
     sensors_init();
 

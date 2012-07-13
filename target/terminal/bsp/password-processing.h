@@ -2,7 +2,7 @@
 #define __PASSWORD_PROCESSING_H
 
 #include "device.h"
-#include <avr/pgmspace.h>
+#include <stdint.h>
 
 void handlePasswordEntryEvent (uint8_t keyevent);
 

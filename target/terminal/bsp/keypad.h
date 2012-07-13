@@ -1,5 +1,8 @@
-#ifndef __KEYBOARD_SCANNER_H
-#define __KEYBOARD_SCANNER_H
+#ifndef __KEYPAD_H
+#define __KEYPAD_H
+
+#include "cpu/avr/gpio.h"
+
 
 #define SCANMASK_PRESSED    (1)
 #define SCANFLAG_PRESSED    (0)
@@ -42,6 +45,9 @@
 #define KEYEVENT_6_RELEASED     (ROW(2) | COL(3) | SCANFLAG_RELEASED)
 #define KEYEVENT_3_RELEASED     (ROW(3) | COL(3) | SCANFLAG_RELEASED)
 
-void scanKeyboard (void);
+
+#define keypad__init() do {DATA_DIR_REG(CONCAT(KEYPAD,__PORT)) = 0xF0; PORT_REG(CONCAT(KEYPAD,__PORT)) = 0xFF;} while(0)
+
+INLINE void keypad__run(void);
 
 #endif

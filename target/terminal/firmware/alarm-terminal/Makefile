@@ -8,6 +8,16 @@ CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
 vpath %.c  $(BSP) $(ROOT)
 
+################################################################################################
+# Define the password as an argument to make
+#
+# example:
+#
+# PASSWORD_LENGTH=2 PASSWORD=KEYEVENT_0_PRESSED,KEYEVENT_0_PRESSED make
+################################################################################################
+CDEFS += -DPASSWORD_LENGTH=$(PASSWORD_LENGTH)
+CDEFS += -DPASSWORD=$(PASSWORD)
+
 
 # Compile all sources in one compilation util (because of the absent link-time optimizations)
 WHOLE_PROGRAM=0
@@ -25,7 +35,7 @@ CDEFS += -DINLINE=
 SRC += main.c
 
 # BSP
-SRC += keyboard-scanner.c
+SRC += keypad.c
 SRC += password-processing.c
 SRC += lcd-print-string-progmem.c
 SRC += lcd-backlight-fading.c

@@ -1,5 +1,5 @@
 #include "device.h"
-#include "keyboard-scanner.h"
+#include "keypad.h"
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 #define KEYBOARD_SCAN_DELAY (F_CPU/100000)
@@ -10,14 +10,20 @@
 #define COL2_SCAN_MASK      (~_BV(6) & 0xFF)
 #define COL3_SCAN_MASK      (~_BV(7) & 0xFF)
 
+
+#define outputScanValue(v)  OUT(KEYPAD, (v))
+#define inputScanValue()    IN(KEYPAD)
+
+
+
 /** An application must define this event handler */
 void keyEvent (uint8_t keyevent);
 
 
 char keyboardState[] = {-1, -1, -1, -1};
 
-void scanKeyboard (void)
-{
+
+INLINE void keypad__run(void) {
     uint8_t scanMask = COL0_SCAN_MASK;
     for (uint8_t column = 0; column < 4; column++)
     {
