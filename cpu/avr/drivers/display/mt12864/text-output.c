@@ -1,7 +1,7 @@
 // Source code adopted from electronix.ru
 // --------------------------------------
 
-#include "cpu/avr/drivers/mt12864/char-output.h"
+#include "cpu/avr/drivers/display/mt12864/char-output.h"
 #include "util/font/fixed-width-font.h"
 #include <stdint.h>
 

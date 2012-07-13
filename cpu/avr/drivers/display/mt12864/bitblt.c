@@ -1,8 +1,8 @@
 // Source code adopted from electronix.ru
 // --------------------------------------
 
-#include "cpu/avr/drivers/mt12864/bitblt.h"
-#include "cpu/avr/drivers/mt12864/driver.h"
+#include "cpu/avr/drivers/display/mt12864/bitblt.h"
+#include "cpu/avr/drivers/display/mt12864/driver.h"
 
 #ifndef min
 #define min(a, b)	((a) < (b) ? (a) : (b))

@@ -3,7 +3,7 @@
 
 #include "device.h"
 
-#include "cpu/avr/drivers/mt12864/driver.h"
+#include "cpu/avr/drivers/display/mt12864/driver.h"
 
 #include <stdint.h>
 #include <avr/io.h>

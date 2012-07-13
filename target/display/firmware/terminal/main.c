@@ -2,7 +2,7 @@
 
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/usart0__rx_buffered.h"
-#include "cpu/avr/drivers/mt12864/terminal.h"
+#include "cpu/avr/drivers/display/mt12864/terminal.h"
 #include <avr/interrupt.h>
 
 int main(void)

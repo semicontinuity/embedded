@@ -25,9 +25,9 @@ CDEFS += -DINLINE=
 SRC += main.c
 
 # Library
-SRC += cpu/avr/drivers/mt12864/text-output.c
-SRC += cpu/avr/drivers/mt12864/bitblt.c
-SRC += cpu/avr/drivers/mt12864/driver.c
+SRC += cpu/avr/drivers/display/mt12864/text-output.c
+SRC += cpu/avr/drivers/display/mt12864/bitblt.c
+SRC += cpu/avr/drivers/display/mt12864/driver.c
 SRC += util/font/Font_6x8.c
 
 endif

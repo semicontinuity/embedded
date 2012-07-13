@@ -13,8 +13,8 @@
 #include "lcd-backlight.h"
 #include "lcd-backlight-fading.h"
 
-#include "cpu/avr/drivers/mt12864/terminal.h"
-#include "cpu/avr/drivers/mt12864/text-output.h"
+#include "cpu/avr/drivers/display/mt12864/terminal.h"
+#include "cpu/avr/drivers/display/mt12864/text-output.h"
 
 
 

@@ -1,8 +1,8 @@
 #include "device.h"
 
-#include "cpu/avr/drivers/mt12864/driver.h"
-#include "cpu/avr/drivers/mt12864/char-output.h"
-#include "cpu/avr/drivers/mt12864/text-output.h"
+#include "cpu/avr/drivers/display/mt12864/driver.h"
+#include "cpu/avr/drivers/display/mt12864/char-output.h"
+#include "cpu/avr/drivers/display/mt12864/text-output.h"
 #include "util/font/Font_6x8.h"
 
 #include <avr/io.h>
