@@ -38,6 +38,7 @@ SRC += main.c
 SRC += keypad.c
 SRC += password-processing.c
 SRC += lcd_backlight_service.c
+SRC += alarm_client.c
 
 # Library
 SRC += cpu/avr/drivers/display/mt12864/terminal.c

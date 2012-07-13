@@ -7,9 +7,10 @@
 
 #include "signal/mt12864.h"
 #include "signal/keypad.h"
+#include "signal/sensors.h"
 
 #include "cpu/avr/gpio.h"
-#include "sensors-config.h"
+
 
 
 
@@ -124,13 +125,6 @@
     set_bit_in_reg (SIG_TXD_DIR, SIG_TXD_PIN);\
     set_bit_in_reg (SIG_RXD_PORT, SIG_RXD_PIN);\
     set_bit_in_reg (SIG_LED_DIR, SIG_LED_PIN);\
-} while(0)
-
-// 1. any change on INT1 generates interrupt (ISC11=0 (default), ISC10=1)
-// 2. enable ext int 1
-#define configure_ext_interrupts() do {\
-    set_bit_in_reg (MCUCR, ISC10);\
-    set_bit_in_reg (GICR, INT1);\
 } while(0)
 
 // 1. enable TIMER0_OVF_vect
