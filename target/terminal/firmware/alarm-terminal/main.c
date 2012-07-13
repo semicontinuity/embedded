@@ -10,6 +10,8 @@
 #include "keypad.h"
 #include "password-processing.h"
 #include "lcd_backlight_service.h"
+#include "state_change_pulse_transmitter.h"
+#include "system_timer.h"
 
 #include "cpu/avr/drivers/display/mt12864/terminal.h"
 #include "cpu/avr/drivers/display/mt12864/text-output.h"
@@ -21,63 +23,43 @@ const char MSG_PASSWORD_NOT_ACCEPTED[] PROGMEM = "\nНеверный код\n";
 const char MSG_PASSWORD_ACCEPTED[] PROGMEM = "\nКод принят\n";
 
 
+// Implementation of callbacks
+// ---------------------------
 
-uint8_t stateChangePulseTimeout;
-
-
-void state_change_pulse_start(void) {
-    state_change_low();
-    stateChangePulseTimeout = 100;
-}
-
-
-void state_change_pulse_run(void) {
-    if (stateChangePulseTimeout != 0) // generating pulse
-    {
-        --stateChangePulseTimeout;
-        if (stateChangePulseTimeout == 0) // just reached 0 - pulse generated
-        {
-            state_change_high();
-        }
-    }
-}
-
-
-void keyEvent(const uint8_t keyevent) {
-    handlePasswordEntryEvent (keyevent);
+INLINE void keypad__on_event(const uint8_t keyevent) {
+    handlePasswordEntryEvent(keyevent);
     lcd_backlight_service__signal();
 }
 
 
-void passwordCharTyped(const uint8_t c) {
+INLINE void keypad_handler__on_password_char_typed(const uint8_t c) {
     terminal_displayChar('*');
 }
 
 
-void incorrectPasswordEntered(void) {
+INLINE void keypad_handler__on_incorrect_password(void) {
     lcd_print_string_progmem(MSG_PASSWORD_NOT_ACCEPTED);
 }
 
 
-void correctPasswordEntered(void) {
+INLINE void keypad_handler__on_correct_password(void) {
     lcd_print_string_progmem(MSG_PASSWORD_ACCEPTED);
-    state_change_pulse_start();
+    state_change_pulse_transmitter__signal();
 }
 
 
-/**
- * This interrupt is invoked F_CPU/1024/256 times per second.
- * (e.g. 45.5 / sec @ 12 MHz)
- */
-ISR(PERIODIC_INTERRUPT_VECT)
-{       
+INLINE void system_timer__on_system_tick(void) {       
     wdt_reset();
 
     keypad__run(); // contains delay!
     lcd_backlight_service__run();
-    state_change_pulse_run();
+    state_change_pulse_transmitter__run();
     alarm_client__run();
 }
+
+
+// RESET handler
+// ---------------------------
 
 
 int main(void) {
@@ -88,10 +70,12 @@ int main(void) {
     keypad__init();
 
     configure_io();
+    state_change_pulse_transmitter__init();
     alarm_client__init();
 
-    init_and_start_scheduler();
 
+    system_timer__init();
+    system_timer__start();
 
     lcd_print_string_progmem (MSG_READY);
     sei();

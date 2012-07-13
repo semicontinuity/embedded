@@ -8,6 +8,7 @@
 #include "signal/mt12864.h"
 #include "signal/keypad.h"
 #include "signal/sensors.h"
+#include "signal/state_change.h"
 
 #include "cpu/avr/gpio.h"
 
@@ -76,25 +77,6 @@
 #define SIG_ALARM_STATE_PIN  (3)
 #define is_system_armed() bit_is_set(PIND, SIG_ALARM_STATE_PIN)
 
-// Signal STATE_CHANGE, output
-// Port PD2
-// External inverting transistor connected
-// Output signalling a state change (as a short negative pulse), when correct password is entered
-#define SIG_STATE_CHANGE_PORT (PORTD)
-#define SIG_STATE_CHANGE_DIR  (DDRD)
-#define SIG_STATE_CHANGE_PIN  (2)
-
-#define state_change_low()  set_bit_in_reg(SIG_STATE_CHANGE_PORT,SIG_STATE_CHANGE_PIN)
-#define state_change_high() clear_bit_in_reg(SIG_STATE_CHANGE_PORT,SIG_STATE_CHANGE_PIN)
-
-// Uart (not used at the moment)
-#define SIG_TXD_PORT (PORTD)
-#define SIG_TXD_DIR  (DDRD)
-#define SIG_TXD_PIN  (1)
-
-#define SIG_RXD_PORT (PORTD)
-#define SIG_RXD_DIR  (DDRD)
-#define SIG_RXD_PIN  (0)
 
 // Led is attached to PD4
 #define SIG_LED_PORT (PORTD)
@@ -108,8 +90,6 @@
 
 // (Configure ALARM_STATE for input: do nothing, input by default)
 // 1. Pull up ALARM_STATE
-// 2. Configure STATE_CHANGE for input
-// (Not necessarry to pull up STATE_CHANGE, it has external pull up)
 // 3. Configure Txd for output
 // 4. Pull up Rxd (save some power)
 // 5. Configure LED for output
@@ -121,17 +101,8 @@
 
 #define configure_io() do {\
     set_bit_in_reg (SIG_ALARM_STATE_PORT, SIG_ALARM_STATE_PIN);\
-    set_bit_in_reg (SIG_STATE_CHANGE_DIR, SIG_STATE_CHANGE_PIN);\
-    set_bit_in_reg (SIG_TXD_DIR, SIG_TXD_PIN);\
-    set_bit_in_reg (SIG_RXD_PORT, SIG_RXD_PIN);\
     set_bit_in_reg (SIG_LED_DIR, SIG_LED_PIN);\
 } while(0)
 
-// 1. enable TIMER0_OVF_vect
-// 2. no Force Output Compare, WGMxx=NORMAL, Normal operation, OC0 disconnected, f=clkIO/1024
-#define init_and_start_scheduler() do {\
-    TIMSK = _BV (TOIE0);\
-    TCCR0 = _BV (CS02) | _BV(CS00);\
-} while(0)
 
 #endif

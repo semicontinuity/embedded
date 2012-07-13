@@ -17,7 +17,7 @@
 
 
 /** An application must define this event handler */
-void keyEvent (uint8_t keyevent);
+void keypad__on_event(uint8_t keyevent);
 
 
 char keyboardState[] = {-1, -1, -1, -1};
@@ -48,7 +48,7 @@ INLINE void keypad__run(void) {
                 // if lower bit of tempScanValue=1 => now key released; 0 => pressed
                 uint8_t scancode =
                     (uint8_t) ((tempScanValue & 1) | ROW(row) | COL(column));
-                keyEvent (scancode);
+                keypad__on_event(scancode);
             }
             tempScanValue >>= 1;
             changedLines >>= 1;

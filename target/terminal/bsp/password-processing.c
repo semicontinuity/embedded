@@ -4,9 +4,9 @@
 
 // The application must implement these callbacks
 // ----------------------------------------------
-void correctPasswordEntered(void);
-void incorrectPasswordEntered(void);
-void passwordCharTyped(uint8_t c);
+void keypad_handler__on_correct_password(void);
+void keypad_handler__on_incorrect_password(void);
+void keypad_handler__on_password_char_typed(uint8_t c);
 
 // PASSWORD and PASSWORD_LENGTH are passwed during the build
 char secretPassword[PASSWORD_LENGTH] = {PASSWORD};
@@ -27,9 +27,9 @@ unsigned char passwordMatches(void) {
 
 void passwordEntered(void) {
     if (!passwordMatches())
-        incorrectPasswordEntered();
+        keypad_handler__on_incorrect_password();
     else
-        correctPasswordEntered();
+        keypad_handler__on_correct_password();
 }
 
 
@@ -43,7 +43,7 @@ void handlePasswordEntryEvent(uint8_t keyevent) {
         && ((unsigned char)(keyevent & SCANMASK_PRESSED)) == SCANFLAG_PRESSED)
     {
         password[enteredPasswordLength++] = keyevent;
-        passwordCharTyped(keyevent);
+        keypad_handler__on_password_char_typed(keyevent);
     }
 }
  
