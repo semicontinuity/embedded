@@ -36,7 +36,7 @@ SRC += main.c
 
 # BSP
 SRC += keypad.c
-SRC += password-processing.c
+SRC += keypad_handler.c
 SRC += lcd_backlight_service.c
 SRC += alarm_client.c
 SRC += state_change_pulse_transmitter.c

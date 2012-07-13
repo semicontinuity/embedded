@@ -8,7 +8,7 @@
 
 #include "alarm_client.h"
 #include "keypad.h"
-#include "password-processing.h"
+#include "keypad_handler.h"
 #include "lcd_backlight_service.h"
 #include "state_change_pulse_transmitter.h"
 #include "system_timer.h"
@@ -27,7 +27,7 @@ const char MSG_PASSWORD_ACCEPTED[] PROGMEM = "\nКод принят\n";
 // ---------------------------
 
 INLINE void keypad__on_event(const uint8_t keyevent) {
-    handlePasswordEntryEvent(keyevent);
+    keypad_handler__on_key_event(keyevent);
     lcd_backlight_service__signal();
 }
 
