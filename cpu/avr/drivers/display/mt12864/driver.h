@@ -1,8 +1,8 @@
 // Source code adopted from electronix.ru
 // --------------------------------------
 
-#ifndef __MT12864_IO_H
-#define __MT12864_IO_H
+#ifndef __CPU__AVR__DRIVERS__DISPLAY__MT12864__DRIVER_H
+#define __CPU__AVR__DRIVERS__DISPLAY__MT12864__DRIVER_H
 
 #include "device.h"
 #include <avr/pgmspace.h>

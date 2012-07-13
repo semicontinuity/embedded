@@ -1,8 +1,8 @@
 // Source code adopted from electronix.ru
 // --------------------------------------
 
-#ifndef __MT12864_TEXT_OUTPUT_H
-#define __MT12864_TEXT_OUTPUT_H
+#ifndef __CPU__AVR__DRIVERS__DISPLAY__MT12864__TEXT_OUTPUT_H
+#define __CPU__AVR__DRIVERS__DISPLAY__MT12864__TEXT_OUTPUT_H
 
 #include "util/font/fixed-width-font.h"
 #include <stdint.h>

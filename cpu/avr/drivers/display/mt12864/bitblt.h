@@ -1,8 +1,8 @@
 // Source code adopted from electronix.ru
 // --------------------------------------
 
-#ifndef __MT12864_BITBLT_H
-#define __MT12864_BITBLT_H
+#ifndef __CPU__AVR__DRIVERS__DISPLAY__MT12864__BITBLT_H
+#define __CPU__AVR__DRIVERS__DISPLAY__MT12864__BITBLT_H
 
 #include <avr/pgmspace.h>
 #include <stdint.h>

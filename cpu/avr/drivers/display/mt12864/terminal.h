@@ -1,8 +1,8 @@
 // Source code adopted from electronix.ru
 // --------------------------------------
 
-#ifndef __MT12864_TERMINAL_H
-#define __MT12864_TERMINAL_H
+#ifndef __CPU__AVR__DRIVERS__DISPLAY__MT12864__TERMINAL_H
+#define __CPU__AVR__DRIVERS__DISPLAY__MT12864__TERMINAL_H
 
 #include "cpu/avr/drivers/display/mt12864/driver.h"
 
