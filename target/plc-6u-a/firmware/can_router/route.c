@@ -13,7 +13,7 @@
 #include "packet.h"
 
 #include "cpu/avr/asm.h"
-#include "cpu/avr/bitops.h"
+//#include "util/bitops.h"
 
 // debugging
 #include "cpu/avr/drivers/net/can/mcp251x/registers.h"
@@ -110,7 +110,7 @@ void handle_read_mem(void) {
         usart_tx_q__w_ptr__lo8 += PACKET_Q_STRIDE;
 
         // Wake up usart_tx_q_thread, if it sleeps
-        set (usart_tx_q_thread__enabled);
+        usart_tx_q_thread__enabled__set(1);
     }
 }
 
@@ -160,7 +160,7 @@ void handle_read_can(void) {
         usart_tx_q__w_ptr__lo8 += PACKET_Q_STRIDE;
 
         // Wake up usart_tx_q_thread, if it sleeps
-        set (usart_tx_q_thread__enabled);
+        usart_tx_q_thread__enabled__set();
     }
 */
 }
@@ -209,7 +209,7 @@ void route_to_can_tx_q(void) {
         can_tx_q__w_ptr__lo8 += PACKET_Q_STRIDE;
 
         // Wake up the can_tx_q_thread, if it sleeps
-        can_tx_q_thread__enabled__set();
+        can_tx_q_thread__enabled__set(1);
     }
 }
 
@@ -217,7 +217,6 @@ void route_to_can_tx_q(void) {
 /**
  * Route the packet
  */
-void route(void) __attribute__((noinline));
 void route(void) {
     usart_rx_thread__w_ptr   = usart_rx_buffer;
 

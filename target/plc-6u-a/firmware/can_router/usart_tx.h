@@ -9,7 +9,7 @@
 #include "usart_tx_q.h"
 
 #include "cpu/avr/asm.h"
-#include "cpu/avr/bitops.h"
+#include "util/bitops.h"
 
 
 /*
@@ -29,6 +29,7 @@
 #define USART_TX_Q_THREAD_INTERRUPT		ISR(EE_READY_vect, ISR_NAKED)
 #define usart_tx_q_thread__enabled__HOST	(EECR)
 #define usart_tx_q_thread__enabled__BIT		(EERIE)
+DECLARE_BITVAR(usart_tx_q_thread__enabled, usart_tx_q_thread__enabled__HOST, usart_tx_q_thread__enabled__BIT);
 
 
 
@@ -53,6 +54,7 @@
 #define USART_TX_THREAD_INTERRUPT	ISR(USART_UDRE_vect, ISR_NAKED)
 #define usart_tx_thread__enabled__HOST  (UCSR0B)
 #define usart_tx_thread__enabled__BIT   (UDRIE0)
+DECLARE_BITVAR(usart_tx_thread__enabled, usart_tx_thread__enabled__HOST, usart_tx_thread__enabled__BIT);
 
 register uint8_t usart_tx_thread__r_ptr__lo8	asm("r26");
 register uint8_t usart_tx_thread__r_ptr__hi8	asm("r27");

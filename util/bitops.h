@@ -1,18 +1,21 @@
-#ifndef __BITOPS_H
-#define __BITOPS_H
+#ifndef __UTIL__BITOPS_H
+#define __UTIL__BITOPS_H
+
 
 // =============================================================================
 // Helper macros for bit variables
 // =============================================================================
 
-#define set(name)	do { name##__HOST |= _BV((name##__BIT)); } while(0)
-#define clear(name)	do { name##__HOST &= ~_BV((name##__BIT)); } while(0)
-#define is_set(name)    (name##__HOST & _BV((name##__BIT)))
-
 #define DECLARE_BITVAR(name, host, bit) \
-	static inline void name##__set(void)	{ (host) |= _BV((bit)); }	\
-	static inline void name##__clear(void)	{ (host) &= ~_BV((bit)); }	\
-	static inline int name##__is_set(void)	{ return (host) & _BV((bit)); }
+	static inline void name##__set(char v)	{ if ((v)) (host) |= (1 << (bit)); else (host) &= ~(1 << (bit));}	\
+	static inline int name##__is_set(void)	{ return (host) & (1 << (bit)); }
+/*
+#define DECLARE_BITVAR(name, host, bit) \
+	static inline void name##__setv(char v)	{ if ((v)) (host) |= (1 << (bit)); else (host) &= ~(1 << (bit));}	\
+	static inline void name##__set(void)	{ (host) |= (1 << (bit)); }	\
+	static inline void name##__clear(void)	{ (host) &= ~(1 << (bit)); }	\
+	static inline int name##__is_set(void)	{ return (host) & (1 << (bit)); }
+*/
 
 // =============================================================================
 // Helper macros to translate bit number in the 32-bit big endian value
@@ -28,4 +31,5 @@
 // offset of bit inside a byte of 32-bit value in memory containing given bit
 #define UINT32_BIGENDIAN_BIT_IN_BYTE(bit)	(7 - ((bit)%8))
 
-#endif // __BITOPS_H
+
+#endif

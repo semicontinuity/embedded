@@ -8,7 +8,7 @@
 #include "packet.h"
 
 #include "cpu/avr/asm.h"
-#include "cpu/avr/bitops.h"
+#include "util/bitops.h"
 
 #include "cpu/avr/drivers/net/can/mcp251x/registers.h"
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
@@ -44,7 +44,7 @@ CAN_TX_Q_THREAD_INTERRUPT {
     }
     else {
         // TODO optimize to sleep right after can_tx_q__r_ptr__lo8 += PACKET_Q_STRIDE: check if it has reached w_ptr.
-        can_tx_q_thread__enabled__clear();
+        can_tx_q_thread__enabled__set(0);
     }
 
     __asm__ (

@@ -8,7 +8,6 @@
 #include "route.h"
 
 #include "cpu/avr/asm.h"
-#include "cpu/avr/bitops.h"
 
 
 USART_RX_THREAD_INTERRUPT {

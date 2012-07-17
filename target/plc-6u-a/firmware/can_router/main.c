@@ -45,8 +45,7 @@ int main(void)
     can__init();
     can__start();
 
-
-    set(usart_rx_thread__enabled);
+    usart_rx_thread__enabled__set(1);
 
     sei();
     for(;;);

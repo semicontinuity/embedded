@@ -8,7 +8,7 @@
 #include "packet.h"
 #include "can_tx_q.h"
 #include "cpu/avr/asm.h"
-#include "cpu/avr/bitops.h"
+#include "util/bitops.h"
 
 
 /*

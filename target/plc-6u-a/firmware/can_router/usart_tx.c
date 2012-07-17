@@ -8,12 +8,12 @@
 #include "packet.h"
 
 #include "cpu/avr/asm.h"
-#include "cpu/avr/bitops.h"
+#include "util/bitops.h"
 
 
 
 USART_TX_Q_THREAD_INTERRUPT {
-    clear (usart_tx_q_thread__enabled);
+    usart_tx_q_thread__enabled__set(0);
 
     // TODO: optimize
     // if queue is not empty, remove packet from tail and ask 'usart_tx_thread' to transmit it to UART
@@ -30,7 +30,7 @@ USART_TX_Q_THREAD_INTERRUPT {
         usart_tx_thread__remaining = PACKET_LENGTH;
         
         // Spawn 'usart_tx_thread' and yield to it
-        set (usart_tx_thread__enabled);
+        usart_tx_thread__enabled__set(1);
     }
 
 
@@ -77,8 +77,8 @@ USART_TX_THREAD_INTERRUPT {
         : [count] "+r"(usart_tx_thread__remaining)
     );
 
-    set (usart_tx_q_thread__enabled);
-    clear (usart_tx_thread__enabled);
+    usart_tx_q_thread__enabled__set(1);
+    usart_tx_thread__enabled__set(0);
 
     __asm__ __volatile__ (
         "usart_tx_reti:	reti		\n\t"
