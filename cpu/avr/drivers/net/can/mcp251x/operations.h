@@ -1,7 +1,6 @@
 #ifndef __CPU__AVR__DRIVERS__MCP251X__OPERATIONS_H
 #define __CPU__AVR__DRIVERS__MCP251X__OPERATIONS_H
 
-#include "device.h"
 #include <stdint.h>
 #include <avr/pgmspace.h>
 

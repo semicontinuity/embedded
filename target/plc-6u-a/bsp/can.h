@@ -12,13 +12,13 @@
 
 
 // RX Filters 0-2
-extern mcp251x_message_id rxf0_2[3] PROGMEM;
+extern const mcp251x_message_id rxf0_2[3] PROGMEM;
 
 // RX Filters 3-5
-extern mcp251x_message_id rxf3_5[3] PROGMEM;
+extern const mcp251x_message_id rxf3_5[3] PROGMEM;
 
 // RX Masks 0 and 1
-extern mcp251x_message_id rxm0_1[2] PROGMEM;
+extern const mcp251x_message_id rxm0_1[2] PROGMEM;
 
 
 static inline void can__init(void) {

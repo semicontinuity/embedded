@@ -1,5 +1,3 @@
-#include "device.h"
-
 #include <stdint.h>
 #include <avr/pgmspace.h>
 

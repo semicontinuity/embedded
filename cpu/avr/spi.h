@@ -5,8 +5,9 @@
 #include <avr/io.h>
 
 
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__) || defined(__AVR_ATmega8__)
+#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
+    defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__) || \
+    defined(__AVR_ATmega8__)
 
 
 // SS signal of SPI interface. For SPI master, usually configured as output.
