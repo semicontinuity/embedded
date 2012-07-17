@@ -3,7 +3,9 @@
 
 #define F_CPU 12000000UL
 
+#include "config/alarm_client.h"
 #include "config/lcd_backlight_service.h"
+
 
 #include "signal/mt12864.h"
 #include "signal/keypad.h"

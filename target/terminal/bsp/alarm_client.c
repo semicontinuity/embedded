@@ -16,7 +16,7 @@ const char MSG_DISARMED[] PROGMEM = "Снято с охраны\n";
  */
 ISR(ALARM_STATE_INTERRUPT_VECT) {   
     // start filtering out noise that can be caused by mains transients
-    alarm_state_change_timeout = 5; // about 105 msec
+    alarm_state_change_timeout = ALARM_CLIENT__DEBOUNCE_TIME;
 }
 
 

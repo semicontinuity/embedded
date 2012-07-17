@@ -1,7 +1,7 @@
 // =============================================================================
 // Main program.
 //
-// Continuosly compares the measured mains voltage
+// Continuously compares the measured mains voltage
 // against voltage_min and voltage_max parameters.
 // If the voltage is outside of this range, disconnect the load.
 // When the voltage returns back to the safe range, wait on_delay seconds

@@ -3,9 +3,9 @@
 
 #include "lcd_backlight_service.h"
 
-uint16_t fadeOutTimeout = 0;
-uint8_t dutyFactorDelta = 0;
-uint8_t targetDutyFactor;
+uint16_t lcd_backlight_service__fadeOutTimeout;
+uint8_t  lcd_backlight_service__dutyFactorDelta;
+uint8_t  lcd_backlight_service__targetDutyFactor;
 
 
 
@@ -15,11 +15,11 @@ uint8_t targetDutyFactor;
 void lcd_backlight_service__signal(void)
 {
     lcd_backlight_service__pwm__start();
-    fadeOutTimeout = LCD_BACKLIGHT_FADEOUT_TIMEOUT;
+    lcd_backlight_service__fadeOutTimeout = LCD_BACKLIGHT_SERVICE__FADEOUT_TIMEOUT;
     if (lcd_backlight_service__pwm__get() == 0)	// no backlight, no keyboard events for long time
     {
-        dutyFactorDelta = LCD_BACKLIGHT_INC_BRIGHTNESS_STEP;
-        targetDutyFactor = LCD_BACKLIGHT_MAX_BRIGHTNESS; // start increasing duty factor until this value
+        lcd_backlight_service__dutyFactorDelta  = LCD_BACKLIGHT_SERVICE__INC_BRIGHTNESS_STEP;
+        lcd_backlight_service__targetDutyFactor = LCD_BACKLIGHT_SERVICE__MAX_BRIGHTNESS; // start increasing duty factor until this value
     }
 } 
 
@@ -27,22 +27,22 @@ void lcd_backlight_service__signal(void)
 // Called periodically
 void lcd_backlight_service__run(void)
 {
-    if (fadeOutTimeout != 0)
+    if (lcd_backlight_service__fadeOutTimeout != 0)
     {
-        --fadeOutTimeout;
-        if (fadeOutTimeout == 0) // just reached 0 - timeout
+        --lcd_backlight_service__fadeOutTimeout;
+        if (lcd_backlight_service__fadeOutTimeout == 0) // just reached 0 - timeout
         {
-            dutyFactorDelta = LCD_BACKLIGHT_DEC_BRIGHTNESS_STEP; // start slowly decreasing duty factor
-            targetDutyFactor = LCD_BACKLIGHT_MIN_BRIGHTNESS; // start decreasing duty factor until this value
+            lcd_backlight_service__dutyFactorDelta  = LCD_BACKLIGHT_SERVICE__DEC_BRIGHTNESS_STEP; // start slowly decreasing duty factor
+            lcd_backlight_service__targetDutyFactor = LCD_BACKLIGHT_SERVICE__MIN_BRIGHTNESS; // start decreasing duty factor until this value
         }
     }
 
-    if (dutyFactorDelta != 0)
+    if (lcd_backlight_service__dutyFactorDelta != 0)
     {
-        lcd_backlight_service__pwm__set(lcd_backlight_service__pwm__get() + dutyFactorDelta);
-        if (lcd_backlight_service__pwm__get() == targetDutyFactor)
+        lcd_backlight_service__pwm__set(lcd_backlight_service__pwm__get() + lcd_backlight_service__dutyFactorDelta);
+        if (lcd_backlight_service__pwm__get() == lcd_backlight_service__targetDutyFactor)
         {
-            dutyFactorDelta = 0;
+            lcd_backlight_service__dutyFactorDelta = 0;
             // when brightness=0, actually, a small pulse is generated
             // ideally, pwm should be switched off at next cycle
             // currently, brightness changes non-uniformly around 0, but it is not noticeable.
