@@ -3,8 +3,8 @@
 #include <avr/sfr_defs.h>
 
 #include "device.h"
-#include "usart.h"
 #include "usart_tx.h"
+#include "usart.h"
 #include "packet.h"
 
 #include "cpu/avr/asm.h"

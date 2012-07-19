@@ -6,7 +6,6 @@
 #include <stdint.h>
 
 #include "packet.h"
-#include "usart_tx_q.h"
 
 #include "cpu/avr/asm.h"
 #include "util/bitops.h"
