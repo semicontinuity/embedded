@@ -16,7 +16,7 @@
 #define CAN_TX_Q_LENGTH	(16)
 #define CAN_TX_Q_SIZE 	(CAN_TX_Q_LENGTH * PACKET_Q_STRIDE)
 
-volatile uint8_t can_tx_q[CAN_TX_Q_SIZE] __attribute__ ((aligned (256)));
+extern   uint8_t can_tx_q[CAN_TX_Q_SIZE] __attribute__((section(".can_tx_q")));
 register uint8_t can_tx_q__w_ptr__lo8	asm("r8");
 register uint8_t can_tx_q__r_ptr__lo8	asm("r9");
 register uint8_t can_tx_q__remaining	asm("r4");	// remaining free space in the queue

@@ -15,8 +15,17 @@
 
 
 // New style
-#define QUOTE(x)                     #x
-#define CONCAT(s1, s2)               s1##s2
+#ifndef QUOTE
+#define QUOTE__(x)                   #x
+#define QUOTE_(x)                    QUOTE__(x)
+#define QUOTE(x)                     QUOTE_(x)
+#endif
+
+#ifndef CONCAT
+#define CONCAT2(s1, s2)              s1##s2
+#define CONCAT(s1, s2)               CONCAT2(s1, s2)
+#endif
+
 #define DATA_DIR_REG(port)           CONCAT(DDR, port)
 #define PORT_REG(port)               CONCAT(PORT, port)
 #define PIN_REG(port)                CONCAT(PIN, port)

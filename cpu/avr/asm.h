@@ -4,18 +4,20 @@
 // =============================================================================
 // Macros for some of the instructions from the AVR instruction set.
 // =============================================================================
-
 #ifndef QUOTE
-
-#define QUOTE__(x) #x
-#define QUOTE_(x) QUOTE__(x)
-#define QUOTE(x) QUOTE_(x)
-
+#define QUOTE__(x)                      #x
+#define QUOTE_(x)                       QUOTE__(x)
+#define QUOTE(x)                        QUOTE_(x)
 #endif
 
+#ifndef CONCAT
+#define CONCAT2(s1, s2)                 s1##s2
+#define CONCAT(s1, s2)                  CONCAT2(s1, s2)
+#endif
 
-
-#define LABEL(label)		do { __asm__ __volatile__(#label ":"); } while(0)
+#define MARKED_LABEL(prefix, mark)      #prefix "__" mark
+#define TMP_LABEL(p)	                MARKED_LABEL(p, QUOTE(__LINE__))
+#define MARK(label)		        do { __asm__ __volatile__( label ":"); } while(0)
 
 
 #define CONST_LO8(k)			\
@@ -70,7 +72,7 @@
 
 #define LOAD_ADDRESS_OFFSET(var, addr, off)	do {	\
   __asm__ __volatile__ (				\
-    "ldi %A0, lo8(" #addr "+ " QUOTE(off) ")\n\t"	\
+    "ldi %A0, lo8(" #addr "+ " QUOTE(off) ")\n\t"       \
     "ldi %B0, hi8(" #addr "+ " QUOTE(off) ")\n\t"	\
         : "=d"(var)					\
   );							\
@@ -92,15 +94,13 @@
   );							\
 } while(0)
 
-
-#define STORE_INC(ptr, val)	do {	\
-  __asm__ __volatile__ (		\
-    "st %a0, %1"			\
-        : "=e"((ptr))			\
-        : "r"((val)),			\
-          "e"((ptr))			\
-  );					\
+#define SET_LO8_OF(u16_dst, src)	do {	\
+  __asm__ __volatile__ (			\
+    "mov %A0, %A1	\n\t"			\
+        : "=r"(u16_dst) : "r"(src)		\
+  );						\
 } while(0)
+
 
 
 #define GOTO_IF_BIT_SET(r, b, l) do {	\
@@ -114,6 +114,18 @@
 } while(0)
 
 
+// ----------------------------------------------
+// Operations with X register
+// ----------------------------------------------
+
+#define ADDRESS_TO_XPLUS(addr) do {		\
+  __asm__ __volatile__ (			\
+    "lds   __tmp_reg__," QUOTE(addr) "	\n\t"	\
+    "st	   X+, __tmp_reg__		\n\t"	\
+  );						\
+} while(0)
+
+
 #define XPLUS_TO_ADDRESS(addr) do {		\
   __asm__ __volatile__ (			\
     "ld	   __tmp_reg__, X+		\n\t"	\
@@ -121,6 +133,10 @@
   );						\
 } while(0)
 
+
+// ----------------------------------------------
+// Operations with Y register
+// ----------------------------------------------
 
 #define ADDRESS_TO_YPLUS(addr) do {		\
   __asm__ __volatile__ (			\
@@ -130,6 +146,25 @@
 } while(0)
 
 
+#define YPLUS_TO_ADDRESS(addr) do {		\
+  __asm__ __volatile__ (			\
+    "ld	   __tmp_reg__, Y+		\n\t"	\
+    "sts   " QUOTE(addr) ", __tmp_reg__	\n\t"	\
+  );						\
+} while(0)
+
+
+#define LDD_Y(result, d) do {                   \
+  __asm__ __volatile__ (			\
+    "ldd   %0,Y + " QUOTE(d) "          \n\t"   \
+    : "=r" (result)                             \
+  );						\
+} while(0)
+
+// ----------------------------------------------
+// Transfers between X, Y and Z register
+// ----------------------------------------------
+
 #define YPLUS_TO_ZPLUS() do {			\
   __asm__ __volatile__ (			\
     "ld	__tmp_reg__, Y+			\n\t"   \
@@ -138,13 +173,9 @@
 } while(0)
 
 
-
-#define SET_LO8_OF(u16_dst, src)	do {	\
-  __asm__ __volatile__ (			\
-    "mov %A0, %A1	\n\t"			\
-        : "=r"(u16_dst) : "r"(src)		\
-  );						\
-} while(0)
+// ----------------------------------------------
+// Flash access
+// ----------------------------------------------
 
 
 #define __LPM_increment__(addr) \
@@ -172,5 +203,9 @@
 #define BREQ(label)		do { __asm__ __volatile__ ("breq " #label); } while(0)
 #define BRNE(label)		do { __asm__ __volatile__ ("brne " #label); } while(0)
 
+#define RETI()		        do { __asm__ __volatile__ ("reti"); } while(0)
+
+#define BRNE_TMP_LABEL()        do { __asm__ __volatile__("brne " TMP_LABEL(L)); } while(0)
+#define IF_ZERO(body)           do { BRNE_TMP_LABEL(); body; MARK(TMP_LABEL(L)); } while(0)
 
 #endif // __CPU__AVR__ASM_H

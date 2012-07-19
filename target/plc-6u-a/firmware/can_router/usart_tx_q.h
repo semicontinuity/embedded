@@ -16,7 +16,7 @@
 #define USART_TX_Q_LENGTH	(16)
 #define USART_TX_Q_SIZE 	(USART_TX_Q_LENGTH * PACKET_Q_STRIDE)
 
-volatile uint8_t usart_tx_q[USART_TX_Q_SIZE];
+extern   uint8_t usart_tx_q[USART_TX_Q_SIZE] __attribute__((section(".usart_tx_q")));
 register uint8_t usart_tx_q__w_ptr__lo8	asm("r16");
 register uint8_t *usart_tx_q__w_ptr	asm("r16");
 register uint8_t usart_tx_q__r_ptr__lo8	asm("r17");

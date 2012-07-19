@@ -3,6 +3,6 @@
 
 #include "usart_rx_buffer.h"
 
-void route(void) __attribute__((noinline));
+void router__process_packet(void) __attribute__((noinline));
 
 #endif // __ROUTE_H
