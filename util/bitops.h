@@ -7,8 +7,8 @@
 // =============================================================================
 
 #define DECLARE_BITVAR(name, host, bit) \
-	static inline void name##__set(char v)	{ if ((v)) (host) |= (1 << (bit)); else (host) &= ~(1 << (bit));}	\
-	static inline int name##__is_set(void)	{ return (host) & (1 << (bit)); }
+	inline void name##__set(char v)	{ if ((v)) (host) |= (1 << (bit)); else (host) &= ~(1 << (bit));}	\
+	inline int name##__is_set(void)	{ return (host) & (1 << (bit)); }
 /*
 #define DECLARE_BITVAR(name, host, bit) \
 	static inline void name##__setv(char v)	{ if ((v)) (host) |= (1 << (bit)); else (host) &= ~(1 << (bit));}	\

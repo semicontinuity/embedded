@@ -34,4 +34,10 @@ inline void can_tx_q__init(void) {
 }
 
 
+/**
+ * Puts the packet to the CAN TX queue.
+ * @param Y register - the pointer to the packet
+ */
+void can_tx_q__put(void);
+
 #endif // __CAN_TX_Q_H
