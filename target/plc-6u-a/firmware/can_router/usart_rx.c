@@ -13,9 +13,9 @@
 
 
 inline static void usart_rx_thread__on_packet_transferred(void) {
-    register uint8_t *packet	asm("r28") = usart_rx_buffer;
 
-    usart_rx_thread__w_ptr   = usart_rx_buffer;
+    usart_tx_buffer__to_y();
+    volatile register uint8_t *packet	asm("r28");
 
     // If host=0:0 it is a query from host.
     if (!(*(packet+3))) {
