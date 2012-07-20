@@ -12,7 +12,7 @@
 #include "cpu/avr/asm.h"
 
 
-inline void usart_rx_thread__process_packet(void) {
+inline static void usart_rx_thread__on_packet_transferred(void) {
     register uint8_t *packet	asm("r28") = usart_rx_buffer;
 
     usart_rx_thread__w_ptr   = usart_rx_buffer;
@@ -33,7 +33,7 @@ inline void usart_rx_thread__process_packet(void) {
 USART_RX_THREAD_INTERRUPT {
     USART_TO_YPLUS();
 
-    DEC(usart_rx_thread__remaining);
-    IF_ZERO(usart_rx_thread__process_packet());
+    DEC(usart_rx_thread__size);
+    IF_ZERO(usart_rx_thread__on_packet_transferred());
     RETI();    
 }

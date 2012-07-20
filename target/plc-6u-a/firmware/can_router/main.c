@@ -2,6 +2,7 @@
 
 #include "can_tx_q.h"
 #include "usart_tx.h"
+#include "usart_tx_q.h"
 #include "usart_rx.h"
 
 #include "can.h"
@@ -12,14 +13,6 @@
 #include "cpu/avr/gpio.h"
 #include "cpu/avr/usart0.h"
 
-
-/**
- * Initial configuration of usart_tx_thread: bind to 'usart_tx_q'
- * Must use inline assembly, otherwise GCC discards register modifications.
- */
-static inline void usart_tx_thread__init(void) {
-    LOAD_ADDRESS_HI8 (usart_tx_thread__r_ptr__hi8, usart_tx_q);
-}
 
 
 //int main(void) __attribute__ ((noreturn));

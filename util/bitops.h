@@ -1,6 +1,7 @@
 #ifndef __UTIL__BITOPS_H
 #define __UTIL__BITOPS_H
 
+#include <stdbool.h>
 
 // =============================================================================
 // Helper macros for bit variables
@@ -8,7 +9,25 @@
 
 #define DECLARE_BITVAR(name, host, bit) \
 	static inline void name##__set(char v)	{ if ((v)) (host) |= (1 << (bit)); else (host) &= ~(1 << (bit));}	\
-	static inline char name##__is_set(void)	{ return (host) & (1 << (bit)); }
+	static inline bool name##__is_set(void)	{ return (host) & (1 << (bit)); }
+
+#define DECLARE_BITVAR_WITH_BINDING(name, host, bit) \
+INLINE void name##__on_set_0(void);      \
+INLINE void name##__on_set_1(void);      \
+static inline void name##__set(char v)	{       \
+    if (v) {                                    \
+        (host) |= (1 << (bit));                 \
+        name##__on_set_1();                     \
+    }                                           \
+    else {                                      \
+        (host) &= ~(1 << (bit));                \
+        name##__on_set_0();                     \
+    }                                           \
+}                                               \
+static inline bool name##__is_set(void)	{       \
+    return (host) & (1 << (bit));               \
+}
+
 /*
 #define DECLARE_BITVAR(name, host, bit) \
 	static inline void name##__setv(char v)	{ if ((v)) (host) |= (1 << (bit)); else (host) &= ~(1 << (bit));}	\

@@ -19,7 +19,7 @@
  *
  * Property 'can_tx_q_thread__enabled':
  * - When set, the thread 'can_tx_q_thread' is constantly scheduled to run.
- * - Is set when (can_tx_q__remaining < CAN_TX_Q_LENGTH), i.e. when the queue is not empty.
+ * - Is set when can_tx_q__size > 0, i.e. when the queue is not empty.
  * - Mapped to bit SPMIE in EECR, that enables SPM_READY interrupt.
 
  *****************************************************************************************************

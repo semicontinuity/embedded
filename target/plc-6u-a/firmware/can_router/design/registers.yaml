@@ -15,8 +15,8 @@ Registers:
 - r13	: lo8(can_tx_q2__r_ptr) - just for proper placement of queue and this pointer in memory
 - r14	: lo8(can_tx_q3__w_ptr) - just for proper placement of queue and this pointer in memory
 - r15	: lo8(can_tx_q4__r_ptr) - just for proper placement of queue and this pointer in memory
-- r16	: lo8(usart_tx_q__w_ptr_lo8)
-- r17	: lo8(usart_tx_q__r_ptr_lo8)
+- r16	: lo8(usart_tx_q__w_ptr)
+- r17	: lo8(usart_tx_q__r_ptr)
 - r18	: usart_tx_thread__remaining
 - r19	: usart_rx_thread__remaining
 - r20	: 

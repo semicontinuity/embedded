@@ -18,49 +18,53 @@
 #define PROTOCOL_CMD_READ_CAN   (2)
 #define PROTOCOL_CMD_WRITE_CAN  (3)
 
+/**
+ * Create the response packet for the Memory Request packet
+ * @param register Y - request packet
+ * @param register Z - response packet
+ */
+inline static void server__handle_packet__read_mem(void) {
+    // Create response: (header = copy of request header) + (data = memory contents)
+
+    // Copy header (5 bytes)
+    // -------------------------------------------------------------------------------------------
+
+    YPLUS_TO_ZPLUS();
+    YPLUS_TO_ZPLUS();
+    YPLUS_TO_ZPLUS();
+    YPLUS_TO_ZPLUS();
+    YPLUS_TO_ZPLUS();
+
+    // Copy the specified memory contents (8 bytes).
+    // -------------------------------------------------------------------------------------------
+
+    // Prepare to copy: set up Y to point to the memory address requested
+    // (first two bytes of payload)
+    __asm__ __volatile__ (
+        "ldd r28, Y+0\n\t"
+        "ldd r29, Y+1\n\t"
+    );
+
+    // Copy data (8 bytes)
+    YPLUS_TO_ZPLUS();
+    YPLUS_TO_ZPLUS();
+    YPLUS_TO_ZPLUS();
+    YPLUS_TO_ZPLUS();
+    YPLUS_TO_ZPLUS();
+    YPLUS_TO_ZPLUS();
+    YPLUS_TO_ZPLUS();
+    YPLUS_TO_ZPLUS();
+}
 
 
-inline void server__process_packet__read_mem(void) {
-    // The only supported query is "memory dump":
-    // Return 8 bytes of memory, starting at location (endpoint)*8.
-    // The response to the host query is sent to USART (via usart_tx_queue)
-
-    if (usart_tx_q__not_empty()) {
-        usart_tx_q__write__begin();
-
-        // Create response in usart_tx_q: (header = copy of request header) + (data = memory contents)
-
-        // Copy header (5 bytes)
-        // -------------------------------------------------------------------------------------------
-
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-
-        // Copy the specified memory contents (8 bytes).
-        // -------------------------------------------------------------------------------------------
-
-        // Prepare to copy: set up Y to point to the memory address requested
-        // (first two bytes of payload)
-        __asm__ __volatile__ (
-            "ldd r28, Y+0\n\t"
-            "ldd r29, Y+1\n\t"
-        );
-
-        // Copy data (8 bytes)
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-
-        usart_tx_q__write__end();
-    }
+/**
+ * Read memory query.
+ * The first 2 bytes of request packet payload contain the memory address to be read.
+ * The 8 bytes of memory from the specified address are placed into the response packet payload,
+ * and the response is placed into USART TX queue.
+ */
+inline static void server__process_packet__read_mem(void) {
+    usart_tx_q__put_if_not_full(server__handle_packet__read_mem());
 }
 
 
@@ -68,55 +72,11 @@ inline void server__process_packet__read_mem(void) {
  * Processed the packet addressed to the server.
  * @param Y register - the pointer to the packet
  */
-inline void server__process_packet__read_can(void) {
+inline static void server__process_packet__read_can(void) {
     volatile register uint8_t *packet	asm("r28");
-/*
-    if (usart_tx_q__remaining > 0) {
-        usart_tx_q__remaining--;
-
-        // Prepare to copy: set up Z to point to the head of the usart_tx_q.
-        __asm__ __volatile__ (
-            "mov	r30, %0			\n\t"
-            "ldi	r31, hi8(usart_tx_q)	\n\t"
-             :: "r"(usart_tx_q__w_ptr__lo8)
-        );
-
-        // Copy header (5 bytes)
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-
-*/
-
-//        WITH_CS (mcp251x_read_bytes(usart_tx_q__w_ptr + 5, packet[PACKET__OFFSETOF_A_LO], 8));
-//        WITH_CS (mcp251x_read_bytes(usart_rx_buffer, 0x28, 8));
     uint8_t d;
     MCP251X_SPI_COMM (d = mcp251x_read_byte(*packet));
     debug__write(d);
-
-/*
-        MOVW(packet, usart_rx_buffer);
-        // Copy data (8 bytes)
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-        YPLUS_TO_ZPLUS();
-
-
-        // Move head pointer
-        // Higher 8 bits are not touched, thus the pointer automatically wraps to the start of the queue.
-        usart_tx_q__w_ptr__lo8 += PACKET_Q_STRIDE;
-
-        // Wake up usart_tx_q_thread, if it sleeps
-        usart_tx_q_thread__enabled__set();
-    }
-*/
 }
 
 
