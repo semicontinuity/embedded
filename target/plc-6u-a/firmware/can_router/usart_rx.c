@@ -14,8 +14,8 @@
 
 inline static void usart_rx_thread__on_packet_transferred(void) {
 
-    usart_rx_buffer__to_y();
     volatile register uint8_t *packet	asm("r28");
+    LOAD_ADDRESS(packet, usart_rx_buffer);
 
     // If host=0:0 it is a query from host.
     if (!(*(packet+3))) {

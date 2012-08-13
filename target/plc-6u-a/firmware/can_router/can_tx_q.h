@@ -55,19 +55,6 @@ inline void can_tx_q__head__move(void) {
 
 
 /**
- * Copy the head pointer to the z register
- */
-inline void can_tx_q__head__to_z(void) {
-    // Prepare to copy: set up Z to point to the head of the usart_tx_q.
-    __asm__ __volatile__ (
-        "mov	r30, %0			\n\t"
-        "ldi	r31, hi8(can_tx_q)	\n\t"
-        :: "r"(can_tx_q__w_ptr__lo8)
-    );
-}
-
-
-/**
  * Moves the tail pointer (the element the tail is logically removed).
  * Adjusts the queue size and the tail (read) pointer.
  */
@@ -80,42 +67,42 @@ inline void can_tx_q__tail__move(void) {
 
 
 /**
- * Copy the tail pointer to the z register
- */
-inline void can_tx_q__tail__to_z(void) {
-    // Prepare to copy: set up Z to point to the head of the usart_tx_q.
-    __asm__ __volatile__ (
-        "mov	r30, %0			\n\t"
-        "ldi	r31, hi8(can_tx_q)	\n\t"
-        :: "r"(can_tx_q__r_ptr__lo8)
-    );
-}
-
-
-/**
- * Puts the packet to the CAN TX queue.
- * @param Y register - the pointer to the packet
- */
-void can_tx_q__put(void);
-
-
-/**
  * Invoked after the put to the queue.
  * Implement in the application code.
  */
 INLINE void can_tx_q__on_not_empty(void);
 
+
 /**
  * Put the packet to the queue, if it is not full.
  * The function f is invoked to actually write data to the queue (with Z register pointing into the queue)
  */
-#define can_tx_q__put_if_not_full(f) do {     \
-    if (!can_tx_q__full()) {                  \
-        can_tx_q__head__to_z();               \
-        f;                                    \
-        can_tx_q__head__move();               \
-        can_tx_q__on_not_empty();             \
-    }                                         \
+#define can_tx_q__put_if_not_full(f) do {       \
+    if (!can_tx_q__full()) {                    \
+        volatile register uint8_t *z asm("r30");\
+        SET_LO8_OF(z, can_tx_q__w_ptr__lo8);    \
+        LOAD_ADDRESS_HI8_OF(z, can_tx_q);       \
+        f;                                      \
+        can_tx_q__head__move();                 \
+        can_tx_q__on_not_empty();               \
+    }                                           \
+} while(0)
+
+
+/**
+ * Get the packet from the queue, assuming it is not empty.
+ * The function f is invoked to actually process data retrieved from the queue (with Z register pointing to the packet retrieved)
+ * The function on_empty is invoked when the queue becomes empty.
+ */
+#define can_tx_q__get(f,on_empty) do {                  \
+    volatile register uint8_t *z asm("r30");            \
+    SET_LO8_OF(z, can_tx_q__r_ptr__lo8);		\
+    LOAD_ADDRESS_HI8_OF(z, can_tx_q);                   \
+    can_tx_q__tail__move();                             \
+    f;                                                  \
+    if (can_tx_q__empty()) {                            \
+        on_empty;                                       \
+    }                                                   \
 } while(0)
 
 

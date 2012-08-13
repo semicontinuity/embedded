@@ -94,6 +94,14 @@
   );							\
 } while(0)
 
+
+#define LOAD_ADDRESS_HI8_OF(var, addr)	do {		\
+  __asm__ __volatile__ (				\
+    "ldi %B0, hi8(" #addr ")\n\t"			\
+        : "=d"(var)					\
+  );							\
+} while(0)
+
 #define SET_LO8_OF(u16_dst, src)	do {	\
   __asm__ __volatile__ (			\
     "mov %A0, %A1	\n\t"			\

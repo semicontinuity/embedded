@@ -20,8 +20,8 @@
 
 /**
  * Create the response packet for the Memory Request packet
- * @param register Y - request packet
- * @param register Z - response packet
+ * @param register Y - request packet pointer
+ * @param register Z - response packet pointer
  */
 inline static void server__handle_packet__read_mem(void) {
     // Create response: (header = copy of request header) + (data = memory contents)

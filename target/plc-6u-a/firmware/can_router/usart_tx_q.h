@@ -57,19 +57,6 @@ inline void usart_tx_q__head__move(void) {
 
 
 /**
- * Copy the head pointer to the z register
- */
-inline void usart_tx_q__head__to_z(void) {
-    // Prepare to copy: set up Z to point to the head of the usart_tx_q.
-    __asm__ __volatile__ (
-        "mov	r30, %0			\n\t"
-        "ldi	r31, hi8(usart_tx_q)	\n\t"
-        :: "r"(usart_tx_q__w_ptr__lo8)
-    );
-}
-
-
-/**
  * Moves the tail pointer (the element the tail is logically removed).
  * Adjusts the queue size and the tail (read) pointer.
  */
@@ -80,17 +67,6 @@ inline void usart_tx_q__tail__move(void) {
     usart_tx_q__r_ptr__lo8 += PACKET_Q_STRIDE;
 }
 
-/**
- * Copy the tail pointer to the z register
- */
-inline void usart_tx_q__tail__to_z(void) {
-    // Prepare to copy: set up Z to point to the head of the usart_tx_q.
-    __asm__ __volatile__ (
-        "mov	r30, %0			\n\t"
-        "ldi	r31, hi8(usart_tx_q)	\n\t"
-        :: "r"(usart_tx_q__r_ptr__lo8)
-    );
-}
 
 /**
  * Invoked after the put to the queue.
@@ -104,7 +80,9 @@ INLINE void usart_tx_q__on_not_empty(void);
  */
 #define usart_tx_q__put_if_not_full(f) do {     \
     if (!usart_tx_q__full()) {                  \
-        usart_tx_q__head__to_z();               \
+        volatile register uint8_t *z asm("r30");\
+        SET_LO8_OF(z, usart_tx_q__w_ptr__lo8);  \
+        LOAD_ADDRESS_HI8_OF(z, usart_tx_q);     \
         f;                                      \
         usart_tx_q__head__move();               \
         usart_tx_q__on_not_empty();             \
