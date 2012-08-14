@@ -23,6 +23,7 @@ else
 CDEFS += -DINLINE=
 
 # Firmware
+SRC += can_service.c
 SRC += can_tx_q.c
 SRC += usart_tx.c
 SRC += usart_tx_q.c

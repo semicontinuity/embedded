@@ -3,6 +3,7 @@
 
 // Firmware
 
+#include "can_service.c"
 #include "can_tx_q.c"
 #include "usart_tx_q.c"
 #include "usart_tx.c"

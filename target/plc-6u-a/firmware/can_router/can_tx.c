@@ -1,8 +1,6 @@
 #include "device.h"
 #include <avr/io.h>
 
-#include "device.h"
-
 #include "can_tx_q.h"
 #include "can_tx.h"
 #include "packet.h"

@@ -1,5 +1,6 @@
 #include "device.h"
 
+#include "can_service.h"
 #include "can_tx_q.h"
 #include "usart_tx.h"
 #include "usart_tx_q.h"
@@ -37,6 +38,9 @@ int main(void)
 
     can__init();
     can__start();
+
+    can_service__init();
+    can_service__start();
 
     usart_rx_thread__enabled__set(1);
 
