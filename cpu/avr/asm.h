@@ -169,6 +169,15 @@
   );						\
 } while(0)
 
+
+#define LDD_Y_U16(result, d) do {               \
+  __asm__ __volatile__ (			\
+    "ldd   %A0,Y + " QUOTE(d) "          \n\t"  \
+    "ldd   %B0,Y + " QUOTE(d) " + 1      \n\t"  \
+    : "=r" (result)                             \
+  );						\
+} while(0)
+
 // ----------------------------------------------
 // Transfers between X, Y and Z register
 // ----------------------------------------------

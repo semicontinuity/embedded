@@ -22,7 +22,7 @@ inline static void usart_rx_thread__on_packet_transferred(void) {
         server__process_packet();
     }
     else {
-        router__process_packet();
+        router__put_packet_to_can_tx_q();
     }
 
     // prepare to receive the next packet

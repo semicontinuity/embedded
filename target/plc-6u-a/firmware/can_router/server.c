@@ -1,6 +1,7 @@
 #include "device.h"
 #include <avr/io.h>
 
+#include "packet.h"
 #include "server.h"
 #include "debug.h"
 
@@ -25,35 +26,17 @@
  */
 inline static void server__handle_packet__read_mem(void) {
     // Create response: (header = copy of request header) + (data = memory contents)
-
-    // Copy header (5 bytes)
-    // -------------------------------------------------------------------------------------------
-
-    YPLUS_TO_ZPLUS();
-    YPLUS_TO_ZPLUS();
-    YPLUS_TO_ZPLUS();
-    YPLUS_TO_ZPLUS();
-    YPLUS_TO_ZPLUS();
+    packet__copy_header();
 
     // Copy the specified memory contents (8 bytes).
     // -------------------------------------------------------------------------------------------
-
-    // Prepare to copy: set up Y to point to the memory address requested
+    // Set up Y to point to the memory address requested
     // (first two bytes of payload)
-    __asm__ __volatile__ (
-        "ldd r28, Y+0\n\t"
-        "ldd r29, Y+1\n\t"
-    );
-
-    // Copy data (8 bytes)
-    YPLUS_TO_ZPLUS();
-    YPLUS_TO_ZPLUS();
-    YPLUS_TO_ZPLUS();
-    YPLUS_TO_ZPLUS();
-    YPLUS_TO_ZPLUS();
-    YPLUS_TO_ZPLUS();
-    YPLUS_TO_ZPLUS();
-    YPLUS_TO_ZPLUS();
+    volatile register uint8_t *address;
+    volatile register uint8_t *packet	asm("r28");
+    LDD_Y_U16(address, 0);
+    MOVW(packet, address);
+    packet__copy_payload();
 }
 
 
