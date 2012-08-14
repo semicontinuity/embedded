@@ -5,11 +5,12 @@
 #include <stdint.h>
 
 #include "packet.h"
-#include "usart_rx_buffer.h"
 
 #include "cpu/avr/asm.h"
 #include "util/bitops.h"
 
+
+extern uint8_t usart_rx_buffer[PACKET_LENGTH] __attribute__ ((section (".noinit")));
 
 /*
  *****************************************************************************************************

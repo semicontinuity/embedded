@@ -32,7 +32,7 @@
 static volatile mcp251x_message_buffer buffer;
 
 
-static void handle_rx(void) {
+static void can_service__handle_rx(void) {
     STROBED_LOW (SS, mcp251x_read_bytes((uint8_t*)&buffer.header, MCP251X_REGISTER_RXB0SIDH, sizeof(mcp251x_frame_header)));
     uint8_t slot = CANP_SLOT_BITS(buffer.header.id);    
 
@@ -74,11 +74,10 @@ static void handle_rx(void) {
 /**
  *  Handler for the interrupt from MCP2515 CAN controller (falling edge).
  */
-ISR(INT1_vect)
-{
+ISR(INT1_vect) {
     // interrupt flag for INT1 cleared automatically
     // The only source of interrupt is from RX buffer 0
-    handle_rx();
+    can_service__handle_rx();
 
     // Clear all interrupts
     DRIVE_LOW(SS);

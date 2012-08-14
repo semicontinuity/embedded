@@ -1,7 +1,8 @@
 #include "device.h"
-#include <avr/io.h>
 
-#include "device.h"
+#include <avr/io.h>
+#include <stdint.h>
+#include "packet.h"
 
 #include "usart.h"
 #include "usart_rx.h"
@@ -10,6 +11,9 @@
 #include "router.h"
 
 #include "cpu/avr/asm.h"
+
+
+uint8_t usart_rx_buffer[PACKET_LENGTH] __attribute__ ((section (".noinit")));
 
 
 inline static void usart_rx_thread__on_packet_transferred(void) {

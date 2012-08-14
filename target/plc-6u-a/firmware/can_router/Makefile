@@ -29,7 +29,6 @@ SRC += usart_tx.c
 SRC += usart_tx_q.c
 SRC += can_tx.c
 SRC += usart_rx.c
-SRC += usart_rx_buffer.c
 SRC += router.c
 SRC += server.c
 SRC += main.c

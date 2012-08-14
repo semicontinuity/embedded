@@ -9,7 +9,6 @@
 #include "usart_tx.c"
 #include "can_tx.c"
 #include "usart_rx.c"
-#include "usart_rx_buffer.c"
 #include "router.c"
 #include "server.c"
 #include "main.c"

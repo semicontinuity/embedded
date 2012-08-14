@@ -17,7 +17,7 @@
  * @param register Z - packet pointer
  */
 inline void can_tx__transmit_packet(void) {
-    volatile register uint8_t *packet asm("r30");
+    register const uint8_t *packet asm("r30");
     MCP251X_SPI_COMM (mcp2515_load_tx_buffer (packet, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, PACKET_LENGTH));
     MCP251X_SPI_COMM (mcp2515_request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
 }
