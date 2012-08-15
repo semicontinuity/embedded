@@ -462,7 +462,7 @@ inline static void ui_controller__run(void) {
 
 
 // =============================================================================
-// Implementation of callbacks form other modules
+// Implementation of callbacks from other modules
 // =============================================================================
 
 INLINE void on_system_tick(void) {
