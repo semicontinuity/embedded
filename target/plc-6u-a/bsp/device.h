@@ -7,6 +7,5 @@
 
 
 #include "config/usart.h"
-#include "config/can.h"
 
 #endif

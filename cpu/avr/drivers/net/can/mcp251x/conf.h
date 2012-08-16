@@ -1,10 +1,25 @@
 // =============================================================================
+// MCP251x controller configuration.
+// Resets the MCP251X and uploads configuration registers.
+// The parameters mentioned below must be defined externally.
+// =============================================================================
+
+
 // The constants for MCP251x configuration.
 // Describe the valid combination of bits in the registers CNF1, CNF2 and CNF3.
 // =============================================================================
 
 #ifndef __CPU__AVR__DRIVERS__NET__MCP251X__CONF_H
 #define __CPU__AVR__DRIVERS__NET__MCP251X__CONF_H
+
+#include <util/delay.h>
+
+#include "can_selector.h"
+
+#include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
+#include "cpu/avr/drivers/net/can/mcp251x/registers.h"
+#include "cpu/avr/drivers/net/can/mcp251x/operations.h"
+
 
 // Bit masks applicable for the register CNF1.
 // #############################################################################
@@ -56,5 +71,44 @@
 // Parameter MCP251X__CONF__PROP_SEGMENT_2_BITS, starts at bit PHSEG20
 #define MCP251X_PROP_SEGMENT_2_LENGTH_MASK      (0x07)
 
+
+
+#ifdef MCP251X__CNF1
+#  error "MCP251X__CNF1 is already defined"
+#endif
+#ifdef MCP251X__CNF2
+#  error "MCP251X__CNF2 is already defined"
+#endif
+#ifdef MCP251X__CNF3
+#  error "MCP251X__CNF3 is already defined"
+#endif
+
+#define MCP251X__CNF1 (\
+  (MCP251X__CONF__SYNC_JUMP_WIDTH_BITS)     << MCP251X_SJW0   | \
+  (MCP251X__CONF__BAUD_RATE_PRESCALER_BITS) << MCP251X_BRP0     \
+)
+#define MCP251X__CNF2 (\
+  (MCP251X__CONF__BIT_TIME_LENGTH_MODE) << MCP251X_BLTMODE    | \
+  (MCP251X__CONF__BUS_SAMPLING_MODE)    << MCP251X_SAM        | \
+  (MCP251X__CONF__PROP_SEGMENT_1_BITS)  << MCP251X_PHSEG10    | \
+  (MCP251X__CONF__PROP_SEGMENT_BITS)    << MCP251X_PRSEG0       \
+)
+#define MCP251X__CNF3 (\
+  (MCP251X__CONF__CLKOUT_MODE)          << MCP251X_SOF        | \
+  (MCP251X__CONF__WAKEUP_FILTER_MODE)   << MCP251X_WAKFIL     | \
+  (MCP251X__CONF__PROP_SEGMENT_2_BITS)  << MCP251X_PHSEG20      \
+)
+
+
+inline static void mcp251x__init(void) {
+    // Rely on HW reset 
+    can_selector__run(mcp251x_reset());
+
+    _delay_us(50); // >2
+
+    can_selector__run(mcp251x_write_byte(MCP251X_REGISTER_CNF1, MCP251X__CNF1));
+    can_selector__run(mcp251x_write_byte(MCP251X_REGISTER_CNF2, MCP251X__CNF2));
+    can_selector__run(mcp251x_write_byte(MCP251X_REGISTER_CNF3, MCP251X__CNF3));
+}
 
 #endif

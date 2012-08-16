@@ -4,6 +4,7 @@
 #include <avr/interrupt.h>
 
 #include "pwm.h"
+#include "can_selector.h"
 
 #include "cpu/avr/gpio.h"
 #include "cpu/avr/util/debug.h"
@@ -13,6 +14,8 @@
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 #include "cpu/avr/drivers/net/can/mcp251x/struct.h"
 #include "cpu/avr/drivers/net/can/mcp251x/interrupt-codes.h"
+
+#include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 
 
 #define COPY_8_BYTES(dst_start, src_start)	do {	\
@@ -33,8 +36,8 @@ static volatile mcp251x_message_buffer buffer;
 
 
 static void can_service__handle_rx(void) {
-    STROBED_LOW (SS, mcp251x_read_bytes((uint8_t*)&buffer.header, MCP251X_REGISTER_RXB0SIDH, sizeof(mcp251x_frame_header)));
-    uint8_t slot = CANP_SLOT_BITS(buffer.header.id);    
+    can_selector__run(mcp251x_read_bytes((uint8_t*)&buffer.header, MCP251X_REGISTER_RXB0SIDH, sizeof(mcp251x_frame_header)));
+    uint8_t slot = CANP_SLOT_BITS(buffer.header.id);
 
     // Assume that extended frame was received.
     // Check if it was an Remote Transmission Request: use RTR bit in DLC (extended frames only)
@@ -47,16 +50,16 @@ static void can_service__handle_rx(void) {
         if (CANP_AUX_BITS(buffer.header.id)) {
             // Read ROM
             memcpy_P((void*)buffer.data, (PGM_VOID_P)(slot * 8), buffer.header.dlc);
-            STROBED_LOW (SS, mcp2515_load_tx_buffer ((uint8_t*)&buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, sizeof(buffer)));
-            STROBED_LOW (SS, mcp2515_request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
+            can_selector__run(mcp2515_load_tx_buffer ((uint8_t*)&buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, sizeof(buffer)));
+            can_selector__run(mcp2515_request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
             // TODO: check TXREQ
         }
         else {
             // Read RAM request
             if (slot == 0) {
                 COPY_8_BYTES(buffer.data, colors);
-                STROBED_LOW (SS, mcp2515_load_tx_buffer ((uint8_t*)&buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, sizeof(buffer)));
-                STROBED_LOW (SS, mcp2515_request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
+                can_selector__run(mcp2515_load_tx_buffer ((uint8_t*)&buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, sizeof(buffer)));
+                can_selector__run(mcp2515_request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
                 // TODO: check TXREQ
             }
         }
@@ -64,7 +67,7 @@ static void can_service__handle_rx(void) {
     else {
         // Received PUT request
         if (!CANP_AUX_BITS(buffer.header.id) && slot == 0) {
-            STROBED_LOW (SS, mcp251x_read_bytes((uint8_t*)buffer.data, MCP251X_REGISTER_RXB0D0, sizeof(buffer.data)));
+            can_selector__run(mcp251x_read_bytes((uint8_t*)buffer.data, MCP251X_REGISTER_RXB0D0, sizeof(buffer.data)));
             COPY_8_BYTES(colors, buffer.data);
         }        
     }
@@ -80,9 +83,7 @@ ISR(INT1_vect) {
     can_service__handle_rx();
 
     // Clear all interrupts
-    DRIVE_LOW(SS);
-    mcp251x_write_byte(MCP251X_REGISTER_CANINTF, 0);
-    DRIVE_HIGH(SS);
+    can_selector__run(mcp251x_write_byte(MCP251X_REGISTER_CANINTF, 0));
 }
 
 

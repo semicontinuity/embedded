@@ -3,8 +3,12 @@
 #include "device.h"
 
 #include "cpu/avr/spi.h"
+#include "cpu/avr/drivers/net/can/mcp251x/conf.h"
+
 
 #include "can.h"
+#include "can_selector.h"
+
 #include "pwm.h"
 #include "console_service.h"
 #include "can_service.h"
@@ -18,6 +22,9 @@ int main(void)
     pwm__start();
 
     spi__init(SPI_CLKDIV_16);
+    can_selector__init();
+
+    mcp251x__init();
 
     can__init();
     can__start();

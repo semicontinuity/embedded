@@ -1,6 +1,7 @@
 #include "device.h"
 #include "console_service.h"
 #include "parse.h"
+#include "can_selector.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -47,10 +48,8 @@ void console_service__run(void)
 //            debug__putc(10);
 
             uint8_t addr = parseByte(input_buffer);
-            
-            DRIVE_LOW(SS);            
-            register uint8_t v = mcp251x_read_byte(addr);
-            DRIVE_HIGH(SS);            
+            register uint8_t v;
+            can_selector__run(v = mcp251x_read_byte(addr));
 
 //            debug__putc('<');
 //            debug__putc('r');
@@ -71,9 +70,7 @@ void console_service__run(void)
             register uint8_t addr = parseByte(input_buffer);
             register uint8_t value = parseByte(input_buffer + 3);
             
-            DRIVE_LOW(SS);            
-            mcp251x_write_byte(addr, value);
-            DRIVE_HIGH(SS);
+            can_selector__run(mcp251x_write_byte(addr, value));
             
 //            debug__putc('<');
 //            debug__putc('w');
@@ -86,9 +83,7 @@ void console_service__run(void)
 //            debug__putc(13);
 //            debug__putc(10);
 
-            DRIVE_LOW(SS);            
-            mcp251x_reset();
-            DRIVE_HIGH(SS);
+            can_selector__run(mcp251x_reset());
 
 //            debug__putc('<');
 //            debug__putc('!');

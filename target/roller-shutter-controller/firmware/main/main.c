@@ -5,6 +5,7 @@
 #include <avr/interrupt.h>
 
 #include "cpu/avr/spi.h"
+#include "cpu/avr/drivers/net/can/mcp251x/conf.h"
 
 #include "can.h"
 #include "can_selector.h"
@@ -50,6 +51,8 @@ int main(void) {
     spi__init(SPI_CLKDIV_16);
 
     can_selector__init();
+
+    mcp251x__init();
 
     can__init();
     can__start();

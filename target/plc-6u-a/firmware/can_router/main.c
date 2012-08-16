@@ -16,6 +16,8 @@
 #include "cpu/avr/spi.h"
 #include "cpu/avr/usart0.h"
 
+#include "cpu/avr/drivers/net/can/mcp251x/conf.h"
+
 
 
 //int main(void) __attribute__ ((noreturn));
@@ -37,6 +39,8 @@ int main(void)
     spi__init(SPI_CLKDIV_128);
 
     can_selector__init();
+
+    mcp251x__init();
 
     can__init();
     can__start();
