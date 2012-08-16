@@ -6,19 +6,13 @@
 // In configuration file, included from device.h, the following must be defined:
 // 
 // USART0__IN__BUFFER__SIZE
-//
-// usart0__in__buffer__roll(index)
-//   This macro is called every time a character has been placed to the buffer
-//   The index may have reached the top of the buffer
-//   If the index is at the top of the buffer, it must be reset to point to the
-//   beginning of the buffer
-//   As circular buffer size is often the power of 2, this operation can be optimized.
 // ===================================================================================
 
 #include "device.h"
 
 #include <stdint.h>
 #include <avr/interrupt.h>
+
 
 // We have UART circular buffer because data can arrive faster than we can process it
 uint8_t usart0__buffer[USART0__IN__BUFFER__SIZE];
@@ -34,24 +28,33 @@ volatile uint16_t usart0__buffer_r_ptr;
 volatile uint16_t usart0__buffer_remaining;
 
 
-#ifndef usart0__in__buffer__roll
-#define usart0__in__buffer__roll(index) do {\
-    if (index >= USART0__IN__BUFFER__SIZE) index = 0;\
-} while (0);
+/**
+ * This function is called every time a character has been placed to the buffer
+ * the index may have reached the top of the buffer
+ * If the index is at the top of the buffer, it must be reset to point to the
+ * beginning of the buffer.
+ */
+inline uint16_t usart0__in__buffer__roll(uint16_t index) {
+#if USART0__IN__BUFFER__SIZE & (USART0__IN__BUFFER__SIZE - 1)
+    return (index >= USART0__IN__BUFFER__SIZE) ? 0 : index;
+#else
+    return index & (USART0__IN__BUFFER__SIZE - 1);
 #endif
+}
 
 
 /**
  * When a character is received, this ISR is called.
  * If there were o framing erro and the buffer is not full, put the character to the buffer.
  */
-ISR(USART_RXC_vect) {
 
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__) 
+    defined(__AVR_ATmega168__)
+ISR(USART_RX_vect) {
     uint8_t c = UDR0;
-    if (bit_is_clear(UCSR0A, FE0) && usart0__buffer_remaining < USART0__IN__BUFFER__SIZE)
+    if (bit_is_clear(UCSR0A, FE0) && usart0__buffer_remaining < USART0__IN__BUFFER__SIZE) 
 #elif defined(__AVR_ATmega8__)
+ISR(USART_RXC_vect) {
     uint8_t c = UDR;
     if (bit_is_clear(UCSRA, FE) && usart0__buffer_remaining < USART0__IN__BUFFER__SIZE)
 #else
@@ -61,22 +64,22 @@ ISR(USART_RXC_vect) {
     {
         usart0__buffer[usart0__buffer_w_ptr] = c;
         ++usart0__buffer_w_ptr;
-        usart0__in__buffer__roll(usart0__buffer_w_ptr);
+        usart0__buffer_w_ptr = usart0__in__buffer__roll(usart0__buffer_w_ptr);
         ++usart0__buffer_remaining;
     }
 }
 
 
 /**
- * Receives a byte from UART
- * Blocks if no data available
+ * Receives a byte from UART.
+ * Blocks if no data available.
  */
 uint8_t usart__in__read(void)
 {
     while (usart0__buffer_remaining == 0);
 
     uint8_t c = usart0__buffer[usart0__buffer_r_ptr++];
-    usart0__in__buffer__roll(usart0__buffer_r_ptr);
+    usart0__buffer_r_ptr = usart0__in__buffer__roll(usart0__buffer_r_ptr);
     --usart0__buffer_remaining;
     return c;
 }
