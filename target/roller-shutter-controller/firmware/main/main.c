@@ -36,7 +36,7 @@ INLINE void buttons__on_button2_changed(void) {
 
 INLINE void on_system_tick(void) {
     buttons__run();
-    motor_controller__run();
+    motor_controller__prescaler__run();
 }
 
 

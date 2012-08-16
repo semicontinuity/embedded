@@ -41,10 +41,11 @@ uint8_t motor_controller__timer                 = 0;
  int8_t motor_controller__position_delta        = 0;
 uint8_t motor_controller__error                 = MOTOR_CONTROLLER__POSITION__MIDDLE;
 
+
 /**
  * Called every motor_controller_tick to generate proper signals to control the motor.
  */
-inline void motor_controller__on_tick(void) {
+inline void motor_controller__run(void) {
     switch (motor_controller__state) {
     case MOTOR_CONTROLLER__STATE__REVERSE_DELAY:
         if (--motor_controller__timer != 0) {
@@ -85,14 +86,15 @@ inline void motor_controller__on_tick(void) {
 }
 
 
+uint8_t motor_controller__prescaler__time;
+
 /**
  * Called every system tick to generate motor_controller_tick.
  */
-inline void motor_controller__run(void) {
-    static int8_t t;
-    if (--t == 0) {
-        t = MOTOR_CONTROLLER__TICK_PERIOD;
-        motor_controller__on_tick();
+inline void motor_controller__prescaler__run(void) {
+    if (--motor_controller__prescaler__time == 0) {
+        motor_controller__prescaler__time = MOTOR_CONTROLLER__TICK_PERIOD;
+        motor_controller__run();
     }
 }
 

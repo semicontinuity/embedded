@@ -14,7 +14,7 @@ inline void motor_controller__init(void) {
 /**
  * Called at every system tick to generate proper signals to control the motor.
  */
-inline void motor_controller__run(void);
+inline void motor_controller__prescaler__run(void);
 
 
 /**
