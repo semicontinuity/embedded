@@ -2,6 +2,8 @@
 
 #include "device.h"
 
+#include "cpu/avr/spi.h"
+
 #include "can.h"
 #include "pwm.h"
 #include "console_service.h"
@@ -15,7 +17,7 @@ int main(void)
     pwm__init();
     pwm__start();
 
-    spi__init();
+    spi__init(SPI_CLKDIV_16);
 
     can__init();
     can__start();

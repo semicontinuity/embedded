@@ -42,9 +42,10 @@
 #define ENABLE_PULLUP(signal)        do {set_bit_in_reg (PORT_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
 #define TOGGLE(signal)               do {set_bit_in_reg (PIN_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
 
-#define OUT_0_RAW(signal)            (PORT_REG(CONCAT(signal,__PORT)) &= ~_BV(signal##__PIN))
+#define SIGNAL_MASK(signal)          (_BV(signal##__PIN))
+#define OUT_0_RAW(signal)            (PORT_REG(CONCAT(signal,__PORT)) &= ~SIGNAL_MASK(signal))
 #define OUT_0(signal)                do {clear_bit_in_reg (PORT_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
-#define OUT_1_RAW(signal)            (PORT_REG(CONCAT(signal,__PORT)) |= _BV(signal##__PIN))
+#define OUT_1_RAW(signal)            (PORT_REG(CONCAT(signal,__PORT)) |= SIGNAL_MASK(signal))
 #define OUT_1(signal)                do {set_bit_in_reg (PORT_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
 
 #define PORT_VALUE(signal)           (PIN_REG(CONCAT(signal,__PORT)))

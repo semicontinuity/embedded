@@ -9,31 +9,8 @@ CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)
 
 # Configuration
-################################################################################
-
-# CPU
-# Internal RC oscillator
-CDEFS += -DF_CPU=8000000UL
-
-# Buttons
-# All buttons MUST be on the same port
-# ==============================================================================
-CDEFS += -DBUTTONS__PORT=D
-CDEFS += -DBUTTON1__PORT=D
-CDEFS += -DBUTTON1__PIN=7
-CDEFS += -DBUTTON2__PORT=D
-CDEFS += -DBUTTON2__PIN=6
-
-# Motor control
-# All motor control signals MUST be on the same port
-# ==============================================================================
-CDEFS += -DMOTOR__PORT=C
-CDEFS += -DMOTOR_UP__PORT=C
-CDEFS += -DMOTOR_UP__PIN=0
-CDEFS += -DMOTOR_DOWN__PORT=C
-CDEFS += -DMOTOR_DOWN__PIN=1
-
-################################################################################
+CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
+CDEFS += $(CONF)
 
 # Compile all sources in one compilation unit (because of the absent link-time optimizations)
 # The goal is to have extra inlining of functions.
@@ -52,9 +29,13 @@ CDEFS += -DINLINE=
 SRC += main.c
 
 # BSP
-SRC += system_timer.c
-SRC += motor_controller.c
 SRC += buttons.c
+SRC += can.c
+SRC += motor_controller.c
+SRC += system_timer.c
+
+# Library
+SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
 
 endif
 

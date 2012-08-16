@@ -9,7 +9,6 @@
 #include "signal/led.h"
 
 #include "config/usart.h"
-#include "config/spi.h"
 #include "config/can_selector.h"
 #include "config/can.h"
 

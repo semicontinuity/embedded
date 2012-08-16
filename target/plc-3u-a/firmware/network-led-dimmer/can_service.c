@@ -25,7 +25,7 @@
     *dst++ = *src++;	\
     *dst++ = *src++;	\
     *dst++ = *src++;	\
-    *dst = *src;	\
+    *dst++ = *src++;	\
 } while(0)
 
 

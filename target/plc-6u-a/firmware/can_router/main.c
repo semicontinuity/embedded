@@ -13,6 +13,7 @@
 #include <util/atomic.h>
 
 #include "cpu/avr/gpio.h"
+#include "cpu/avr/spi.h"
 #include "cpu/avr/usart0.h"
 
 
@@ -33,7 +34,7 @@ int main(void)
     can_tx_q__init();
 
 
-    spi__init();
+    spi__init(SPI_CLKDIV_128);
 
     can_selector__init();
 
