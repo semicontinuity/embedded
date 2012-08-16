@@ -5,8 +5,8 @@
 #include "cpu/avr/drivers/display/mt12864/terminal.h"
 #include <avr/interrupt.h>
 
-int main(void)
-{
+
+int main(void) {
     terminal_init();
     usart__rate__set(USART_BAUD_RATE);
     usart__init();
@@ -16,9 +16,8 @@ int main(void)
 
     sei();
 
-    for (;;)
-    {
-        uint8_t c = usart__in__read();
+    for (;;) {
+        uint8_t c = usart0__in__read();
         terminal_displayChar(c);
     }
 

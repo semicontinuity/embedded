@@ -69,11 +69,10 @@ ISR(USART_RXC_vect) {
 
 
 /**
- * Receives a byte from UART.
+ * Receives a byte from the USART0.
  * Blocks if no data available.
  */
-uint8_t usart__in__read(void)
-{
+uint8_t usart0__in__read(void) {
     while (usart0__buffer_remaining == 0);
 
     uint8_t c = usart0__buffer[usart0__buffer_r_ptr++];

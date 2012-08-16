@@ -3,7 +3,12 @@
 
 #include <stdint.h>
 
-uint8_t usart__in__read(void);
+
+/**
+ * Receives a byte from the USART0.
+ * Blocks if no data available.
+ */
+uint8_t usart0__in__read(void);
 
 
 #endif

@@ -3,7 +3,7 @@
 //
 // API:
 //
-// usart_in__read:
+// usart0_in__read:
 //   Blocking read
 // =============================================================================
 
@@ -16,10 +16,10 @@
 
 
 // =============================================================================
-// usart__in__read
+// usart0__in__read
 // =============================================================================
 
-inline uint8_t usart__in__read(void) {
+inline uint8_t usart0__in__read(void) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) 
     loop_until_bit_is_set(UCSR0A, RXC0);
