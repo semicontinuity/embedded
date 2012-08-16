@@ -1,5 +1,5 @@
-#ifndef __CPU__AVR__DRIVERS__MCP251X__BITDEFS_H
-#define __CPU__AVR__DRIVERS__MCP251X__BITDEFS_H
+#ifndef __CPU__AVR__DRIVERS__NET__MCP251X__BITDEFS_H
+#define __CPU__AVR__DRIVERS__NET__MCP251X__BITDEFS_H
 
 // Bit definitions for register CANSTAT
 #define MCP251X_ICOD0		(1)
@@ -65,5 +65,34 @@
 
 // Bit definitions for registers RXBxDLC
 #define MCP251X_RTR		(6)
+
+
+// Bit definitions for register CNF1
+#define MCP251X_BRP0            (0)
+#define MCP251X_BRP1            (1)
+#define MCP251X_BRP2            (2)
+#define MCP251X_BRP3            (3)
+#define MCP251X_BRP4            (4)
+#define MCP251X_BRP5            (5)
+#define MCP251X_SJW0            (6)
+#define MCP251X_SJW1            (7)
+
+// Bit definitions for register CNF2
+#define MCP251X_PRSEG0          (0)
+#define MCP251X_PRSEG1          (1)
+#define MCP251X_PRSEG2          (2)
+#define MCP251X_PHSEG10         (3)
+#define MCP251X_PHSEG11         (4)
+#define MCP251X_PHSEG12         (5)
+#define MCP251X_SAM             (6)
+#define MCP251X_BLTMODE         (7)
+
+// Bit definitions for register CNF3
+#define MCP251X_PHSEG20         (0)
+#define MCP251X_PHSEG21         (1)
+#define MCP251X_PHSEG22         (2)
+#define MCP251X_WAKFIL          (6)
+#define MCP251X_SOF             (7)
+
 
 #endif

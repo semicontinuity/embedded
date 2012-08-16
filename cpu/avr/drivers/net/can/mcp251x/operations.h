@@ -1,5 +1,5 @@
-#ifndef __CPU__AVR__DRIVERS__MCP251X__OPERATIONS_H
-#define __CPU__AVR__DRIVERS__MCP251X__OPERATIONS_H
+#ifndef __CPU__AVR__DRIVERS__NET__MCP251X__OPERATIONS_H
+#define __CPU__AVR__DRIVERS__NET__MCP251X__OPERATIONS_H
 
 #include <stdint.h>
 #include <avr/pgmspace.h>

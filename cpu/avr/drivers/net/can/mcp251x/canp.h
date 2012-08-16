@@ -1,10 +1,6 @@
-#ifndef __CPU__AVR__DRIVERS__MCP251X__CANP_H
-#define __CPU__AVR__DRIVERS__MCP251X__CANP_H
+#ifndef __CPU__AVR__DRIVERS__NET__MCP251X__CANP_H
+#define __CPU__AVR__DRIVERS__NET__MCP251X__CANP_H
 
-
-
-#define CANP_DEVICE_NET			(0x01)
-#define CANP_DEVICE_ADDR		(0x01)
 
 // Masks and filters work as follows:
 // Compare message bits with filter bits only when mask bit is 1.

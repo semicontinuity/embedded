@@ -1,3 +1,24 @@
+// =============================================================================
+// CAN Networking initialization.
+//
+// Performs MCP251x controller configuration.
+// Uploads all the data that are set in the Configuration mode of MCP251X:
+//
+// - Configuration registers
+// - Masks
+// - Filters
+//
+// When the data are uploaded, the controller is switched into Normal Mode.
+//
+// The following constants must be defined:
+//
+// - CANP_DEVICE_NET	network id
+// - CANP_DEVICE_ADDR	address in the network
+//
+// See conf.h for the description of constants
+// that must be defined for the configuration registers.
+// =============================================================================
+
 #include "can.h"
 
 #include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"

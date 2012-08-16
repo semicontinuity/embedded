@@ -9,6 +9,10 @@ CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)
 
+# Configuration
+CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
+CDEFS += $(CONF)
+
 
 # Compile all sources in one compilation util (because of the absent link-time optimizations)
 WHOLE_PROGRAM=1
