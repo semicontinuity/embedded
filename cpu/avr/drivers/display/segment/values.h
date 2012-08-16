@@ -20,7 +20,6 @@
 #ifndef __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__VALUES_H
 #define __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__VALUES_H
 
-#include "device.h"
 #include <stdint.h>
 #include <avr/sfr_defs.h>
 

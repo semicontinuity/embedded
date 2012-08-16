@@ -15,8 +15,6 @@
 // To turn off blinking, call display_thread__blink__off().
 // Call display_thread__phase_on() and display_thread__phase_off() periodically.
 // =============================================================================
-#include "device.h"
-
 #include <stdint.h>
 #include "cpu/avr/drivers/display/segment/dynamic3_thread.h"
 #include "cpu/avr/drivers/display/segment/dynamic3.h"
@@ -40,13 +38,12 @@ volatile uint8_t display_thread__segments[3] = {
 volatile uint8_t display_thread__blink;
 
 
+/**
+ * Display thread constructor.
+ */
 INLINE void display_thread__init(void) {
-    display_init();
-    display_on();
-
-    // TODO: try to remove
-    display__segments__set(DISPLAY_SEGMENT_VALUE_EMPTY);
-    display_select_digit_1();
+    display__init();
+    display__on();
 }
 
 
@@ -59,24 +56,27 @@ INLINE void display_thread__init(void) {
 int8_t display_thread__state;
 
 
+/**
+ * Invoked periodically (every system tick) to implement dynamic display.
+ */
 INLINE void display_thread__run(void) {
-
     --display_thread__state;
     if (display_thread__state < 0) {
-        display_thread__state = 2;
-        display_deselect_digit_1();
+        display_thread__state = 2; // roll over
+
+        display__digit_1__deselect();
         display__segments__set(display_thread__segments[2]);
-        display_select_digit_3();
+        display__digit_3__select();
     }
     else if (display_thread__state == 0) {
-        display_deselect_digit_2();
+        display__digit_2__deselect();
         display__segments__set(display_thread__segments[0]);
-        display_select_digit_1();
+        display__digit_1__select();
     }
     else /* new state is 1 */ {
-        display_deselect_digit_3();
+        display__digit_3__deselect();
         display__segments__set(display_thread__segments[1]);
-        display_select_digit_2();
+        display__digit_2__select();
     }
 }
 
@@ -88,19 +88,19 @@ INLINE void display_thread__blink__on(void) {
 
 INLINE void display_thread__blink__off(void) {
     display_thread__blink = 0;
-    display_on();
+    display__on();
 }
 
 
 INLINE void display_thread__phase_on(void) {
     if (display_thread__blink) {
-        display_on();
+        display__on();
     }
 }
 
 
 INLINE void display_thread__phase_off(void) {
     if (display_thread__blink) {
-        display_off();
+        display__off();
     }
 }

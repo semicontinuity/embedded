@@ -8,8 +8,6 @@
 // TODO: replace hardcoded reference display_thread__segments with pointer
 // =============================================================================
 
-#include "device.h"
-
 #include "cpu/avr/drivers/display/segment/dynamic3_numeric.h"
 #include "cpu/avr/drivers/display/segment/dynamic3_thread.h"
 #include "cpu/avr/drivers/display/segment/values.h"
