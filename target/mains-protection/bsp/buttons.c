@@ -3,7 +3,6 @@
 // all on the same BUTTONS__PORT.
 // Does not support concurrent button presses.
 // =============================================================================
-#include "device.h"
 
 #include "buttons.h"
 #include <stdint.h>

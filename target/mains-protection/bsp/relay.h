@@ -1,7 +1,6 @@
 #ifndef __RELAY_H
 #define __RELAY_H
 
-#include "device.h"
 #include "cpu/avr/gpio.h"
 
 inline void relay__init(void) {

@@ -8,10 +8,9 @@ CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)
 
-
-CDEFS += -DENABLE_VOLTAGE_MONITOR
-CDEFS += -DENABLE_VOLTAGE_AVERAGING
-#CDEFS += -DDEBUG__MEASURE_VOLTAGE_ON_KEY_PRESS
+# Generate a list of -D options from .conf file
+CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
+CDEFS += $(CONF)
 
 
 # Compile all sources in one compilation unit (because of the absent link-time optimizations)

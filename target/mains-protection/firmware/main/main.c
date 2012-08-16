@@ -29,7 +29,6 @@
 // Press "SET" to change the parameter to edit
 // and finally return to voltage display mode.
 // =============================================================================
-#include "device.h"
 
 #include "cpu/avr/util/bcd.h"
 #include "cpu/avr/util/mult16x16.h"

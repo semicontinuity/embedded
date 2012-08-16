@@ -7,7 +7,6 @@
 // The measured voltage (raw reading from ADC)
 // will be reported to the on_voltage_measured() callback.
 // =============================================================================
-#include "device.h"
 
 #include "voltmeter.h"
 #include <avr/io.h>

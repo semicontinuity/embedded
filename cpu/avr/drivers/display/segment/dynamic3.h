@@ -16,34 +16,34 @@
 
 
 inline void display_init(void) {
-    DISPLAY_SEGMENTS_DIR  = 0xFF;
+    USE_PORT_AS_OUTPUT(DISPLAY_SEGMENTS);
 }
 
 inline void display_on(void) {
-    CONFIGURE_AS_OUTPUT(DISPLAY_ANODE1);
-    CONFIGURE_AS_OUTPUT(DISPLAY_ANODE2);
-    CONFIGURE_AS_OUTPUT(DISPLAY_ANODE3);
+    USE_AS_OUTPUT(DISPLAY_ANODE1);
+    USE_AS_OUTPUT(DISPLAY_ANODE2);
+    USE_AS_OUTPUT(DISPLAY_ANODE3);
 }
 
 
 inline void display_off(void) {
-    CONFIGURE_AS_INPUT(DISPLAY_ANODE1);
-    CONFIGURE_AS_INPUT(DISPLAY_ANODE2);
-    CONFIGURE_AS_INPUT(DISPLAY_ANODE3);
+    USE_AS_INPUT(DISPLAY_ANODE1);
+    USE_AS_INPUT(DISPLAY_ANODE2);
+    USE_AS_INPUT(DISPLAY_ANODE3);
 }
 
 
-inline void display__segments__set(uint8_t v)	{ DISPLAY_SEGMENTS_PORT = v; }
+inline void display__segments__set(const uint8_t v)	{ OUT(DISPLAY_SEGMENTS, v); }
 
 
-#define display_select_digit_1()	do {DRIVE_HIGH(DISPLAY_ANODE1);} while(0)
-#define display_deselect_digit_1()	do {DRIVE_LOW(DISPLAY_ANODE1);} while(0)
+#define display_select_digit_1()	do {OUT_1(DISPLAY_ANODE1);} while(0)
+#define display_deselect_digit_1()	do {OUT_0(DISPLAY_ANODE1);} while(0)
 
-#define display_select_digit_2()	do {DRIVE_HIGH(DISPLAY_ANODE2);} while(0)
-#define display_deselect_digit_2()	do {DRIVE_LOW(DISPLAY_ANODE2);} while(0)
+#define display_select_digit_2()	do {OUT_1(DISPLAY_ANODE2);} while(0)
+#define display_deselect_digit_2()	do {OUT_0(DISPLAY_ANODE2);} while(0)
 
-#define display_select_digit_3()	do {DRIVE_HIGH(DISPLAY_ANODE3);} while(0)
-#define display_deselect_digit_3()	do {DRIVE_LOW(DISPLAY_ANODE3);} while(0)
+#define display_select_digit_3()	do {OUT_1(DISPLAY_ANODE3);} while(0)
+#define display_deselect_digit_3()	do {OUT_0(DISPLAY_ANODE3);} while(0)
 
 
 #endif

@@ -1,7 +1,6 @@
 #ifndef __BUTTONS_H
 #define __BUTTONS_H
 
-#include "device.h"
 #include "cpu/avr/gpio.h"
 #include <stdint.h>
 

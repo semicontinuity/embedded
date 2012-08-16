@@ -13,7 +13,6 @@
 #ifndef __BUZZER_H
 #define __BUZZER_H
 
-#include "device.h"
 #include "cpu/avr/gpio.h"
 #include "cpu/avr/timer0.h"
 
