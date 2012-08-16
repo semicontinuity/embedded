@@ -11,7 +11,6 @@
 //     |          |      |             |
 // ----+          +------+---- ...   --+-----------
 
-#include "device.h"
 #include "cpu/avr/gpio.h"
 
 #include <avr/io.h>
@@ -37,9 +36,9 @@ ISR(TIMER0_COMPA_vect)
     // if 256 timer overflows happened, start over.
     if (++t == 0) {
 //        mask = _BV(PWM_0_PIN)|_BV(PWM_1_PIN)|_BV(PWM_2_PIN);
-        DRIVE_HIGH(LED_R);
-        DRIVE_HIGH(LED_G);
-        DRIVE_HIGH(LED_B);
+        OUT_1(LED_R);
+        OUT_1(LED_G);
+        OUT_1(LED_B);
     }
 
     uint8_t index = 0;
@@ -47,9 +46,9 @@ ISR(TIMER0_COMPA_vect)
 //    if (t == colors[index++]) mask &= ~_BV(PWM_0_PIN);
 //    if (t == colors[index++]) mask &= ~_BV(PWM_1_PIN);
 //    if (t == colors[index++]) mask &= ~_BV(PWM_2_PIN);
-    if (t == colors[index++]) DRIVE_LOW(LED_R);
-    if (t == colors[index++]) DRIVE_LOW(LED_G);
-    if (t == colors[index++]) DRIVE_LOW(LED_B);
+    if (t == colors[index++]) OUT_0(LED_R);
+    if (t == colors[index++]) OUT_0(LED_G);
+    if (t == colors[index++]) OUT_0(LED_B);
 
 //    PWM_PORT = mask;
 }

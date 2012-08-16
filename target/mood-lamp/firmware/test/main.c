@@ -1,4 +1,3 @@
-#include "device.h"
 #include "pwm.h"
 
 #include <avr/interrupt.h>
@@ -13,27 +12,27 @@ void main(void)
 {
     pwm__init();
 
-        DRIVE_HIGH(LED_R);
-        DRIVE_HIGH(LED_G);
-        DRIVE_HIGH(LED_B);
+        OUT_1(LED_R);
+        OUT_1(LED_G);
+        OUT_1(LED_B);
 _delay_ms(1000);
 
 // R
-        DRIVE_LOW(LED_R);
-        DRIVE_HIGH(LED_G);
-        DRIVE_HIGH(LED_B);
+        OUT_0(LED_R);
+        OUT_1(LED_G);
+        OUT_1(LED_B);
 _delay_ms(1000);
 
 // G
-        DRIVE_HIGH(LED_R);
-        DRIVE_LOW(LED_G);
-        DRIVE_HIGH(LED_B);
+        OUT_1(LED_R);
+        OUT_0(LED_G);
+        OUT_1(LED_B);
 _delay_ms(1000);
 
 // B
-        DRIVE_HIGH(LED_R);
-        DRIVE_HIGH(LED_G);
-        DRIVE_LOW(LED_B);
+        OUT_1(LED_R);
+        OUT_1(LED_G);
+        OUT_0(LED_B);
 
 
 

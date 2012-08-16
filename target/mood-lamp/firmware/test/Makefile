@@ -8,6 +8,10 @@ CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
 vpath %.c  $(ROOT) $(BSP)
 
+# Configuration
+CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
+CDEFS += $(CONF)
+
 
 CDEFS += -DF_CPU=19660800UL
 CDEFS += -Ddebug__putc=usart__out__write

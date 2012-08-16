@@ -1,7 +1,6 @@
 #ifndef __PWM_H
 #define __PWM_H
 
-#include "device.h"
 #include "cpu/avr/gpio.h"
 #include "cpu/avr/timer0.h"
 #include <stdint.h>
@@ -11,9 +10,9 @@ extern volatile uint8_t colors[6];
 
 
 inline void pwm__init(void) {
-    CONFIGURE_AS_OUTPUT(LED_R);
-    CONFIGURE_AS_OUTPUT(LED_G);
-    CONFIGURE_AS_OUTPUT(LED_B);
+    USE_AS_OUTPUT(LED_R);
+    USE_AS_OUTPUT(LED_G);
+    USE_AS_OUTPUT(LED_B);
 
     OCR0A = 128;
     TCCR0A = 0x02;
