@@ -11,7 +11,7 @@
 
 #include <stdint.h>
 
-INLINE void numeric_display__set(const uint16_t number);
-INLINE void numeric_display__add_comma_to_second_digit(void);
+INLINE void number_renderer__render(const uint16_t number, uint8_t *buffer);
+INLINE void number_renderer__render_decimal_point(uint8_t *buffer);
 
 #endif

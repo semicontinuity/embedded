@@ -1,13 +1,13 @@
 // =============================================================================
-// Main program.
+// The device for protection against abnormal mains voltage - main module.
 //
-// Continuously compares the measured mains voltage
-// against voltage_min and voltage_max parameters.
+// The program continuously compares the measured mains voltage
+// against the parameters 'voltage_min' and 'voltage_max'.
 // If the voltage is outside of this range, disconnect the load.
-// When the voltage returns back to the safe range, wait on_delay seconds
+// When the voltage returns back to the safe range, it waits 'on_delay' seconds
 // and reconnect the load back.
 //
-// If on_delay is 0, the device will not switch on back after voltage anomaly.
+// If 'on_delay' is 0, the device will not switch on back after voltage anomaly.
 //
 // User interface:
 //
@@ -21,20 +21,29 @@
 //
 // The user can press and hold for 1 second the "SET" button
 // to edit the parameters:
-// - voltage_max: red LED is on
-// - voltage_min: green LED is on
-// - on_delay:    LED alternates between red and green
+// - voltage_max: when the red LED is on
+// - voltage_min: when the green LED is on
+// - on_delay:    when the LED alternates between red and green
 // - angle:       (the time instant at which the voltage is measured)
-//                LED is off.
+//                when the LED is off.
 // Press "SET" to change the parameter to edit
 // and finally return to voltage display mode.
+//
+// Impl note: moving state to registers should make the code smaller and faster,
+// but some obscure bugs appeared when trying to do it.
+// (Although registers were not used by the compiler.)
+//
+// Possible improvement: automatically return to voltage display mode
+// from configuration mode if no button is pressed for the long time.
+//
+// Possible improvement: compile for hardware with no buzzer.
 // =============================================================================
 
 #include "cpu/avr/util/bcd.h"
 #include "cpu/avr/util/mult16x16.h"
 #include "cpu/avr/drivers/display/segment/values.h"
 #include "cpu/avr/drivers/display/segment/dynamic3_thread.h"
-#include "cpu/avr/drivers/display/segment/dynamic3_numeric.h"
+#include "cpu/avr/drivers/display/segment/number_renderer.h"
 
 #include "buttons.h"
 #include "buzzer.h"
@@ -229,7 +238,12 @@ inline static void write_buzzer(void) {
 // Displaying voltage and parameters
 // =============================================================================
 
-inline static void display_bcd(const uint16_t number) {
+inline static void numeric_display__set(const uint16_t number) {
+    number_renderer__render(number, (uint8_t *)display_thread__segments);
+}
+
+
+inline static void numeric_display__set_bcd(const uint16_t number) {
     numeric_display__set(uint9_to_bcd(number));
 }
 
@@ -241,17 +255,17 @@ inline static void display_voltage(void) {
 }
 
 inline static void display_voltage_max(void) {
-    display_bcd(t_voltage_max);
+    numeric_display__set_bcd(t_voltage_max);
 }
 
 inline static void display_voltage_min(void) {
-    display_bcd(t_voltage_min);
+    numeric_display__set_bcd(t_voltage_min);
 }
 
 inline static void display_on_delay(void) {
     // display message "OFF" if t_on_delay is 0
     if (t_on_delay) {
-        uint16_t number = uint9_to_bcd(t_on_delay) << 4;
+        uint16_t number = uint9_to_bcd(t_on_delay) << 4; // <<4 adds 0 at the end
         numeric_display__set(number);
     }
     else
@@ -259,7 +273,7 @@ inline static void display_on_delay(void) {
 }
 
 inline static void display_angle(void) {
-    display_bcd(t_angle);
+    numeric_display__set_bcd(t_angle);
 }
 
 inline static void display_buzzer(void) {
@@ -485,24 +499,19 @@ INLINE void on_second_tick(void) {
 
 INLINE void on_ten_seconds_tick(void) {
     if (time_to_turn_on > 0) --time_to_turn_on;
-
-//    display_bcd(frequency);
-//    numeric_display__add_comma_to_second_digit();
-//    frequency_counter__reset();
 }
 
 INLINE void on_zero_cross(void) {
     voltmeter__delayed_run(angle << 8);
-//    frequency_counter__run();
 }
 
-INLINE void update_voltage(uint16_t value) {
+INLINE void update_voltage(const uint16_t value) {
     voltage_bcd = uint9_to_bcd(value);
     if (is_voltage_display_mode()) display_voltage();
 }
 
 
-INLINE void on_voltage_measured (uint16_t reading) {
+INLINE void on_voltage_measured(uint16_t reading) {
 
 /*
     voltage_integral += MAKE_WORD(ADCL, ADCH);
@@ -573,8 +582,7 @@ INLINE void on_voltage_measured (uint16_t reading) {
 // Entry point
 // =============================================================================
 
-int main(void)
-{
+int main(void) {
     _delay_ms(50);
 
 //    uart_set_rate();

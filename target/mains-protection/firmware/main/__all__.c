@@ -10,7 +10,7 @@
 
 // Library
 #include "cpu/avr/util/bcd.c"
-#include "cpu/avr/drivers/display/segment/dynamic3_numeric.c"
+#include "cpu/avr/drivers/display/segment/number_renderer.c"
 #include "cpu/avr/drivers/display/segment/dynamic3_thread.c"
 
 
