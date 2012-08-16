@@ -10,8 +10,6 @@
 #ifndef __CPU__AVR__USART0_RX_POLLED_H
 #define __CPU__AVR__USART0_RX_POLLED_H
 
-#include "device.h"
-
 #include <stdint.h>
 #include <avr/sfr_defs.h>
 #include <avr/io.h>

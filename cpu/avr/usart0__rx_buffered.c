@@ -8,8 +8,6 @@
 // USART0__IN__BUFFER__SIZE
 // ===================================================================================
 
-#include "device.h"
-
 #include <stdint.h>
 #include <avr/interrupt.h>
 
