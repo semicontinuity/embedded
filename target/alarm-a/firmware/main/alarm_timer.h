@@ -8,8 +8,8 @@
 
 extern uint8_t alarm_timer__counter;
 
-#define callback_in(t) do { alarm_timer__counter=(t); } while(0)
-#define cancel_callback() do { alarm_timer__counter = 0; } while(0)
+#define alarm_timer__set(t) do { alarm_timer__counter=(t); } while(0)
+#define alarm_timer__reset() do { alarm_timer__counter = 0; } while(0)
 
 // callback
 void alarm_timer__output__run(void);

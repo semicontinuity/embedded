@@ -39,7 +39,7 @@ void correctPasswordEntered (void) {
         // If disarmed - arm
         alarm_state_armed();
         state = STATE_ARMING;
-        callback_in(TIME_ARMING);
+        alarm_timer__set(TIME_ARMING);
         timeAlert = TIME_ALERT;
     }
     else
@@ -48,17 +48,16 @@ void correctPasswordEntered (void) {
         alarm_off(); // alarm may be on
         alarm_state_disarmed();
         // stop counting any timeouts for current state, STATE_DISARMED does not have timeout
-        cancel_callback(); 
+        alarm_timer__reset(); 
         state = STATE_DISARMED;        
     }
 }
 
 // Called when some sensor has detected intruder
-void sensor_signal(void)
-{
+void sensor_signal(void) {
     if (state != STATE_ARMED) return;
     state = STATE_ALERT;
-    callback_in(timeAlert);
+    alarm_timer__set(timeAlert);
 }
 
 
@@ -68,13 +67,13 @@ void alarm_timer__output__run(void) {
     case STATE_ALARM:
         // ALARM is active for some time, let's mute it
         state = STATE_MUTE_ALARM;
-        callback_in(TIME_MUTE);
+        alarm_timer__set(TIME_MUTE);
         alarm_off();
         break;
     case STATE_MUTE_ALARM:
         // Muting period expired, switch to ARMED
         state = STATE_ARMED;
-        cancel_callback();
+        alarm_timer__reset();
         timeAlert = TIME_ALERT_MUTE;
         // if sensors send alarm signal at this time, immediately fire alarm
         // (go thru STATE_ALERT state for technical reasons - after switch statement
@@ -108,7 +107,7 @@ void alarm_timer__output__run(void) {
         // Alert period ended, but alarm is not disarmed!
         // It is ALARM situation!
         state = STATE_ALARM;
-        callback_in(TIME_ALARM);
+        alarm_timer__set(TIME_ALARM);
         alarm_on();
         // actually, it means, ignore if were are muting alarm already
         if (timeAlert != TIME_ALERT_MUTE) 
