@@ -8,6 +8,11 @@ CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)
 
+# Configuration
+CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
+CDEFS += $(CONF)
+
+
 # Firmware
 SRC += main.c
 

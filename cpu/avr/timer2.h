@@ -1,9 +1,11 @@
+// =============================================================================
+// Timer 2 driver
+// =============================================================================
+
 #ifndef __CPU_AVR_TIMER2_H
 #define __CPU_AVR_TIMER2_H
 
 
-// There are the following 8 modes:
-//
 #define TIMER2_MODE_STOPPED		(0)
 #define TIMER2_MODE_RUN_NO_PRESCALER	(                        _BV(CS20))
 #define TIMER2_MODE_RUN_PRESCALER_8	(            _BV(CS21)            )
@@ -25,7 +27,9 @@
 #   include "cpu/avr/timer2__m8.h"
 
 #else
-    #error "Unsupported MCU"
+
+#   error "Unsupported MCU"
+
 #endif
 
 

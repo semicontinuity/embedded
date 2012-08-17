@@ -1,10 +1,12 @@
+// =============================================================================
+// Timer 0 driver
+// Counts always from 0 to 255
+// =============================================================================
+
 #ifndef __CPU_AVR_TIMER0_H
 #define __CPU_AVR_TIMER0_H
 
 
-// Timer 0 counts always from 0 to 255
-// There are the following 8 modes:
-//
 #define TIMER0_MODE_STOPPED		(0)
 #define TIMER0_MODE_RUN_NO_PRESCALER	(                        _BV(CS00))
 #define TIMER0_MODE_RUN_PRESCALER_8	(            _BV(CS01)            )
@@ -26,7 +28,9 @@
 #   include "cpu/avr/timer0__m8.h"
 
 #else
-    #error "Unsupported MCU"
+
+#   error "Unsupported MCU"
+
 #endif
 
 

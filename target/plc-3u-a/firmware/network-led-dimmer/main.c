@@ -1,7 +1,5 @@
 #include <avr/interrupt.h>
 
-#include "device.h"
-
 #include "cpu/avr/spi.h"
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
 

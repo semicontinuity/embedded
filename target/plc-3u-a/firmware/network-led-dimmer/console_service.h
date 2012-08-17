@@ -1,7 +1,6 @@
 #ifndef __CONSOLE_SERVICE_H
 #define __CONSOLE_SERVICE_H
 
-#include "device.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/usart0__rx_polled.h"
 

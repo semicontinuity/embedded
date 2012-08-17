@@ -1,10 +1,8 @@
-#include "device.h"
 #include <avr/io.h>
-
 #include <stdint.h>
 
-uint8_t parseByte(const uint8_t* __restrict const str)
-{
+
+uint8_t parseByte(const uint8_t* __restrict const str) {
     register uint8_t last_error;
     register uint8_t c1 = str[0];
     if ((c1 < '0') || (c1 > 'F') || ((c1 > '9') && (c1 < 'A'))) last_error=1;

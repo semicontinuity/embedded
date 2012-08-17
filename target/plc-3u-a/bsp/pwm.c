@@ -11,8 +11,8 @@
 //     |          |      |             |
 // ----+          +------+---- ...   --+-----------
 
-#include "device.h"
 #include "pwm.h"
+#include "cpu/avr/gpio.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -30,22 +30,21 @@ register uint8_t mask asm("r6");
 /**
  * Timer 0 overflow interrupt handler
  */
-ISR(TIMER0_OVF_vect)
-{
+ISR(TIMER0_OVF_vect) {
 
     // if 256 timer overflows happened, start over.
     if (++t == 0) {
-        mask = _BV(PWM_0_PIN)|_BV(PWM_1_PIN)|_BV(PWM_2_PIN)|_BV(PWM_3_PIN)|_BV(PWM_4_PIN)|_BV(PWM_5_PIN);
+        mask = SIGNAL_MASK(PWM_0)|SIGNAL_MASK(PWM_1)|SIGNAL_MASK(PWM_2)|SIGNAL_MASK(PWM_3)|SIGNAL_MASK(PWM_4)|SIGNAL_MASK(PWM_5);
     }
 
     uint8_t index = 0;
     // Loop unrolled for performance reason
-    if (t == colors[index++]) mask &= ~_BV(PWM_0_PIN);
-    if (t == colors[index++]) mask &= ~_BV(PWM_1_PIN);
-    if (t == colors[index++]) mask &= ~_BV(PWM_2_PIN);
-    if (t == colors[index++]) mask &= ~_BV(PWM_3_PIN);
-    if (t == colors[index++]) mask &= ~_BV(PWM_4_PIN);
-    if (t == colors[index++]) mask &= ~_BV(PWM_5_PIN);
+    if (t == colors[index++]) mask &= ~SIGNAL_MASK(PWM_0);
+    if (t == colors[index++]) mask &= ~SIGNAL_MASK(PWM_1);
+    if (t == colors[index++]) mask &= ~SIGNAL_MASK(PWM_2);
+    if (t == colors[index++]) mask &= ~SIGNAL_MASK(PWM_3);
+    if (t == colors[index++]) mask &= ~SIGNAL_MASK(PWM_4);
+    if (t == colors[index++]) mask &= ~SIGNAL_MASK(PWM_5);
 
-    PWM_PORT = mask;
+    OUT(PWM, mask);
 }

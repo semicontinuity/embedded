@@ -1,4 +1,3 @@
-#include "device.h"
 #include "console_service.h"
 #include "parse.h"
 #include "can_selector.h"

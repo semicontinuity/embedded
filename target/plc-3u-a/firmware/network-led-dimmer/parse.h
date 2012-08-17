@@ -1,7 +1,6 @@
 #ifndef __PARSE_H
 #define __PARSE_H
 
-#include "device.h"
 #include <avr/io.h>
 
 

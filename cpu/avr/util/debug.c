@@ -1,4 +1,3 @@
-#include "device.h"
 #include "cpu/avr/util/debug.h"
 #include "cpu/avr/usart0.h"
 

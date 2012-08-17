@@ -1,7 +1,6 @@
 #ifndef __CAN_SERVICE_H
 #define __CAN_SERVICE_H
 
-#include "device.h"
 #include <avr/io.h>
 #include "cpu/avr/gpio.h"
 #include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
