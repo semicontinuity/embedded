@@ -1,2 +1,49 @@
 alarm-base-station is a base station of alarm system.
 It can also detect water leaks and send SMSs.
+
+
+// Connector, front view
+//
+//        state      GND 5V
+// +--+--+--+--+--+--+--+--+--+--+
+// |AVR ISP |  |WATER|  |  |rx|tx|
+// +        +--+--+--+--+--+--+--+
+// |1       |in|   VCC  |  GND   |
+// +--+--+--+--+--+--+--+--+--+--+
+// [======= bottom (board) ======]
+//
+// in = STATE_CHANGE (from terminals - notify with short negative pulse)
+// state = ALARM_STATE (high=armed, low=disarmed)
+//
+// AVR ISP=               Alarm pins=
+// +----+----+----+       +----+----+----+
+// |VTG |MOSI|GND |       |    |sens|    |
+// +----+----+----+       +----+----+----+
+// |MISO|SCK |RST |       |    |alrm|    |
+// +----+----+----+       +----+----+----+
+
+
+// Ports
+// PB0 STATE_CHANGE		pin 12 - input, externally pulled up
+// PB1
+// PB2 
+// PB3 mosi + SENSOR_LINE	input, externally pulled up. Active low.
+// PB4 miso
+// PB5 sck + ALARM_OUT		output, active high
+// PB6 water B			input, active low
+// PB7 switch B			output, active high
+// PC0
+// PC1
+// PC2 ALARM_STATE		output, high=armed
+// PC3
+// PC4
+// PC5
+// PC6 reset
+// PD0 rx
+// PD1 tx
+// PD2
+// PD3
+// PD4 water A			input, active low
+// PD5 switch A			output, active high
+// PD6
+// PD7

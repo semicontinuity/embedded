@@ -8,20 +8,21 @@
 #include "scheduler.h"
 #include "sms.h"
 #include "alarm.h"
+#include "alarm_timer.h"
+#include "unused.h"
+#include "water_sensors.h"
 
 #include "cpu/avr/usart0.h"
 
 
-/**
- * This procedure is called by scheduler periodically.
- */
-void process_periodic_event(void)
-{
-    wdt_reset();
+inline static void alarm__run(void) {    
+    if (intruder_detected()) sensor_signal(); // makes sense to poll, to filter out noise
+}
 
+
+inline static void water_leak_detector__run(void) {    
     static uint8_t water_leak_detected = 0;
-    if ((water_leak_detected==0) && (water_leak_a() || water_leak_b()))
-    {
+    if ((water_leak_detected == 0) && (water_sensor_a__is_active() || water_sensor_b__is_active())) {
         water_leak_detected = 1;
         switch_a_on();
 
@@ -34,17 +35,48 @@ void process_periodic_event(void)
 //        sendSms('7');
 //        sendSms('8');
     }
-
-    if (intruder_detected()) sensor_signal(); // makes sense to poll, to filter out noise
 }
+
+
+/**
+ * This procedure is called by system timer periodically (every second).
+ */
+void system_timer__on_second_tick(void) {
+    wdt_reset();
+    water_leak_detector__run();
+    alarm__run();
+    alarm_timer__run();
+}
+
+
+/**
+ * This procedure is called by system timer periodically (every system tick).
+ */
+void system_timer__on_system_tick(void) {
+    // TODO: interrupt
+    static uint8_t pwd_pulse = 0;
+    if (pwd_entered()) {
+        if (!pwd_pulse) {
+            pwd_pulse = 1;
+            correctPasswordEntered();
+        }
+    }
+    else {
+          /* It is faster just to set pwd_pulse to 0 unconditionally */
+//        if (pwd_pulse)
+//        {
+            pwd_pulse = 0;
+//        }
+    }
+}
+
 
 /**
  * This procedure is called by alarm when it decided to notify about alarm condition.
  * It is called only once per session, not when alarm is switched on after it was mute.
  * Our reaction is to send SMS.
  */
-void alarm_notification(void)
-{    
+void alarm_notification(void) {    
     sendSms('1');
     wdt_reset(); // sending SMS may take a few seconds
 
@@ -56,12 +88,11 @@ void alarm_notification(void)
 }
 
 
-int main(void)
-{
+int main(void) {
     // maximal value, because sending SMS can take a few seconds
     // (SMSs are sent synchroniously)
     wdt_enable (WDTO_8S); 
-    configure_unused_ports();
+    unused__init();
 
     // Debug/Mobile phone UART
     usart__pins_init();
@@ -70,8 +101,8 @@ int main(void)
     usart__out__enabled__set();
     usart__in__enabled__set();
 
-    water_sensor_a_init();
-    water_sensor_b_init()
+    water_sensor_a__init();
+    water_sensor_b__init();
 
     switch_a_init();
     switch_b_init();

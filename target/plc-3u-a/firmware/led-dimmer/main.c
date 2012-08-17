@@ -1,11 +1,9 @@
-#include "device.h"
 #include "pwm.h"
-
 #include <avr/interrupt.h>
 
+
  __attribute__ ((noreturn))
-void main(void)
-{
+void main(void) {
     colors[0] = 0;
     colors[1] = 50;
     colors[2] = 100;

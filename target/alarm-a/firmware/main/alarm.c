@@ -5,6 +5,7 @@
 #include "scheduler.h"
 #include "alarm.h"
 #include "alarm-timing.h"
+#include "alarm_timer.h"
 
 
 // device is "disarmed" - ignores all events from sensor
@@ -63,8 +64,8 @@ void sensor_signal(void)
     callback_in(timeAlert);
 }
 
-void process_scheduled_event(void)
-{
+
+void alarm_timer__output__run(void) {
     switch (state)
     {
     case STATE_ALARM:

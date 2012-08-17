@@ -7,17 +7,15 @@
 #include "cpu/avr/usart0.h"
 
 
-const uint8_t PROGMEM MESSAGE[]={
- 'A','T','+','C','M','S','S','='
+const uint8_t PROGMEM MESSAGE[] = {
+    'A','T','+','C','M','S','S','='
 };
 
 
-void sendSms(uint8_t index)
-{
+void sendSms(uint8_t index) {
     const uint8_t* PROGMEM ptr = MESSAGE;
     const uint8_t* PROGMEM end = MESSAGE + sizeof(MESSAGE);
-    while (ptr <= end)
-    {
+    while (ptr <= end) {
         usart__out__write(pgm_read_byte(ptr));
         ptr++;
     }
