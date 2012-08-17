@@ -3,14 +3,6 @@
 
 #include "cpu/avr/gpio.h"
 
-// STATE_CHANGE pin, PB0, input, ext. pullup
-// PB0 is pin 12, PCINT0/CLKO/ICP1
-// Terminals notify about state change with a short negative pulse
-#define PWD_ENTERED_PORT_IN	(PINB)
-#define PWD_ENTERED_DIR	        (DDRB)
-#define PWD_ENTERED_PIN	        (0)
-#define pwd_entered_pin_init()
-#define pwd_entered()           (bit_is_clear(PWD_ENTERED_PORT_IN, PWD_ENTERED_PIN))
 
 // SENSOR_LINE pin, PB3, input, ext. pullup
 // Any sensor may drive it low to indicate alarm condition

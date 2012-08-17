@@ -12,6 +12,7 @@
 #include "unused.h"
 #include "water_sensors.h"
 
+#include "in_pwd_entered.h"
 #include "out_valve.h"
 #include "out_buzzer.h"
 
@@ -52,25 +53,12 @@ void system_timer__on_second_tick(void) {
 }
 
 
+
 /**
  * This procedure is called by system timer periodically (every system tick).
  */
 void system_timer__on_system_tick(void) {
-    // TODO: interrupt
-    static uint8_t pwd_pulse = 0;
-    if (pwd_entered()) {
-        if (!pwd_pulse) {
-            pwd_pulse = 1;
-            correctPasswordEntered();
-        }
-    }
-    else {
-          /* It is faster just to set pwd_pulse to 0 unconditionally */
-//        if (pwd_pulse)
-//        {
-            pwd_pulse = 0;
-//        }
-    }
+    pwd_entered__run();
 }
 
 
@@ -109,7 +97,7 @@ int main(void) {
     valve__init();
     buzzer__init();
 
-    pwd_entered_pin_init();
+    pwd_entered__init();
     alarm_state_pin_init();
     sensor_line_pin_init();
     alarm_out_pin_init();

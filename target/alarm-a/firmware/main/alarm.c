@@ -118,4 +118,8 @@ void alarm_timer__output__run(void) {
         }
     }
 }
-    
+
+
+void pwd_entered__on_active(void) {    
+    correctPasswordEntered();
+}
