@@ -1,9 +1,3 @@
-#ifndef __DEVICE_H
-#define __DEVICE_H
-
-
-#define F_CPU 1000000UL
-
 // Connectors on the base board:
 
 //			ext4	01	02	ext5
@@ -101,19 +95,3 @@
 //                                       v
 //                                       |
 //                                      GND
-
-#include "config/usart.h"               
-#include "signal/usart_tx.h"
-
-// activate pullups
-#define sensors_a_init()     do { PORTB |= (_BV(0) | _BV(1) | _BV(2)); } while(0)
-#define sensors_b_init()     do { PORTD |= (_BV(7) | _BV(6) | _BV(5)); } while(0)
-
-// active means that sensor contacts became open, line disconnected from GND
-// and driven high by pullup
-#define sensors_a_active()   ((PINB & (_BV(0) | _BV(1) /* | _BV(2)*/)) != 0)
-#define sensors_b_active()   ((PIND & (_BV(7) | _BV(6) /* | _BV(5)*/)) != 0)
-
-#include "signal/sensor.h"
-
-#endif
