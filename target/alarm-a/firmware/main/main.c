@@ -1,15 +1,14 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
-#include <stdint.h>
-#include <avr/pgmspace.h>
 
 #include "system_timer.h"
 #include "sms.h"
 #include "alarm.h"
 #include "alarm_timer.h"
-#include "unused.h"
 #include "water_sensors.h"
+#include "water_leak_detector.h"
+#include "unused.h"
 
 #include "in_pwd_entered.h"
 #include "in_sensor_line.h"
@@ -18,22 +17,35 @@
 #include "out_alarm_line.h"
 #include "out_alarm_state_line.h"
 
-
 #include "cpu/avr/usart0.h"
 
 
-inline static void water_leak_detector__run(void) {    
-    static uint8_t water_leak_detected = 0;
-    if ((water_leak_detected == 0) && (water_sensor_a__is_active() || water_sensor_b__is_active())) {
-        water_leak_detected = 1;
-        valve__on();
+/**
+ * This procedure is called by alarm when it decided to notify about alarm condition.
+ * It is called only once per session, not when alarm is switched on after it was mute.
+ * Our reaction is to send SMS.
+ */
+void alarm__out__run(void) {    
+    sms__send('1');
+    wdt_reset(); // sending SMS may take a few seconds
 
-        sms__send('5');
-        wdt_reset(); // sending SMS may take a few seconds
+    sms__send('2');
+    wdt_reset(); // sending SMS may take a few seconds
+}
 
-        sms__send('6');
-        wdt_reset(); // sending SMS may take a few seconds
-    }
+
+/**
+ * This procedure is called by water leak detector when it has decided to notify about the water leak.
+ * Our reaction is to turn on valve and send SMS.
+ */
+void water_leak_detector__out__run(void) {    
+    valve__on();
+
+    sms__send('5');
+    wdt_reset(); // sending SMS may take a few seconds
+
+    sms__send('6');
+    wdt_reset(); // sending SMS may take a few seconds
 }
 
 
@@ -48,26 +60,11 @@ void system_timer__on_second_tick(void) {
 }
 
 
-
 /**
  * This procedure is called by system timer periodically (every system tick).
  */
 void system_timer__on_system_tick(void) {
     pwd_entered__run();
-}
-
-
-/**
- * This procedure is called by alarm when it decided to notify about alarm condition.
- * It is called only once per session, not when alarm is switched on after it was mute.
- * Our reaction is to send SMS.
- */
-void alarm__out__run(void) {    
-    sms__send('1');
-    wdt_reset(); // sending SMS may take a few seconds
-
-    sms__send('2');
-    wdt_reset(); // sending SMS may take a few seconds
 }
 
 
@@ -96,9 +93,6 @@ int main(void) {
 
     system_timer__init();
     system_timer__start();
-    
-    // not used, alarm is 12V - will use for amplifier
-    //switch_b_on();
 
     sei();
     while(1);
