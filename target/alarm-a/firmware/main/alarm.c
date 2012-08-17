@@ -2,7 +2,6 @@
 #include <avr/pgmspace.h>
 
 #include "alarm.h"
-#include "alarm-timing.h"
 #include "alarm_timer.h"
 
 
