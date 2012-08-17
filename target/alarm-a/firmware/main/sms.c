@@ -1,5 +1,3 @@
-#include "device.h"
-
 #include <stdint.h>
 #include <avr/pgmspace.h>
 #include <avr/io.h>
@@ -12,7 +10,7 @@ const uint8_t PROGMEM MESSAGE[] = {
 };
 
 
-void sendSms(uint8_t index) {
+void sms__send(const uint8_t index) {
     const uint8_t* PROGMEM ptr = MESSAGE;
     const uint8_t* PROGMEM end = MESSAGE + sizeof(MESSAGE);
     while (ptr <= end) {

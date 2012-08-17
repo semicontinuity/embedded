@@ -1,4 +1,3 @@
-#include "device.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
@@ -17,6 +16,8 @@
 #include "out_valve.h"
 #include "out_buzzer.h"
 #include "out_alarm_line.h"
+#include "out_alarm_state_line.h"
+
 
 #include "cpu/avr/usart0.h"
 
@@ -27,14 +28,11 @@ inline static void water_leak_detector__run(void) {
         water_leak_detected = 1;
         valve__on();
 
-        sendSms('5');
+        sms__send('5');
         wdt_reset(); // sending SMS may take a few seconds
 
-        sendSms('6');
+        sms__send('6');
         wdt_reset(); // sending SMS may take a few seconds
-
-//        sendSms('7');
-//        sendSms('8');
     }
 }
 
@@ -64,15 +62,12 @@ void system_timer__on_system_tick(void) {
  * It is called only once per session, not when alarm is switched on after it was mute.
  * Our reaction is to send SMS.
  */
-void alarm_notification(void) {    
-    sendSms('1');
+void alarm__out__run(void) {    
+    sms__send('1');
     wdt_reset(); // sending SMS may take a few seconds
 
-    sendSms('2');
+    sms__send('2');
     wdt_reset(); // sending SMS may take a few seconds
-
-//    sendSms('3');
-//    sendSms('4');
 }
 
 
@@ -95,7 +90,7 @@ int main(void) {
     buzzer__init();
 
     pwd_entered__init();
-    alarm_state_pin_init();
+    alarm_state_line__init();
     sensor_line__init();
     alarm_line__init();
 

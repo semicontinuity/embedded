@@ -1,8 +1,6 @@
-#include "device.h"
-#include <avr/pgmspace.h>
-
 #include "in_sensor_line.h"
 #include "out_alarm_line.h"
+#include "out_alarm_state_line.h"
 #include "out_buzzer.h"
 #include "alarm.h"
 #include "alarm_timer.h"
@@ -40,10 +38,10 @@ unsigned char state;
 unsigned char timeAlert;
 
 
-void correctPasswordEntered (void) {
+void correctPasswordEntered(void) {
     if (state == STATE_DISARMED) {
         // If disarmed - arm
-        alarm_state_armed();
+        alarm_state_line__on();
         state = STATE_ARMING;
         alarm_timer__set(TIME_ARMING);
         timeAlert = TIME_ALERT;
@@ -51,7 +49,7 @@ void correctPasswordEntered (void) {
     else {
         // If not disarmed - disarm
         alarm_off(); // alarm may be on
-        alarm_state_disarmed();
+        alarm_state_line__off();
         // stop counting any timeouts for current state, STATE_DISARMED does not have timeout
         alarm_timer__reset(); 
         state = STATE_DISARMED;        
@@ -119,9 +117,8 @@ void alarm_timer__output__run(void) {
         alarm_timer__set(TIME_ALARM);
         alarm_on();
         // actually, it means, ignore if were are muting alarm already
-        if (timeAlert != TIME_ALERT_MUTE) 
-        {
-            alarm_notification();
+        if (timeAlert != TIME_ALERT_MUTE) {
+            alarm__out__run();
         }
     }
 }
