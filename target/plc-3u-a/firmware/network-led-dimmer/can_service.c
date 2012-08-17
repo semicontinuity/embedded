@@ -88,20 +88,17 @@ ISR(INT1_vect) {
 
 /*
 static void handle_error(void) {
-    DRIVE_LOW(SS);            
-    uint8_t eflg = mcp251x_read_byte(MCP251X_REGISTER_EFLG);
-    DRIVE_HIGH(SS);
+    uint8_t eflg;
+    can_selector__run(eflg = mcp251x_read_byte(MCP251X_REGISTER_EFLG));
 }
 */
 
 /*
-ISR(INT1_vect)
-{
+ISR(INT1_vect) {
     // interrupt flag for INT1 cleared automatically
-    DRIVE_LOW(SS);            
-    uint8_t icod_bits = mcp251x_read_byte(MCP251X_REGISTER_CANSTAT) & ICOD_BITS_MASK;
-    DRIVE_HIGH(SS);
-
+    uint8_t icod_bits;
+    can_selector__run(icod_bits = mcp251x_read_byte(MCP251X_REGISTER_CANSTAT) & ICOD_BITS_MASK);
+    
     switch(icod_bits) {
 //    case ICOD_BITS_MASKED(MCP251X_ICOD_ERROR):
 //        break;

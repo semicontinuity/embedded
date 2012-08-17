@@ -3,7 +3,7 @@
 
 // Parameters
 // ===================================================================================
-// In configuration file, included from device.h, the following must be defined:
+// The following parameters must be defined:
 // 
 // USART0__IN__BUFFER__SIZE
 // ===================================================================================

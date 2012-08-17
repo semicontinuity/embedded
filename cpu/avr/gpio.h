@@ -7,12 +7,6 @@
 #define set_bit_in_reg(reg,bit)      do {(reg) |= _BV(bit);} while(0)
 #define clear_bit_in_reg(reg,bit)    do {(reg) &= ~_BV(bit);} while(0)
 
-#define CONFIGURE_AS_OUTPUT(signal)  do {set_bit_in_reg (signal##_DIR, signal##_PIN);} while(0)
-#define CONFIGURE_AS_INPUT(signal)   do {clear_bit_in_reg (signal##_DIR, signal##_PIN);} while(0)
-#define DRIVE_LOW(signal)            do {clear_bit_in_reg (signal##_PORT, signal##_PIN);} while(0)
-#define DRIVE_HIGH(signal)           do {set_bit_in_reg (signal##_PORT, signal##_PIN);} while(0)
-
-
 
 // New style
 #ifndef QUOTE
@@ -52,12 +46,5 @@
 #define IS_0(signal)                 (bit_is_clear (PIN_REG(CONCAT(signal,__PORT)), signal##__PIN))
 #define IS_1(signal)                 (bit_is_set (PIN_REG(CONCAT(signal,__PORT)), signal##__PIN))
 
-
-
-#define STROBED_LOW(signal, op) do {\
-    OUT_0(signal);\
-    op;\
-    OUT_1(signal);\
-} while(0)
 
 #endif // __GPIO_H

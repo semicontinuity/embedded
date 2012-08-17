@@ -14,12 +14,6 @@
 
 
 // SS signal of SPI interface. For SPI master, usually configured as output.
-#define SS_PORT       (PORTB)
-#define SS_DIR        (DDRB)
-#define SS_PIN        (2)
-
-
-// SS signal of SPI interface. For SPI master, usually configured as output.
 #define SS__PORT      B
 #define SS__PIN       2
 
