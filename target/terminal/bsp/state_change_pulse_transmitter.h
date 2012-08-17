@@ -1,7 +1,6 @@
 #ifndef __STATE_CHANGE_PULSE_TRANSMITTER_H
 #define __STATE_CHANGE_PULSE_TRANSMITTER_H
 
-#include "device.h"
 #include "cpu/avr/gpio.h"
 
 // 1. any change on INT1 generates interrupt (ISC11=0 (default), ISC10=1)

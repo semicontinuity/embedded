@@ -4,8 +4,6 @@
 #ifndef __CPU__AVR__DRIVERS__DISPLAY__MT12864__DRIVER_H
 #define __CPU__AVR__DRIVERS__DISPLAY__MT12864__DRIVER_H
 
-#include "device.h"
-
 #include "cpu/avr/gpio.h"
 
 #define mt12864_clear_line_E   OUT_0(MT12864_E)

@@ -15,7 +15,7 @@
  * @param font  font to use
  * @param flags flags
  */
-void Draw_Text(uint8_t *str, uint8_t X, uint8_t Y, struct FONT *font, uint8_t flags);
+void Draw_Text(char *str, uint8_t X, uint8_t Y, struct FONT *font, uint8_t flags);
 
 
 #endif

@@ -1,4 +1,3 @@
-#include "device.h"
 #include <avr/pgmspace.h>
 
 #include "lcd_backlight_service.h"

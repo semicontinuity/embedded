@@ -1,4 +1,3 @@
-#include "device.h"
 #include "state_change_pulse_transmitter.h"
 #include "cpu/avr/gpio.h"
 

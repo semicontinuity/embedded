@@ -1,4 +1,3 @@
-#include "device.h"
 #include "keypad.h"
 #include <stdint.h>
 

@@ -7,7 +7,6 @@
 #define __SYSTEM_TIMER_H
 
 #include <stdint.h>
-#include "device.h"
 #include "cpu/avr/gpio.h"
 //#include "cpu/avr/timer0.h"
 

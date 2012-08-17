@@ -8,6 +8,12 @@ CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
 vpath %.c  $(BSP) $(ROOT)
 
+
+# Configuration
+CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
+CDEFS += $(CONF)
+
+
 ################################################################################################
 # Define the password as an argument to make
 #
@@ -15,6 +21,14 @@ vpath %.c  $(BSP) $(ROOT)
 #
 # PASSWORD_LENGTH=2 PASSWORD=KEYEVENT_0_PRESSED,KEYEVENT_0_PRESSED make
 ################################################################################################
+ifndef PASSWORD_LENGTH
+$(error PASSWORD_LENGTH is not set)
+endif
+
+ifndef PASSWORD
+$(error PASSWORD is not set)
+endif
+
 CDEFS += -DPASSWORD_LENGTH=$(PASSWORD_LENGTH)
 CDEFS += -DPASSWORD=$(PASSWORD)
 

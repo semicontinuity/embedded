@@ -1,5 +1,3 @@
-#include "device.h"
-
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
 #include <avr/wdt.h>
@@ -7,8 +5,11 @@
 #include <compat/deprecated.h>
 
 #include "alarm_client.h"
+#include "alarm_state.h"
 #include "keypad.h"
 #include "keypad_handler.h"
+#include "led.h"
+
 #include "lcd_backlight_service.h"
 #include "state_change_pulse_transmitter.h"
 #include "system_timer.h"
@@ -69,7 +70,8 @@ int main(void) {
     terminal_init();
     keypad__init();
 
-    configure_io();
+    led__init();
+    alarm_state__init();
     state_change_pulse_transmitter__init();
     alarm_client__init();
 

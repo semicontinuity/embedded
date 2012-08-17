@@ -1,5 +1,3 @@
-#include "device.h"
-
 #include "cpu/avr/drivers/display/mt12864/driver.h"
 #include "cpu/avr/drivers/display/mt12864/char-output.h"
 #include "cpu/avr/drivers/display/mt12864/text-output.h"

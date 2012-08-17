@@ -1,22 +1,3 @@
-#ifndef __DEVICE_H
-#define __DEVICE_H
-
-#define F_CPU 12000000UL
-
-#include "config/alarm_client.h"
-#include "config/lcd_backlight_service.h"
-
-
-#include "signal/mt12864.h"
-#include "signal/keypad.h"
-#include "signal/sensors.h"
-#include "signal/state_change.h"
-
-#include "cpu/avr/gpio.h"
-
-
-
-
 // Ports
 //
 // PA - mt12864 data bus
@@ -67,44 +48,3 @@
 //                                         |    |
 //                                         +----+
 //                                         AVR ISP
-
-#define PERIODIC_INTERRUPT_VECT    (TIMER0_OVF_vect)
-#define ALARM_STATE_INTERRUPT_VECT (INT1_vect)
-
-// Signal ALARM_STATE, input
-// Port PD3, used as INT1 (?)
-// Input from alarm base station to indicate the current state of alarm
-#define SIG_ALARM_STATE_PORT (PORTD)
-#define SIG_ALARM_STATE_DIR  (DDRD)
-#define SIG_ALARM_STATE_PIN  (3)
-#define is_system_armed() bit_is_set(PIND, SIG_ALARM_STATE_PIN)
-
-
-// Led is attached to PD4
-#define SIG_LED_PORT (PORTD)
-#define SIG_LED_DIR  (DDRD)
-#define SIG_LED_PIN  (4)
-#define armed_led_on()      set_bit_in_reg (SIG_LED_PORT, SIG_LED_PIN)
-#define armed_led_off()     clear_bit_in_reg (SIG_LED_PORT, SIG_LED_PIN)
-
-
-
-
-// (Configure ALARM_STATE for input: do nothing, input by default)
-// 1. Pull up ALARM_STATE
-// 3. Configure Txd for output
-// 4. Pull up Rxd (save some power)
-// 5. Configure LED for output
-// (PORTA is configured separetely - for mt12864 data bus)
-// (PORTB is configured separetely - for keyboard)
-// (PC2-PC5 configured separetely - for sensors)
-// (mt12864 control lines configured separetely)
-
-
-#define configure_io() do {\
-    set_bit_in_reg (SIG_ALARM_STATE_PORT, SIG_ALARM_STATE_PIN);\
-    set_bit_in_reg (SIG_LED_DIR, SIG_LED_PIN);\
-} while(0)
-
-
-#endif

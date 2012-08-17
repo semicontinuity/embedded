@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <avr/sfr_defs.h>
+#include "cpu/avr/gpio.h"
 
 #if defined(__AVR_ATmega16__)
 
@@ -18,7 +19,7 @@ inline void lcd_backlight_service__pwm__set(uint8_t v) {
 }
 
 inline void lcd_backlight_service__init(void) {
-    DDRD |= _BV(7);
+    USE_AS_OUTPUT(MT12864_BACKLIGHT);
 }
 
 // start timer 2, fast pwm, no-inverting out at OC2, clk/256

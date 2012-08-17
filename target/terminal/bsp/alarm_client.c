@@ -1,6 +1,7 @@
 #include <avr/interrupt.h>
 
-#include "device.h"
+#include "led.h"
+#include "alarm_state.h"
 #include "cpu/avr/drivers/display/mt12864/terminal.h"
 
 
@@ -27,18 +28,18 @@ void alarm_client__run(void) {
         --alarm_state_change_timeout;
         if (alarm_state_change_timeout == 0)
         {
-            uint8_t new_alarm_state = is_system_armed();
+            uint8_t new_alarm_state = alarm_state__get();
             if (new_alarm_state != alarm_state)
             {
                 const char* PROGMEM message;
                 if (new_alarm_state)
                 {
-                    armed_led_on();
+                    led__on();
                     message = MSG_ARMED;
                 }
                 else
                 {
-                    armed_led_off();
+                    led__off();
                     message = MSG_DISARMED;
                 }
 

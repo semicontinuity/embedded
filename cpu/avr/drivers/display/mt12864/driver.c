@@ -1,8 +1,6 @@
 // Source code adopted from electronix.ru
 // --------------------------------------
 
-#include "device.h"
-
 #include "cpu/avr/drivers/display/mt12864/driver.h"
 
 #include <stdint.h>
