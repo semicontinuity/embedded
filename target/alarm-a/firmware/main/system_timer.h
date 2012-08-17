@@ -4,8 +4,8 @@
  * CS=100, CLKio/256
  * Interrupt will be invoked F_CPU/256/256 times per second
  */
-#ifndef __SCHEDULER_H
-#define __SCHEDULER_H
+#ifndef __SYSTEM_TIMER_H
+#define __SYSTEM_TIMER_H
 
 
 static inline void system_timer__init(void) {
