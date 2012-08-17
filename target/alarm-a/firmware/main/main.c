@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <avr/pgmspace.h>
 
-#include "scheduler.h"
+#include "system_timer.h"
 #include "sms.h"
 #include "alarm.h"
 #include "alarm_timer.h"
@@ -95,7 +95,6 @@ int main(void) {
     unused__init();
 
     // Debug/Mobile phone UART
-    usart__pins_init();
     usart__rate__set(USART_BAUD_RATE);
     usart__init();
     usart__out__enabled__set();
@@ -112,7 +111,8 @@ int main(void) {
     sensor_line_pin_init();
     alarm_out_pin_init();
 
-    init_and_start_scheduler();
+    system_timer__init();
+    system_timer__start();
     
     // not used, alarm is 12V - will use for amplifier
     //switch_b_on();

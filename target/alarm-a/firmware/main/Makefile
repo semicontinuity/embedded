@@ -26,7 +26,7 @@ else
 CDEFS += -DINLINE=
 
 SRC += main.c
-SRC += scheduler.c
+SRC += system_timer.c
 SRC += sms.c
 SRC += alarm.c
 SRC += alarm_timer.c

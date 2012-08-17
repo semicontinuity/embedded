@@ -1,8 +1,6 @@
 #include "device.h"
 #include <avr/pgmspace.h>
 
-
-#include "scheduler.h"
 #include "alarm.h"
 #include "alarm-timing.h"
 #include "alarm_timer.h"
@@ -35,8 +33,7 @@ unsigned char state;
 unsigned char timeAlert;
 
 
-void correctPasswordEntered (void)
-{
+void correctPasswordEntered (void) {
     if (state == STATE_DISARMED)
     {
         // If disarmed - arm

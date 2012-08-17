@@ -1,6 +1,6 @@
 #include <avr/interrupt.h>
 #include <stdint.h>
-#include "scheduler.h"
+#include "system_timer.h"
 
 
 uint8_t fastCounter;
