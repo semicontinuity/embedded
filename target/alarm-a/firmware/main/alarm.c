@@ -2,13 +2,14 @@
 #include <avr/pgmspace.h>
 
 #include "in_sensor_line.h"
+#include "out_alarm_line.h"
 #include "out_buzzer.h"
 #include "alarm.h"
 #include "alarm_timer.h"
 
 
-#define alarm_on()              do { alarm_out_pin_high(); buzzer__on(); } while(0)
-#define alarm_off()             do { alarm_out_pin_low(); buzzer__off(); } while(0)
+#define alarm_on()              do { alarm_line__on(); buzzer__on(); } while(0)
+#define alarm_off()             do { alarm_line__off(); buzzer__off(); } while(0)
 
 
 

@@ -2,7 +2,6 @@
 #define __OUT_BUZZER_H
 
 #include "cpu/avr/gpio.h"
-#include <stdbool.h>
 
 
 static inline void buzzer__init(void) {

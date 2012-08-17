@@ -16,6 +16,7 @@
 #include "in_sensor_line.h"
 #include "out_valve.h"
 #include "out_buzzer.h"
+#include "out_alarm_line.h"
 
 #include "cpu/avr/usart0.h"
 
@@ -96,7 +97,7 @@ int main(void) {
     pwd_entered__init();
     alarm_state_pin_init();
     sensor_line__init();
-    alarm_out_pin_init();
+    alarm_line__init();
 
     system_timer__init();
     system_timer__start();
