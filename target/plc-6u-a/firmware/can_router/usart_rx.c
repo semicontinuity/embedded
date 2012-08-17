@@ -1,5 +1,3 @@
-#include "device.h"
-
 #include <avr/io.h>
 #include <stdint.h>
 #include "packet.h"

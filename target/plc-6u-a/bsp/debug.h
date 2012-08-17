@@ -1,8 +1,6 @@
 #ifndef __DEBUG_H
 #define __DEBUG_H
 
-#include "device.h"
-
 
 #define debug__register(r) do {			\
     loop_until_bit_is_set(UCSR0A, UDRE0);	\

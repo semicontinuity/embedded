@@ -1,5 +1,3 @@
-#include "device.h"
-
 #include "can_selector.h"
 #include "can_service.h"
 #include "can_tx_q.h"

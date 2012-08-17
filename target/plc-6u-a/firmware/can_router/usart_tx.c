@@ -1,8 +1,6 @@
-#include "device.h"
 #include <avr/io.h>
 #include <avr/sfr_defs.h>
 
-#include "device.h"
 #include "usart_tx.h"
 #include "usart.h"
 #include "packet.h"

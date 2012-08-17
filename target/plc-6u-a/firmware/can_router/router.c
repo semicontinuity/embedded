@@ -1,7 +1,5 @@
-#include "device.h"
 #include <avr/io.h>
 
-#include "device.h"
 #include "debug.h"
 
 #include "router.h"

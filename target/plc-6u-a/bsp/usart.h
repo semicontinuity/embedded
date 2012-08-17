@@ -1,7 +1,6 @@
 #ifndef __USART_H
 #define __USART_H
 
-#include "device.h"
 
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
     defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)

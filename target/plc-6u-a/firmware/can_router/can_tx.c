@@ -1,4 +1,3 @@
-#include "device.h"
 #include <avr/io.h>
 
 #include "can_selector.h"

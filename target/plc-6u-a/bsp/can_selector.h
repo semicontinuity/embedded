@@ -1,7 +1,6 @@
 #ifndef __CAN_SELECTOR_H
 #define __CAN_SELECTOR_H
 
-#include "device.h"
 #include "cpu/avr/gpio.h"
 #include "cpu/avr/spi.h"
 
