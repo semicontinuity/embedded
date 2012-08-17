@@ -12,6 +12,9 @@
 #include "unused.h"
 #include "water_sensors.h"
 
+#include "out_valve.h"
+#include "out_buzzer.h"
+
 #include "cpu/avr/usart0.h"
 
 
@@ -24,7 +27,7 @@ inline static void water_leak_detector__run(void) {
     static uint8_t water_leak_detected = 0;
     if ((water_leak_detected == 0) && (water_sensor_a__is_active() || water_sensor_b__is_active())) {
         water_leak_detected = 1;
-        switch_a_on();
+        valve__on();
 
         sendSms('5');
         wdt_reset(); // sending SMS may take a few seconds
@@ -103,8 +106,8 @@ int main(void) {
     water_sensor_a__init();
     water_sensor_b__init();
 
-    switch_a_init();
-    switch_b_init();
+    valve__init();
+    buzzer__init();
 
     pwd_entered_pin_init();
     alarm_state_pin_init();

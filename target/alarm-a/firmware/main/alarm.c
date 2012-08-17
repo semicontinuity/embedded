@@ -1,8 +1,14 @@
 #include "device.h"
 #include <avr/pgmspace.h>
 
+#include "out_buzzer.h"
 #include "alarm.h"
 #include "alarm_timer.h"
+
+
+#define alarm_on()              do { alarm_out_pin_high(); buzzer__on(); } while(0)
+#define alarm_off()             do { alarm_out_pin_low(); buzzer__off(); } while(0)
+
 
 
 // device is "disarmed" - ignores all events from sensor
@@ -33,16 +39,14 @@ unsigned char timeAlert;
 
 
 void correctPasswordEntered (void) {
-    if (state == STATE_DISARMED)
-    {
+    if (state == STATE_DISARMED) {
         // If disarmed - arm
         alarm_state_armed();
         state = STATE_ARMING;
         alarm_timer__set(TIME_ARMING);
         timeAlert = TIME_ALERT;
     }
-    else
-    {
+    else {
         // If not disarmed - disarm
         alarm_off(); // alarm may be on
         alarm_state_disarmed();
@@ -101,8 +105,7 @@ void alarm_timer__output__run(void) {
 // IF THERE IS A LACK OF MEMORY, goto STATEMENT CAN BE USED HERE
     }
 
-    if (state == STATE_ALERT)
-    {
+    if (state == STATE_ALERT) {
         // Alert period ended, but alarm is not disarmed!
         // It is ALARM situation!
         state = STATE_ALARM;
