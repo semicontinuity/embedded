@@ -12,7 +12,9 @@ static inline bool pwd_entered__is_active(void) {
     return IS_0(PWD_ENTERED);
 }
 
-static inline bool pwd_entered__run(void) {
+void pwd_entered__on_active(void);
+
+static inline void pwd_entered__run(void) {
     // TODO: interrupt
     static uint8_t pwd_pulse = 0;
     if (pwd_entered__is_active()) {
@@ -31,7 +33,6 @@ static inline bool pwd_entered__run(void) {
     }
 }
 
-void pwd_entered__on_active(void);
 
 
 #endif

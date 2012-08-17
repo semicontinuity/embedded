@@ -13,15 +13,11 @@
 #include "water_sensors.h"
 
 #include "in_pwd_entered.h"
+#include "in_sensor_line.h"
 #include "out_valve.h"
 #include "out_buzzer.h"
 
 #include "cpu/avr/usart0.h"
-
-
-inline static void alarm__run(void) {    
-    if (intruder_detected()) sensor_signal(); // makes sense to poll, to filter out noise
-}
 
 
 inline static void water_leak_detector__run(void) {    
@@ -99,7 +95,7 @@ int main(void) {
 
     pwd_entered__init();
     alarm_state_pin_init();
-    sensor_line_pin_init();
+    sensor_line__init();
     alarm_out_pin_init();
 
     system_timer__init();

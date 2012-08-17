@@ -3,7 +3,7 @@
 
 #include "cpu/avr/gpio.h"
 
-static inline void unused__init() {
+static inline void unused__init(void) {
     USE_AS_OUTPUT(UNUSED1);
     USE_AS_OUTPUT(UNUSED2);
     USE_AS_OUTPUT(UNUSED3);

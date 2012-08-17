@@ -7,8 +7,7 @@
 /**************************************/
 /* Service functions                  */
 /**************************************/
-void correctPasswordEntered (void);
-void sensor_signal(void);
+void alarm__run(void);
 
 /**************************************/
 /* Callbacks                          */

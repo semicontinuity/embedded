@@ -1,6 +1,7 @@
 #include "device.h"
 #include <avr/pgmspace.h>
 
+#include "in_sensor_line.h"
 #include "out_buzzer.h"
 #include "alarm.h"
 #include "alarm_timer.h"
@@ -64,6 +65,11 @@ void sensor_signal(void) {
 }
 
 
+void alarm__run(void) {    
+    if (sensor_line__is_active()) sensor_signal(); // makes sense to poll, to filter out noise
+}
+
+
 void alarm_timer__output__run(void) {
     switch (state)
     {
@@ -82,7 +88,7 @@ void alarm_timer__output__run(void) {
         // (go thru STATE_ALERT state for technical reasons - after switch statement
         // it will be checked and actions to fire alarm will be taken
         // This should save 2 function calls = some flash memory)
-        if (intruder_detected()) state = STATE_ALERT;
+        if (sensor_line__is_active()) state = STATE_ALERT;
         break;
     case STATE_ARMING:
         // // Arming period ended, now we are ARMED
@@ -93,7 +99,7 @@ void alarm_timer__output__run(void) {
         // This should save 2 function calls = some flash memory)
 
         // if an operator was late the alarm will be turned on immediately
-        if (intruder_detected()) state = STATE_ALERT;
+        if (sensor_line__is_active()) state = STATE_ALERT;
 
 
 //        NB! fall thru deliberately (to save flash size)!

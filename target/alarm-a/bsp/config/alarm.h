@@ -3,15 +3,6 @@
 
 #include "cpu/avr/gpio.h"
 
-
-// SENSOR_LINE pin, PB3, input, ext. pullup
-// Any sensor may drive it low to indicate alarm condition
-#define SENSOR_LINE_PORT_IN	(PINB)
-#define SENSOR_LINE_DIR		(DDRB)
-#define SENSOR_LINE_PIN		(3)
-#define sensor_line_pin_init()
-#define intruder_detected()     (bit_is_clear(SENSOR_LINE_PORT_IN,SENSOR_LINE_PIN))
-
 // ALARM_OUT pin, PB5, output, active high
 // May be used to trigger external sound alarm
 #define ALARM_OUT_PORT          (PORTB)
