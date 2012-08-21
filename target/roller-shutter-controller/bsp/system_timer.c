@@ -15,14 +15,14 @@
 ISR(TIMER2_COMPA_vect)
 {
     // 1. invoke system_tick consumers
-    on_system_tick();
+    system_timer__on_system_tick();
 
 #ifdef SYSTEM_TIMER__SECOND_TICK
     // 2. second_tick
     static int8_t t;
     if (--t == 0) {
         t = 250;
-        on_second_tick();
+        system_timer__on_second_tick();
     }
 #endif
 }

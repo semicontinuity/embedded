@@ -76,6 +76,19 @@ void mcp2515_read_rx_buffer(uint8_t* buffer, const uint8_t instruction, uint8_t 
 }
 
 
+/**
+ * Load data into the specified TX Buffer.
+ * @param buffer        The pointer to the data to be loaded.
+ * @param instruction   The instruction that determines what TX buffer to load data to.
+ *                      Must be one of:
+ *                      * MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH
+ *                      * MCP251X_INSTRUCTION_LOAD_BUFFER_0_D0
+ *                      * MCP251X_INSTRUCTION_LOAD_BUFFER_1_SIDH
+ *                      * MCP251X_INSTRUCTION_LOAD_BUFFER_1_D0
+ *                      * MCP251X_INSTRUCTION_LOAD_BUFFER_2_SIDH
+ *                      * MCP251X_INSTRUCTION_LOAD_BUFFER_2_D0
+ * @param count         The number of bytes to load.
+ */
 void mcp2515_load_tx_buffer(const uint8_t* buffer, const uint8_t instruction, uint8_t count) {
     spi__write(instruction);
     do {

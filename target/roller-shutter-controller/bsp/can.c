@@ -1,12 +1,6 @@
 // =============================================================================
-// CAN Networking initialization.
+// CAN Networking service.
 //
-// Performs MCP251x controller configuration.
-// Uploads all the data that are set in the Configuration mode of MCP251X:
-//
-// - Configuration registers
-// - Masks
-// - Filters
 //
 // When the data are uploaded, the controller is switched into Normal Mode.
 //
@@ -14,9 +8,6 @@
 //
 // - CANP_DEVICE_NET	network id
 // - CANP_DEVICE_ADDR	address in the network
-//
-// See conf.h for the description of constants
-// that must be defined for the configuration registers.
 // =============================================================================
 
 #include "can.h"
@@ -42,16 +33,20 @@
 
 
 // RX Filters 0-2
-mcp251x_message_id rxf0_2[3] PROGMEM = {
-    RXF0, RXF1, RXF2
-};
+mcp251x_message_id can__rxf0_2[3] PROGMEM = {RXF0, RXF1, RXF2};
 
 // RX Filters 3-5
-mcp251x_message_id rxf3_5[3] PROGMEM = {
-    RXF3, RXF4, RXF5
-};
+mcp251x_message_id can__rxf3_5[3] PROGMEM = {RXF3, RXF4, RXF5};
 
 // RX Masks 0 and 1
-mcp251x_message_id rxm0_1[2] PROGMEM = {
-    RXM0, RXM1
-};
+mcp251x_message_id can__rxm0_1[2] PROGMEM = {RXM0, RXM1};
+
+
+// TX Buffer 2 Header
+// Used exclusively for sending notifications from buttons.
+mcp251x_message_id can__txb2_h PROGMEM = CANP_HEADER(
+    CANP_EXT_ID, CANP_DEVICE_TAG,
+    CANP_MANAGER_NET, CANP_MANAGER_ADDR,
+    CANP_DEVICE_NET, CANP_DEVICE_ADDR,
+    CANP_OUT, CANP_RAM, 0
+);

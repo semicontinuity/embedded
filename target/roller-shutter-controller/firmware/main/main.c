@@ -10,33 +10,31 @@
 #include "can.h"
 #include "can_selector.h"
 #include "buttons.h"
+#include "buttons_scanner.h"
 #include "motor_controller.h"
 #include "system_timer.h"
 
+
 // =============================================================================
-// Button handler.
+// Controller.
 // =============================================================================
 
-inline static void button_handler__init(void) {
-    buttons__init();
-}
+void controller__put(uint8_t button_index, uint8_t button_state) {
 
-INLINE void buttons__on_button1_changed(void) {
-    motor_controller__up();
-}
-
-INLINE void buttons__on_button2_changed(void) {
-    motor_controller__down();
 }
 
 
 // =============================================================================
-// Implementation of callbacks from other modules
+// Implementation of callbacks from other modules (bindings)
 // =============================================================================
 
-INLINE void on_system_tick(void) {
-    buttons__run();
+INLINE void system_timer__on_system_tick(void) {
+    buttons_scanner__run();
     motor_controller__prescaler__run();
+}
+
+
+INLINE void buttons_scanner__out__put(uint8_t buttons_changed, uint8_t buttons_state) {
 }
 
 
@@ -45,7 +43,7 @@ INLINE void on_system_tick(void) {
 // =============================================================================
 
 int main(void) {
-    button_handler__init();
+    buttons__init();
     motor_controller__init();
 
     spi__init(SPI_CLKDIV_16);

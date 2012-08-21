@@ -23,10 +23,10 @@
 #include "cpu/avr/timer2.h"
 
 
-INLINE void on_system_tick(void);
+INLINE void system_timer__on_system_tick(void);
 
 #ifdef SYSTEM_TIMER__SECOND_TICK
-INLINE void on_second_tick(void);
+INLINE void system_timer__on_second_tick(void);
 #endif
 
 

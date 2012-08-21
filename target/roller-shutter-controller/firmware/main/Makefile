@@ -29,7 +29,7 @@ CDEFS += -DINLINE=
 SRC += main.c
 
 # BSP
-SRC += buttons.c
+SRC += buttons_scanner.c
 SRC += can.c
 SRC += motor_controller.c
 SRC += system_timer.c

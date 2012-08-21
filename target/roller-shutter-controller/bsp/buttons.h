@@ -5,40 +5,24 @@
 #include <stdint.h>
 
 
-/**
- * Initialize the button pins
- */
-INLINE void buttons__init(void);
+inline void button1__init(void) {
+    USE_AS_INPUT(BUTTON1);
+    ENABLE_PULLUP(BUTTON1);
+}
 
-/**
- * Called periodically to scan buttons
- */
-INLINE void buttons__run(void);
+inline void button2__init(void) {
+    USE_AS_INPUT(BUTTON2);
+    ENABLE_PULLUP(BUTTON2);
+}
 
-
-
-#define button1__is_pressed()   (IS_0(BUTTON1))
-#define button1__was_pressed()  (~buttons__state & _BV(BUTTON1__PIN))
-#define button1__was_released() (buttons__state & _BV(BUTTON1__PIN))
 
 /**
- * Callback function, that must be implemented by the user.
- * Called when BUTTON1 has been just pressed or released.
+ * Initialize the button pins.
  */
-INLINE void buttons__on_button1_changed(void);
-
-
-
-#define button2__is_pressed()   (IS_0(BUTTON2))
-#define button2__was_pressed()  (~buttons__state & _BV(BUTTON2__PIN))
-#define button2__was_released() (buttons__state & _BV(BUTTON2__PIN))
-
-/**
- * Callback function, that must be implemented by the user.
- * Called when BUTTON2 has been just pressed or released.
- */
-INLINE void buttons__on_button2_changed(void);
-
+inline void buttons__init(void) {
+    button1__init();
+    button2__init();
+}
 
 
 #endif

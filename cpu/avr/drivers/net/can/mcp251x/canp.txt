@@ -1,7 +1,47 @@
 CAN Protocol
+================================================================================
+
+Requirements
 --------------------------------------------------------------------------------
 
-Message header layout:
+The CAN protocol is designed to fulfill the following requirements:
+
+- Supported message types:
+    - Information request message (also reffered to as RTR or query)
+    - Output message, i.e. the message transmitted from the node with some payload.
+      Can be initiated by the node itself (notification)
+      or in response to information request message.
+    - Input message, i.e. the message transmitting payload to the node.
+- Support for multiple physical buses and routing.
+- Compatibility with Microchip CAN Extenders.
+
+
+Design decisions
+--------------------------------------------------------------------------------
+
+Only extended messages are supported,
+to have long enough headers with rich semantics.
+
+Message headers contain addresses of both the sender and the receiver
+of the message, to simplify system debugging by logging of all traffic.
+
+To simplify software, no distinction is made between responses
+to RTR and node-initiated notifications.
+If the node is able to send notifications, an RTR will make the node
+transmit one notification, as if the condition to transmit the notification
+was met.
+
+For compatibility with CAN extenders, RTR and RTR response messages
+have the same ID bits (the only difference is in RTR bit and payload).
+Thus, there are no fields like 'sender address' and 'receiver address'
+in the header, but 'host address', 'counterparty address' and 'owner'.
+It also makes the node software simpler: to generate the response to RTR,
+it is only necessary to clear RTR bit
+(but the router software is becoming more complex).
+
+
+Message header layout
+--------------------------------------------------------------------------------
 
 SID10 ..     SID3 SID2..0 IDE EID17 EID15  ..    EID8 EID7    ..   EID0
 +-+-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+
@@ -30,14 +70,14 @@ SID10 ..     SID3 SID2..0 IDE EID17 EID15  ..    EID8 EID7    ..   EID0
 The router must examine RTR and OWNER bits, to identify the destination network of the packet.
 
 
-Examples:
-
+Message header layout examples
+--------------------------------------------------------------------------------
 
 Client node 001.00001 sets the value of the parameter 010.00010.00000:
 
- 0 1 1 0 0 0 0 1   0 0 1       0 0   0 1 0 0 0 0 1 0   0 0 0 0 0 0 0 0  (RTR=0: payload)
+ 0 1 1 0 0 0 0 1   0 0 1   0   0 0   0 1 0 0 0 0 1 0   0 0 0 0 0 0 0 0  (RTR=0: payload)
 +-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
-|short|   cpty  | | cpty|     |o|a| | host| host    | | slot          |
+|short|   cpty  | | cpty|  R  |o|a| | host| host    | | slot          |
 | tag | address | | net |     |w|u| |  net| address | |               | 
 +-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
 Router sees that RTR==0 && Owner==0 => destination net is host net
@@ -46,9 +86,9 @@ Router sees that RTR==0 && Owner==0 => destination net is host net
 
 Query for the value of the parameter 010.00010.00000 from the node 001.00001:
 
- 0 1 1 0 0 0 0 1   0 0 1       1 0   0 1 0 0 0 0 1 0   0 0 0 0 0 0 0 0  (RTR=1: no payload)
+ 0 1 1 0 0 0 0 1   0 0 1   1   1 0   0 1 0 0 0 0 1 0   0 0 0 0 0 0 0 0  (RTR=1: no payload)
 +-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
-|short|   cpty  | | cpty|     |o|a| | host| host    | | slot          |
+|short|   cpty  | | cpty|  R  |o|a| | host| host    | | slot          |
 | tag | address | | net |     |w|u| |  net| address | |               | 
 +-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
 Router sees RTR==1 => destination net is host net
@@ -59,12 +99,71 @@ If RTR==1 && Owner==0 => semantics undefined yet (
 )
 
 
-The node 010.00010 replies to the node 001.00001 with the value of the parameter 010.00010.00000:
+The node 010.00010 replies to the node 001.00001 with the value of the parameter 010.00010.00000
+(or sends notification):
 
- 0 1 1 0 0 0 0 1   0 0 1       1 0   0 1 0 0 0 0 1 0   0 0 0 0 0 0 0 0  (RTR=0: payload)
+ 0 1 1 0 0 0 0 1   0 0 1   0   1 0   0 1 0 0 0 0 1 0   0 0 0 0 0 0 0 0  (RTR=0: payload)
 +-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
-|short|   cpty  | | cpty|     |o|a| | host| host    | | slot          |
+|short|   cpty  | | cpty|  R  |o|a| | host| host    | | slot          |
 | tag | address | | net |     |w|u| |  net| address | |               | 
 +-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
 Router sees RTR==0 && Owner==1 => destination net is counterparty net
 
+
+Parallel GPIO Profile
+--------------------------------------------------------------------------------
+
+The Parallel GPIO profile describes a set of CAN messages (reports)
+to for performing I/O on 8-bit GPIO port.
+It is designed to be similar to one of CAN Extender,
+to allow for at least partially compatible software.
+
+There are the following registers in the profile:
+- PORT_OUT_MASK:    the mask for writes into PORT_OUT.
+                    write only.
+- PORT_OUT:         determines the pins driven by the port.
+
+- PORT_IN_MASK:     the mask of bits in PORT_IN changed since the last report.
+                    read only.
+- PORT_IN:          contains the value that is read by the port.
+
+- PORT_DIR:         determines the direction of the port pins (1=output, 0=input).
+- PORT_CNF1:        reserved
+- PORT_CNF2:        reserved
+- PORT_CNF3:        reserved
+- PORT_MODE0:       port mode bits
+- PORT_MODE1:       port mode bits
+
+If the port is configured for input, the bits in PORT_MODE1 and PORT_MODE0
+are interpreted as follows:
+
+- 00: changes on the pin do not generate notifications.
+- 01: positive edge generates notifications.
+- 10: negative edge generates notifications.
+- 11: positive and negative edge generates notifications.
+
+When a notification is generated, the corresponding bit in PORT_IN_MASK
+is set.
+
+
+There are the following fields in the profile ROM:
+- PORT_DIR_MASK:    the mask of the bits of PORT_DIR that can be changed.
+
+
+There are the following reports in the profile:
+
+- PORT_OUT:
+  - byte 0:         register PORT_OUT_MASK
+  - byte 1:         register PORT_OUT
+
+- PORT_IN:
+  - byte 0:         register PORT_IN_MASK
+  - byte 1:         register PORT_IN
+
+- PORT_CONF:
+  - byte 0:         register PORT_DIR
+  - byte 1:         register PORT_CNF1
+  - byte 2:         register PORT_CNF2
+  - byte 3:         register PORT_CNF3
+  - byte 4:         register PORT_MODE0
+  - byte 5:         register PORT_MODE1
