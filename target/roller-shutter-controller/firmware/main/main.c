@@ -19,7 +19,7 @@
 // Controller.
 // =============================================================================
 
-void controller__put(uint8_t button_index, uint8_t button_state) {
+void controller__run(void) {
 
 }
 
@@ -31,11 +31,9 @@ void controller__put(uint8_t button_index, uint8_t button_state) {
 INLINE void system_timer__on_system_tick(void) {
     buttons_scanner__run();
     motor_controller__prescaler__run();
+    can__run();
 }
 
-
-INLINE void buttons_scanner__out__put(uint8_t buttons_changed, uint8_t buttons_state) {
-}
 
 
 // =============================================================================

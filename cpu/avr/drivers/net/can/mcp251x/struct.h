@@ -6,8 +6,7 @@
 // Useful structure definitions
 // Reminder: masks and filters can only be read and written in configuration mode
 
-typedef struct mcp251x_message_id
-{
+typedef struct mcp251x_message_id {
     uint8_t sidh;
     uint8_t sidl;
     uint8_t eid8;
@@ -15,15 +14,13 @@ typedef struct mcp251x_message_id
 } mcp251x_message_id;
 
 
-typedef struct mcp251x_frame_header
-{
+typedef struct mcp251x_frame_header {
     mcp251x_message_id id;
     uint8_t dlc;
 } mcp251x_frame_header;
 
 
-typedef struct mcp251x_message_buffer
-{
+typedef struct mcp251x_message_buffer {
     mcp251x_frame_header header;
     uint8_t data[8];
 } mcp251x_message_buffer;

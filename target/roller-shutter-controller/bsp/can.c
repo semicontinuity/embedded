@@ -11,12 +11,11 @@
 // =============================================================================
 
 #include "can.h"
-
-#include "cpu/avr/drivers/net/can/mcp251x/struct.h"
 #include <avr/pgmspace.h>
 
-
+#include "cpu/avr/drivers/net/can/mcp251x/struct.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
+
 
 // Filters and mask for RX Buffer 0
 #define RXM0	CANP_MASK	(0, 0, 0, CANP_COMPARE_HOST_NET,	CANP_COMPARE_HOST_ADDR,	0, 0, 0)
@@ -44,9 +43,12 @@ mcp251x_message_id can__rxm0_1[2] PROGMEM = {RXM0, RXM1};
 
 // TX Buffer 2 Header
 // Used exclusively for sending notifications from buttons.
-mcp251x_message_id can__txb2_h PROGMEM = CANP_HEADER(
-    CANP_EXT_ID, CANP_DEVICE_TAG,
-    CANP_MANAGER_NET, CANP_MANAGER_ADDR,
-    CANP_DEVICE_NET, CANP_DEVICE_ADDR,
-    CANP_OUT, CANP_RAM, 0
-);
+mcp251x_frame_header can__txb2_h PROGMEM = {
+    CANP_HEADER(
+        CANP_EXT_ID, CANP_DEVICE_TAG,
+        CANP_MANAGER_NET, CANP_MANAGER_ADDR,
+        CANP_DEVICE_NET, CANP_DEVICE_ADDR,
+        CANP_OUT, CANP_RAM, CANP_SLOT_BUTTONS_STATUS
+    ),
+    sizeof(buttons_scanner__status)
+};
