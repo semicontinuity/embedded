@@ -12,6 +12,7 @@
 #include "buttons.h"
 #include "buttons_scanner.h"
 #include "motor_controller.h"
+#include "motor_controller_prescaler.h"
 #include "system_timer.h"
 
 

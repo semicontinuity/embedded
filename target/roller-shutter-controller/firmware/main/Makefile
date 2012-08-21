@@ -32,6 +32,7 @@ SRC += main.c
 SRC += buttons_scanner.c
 SRC += can.c
 SRC += motor_controller.c
+SRC += motor_controller_prescaler.c
 SRC += system_timer.c
 
 # Library
