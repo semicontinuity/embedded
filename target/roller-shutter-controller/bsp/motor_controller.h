@@ -9,6 +9,11 @@
 #define MOTOR_CONTROLLER__POSITION__MIDDLE      (50)
 
 
+extern uint8_t motor_controller__status[2];
+#define motor_controller__position              motor_controller__status[0]
+#define motor_controller__position_error        motor_controller__status[1]
+
+
 /**
  * Called every motor_controller_tick to implement the motor control logic
  * and generate signals to drive the motor.

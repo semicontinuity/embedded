@@ -24,11 +24,15 @@
 
 
 uint8_t motor_controller__final_position        = MOTOR_CONTROLLER__POSITION__MIDDLE;
-uint8_t motor_controller__position              = MOTOR_CONTROLLER__POSITION__MIDDLE;
+
+uint8_t motor_controller__status[2]             = {
+    MOTOR_CONTROLLER__POSITION__MIDDLE,
+    MOTOR_CONTROLLER__POSITION__MIDDLE
+};
+
 uint8_t motor_controller__state                 = MOTOR_CONTROLLER__STATE__OFF;
 uint8_t motor_controller__timer                 = 0;
  int8_t motor_controller__position_delta        = 0;
-uint8_t motor_controller__position_error        = MOTOR_CONTROLLER__POSITION__MIDDLE;
 
 
 /**
@@ -43,7 +47,6 @@ INLINE void motor_controller__run(void) {
     case MOTOR_CONTROLLER__STATE__CHECK_START:
         if (motor_controller__position == motor_controller__final_position) {
             motor_controller__state = MOTOR_CONTROLLER__STATE__OFF;
-            break;
         }
         else {
             if (motor_controller__position > motor_controller__final_position) {
@@ -58,6 +61,7 @@ INLINE void motor_controller__run(void) {
             }
             motor_controller__state = MOTOR_CONTROLLER__STATE__RUN;
         }
+        break;
     case MOTOR_CONTROLLER__STATE__RUN:      
         motor_controller__position += motor_controller__position_delta;
         if (motor_controller__position == motor_controller__final_position) {
