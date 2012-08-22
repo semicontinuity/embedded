@@ -10,15 +10,6 @@
 
 
 /**
- * Initialize the motor controller.
- */
-inline void motor_controller__init(void) {
-    // Output port contains 0 by default.
-    USE_AS_OUTPUT(MOTOR_UP);
-    USE_AS_OUTPUT(MOTOR_DOWN);
-}
-
-/**
  * Called every motor_controller_tick to implement the motor control logic
  * and generate signals to drive the motor.
  */

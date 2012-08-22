@@ -88,11 +88,12 @@ INLINE void system_timer__on_system_tick(void) {
 
 // =============================================================================
 // Entry point
+// TODO: investigate brown-out behaviour (are ports re-initialized?)
 // =============================================================================
 
 int main(void) {
     buttons__init();
-    motor_controller__init();
+    motor__init();
 
     spi__init(SPI_CLKDIV_16);
 
