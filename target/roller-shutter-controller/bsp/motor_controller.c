@@ -13,18 +13,56 @@
 #include "motor_controller.h"
 #include "cpu/avr/gpio.h"
 
-#define MOTOR_CONTROLLER__REVERSE_DELAY         (2)
-#define MOTOR_CONTROLLER__ERROR                 (2)
 
 #define MOTOR_CONTROLLER__PORT_VALUE_UP         (SIGNAL_MASK(MOTOR_UP))
 #define MOTOR_CONTROLLER__PORT_VALUE_DOWN       (SIGNAL_MASK(MOTOR_DOWN))
 #define MOTOR_CONTROLLER__PORT_VALUE_OFF        (0)
 
+
 #define MOTOR_CONTROLLER__STATE__OFF            (0)
-#define MOTOR_CONTROLLER__STATE__REVERSE_DELAY  (1)
-#define MOTOR_CONTROLLER__STATE__MOTOR_START    (2)
-#define MOTOR_CONTROLLER__STATE__MOTOR_RUN      (3)
-#define MOTOR_CONTROLLER__STATE__END_DELAY      (4)
+#define MOTOR_CONTROLLER__STATE__DEAD_TIME      (1)
+#define MOTOR_CONTROLLER__STATE__CHECK_START    (2)
+#define MOTOR_CONTROLLER__STATE__RUN            (3)
+#define MOTOR_CONTROLLER__STATE__OVERRUN        (4)
+#define MOTOR_CONTROLLER__STATE__CHECK_REVERSE  (5)
+#define MOTOR_CONTROLLER__STATE__STOP           (6)
+
+// bit 0 is 1 if UP motor is on, bit 1 is 1 if DOWN motor is on
+#define MOTOR__MODE__STOP                       (0)
+#define MOTOR__MODE__UP                         (1)
+#define MOTOR__MODE__DOWN                       (2)
+
+
+inline void motor__up__on(void) {
+    OUT_1(MOTOR_UP);
+}
+
+inline void motor__up__off(void) {
+    OUT_0(MOTOR_UP);
+}
+
+inline void motor__down__on(void) {
+    OUT_1(MOTOR_DOWN);
+}
+
+inline void motor__down__off(void) {
+    OUT_0(MOTOR_DOWN);
+}
+
+
+inline void motor__up(void) {
+    motor__up__on();
+}
+
+inline void motor__down(void) {
+    motor__down__on();
+}
+
+inline void motor__stop(void) {
+    motor__up__off();
+    motor__down__off();
+}
+
 
 
 uint8_t motor_controller__final_position        = MOTOR_CONTROLLER__POSITION__MIDDLE;
@@ -33,51 +71,71 @@ uint8_t motor_controller__state                 = MOTOR_CONTROLLER__STATE__OFF;
 uint8_t motor_controller__port_value            = 0;
 uint8_t motor_controller__timer                 = 0;
  int8_t motor_controller__position_delta        = 0;
-uint8_t motor_controller__error                 = MOTOR_CONTROLLER__POSITION__MIDDLE;
+uint8_t motor_controller__position_error        = MOTOR_CONTROLLER__POSITION__MIDDLE;
 
 
 /**
  * Called every motor_controller_tick to implement the motor control logic
  * and generate signals to drive the motor.
  */
-inline void motor_controller__run(void) {
+INLINE void motor_controller__run(void) {
+    // MOTOR_CONTROLLER__STATE__OFF not matched, do nothing.
     switch (motor_controller__state) {
-    case MOTOR_CONTROLLER__STATE__REVERSE_DELAY:
-        if (--motor_controller__timer != 0) {
+    case MOTOR_CONTROLLER__STATE__DEAD_TIME:
+        if (--motor_controller__timer != 0) break;
+    case MOTOR_CONTROLLER__STATE__CHECK_START:
+        if (motor_controller__position == motor_controller__final_position) {
+            motor_controller__state = MOTOR_CONTROLLER__STATE__OFF;
             break;
         }
-        // if motor_controller__timer has reached 0, fall thru to start motor.
-    case MOTOR_CONTROLLER__STATE__MOTOR_START:
-        if (motor_controller__position_delta != 0) {
-            OUT(MOTOR, motor_controller__port_value);
-            motor_controller__state = MOTOR_CONTROLLER__STATE__MOTOR_RUN;
-        }
         else {
-            // Abort motor start, already at the proper position.
-            motor_controller__state = MOTOR_CONTROLLER__STATE__OFF;
+            if (motor_controller__position > motor_controller__final_position) {
+                // Need to start moving up
+                motor_controller__position_delta = -1;
+                motor__up();
+            }
+            else {  // motor_controller__position < motor_controller__final_position
+                // Need to start moving down
+                motor_controller__position_delta = 1;
+                motor__down();
+            }
+            motor_controller__state = MOTOR_CONTROLLER__STATE__RUN;
         }
-        break;
-    case MOTOR_CONTROLLER__STATE__MOTOR_RUN:      
+    case MOTOR_CONTROLLER__STATE__RUN:      
         motor_controller__position += motor_controller__position_delta;
         if (motor_controller__position == motor_controller__final_position) {
-            OUT(MOTOR, MOTOR_CONTROLLER__PORT_VALUE_OFF);
             if (motor_controller__position == MOTOR_CONTROLLER__POSITION__DOWN ||
                 motor_controller__position == MOTOR_CONTROLLER__POSITION__UP) {
-                motor_controller__state = MOTOR_CONTROLLER__STATE__END_DELAY;
+                motor_controller__state = MOTOR_CONTROLLER__STATE__OVERRUN;
+                break;
+    case MOTOR_CONTROLLER__STATE__OVERRUN:
+                // In this state, the motor is kept on for some time
+                // to make sure that roller shutter is fully open or closed.
+                if (--motor_controller__position_error != 0) break;
+                motor_controller__position_error = MOTOR_CONTROLLER__POSITION_ERROR;
+    // end of case MOTOR_CONTROLLER__STATE__OVERRUN
             }
-            else {
-                motor_controller__state = MOTOR_CONTROLLER__STATE__REVERSE_DELAY;
+            // proceed to case MOTOR_CONTROLLER__STATE__STOP
+        }
+        else {
+    case MOTOR_CONTROLLER__STATE__CHECK_REVERSE:
+            if (motor_controller__position > motor_controller__final_position) {
+                // Need to move up
+                if (motor_controller__position_delta == -1) break;      // if no reverse needed, continue to run motor.
+                // Otherwise stop the motor, wait, and later reverse the motor
+            }
+            else {  // motor_controller__position < motor_controller__final_position
+                // Need to move down
+                if (motor_controller__position_delta == 1) break;       // if no reverse needed, continue to run motor.
+                // Otherwise stop the motor, wait, and later reverse the motor
             }
         }
-        break;
-    case MOTOR_CONTROLLER__STATE__END_DELAY:
-        if (--motor_controller__error == 0) {
-            motor_controller__error = MOTOR_CONTROLLER__ERROR;
-            motor_controller__state = MOTOR_CONTROLLER__STATE__OFF;
-        }
+    case MOTOR_CONTROLLER__STATE__STOP:
+        motor__stop();
+        motor_controller__timer = MOTOR_CONTROLLER__DEAD_TIME;
+        motor_controller__state = MOTOR_CONTROLLER__STATE__DEAD_TIME;
         break;
     }
-    // MOTOR_CONTROLLER__STATE__OFF not matched, do nothing.
 }
 
 
@@ -86,49 +144,18 @@ inline void motor_controller__run(void) {
  * (Setting final_position property can trigger the motion)
  */
 void motor_controller__final_position__set(const uint8_t final_position) {
-    int8_t new_delta;
 
-    // Calculate new_delta and new motor_controller__port_value.
-    if (motor_controller__position == final_position) {
-        // Moving and just reached final position, or stopped and setting final_position to current position
-        new_delta = 0; // if motor is running, it will cause it to stop
+    if (final_position == motor_controller__final_position) return;
+
+    if (motor_controller__state == MOTOR_CONTROLLER__STATE__OVERRUN) {
+        motor_controller__state = MOTOR_CONTROLLER__STATE__CHECK_REVERSE;
     }
-    else {
-        if (motor_controller__position > final_position) {
-            // Parameters to make the motor move the shutter up.
-            new_delta = -1;
-            motor_controller__port_value = MOTOR_CONTROLLER__PORT_VALUE_UP;
-        }
-        else {  // motor_controller__position < final_position
-            // Parameters to make the motor move the shutter down.
-            new_delta = 1;
-            motor_controller__port_value = MOTOR_CONTROLLER__PORT_VALUE_DOWN;
-        }
+    else if (motor_controller__state == MOTOR_CONTROLLER__STATE__OFF) {
+        motor_controller__state = MOTOR_CONTROLLER__STATE__CHECK_START;
     }
+    // If in MOTOR_CONTROLLER__STATE__DEAD_TIME, let it elapse.
+    // If in MOTOR_CONTROLLER__STATE__RUN or MOTOR_CONTROLLER__STATE__CHECK_REVERSE, let it check for new position.
+
 
     motor_controller__final_position = final_position;
-    // If moving to the different position, but in the same direction,
-    // or if no change in final position (that could have been already reached).
-    if (new_delta == motor_controller__position_delta) return;
-    motor_controller__position_delta = new_delta;
-
-    
-    // Program new parameters
-    switch (motor_controller__state) {
-    case MOTOR_CONTROLLER__STATE__MOTOR_RUN:      
-        // Stop the motor
-        OUT(MOTOR, MOTOR_CONTROLLER__PORT_VALUE_OFF);
-        motor_controller__timer = MOTOR_CONTROLLER__REVERSE_DELAY;
-        motor_controller__state = MOTOR_CONTROLLER__STATE__REVERSE_DELAY;
-    case MOTOR_CONTROLLER__STATE__REVERSE_DELAY:
-        // The direction in which the motor was moving
-        // could have been overwritten with the opposite one and again with the same one.
-        // For simplification, let the delay elapse anyway.
-        break;
-    case MOTOR_CONTROLLER__STATE__END_DELAY:
-        if (motor_controller__position_delta != 0) {
-            motor_controller__state = MOTOR_CONTROLLER__STATE__MOTOR_START;
-        }
-        break;
-    }
 }

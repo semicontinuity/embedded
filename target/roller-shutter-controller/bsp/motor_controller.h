@@ -22,7 +22,7 @@ inline void motor_controller__init(void) {
  * Called every motor_controller_tick to implement the motor control logic
  * and generate signals to drive the motor.
  */
-inline void motor_controller__run(void);
+INLINE void motor_controller__run(void);
 
 
 /**
