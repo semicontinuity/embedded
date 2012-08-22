@@ -1,5 +1,5 @@
 The device for protection against abnormal mains voltage
-=========================================================
+================================================================================
 
 This device monitors the mains voltage,
 and if the voltage is outside of the specified range, the load is disconnected.
@@ -15,3 +15,8 @@ The schematics is essentially the same, with the few minor changes:
 - LED is moved to PD3+PD4 to free up serial port.
 - A serial port is connected (not used yet).
 - Added buzzer to PC1.
+
+Possible improvements
+--------------------------------------------------------------------------------
+- Make sure that device works after brown-outs (are ports re-initialized?)
+- Add opto-isolated UART and support it in firmware (to control the device via UART)
