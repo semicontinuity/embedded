@@ -11,12 +11,7 @@
 
 #include <stdint.h>
 #include "motor_controller.h"
-#include "cpu/avr/gpio.h"
-
-
-#define MOTOR_CONTROLLER__PORT_VALUE_UP         (SIGNAL_MASK(MOTOR_UP))
-#define MOTOR_CONTROLLER__PORT_VALUE_DOWN       (SIGNAL_MASK(MOTOR_DOWN))
-#define MOTOR_CONTROLLER__PORT_VALUE_OFF        (0)
+#include "motor.h"
 
 
 #define MOTOR_CONTROLLER__STATE__OFF            (0)
@@ -27,48 +22,10 @@
 #define MOTOR_CONTROLLER__STATE__CHECK_REVERSE  (5)
 #define MOTOR_CONTROLLER__STATE__STOP           (6)
 
-// bit 0 is 1 if UP motor is on, bit 1 is 1 if DOWN motor is on
-#define MOTOR__MODE__STOP                       (0)
-#define MOTOR__MODE__UP                         (1)
-#define MOTOR__MODE__DOWN                       (2)
-
-
-inline void motor__up__on(void) {
-    OUT_1(MOTOR_UP);
-}
-
-inline void motor__up__off(void) {
-    OUT_0(MOTOR_UP);
-}
-
-inline void motor__down__on(void) {
-    OUT_1(MOTOR_DOWN);
-}
-
-inline void motor__down__off(void) {
-    OUT_0(MOTOR_DOWN);
-}
-
-
-inline void motor__up(void) {
-    motor__up__on();
-}
-
-inline void motor__down(void) {
-    motor__down__on();
-}
-
-inline void motor__stop(void) {
-    motor__up__off();
-    motor__down__off();
-}
-
-
 
 uint8_t motor_controller__final_position        = MOTOR_CONTROLLER__POSITION__MIDDLE;
 uint8_t motor_controller__position              = MOTOR_CONTROLLER__POSITION__MIDDLE;
 uint8_t motor_controller__state                 = MOTOR_CONTROLLER__STATE__OFF;
-uint8_t motor_controller__port_value            = 0;
 uint8_t motor_controller__timer                 = 0;
  int8_t motor_controller__position_delta        = 0;
 uint8_t motor_controller__position_error        = MOTOR_CONTROLLER__POSITION__MIDDLE;
