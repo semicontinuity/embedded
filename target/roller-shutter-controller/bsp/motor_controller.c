@@ -64,6 +64,7 @@ INLINE void motor_controller__run(void) {
         break;
     case MOTOR_CONTROLLER__STATE__RUN:      
         motor_controller__position += motor_controller__position_delta;
+        motor_controller__status__on_change();
         if (motor_controller__position == motor_controller__final_position) {
             if (motor_controller__position == MOTOR_CONTROLLER__POSITION__DOWN ||
                 motor_controller__position == MOTOR_CONTROLLER__POSITION__UP) {

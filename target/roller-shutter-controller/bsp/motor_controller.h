@@ -15,6 +15,12 @@ extern uint8_t motor_controller__status[2];
 
 
 /**
+ * Called by motor_controller__run() when motor_controller__status.position has been changed.
+ */
+INLINE void motor_controller__status__on_change(void);
+
+
+/**
  * Called every motor_controller_tick to implement the motor control logic
  * and generate signals to drive the motor.
  */
