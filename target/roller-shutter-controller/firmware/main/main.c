@@ -41,6 +41,27 @@ INLINE void buttons_scanner__on_change(void) {
 
 
 /**
+ * Callback function, called by motor__up() when the motor is instructed to rotate "up".
+ */
+INLINE void motor__on_up(void) {
+}
+
+
+/**
+ * Callback function, called by motor__down() when the motor is instructed to rotate "down".
+ */
+INLINE void motor__on_down(void) {
+}
+
+
+/**
+ * Callback function, called by motor__stop() when the motor is instructed to stop.
+ */
+INLINE void motor__on_stop(void) {
+}
+
+
+/**
  * Callback function, called by system_timer__run() on every system tick.
  */
 INLINE void system_timer__on_system_tick(void) {

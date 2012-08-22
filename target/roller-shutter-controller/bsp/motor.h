@@ -18,37 +18,48 @@
 extern uint8_t motor__mode;
 
 
-inline void motor__up__on(void) {
+inline static void motor__up__on(void) {
     OUT_1(MOTOR_UP);
 }
 
-inline void motor__up__off(void) {
+inline static void motor__up__off(void) {
     OUT_0(MOTOR_UP);
 }
 
-inline void motor__down__on(void) {
+inline static void motor__down__on(void) {
     OUT_1(MOTOR_DOWN);
 }
 
-inline void motor__down__off(void) {
+inline static void motor__down__off(void) {
     OUT_0(MOTOR_DOWN);
 }
 
 
-inline void motor__up(void) {
+INLINE void motor__on_up(void);
+
+inline static void motor__up(void) {
     motor__mode = MOTOR__MODE__RUNNING_UP;
     motor__up__on();
+    motor__on_up();
 }
 
-inline void motor__down(void) {
+
+INLINE void motor__on_down(void);
+
+inline static void motor__down(void) {
     motor__mode = MOTOR__MODE__RUNNING_DOWN;
     motor__down__on();
+    motor__on_down();
 }
 
-inline void motor__stop(void) {
+
+INLINE void motor__on_stop(void);
+
+inline static void motor__stop(void) {
     motor__mode = MOTOR__MODE__STOPPED;
     motor__up__off();
     motor__down__off();
+    motor__on_stop();
 }
 
 
