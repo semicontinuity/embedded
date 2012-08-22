@@ -11,6 +11,7 @@
 #include "can_selector.h"
 #include "buttons.h"
 #include "buttons_scanner.h"
+#include "motor.h"
 #include "motor_controller.h"
 #include "motor_controller_prescaler.h"
 #include "system_timer.h"
@@ -29,21 +30,33 @@ void controller__run(void) {
 // Implementation of callbacks from other modules (bindings)
 // =============================================================================
 
-/**
- * Callback function, called by buttons_scanner__run() when any of the buttons has changed its state.
- */
-INLINE void buttons_scanner__on_change(void) {
-    // It is assumed that time between pin changes (at least one system tick) is enough to send notification.
+inline static void main__broadcast_buttons_status(void) {
+    // It is assumed that the time between pin changes (at least one system tick) is enough to send notification.
     // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
     can__txb2__load(buttons_scanner__status, sizeof(buttons_scanner__status));
     can__txb2__request_to_send();
 }
 
+/**
+ * Callback function, called by buttons_scanner__run() when any of the buttons has changed its state.
+ */
+INLINE void buttons_scanner__on_change(void) {
+    main__broadcast_buttons_status();
+}
+
+
+static void main__broadcast_motor_status(void) {
+    // It is assumed that the time between motor mode changes (at least one system tick) is enough to send notification.
+    // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
+    can__txb1__load(&motor__mode, sizeof(motor__mode));
+    can__txb1__request_to_send();
+}
 
 /**
  * Callback function, called by motor__up() when the motor is instructed to rotate "up".
  */
 INLINE void motor__on_up(void) {
+    main__broadcast_motor_status();
 }
 
 
@@ -51,6 +64,7 @@ INLINE void motor__on_up(void) {
  * Callback function, called by motor__down() when the motor is instructed to rotate "down".
  */
 INLINE void motor__on_down(void) {
+    main__broadcast_motor_status();
 }
 
 
@@ -58,6 +72,7 @@ INLINE void motor__on_down(void) {
  * Callback function, called by motor__stop() when the motor is instructed to stop.
  */
 INLINE void motor__on_stop(void) {
+    main__broadcast_motor_status();
 }
 
 
