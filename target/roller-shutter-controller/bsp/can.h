@@ -58,24 +58,13 @@ inline static void can__start(void) {
 }
 
 
-/**
- * Processes pending notifications that are sent using TX Buffer 2.
- */ 
-inline static void can__txb2__run(void) {
-    if (buttons_scanner__pins_changed != 0) {
-        // It is assumed that time between pin changes (at least one system tick) is enough to send notification.
-        // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
-        // TODO: abort possible ongoing transmission.
-        can_selector__run(mcp2515_load_tx_buffer(buttons_scanner__status, MCP251X_INSTRUCTION_LOAD_BUFFER_2_D0, sizeof(buttons_scanner__status)));
-        can_selector__run(mcp2515_request_to_send(MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B2));
-    }
+inline static void can__txb2__load(const uint8_t* buffer, uint8_t count) {
+    can_selector__run(mcp2515_load_tx_buffer(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_2_D0, count));
 }
 
-/**
- * Processes pending notifications.
- */ 
-inline static void can__run(void) {
-    can__txb2__run();
+
+inline static void can__txb2__request_to_send(void) {
+    can_selector__run(mcp2515_request_to_send(MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B2));
 }
 
 

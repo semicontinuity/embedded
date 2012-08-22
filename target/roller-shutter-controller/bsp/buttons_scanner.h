@@ -12,13 +12,20 @@ extern uint8_t buttons_scanner__status[2];
 
 
 /**
+ * Callback function, called by buttons_scanner__run() when any of the buttons has changed its state.
+ */
+INLINE void buttons_scanner__on_change(void);
+
+
+/**
  * Called periodically to scan buttons.
  * At every call, it will report the buttons state to the callback buttons_scanner__out__put()
  */
-inline void buttons_scanner__run(void) {
+inline static void buttons_scanner__run(void) {
     uint8_t current_state = PORT_VALUE(BUTTONS) & BUTTONS_MASK;
     buttons_scanner__pins_changed = buttons_scanner__pins_state ^ current_state;
     buttons_scanner__pins_state   = current_state;
+    if (buttons_scanner__pins_changed != 0) buttons_scanner__on_change();
 }
 
 

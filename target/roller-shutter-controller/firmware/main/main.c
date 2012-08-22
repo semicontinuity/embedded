@@ -29,10 +29,23 @@ void controller__run(void) {
 // Implementation of callbacks from other modules (bindings)
 // =============================================================================
 
+/**
+ * Callback function, called by buttons_scanner__run() when any of the buttons has changed its state.
+ */
+INLINE void buttons_scanner__on_change(void) {
+    // It is assumed that time between pin changes (at least one system tick) is enough to send notification.
+    // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
+    can__txb2__load(buttons_scanner__status, sizeof(buttons_scanner__status));
+    can__txb2__request_to_send();
+}
+
+
+/**
+ * Callback function, called by system_timer__run() on every system tick.
+ */
 INLINE void system_timer__on_system_tick(void) {
     buttons_scanner__run();
     motor_controller__prescaler__run();
-    can__run();
 }
 
 
