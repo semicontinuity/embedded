@@ -41,14 +41,24 @@ mcp251x_message_id can__rxf3_5[3] PROGMEM = {RXF3, RXF4, RXF5};
 mcp251x_message_id can__rxm0_1[2] PROGMEM = {RXM0, RXM1};
 
 
+// TX Buffer 1 Header
+mcp251x_frame_header can__txb1_h PROGMEM = {
+    CANP_HEADER(
+        CANP_EXT_ID, CANP_DEVICE_TAG,
+        CANP_MANAGER_NET, CANP_MANAGER_ADDR,
+        CANP_DEVICE_NET, CANP_DEVICE_ADDR,
+        CANP_OUT, CANP_RAM, CANP_TXB1_REPORT_ID
+    ),
+    CANP_TXB1_REPORT_SIZE
+};
+
 // TX Buffer 2 Header
-// Used exclusively for sending notifications from buttons.
 mcp251x_frame_header can__txb2_h PROGMEM = {
     CANP_HEADER(
         CANP_EXT_ID, CANP_DEVICE_TAG,
         CANP_MANAGER_NET, CANP_MANAGER_ADDR,
         CANP_DEVICE_NET, CANP_DEVICE_ADDR,
-        CANP_OUT, CANP_RAM, CANP_SLOT_BUTTONS_STATUS
+        CANP_OUT, CANP_RAM, CANP_TXB2_REPORT_ID
     ),
-    sizeof(buttons_scanner__status)
+    CANP_TXB2_REPORT_SIZE
 };
