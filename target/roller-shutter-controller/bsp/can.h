@@ -58,6 +58,20 @@ inline static void can__start(void) {
 }
 
 
+static inline uint8_t can__read_frame(uint8_t *buffer) {
+    uint8_t status;
+    can_selector__run(status = mcp2515_rx_status());
+
+    // For remote frames, read just the header.
+    // For data frames, read the header + all 8 bytes of payload, even though DLC can be less than 8.
+    uint8_t count = status & MCP251X__RX_STATUS__TYPE__REMOTE ? sizeof(struct mcp251x_message_id) : sizeof(struct mcp251x_frame_header);
+    uint8_t instruction = status & MCP251X__RX_STATUS__BUFFER__0 ? MCP251X_REGISTER_RXB0SIDH : MCP251X_REGISTER_RXB1SIDH;
+
+    can_selector__run(mcp2515_read_rx_buffer(buffer, instruction, count));
+
+    return status & MCP251X__RX_STATUS__FILTER__MASK;
+}
+
 // Generic TX functions
 // -----------------------------------------------------------------------------
 
@@ -65,7 +79,7 @@ static void can__load_txb_data(const uint8_t* buffer, uint8_t count, uint8_t ins
     can_selector__run(mcp2515_load_tx_buffer(buffer, instruction, count));
 }
 
-static void can__load_txb_report(const uint8_t report_id, const uint8_t count, const uint8_t* data, uint8_t address) {
+static void can__load_txb_report(const uint8_t report_id, const uint8_t count, const uint8_t* data, const uint8_t address) {
     can_selector__on();
     mcp2515_write(address);
     spi__write(report_id);              // to EID0 register

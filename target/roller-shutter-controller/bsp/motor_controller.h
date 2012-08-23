@@ -1,6 +1,7 @@
 #ifndef __MOTOR_CONTROLLER_H
 #define __MOTOR_CONTROLLER_H
 
+#include <stdint.h>
 #include "cpu/avr/gpio.h"
 
 
@@ -8,13 +9,21 @@
 #define MOTOR_CONTROLLER__POSITION__DOWN        (100)
 #define MOTOR_CONTROLLER__POSITION__MIDDLE      (50)
 
-extern uint8_t motor_controller__control[1];
-#define motor_controller__final_position        motor_controller__control[0]
+
+struct motor_controller__control {
+    uint8_t final_position;
+};
+extern struct motor_controller__control motor_controller__control;
+#define motor_controller__final_position        motor_controller__control.final_position
 
 
-extern uint8_t motor_controller__status[2];
-#define motor_controller__position              motor_controller__status[0]
-#define motor_controller__position_error        motor_controller__status[1]
+struct motor_controller__status {
+    uint8_t position;
+    uint8_t position_error;
+};
+extern struct motor_controller__status motor_controller__status;
+#define motor_controller__position              motor_controller__status.position
+#define motor_controller__position_error        motor_controller__status.position_error
 
 
 /**
@@ -32,10 +41,19 @@ INLINE void motor_controller__run(void);
 
 /**
  * Instructs the motor controller to move to the shutter to the specified position.
- * (Setting final_position property can trigger the motion)
+ * (Can trigger the motion)
  */
 void motor_controller__final_position__set(const uint8_t position);
  
+
+/**
+ * Sets the control structure.
+ * (Can trigger the motion)
+ */
+inline void motor_controller__control__set(struct motor_controller__control* control) {
+    motor_controller__final_position__set(control->final_position);
+}
+
 
 /**
  * Instructs the motor controller to move to the shutter all the way down.

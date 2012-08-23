@@ -50,17 +50,17 @@ static inline void can_service__handle_motor_status(void) {
 
 static inline void can_service__handle_motor_controller_control(void) {
     if (buffer.header.dlc & (1 << MCP251X_RTR)) {
-        // Received GET request for motor_controller_control.
+        // Received GET request for motor_controller__control.
 
         // Convert buffer to response.        
         buffer.header.dlc &= 0x0F; // Leave only data length in dlc field
         can__txb0__load_buffer((uint8_t*)&buffer, CANP_BASIC_HEADER_SIZE);
-        can__txb0__load_report(CANP_REPORT__MOTOR_CONTROLLER__CONTROL, sizeof(motor_controller__control), motor_controller__control);
+        can__txb0__load_report(CANP_REPORT__MOTOR_CONTROLLER__CONTROL, sizeof(motor_controller__control), (const uint8_t*)&motor_controller__control);
         can__txb0__request_to_send();
     }
     else {
-        // Received PUT request for motor_controller_control.
-        motor_controller__final_position__set(buffer.data[0]);
+        // Received PUT request for motor_controller__control.
+        motor_controller__control__set((struct motor_controller__control*)buffer.data);
     }
 }
 
@@ -70,7 +70,7 @@ static inline void can_service__handle_motor_controller_status(void) {
         // Convert buffer to response.        
         buffer.header.dlc &= 0x0F; // Leave only data length in dlc field
         can__txb0__load_buffer((uint8_t*)&buffer, CANP_BASIC_HEADER_SIZE);
-        can__txb0__load_report(CANP_REPORT__MOTOR_CONTROLLER__STATUS, sizeof(motor_controller__status), motor_controller__status);
+        can__txb0__load_report(CANP_REPORT__MOTOR_CONTROLLER__STATUS, sizeof(motor_controller__status), (const uint8_t*)&motor_controller__status);
         can__txb0__request_to_send();
     }
     // If DATA frame was received, ignore (perhaps, log as malformed request)
@@ -90,17 +90,7 @@ static inline void can_service__handle_buttons_scanner_status(void) {
 
 
 static inline void can_service__handle_rx(void) {
-    uint8_t status;
-    can_selector__run(status = mcp2515_rx_status());
-
-    // For remote frames, read just the header.
-    // For data frames, read the header + all 8 bytes of payload, even though DLC can be less than 8.
-    uint8_t count = status & MCP251X__RX_STATUS__TYPE__REMOTE ? sizeof(buffer.header) : sizeof(buffer);
-    uint8_t instruction = status & MCP251X__RX_STATUS__BUFFER__0 ? MCP251X_REGISTER_RXB0SIDH : MCP251X_REGISTER_RXB1SIDH;
-
-    can_selector__run(mcp2515_read_rx_buffer((uint8_t*)&buffer.header, instruction, count));
-
-    switch (status & MCP251X__RX_STATUS__FILTER__MASK) {
+    switch (can__read_frame((uint8_t*)&buffer)) {
     case CANP_FILTER__MOTOR__STATUS:
         can_service__handle_motor_status();
         break;

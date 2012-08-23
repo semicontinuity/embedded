@@ -48,7 +48,7 @@ inline static void can_service__broadcast_motor_status(void) {
 inline static void can_service__broadcast_motor_controller_status(void) {
     // It is assumed that the time between motor controller status changes (at least one system tick) is enough to send notification.
     // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
-    can__txb1__load_report(CANP_REPORT__MOTOR_CONTROLLER__STATUS, sizeof(motor_controller__status), motor_controller__status);
+    can__txb1__load_report(CANP_REPORT__MOTOR_CONTROLLER__STATUS, sizeof(motor_controller__status), (const uint8_t*)&motor_controller__status);
     can__txb1__request_to_send();
 }
 

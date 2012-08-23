@@ -23,13 +23,13 @@
 #define MOTOR_CONTROLLER__STATE__STOP           (6)
 
 
-uint8_t motor_controller__control[1]            = {
-    MOTOR_CONTROLLER__POSITION__MIDDLE
+struct motor_controller__control motor_controller__control = {
+    .final_position     = MOTOR_CONTROLLER__POSITION__MIDDLE
 };
 
-uint8_t motor_controller__status[2]             = {
-    MOTOR_CONTROLLER__POSITION__MIDDLE,
-    MOTOR_CONTROLLER__POSITION__MIDDLE
+struct motor_controller__status motor_controller__status = {
+    .position           = MOTOR_CONTROLLER__POSITION__MIDDLE,
+    .position_error     = MOTOR_CONTROLLER__POSITION__MIDDLE
 };
 
 uint8_t motor_controller__state                 = MOTOR_CONTROLLER__STATE__OFF;
