@@ -63,7 +63,7 @@ void console_service__run(void) {
             register uint8_t addr = parseByte(input_buffer);
             register uint8_t value = parseByte(input_buffer + 3);
             
-            can_selector__run(mcp251x_write_byte(addr, value));
+            can_selector__run(mcp251x_write_one_byte(addr, value));
             
 //            debug__putc('<');
 //            debug__putc('w');

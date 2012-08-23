@@ -43,7 +43,7 @@ inline static void can__init(void) {
 
 
 inline void can__start(void) {
-    can_selector__run(mcp251x_write_byte (MCP251X_REGISTER_CANCTRL, MCP251X_OPMODE_NORMAL));
+    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANCTRL, MCP251X_OPMODE_NORMAL));
 }
 
 #endif

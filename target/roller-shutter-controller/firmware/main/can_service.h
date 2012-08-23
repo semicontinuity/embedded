@@ -16,7 +16,7 @@ inline void can_service__init(void) {
 
 inline void can_service__start(void) {
     GICR  = _BV(INT1);	// enable external interrupt from INT1 pin
-    can_selector__run(mcp251x_write_byte (MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)));
+    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)));
 }
 
 #endif

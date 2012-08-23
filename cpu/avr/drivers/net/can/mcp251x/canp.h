@@ -83,5 +83,8 @@
 #define CANP_COMPARE_AUX		(0x01)
 #define CANP_COMPARE_SLOT		(0xFF)
 
+#define CANP_DONT_COMPARE               (0x00)
+#define CANP_DONT_CARE                  (0x00)
+
 
 #endif

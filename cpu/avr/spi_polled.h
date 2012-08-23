@@ -25,6 +25,14 @@ inline void spi__write(uint8_t value) {
     loop_until_bit_is_set(SPSR, SPIF);
 }
 
+
+inline void spi__write_bytes(const uint8_t* buffer, uint8_t count) {
+    do {
+        spi__write(*buffer++);
+    }
+    while (--count > 0);
+}
+
 #else
 #   error "Unsupported MCU"
 #endif

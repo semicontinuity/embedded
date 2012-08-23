@@ -10,8 +10,9 @@
 
 void mcp251x_reset (void);
 
-void mcp251x_write_byte (const uint8_t address, const uint8_t data);
-void mcp251x_write_bytes (uint8_t* buffer, const uint8_t address, uint8_t count);
+void mcp251x_write (const uint8_t address);
+void mcp251x_write_one_byte (const uint8_t address, const uint8_t data);
+void mcp251x_write_bytes (const uint8_t* buffer, const uint8_t address, uint8_t count);
 void mcp251x_write_bytes_progmem (uint8_t * PROGMEM buffer, const uint8_t address, uint8_t count);
 
 uint8_t mcp251x_read_byte (const uint8_t address);
@@ -22,7 +23,8 @@ void mcp251x_read_bytes (uint8_t* buffer, const uint8_t address, uint8_t count);
 // =============================================================================
 
 #define mcp2515_reset                   mcp251x_reset
-#define mcp2515_write_byte              mcp251x_write_byte
+#define mcp2515_write                   mcp251x_write
+#define mcp2515_write_one_byte          mcp251x_write_one_byte
 #define mcp2515_write_bytes             mcp251x_write_bytes
 #define mcp2515_write_bytes_progmem     mcp251x_write_bytes_progmem
 #define mcp2515_read_byte               mcp251x_read_byte

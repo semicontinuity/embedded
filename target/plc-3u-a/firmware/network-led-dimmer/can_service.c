@@ -82,7 +82,7 @@ ISR(INT1_vect) {
     can_service__handle_rx();
 
     // Clear all interrupts
-    can_selector__run(mcp251x_write_byte(MCP251X_REGISTER_CANINTF, 0));
+    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTF, 0));
 }
 
 

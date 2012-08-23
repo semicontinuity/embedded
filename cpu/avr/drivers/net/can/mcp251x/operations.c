@@ -13,14 +13,20 @@ void mcp251x_reset() {
 }
 
 
-void mcp251x_write_byte(const uint8_t address, const uint8_t data) {
+void mcp251x_write(const uint8_t address) {
+    spi__write(MCP251X_INSTRUCTION_WRITE);
+    spi__write(address);
+}
+
+
+void mcp251x_write_one_byte(const uint8_t address, const uint8_t data) {
     spi__write(MCP251X_INSTRUCTION_WRITE);
     spi__write(address);
     spi__write(data);
 }
 
 
-void mcp251x_write_bytes(uint8_t* buffer, const uint8_t address, uint8_t count) {
+void mcp251x_write_bytes(const uint8_t* buffer, const uint8_t address, uint8_t count) {
     spi__write(MCP251X_INSTRUCTION_WRITE);
     spi__write(address);
     do {

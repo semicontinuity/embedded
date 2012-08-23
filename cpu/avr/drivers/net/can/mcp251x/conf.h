@@ -106,9 +106,9 @@ inline static void mcp251x__init(void) {
 
     _delay_us(50); // >2
 
-    can_selector__run(mcp251x_write_byte(MCP251X_REGISTER_CNF1, MCP251X__CNF1));
-    can_selector__run(mcp251x_write_byte(MCP251X_REGISTER_CNF2, MCP251X__CNF2));
-    can_selector__run(mcp251x_write_byte(MCP251X_REGISTER_CNF3, MCP251X__CNF3));
+    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CNF1, MCP251X__CNF1));
+    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CNF2, MCP251X__CNF2));
+    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CNF3, MCP251X__CNF3));
 }
 
 #endif
