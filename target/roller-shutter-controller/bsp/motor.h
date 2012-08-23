@@ -15,7 +15,9 @@
 #define MOTOR__MODE__RUNNING_DOWN       (2)
 
 
-extern uint8_t motor__mode;
+extern uint8_t motor__status[1];
+#define motor__mode motor__status[0]
+
 
 void motor__status__on_change(void);
 

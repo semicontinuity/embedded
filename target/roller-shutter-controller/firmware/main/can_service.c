@@ -26,6 +26,7 @@
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 
 #include "buttons_scanner.h"
+#include "motor.h"
 #include "motor_controller.h"
 
 #include <stdint.h>
@@ -33,6 +34,18 @@
 
 
 static volatile mcp251x_message_buffer buffer;
+
+
+static inline void can_service__handle_motor_status(void) {
+    if (buffer.header.dlc & (1 << MCP251X_RTR)) {
+        // Convert buffer to response.        
+        buffer.header.dlc &= 0x0F; // Leave only data length in dlc field
+        can__txb0__load_buffer((uint8_t*)&buffer, CANP_BASIC_HEADER_SIZE);
+        can__txb0__load_report(CANP_REPORT__MOTOR__STATUS, sizeof(motor__status), motor__status);
+        can__txb0__request_to_send();
+    }
+    // If DATA frame was received, ignore (perhaps, log as malformed request)
+}
 
 
 static inline void can_service__handle_motor_controller_control(void) {
@@ -88,6 +101,9 @@ static inline void can_service__handle_rx(void) {
     can_selector__run(mcp2515_read_rx_buffer((uint8_t*)&buffer.header, instruction, count));
 
     switch (status & MCP251X__RX_STATUS__FILTER__MASK) {
+    case CANP_FILTER__MOTOR__STATUS:
+        can_service__handle_motor_status();
+        break;
     case CANP_FILTER__MOTOR_CONTROLLER__CONTROL:
         can_service__handle_motor_controller_control();
         break;
