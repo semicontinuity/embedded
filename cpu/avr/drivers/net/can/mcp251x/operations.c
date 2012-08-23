@@ -67,6 +67,17 @@ void mcp251x_bit_modify(const uint8_t address, const uint8_t mask, const uint8_t
 }
 
 
+/**
+ * Read data from the specified RX Buffer.
+ * @param buffer        The pointer to the data buffer.
+ * @param instruction   The instruction that determines the RX buffer to read and a position in it.
+ *                      Must be one of the following constants:
+ *                      * MCP251X_INSTRUCTION_READ_BUFFER_0_SIDH
+ *                      * MCP251X_INSTRUCTION_READ_BUFFER_0_D0
+ *                      * MCP251X_INSTRUCTION_READ_BUFFER_1_SIDH
+ *                      * MCP251X_INSTRUCTION_READ_BUFFER_1_D0
+ * @param count         The number of bytes to read.
+ */
 void mcp2515_read_rx_buffer(uint8_t* buffer, const uint8_t instruction, uint8_t count) {
     spi__write(instruction);
     do {
@@ -113,9 +124,20 @@ void mcp2515_request_to_send(const uint8_t instruction) {
 
 
 /**
- * Issue Read Status instruction
+ * Issue Read Status instruction.
  */
-uint8_t mcp2515_read_status () {
+uint8_t mcp2515_read_status(void) {
     spi__write(MCP251X_INSTRUCTION_READ_STATUS);
     return spi__exchange(0);
 }
+
+
+/**
+ * Issue RX Status instruction.
+ * A command to quickly read RX Status byte.
+ */
+uint8_t mcp2515_rx_status(void) {
+    spi__write(MCP251X_INSTRUCTION_RX_STATUS);
+    return spi__exchange(0);
+}
+

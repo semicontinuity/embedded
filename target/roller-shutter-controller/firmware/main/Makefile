@@ -27,6 +27,7 @@ CDEFS += -DINLINE=
 
 # Firmware
 SRC += main.c
+SRC += can_service.c
 
 # BSP
 SRC += buttons_scanner.c

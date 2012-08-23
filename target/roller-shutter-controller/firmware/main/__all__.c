@@ -1,4 +1,6 @@
+// Firmware
 #include "main.c"
+#include "can_service.c"
 
 // BSP
 #include "target/roller-shutter-controller/bsp/can.c"
