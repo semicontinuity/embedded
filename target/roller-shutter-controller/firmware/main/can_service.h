@@ -31,11 +31,26 @@ inline static void can_service__start(void) {
 }
 
 
-void can_service__broadcast_buttons_status(void);
+inline static void can_service__broadcast_buttons_status(void) {
+    // It is assumed that the time between pin changes (at least one system tick) is enough to send notification.
+    // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
+    can__txb2__load_data(buttons_scanner__status, sizeof(buttons_scanner__status));
+    can__txb2__request_to_send();
+}
 
-void can_service__broadcast_motor_status(void);
+inline static void can_service__broadcast_motor_status(void) {
+    // It is assumed that the time between motor mode changes (at least one system tick) is enough to send notification.
+    // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
+    can__txb1__load_report(CANP_REPORT__MOTOR__STATUS, sizeof(motor__mode), &motor__mode);
+    can__txb1__request_to_send();
+}
 
-void can_service__broadcast_motor_controller_status(void);
+inline static void can_service__broadcast_motor_controller_status(void) {
+    // It is assumed that the time between motor controller status changes (at least one system tick) is enough to send notification.
+    // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
+    can__txb1__load_report(CANP_REPORT__MOTOR_CONTROLLER__STATUS, sizeof(motor_controller__status), motor_controller__status);
+    can__txb1__request_to_send();
+}
 
 
 #endif

@@ -35,41 +35,24 @@ void controller__run(void) {
 /**
  * Callback function, called by buttons_scanner__run() when any of the buttons has changed its state.
  */
-INLINE void buttons_scanner__on_change(void) {
+INLINE void buttons_scanner__status__on_change(void) {
     can_service__broadcast_buttons_status();
 }
 
 
-
 /**
- * Callback function, called by motor__up() when the motor is instructed to rotate "up".
- */
-INLINE void motor__on_up(void) {
-    can_service__broadcast_motor_status();
-}
-
-
-/**
- * Callback function, called by motor__down() when the motor is instructed to rotate "down".
- */
-INLINE void motor__on_down(void) {
-    can_service__broadcast_motor_status();
-}
-
-
-/**
- * Callback function, called by motor__stop() when the motor is instructed to stop.
- */
-INLINE void motor__on_stop(void) {
-    can_service__broadcast_motor_status();
-}
-
-
-/**
- * Called by motor_controller__run() when motor_controller__status.position has been changed.
+ * Called by motor_controller__run() when motor_controller__status has been changed.
  */
 INLINE void motor_controller__status__on_change(void) {
     can_service__broadcast_motor_controller_status();
+}
+
+
+/**
+ * Callback function, called when the motor status has been changed.
+ */
+void motor__status__on_change(void) {
+    can_service__broadcast_motor_status();
 }
 
 
