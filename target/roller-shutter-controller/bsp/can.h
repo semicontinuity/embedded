@@ -1,11 +1,5 @@
 // =============================================================================
-// CAN Networking service.
-//
-// The following constants must be defined:
-//
-// - CANP_DEVICE_NET	network id
-// - CANP_DEVICE_ADDR	address in the network
-// ...
+// CAN Controller driver.
 // =============================================================================
 
 #ifndef __CAN_H
@@ -24,13 +18,13 @@
 #include "cpu/avr/spi_polled.h"
 
 
-// RX Filters 0-2
+// RX Filters 0-2 (uploaded as one piece)
 extern mcp251x_message_id can__rxf0_2[3] PROGMEM;
 
-// RX Filters 3-5
+// RX Filters 3-5 (uploaded as one piece)
 extern mcp251x_message_id can__rxf3_5[3] PROGMEM;
 
-// RX Masks 0 and 1
+// RX Masks 0 and 1 (uploaded as one piece)
 extern mcp251x_message_id can__rxm0_1[2] PROGMEM;
 
 // TX Buffer 1 Header
@@ -88,6 +82,10 @@ static void can__request_to_send(const uint8_t instruction) {
 // TXB0 functions
 // -----------------------------------------------------------------------------
 
+inline static void can__txb0__load_buffer(const uint8_t* buffer, uint8_t count) {
+    can__load_txb_data(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, count);
+}
+
 inline static void can__txb0__load_data(const uint8_t* buffer, uint8_t count) {
     can__load_txb_data(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_D0, count);
 }
@@ -103,6 +101,10 @@ inline static void can__txb0__request_to_send(void) {
 // TXB1 functions
 // -----------------------------------------------------------------------------
 
+inline static void can__txb1__load_buffer(const uint8_t* buffer, uint8_t count) {
+    can__load_txb_data(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_1_SIDH, count);
+}
+
 inline static void can__txb1__load_data(const uint8_t* buffer, uint8_t count) {
     can__load_txb_data(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_1_D0, count);
 }
@@ -117,6 +119,10 @@ inline static void can__txb1__request_to_send(void) {
 
 // TXB2 functions
 // -----------------------------------------------------------------------------
+
+inline static void can__txb2__load_buffer(const uint8_t* buffer, uint8_t count) {
+    can__load_txb_data(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_2_SIDH, count);
+}
 
 inline static void can__txb2__load_data(const uint8_t* buffer, uint8_t count) {
     can__load_txb_data(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_2_D0, count);

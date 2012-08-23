@@ -1,5 +1,19 @@
+// =============================================================================
+// CAN Protocol (CANP).
+//
+// Contains definitions for encoding of CANP fields
+// into 4-bytes CAN ID of MCP251X controllers.
+//
+// See the canp.txt for details.
+//
+// The first 3 bytes of header are "basic header",
+// that contains everything but the slot number (= report id).
+// =============================================================================
+
 #ifndef __CPU__AVR__DRIVERS__NET__MCP251X__CANP_H
 #define __CPU__AVR__DRIVERS__NET__MCP251X__CANP_H
+
+#define CANP_BASIC_HEADER_SIZE          (3)
 
 
 // Values for individual bits

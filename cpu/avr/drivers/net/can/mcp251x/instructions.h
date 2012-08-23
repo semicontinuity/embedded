@@ -42,6 +42,8 @@
 #define MCP251X__RX_STATUS__TYPE__DATA          (0x00)
 
 // Matched filter
+#define MCP251X__RX_STATUS__FILTER__MASK        (0x07)
+
 #define MCP251X__RX_STATUS__FILTER__0           (0x00)
 #define MCP251X__RX_STATUS__FILTER__1           (0x01)
 #define MCP251X__RX_STATUS__FILTER__2           (0x02)

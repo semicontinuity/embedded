@@ -23,7 +23,9 @@
 #define MOTOR_CONTROLLER__STATE__STOP           (6)
 
 
-uint8_t motor_controller__final_position        = MOTOR_CONTROLLER__POSITION__MIDDLE;
+uint8_t motor_controller__control[1]            = {
+    MOTOR_CONTROLLER__POSITION__MIDDLE
+};
 
 uint8_t motor_controller__status[2]             = {
     MOTOR_CONTROLLER__POSITION__MIDDLE,

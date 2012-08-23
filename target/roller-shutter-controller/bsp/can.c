@@ -1,13 +1,5 @@
 // =============================================================================
-// CAN Networking service.
-//
-//
-// When the data are uploaded, the controller is switched into Normal Mode.
-//
-// The following constants must be defined:
-//
-// - CANP_DEVICE_NET	network id
-// - CANP_DEVICE_ADDR	address in the network
+// CAN Controller driver.
 // =============================================================================
 
 #include "can.h"
@@ -31,15 +23,16 @@
 #define RXF5	CANP_HEADER     (CANP_RXF5_EXIDE, CANP_RXF5_TAG, CANP_RXF5_CPTY_NET, CANP_RXF5_CPTY_ADDR, CANP_RXF5_HOST_NET, CANP_RXF5_HOST_ADDR, CANP_RXF5_OWNER, CANP_RXF5_AUX, CANP_RXF5_REPORT)
 
 
-// RX Filters 0-2
+// RX Filters 0-2 (uploaded as one piece)
 mcp251x_message_id can__rxf0_2[3] PROGMEM = {RXF0, RXF1, RXF2};
 
-// RX Filters 3-5
+// RX Filters 3-5 (uploaded as one piece)
 mcp251x_message_id can__rxf3_5[3] PROGMEM = {RXF3, RXF4, RXF5};
 
-// RX Masks 0 and 1
+// RX Masks 0 and 1 (uploaded as one piece)
 mcp251x_message_id can__rxm0_1[2] PROGMEM = {RXM0, RXM1};
 
+// TODO: Configure TXB0
 
 // TX Buffer 1 Header
 mcp251x_frame_header can__txb1_h PROGMEM = {
@@ -62,3 +55,5 @@ mcp251x_frame_header can__txb2_h PROGMEM = {
     ),
     CANP_TXB2_REPORT_SIZE
 };
+
+// TODO: Configure RXB0CTRL and RXB1CTRL

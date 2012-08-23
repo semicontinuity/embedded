@@ -8,6 +8,9 @@
 #define MOTOR_CONTROLLER__POSITION__DOWN        (100)
 #define MOTOR_CONTROLLER__POSITION__MIDDLE      (50)
 
+extern uint8_t motor_controller__control[1];
+#define motor_controller__final_position        motor_controller__control[0]
+
 
 extern uint8_t motor_controller__status[2];
 #define motor_controller__position              motor_controller__status[0]
