@@ -6,13 +6,18 @@
 
 
 // bit 0 is 1 if UP motor is on, bit 1 is 1 if DOWN motor is on
-#define MOTOR__MODE__STOPPED            (0)
-#define MOTOR__MODE__RUNNING_UP         (1)
-#define MOTOR__MODE__RUNNING_DOWN       (2)
+#define MOTOR_CONTROLLER__MOTOR_MODE__STOPPED            (0)
+#define MOTOR_CONTROLLER__MOTOR_MODE__RUNNING_UP         (1)
+#define MOTOR_CONTROLLER__MOTOR_MODE__RUNNING_DOWN       (2)
 
-extern uint8_t motor__mode;
+extern uint8_t motor_controller__motor_mode;
 
-void motor__mode__on_change(void);
+
+/**
+ * Callback function, called when the motor status has been changed.
+ * To be implemented by user.
+ */
+void motor_controller__motor_mode__on_change(void);
 
 
 

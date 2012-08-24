@@ -12,7 +12,6 @@
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 
 #include "buttons_scanner.h"
-#include "motor.h"
 #include "motor_controller.h"
 
 
@@ -38,10 +37,10 @@ inline static void can_service__broadcast_buttons_status(void) {
     can__txb2__request_to_send();
 }
 
-inline static void can_service__broadcast_motor_mode(void) {
+inline static void can_service__broadcast_motor_controller__motor_mode(void) {
     // It is assumed that the time between motor mode changes (at least one system tick) is enough to send notification.
     // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
-    can__txb1__load_report(CANP_REPORT__MOTOR__MODE, sizeof(motor__mode), (const uint8_t*)&motor__mode);
+    can__txb1__load_report(CANP_REPORT__MOTOR_CONTROLLER__MOTOR_MODE, sizeof(motor_controller__motor_mode), (const uint8_t*)&motor_controller__motor_mode);
     can__txb1__request_to_send();
 }
 

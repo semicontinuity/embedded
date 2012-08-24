@@ -63,8 +63,8 @@ INLINE void motor_controller__status__on_change(void) {
 /**
  * Callback function, called when the motor status has been changed.
  */
-void motor__mode__on_change(void) {
-    can_service__broadcast_motor_mode();
+void motor_controller__motor_mode__on_change(void) {
+    can_service__broadcast_motor_controller__motor_mode();
 }
 
 

@@ -36,12 +36,12 @@
 static volatile mcp251x_message_buffer buffer;
 
 
-static inline void can_service__handle_motor_mode(void) {
+static inline void can_service__handle__motor_controller__motor_mode(void) {
     if (buffer.header.dlc & (1 << MCP251X_RTR)) {
         // Convert buffer to response.        
         buffer.header.dlc &= 0x0F; // Leave only data length in dlc field
         can__txb0__load_buffer((uint8_t*)&buffer, CANP_BASIC_HEADER_SIZE);
-        can__txb0__load_report(CANP_REPORT__MOTOR__MODE, sizeof(motor__mode), (const uint8_t*)&motor__mode);
+        can__txb0__load_report(CANP_REPORT__MOTOR_CONTROLLER__MOTOR_MODE, sizeof(motor_controller__motor_mode), (const uint8_t*)&motor_controller__motor_mode);
         can__txb0__request_to_send();
     }
     // If DATA frame was received, ignore (perhaps, log as malformed request)
@@ -91,8 +91,8 @@ static inline void can_service__handle_buttons_scanner_status(void) {
 
 static inline void can_service__handle_rx(void) {
     switch (can__read_frame((uint8_t*)&buffer)) {
-    case CANP_FILTER__MOTOR__MODE:
-        can_service__handle_motor_mode();
+    case CANP_FILTER__MOTOR_CONTROLLER__MOTOR_MODE:
+        can_service__handle__motor_controller__motor_mode();
         break;
     case CANP_FILTER__MOTOR_CONTROLLER__CONTROL:
         can_service__handle_motor_controller_control();
