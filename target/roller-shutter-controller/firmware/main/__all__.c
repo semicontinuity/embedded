@@ -11,4 +11,5 @@
 #include "target/roller-shutter-controller/bsp/system_timer.c"
 
 // Library
+#include "cpu/avr/int1.c"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.c"

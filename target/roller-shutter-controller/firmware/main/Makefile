@@ -38,6 +38,7 @@ SRC += motor_controller_prescaler.c
 SRC += system_timer.c
 
 # Library
+SRC += cpu/avr/int1.c
 SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
 
 endif

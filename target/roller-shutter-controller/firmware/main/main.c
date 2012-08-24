@@ -4,6 +4,7 @@
 
 #include <avr/interrupt.h>
 
+#include "cpu/avr/int1.h"
 #include "cpu/avr/spi.h"
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
 
@@ -77,6 +78,10 @@ INLINE void system_timer__on_system_tick(void) {
 }
 
 
+INLINE void int1__run(void) {
+    can_service__run();
+}
+
 
 // =============================================================================
 // Entry point
@@ -93,14 +98,18 @@ int main(void) {
 
     mcp251x__init();
 
+    int1__init();
+    int1__start();
+
     can__init();
     can__start();
+
+    can_service__start();
 
     system_timer__init();
     system_timer__start();
 
     sei();
-
     system_timer__loop();
     return 0;
 }
