@@ -11,15 +11,15 @@
 
 
 struct motor_controller__control {
-    uint8_t final_position;
+    int8_t final_position;
 };
 extern struct motor_controller__control motor_controller__control;
 #define motor_controller__final_position        motor_controller__control.final_position
 
 
 struct motor_controller__status {
-    uint8_t position;
-    uint8_t position_error;
+    int8_t position;
+    int8_t position_error;
 };
 extern struct motor_controller__status motor_controller__status;
 #define motor_controller__position              motor_controller__status.position
@@ -45,6 +45,12 @@ INLINE void motor_controller__run(void);
  */
 void motor_controller__final_position__set(const uint8_t position);
  
+
+/**
+ * Instructs the motor controller to stop the motion, if any.
+ */
+void motor_controller__stop(void);
+
 
 /**
  * Sets the control structure.

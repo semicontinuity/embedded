@@ -107,9 +107,9 @@ INLINE void motor_controller__run(void) {
  * Instructs the motor controller to move to the shutter to the specified position.
  * (Setting final_position property can trigger the motion)
  */
-void motor_controller__final_position__set(const uint8_t final_position) {
-
+void motor_controller__final_position__set(const uint8_t final_position) {        
     if (final_position == motor_controller__final_position) return;
+    motor_controller__final_position = final_position;
 
     if (motor_controller__state == MOTOR_CONTROLLER__STATE__OVERRUN) {
         motor_controller__state = MOTOR_CONTROLLER__STATE__CHECK_REVERSE;
@@ -117,9 +117,29 @@ void motor_controller__final_position__set(const uint8_t final_position) {
     else if (motor_controller__state == MOTOR_CONTROLLER__STATE__OFF) {
         motor_controller__state = MOTOR_CONTROLLER__STATE__CHECK_START;
     }
+    // MOTOR_CONTROLLER__STATE__OFF cannot happen.
     // If in MOTOR_CONTROLLER__STATE__DEAD_TIME, let it elapse.
+    // If in MOTOR_CONTROLLER__STATE__CHECK_REVERSE, changing final position is ok.
+    // If in MOTOR_CONTROLLER__STATE__CHECK_START, changing final position is ok.
     // If in MOTOR_CONTROLLER__STATE__RUN or MOTOR_CONTROLLER__STATE__CHECK_REVERSE, let it check for new position.
+}
 
 
-    motor_controller__final_position = final_position;
+/**
+ * Instructs the motor controller to stop the motion, if any.
+ */
+void motor_controller__stop(void) {
+    if (motor_controller__state == MOTOR_CONTROLLER__STATE__OFF) return;
+
+    if (motor_controller__state == MOTOR_CONTROLLER__STATE__OVERRUN || motor_controller__state == MOTOR_CONTROLLER__STATE__CHECK_REVERSE) {
+        motor_controller__state = MOTOR_CONTROLLER__STATE__STOP;
+    }
+    else if (motor_controller__state == MOTOR_CONTROLLER__STATE__RUN) {
+        motor_controller__final_position = motor_controller__position + motor_controller__position_delta;
+        motor_controller__state = MOTOR_CONTROLLER__STATE__STOP;
+    }
+    else if (motor_controller__state == MOTOR_CONTROLLER__STATE__DEAD_TIME || motor_controller__state == MOTOR_CONTROLLER__STATE__CHECK_START) {
+        motor_controller__final_position = motor_controller__position;
+        motor_controller__state = MOTOR_CONTROLLER__STATE__OFF;
+    }
 }
