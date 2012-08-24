@@ -4,6 +4,4 @@
 
 #include "motor.h"
 
-uint8_t motor__status[1]             = {
-    MOTOR__MODE__STOPPED
-};
+uint8_t motor__mode = MOTOR__MODE__STOPPED;

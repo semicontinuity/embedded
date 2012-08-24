@@ -14,12 +14,9 @@
 #define MOTOR__MODE__RUNNING_UP         (1)
 #define MOTOR__MODE__RUNNING_DOWN       (2)
 
+extern uint8_t motor__mode;
 
-extern uint8_t motor__status[1];
-#define motor__mode motor__status[0]
-
-
-void motor__status__on_change(void);
+void motor__mode__on_change(void);
 
 
 inline static void motor__up__init(void) {
@@ -70,7 +67,7 @@ inline static void motor__up(void) {
     motor__on_up();
 
     motor__mode = MOTOR__MODE__RUNNING_UP;
-    motor__status__on_change();
+    motor__mode__on_change();
 }
 
 
@@ -81,7 +78,7 @@ inline static void motor__down(void) {
     motor__on_down();
     
     motor__mode = MOTOR__MODE__RUNNING_DOWN;
-    motor__status__on_change();
+    motor__mode__on_change();
 }
 
 
@@ -93,7 +90,7 @@ inline static void motor__stop(void) {
     motor__on_stop();
 
     motor__mode = MOTOR__MODE__STOPPED;
-    motor__status__on_change();
+    motor__mode__on_change();
 }
 
 

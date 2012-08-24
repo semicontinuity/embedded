@@ -5,7 +5,7 @@
 // If the MOTOR_DOWN signal is set to 1, the motor rotates 'down'.
 // It is prohibited to set both MOTOR_UP and MOTOR_DOWN to 1 at the same time.
 // 
-// The motor controller has properties 'position' and 'final_position',
+// The motor controller has properties 'position' and 'target_position',
 // that can take values from 0 to 100, inclusive.
 // =============================================================================
 
@@ -24,7 +24,7 @@
 
 
 struct motor_controller__control motor_controller__control = {
-    .final_position     = MOTOR_CONTROLLER__POSITION__MIDDLE
+    .target_position    = MOTOR_CONTROLLER__POSITION__MIDDLE
 };
 
 struct motor_controller__status motor_controller__status = {
@@ -47,16 +47,16 @@ INLINE void motor_controller__run(void) {
     case MOTOR_CONTROLLER__STATE__DEAD_TIME:
         if (--motor_controller__timer != 0) break;
     case MOTOR_CONTROLLER__STATE__CHECK_START:
-        if (motor_controller__position == motor_controller__final_position) {
+        if (motor_controller__position == motor_controller__target_position) {
             motor_controller__state = MOTOR_CONTROLLER__STATE__OFF;
         }
         else {
-            if (motor_controller__position > motor_controller__final_position) {
+            if (motor_controller__position > motor_controller__target_position) {
                 // Need to start moving up
                 motor_controller__position_delta = -1;
                 motor__up();
             }
-            else {  // motor_controller__position < motor_controller__final_position
+            else {  // motor_controller__position < motor_controller__target_position
                 // Need to start moving down
                 motor_controller__position_delta = 1;
                 motor__down();
@@ -67,7 +67,7 @@ INLINE void motor_controller__run(void) {
     case MOTOR_CONTROLLER__STATE__RUN:      
         motor_controller__position += motor_controller__position_delta;
         motor_controller__status__on_change();
-        if (motor_controller__position == motor_controller__final_position) {
+        if (motor_controller__position == motor_controller__target_position) {
             if (motor_controller__position == MOTOR_CONTROLLER__POSITION__DOWN ||
                 motor_controller__position == MOTOR_CONTROLLER__POSITION__UP) {
                 motor_controller__state = MOTOR_CONTROLLER__STATE__OVERRUN;
@@ -83,12 +83,12 @@ INLINE void motor_controller__run(void) {
         }
         else {
     case MOTOR_CONTROLLER__STATE__CHECK_REVERSE:
-            if (motor_controller__position > motor_controller__final_position) {
+            if (motor_controller__position > motor_controller__target_position) {
                 // Need to move up
                 if (motor_controller__position_delta == -1) break;      // if no reverse needed, continue to run motor.
                 // Otherwise stop the motor, wait, and later reverse the motor
             }
-            else {  // motor_controller__position < motor_controller__final_position
+            else {  // motor_controller__position < motor_controller__target_position
                 // Need to move down
                 if (motor_controller__position_delta == 1) break;       // if no reverse needed, continue to run motor.
                 // Otherwise stop the motor, wait, and later reverse the motor
@@ -105,11 +105,11 @@ INLINE void motor_controller__run(void) {
 
 /**
  * Instructs the motor controller to move to the shutter to the specified position.
- * (Setting final_position property can trigger the motion)
+ * (Setting target_position property can trigger the motion)
  */
-void motor_controller__move(const int8_t final_position) {        
-    if (final_position == motor_controller__final_position) return;
-    motor_controller__final_position = final_position;
+void motor_controller__move(const int8_t target_position) {        
+    if (target_position == motor_controller__target_position) return;
+    motor_controller__target_position = target_position;
 
     if (motor_controller__state == MOTOR_CONTROLLER__STATE__OVERRUN) {
         motor_controller__state = MOTOR_CONTROLLER__STATE__CHECK_REVERSE;
@@ -132,11 +132,11 @@ void motor_controller__stop(void) {
     switch (motor_controller__state) {
     case MOTOR_CONTROLLER__STATE__DEAD_TIME:
     case MOTOR_CONTROLLER__STATE__CHECK_START:
-        motor_controller__final_position = motor_controller__position;
+        motor_controller__target_position = motor_controller__position;
         motor_controller__state = MOTOR_CONTROLLER__STATE__OFF;
         break;
     case MOTOR_CONTROLLER__STATE__RUN:
-        motor_controller__final_position = motor_controller__position + motor_controller__position_delta;
+        motor_controller__target_position = motor_controller__position + motor_controller__position_delta;
     case MOTOR_CONTROLLER__STATE__OVERRUN:
     case MOTOR_CONTROLLER__STATE__CHECK_REVERSE:
         motor_controller__state = MOTOR_CONTROLLER__STATE__STOP;

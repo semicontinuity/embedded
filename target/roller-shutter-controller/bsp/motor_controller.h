@@ -11,10 +11,10 @@
 
 
 struct motor_controller__control {
-    int8_t final_position;
+    int8_t target_position;
 };
 extern struct motor_controller__control motor_controller__control;
-#define motor_controller__final_position        motor_controller__control.final_position
+#define motor_controller__target_position       motor_controller__control.target_position
 
 
 struct motor_controller__status {
@@ -73,12 +73,12 @@ inline void motor_controller__move_up(void) {
  * (Can trigger the motion)
  */
 inline void motor_controller__control__set(struct motor_controller__control* control) {
-    int8_t final_position = control->final_position;
-    if (final_position == MOTOR_CONTROLLER__POSITION__STOP) {
+    int8_t target_position = control->target_position;
+    if (target_position == MOTOR_CONTROLLER__POSITION__STOP) {
         motor_controller__stop();
     }
-    else if (final_position >= MOTOR_CONTROLLER__POSITION__UP && final_position <= MOTOR_CONTROLLER__POSITION__DOWN) {
-        motor_controller__move(control->final_position);
+    else if (target_position >= MOTOR_CONTROLLER__POSITION__UP && target_position <= MOTOR_CONTROLLER__POSITION__DOWN) {
+        motor_controller__move(control->target_position);
     }
 }
 
