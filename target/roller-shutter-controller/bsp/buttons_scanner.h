@@ -3,6 +3,8 @@
 
 #include "cpu/avr/gpio.h"
 #include <stdint.h>
+#include <stdbool.h>
+
 
 #define BUTTONS_MASK (SIGNAL_MASK(BUTTON1) | SIGNAL_MASK(BUTTON2))
 
@@ -26,6 +28,24 @@ inline static void buttons_scanner__run(void) {
     buttons_scanner__pins_changed = buttons_scanner__pins_state ^ current_state;
     buttons_scanner__pins_state   = current_state;
     if (buttons_scanner__pins_changed != 0) buttons_scanner__status__on_change();
+}
+
+
+inline static bool buttons_scanner__button1__is_changed(void) {
+    return buttons_scanner__pins_changed & SIGNAL_MASK(BUTTON1);
+}
+
+inline static bool buttons_scanner__button1__is_released(void) {
+    return buttons_scanner__pins_state & SIGNAL_MASK(BUTTON1);
+}
+
+
+inline static bool buttons_scanner__button2__is_changed(void) {
+    return buttons_scanner__pins_changed & SIGNAL_MASK(BUTTON2);
+}
+
+inline static bool buttons_scanner__button2__is_released(void) {
+    return buttons_scanner__pins_state & SIGNAL_MASK(BUTTON2);
 }
 
 

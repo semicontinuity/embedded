@@ -22,8 +22,19 @@
 // Controller.
 // =============================================================================
 
-void controller__run(void) {
-
+inline static void controller__run(void) {
+    if (buttons_scanner__button1__is_changed()) {
+        if (buttons_scanner__button1__is_released())
+            motor_controller__stop();
+        else
+            motor_controller__move_up();
+    }
+    if (buttons_scanner__button2__is_changed()) {
+        if (buttons_scanner__button2__is_released())
+            motor_controller__stop();
+        else
+            motor_controller__move_down();
+    }
 }
 
 
@@ -36,6 +47,7 @@ void controller__run(void) {
  * Callback function, called by buttons_scanner__run() when any of the buttons has changed its state.
  */
 INLINE void buttons_scanner__status__on_change(void) {
+    controller__run();
     can_service__broadcast_buttons_status();
 }
 
