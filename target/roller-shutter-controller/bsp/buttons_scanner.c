@@ -4,8 +4,10 @@
 // Does not support concurrent button presses.
 // =============================================================================
 #include "buttons_scanner.h"
-#include <stdint.h>
-#include <avr/io.h>
-#include "cpu/avr/gpio.h"
 
-uint8_t buttons_scanner__status[2] = {0, BUTTONS_MASK};
+struct buttons_scanner__status buttons_scanner__status = {
+    .pins_changed       = 0,
+    .pins_state	        = BUTTONS_MASK
+};
+
+

@@ -8,9 +8,14 @@
 
 #define BUTTONS_MASK (SIGNAL_MASK(BUTTON1) | SIGNAL_MASK(BUTTON2))
 
-extern uint8_t buttons_scanner__status[2];
-#define buttons_scanner__pins_changed   buttons_scanner__status[0]
-#define buttons_scanner__pins_state     buttons_scanner__status[1]
+
+struct buttons_scanner__status {
+    uint8_t pins_changed;
+    uint8_t pins_state;
+};
+extern struct buttons_scanner__status buttons_scanner__status;
+#define buttons_scanner__pins_changed   buttons_scanner__status.pins_changed
+#define buttons_scanner__pins_state     buttons_scanner__status.pins_state
 
 
 /**

@@ -34,7 +34,7 @@ inline static void can_service__start(void) {
 inline static void can_service__broadcast_buttons_status(void) {
     // It is assumed that the time between pin changes (at least one system tick) is enough to send notification.
     // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
-    can__txb2__load_data(buttons_scanner__status, sizeof(buttons_scanner__status));
+    can__txb2__load_data((const uint8_t*)&buttons_scanner__status, sizeof(buttons_scanner__status));
     can__txb2__request_to_send();
 }
 
