@@ -14,6 +14,9 @@
 #include "motor.h"
 
 
+uint8_t motor__mode = MOTOR__MODE__STOPPED;
+
+
 #define MOTOR_CONTROLLER__STATE__OFF            (0)
 #define MOTOR_CONTROLLER__STATE__DEAD_TIME      (1)
 #define MOTOR_CONTROLLER__STATE__CHECK_START    (2)
@@ -55,11 +58,15 @@ INLINE void motor_controller__run(void) {
                 // Need to start moving up
                 motor_controller__position_delta = -1;
                 motor__up();
+                motor__mode = MOTOR__MODE__RUNNING_UP;
+                motor__mode__on_change();
             }
             else {  // motor_controller__position < motor_controller__target_position
                 // Need to start moving down
                 motor_controller__position_delta = 1;
                 motor__down();
+                motor__mode = MOTOR__MODE__RUNNING_DOWN;
+                motor__mode__on_change();
             }
             motor_controller__state = MOTOR_CONTROLLER__STATE__RUN;
         }
@@ -96,6 +103,9 @@ INLINE void motor_controller__run(void) {
         }
     case MOTOR_CONTROLLER__STATE__STOP:
         motor__stop();
+        motor__mode = MOTOR__MODE__STOPPED;
+        motor__mode__on_change();
+
         motor_controller__timer = MOTOR_CONTROLLER__DEAD_TIME;
         motor_controller__state = MOTOR_CONTROLLER__STATE__DEAD_TIME;
         break;

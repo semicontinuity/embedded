@@ -4,6 +4,18 @@
 #include <stdint.h>
 #include "cpu/avr/gpio.h"
 
+
+// bit 0 is 1 if UP motor is on, bit 1 is 1 if DOWN motor is on
+#define MOTOR__MODE__STOPPED            (0)
+#define MOTOR__MODE__RUNNING_UP         (1)
+#define MOTOR__MODE__RUNNING_DOWN       (2)
+
+extern uint8_t motor__mode;
+
+void motor__mode__on_change(void);
+
+
+
 #define MOTOR_CONTROLLER__POSITION__STOP        (-1)
 #define MOTOR_CONTROLLER__POSITION__UP          (0)
 #define MOTOR_CONTROLLER__POSITION__DOWN        (100)
