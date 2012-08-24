@@ -65,7 +65,18 @@ SID10 ..     SID3 SID2..0 IDE EID17 EID15  ..    EID8 EID7    ..   EID0
 - Owner (1 bit): Set for a packet with the payload, transmitted by the owner of the parameter (from the owner to the client)
                  Reset for a packet with the payload, transmitted by the non-owner of the parameter (from the client to the owner)
 
-- Auxillary: Auxillary bit, for now used to distinguish ROM (1) and RAM (0) queries. Can also be used to mark broadcast traffic.
+- Auxillary: Auxillary bit, for now used to distinguish SYSTEM (1) and USER (0) messages.
+
+The combination of Auxillary, RTR and Owner bits defines the message type:
+
+- AUX=0, RTR=0, OWN=0:  PUT request, the client asks the node to set the certain parameter.
+- AUX=0, RTR=0, OWN=1:  Parameter VALUE, sent by the parameter owner. Either the response to PUT or the owner-initiated notification.
+- AUX=0, RTR=1, OWN=0:  UNDEFINED yet. Possible usage: as an ERROR response to PUT (parameter value not accepted), or to broadcast that the parameter value is now INVALID.
+- AUX=0, RTR=1, OWN=1:  GET request, the client asks the node to send out the value of a certain parameter.
+- AUX=1, RTR=0, OWN=0:  System COMMAND with parameters.
+- AUX=1, RTR=0, OWN=1:  DESCRIPTOR_MEMORY_VALUE, sent as a response to DESCRIPTOR_MEMORY_READ.
+- AUX=1, RTR=1, OWN=0:  System SHORT_COMMAND, without parameters.
+- AUX=1, RTR=1, OWN=1:  DESCRIPTOR_MEMORY_READ, slot contains a number of 8-bytes element of descriptor memory.
 
 The router must examine RTR and OWNER bits, to identify the destination network of the packet.
 
