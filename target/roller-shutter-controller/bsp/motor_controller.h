@@ -12,7 +12,6 @@
 
 extern uint8_t motor_controller__motor_mode;
 
-
 /**
  * Callback function, called when the motor status has been changed.
  * To be implemented by user.
@@ -21,7 +20,6 @@ void motor_controller__motor_mode__on_change(void);
 
 
 
-#define MOTOR_CONTROLLER__POSITION__STOP        (-1)
 #define MOTOR_CONTROLLER__POSITION__UP          (0)
 #define MOTOR_CONTROLLER__POSITION__DOWN        (100)
 #define MOTOR_CONTROLLER__POSITION__MIDDLE      (50)
