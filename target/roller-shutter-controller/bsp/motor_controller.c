@@ -129,17 +129,17 @@ void motor_controller__move(const int8_t final_position) {
  * Instructs the motor controller to stop the motion, if any.
  */
 void motor_controller__stop(void) {
-    if (motor_controller__state == MOTOR_CONTROLLER__STATE__OFF) return;
-
-    if (motor_controller__state == MOTOR_CONTROLLER__STATE__OVERRUN || motor_controller__state == MOTOR_CONTROLLER__STATE__CHECK_REVERSE) {
-        motor_controller__state = MOTOR_CONTROLLER__STATE__STOP;
-    }
-    else if (motor_controller__state == MOTOR_CONTROLLER__STATE__RUN) {
-        motor_controller__final_position = motor_controller__position + motor_controller__position_delta;
-        motor_controller__state = MOTOR_CONTROLLER__STATE__STOP;
-    }
-    else if (motor_controller__state == MOTOR_CONTROLLER__STATE__DEAD_TIME || motor_controller__state == MOTOR_CONTROLLER__STATE__CHECK_START) {
+    switch (motor_controller__state) {
+    case MOTOR_CONTROLLER__STATE__DEAD_TIME:
+    case MOTOR_CONTROLLER__STATE__CHECK_START:
         motor_controller__final_position = motor_controller__position;
         motor_controller__state = MOTOR_CONTROLLER__STATE__OFF;
+        break;
+    case MOTOR_CONTROLLER__STATE__RUN:
+        motor_controller__final_position = motor_controller__position + motor_controller__position_delta;
+    case MOTOR_CONTROLLER__STATE__OVERRUN:
+    case MOTOR_CONTROLLER__STATE__CHECK_REVERSE:
+        motor_controller__state = MOTOR_CONTROLLER__STATE__STOP;
     }
+    // MOTOR_CONTROLLER__STATE__OFF: do nothing
 }
