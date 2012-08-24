@@ -107,7 +107,7 @@ INLINE void motor_controller__run(void) {
  * Instructs the motor controller to move to the shutter to the specified position.
  * (Setting final_position property can trigger the motion)
  */
-void motor_controller__final_position__set(const uint8_t final_position) {        
+void motor_controller__move(const int8_t final_position) {        
     if (final_position == motor_controller__final_position) return;
     motor_controller__final_position = final_position;
 

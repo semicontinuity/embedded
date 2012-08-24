@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "cpu/avr/gpio.h"
 
-
+#define MOTOR_CONTROLLER__POSITION__STOP        (-1)
 #define MOTOR_CONTROLLER__POSITION__UP          (0)
 #define MOTOR_CONTROLLER__POSITION__DOWN        (100)
 #define MOTOR_CONTROLLER__POSITION__MIDDLE      (50)
@@ -43,7 +43,7 @@ INLINE void motor_controller__run(void);
  * Instructs the motor controller to move to the shutter to the specified position.
  * (Can trigger the motion)
  */
-void motor_controller__final_position__set(const uint8_t position);
+void motor_controller__move(const int8_t position);
  
 
 /**
@@ -53,27 +53,33 @@ void motor_controller__stop(void);
 
 
 /**
- * Sets the control structure.
- * (Can trigger the motion)
- */
-inline void motor_controller__control__set(struct motor_controller__control* control) {
-    motor_controller__final_position__set(control->final_position);
-}
-
-
-/**
  * Instructs the motor controller to move to the shutter all the way down.
  */
-inline void motor_controller__down(void) {
-    motor_controller__final_position__set(MOTOR_CONTROLLER__POSITION__DOWN);
+inline void motor_controller__move_down(void) {
+    motor_controller__move(MOTOR_CONTROLLER__POSITION__DOWN);
 }
 
 
 /**
  * Instructs the motor controller to move to the shutter all the way up.
  */
-inline void motor_controller__up(void) {
-    motor_controller__final_position__set(MOTOR_CONTROLLER__POSITION__UP);
+inline void motor_controller__move_up(void) {
+    motor_controller__move(MOTOR_CONTROLLER__POSITION__UP);
+}
+
+
+/**
+ * Sets the control structure.
+ * (Can trigger the motion)
+ */
+inline void motor_controller__control__set(struct motor_controller__control* control) {
+    int8_t final_position = control->final_position;
+    if (final_position == MOTOR_CONTROLLER__POSITION__STOP) {
+        motor_controller__stop();
+    }
+    else if (final_position >= MOTOR_CONTROLLER__POSITION__UP && final_position <= MOTOR_CONTROLLER__POSITION__DOWN) {
+        motor_controller__move(control->final_position);
+    }
 }
 
 
