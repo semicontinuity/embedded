@@ -86,17 +86,36 @@ inline void motor_controller__move_up(void) {
 
 
 /**
+ * Set the desired motor mode.
+ * (Can trigger the motion)
+ */
+inline void motor_controller__motor_mode__set_from_raw_ptr(const void* ptr) {
+    const uint8_t *motor_mode_ptr = (const uint8_t *)ptr;
+    const uint8_t motor_mode = *motor_mode_ptr;
+
+    if (motor_mode == MOTOR_CONTROLLER__MOTOR_MODE__STOPPED) {
+        motor_controller__stop();
+    }
+    else if (motor_mode == MOTOR_CONTROLLER__MOTOR_MODE__RUNNING_UP) {
+        motor_controller__move_up();
+    }
+    else if (motor_mode == MOTOR_CONTROLLER__MOTOR_MODE__RUNNING_DOWN) {
+        motor_controller__move_down();
+    }
+    // ignore invalid values
+}
+
+/**
  * Sets the control structure.
  * (Can trigger the motion)
  */
-inline void motor_controller__control__set(struct motor_controller__control* control) {
+inline void motor_controller__control__set_from_raw_ptr(const void* ptr) {
+    const struct motor_controller__control *control = (const struct motor_controller__control *)ptr;
     int8_t target_position = control->target_position;
-    if (target_position == MOTOR_CONTROLLER__POSITION__STOP) {
-        motor_controller__stop();
-    }
-    else if (target_position >= MOTOR_CONTROLLER__POSITION__UP && target_position <= MOTOR_CONTROLLER__POSITION__DOWN) {
+    if (target_position >= MOTOR_CONTROLLER__POSITION__UP && target_position <= MOTOR_CONTROLLER__POSITION__DOWN) {
         motor_controller__move(control->target_position);
     }
+    // ignore invalid values
 }
 
 
