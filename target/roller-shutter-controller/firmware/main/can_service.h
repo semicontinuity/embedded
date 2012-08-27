@@ -1,8 +1,7 @@
 // =============================================================================
 // CAN service.
-//
-// Handles CAN communications.
-// Services incoming requests.
+// Handles CAN communications (services incoming requests).
+// Implements comm_service.
 //
 // The device is designed for the system with one super-node ("master").
 // The master is the only device that can send messages to the node.
@@ -18,6 +17,8 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#include "comm_service.h"
+
 #include "can.h"
 #include "can_selector.h"
 
@@ -31,26 +32,9 @@
 #include "motor_controller.h"
 
 
-extern volatile mcp251x_message_buffer can_service__buffer;
-
-
 inline static void can_service__start(void) {
     can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)|_BV(MCP251X_RX1IE)));
 }
-
-void can_service__send_response(const uint8_t report_id, const uint8_t count, const uint8_t* data) {
-    can__load_txb_response(
-        MCP251X_REGISTER_TXB0SIDH,
-        can_service__buffer.header.id.sidh,
-        can_service__buffer.header.id.sidl,
-        CANP_EID8(CANP_TXB0_HOST_NET, CANP_TXB0_HOST_ADDR),
-        report_id,
-        count,
-        data
-    );
-    can__txb0__request_to_send();
-}
-
 
 
 inline static void can_service__broadcast_buttons_status(void) {
@@ -75,89 +59,12 @@ inline static void can_service__broadcast_motor_controller_status(void) {
 }
 
 
-static inline void can_service__handle__descriptor_memory(void) {
-}
-
-
-static inline void can_service__handle__commands(void) {
-}
-
-
-static inline void can_service__handle__motor_controller__motor_mode(void) {
-    if (can_service__buffer.header.dlc & (1 << MCP251X_RTR)) {
-        // Handle GET request
-        can_service__send_response(CANP_REPORT__MOTOR_CONTROLLER__MOTOR_MODE, sizeof(motor_controller__motor_mode), (const uint8_t*)&motor_controller__motor_mode);
-    }
-    else {
-        // Handle PUT request
-        motor_controller__motor_mode__set_from_raw_ptr(&can_service__buffer.data);
-    }
-}
-
-
-static inline void can_service__handle_motor_controller_control(void) {
-    if (can_service__buffer.header.dlc & (1 << MCP251X_RTR)) {
-        // Handle GET request
-        can_service__send_response(CANP_REPORT__MOTOR_CONTROLLER__CONTROL, sizeof(motor_controller__control), (const uint8_t*)&motor_controller__control);
-    }
-    else {
-        // Handle PUT request
-        motor_controller__control__set_from_raw_ptr(&can_service__buffer.data);
-    }
-}
-
-
-static inline void can_service__handle_motor_controller_status(void) {
-    if (can_service__buffer.header.dlc & (1 << MCP251X_RTR)) {
-        // Handle GET request
-        can_service__send_response(CANP_REPORT__MOTOR_CONTROLLER__STATUS, sizeof(motor_controller__status), (const uint8_t*)&motor_controller__status);
-    }
-    // If DATA frame was received, ignore (perhaps, log as malformed request)
-}
-
-
-static inline void can_service__handle_buttons_scanner_status(void) {
-    if (can_service__buffer.header.dlc & (1 << MCP251X_RTR)) {
-        // Handle GET request
-        can_service__send_response(CANP_REPORT__BUTTONS_SCANNER__STATUS, sizeof(buttons_scanner__status), (const uint8_t*)&buttons_scanner__status);
-    }
-    // If DATA frame was received, ignore (perhaps, log as malformed request)
-}
-
-
-static inline void can_service__handle_rx(void) {
-    switch (can__read_frame((uint8_t*)&can_service__buffer)) {
-    case CANP_FILTER__DESCRIPTOR_MEMORY:
-        can_service__handle__descriptor_memory();
-        break;
-    case CANP_FILTER__COMMANDS:
-        can_service__handle__commands();
-        break;
-    case CANP_FILTER__USER:
-    case CANP_FILTER__USER_MCAST:
-        switch (CANP_SLOT_BITS(can_service__buffer.header.id)) {
-        case CANP_REPORT__MOTOR_CONTROLLER__MOTOR_MODE:
-            can_service__handle__motor_controller__motor_mode();
-            break;
-        case CANP_REPORT__MOTOR_CONTROLLER__CONTROL:
-            can_service__handle_motor_controller_control();
-            break;
-        case CANP_REPORT__MOTOR_CONTROLLER__STATUS:
-            can_service__handle_motor_controller_status();
-            break;
-        case CANP_REPORT__BUTTONS_SCANNER__STATUS:
-            can_service__handle_buttons_scanner_status();
-            break;
-        }
-    }
-}
-
 /**
  *  Handler for the interrupt from MCP2515 CAN controller (falling edge).
  */
 static inline void can_service__run(void) {
     // Interrupt flag for INT1 cleared automatically when RX buffer is read.
-    can_service__handle_rx();
+    comm_service__handle_rx(can__read_frame((uint8_t*)&comm_service__buffer));
 }
 
 
