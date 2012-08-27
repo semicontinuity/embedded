@@ -35,7 +35,7 @@ extern volatile mcp251x_message_buffer can_service__buffer;
 
 
 inline static void can_service__start(void) {
-    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)));
+    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)|_BV(MCP251X_RX1IE)));
 }
 
 
@@ -135,18 +135,22 @@ static inline void can_service__handle_rx(void) {
     case CANP_FILTER__COMMANDS:
         can_service__handle__commands();
         break;
-    case CANP_FILTER__MOTOR_CONTROLLER__MOTOR_MODE:
-        can_service__handle__motor_controller__motor_mode();
-        break;
-    case CANP_FILTER__MOTOR_CONTROLLER__CONTROL:
-        can_service__handle_motor_controller_control();
-        break;
-    case CANP_FILTER__MOTOR_CONTROLLER__STATUS:
-        can_service__handle_motor_controller_status();
-        break;
-    case CANP_FILTER__BUTTONS_SCANNER__STATUS:
-        can_service__handle_buttons_scanner_status();
-        break;
+    case CANP_FILTER__USER:
+    case CANP_FILTER__USER_MCAST:
+        switch (CANP_SLOT_BITS(can_service__buffer.header.id)) {
+        case CANP_REPORT__MOTOR_CONTROLLER__MOTOR_MODE:
+            can_service__handle__motor_controller__motor_mode();
+            break;
+        case CANP_REPORT__MOTOR_CONTROLLER__CONTROL:
+            can_service__handle_motor_controller_control();
+            break;
+        case CANP_REPORT__MOTOR_CONTROLLER__STATUS:
+            can_service__handle_motor_controller_status();
+            break;
+        case CANP_REPORT__BUTTONS_SCANNER__STATUS:
+            can_service__handle_buttons_scanner_status();
+            break;
+        }
     }
 }
 

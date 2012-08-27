@@ -26,6 +26,9 @@
 #define CANP_IN                         (0)
 #define CANP_OUT                        (1)
 
+#define CANP_OWNER_0                    (0)
+#define CANP_OWNER_1                    (1)
+
 // Aux is not set = USER, set = SYSTEM
 #define CANP_USER                       (0)
 #define CANP_SYSTEM                     (1)
