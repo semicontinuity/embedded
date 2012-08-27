@@ -87,7 +87,6 @@ INLINE void int1__run(void) {
 // Entry point
 // TODO: investigate brown-out behaviour (are ports re-initialized?)
 // =============================================================================
-
 int main(void) {
     buttons__init();
     motor__init();
