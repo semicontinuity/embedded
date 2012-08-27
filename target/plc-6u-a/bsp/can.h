@@ -36,9 +36,9 @@ extern mcp251x_message_id rxm0_1[2] PROGMEM;
 
 
 inline static void can__init(void) {
-    can_selector__run(mcp251x_write_bytes_progmem ((uint8_t* PROGMEM)rxf0_2, MCP251X_REGISTER_RXF0SIDH, sizeof(rxf0_2)));
-    can_selector__run(mcp251x_write_bytes_progmem ((uint8_t* PROGMEM)rxf3_5, MCP251X_REGISTER_RXF3SIDH, sizeof(rxf3_5)));
-    can_selector__run(mcp251x_write_bytes_progmem ((uint8_t* PROGMEM)rxm0_1, MCP251X_REGISTER_RXM0SIDH, sizeof(rxm0_1)));
+    can_selector__run(mcp251x_write_bytes_progmem(MCP251X_REGISTER_RXF0SIDH, sizeof(rxf0_2), (uint8_t* PROGMEM)rxf0_2));
+    can_selector__run(mcp251x_write_bytes_progmem(MCP251X_REGISTER_RXF3SIDH, sizeof(rxf3_5), (uint8_t* PROGMEM)rxf3_5));
+    can_selector__run(mcp251x_write_bytes_progmem(MCP251X_REGISTER_RXM0SIDH, sizeof(rxm0_1), (uint8_t* PROGMEM)rxm0_1));
 }
 
 

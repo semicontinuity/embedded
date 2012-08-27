@@ -202,8 +202,8 @@
     __asm__                     \
     (                           \
         "lpm %0, Z+" "\n\t"     \
-        : "=r" (__result)       \
-        : "+z" (__addr16)       \
+        : "=r" (__result),      \
+          "+z" (__addr16)       \
     );                          \
     __result;                   \
 }))

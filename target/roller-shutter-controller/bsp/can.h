@@ -43,13 +43,13 @@ extern mcp251x_frame_header can__txb2_h PROGMEM;
  * - TX Buffer 2 header
  */ 
 inline static void can__init(void) {
-    can_selector__run(mcp2515_write_bytes_progmem((uint8_t* PROGMEM)&can__rxf0_2, MCP251X_REGISTER_RXF0SIDH, sizeof(can__rxf0_2)));
-    can_selector__run(mcp2515_write_bytes_progmem((uint8_t* PROGMEM)&can__rxf3_5, MCP251X_REGISTER_RXF3SIDH, sizeof(can__rxf3_5)));
-    can_selector__run(mcp2515_write_bytes_progmem((uint8_t* PROGMEM)&can__rxm0_1, MCP251X_REGISTER_RXM0SIDH, sizeof(can__rxm0_1)));
+    can_selector__run(mcp2515_write_bytes_progmem(MCP251X_REGISTER_RXF0SIDH, sizeof(can__rxf0_2), (uint8_t* PROGMEM)&can__rxf0_2));
+    can_selector__run(mcp2515_write_bytes_progmem(MCP251X_REGISTER_RXF3SIDH, sizeof(can__rxf3_5), (uint8_t* PROGMEM)&can__rxf3_5));
+    can_selector__run(mcp2515_write_bytes_progmem(MCP251X_REGISTER_RXM0SIDH, sizeof(can__rxm0_1), (uint8_t* PROGMEM)&can__rxm0_1));
 
     // Note: could implement mcp2515_load_tx_buffer_progmem
-    can_selector__run(mcp2515_write_bytes_progmem((uint8_t* PROGMEM)&can__txb1_h, MCP251X_REGISTER_TXB1SIDH, sizeof(can__txb1_h)));
-    can_selector__run(mcp2515_write_bytes_progmem((uint8_t* PROGMEM)&can__txb2_h, MCP251X_REGISTER_TXB2SIDH, sizeof(can__txb2_h)));
+    can_selector__run(mcp2515_write_bytes_progmem(MCP251X_REGISTER_TXB1SIDH, sizeof(can__txb1_h), (uint8_t* PROGMEM)&can__txb1_h));
+    can_selector__run(mcp2515_write_bytes_progmem(MCP251X_REGISTER_TXB2SIDH, sizeof(can__txb2_h), (uint8_t* PROGMEM)&can__txb2_h));
 }
 
 

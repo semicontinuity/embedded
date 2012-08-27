@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <avr/pgmspace.h>
 
+#include "cpu/avr/asm.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
 #include "cpu/avr/spi_polled.h"
@@ -36,11 +37,11 @@ void mcp251x_write_bytes(const uint8_t* buffer, const uint8_t address, uint8_t c
 }
 
 
-void mcp251x_write_bytes_progmem(uint8_t * PROGMEM buffer, const uint8_t address, uint8_t count) {
+void mcp251x_write_bytes_progmem(const uint8_t address, uint8_t count, uint8_t * PROGMEM buffer) {
     spi__write(MCP251X_INSTRUCTION_WRITE);
     spi__write(address);
     do {
-        spi__write(pgm_read_byte(buffer++));
+        spi__write(__LPM_increment__(buffer));
     }
     while (--count > 0);
 }
