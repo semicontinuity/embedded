@@ -88,6 +88,26 @@ static void can__load_txb_report(const uint8_t report_id, const uint8_t count, c
     can_selector__off();
 }
 
+static void can__load_txb_response(
+    const uint8_t address,
+    const uint8_t sidh,
+    const uint8_t sidl,
+    const uint8_t eid8,
+    const uint8_t eid0,
+    const uint8_t dlc,
+    const uint8_t* data) {
+
+    can_selector__on();
+    mcp2515_write(address);
+    spi__write(sidh);
+    spi__write(sidl);
+    spi__write(eid8);
+    spi__write(eid0);
+    spi__write(dlc);
+    spi__write_bytes(data, dlc);
+    can_selector__off();
+}
+
 static void can__request_to_send(const uint8_t instruction) {
     can_selector__run(mcp2515_request_to_send(instruction));
 }
@@ -111,6 +131,7 @@ inline static void can__txb0__load_report(const uint8_t report_id, const uint8_t
 inline static void can__txb0__request_to_send(void) {
     can__request_to_send(MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0);
 }
+
 
 // TXB1 functions
 // -----------------------------------------------------------------------------

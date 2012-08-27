@@ -6,14 +6,14 @@
 //
 // See the canp.txt for details.
 //
-// The first 3 bytes of header are "basic header",
-// that contains everything but the slot number (= report id).
+// The first 2 bytes of header are "response header",
+// that contains everything but the host address and slot number (= report id).
 // =============================================================================
 
 #ifndef __CPU__AVR__DRIVERS__NET__MCP251X__CANP_H
 #define __CPU__AVR__DRIVERS__NET__MCP251X__CANP_H
 
-#define CANP_BASIC_HEADER_SIZE          (3)
+#define CANP_RESPONSE_HEADER_SIZE       (2)
 
 
 // Values for individual bits
@@ -66,6 +66,7 @@
 
 // Macros for mcp251x_message structures
 // -----------------------------------------------------------------------------
+#define CANP_EID8(host_net, host_addr) ((uint8_t) (((host_net) << 5) | (host_addr)))
 #define CANP_HEADER(exide, tag, cpty_net, cpty_addr, host_net, host_addr, owner, aux, slot) {   \
   .sidh=(uint8_t) (((tag) << 5) | (cpty_addr)),							\
   .sidl=(uint8_t) (((cpty_net) << 5) | ((exide) << 3) | ((owner) << 1) | ((aux) << 0)),	        \
