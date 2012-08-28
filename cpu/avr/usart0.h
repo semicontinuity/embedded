@@ -97,6 +97,22 @@ inline void usart__in__enabled__set(void) {
 
 
 // =============================================================================
+// usart__in__peek
+// =============================================================================
+
+inline char usart__in__peek(void) {
+#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
+    defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
+    return UDR0;
+#elif defined(__AVR_ATmega8__)
+    return UDR;
+#else
+    #error "Unsupported MCU"
+#endif
+}
+
+
+// =============================================================================
 // usart__in__complete_interrupt_enabled__set
 // =============================================================================
 

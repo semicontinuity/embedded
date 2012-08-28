@@ -25,3 +25,7 @@ void can_service__send_response(const uint8_t report_id, const uint8_t count, co
     );
     can__txb0__request_to_send();
 }
+
+INLINE void int1__run(void) {
+    can_service__run();
+}

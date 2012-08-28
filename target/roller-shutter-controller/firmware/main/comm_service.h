@@ -10,9 +10,11 @@
 #include <avr/interrupt.h>
 
 #include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
+#include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
 #include "cpu/avr/drivers/net/can/mcp251x/registers.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
+#include "cpu/avr/drivers/net/can/mcp251x/struct.h"
 
 #include "buttons_scanner.h"
 #include "motor_controller.h"

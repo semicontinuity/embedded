@@ -17,6 +17,8 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#include "cpu/avr/int1.h"
+
 #include "comm_service.h"
 
 #include "can.h"
@@ -26,13 +28,23 @@
 #include "cpu/avr/drivers/net/can/mcp251x/registers.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
+#include "cpu/avr/drivers/net/can/mcp251x/conf.h"
 
 
 #include "buttons_scanner.h"
 #include "motor_controller.h"
 
 
+inline static void can_service__init(void) {
+    int1__init();
+    can__init();
+}
+
+
 inline static void can_service__start(void) {
+    int1__start();
+    can__start();
+
     can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)|_BV(MCP251X_RX1IE)));
 }
 

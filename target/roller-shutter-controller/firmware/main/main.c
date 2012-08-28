@@ -4,19 +4,18 @@
 
 #include <avr/interrupt.h>
 
-#include "cpu/avr/int1.h"
 #include "cpu/avr/spi.h"
+
+#include "can_selector.h"
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
 
-#include "can.h"
-#include "can_service.h"
-#include "can_selector.h"
 #include "buttons.h"
 #include "buttons_scanner.h"
 #include "motor.h"
 #include "motor_controller.h"
 #include "motor_controller_prescaler.h"
 #include "system_timer.h"
+#include COMM_SERVICE__HEADER
 
 
 // =============================================================================
@@ -49,7 +48,7 @@ inline static void controller__run(void) {
  */
 INLINE void buttons_scanner__status__on_change(void) {
     controller__run();
-    can_service__broadcast_buttons_status();
+    comm_service__broadcast_buttons_status();
 }
 
 
@@ -57,7 +56,7 @@ INLINE void buttons_scanner__status__on_change(void) {
  * Called by motor_controller__run() when motor_controller__status has been changed.
  */
 INLINE void motor_controller__status__on_change(void) {
-    can_service__broadcast_motor_controller_status();
+    comm_service__broadcast_motor_controller_status();
 }
 
 
@@ -65,7 +64,7 @@ INLINE void motor_controller__status__on_change(void) {
  * Callback function, called when the motor status has been changed.
  */
 void motor_controller__motor_mode__on_change(void) {
-    can_service__broadcast_motor_controller__motor_mode();
+    comm_service__broadcast_motor_controller__motor_mode();
 }
 
 
@@ -78,35 +77,25 @@ INLINE void system_timer__on_system_tick(void) {
 }
 
 
-INLINE void int1__run(void) {
-    can_service__run();
-}
-
-
 // =============================================================================
 // Entry point
 // TODO: investigate brown-out behaviour (are ports re-initialized?)
 // =============================================================================
 int main(void) {
+
     buttons__init();
     motor__init();
 
     spi__init(SPI_CLKDIV_16);
-
     can_selector__init();
-
     mcp251x__init();
 
-    int1__init();
-    int1__start();
-
-    can__init();
-    can__start();
-
-    can_service__start();
+    comm_service__init();
+    comm_service__start();
 
     system_timer__init();
     system_timer__start();
+
 
     sei();
     system_timer__loop();

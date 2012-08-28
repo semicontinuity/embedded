@@ -126,6 +126,14 @@
 // Operations with X register
 // ----------------------------------------------
 
+#define STORE_TO_XPLUS(var) do {		\
+  __asm__ __volatile__ (			\
+    "st	   X+, %0\n\t"	                        \
+    ::"r"(var):"r26","r27"                      \
+  );						\
+} while(0)
+
+
 #define ADDRESS_TO_XPLUS(addr) do {		\
   __asm__ __volatile__ (			\
     "lds   __tmp_reg__," QUOTE(addr) "	\n\t"	\
