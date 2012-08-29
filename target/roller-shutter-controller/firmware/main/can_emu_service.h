@@ -1,5 +1,10 @@
-#ifndef __USART_SERVICE_H
-#define __USART_SERVICE_H
+// =============================================================================
+// CAN service emulator.
+// Handles CAN communications (services incoming requests).
+// Extends comm_service.
+// =============================================================================
+#ifndef __CAN_EMU_SERVICE_H
+#define __CAN_EMU_SERVICE_H
 
 #include <avr/interrupt.h>
 #include <stdint.h>
@@ -48,7 +53,10 @@ inline void usart_rx_thread__init(void) {
 }
 
 
-inline static void usart_service__init(void) {
+/**
+ * Implements the function from comm_service.
+ */ 
+inline static void comm_service__init(void) {
     usart__rate__set(USART_BAUD_RATE);
     usart__init();
     usart__out__enabled__set();
@@ -58,17 +66,11 @@ inline static void usart_service__init(void) {
 }
 
 
-inline static void usart_service__start(void) {
+/**
+ * Implements the function from comm_service.
+ */ 
+inline static void comm_service__start(void) {
     usart_rx_thread__enabled__set(1);
-}
-
-inline static void usart_service__broadcast_buttons_status(void) {
-}
-
-inline static void usart_service__broadcast_motor_controller__motor_mode(void) {
-}
-
-inline static void usart_service__broadcast_motor_controller_status(void) {
 }
 
 

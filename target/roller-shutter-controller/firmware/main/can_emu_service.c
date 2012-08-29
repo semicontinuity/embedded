@@ -1,15 +1,21 @@
+// =============================================================================
+// CAN service emulator.
+// Handles CAN communications (services incoming requests).
+// Extends comm_service.
+// =============================================================================
+
 #include <avr/io.h>
 #include <stdint.h>
 
-#include "usart_service.h"
-#include "cpu/avr/usart0.h"
+#include "can_emu_service.h"
 #include "cpu/avr/asm.h"
+
 
 
 /**
  * Emulate MCP2515 masks and filters.
  */
-inline static void usart_service__on_packet_transferred(void) {
+inline static void can_service__on_packet_transferred(void) {
     const uint8_t slot = CANP_SLOT_BITS(comm_service__buffer.header.id);
     if (comm_service__buffer.header.id.eid8 == ((CANP_DEVICE_NET<<5) | CANP_DEVICE_ADDR)) {
         if (CANP_AUX_BITS(comm_service__buffer.header.id)) {
@@ -31,7 +37,7 @@ inline static void usart_service__on_packet_transferred(void) {
 
 inline static void usart_rx_thread__on_packet_transferred(void) {
     // handle
-    usart_service__on_packet_transferred();
+    can_service__on_packet_transferred();
 
     // prepare to receive the next packet
     usart_rx_thread__init();
@@ -44,8 +50,4 @@ USART_RX_THREAD_INTERRUPT {
     DEC(usart_rx_thread__size);
     IF_ZERO(usart_rx_thread__on_packet_transferred());
     RETI();    
-}
-
-
-void usart_service__send_response(const uint8_t report_id, const uint8_t count, const uint8_t* data) {
 }

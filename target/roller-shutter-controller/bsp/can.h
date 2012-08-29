@@ -128,6 +128,10 @@ inline static void can__txb0__load_report(const uint8_t report_id, const uint8_t
     can__load_txb_report(report_id, count, buffer, MCP251X_REGISTER_TXB0EID0);
 }
 
+inline static void can__txb0__load_response(const uint8_t sidh, const uint8_t sidl, const uint8_t eid8, const uint8_t eid0, const uint8_t dlc, const uint8_t* data) {
+    can__load_txb_response(MCP251X_REGISTER_TXB0SIDH, sidh, sidl, eid8, eid0, dlc, data);
+}
+
 inline static void can__txb0__request_to_send(void) {
     can__request_to_send(MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0);
 }

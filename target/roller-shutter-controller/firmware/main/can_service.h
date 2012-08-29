@@ -1,7 +1,7 @@
 // =============================================================================
 // CAN service.
 // Handles CAN communications (services incoming requests).
-// Implements comm_service.
+// Extends comm_service.
 //
 // The device is designed for the system with one super-node ("master").
 // The master is the only device that can send messages to the node.
@@ -35,39 +35,23 @@
 #include "motor_controller.h"
 
 
-inline static void can_service__init(void) {
+/**
+ * Implements the function from comm_service.
+ */ 
+inline static void comm_service__init(void) {
     int1__init();
     can__init();
 }
 
 
-inline static void can_service__start(void) {
+/**
+ * Implements the function from comm_service.
+ */ 
+inline static void comm_service__start(void) {
     int1__start();
     can__start();
 
     can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)|_BV(MCP251X_RX1IE)));
-}
-
-
-inline static void can_service__broadcast_buttons_status(void) {
-    // It is assumed that the time between pin changes (at least one system tick) is enough to send notification.
-    // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
-    can__txb2__load_data((const uint8_t*)&buttons_scanner__status, sizeof(buttons_scanner__status));
-    can__txb2__request_to_send();
-}
-
-inline static void can_service__broadcast_motor_controller__motor_mode(void) {
-    // It is assumed that the time between motor mode changes (at least one system tick) is enough to send notification.
-    // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
-    can__txb1__load_report(CANP_REPORT__MOTOR_CONTROLLER__MOTOR_MODE, sizeof(motor_controller__motor_mode), (const uint8_t*)&motor_controller__motor_mode);
-    can__txb1__request_to_send();
-}
-
-inline static void can_service__broadcast_motor_controller_status(void) {
-    // It is assumed that the time between motor controller status changes (at least one system tick) is enough to send notification.
-    // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
-    can__txb1__load_report(CANP_REPORT__MOTOR_CONTROLLER__STATUS, sizeof(motor_controller__status), (const uint8_t*)&motor_controller__status);
-    can__txb1__request_to_send();
 }
 
 

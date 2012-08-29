@@ -145,7 +145,7 @@ inline void usart__out__enabled__set(void) {
 
 
 // =============================================================================
-// usart_out__write
+// usart__out__write
 // =============================================================================
 
 inline void usart__out__write(char c) {
@@ -159,6 +159,21 @@ inline void usart__out__write(char c) {
 #else
     #error "Unsupported MCU"
 #endif
+}
+
+
+// =============================================================================
+// usart__out__send
+// =============================================================================
+
+inline void usart__out__send(const char *data, uint8_t count) {
+    // synchronously
+    do {
+        // do not inline 'b', compile will produce less optimal code.
+        char b = *data++;
+        usart__out__write(b);
+    }
+    while (--count > 0);
 }
 
 

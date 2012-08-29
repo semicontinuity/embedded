@@ -15,7 +15,7 @@
 #include "motor_controller.h"
 #include "motor_controller_prescaler.h"
 #include "system_timer.h"
-#include COMM_SERVICE__HEADER
+#include CAN_SERVICE_H
 
 
 // =============================================================================

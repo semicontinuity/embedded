@@ -18,7 +18,7 @@
 
 #include "buttons_scanner.h"
 #include "motor_controller.h"
-
+#include CAN_H
 
 extern volatile mcp251x_message_buffer comm_service__buffer;
 
@@ -102,6 +102,28 @@ static inline void comm_service__handle_rx(uint8_t filter) {
             break;
         }
     }
+}
+
+
+inline static void comm_service__broadcast_buttons_status(void) {
+    // It is assumed that the time between pin changes (at least one system tick) is enough to send notification.
+    // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
+    can__txb2__load_data((const uint8_t*)&buttons_scanner__status, sizeof(buttons_scanner__status));
+    can__txb2__request_to_send();
+}
+
+inline static void comm_service__broadcast_motor_controller__motor_mode(void) {
+    // It is assumed that the time between motor mode changes (at least one system tick) is enough to send notification.
+    // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
+    can__txb1__load_report(CANP_REPORT__MOTOR_CONTROLLER__MOTOR_MODE, sizeof(motor_controller__motor_mode), (const uint8_t*)&motor_controller__motor_mode);
+    can__txb1__request_to_send();
+}
+
+inline static void comm_service__broadcast_motor_controller_status(void) {
+    // It is assumed that the time between motor controller status changes (at least one system tick) is enough to send notification.
+    // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
+    can__txb1__load_report(CANP_REPORT__MOTOR_CONTROLLER__STATUS, sizeof(motor_controller__status), (const uint8_t*)&motor_controller__status);
+    can__txb1__request_to_send();
 }
 
 

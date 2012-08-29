@@ -9,15 +9,15 @@ CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)
 
 
-CAN_EMU_USART = 1
+CAN_EMU = 1
 
 
 # Configuration
 PROPS  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
 CDEFS += $(PROPS)
-ifeq ($(CAN_EMU_USART),1)
-CDEFS += -DCAN_EMU_USART=1
-CONF  = $(shell TARGET=$(TARGET)__usart sh $(ROOT)/parse_properties.sh)
+ifeq ($(CAN_EMU),1)
+CDEFS += -DCAN_EMU=1
+CONF  = $(shell TARGET=$(TARGET)__can_emu sh $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
 else
 CONF  = $(shell TARGET=$(TARGET)__can sh $(ROOT)/parse_properties.sh)
@@ -40,26 +40,18 @@ CDEFS += -DINLINE=
 # Firmware
 SRC += main.c
 SRC += comm_service.c
-ifeq ($(CAN_EMU_USART),1)
-SRC += usart_service.c
-else
-SRC += can_service.c
-endif
+SRC += $(CAN_SERVICE_C)
 
 # BSP
 SRC += buttons_scanner.c
-ifeq ($(CAN_EMU_USART),1)
-else
-SRC += can.c
-endif
-
+SRC += $(CAN_C)
 SRC += motor_callbacks_nop.c
 SRC += motor_controller.c
 SRC += motor_controller_prescaler.c
 SRC += system_timer.c
 
 # Library
-ifeq ($(CAN_EMU_USART),1)
+ifeq ($(CAN_EMU),1)
 else
 SRC += cpu/avr/int1.c
 endif
