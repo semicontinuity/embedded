@@ -8,6 +8,7 @@
 
 
 inline static void comm_service__buttons_scanner__status__handle(void) {
+    // TODO: check OWNER bit
     if (CANP_RTR_BITS(comm_service__buffer.header)) {
         // Handle GET request
         comm_service__send_response(CANP_REPORT__BUTTONS_SCANNER__STATUS, sizeof(buttons_scanner__status), (const uint8_t*)&buttons_scanner__status);

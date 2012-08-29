@@ -16,6 +16,7 @@
 extern const uint8_t comm_sevice__descriptor_memory__value[] PROGMEM;
 
 inline static void comm_service__descriptor_memory__handle(void) {
+    // TODO: check OWNER bit
     if (CANP_RTR_BITS(comm_service__buffer.header)) {
         // Handle GET request
         uint8_t slot = CANP_SLOT_BITS(comm_service__buffer.header.id);
