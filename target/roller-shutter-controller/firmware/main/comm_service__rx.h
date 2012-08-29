@@ -1,7 +1,7 @@
 // =============================================================================
-// Communications service.
+// Communications service, receiver.
 //
-// Services incoming requests.
+// Dispatches the incoming packets, based on the matched filter number.
 // =============================================================================
 #ifndef __COMM_SERVICE_RX_H
 #define __COMM_SERVICE_RX_H
@@ -13,7 +13,12 @@
 #include "comm_service__buttons_scanner.h"
 #include "comm_service__motor_controller.h"
 
+#include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
 
+/**
+ * Dispatches the incoming packets, based on the matched filter number.
+ * The code must be consistent with CAN masks and filters.
+ */
 static inline void comm_service__rx__put(const uint8_t filter) {
     switch (filter) {
     case CANP_FILTER__DESCRIPTOR_MEMORY:
