@@ -2,6 +2,7 @@
 #define __COMM_SERVICE__ADMIN_HANDLER_H
 
 #include <avr/pgmspace.h>
+#include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 #include "can_selector.h"
 
@@ -13,6 +14,7 @@
 
 
 static inline void comm_service__handle__admin(void) {
+    // TODO check for message type
     switch (CANP_SLOT_BITS(comm_service__buffer.header.id)) {
     case CANP_REPORT__CAN_READ:
         // Read 32 bits of memory, given the address in data[0..3]

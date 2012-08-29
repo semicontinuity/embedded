@@ -13,7 +13,6 @@
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
 #include "cpu/avr/drivers/net/can/mcp251x/registers.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
-#include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include "cpu/avr/drivers/net/can/mcp251x/struct.h"
 
 extern volatile mcp251x_message_buffer comm_service__buffer;

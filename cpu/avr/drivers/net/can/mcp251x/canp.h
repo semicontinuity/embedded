@@ -13,6 +13,9 @@
 #ifndef __CPU__AVR__DRIVERS__NET__MCP251X__CANP_H
 #define __CPU__AVR__DRIVERS__NET__MCP251X__CANP_H
 
+#include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
+
+
 #define CANP_RESPONSE_HEADER_SIZE       (2)
 
 
@@ -66,6 +69,9 @@
 
 // Macros for mcp251x_message structures
 // -----------------------------------------------------------------------------
+#define CANP_RTR_BITS(header) ((header).dlc & (1 << MCP251X_RTR))
+
+
 #define CANP_EID8(host_net, host_addr) ((uint8_t) (((host_net) << 5) | (host_addr)))
 #define CANP_HEADER(exide, tag, cpty_net, cpty_addr, host_net, host_addr, owner, aux, slot) {   \
   .sidh=(uint8_t) (((tag) << 5) | (cpty_addr)),							\

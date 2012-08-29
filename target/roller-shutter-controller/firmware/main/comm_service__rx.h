@@ -14,7 +14,7 @@
 #include "comm_service__motor_controller.h"
 
 
-static inline void comm_service__rx__put(uint8_t filter) {
+static inline void comm_service__rx__put(const uint8_t filter) {
     switch (filter) {
     case CANP_FILTER__DESCRIPTOR_MEMORY:
         comm_service__descriptor_memory__handle();

@@ -4,6 +4,7 @@
 #include <string.h>
 #include <avr/pgmspace.h>
 #include "comm_service.h"
+#include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 
 
 #define CANP_REPORT__CAN_READ       0x80
@@ -15,7 +16,7 @@
 extern const uint8_t comm_sevice__descriptor_memory__value[] PROGMEM;
 
 inline static void comm_service__descriptor_memory__handle(void) {
-    if (comm_service__buffer.header.dlc & (1 << MCP251X_RTR)) {
+    if (CANP_RTR_BITS(comm_service__buffer.header)) {
         // Handle GET request
         uint8_t slot = CANP_SLOT_BITS(comm_service__buffer.header.id);
         // Do not check SLOT

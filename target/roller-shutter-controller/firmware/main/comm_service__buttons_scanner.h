@@ -3,11 +3,12 @@
 
 #include "comm_service.h"
 #include "buttons_scanner.h"
+#include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include CAN_H
 
 
 inline static void comm_service__buttons_scanner__status__handle(void) {
-    if (comm_service__buffer.header.dlc & (1 << MCP251X_RTR)) {
+    if (CANP_RTR_BITS(comm_service__buffer.header)) {
         // Handle GET request
         comm_service__send_response(CANP_REPORT__BUTTONS_SCANNER__STATUS, sizeof(buttons_scanner__status), (const uint8_t*)&buttons_scanner__status);
     }

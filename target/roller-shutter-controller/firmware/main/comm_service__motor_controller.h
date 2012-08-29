@@ -3,11 +3,12 @@
 
 #include "comm_service.h"
 #include "motor_controller.h"
+#include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include CAN_H
 
 
 inline static void comm_service__motor_controller__motor_mode__handle(void) {
-    if (comm_service__buffer.header.dlc & (1 << MCP251X_RTR)) {
+    if (CANP_RTR_BITS(comm_service__buffer.header)) {
         // Handle GET request
         comm_service__send_response(CANP_REPORT__MOTOR_CONTROLLER__MOTOR_MODE, sizeof(motor_controller__motor_mode), (const uint8_t*)&motor_controller__motor_mode);
     }
@@ -26,7 +27,7 @@ inline static void comm_service__motor_controller__motor_mode__broadcast(void) {
 
 
 inline static void comm_service__motor_controller__control__handle(void) {
-    if (comm_service__buffer.header.dlc & (1 << MCP251X_RTR)) {
+    if (CANP_RTR_BITS(comm_service__buffer.header)) {
         // Handle GET request
         comm_service__send_response(CANP_REPORT__MOTOR_CONTROLLER__CONTROL, sizeof(motor_controller__control), (const uint8_t*)&motor_controller__control);
     }
@@ -38,7 +39,7 @@ inline static void comm_service__motor_controller__control__handle(void) {
 
 
 inline static void comm_service__motor_controller__status__handle(void) {
-    if (comm_service__buffer.header.dlc & (1 << MCP251X_RTR)) {
+    if (CANP_RTR_BITS(comm_service__buffer.header)) {
         // Handle GET request
         comm_service__send_response(CANP_REPORT__MOTOR_CONTROLLER__STATUS, sizeof(motor_controller__status), (const uint8_t*)&motor_controller__status);
     }
