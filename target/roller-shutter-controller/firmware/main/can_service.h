@@ -61,7 +61,7 @@ inline static void comm_service__start(void) {
  */
 static inline void can_service__run(void) {
     // Interrupt flag for INT1 cleared automatically when RX buffer is read.
-    comm_service__handle_rx(can__read_frame((uint8_t*)&comm_service__buffer));
+    comm_service__rx__put(can__read_frame((uint8_t*)&comm_service__buffer));
 }
 
 

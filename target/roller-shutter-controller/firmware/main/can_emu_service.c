@@ -22,16 +22,16 @@ inline static void can_service__on_packet_transferred(void) {
     if (comm_service__buffer.header.id.eid8 == ((CANP_DEVICE_NET<<5) | CANP_DEVICE_ADDR)) {
         if (CANP_AUX_BITS(comm_service__buffer.header.id)) {
             // SYSTEM
-            comm_service__handle_rx((slot & 0x80) ? CANP_FILTER__ADMIN : CANP_FILTER__DESCRIPTOR_MEMORY);
+            comm_service__rx__put((slot & 0x80) ? CANP_FILTER__ADMIN : CANP_FILTER__DESCRIPTOR_MEMORY);
         }
         else {
             // USER
-            comm_service__handle_rx(CANP_FILTER__USER);
+            comm_service__rx__put(CANP_FILTER__USER);
         }        
     }
     else if (comm_service__buffer.header.id.eid8 == ((CANP_MCAST_NET<<5) | CANP_MCAST_ADDR)) {
         if (!CANP_AUX_BITS(comm_service__buffer.header.id)) {
-            comm_service__handle_rx(CANP_FILTER__USER_MCAST);
+            comm_service__rx__put(CANP_FILTER__USER_MCAST);
         }
     }
 }
