@@ -17,6 +17,9 @@
 #include "system_timer.h"
 #include CAN_SERVICE_H
 
+#include "comm_service__buttons_scanner.h"
+#include "comm_service__motor_controller.h"
+
 
 // =============================================================================
 // Controller.

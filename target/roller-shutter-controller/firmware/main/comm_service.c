@@ -1,6 +1,8 @@
 #include "comm_service.h"
+#include CAN_H
 
 volatile mcp251x_message_buffer comm_service__buffer;
+
 
 void comm_service__send_response(const uint8_t report_id, const uint8_t count, const uint8_t* data) {
     can__txb0__load_response(

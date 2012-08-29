@@ -2,6 +2,7 @@
 #include "main.c"
 #include "comm_service.c"
 #include CAN_SERVICE_C
+#include "comm_service__descriptor_memory.c"
 
 // BSP
 #include CAN_C

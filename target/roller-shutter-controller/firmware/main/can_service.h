@@ -20,6 +20,7 @@
 #include "cpu/avr/int1.h"
 
 #include "comm_service.h"
+#include "comm_service__rx.h"
 
 #include "can.h"
 #include "can_selector.h"

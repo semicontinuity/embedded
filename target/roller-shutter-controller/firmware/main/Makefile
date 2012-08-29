@@ -45,6 +45,7 @@ CDEFS += -DINLINE=
 SRC += main.c
 SRC += comm_service.c
 SRC += $(CAN_SERVICE_C)
+SRC += comm_service__descriptor_memory.c
 
 # BSP
 SRC += buttons_scanner.c

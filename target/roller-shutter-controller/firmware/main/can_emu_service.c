@@ -8,6 +8,8 @@
 #include <stdint.h>
 
 #include "can_emu_service.h"
+#include "comm_service.h"
+#include "comm_service__rx.h"
 #include "cpu/avr/asm.h"
 
 

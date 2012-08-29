@@ -12,7 +12,6 @@
 #include "cpu/avr/asm.h"
 #include "util/bitops.h"
 
-#include "comm_service.h"
 #include "cpu/avr/usart0.h"
 
 
