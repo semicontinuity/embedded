@@ -26,7 +26,7 @@ extern volatile mcp251x_message_buffer comm_service__buffer;
 
 void comm_service__send_response(const uint8_t report_id, const uint8_t count, const uint8_t* data);
 
-#include "comm_service__command_handler.h"
+#include "comm_service__admin_handler.h"
 
 
 
@@ -82,8 +82,8 @@ static inline void comm_service__handle_rx(uint8_t filter) {
     case CANP_FILTER__DESCRIPTOR_MEMORY:
         comm_service__handle__descriptor_memory();
         break;
-    case CANP_FILTER__COMMANDS:
-        comm_service__handle__commands();
+    case CANP_FILTER__ADMIN:
+        comm_service__handle__admin();
         break;
     case CANP_FILTER__USER:
     case CANP_FILTER__USER_MCAST:

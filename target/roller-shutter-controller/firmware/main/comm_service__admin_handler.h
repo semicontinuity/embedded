@@ -12,7 +12,7 @@
 #define COMMAND__RESET          0xFF
 
 
-static inline void comm_service__handle__commands(void) {
+static inline void comm_service__handle__admin(void) {
     switch (CANP_SLOT_BITS(comm_service__buffer.header.id)) {
     case COMMAND__CAN_READ:
         // Read 32 bits of memory, given the address in data[0..3]
