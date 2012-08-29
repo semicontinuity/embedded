@@ -19,18 +19,22 @@ ifeq ($(CAN_EMU),1)
 CDEFS += -DCAN_EMU=1
 CONF  = $(shell TARGET=$(TARGET)__can_emu sh $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
+CAN_C = can_emu.c
+CAN_SERVICE_C = can_emu_service.c
 else
 CONF  = $(shell TARGET=$(TARGET)__can sh $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
+CAN_C = can.c
+CAN_SERVICE_C = can_service.c
 endif
 
 # Compile all sources in one compilation unit (because of the absent link-time optimizations)
 # The goal is to have extra inlining of functions.
-WHOLE_PROGRAM=1
+WHOLE_PROGRAM=0
 
 ifeq ($(WHOLE_PROGRAM),1)
 
-CDEFS += -DINLINE="inline static"
+CDEFS += -DINLINE="inline static" -DCAN_C=$(CAN_C) -DCAN_SERVICE_C=$(CAN_SERVICE_C)
 SRC += __all__.c
 
 else
