@@ -51,7 +51,7 @@ inline static void controller__run(void) {
  */
 INLINE void buttons_scanner__status__on_change(void) {
     controller__run();
-    comm_service__broadcast_buttons_status();
+    comm_service__buttons_scanner__status__broadcast();
 }
 
 
@@ -59,7 +59,7 @@ INLINE void buttons_scanner__status__on_change(void) {
  * Called by motor_controller__run() when motor_controller__status has been changed.
  */
 INLINE void motor_controller__status__on_change(void) {
-    comm_service__broadcast_motor_controller_status();
+    comm_service__motor_controller__status__broadcast();
 }
 
 
@@ -67,7 +67,7 @@ INLINE void motor_controller__status__on_change(void) {
  * Callback function, called when the motor status has been changed.
  */
 void motor_controller__motor_mode__on_change(void) {
-    comm_service__broadcast_motor_controller__motor_mode();
+    comm_service__motor_controller__motor_mode__broadcast();
 }
 
 

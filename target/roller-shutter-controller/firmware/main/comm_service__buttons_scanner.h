@@ -6,7 +6,7 @@
 #include CAN_H
 
 
-inline static void comm_service__handle_buttons_scanner_status(void) {
+inline static void comm_service__buttons_scanner__status__handle(void) {
     if (comm_service__buffer.header.dlc & (1 << MCP251X_RTR)) {
         // Handle GET request
         comm_service__send_response(CANP_REPORT__BUTTONS_SCANNER__STATUS, sizeof(buttons_scanner__status), (const uint8_t*)&buttons_scanner__status);
@@ -14,7 +14,7 @@ inline static void comm_service__handle_buttons_scanner_status(void) {
     // If DATA frame was received, ignore (perhaps, log as malformed request)
 }
 
-inline static void comm_service__broadcast_buttons_status(void) {
+inline static void comm_service__buttons_scanner__status__broadcast(void) {
     // It is assumed that the time between pin changes (at least one system tick) is enough to send notification.
     // If for some reason it was not enough (most likely network problem), abort the transmission in progress.
     can__txb2__load_data((const uint8_t*)&buttons_scanner__status, sizeof(buttons_scanner__status));

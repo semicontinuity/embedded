@@ -26,16 +26,16 @@ static inline void comm_service__rx__put(uint8_t filter) {
     case CANP_FILTER__USER_MCAST:
         switch (CANP_SLOT_BITS(comm_service__buffer.header.id)) {
         case CANP_REPORT__MOTOR_CONTROLLER__MOTOR_MODE:
-            comm_service__handle__motor_controller__motor_mode();
+            comm_service__motor_controller__motor_mode__handle();
             break;
         case CANP_REPORT__MOTOR_CONTROLLER__CONTROL:
-            comm_service__handle_motor_controller_control();
+            comm_service__motor_controller__control__handle();
             break;
         case CANP_REPORT__MOTOR_CONTROLLER__STATUS:
-            comm_service__handle_motor_controller_status();
+            comm_service__motor_controller__status__handle();
             break;
         case CANP_REPORT__BUTTONS_SCANNER__STATUS:
-            comm_service__handle_buttons_scanner_status();
+            comm_service__buttons_scanner__status__handle();
             break;
         }
     }
