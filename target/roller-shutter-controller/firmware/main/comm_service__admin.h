@@ -1,5 +1,5 @@
-#ifndef __COMM_SERVICE__ADMIN_HANDLER_H
-#define __COMM_SERVICE__ADMIN_HANDLER_H
+#ifndef __COMM_SERVICE__ADMIN_H
+#define __COMM_SERVICE__ADMIN_H
 
 #include <avr/pgmspace.h>
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
@@ -13,7 +13,7 @@
 #define CANP_REPORT__RESET          0xFF
 
 
-static inline void comm_service__handle__admin(void) {
+static inline void comm_service__admin__handle(void) {
     // TODO check for message type
     switch (CANP_SLOT_BITS(comm_service__buffer.header.id)) {
     case CANP_REPORT__CAN_READ:

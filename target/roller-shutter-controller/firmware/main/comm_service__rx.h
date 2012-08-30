@@ -39,7 +39,7 @@ static inline void comm_service__rx__put(const uint8_t filter) {
         comm_service__descriptor_memory__handle();
         break;
     case CANP_FILTER__ADMIN:
-        comm_service__handle__admin();
+        comm_service__admin__handle();
         break;
     case CANP_FILTER__USER:
     case CANP_FILTER__USER_MCAST:

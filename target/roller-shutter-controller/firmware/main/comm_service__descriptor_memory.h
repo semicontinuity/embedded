@@ -1,5 +1,5 @@
-#ifndef __COMM_SERVICE__DESCRIPTOR_H
-#define __COMM_SERVICE__DESCRIPTOR_H
+#ifndef __COMM_SERVICE__DESCRIPTOR_MEMORY_H
+#define __COMM_SERVICE__DESCRIPTOR_MEMORY_H
 
 #include <string.h>
 #include <avr/pgmspace.h>
