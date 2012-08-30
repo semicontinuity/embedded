@@ -16,5 +16,5 @@
 
 
 INLINE void int1__run(void) {
-    can_service__run();
+    can_service__rx__run();
 }

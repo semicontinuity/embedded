@@ -1,7 +1,7 @@
 // =============================================================================
 // CAN service.
 // Handles CAN communications (services incoming requests).
-// Extends comm_service.
+// Extends comm_service__rx.
 //
 // The device is designed for the system with one super-node ("master").
 // The master is the only device that can send messages to the node.
@@ -37,18 +37,18 @@
 
 
 /**
- * Implements the function from comm_service.
+ * Implements the function from comm_service__rx.
  */ 
-inline static void comm_service__init(void) {
+inline static void comm_service__rx__init(void) {
     int1__init();
     can__init();
 }
 
 
 /**
- * Implements the function from comm_service.
+ * Implements the function from comm_service__rx.
  */ 
-inline static void comm_service__start(void) {
+inline static void comm_service__rx__start(void) {
     int1__start();
     can__start();
 
@@ -59,7 +59,7 @@ inline static void comm_service__start(void) {
 /**
  *  Handler for the interrupt from MCP2515 CAN controller (falling edge).
  */
-static inline void can_service__run(void) {
+static inline void can_service__rx__run(void) {
     // Interrupt flag for INT1 cleared automatically when RX buffer is read.
     comm_service__rx__put(can__read_frame((uint8_t*)&comm_service__buffer));
 }

@@ -93,8 +93,8 @@ int main(void) {
     can_selector__init();
     mcp251x__init();
 
-    comm_service__init();
-    comm_service__start();
+    comm_service__rx__init();
+    comm_service__rx__start();
 
     system_timer__init();
     system_timer__start();

@@ -1,7 +1,7 @@
 // =============================================================================
 // CAN service emulator.
 // Handles CAN communications (services incoming requests).
-// Extends comm_service.
+// Extends comm_service__rx.
 // =============================================================================
 #ifndef __CAN_EMU_SERVICE_H
 #define __CAN_EMU_SERVICE_H
@@ -53,9 +53,9 @@ inline void usart_rx_thread__init(void) {
 
 
 /**
- * Implements the function from comm_service.
+ * Implements the function from comm_service__rx.
  */ 
-inline static void comm_service__init(void) {
+inline static void comm_service__rx__init(void) {
     usart__rate__set(USART_BAUD_RATE);
     usart__init();
     usart__out__enabled__set();
@@ -66,9 +66,9 @@ inline static void comm_service__init(void) {
 
 
 /**
- * Implements the function from comm_service.
+ * Implements the function from comm_service__rx.
  */ 
-inline static void comm_service__start(void) {
+inline static void comm_service__rx__start(void) {
     usart_rx_thread__enabled__set(1);
 }
 
