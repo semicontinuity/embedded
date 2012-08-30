@@ -9,7 +9,7 @@
 
 #include "can_emu_service.h"
 #include "comm_service.h"
-#include "comm_service__rx.h"
+#include "comm_service__handler.h"
 #include "cpu/avr/asm.h"
 
 

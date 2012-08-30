@@ -1,10 +1,10 @@
 // =============================================================================
-// Communications service, receiver.
+// Communications service, handler.
 //
 // Dispatches the incoming packets, based on the matched filter number.
 // =============================================================================
-#ifndef __COMM_SERVICE_RX_H
-#define __COMM_SERVICE_RX_H
+#ifndef __COMM_SERVICE_HANDLER_H
+#define __COMM_SERVICE_HANDLER_H
 
 #include <stdint.h>
 #include "comm_service.h"
@@ -14,19 +14,6 @@
 #include "comm_service__motor_controller.h"
 
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
-
-
-/**
- * Initializes the service.
- * Must be provided by implementation.
- */
-inline static /*abstract */ void comm_service__rx__init(void);
-
-/**
- * Starts the service.
- * Must be provided by implementation.
- */
-inline static /*abstract */ void comm_service__rx__start(void);
 
 
 /**
