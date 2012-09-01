@@ -30,6 +30,12 @@ inline static void can__txb0__load_response(const uint8_t sidh, const uint8_t si
     memcpy((void*)can__txb0.data, data, dlc);
 }
 
+inline static void can__txb0__load_response_(const uint8_t dlc, const uint8_t* id, const uint8_t* data) {
+    memcpy((void*)&can__txb0.header, id, 4);
+    can__txb0.header.dlc = dlc;
+    memcpy((void*)can__txb0.data, data, dlc);
+}
+
 inline static void can__txb0__request_to_send(void) {
     usart__out__send((const char *)&can__txb0, sizeof(can__txb0));
 }

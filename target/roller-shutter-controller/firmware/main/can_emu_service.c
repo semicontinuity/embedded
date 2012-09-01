@@ -17,10 +17,10 @@
 /**
  * Emulate MCP2515 masks and filters.
  */
-inline static void can_service__on_packet_transferred(void) {
-    const uint8_t slot = CANP_SLOT_BITS(comm_service__buffer.header.id);
-    if (comm_service__buffer.header.id.eid8 == ((CANP_DEVICE_NET<<5) | CANP_DEVICE_ADDR)) {
-        if (CANP_AUX_BITS(comm_service__buffer.header.id)) {
+inline static void can_emu_service__on_packet_transferred(void) {
+    const uint8_t slot = CANP_SLOT_BITS(comm_service__packet.header.id);
+    if (comm_service__packet.header.id.eid8 == ((CANP_DEVICE_NET<<5) | CANP_DEVICE_ADDR)) {
+        if (CANP_AUX_BITS(comm_service__packet.header.id)) {
             // SYSTEM
             comm_service__rx__put((slot & 0x80) ? CANP_FILTER__ADMIN : CANP_FILTER__DESCRIPTOR_MEMORY);
         }
@@ -29,8 +29,8 @@ inline static void can_service__on_packet_transferred(void) {
             comm_service__rx__put(CANP_FILTER__USER);
         }        
     }
-    else if (comm_service__buffer.header.id.eid8 == ((CANP_MCAST_NET<<5) | CANP_MCAST_ADDR)) {
-        if (!CANP_AUX_BITS(comm_service__buffer.header.id)) {
+    else if (comm_service__packet.header.id.eid8 == ((CANP_MCAST_NET<<5) | CANP_MCAST_ADDR)) {
+        if (!CANP_AUX_BITS(comm_service__packet.header.id)) {
             comm_service__rx__put(CANP_FILTER__USER_MCAST);
         }
     }
@@ -39,7 +39,7 @@ inline static void can_service__on_packet_transferred(void) {
 
 inline static void usart_rx_thread__on_packet_transferred(void) {
     // handle
-    can_service__on_packet_transferred();
+    can_emu_service__on_packet_transferred();
 
     // prepare to receive the next packet
     usart_rx_thread__init();

@@ -7,15 +7,14 @@
 #include CAN_H
 
 
-inline static void comm_service__motor_controller__motor_mode__handle(void) {
-    // TODO: check OWNER bit
-    if (CANP_RTR_BITS(comm_service__buffer.header)) {
+inline static void comm_service__motor_controller__motor_mode__handle(const uint8_t request_type) {
+    if (CANP_REQUEST_GET(request_type)) {
         // Handle GET request
-        comm_service__send_response(CANP_REPORT__MOTOR_CONTROLLER__MOTOR_MODE, sizeof(motor_controller__motor_mode), (const uint8_t*)&motor_controller__motor_mode);
+        comm_service__send_response(sizeof(motor_controller__motor_mode), (const uint8_t*)&motor_controller__motor_mode);
     }
     else {
         // Handle PUT request
-        motor_controller__motor_mode__set_from_raw_ptr(&comm_service__buffer.data);
+        motor_controller__motor_mode__set_from_raw_ptr(&comm_service__packet.data);
     }
 }
 
@@ -27,24 +26,22 @@ inline static void comm_service__motor_controller__motor_mode__broadcast(void) {
 }
 
 
-inline static void comm_service__motor_controller__control__handle(void) {
-    // TODO: check OWNER bit
-    if (CANP_RTR_BITS(comm_service__buffer.header)) {
+inline static void comm_service__motor_controller__control__handle(const uint8_t request_type) {
+    if (CANP_REQUEST_GET(request_type)) {
         // Handle GET request
-        comm_service__send_response(CANP_REPORT__MOTOR_CONTROLLER__CONTROL, sizeof(motor_controller__control), (const uint8_t*)&motor_controller__control);
+        comm_service__send_response(sizeof(motor_controller__control), (const uint8_t*)&motor_controller__control);
     }
     else {
         // Handle PUT request
-        motor_controller__control__set_from_raw_ptr(&comm_service__buffer.data);
+        motor_controller__control__set_from_raw_ptr(&comm_service__packet.data);
     }
 }
 
 
-inline static void comm_service__motor_controller__status__handle(void) {
-    // TODO: check OWNER bit
-    if (CANP_RTR_BITS(comm_service__buffer.header)) {
+inline static void comm_service__motor_controller__status__handle(const uint8_t request_type) {
+    if (CANP_REQUEST_GET(request_type)) {
         // Handle GET request
-        comm_service__send_response(CANP_REPORT__MOTOR_CONTROLLER__STATUS, sizeof(motor_controller__status), (const uint8_t*)&motor_controller__status);
+        comm_service__send_response(sizeof(motor_controller__status), (const uint8_t*)&motor_controller__status);
     }
     // If DATA frame was received, ignore (perhaps, log as malformed request)
 }

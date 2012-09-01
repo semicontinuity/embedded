@@ -48,7 +48,7 @@ register uint8_t usart_rx_thread__size          USART_RX_THREAD__SIZE__REG;
  */
 inline void usart_rx_thread__init(void) {
     LOAD_CONST8 (usart_rx_thread__size,	 PACKET_LENGTH);
-    LOAD_ADDRESS(usart_rx_thread__w_ptr, comm_service__buffer);
+    LOAD_ADDRESS(usart_rx_thread__w_ptr, comm_service__packet);
 }
 
 

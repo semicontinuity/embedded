@@ -6,21 +6,26 @@ Requirements
 
 The CAN protocol is designed to fulfill the following requirements:
 
-- Supported message types:
-    - Information request message (also reffered to as RTR or query)
-    - Output message, i.e. the message transmitted from the node with some payload.
-      Can be initiated by the node itself (notification)
-      or in response to information request message.
-    - Input message, i.e. the message transmitting payload to the node.
 - Support for multiple physical buses and routing.
+- Possibility to debug system behaviour by analyzing bus traffic.
+- Support messages addressed to a group of nodes (multicast).
+- Nodes should provide information about themselves and their capabilities.
 - Compatibility with Microchip CAN Extenders.
 
 
 Design decisions
 --------------------------------------------------------------------------------
 
+Supported message types:
+    - Information request message (also referred to as RTR or Query)
+    - Output message, i.e. the message transmitted from the node with some payload.
+      Can be initiated by the node itself (notification)
+      or in response to information request message.
+    - Input message, i.e. the message transmitting payload to the node.
+    - Error message, that signals that Input message was rejected.
+
 Only extended messages are supported,
-to have long enough headers with rich semantics.
+to have long enough headers that have all the necessary fields.
 
 Message headers contain addresses of both the sender and the receiver
 of the message, to simplify system debugging by logging of all traffic.
@@ -28,7 +33,7 @@ of the message, to simplify system debugging by logging of all traffic.
 To simplify software, no distinction is made between responses
 to RTR and node-initiated notifications.
 If the node is able to send notifications, an RTR will make the node
-transmit one notification, as if the condition to transmit the notification
+transmit a notification, as if the condition to transmit the notification
 was met.
 
 For compatibility with CAN extenders, RTR and RTR response messages
@@ -38,6 +43,11 @@ in the header, but 'host address', 'counterparty address' and 'owner'.
 It also makes the node software simpler: to generate the response to RTR,
 it is only necessary to clear RTR bit
 (but the router software is becoming more complex).
+
+There is no field in the message to tell that the message is addressed to a group.
+Certain ranges of addresses should be allocated to multicasts,
+and a router, if present, should be consistent with the chosen address scheme.
+
 
 
 Message header layout
@@ -59,8 +69,15 @@ SID10 ..     SID3 SID2..0 IDE EID17 EID15  ..    EID8 EID7    ..   EID0
   - slot: identifies a parameter within the node.
 
 
-- Short tag (3 bits): used to tag the specific type of traffic. also specifies traffic priority.
+- Short tag (3 bits): used to tag the specific type of traffic. also specifies the priority of the current message.
 - Counterparty subnet and address: identifies the node, that is a counterparty in the current transaction.
+  A couterparty is a sender of Input or Query message, or a recipient of Output or Error message.
+  A system can be designed without the use of counterparty addresses,
+  but it comes in handy when debugging a system (e.g. to identify the node that has sent a message),
+  and also for networks with a router.
+
+  In a single-master systems, contains the address of the master.
+  Can be omitted to extend the Tag to 11 bits (Long Tag).
 
 - Owner (1 bit): Set for a packet with the payload, transmitted by the owner of the parameter (from the owner to the client)
                  Reset for a packet with the payload, transmitted by the non-owner of the parameter (from the client to the owner)
@@ -71,14 +88,20 @@ The combination of Auxillary, RTR and Owner bits defines the message type:
 
 - AUX=0, RTR=0, OWN=0:  PUT request, the client asks the node to set the certain parameter.
 - AUX=0, RTR=0, OWN=1:  Parameter VALUE, sent by the parameter owner. Either the response to PUT or the owner-initiated notification.
-- AUX=0, RTR=1, OWN=0:  UNDEFINED yet. Possible usage: as an ERROR response to PUT (parameter value not accepted), or to broadcast that the parameter value is now INVALID.
+- AUX=0, RTR=1, OWN=0:  NOT_OK response to PUT.
 - AUX=0, RTR=1, OWN=1:  GET request, the client asks the node to send out the value of a certain parameter.
-- AUX=1, RTR=0, OWN=0:  System COMMAND with parameters.
-- AUX=1, RTR=0, OWN=1:  DESCRIPTOR_MEMORY_VALUE, sent as a response to DESCRIPTOR_MEMORY_READ.
-- AUX=1, RTR=1, OWN=0:  System SHORT_COMMAND, without parameters.
-- AUX=1, RTR=1, OWN=1:  DESCRIPTOR_MEMORY_READ, slot contains a number of 8-bytes element of descriptor memory.
 
 The router must examine RTR and OWNER bits, to identify the destination network of the packet.
+
+Each node has a virtual memory space, that can be read or written remotely.
+As the maximum payload of CAN message is 8 bytes,
+the addresses used in read and write operations are aligned to 8-byte boundaries.
+The 8-byte piece of memory is called a Slot.
+Memory operations are using slot numbers instead of memory addresses.
+
+In total, there are 9 bits in the message header for the slot number:
+1 bit of AUX + 8 bits of SLOT, so there are 512 slots per node.
+The lower 256 slots (AUX=0) are dedicated for user memory, and the higher 256 (AUX=1) for system memory.
 
 
 Message header layout examples

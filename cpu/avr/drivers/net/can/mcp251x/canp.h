@@ -54,22 +54,31 @@
 #define CANP_SIDL_MASK_HOST_NET         (0xE0)
 #define CANP_SIDH_MASK_HOST_ADDR        (0x1F)
 
+#define CANP_DLC_MASK_RTR               (1 << MCP251X_RTR)
+
 
 // Macros for extraction of bits of the individual fields
 // -----------------------------------------------------------------------------
-#define CANP_TAG_BITS(message) ((message).sidh & CANP_SIDH_MASK_TAG)
-#define CANP_CPTY_ADDR_BITS(message) ((message).sidh & CANP_SIDH_MASK_CPTY_ADDR)
-#define CANP_CPTY_NET_BITS(message) ((message).sidl & CANP_SIDL_MASK_CPTY_NET)
-#define CANP_OWNER_BITS(message) ((message).sidl & CANP_SIDL_MASK_OWNER)
-#define CANP_AUX_BITS(message) ((message).sidl & CANP_SIDL_MASK_AUX)
-#define CANP_HOST_NET_BITS(message) ((message).eid8 & CANP_SIDL_MASK_HOST_NET)
-#define CANP_HOST_ADDR_BITS(message) ((message).eid8 & CANP_SIDL_MASK_HOST_ADDR)
-#define CANP_SLOT_BITS(message) ((message).eid0)
+#define CANP_TAG_BITS(id)               ((id).sidh & CANP_SIDH_MASK_TAG)
+#define CANP_CPTY_ADDR_BITS(id)         ((id).sidh & CANP_SIDH_MASK_CPTY_ADDR)
+#define CANP_CPTY_NET_BITS(id)          ((id).sidl & CANP_SIDL_MASK_CPTY_NET)
+#define CANP_OWNER_BITS(id)             ((id).sidl & CANP_SIDL_MASK_OWNER)
+#define CANP_AUX_BITS(id)               ((id).sidl & CANP_SIDL_MASK_AUX)
+#define CANP_HOST_NET_BITS(id)          ((id).eid8 & CANP_SIDL_MASK_HOST_NET)
+#define CANP_HOST_ADDR_BITS(id)         ((id).eid8 & CANP_SIDL_MASK_HOST_ADDR)
+#define CANP_SLOT_BITS(id)              ((id).eid0)
 
 
 // Macros for mcp251x_message structures
 // -----------------------------------------------------------------------------
-#define CANP_RTR_BITS(header) ((header).dlc & (1 << MCP251X_RTR))
+#define CANP_RTR_BITS(header) ((header).dlc & CANP_DLC_MASK_RTR)
+
+
+// Macros for request types
+// -----------------------------------------------------------------------------
+#define CANP_REQUEST_GET(request_type)  (request_type != 0)
+#define CANP_REQUEST_PUT(request_type)  (request_type == 0)
+
 
 
 #define CANP_EID8(host_net, host_addr) ((uint8_t) (((host_net) << 5) | (host_addr)))

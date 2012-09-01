@@ -10,7 +10,7 @@
 /**
  * System tick interrupt handler.
  * Called SYSTEM_TIMER__SECOND_TICK_PERIOD times per second (typically, 250).
- * Iimplemented with Timer 2 Compare A interrupt.
+ * Implemented with Timer 2 Compare A interrupt.
  */
 ISR(TIMER2_COMPA_vect)
 {

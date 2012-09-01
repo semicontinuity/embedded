@@ -9,5 +9,3 @@ struct buttons_scanner__status buttons_scanner__status = {
     .pins_changed       = 0,
     .pins_state	        = BUTTONS_MASK
 };
-
-

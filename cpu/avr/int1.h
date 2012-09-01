@@ -5,6 +5,9 @@
 #ifndef __CPU_AVR_INT1_H
 #define __CPU_AVR_INT1_H
 
+#include <avr/io.h>
+
+
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) 
 

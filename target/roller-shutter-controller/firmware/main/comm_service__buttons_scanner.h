@@ -7,13 +7,12 @@
 #include CAN_H
 
 
-inline static void comm_service__buttons_scanner__status__handle(void) {
-    // TODO: check OWNER bit
-    if (CANP_RTR_BITS(comm_service__buffer.header)) {
+inline static void comm_service__buttons_scanner__status__handle(const uint8_t request_type) {
+    if (CANP_REQUEST_GET(request_type)) {
         // Handle GET request
-        comm_service__send_response(CANP_REPORT__BUTTONS_SCANNER__STATUS, sizeof(buttons_scanner__status), (const uint8_t*)&buttons_scanner__status);
+        comm_service__send_response(sizeof(buttons_scanner__status), (const uint8_t*)&buttons_scanner__status);
     }
-    // If DATA frame was received, ignore (perhaps, log as malformed request)
+    // Ignore PUT requests
 }
 
 inline static void comm_service__buttons_scanner__status__broadcast(void) {

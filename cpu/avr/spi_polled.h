@@ -4,8 +4,11 @@
 #include <avr/io.h>
 #include <stdint.h>
 
+#include "cpu/avr/asm.h"
+
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) || defined(__AVR_ATmega8__)
+
 
 /**
  * SPI Exchange (polled)
@@ -27,10 +30,12 @@ inline void spi__write(uint8_t value) {
 
 
 inline void spi__write_bytes(const uint8_t* buffer, uint8_t count) {
-    do {
-        spi__write(*buffer++);
+    while (1) {
+        uint8_t temp;
+        LD_ZPLUS(temp, buffer);
+        spi__write(temp);
+        if (--count == 0) break;
     }
-    while (--count > 0);
 }
 
 #else

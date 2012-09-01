@@ -30,11 +30,11 @@ endif
 
 # Compile all sources in one compilation unit (because of the absent link-time optimizations)
 # The goal is to have extra inlining of functions.
-WHOLE_PROGRAM=0
+WHOLE_PROGRAM=1
 
 ifeq ($(WHOLE_PROGRAM),1)
 
-CDEFS += -DINLINE="inline static" -DCAN_C=$(CAN_C) -DCAN_SERVICE_C=$(CAN_SERVICE_C)
+CDEFS += -DINLINE="inline static" -DCAN_C=\"$(CAN_C)\" -DCAN_SERVICE_C=\"$(CAN_SERVICE_C)\"
 SRC += __all__.c
 
 else
