@@ -146,7 +146,8 @@ void motor_controller__stop(void) {
         motor_controller__state = MOTOR_CONTROLLER__STATE__OFF;
         break;
     case MOTOR_CONTROLLER__STATE__RUN:
-        motor_controller__target_position = motor_controller__position + motor_controller__position_delta;
+        motor_controller__position += motor_controller__position_delta;
+        motor_controller__target_position = motor_controller__position;
     case MOTOR_CONTROLLER__STATE__OVERRUN:
     case MOTOR_CONTROLLER__STATE__CHECK_REVERSE:
         motor_controller__state = MOTOR_CONTROLLER__STATE__STOP;

@@ -19,14 +19,14 @@ extern struct buttons_scanner__status buttons_scanner__status;
 
 
 /**
- * Callback function, called by buttons_scanner__run() when any of the buttons has changed its state.
+ * Callback function, called by buttons_scanner__run() when any of the buttons has changed state.
  */
 INLINE void buttons_scanner__status__on_change(void);
 
 
 /**
  * Called periodically to scan buttons.
- * At every call, it will report the buttons state to the callback buttons_scanner__out__put()
+ * Will invoke the callback buttons_scanner__status__on_change() when any of the buttons has changed state.
  */
 inline static void buttons_scanner__run(void) {
     uint8_t current_state = PORT_VALUE(BUTTONS) & BUTTONS_MASK;

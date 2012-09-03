@@ -9,6 +9,7 @@
 #include "can_selector.h"
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
 
+#include "unused.h"
 #include "buttons.h"
 #include "buttons_scanner.h"
 #include "motor.h"
@@ -88,8 +89,11 @@ int main(void) {
 
     buttons__init();
     motor__init();
+    unused1__init();
+    unused2__init();
+    unused3__init();
 
-    spi__init(SPI_CLKDIV_16);
+    spi__init(SPI_CLKDIV_128);
     can_selector__init();
     mcp251x__init();
 

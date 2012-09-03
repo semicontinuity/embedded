@@ -13,7 +13,6 @@
 #include "cpu/avr/asm.h"
 
 
-
 /**
  * Emulate MCP2515 masks and filters.
  */
@@ -29,9 +28,11 @@ inline static void can_emu_service__on_packet_transferred(void) {
             comm_service__rx__put(CANP_FILTER__USER);
         }        
     }
-    else if (comm_service__packet.header.id.eid8 == ((CANP_MCAST_NET<<5) | CANP_MCAST_ADDR)) {
-        if (!CANP_AUX_BITS(comm_service__packet.header.id)) {
-            comm_service__rx__put(CANP_FILTER__USER_MCAST);
+    else {
+        if (comm_service__packet.header.id.eid8 == ((CANP_MCAST_NET<<5) | CANP_MCAST_ADDR)) {
+            if (!CANP_AUX_BITS(comm_service__packet.header.id)) {
+                comm_service__rx__put(CANP_FILTER__USER_MCAST);
+            }
         }
     }
 }
@@ -47,7 +48,7 @@ inline static void usart_rx_thread__on_packet_transferred(void) {
 
 
 USART_RX_THREAD_INTERRUPT {
-    STORE_TO_XPLUS(usart__in__peek());
+    ST_YPLUS(usart__in__peek());
 
     DEC(usart_rx_thread__size);
     IF_ZERO(usart_rx_thread__on_packet_transferred());

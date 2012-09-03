@@ -71,7 +71,8 @@
 
 // Macros for mcp251x_message structures
 // -----------------------------------------------------------------------------
-#define CANP_RTR_BITS(header) ((header).dlc & CANP_DLC_MASK_RTR)
+#define CANP_RTR_BITS(header)           ((header).dlc & CANP_DLC_MASK_RTR)
+#define CANP_DATA_LENGTH_BITS(header)   ((header).dlc & 0x0F)
 
 
 // Macros for request types

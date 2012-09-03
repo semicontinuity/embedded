@@ -13,9 +13,10 @@ inline static void comm_service__descriptor_memory__handle(const uint8_t request
     if (CANP_REQUEST_GET(request_type)) {
         // Handle GET request
         uint8_t slot = CANP_SLOT_BITS(comm_service__packet.header.id);
+        uint8_t length = CANP_DATA_LENGTH_BITS(comm_service__packet.header);
         // Do not check SLOT
-        memcpy_P((void*)comm_service__packet.data, comm_sevice__descriptor_memory__value + (slot << 3), comm_service__packet.header.dlc);
-        comm_service__send_response(comm_service__packet.header.dlc, (const uint8_t*)&comm_service__packet.data);
+        memcpy_P((void*)comm_service__packet.data, comm_sevice__descriptor_memory__value + (slot << 3), length);
+        comm_service__send_response(length, (const uint8_t*)&comm_service__packet.data);
     }
     // Ignore PUT requests
 }

@@ -102,6 +102,8 @@
 
 inline static void mcp251x__init(void) {
     // Rely on HW reset 
+    _delay_us(50); // >2
+
     can_selector__run(mcp251x_reset());
 
     _delay_us(50); // >2

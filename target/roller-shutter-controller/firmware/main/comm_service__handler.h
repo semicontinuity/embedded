@@ -14,6 +14,7 @@
 #include "comm_service__motor_controller.h"
 
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
+#include "cpu/avr/usart0.h"
 
 
 /**
@@ -23,14 +24,15 @@
 static inline void comm_service__rx__put(const uint8_t filter) {
     uint8_t supported = 0;
     const uint8_t owner_bits = CANP_OWNER_BITS(comm_service__packet.header.id);
+
     const uint8_t rtr_bits = CANP_RTR_BITS(comm_service__packet.header);
+
     if (rtr_bits) {
         if (owner_bits) supported = 1;
     }
     else {
         if (!owner_bits) supported = 1;
     }
-
     // possible to send error response
     if (!supported) return;
 

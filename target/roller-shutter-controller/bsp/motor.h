@@ -49,24 +49,27 @@ inline static void motor__init(void) {
 }
 
 
-
+#ifndef motor__on_up
 INLINE void motor__on_up(void);
+#endif
 
 inline static void motor__up(void) {
     motor__up__on();
     motor__on_up();
 }
 
-
+#ifndef motor__on_down
 INLINE void motor__on_down(void);
+#endif
 
 inline static void motor__down(void) {
     motor__down__on();
     motor__on_down();
 }
 
-
+#ifndef motor__on_stop
 INLINE void motor__on_stop(void);
+#endif
 
 inline static void motor__stop(void) {
     motor__up__off();

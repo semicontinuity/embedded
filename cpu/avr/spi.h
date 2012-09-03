@@ -17,6 +17,11 @@
 #define SS__PORT      B
 #define SS__PIN       2
 
+#define MOSI__PORT    B
+#define MOSI__PIN     3
+
+#define SCK__PORT     B
+#define SCK__PIN      5
 
 
 // There are the following 8 modes:
@@ -35,7 +40,13 @@
 // - CPOL=0: SCK is low when idle 
 // - CPHA=0: Sample on leading edge, setup on trailing edge
 static inline void spi__init(const uint8_t speed) {
-    // SS Must be configured as output for proper SPI operation, even if it is not use to select the chip.
+    // MOSI MUST be configured as output for proper SPI MASTER operation - pin not configured as output automatically.
+    USE_AS_OUTPUT(MOSI);
+
+    // SCK MUST be configured as output for proper SPI MASTER operation - pin not configured as output automatically.
+    USE_AS_OUTPUT(SCK);
+
+    // SS MUST be configured as output for proper SPI MASTER operation, even if it is not use to select the chip.
     USE_AS_OUTPUT(SS);
     OUT_1(SS);
 

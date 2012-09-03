@@ -170,6 +170,14 @@
 } while(0)
 
 
+#define LD_YPLUS(result,ptr) do {               \
+  __asm__ __volatile__ (			\
+    "ld	%0, y+			        \n\t"   \
+    : "=r" (result) : "y"(ptr)                  \
+  );						\
+} while(0)
+
+
 #define LDD_Y(result, d) do {                   \
   __asm__ __volatile__ (			\
     "ldd   %0,Y + " QUOTE(d) "          \n\t"   \
@@ -186,6 +194,14 @@
   );						\
 } while(0)
 
+
+#define ST_YPLUS(var) do {                      \
+  __asm__ __volatile__ (                        \
+    "st	   Y+, %0\n\t"                          \
+    ::"r"(var):"r28","r29"                      \
+  );						\
+} while(0)
+
 // ----------------------------------------------
 // Operations with Z register
 // ----------------------------------------------
@@ -194,6 +210,23 @@
   __asm__ __volatile__ (			\
     "ld	%0, z+			        \n\t"   \
     : "=r" (result) : "z"(ptr)                  \
+  );						\
+} while(0)
+
+
+#define LDD_Z(result, d) do {                   \
+  __asm__ __volatile__ (			\
+    "ldd   %0,Z + " QUOTE(d) "          \n\t"   \
+    : "=r" (result)                             \
+  );						\
+} while(0)
+
+
+#define LDD_Z_U16(result, d) do {               \
+  __asm__ __volatile__ (			\
+    "ldd   %A0,Z + " QUOTE(d) "          \n\t"  \
+    "ldd   %B0,Z + " QUOTE(d) " + 1      \n\t"  \
+    : "=r" (result)                             \
   );						\
 } while(0)
 

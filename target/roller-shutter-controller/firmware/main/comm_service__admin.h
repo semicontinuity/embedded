@@ -22,10 +22,11 @@ static inline void comm_service__admin__handle(const uint8_t request_type) {
     // PUT requests
     switch (CANP_SLOT_BITS(comm_service__packet.header.id)) {
     case CANP_REPORT__CAN_READ:
-        // Read 32 bits of memory, given the address in data[0..3]
+        // DLC ignored.
+        // Read 8 bits of memory, given the address in data[0]
         if (comm_service__packet.data[3] == 0 && comm_service__packet.data[2] == 0 && comm_service__packet.data[1] == 0) {
             can_selector__run(comm_service__packet.data[4] = mcp251x_read_byte(comm_service__packet.data[0]));
-            comm_service__send_response(8, (const uint8_t*)&comm_service__packet.data);
+            comm_service__send_response(5, (const uint8_t*)&comm_service__packet.data);
         }
         break;
     case CANP_REPORT__FLASH_READ:
