@@ -20,7 +20,7 @@ inline static void usart_rx_thread__on_packet_transferred(void) {
     LOAD_ADDRESS(packet, usart_rx_buffer);
 
     // If host=0:0 it is a query from host.
-    if (!(*(packet+3))) {
+    if (!(*(packet+2))) {
         server__process_packet();
     }
     else {
