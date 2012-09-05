@@ -84,7 +84,7 @@ inline void motor_controller__move_up(void) {
 
 
 /**
- * Set the desired motor mode.
+ * Sets the desired motor mode.
  * (Can trigger the motion)
  */
 inline void motor_controller__motor_mode__set_from_raw_ptr(const void* ptr) {
@@ -103,6 +103,7 @@ inline void motor_controller__motor_mode__set_from_raw_ptr(const void* ptr) {
     // ignore invalid values
 }
 
+
 /**
  * Sets the control structure.
  * (Can trigger the motion)
@@ -114,6 +115,17 @@ inline void motor_controller__control__set_from_raw_ptr(const void* ptr) {
         motor_controller__move(control->target_position);
     }
     // ignore invalid values
+}
+
+
+/**
+ * Sets the status structure (for administrative purposes).
+ */
+inline void motor_controller__status__set_from_raw_ptr(const void* ptr) {
+    const struct motor_controller__status *status = (const struct motor_controller__status *)ptr;
+    // ignore invalid values
+    motor_controller__position = status->position;
+    motor_controller__position_error = status->position_error;
 }
 
 

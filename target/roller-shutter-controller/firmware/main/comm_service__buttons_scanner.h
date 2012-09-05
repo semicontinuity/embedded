@@ -1,15 +1,14 @@
 #ifndef __COMM_SERVICE__BUTTONS_SCANNER_H
 #define __COMM_SERVICE__BUTTONS_SCANNER_H
 
-#include "comm_service.h"
+#include "kernel.h"
 #include "buttons_scanner.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include CAN_H
 
 
-inline static void comm_service__buttons_scanner__status__handle(const uint8_t request_type) {
-    if (CANP_REQUEST_GET(request_type)) {
-        // Handle GET request
+inline static void comm_service__buttons_scanner__status__handle(const uint8_t is_get) {
+    if (is_get) {
         comm_service__send_response(sizeof(buttons_scanner__status), (const uint8_t*)&buttons_scanner__status);
     }
     // Ignore PUT requests

@@ -1,15 +1,14 @@
 #ifndef __COMM_SERVICE__MOTOR_CONTOLLER_H
 #define __COMM_SERVICE__MOTOR_CONTOLLER_H
 
-#include "comm_service.h"
+#include "kernel.h"
 #include "motor_controller.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include CAN_H
 
 
-inline static void comm_service__motor_controller__motor_mode__handle(const uint8_t request_type) {
-    if (CANP_REQUEST_GET(request_type)) {
-        // Handle GET request
+inline static void comm_service__motor_controller__motor_mode__handle(const uint8_t is_get) {
+    if (is_get) {
         comm_service__send_response(sizeof(motor_controller__motor_mode), (const uint8_t*)&motor_controller__motor_mode);
     }
     else {
@@ -26,9 +25,8 @@ inline static void comm_service__motor_controller__motor_mode__broadcast(void) {
 }
 
 
-inline static void comm_service__motor_controller__control__handle(const uint8_t request_type) {
-    if (CANP_REQUEST_GET(request_type)) {
-        // Handle GET request
+inline static void comm_service__motor_controller__control__handle(const uint8_t is_get) {
+    if (is_get) {
         comm_service__send_response(sizeof(motor_controller__control), (const uint8_t*)&motor_controller__control);
     }
     else {
@@ -38,12 +36,15 @@ inline static void comm_service__motor_controller__control__handle(const uint8_t
 }
 
 
-inline static void comm_service__motor_controller__status__handle(const uint8_t request_type) {
-    if (CANP_REQUEST_GET(request_type)) {
-        // Handle GET request
+inline static void comm_service__motor_controller__status__handle(const uint8_t is_get) {
+    if (is_get) {
         comm_service__send_response(sizeof(motor_controller__status), (const uint8_t*)&motor_controller__status);
     }
-    // If DATA frame was received, ignore (perhaps, log as malformed request)
+    else {
+        // Handle PUT request
+        // Allow setting of status for administrative purposes
+        motor_controller__status__set_from_raw_ptr(&comm_service__packet.data);
+    }
 }
 
 inline static void comm_service__motor_controller__status__broadcast(void) {

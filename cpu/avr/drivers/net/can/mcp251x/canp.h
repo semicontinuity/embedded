@@ -47,7 +47,8 @@
 // .sidl (tag + counterparty address)
 #define CANP_SIDL_MASK_CPTY_NET         (0xE0)
 #define CANP_SIDL_MASK_FLAGS            (0x03)
-#define CANP_SIDL_MASK_OWNER            (0x02)
+#define CANP_SIDL_OWNER                 (1)
+#define CANP_SIDL_MASK_OWNER            (1 << CANP_SIDL_OWNER)
 #define CANP_SIDL_MASK_AUX              (0x01)
 
 // .eid8 
@@ -77,6 +78,12 @@
 
 // Macros for request types
 // -----------------------------------------------------------------------------
+#if MCP251X_RTR > CANP_SIDL_OWNER
+#  define CANP_IS_RESPONSE(owner_bits, rtr_bits) ((owner_bits) ^ ((rtr_bits) >> (MCP251X_RTR-CANP_SIDL_OWNER)))
+#else
+#  error
+#endif
+
 #define CANP_REQUEST_GET(request_type)  (request_type != 0)
 #define CANP_REQUEST_PUT(request_type)  (request_type == 0)
 

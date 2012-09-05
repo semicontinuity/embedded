@@ -1,15 +1,15 @@
 // =============================================================================
 // CAN service emulator.
 // Handles CAN communications (services incoming requests).
-// Extends comm_service.
+// Extends kernel.
 // =============================================================================
 
 #include <avr/io.h>
 #include <stdint.h>
 
 #include "can_emu_service.h"
-#include "comm_service.h"
-#include "comm_service__handler.h"
+#include "kernel.h"
+#include "kernel__rx__handler.h"
 #include "cpu/avr/asm.h"
 
 

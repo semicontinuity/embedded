@@ -1,8 +1,9 @@
 // Firmware
 #include "main.c"
-#include "comm_service.c"
+#include "kernel.c"
 #include CAN_SERVICE_C
 #include "comm_service__descriptor_memory.c"
+#include "comm_service__handler.c"
 
 // BSP
 #include CAN_C

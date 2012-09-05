@@ -9,8 +9,8 @@ CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)
 
 
-CAN_EMU = 1
-
+CAN_EMU = 0
+CDEFS += -Wl,--section-start=.kernel=0x00000A00 -Wl,--section-start=.kernel.data=0x00800100 -Wl,--section-start=.data=0x0080010d
 
 # Configuration
 PROPS  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
@@ -43,9 +43,10 @@ CDEFS += -DINLINE=
 
 # Firmware
 SRC += main.c
-SRC += comm_service.c
+SRC += kernel.c
 SRC += $(CAN_SERVICE_C)
 SRC += comm_service__descriptor_memory.c
+SRC += comm_service__handler.c
 
 # BSP
 SRC += buttons_scanner.c

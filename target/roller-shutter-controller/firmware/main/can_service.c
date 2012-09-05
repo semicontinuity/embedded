@@ -14,7 +14,16 @@
 #include "can_service.h"
 
 
+/**
+ *  Handler for the interrupt from MCP2515 CAN controller (falling edge).
+ */
+static inline void can_service__rx__run(void) {
+    // Interrupt flag for INT1 cleared automatically when RX buffer is read.
+    kernel__rx__handle(can__read_frame((uint8_t*)&comm_service__packet));
+}
 
+
+INLINE void int1__run(void) __attribute__((section(".kernel\\")));
 INLINE void int1__run(void) {
     can_service__rx__run();
 }

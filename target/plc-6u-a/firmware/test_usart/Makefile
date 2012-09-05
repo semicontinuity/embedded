@@ -1,4 +1,4 @@
-TARGET = can_router
+TARGET = test_usart
 MCU = atmega168
 OPT = 3 -mcall-prologues
 ROOT = ../../../..
@@ -15,7 +15,7 @@ CDEFS += $(CONF)
 
 
 # Compile all sources in one compilation util (because of the absent link-time optimizations)
-WHOLE_PROGRAM=1
+WHOLE_PROGRAM=0
 
 ifeq ($(WHOLE_PROGRAM),1)
 
@@ -27,21 +27,9 @@ else
 CDEFS += -DINLINE=
 
 # Firmware
-SRC += can_service.c
-SRC += can_tx_q.c
-SRC += usart_tx.c
-SRC += usart_tx_q.c
-SRC += can_tx.c
 SRC += usart_rx.c
-SRC += router.c
-SRC += server.c
 SRC += main.c
 
-# BSP
-SRC += can.c
-
-# Library
-SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
 
 endif
 

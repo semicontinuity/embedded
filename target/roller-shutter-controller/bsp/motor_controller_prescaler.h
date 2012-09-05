@@ -8,6 +8,7 @@
 #include <stdint.h>
 #include "motor_controller.h"
 
+extern uint8_t motor_controller__prescaler__value;
 extern uint8_t motor_controller__prescaler__time;
 
 
@@ -16,7 +17,7 @@ extern uint8_t motor_controller__prescaler__time;
  */
 inline static void motor_controller__prescaler__run(void) {
     if (--motor_controller__prescaler__time == 0) {
-        motor_controller__prescaler__time = MOTOR_CONTROLLER__PRESCALER;
+        motor_controller__prescaler__time = motor_controller__prescaler__value;
         motor_controller__run();
     }
 }

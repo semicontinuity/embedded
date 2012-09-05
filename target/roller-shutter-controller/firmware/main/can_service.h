@@ -19,8 +19,8 @@
 
 #include "cpu/avr/int1.h"
 
-#include "comm_service.h"
-#include "comm_service__handler.h"
+#include "kernel.h"
+#include "kernel__rx__handler.h"
 
 #include "can.h"
 #include "can_selector.h"
@@ -53,15 +53,6 @@ inline static void comm_service__rx__start(void) {
     can__start();
 
     can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)|_BV(MCP251X_RX1IE)));
-}
-
-
-/**
- *  Handler for the interrupt from MCP2515 CAN controller (falling edge).
- */
-static inline void can_service__rx__run(void) {
-    // Interrupt flag for INT1 cleared automatically when RX buffer is read.
-    comm_service__rx__put(can__read_frame((uint8_t*)&comm_service__packet));
 }
 
 

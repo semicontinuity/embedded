@@ -3,15 +3,14 @@
 
 #include <string.h>
 #include <avr/pgmspace.h>
-#include "comm_service.h"
+#include "kernel.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 
 
 extern const uint8_t comm_sevice__descriptor_memory__value[] PROGMEM;
 
-inline static void comm_service__descriptor_memory__handle(const uint8_t request_type) {
-    if (CANP_REQUEST_GET(request_type)) {
-        // Handle GET request
+inline static void comm_service__descriptor_memory__handle(const uint8_t is_get) {
+    if (is_get) {
         uint8_t slot = CANP_SLOT_BITS(comm_service__packet.header.id);
         uint8_t length = CANP_DATA_LENGTH_BITS(comm_service__packet.header);
         // Do not check SLOT
