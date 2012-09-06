@@ -16,6 +16,6 @@
 
 // Library
 #ifndef CAN_EMU
-#  include "cpu/avr/int1.c"
+#  include "cpu/avr/int0.c"
 #endif
 #include "cpu/avr/drivers/net/can/mcp251x/operations.c"

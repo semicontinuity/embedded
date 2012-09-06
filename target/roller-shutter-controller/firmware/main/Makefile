@@ -10,7 +10,8 @@ vpath %.c $(BSP) $(ROOT)
 
 
 CAN_EMU = 0
-CDEFS += -Wl,--section-start=.kernel=0x00000A00 -Wl,--section-start=.kernel.data=0x00800100 -Wl,--section-start=.data=0x0080010d
+CDEFS += -Wl,--section-start=.kernel=0x00000A00 -Wl,--section-start=.noinit=0x008002F3 -Wl,-Tdata,0x00800100  -Wl,--defsym=__stack=0x02f2
+# -Wl,--defsym=__stack=0x008002f2
 
 # Configuration
 PROPS  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
@@ -59,7 +60,7 @@ SRC += system_timer.c
 # Library
 ifeq ($(CAN_EMU),1)
 else
-SRC += cpu/avr/int1.c
+SRC += cpu/avr/int0.c
 endif
 SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
 

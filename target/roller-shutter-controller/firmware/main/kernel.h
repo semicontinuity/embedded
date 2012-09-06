@@ -14,7 +14,7 @@
 #include <stdint.h>
 #include "cpu/avr/drivers/net/can/mcp251x/struct.h"
 
-extern volatile mcp251x_message_buffer comm_service__packet __attribute__((section(".kernel.data")));
+extern volatile mcp251x_message_buffer comm_service__packet __attribute__((section(".noinit")));
 
 extern void comm_service__send_response(const uint8_t count, const uint8_t* data) __attribute__((section(".kernel")));
 

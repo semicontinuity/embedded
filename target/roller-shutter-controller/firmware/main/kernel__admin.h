@@ -91,7 +91,8 @@ static inline void kernel__admin__handle(void) {
         }
         break;
     case CANP_REPORT__STOP:
-        MCUSR = 0x0F;
+        MCUCR = 0x01;
+        MCUCR = 0x02;
     case CANP_REPORT__RESET:
         // Executed in context of the interrupt, so interrupts are disabled.
         asm("rjmp __vectors");

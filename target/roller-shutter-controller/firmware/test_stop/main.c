@@ -8,16 +8,36 @@
 // Entry point
 // =============================================================================
 int main(void) {
-    if (MCUSR == 0x0F) {
-        // Indicate STOP mode
-        motor__init();
-        motor__up__on();
+    motor__up__init();
+    motor__down__init();
+
+//    motor__down__on();
+
+//    if (MCUCR == 0x00) {
+//        motor__up__on();
+//    }
+/*
+    MCUCR = 0x01;
+    MCUCR = 0x02;
+
+    if (MCUCR == 0x02) {
         motor__down__on();
     }
+*/
+
+
+    if (MCUCR == 0x02) {
+        // Indicate STOP mode
+        motor__up__on();
+    }
     else {
+        //motor__up__on();
+
         // Request STOP mode
-        MCUSR = 0x0F;
+        MCUCR = 0x01;
+        MCUCR = 0x02;
         asm("rjmp __vectors");
     }
+
     return 0;
 }

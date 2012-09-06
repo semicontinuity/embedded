@@ -23,7 +23,6 @@ static inline void can_service__rx__run(void) {
 }
 
 
-INLINE void int1__run(void) __attribute__((section(".kernel\\")));
-INLINE void int1__run(void) {
+INLINE void int0__run(void) {
     can_service__rx__run();
 }

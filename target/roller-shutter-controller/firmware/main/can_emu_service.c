@@ -21,17 +21,17 @@ inline static void can_emu_service__on_packet_transferred(void) {
     if (comm_service__packet.header.id.eid8 == ((CANP_DEVICE_NET<<5) | CANP_DEVICE_ADDR)) {
         if (CANP_AUX_BITS(comm_service__packet.header.id)) {
             // SYSTEM
-            comm_service__rx__put((slot & 0x80) ? CANP_FILTER__ADMIN : CANP_FILTER__DESCRIPTOR_MEMORY);
+            kernel__rx__handle((slot & 0x80) ? CANP_FILTER__ADMIN : CANP_FILTER__DESCRIPTOR_MEMORY);
         }
         else {
             // USER
-            comm_service__rx__put(CANP_FILTER__USER);
+            kernel__rx__handle(CANP_FILTER__USER);
         }        
     }
     else {
         if (comm_service__packet.header.id.eid8 == ((CANP_MCAST_NET<<5) | CANP_MCAST_ADDR)) {
             if (!CANP_AUX_BITS(comm_service__packet.header.id)) {
-                comm_service__rx__put(CANP_FILTER__USER_MCAST);
+                kernel__rx__handle(CANP_FILTER__USER_MCAST);
             }
         }
     }

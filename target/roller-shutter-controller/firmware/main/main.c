@@ -123,7 +123,7 @@ inline static void kernel__start(void) {
 // TODO: investigate brown-out behaviour (are ports re-initialized?)
 // =============================================================================
 int main(void) {
-    if (MCUSR == 0x0F) {
+    if (MCUCR == 0x02) {
         application__stop();
     }
     else {

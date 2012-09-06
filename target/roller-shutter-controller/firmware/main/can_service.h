@@ -14,33 +14,21 @@
 #ifndef __CAN_SERVICE_H
 #define __CAN_SERVICE_H
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
-#include "cpu/avr/int1.h"
-
-#include "kernel.h"
+#include "cpu/avr/int0.h"
 #include "kernel__rx__handler.h"
 
 #include "can.h"
 #include "can_selector.h"
 
-#include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
 #include "cpu/avr/drivers/net/can/mcp251x/registers.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
-#include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
-
-
-#include "buttons_scanner.h"
-#include "motor_controller.h"
-
 
 /**
  * Implements the function from comm_service__rx.
  */ 
 inline static void comm_service__rx__init(void) {
-    int1__init();
+    int0__init();
     can__init();
 }
 
@@ -49,9 +37,10 @@ inline static void comm_service__rx__init(void) {
  * Implements the function from comm_service__rx.
  */ 
 inline static void comm_service__rx__start(void) {
-    int1__start();
+    int0__start();
     can__start();
 
+    // TODO: abstract
     can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)|_BV(MCP251X_RX1IE)));
 }
 
