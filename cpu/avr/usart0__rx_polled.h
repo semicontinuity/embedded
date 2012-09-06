@@ -24,7 +24,7 @@ inline uint8_t usart0__in__read(void) {
     defined(__AVR_ATmega168__) 
     loop_until_bit_is_set(UCSR0A, RXC0);
     return UDR0;
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     loop_until_bit_is_set(UCSRA, RXC);
     return UDR;
 #else

@@ -40,7 +40,7 @@ inline void usart__rate__set(uint32_t rate) {
     UBRR0L = (uint8_t)(UBRR_VALUE(rate));
 }
 
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
 
 inline void usart__rate__set(uint32_t rate) {
     UBRRH = (uint8_t)(UBRR_VALUE(rate)>>8);
@@ -72,7 +72,7 @@ inline void usart__init(void) {
 //  UCSZ=011	8 bit
 //  UCPOL0=0	Polarity: Rising, 0 for Asynch.
     UCSR0C = (0<<UMSEL01)|(0<<UMSEL00)|(0<<UPM01)|(0<<UPM00)|(0<<USBS0)|(3<<UCSZ00)|(0<<UCPOL0);
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     UCSRC = (1<<URSEL)|(0<<UMSEL)|(0<<UPM1)|(0<<UPM0)|(0<<USBS)|(3<<UCSZ0)|(0<<UCPOL);
 #else
     #error "Unsupported MCU"
@@ -88,7 +88,7 @@ inline void usart__in__enabled__set(void) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
     defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
     set_bit_in_reg(UCSR0B, RXEN0);
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     set_bit_in_reg(UCSRB, RXEN);
 #else
     #error "Unsupported MCU"
@@ -104,7 +104,7 @@ inline char usart__in__peek(void) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
     defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
     return UDR0;
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     return UDR;
 #else
     #error "Unsupported MCU"
@@ -120,7 +120,7 @@ inline void usart__in__complete_interrupt_enabled__set(void) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
     defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
     set_bit_in_reg(UCSR0B, RXCIE0);
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     set_bit_in_reg(UCSRB, RXCIE);
 #else
     #error "Unsupported MCU"
@@ -136,7 +136,7 @@ inline void usart__out__enabled__set(void) {
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
     defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
     set_bit_in_reg(UCSR0B, TXEN0);
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     set_bit_in_reg(UCSRB, TXEN);
 #else
     #error "Unsupported MCU"
@@ -153,7 +153,7 @@ inline void usart__out__write(char c) {
     defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
     loop_until_bit_is_set(UCSR0A, UDRE0);
     UDR0 = c;
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     loop_until_bit_is_set(UCSRA, UDRE);
     UDR = c;
 #else
