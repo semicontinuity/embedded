@@ -26,18 +26,22 @@
 // Controller.
 // =============================================================================
 
+uint8_t  controller__enabled;
+
 inline static void controller__run(void) {
-    if (buttons_scanner__button1__is_changed()) {
-        if (buttons_scanner__button1__is_released())
-            motor_controller__stop();
-        else
-            motor_controller__move_up();
-    }
-    if (buttons_scanner__button2__is_changed()) {
-        if (buttons_scanner__button2__is_released())
-            motor_controller__stop();
-        else
-            motor_controller__move_down();
+    if (controller__enabled) {
+        if (buttons_scanner__button1__is_changed()) {
+            if (buttons_scanner__button1__is_released())
+                motor_controller__stop();
+            else
+                motor_controller__move_up();
+        }
+        if (buttons_scanner__button2__is_changed()) {
+            if (buttons_scanner__button2__is_released())
+                motor_controller__stop();
+            else
+                motor_controller__move_down();
+        }
     }
 }
 
@@ -85,10 +89,13 @@ INLINE void system_timer__on_system_tick(void) {
 // Kernel and application
 // =============================================================================
 
+uint8_t  EEMEM  ee__controller__enabled                 = CONTROLLER__ENABLED;
 uint8_t  EEMEM  ee__motor_controller__prescaler__value  = MOTOR_CONTROLLER__PRESCALER;
 
 inline static void application__init(void) {
-    motor_controller__prescaler__value = eeprom_read_byte(&ee__motor_controller__prescaler__value);
+    controller__enabled                 = eeprom_read_byte(&ee__controller__enabled);
+    motor_controller__prescaler__value  = eeprom_read_byte(&ee__motor_controller__prescaler__value);
+
     buttons__init();
     motor__init();
     unused1__init();
