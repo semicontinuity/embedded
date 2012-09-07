@@ -84,18 +84,6 @@ _delay_ms(10);
     debug__print_byte_as_hex(instruction);
 _delay_ms(10);
 
-/*
-    debug__print_byte_as_hex(sizeof(struct mcp251x_message_id));
-    debug__putc(13);
-    debug__putc(10);
-
-    debug__print_byte_as_hex(sizeof(struct mcp251x_frame_header));
-    debug__putc(13);
-    debug__putc(10);
-*/
-//    debug__putc(13);
-//    debug__putc(10);
-
     debug__putc('\n');
     can_selector__run(mcp2515_read_rx_buffer(buffer, instruction, count));
 

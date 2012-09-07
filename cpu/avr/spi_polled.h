@@ -48,7 +48,6 @@ inline void spi__write_bytes(const uint8_t* buffer, uint8_t count) {
     }
 }
 
-
 // count > 0 
 inline static const uint8_t * PROGMEM spi__write_bytes_P(const uint8_t * PROGMEM buffer, uint8_t count) {
     do {

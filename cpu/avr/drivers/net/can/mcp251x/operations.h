@@ -14,26 +14,6 @@
 #endif
 
 
-// Building blocks
-// -----------------------------------------------------------------------------
-inline static void mcp251x__send_byte(const uint8_t b) {
-    spi__write(b);
-}
-
-inline static void mcp251x__send_instruction(const uint8_t instruction) {
-    mcp251x__send_byte(instruction);
-}
-
-// count > 0 
-inline static const uint8_t* mcp251x__send_bytes(const uint8_t* buffer, uint8_t count) {
-    do {
-        spi__write(*buffer++);
-    }
-    while (--count > 0);
-    return buffer;
-}
-
-
 void mcp251x_reset (void) MCP251X_attrs;
 
 void mcp251x_write (const uint8_t address) MCP251X_attrs;

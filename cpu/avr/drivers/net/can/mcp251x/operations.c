@@ -23,14 +23,14 @@ void mcp251x_write(const uint8_t address) {
 void mcp251x_write_one_byte(const uint8_t address, const uint8_t data) {
     spi__write(MCP251X_INSTRUCTION_WRITE);
     spi__write(address);
-    mcp251x__send_byte(data);
+    spi__write(data);
 }
 
 
 void mcp251x_write_bytes(const uint8_t* buffer, const uint8_t address, uint8_t count) {
     spi__write(MCP251X_INSTRUCTION_WRITE);
     spi__write(address);
-    mcp251x__send_bytes(buffer, count);
+    spi__write_bytes(buffer, count);
 }
 
 
@@ -95,10 +95,7 @@ uint8_t* mcp2515_read_rx_buffer(uint8_t* buffer, const uint8_t instruction, uint
  */
 void mcp2515_load_tx_buffer(const uint8_t* buffer, const uint8_t instruction, uint8_t count) {
     spi__write(instruction);
-    do {
-        spi__write(*buffer++);
-    }
-    while (--count > 0);
+    spi__write_bytes(buffer, count);
 }
 
 
@@ -121,7 +118,7 @@ void mcp2515_request_to_send(const uint8_t instruction) {
  */
 uint8_t mcp2515_read_status(void) {
     spi__write(MCP251X_INSTRUCTION_READ_STATUS);
-    return spi__exchange(0);
+    return spi__read();
 }
 
 
@@ -131,6 +128,6 @@ uint8_t mcp2515_read_status(void) {
  */
 uint8_t mcp2515_rx_status(void) {
     spi__write(MCP251X_INSTRUCTION_RX_STATUS);
-    return spi__exchange(0);
+    return spi__read();
 }
 

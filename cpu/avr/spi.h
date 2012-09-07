@@ -25,7 +25,7 @@
 
 
 // There are the following 8 modes:
-//
+// (add 2x modes)
 #define SPI_CLKDIV_4    (                    0)
 #define SPI_CLKDIV_16   (            _BV(SPR0))
 #define SPI_CLKDIV_64   (_BV(SPR1)            )
@@ -39,7 +39,7 @@
 // - MSTR=1: Master. TODO: check that SS is not an input
 // - CPOL=0: SCK is low when idle 
 // - CPHA=0: Sample on leading edge, setup on trailing edge
-static inline void spi__init(const uint8_t speed) {
+static inline void spi__init(const uint8_t clock_divisor) {
     // MOSI MUST be configured as output for proper SPI MASTER operation - pin not configured as output automatically.
     USE_AS_OUTPUT(MOSI);
 
@@ -51,8 +51,16 @@ static inline void spi__init(const uint8_t speed) {
     OUT_1(SS);
 
     // MOSI, SCK are automatically configured as outputs 
-    SPCR=_BV(SPE)|_BV(MSTR)|speed;
+    SPCR=_BV(SPE)|_BV(MSTR)|clock_divisor;
 }
+
+static inline void spi__double_speed__set(const uint8_t is2x) {
+    if (is2x)
+        SPSR |=_BV(SPI2X);
+    else
+        SPSR &=~_BV(SPI2X);
+}
+
 
 
 #else

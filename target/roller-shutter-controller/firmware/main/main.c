@@ -21,6 +21,7 @@
 #include "comm_service__buttons_scanner.h"
 #include "comm_service__motor_controller.h"
 
+#include <avr/io.h>
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/util/debug.h"
 
@@ -116,7 +117,8 @@ inline static void application__stop(void) {
 }
 
 inline static void kernel__init(void) {
-    spi__init(SPI_CLKDIV_16);
+    spi__init(SPI_CLKDIV_4);
+    spi__double_speed__set(1);
     can_selector__init();
     mcp251x__init();
 
@@ -129,14 +131,24 @@ inline static void kernel__start(void) {
 }
 
 // =============================================================================
-// Entry point
+// Entry point.
+//
+// Besides ordinary RESET sources, can be invoked directly by admin handler.
+// In that case, the interrupts are disabled, so they need to be enabled.
 // TODO: investigate brown-out behaviour (are ports re-initialized?)
 // NOTE: possible optimization:
 // Ext I/O registers (e.g. USART) accessed with lds/sts.
 // =============================================================================
 int main(void) {
+    // TODO abstract the logic
     if (MCUCR == 0x02) {
         application__stop();
+        debug__putc(10);  _delay_ms(5);
+        debug__putc('S'); _delay_ms(5);
+        debug__putc('T'); _delay_ms(5);
+        debug__putc('O'); _delay_ms(5);
+        debug__putc('P'); _delay_ms(5);
+        debug__putc(10);  _delay_ms(5);
     }
     else {
         kernel__init();
@@ -148,9 +160,9 @@ int main(void) {
 
         application__init();
         application__start();
-
-        sei();
     }
+
+    sei();
 
     for(;;);
     return 0;
