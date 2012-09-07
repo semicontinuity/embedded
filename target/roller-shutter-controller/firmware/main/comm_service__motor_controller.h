@@ -9,11 +9,11 @@
 
 inline static void comm_service__motor_controller__motor_mode__handle(const uint8_t is_get) {
     if (is_get) {
-        comm_service__send_response(sizeof(motor_controller__motor_mode), (const uint8_t*)&motor_controller__motor_mode);
+        kernel__send_response(sizeof(motor_controller__motor_mode), (const uint8_t*)&motor_controller__motor_mode);
     }
     else {
         // Handle PUT request
-        motor_controller__motor_mode__set_from_raw_ptr(&comm_service__packet.data);
+        motor_controller__motor_mode__set_from_raw_ptr(&kernel__frame.data);
     }
 }
 
@@ -27,23 +27,23 @@ inline static void comm_service__motor_controller__motor_mode__broadcast(void) {
 
 inline static void comm_service__motor_controller__control__handle(const uint8_t is_get) {
     if (is_get) {
-        comm_service__send_response(sizeof(motor_controller__control), (const uint8_t*)&motor_controller__control);
+        kernel__send_response(sizeof(motor_controller__control), (const uint8_t*)&motor_controller__control);
     }
     else {
         // Handle PUT request
-        motor_controller__control__set_from_raw_ptr(&comm_service__packet.data);
+        motor_controller__control__set_from_raw_ptr(&kernel__frame.data);
     }
 }
 
 
 inline static void comm_service__motor_controller__status__handle(const uint8_t is_get) {
     if (is_get) {
-        comm_service__send_response(sizeof(motor_controller__status), (const uint8_t*)&motor_controller__status);
+        kernel__send_response(sizeof(motor_controller__status), (const uint8_t*)&motor_controller__status);
     }
     else {
         // Handle PUT request
         // Allow setting of status for administrative purposes
-        motor_controller__status__set_from_raw_ptr(&comm_service__packet.data);
+        motor_controller__status__set_from_raw_ptr(&kernel__frame.data);
     }
 }
 

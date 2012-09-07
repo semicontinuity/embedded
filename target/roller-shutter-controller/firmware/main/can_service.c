@@ -13,8 +13,6 @@
 // =============================================================================
 #include "can_service.h"
 
-#include "cpu/avr/usart0.h"
-#include "cpu/avr/util/debug.h"
 #include <util/delay.h>
 
 /**
@@ -22,13 +20,9 @@
  */
 static inline void can_service__rx__run(void) {
     // Interrupt flag cleared automatically when proper RX buffer is read.
-    uint8_t z = can__read_frame((uint8_t*)&comm_service__packet);
-    debug__print_byte_as_hex(z);
-
-    kernel__rx__handle(z);
+    kernel__rx__handle(can__read_frame((uint8_t*)&kernel__frame));
     // Clear all interrupts
     //can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTF, 0));
-    debug__putc('\n');
 }
 
 

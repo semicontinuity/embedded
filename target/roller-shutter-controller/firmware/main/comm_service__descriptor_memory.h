@@ -12,13 +12,13 @@ extern const uint8_t comm_sevice__descriptor_memory__value[] PROGMEM;
 
 inline static void comm_service__descriptor_memory__handle(const uint8_t is_get) {
     if (is_get) {
-        uint8_t slot = CANP_SLOT_BITS(comm_service__packet.header.id);
-        uint8_t length = CANP_DATA_LENGTH_BITS(comm_service__packet.header);
+        uint8_t slot = CANP_SLOT_BITS(kernel__frame.header.id);
+        uint8_t length = CANP_DATA_LENGTH_BITS(kernel__frame.header);
         // Do not check SLOT
 
         // Same as memcpy_P, but inlined and produces less stupid code. Still some stuped register moves, but does not use r28
-        memory__copy_P((void*)comm_service__packet.data, (const void* PROGMEM)comm_sevice__descriptor_memory__value + (slot << 3), length);
-        comm_service__send_response(length, (const uint8_t*)&comm_service__packet.data);
+        memory__copy_P((void*)kernel__frame.data, (const void* PROGMEM)comm_sevice__descriptor_memory__value + (slot << 3), length);
+        kernel__send_response(length, (const uint8_t*)&kernel__frame.data);
     }
     // Ignore PUT requests
 }

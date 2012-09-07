@@ -22,8 +22,6 @@
 #include "comm_service__motor_controller.h"
 
 #include <avr/io.h>
-#include "cpu/avr/usart0.h"
-#include "cpu/avr/util/debug.h"
 
 
 // =============================================================================
@@ -143,20 +141,10 @@ int main(void) {
     // TODO abstract the logic
     if (MCUCR == 0x02) {
         application__stop();
-        debug__putc(10);  _delay_ms(5);
-        debug__putc('S'); _delay_ms(5);
-        debug__putc('T'); _delay_ms(5);
-        debug__putc('O'); _delay_ms(5);
-        debug__putc('P'); _delay_ms(5);
-        debug__putc(10);  _delay_ms(5);
     }
     else {
         kernel__init();
         kernel__start();
-
-        usart__rate__set(USART_BAUD_RATE);
-        usart__init();
-        usart__out__enabled__set();
 
         application__init();
         application__start();

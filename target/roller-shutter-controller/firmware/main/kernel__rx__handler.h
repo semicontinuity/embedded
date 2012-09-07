@@ -21,8 +21,8 @@
 static inline void kernel__rx__handle(const uint8_t filter) {
     // use CANP_IS_RESPONSE
     uint8_t supported = 0;
-    const uint8_t owner_bits = CANP_OWNER_BITS(comm_service__packet.header.id);
-    const uint8_t rtr_bits = CANP_RTR_BITS(comm_service__packet.header);
+    const uint8_t owner_bits = CANP_OWNER_BITS(kernel__frame.header.id);
+    const uint8_t rtr_bits = CANP_RTR_BITS(kernel__frame.header);
 
     if (rtr_bits) {
         if (owner_bits) supported = 1;

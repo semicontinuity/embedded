@@ -19,5 +19,3 @@
 #  include "cpu/avr/int0.c"
 #endif
 #include "cpu/avr/drivers/net/can/mcp251x/operations.c"
-
-#include "cpu/avr/util/debug.c"

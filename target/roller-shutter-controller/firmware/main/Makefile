@@ -62,7 +62,6 @@ ifneq ($(CAN_EMU),1)
 SRC += cpu/avr/int0.c
 endif
 SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
-SRC += cpu/avr/util/debug.c
 endif
 
 

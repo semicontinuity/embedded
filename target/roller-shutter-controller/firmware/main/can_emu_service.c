@@ -17,9 +17,9 @@
  * Emulate MCP2515 masks and filters.
  */
 inline static void can_emu_service__on_packet_transferred(void) {
-    const uint8_t slot = CANP_SLOT_BITS(comm_service__packet.header.id);
-    if (comm_service__packet.header.id.eid8 == ((CANP_DEVICE_NET<<5) | CANP_DEVICE_ADDR)) {
-        if (CANP_AUX_BITS(comm_service__packet.header.id)) {
+    const uint8_t slot = CANP_SLOT_BITS(kernel__frame.header.id);
+    if (kernel__frame.header.id.eid8 == ((CANP_DEVICE_NET<<5) | CANP_DEVICE_ADDR)) {
+        if (CANP_AUX_BITS(kernel__frame.header.id)) {
             // SYSTEM
             kernel__rx__handle((slot & 0x80) ? CANP_FILTER__ADMIN : CANP_FILTER__DESCRIPTOR_MEMORY);
         }
@@ -29,8 +29,8 @@ inline static void can_emu_service__on_packet_transferred(void) {
         }        
     }
     else {
-        if (comm_service__packet.header.id.eid8 == ((CANP_MCAST_NET<<5) | CANP_MCAST_ADDR)) {
-            if (!CANP_AUX_BITS(comm_service__packet.header.id)) {
+        if (kernel__frame.header.id.eid8 == ((CANP_MCAST_NET<<5) | CANP_MCAST_ADDR)) {
+            if (!CANP_AUX_BITS(kernel__frame.header.id)) {
                 kernel__rx__handle(CANP_FILTER__USER_MCAST);
             }
         }

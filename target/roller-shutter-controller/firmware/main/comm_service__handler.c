@@ -25,7 +25,7 @@ void comm_service__handler__handle(const uint8_t filter, const uint8_t is_get) {
         break;
     case CANP_FILTER__USER:
     case CANP_FILTER__USER_MCAST:
-        switch (CANP_SLOT_BITS(comm_service__packet.header.id)) {
+        switch (CANP_SLOT_BITS(kernel__frame.header.id)) {
         case CANP_REPORT__MOTOR_CONTROLLER__MOTOR_MODE:
             comm_service__motor_controller__motor_mode__handle(is_get);
             break;

@@ -9,7 +9,7 @@
 
 inline static void comm_service__buttons_scanner__status__handle(const uint8_t is_get) {
     if (is_get) {
-        comm_service__send_response(sizeof(buttons_scanner__status), (const uint8_t*)&buttons_scanner__status);
+        kernel__send_response(sizeof(buttons_scanner__status), (const uint8_t*)&buttons_scanner__status);
     }
     // Ignore PUT requests
 }

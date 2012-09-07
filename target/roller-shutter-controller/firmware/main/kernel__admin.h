@@ -26,32 +26,32 @@
  * (because queries contain extra parameters that must be transferred in the packet payload)
  */
 static inline void kernel__admin__handle(void) {
-    switch (CANP_SLOT_BITS(comm_service__packet.header.id)) {
+    switch (CANP_SLOT_BITS(kernel__frame.header.id)) {
     case CANP_REPORT__MEMORY_READ:
         // Read 32 bits of memory, given the address in data[0..3]
-        if (comm_service__packet.data[3] == 0 && comm_service__packet.data[2] == 0) {
-            const uint8_t* ptr = (const uint8_t*)(comm_service__packet.data[0] | (comm_service__packet.data[1] << 8));
-            comm_service__packet.data[4] = ptr[0];
-            comm_service__packet.data[5] = ptr[1];
-            comm_service__packet.data[6] = ptr[2];
-            comm_service__packet.data[7] = ptr[3];
-            comm_service__send_response(8, (const uint8_t*)&comm_service__packet.data);
+        if (kernel__frame.data[3] == 0 && kernel__frame.data[2] == 0) {
+            const uint8_t* ptr = (const uint8_t*)(kernel__frame.data[0] | (kernel__frame.data[1] << 8));
+            kernel__frame.data[4] = ptr[0];
+            kernel__frame.data[5] = ptr[1];
+            kernel__frame.data[6] = ptr[2];
+            kernel__frame.data[7] = ptr[3];
+            kernel__send_response(8, (const uint8_t*)&kernel__frame.data);
         }
         break;
     case CANP_REPORT__EEPROM_READ:
         // Read 4 bytes of EEPROM memory, given the address in data[0..3]
         {
-            uint8_t length = comm_service__packet.header.dlc;
-            if (length == 4 && comm_service__packet.data[3] == 0 && comm_service__packet.data[2] == 0) {
-                uint8_t* ptr = (uint8_t*)(comm_service__packet.data[0] | (comm_service__packet.data[1] << 8));
-                comm_service__packet.data[4] = eeprom__read_byte(ptr);
+            uint8_t length = kernel__frame.header.dlc;
+            if (length == 4 && kernel__frame.data[3] == 0 && kernel__frame.data[2] == 0) {
+                uint8_t* ptr = (uint8_t*)(kernel__frame.data[0] | (kernel__frame.data[1] << 8));
+                kernel__frame.data[4] = eeprom__read_byte(ptr);
                 ptr += 1;
-                comm_service__packet.data[5] = eeprom__read_byte(ptr);
+                kernel__frame.data[5] = eeprom__read_byte(ptr);
                 ptr += 1;
-                comm_service__packet.data[6] = eeprom__read_byte(ptr);
+                kernel__frame.data[6] = eeprom__read_byte(ptr);
                 ptr += 1;
-                comm_service__packet.data[7] = eeprom__read_byte(ptr);
-                comm_service__send_response(8, (const uint8_t*)&comm_service__packet.data);
+                kernel__frame.data[7] = eeprom__read_byte(ptr);
+                kernel__send_response(8, (const uint8_t*)&kernel__frame.data);
             }
         }
         break;
@@ -60,10 +60,10 @@ static inline void kernel__admin__handle(void) {
         // Can take a long time to disrupt the device operation,
         // so write EEPROM only when the device is not performing any time-critical tasks.
         {
-            uint8_t length = comm_service__packet.header.dlc;
-            if ((length -= 4) > 0 && comm_service__packet.data[3] == 0 && comm_service__packet.data[2] == 0) {
-                uint8_t *r_ptr = (uint8_t*)(&comm_service__packet.data[4]);
-                uint8_t *w_ptr = (uint8_t*)(comm_service__packet.data[0] | (comm_service__packet.data[1] << 8));
+            uint8_t length = kernel__frame.header.dlc;
+            if ((length -= 4) > 0 && kernel__frame.data[3] == 0 && kernel__frame.data[2] == 0) {
+                uint8_t *r_ptr = (uint8_t*)(&kernel__frame.data[4]);
+                uint8_t *w_ptr = (uint8_t*)(kernel__frame.data[0] | (kernel__frame.data[1] << 8));
                 do {
                     eeprom__write_byte(w_ptr++, *r_ptr++);
                 }
@@ -74,20 +74,20 @@ static inline void kernel__admin__handle(void) {
     case CANP_REPORT__CAN_READ:
         // DLC ignored.
         // Read 8 bits of memory, given the address in data[0]
-        if (comm_service__packet.data[3] == 0 && comm_service__packet.data[2] == 0 && comm_service__packet.data[1] == 0) {
-            can_selector__run(comm_service__packet.data[4] = mcp251x_read_byte(comm_service__packet.data[0]));
-            comm_service__send_response(5, (const uint8_t*)&comm_service__packet.data);
+        if (kernel__frame.data[3] == 0 && kernel__frame.data[2] == 0 && kernel__frame.data[1] == 0) {
+            can_selector__run(kernel__frame.data[4] = mcp251x_read_byte(kernel__frame.data[0]));
+            kernel__send_response(5, (const uint8_t*)&kernel__frame.data);
         }
         break;
     case CANP_REPORT__FLASH_READ:
         // Read 32 bits of memory, given the address in data[0..3]
-        if (comm_service__packet.data[3] == 0 && comm_service__packet.data[2] == 0) {
-            const uint8_t* PROGMEM ptr = (const uint8_t* PROGMEM)(comm_service__packet.data[0] | (comm_service__packet.data[1] << 8));
-            comm_service__packet.data[4] = pgm_read_byte(ptr + 0);
-            comm_service__packet.data[5] = pgm_read_byte(ptr + 1);
-            comm_service__packet.data[6] = pgm_read_byte(ptr + 2);
-            comm_service__packet.data[7] = pgm_read_byte(ptr + 3);
-            comm_service__send_response(8, (const uint8_t*)&comm_service__packet.data);
+        if (kernel__frame.data[3] == 0 && kernel__frame.data[2] == 0) {
+            const uint8_t* PROGMEM ptr = (const uint8_t* PROGMEM)(kernel__frame.data[0] | (kernel__frame.data[1] << 8));
+            kernel__frame.data[4] = pgm_read_byte(ptr + 0);
+            kernel__frame.data[5] = pgm_read_byte(ptr + 1);
+            kernel__frame.data[6] = pgm_read_byte(ptr + 2);
+            kernel__frame.data[7] = pgm_read_byte(ptr + 3);
+            kernel__send_response(8, (const uint8_t*)&kernel__frame.data);
         }
         break;
     case CANP_REPORT__STOP:
