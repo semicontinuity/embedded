@@ -21,13 +21,15 @@ static void can_service__handle_rx(void) {
 }
 
 
+// invoked on ANY change
 CAN_CONTROLLER_INTERRUPT {
-    // interrupt flag for INT0 cleared automatically
-    // The only source of interrupt is from RX buffer 0
-    can_service__handle_rx();
+    if (bit_is_clear(PINC, 3)) {
+        // interrupt flag for INT0 cleared automatically(?)
+        // The only source of interrupt is from RX buffer 0
+        can_service__handle_rx();
 
-    // Clear all interrupts
-    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTF, 0));
-
+        // Clear all interrupts
+        can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTF, 0));
+    }
     RETI();
 }

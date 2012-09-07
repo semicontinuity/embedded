@@ -10,13 +10,8 @@
 //
 // When the data are uploaded, the controller is switched into Normal Mode.
 //
-// The following constants must be defined:
-//
-// - CANP_DEVICE_NET	network id
-// - CANP_DEVICE_ADDR	address in the network
-//
-// See conf.h for the description of constants
-// that must be defined for the configuration registers.
+// This version of CAN router works only as USART<->CAN bridge.
+// All extended frames are received and forwarded to USART.
 // =============================================================================
 
 #include "can.h"
@@ -28,8 +23,8 @@
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 
 // Filters and mask for RX Buffer 0
-#define RXM0	CANP_MASK	(0, 0, 0, CANP_COMPARE_HOST_NET,	CANP_COMPARE_HOST_ADDR,	0, 0, 0)
-#define RXF0	CANP_FILT_EXT	(0, 0, 0, CANP_DEVICE_NET,		CANP_DEVICE_ADDR,	0, 0, 0) /* All EXT frames addressed to device */
+#define RXM0	CANP_MASK	(0, 0, 0, 0, 0,	0, 0, 0) /* Don't compare */
+#define RXF0	CANP_FILT_EXT	(0, 0, 0, 0, 0,	0, 0, 0) /* All EXT frames addressed to device */
 #define RXF1	CANP_FILT_STD	(0, 0, 0, 0, 0, 0, 0, 0) /* All STD frames => will never be triggered */
 
 

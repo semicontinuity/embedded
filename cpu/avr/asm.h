@@ -216,7 +216,7 @@
 #define LD_ZPLUS(result,ptr) do {               \
   __asm__ __volatile__ (			\
     "ld	%0, z+			        \n\t"   \
-    : "=r" (result) : "z"(ptr)                  \
+    : "=r" (result),"+z"(ptr)                   \
   );						\
 } while(0)
 
