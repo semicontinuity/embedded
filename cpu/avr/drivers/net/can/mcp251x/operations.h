@@ -33,25 +33,6 @@ inline static const uint8_t* mcp251x__send_bytes(const uint8_t* buffer, uint8_t 
     return buffer;
 }
 
-// count > 0 
-inline static const uint8_t * PROGMEM mcp251x__send_bytes_P(const uint8_t * PROGMEM buffer, uint8_t count) {
-    do {
-        spi__write(__LPM_increment__(buffer));
-    }
-    while (--count > 0);
-    return buffer;
-}
-
-// count > 0
-inline static uint8_t* mcp251x__receive_bytes(uint8_t* buffer, uint8_t count) {
-    do {
-        *(buffer++) = spi__exchange(0);
-    }
-    while (--count > 0);
-    return buffer;
-}
-
-
 
 void mcp251x_reset (void) MCP251X_attrs;
 

@@ -116,7 +116,7 @@ inline static void application__stop(void) {
 }
 
 inline static void kernel__init(void) {
-    spi__init(SPI_CLKDIV_64);
+    spi__init(SPI_CLKDIV_16);
     can_selector__init();
     mcp251x__init();
 

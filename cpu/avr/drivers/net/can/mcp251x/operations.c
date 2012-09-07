@@ -23,7 +23,7 @@ void mcp251x_write(const uint8_t address) {
 void mcp251x_write_one_byte(const uint8_t address, const uint8_t data) {
     spi__write(MCP251X_INSTRUCTION_WRITE);
     spi__write(address);
-    spi__write(data);
+    mcp251x__send_byte(data);
 }
 
 
@@ -37,26 +37,21 @@ void mcp251x_write_bytes(const uint8_t* buffer, const uint8_t address, uint8_t c
 void mcp251x_write_bytes_progmem(const uint8_t address, uint8_t count, uint8_t * PROGMEM buffer) {
     spi__write(MCP251X_INSTRUCTION_WRITE);
     spi__write(address);
-    do {
-        spi__write(__LPM_increment__(buffer));
-    }
-    while (--count > 0);
+    spi__write_bytes_P(buffer, count);
 }
 
 
 uint8_t mcp251x_read_byte(const uint8_t address) {
     spi__write(MCP251X_INSTRUCTION_READ);
     spi__write(address);
-    register uint8_t data = spi__exchange(0);
-
-    return data;
+    return spi__read();
 }
 
 
 void mcp251x_read_bytes(uint8_t* buffer, const uint8_t address, uint8_t count) {
     spi__write(MCP251X_INSTRUCTION_READ);
     spi__write(address);
-    mcp251x__receive_bytes(buffer, count);
+    spi__read_bytes(buffer, count);
 }
 
 
@@ -81,7 +76,7 @@ void mcp251x_bit_modify(const uint8_t address, const uint8_t mask, const uint8_t
  */
 uint8_t* mcp2515_read_rx_buffer(uint8_t* buffer, const uint8_t instruction, uint8_t count) {
     spi__write(instruction);
-    return mcp251x__receive_bytes(buffer, count);
+    return spi__read_bytes(buffer, count);
 }
 
 
