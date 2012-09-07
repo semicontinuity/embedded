@@ -4,12 +4,54 @@
 #include <stdint.h>
 #include <avr/pgmspace.h>
 
+#include "cpu/avr/spi_polled.h"
+
 
 // Operations available in both MCP2510 and MCP2515
 // =============================================================================
 #ifndef MCP251X_attrs
 #define MCP251X_attrs
 #endif
+
+
+// Building blocks
+// -----------------------------------------------------------------------------
+inline static void mcp251x__send_byte(const uint8_t b) {
+    spi__write(b);
+}
+
+inline static void mcp251x__send_instruction(const uint8_t instruction) {
+    mcp251x__send_byte(instruction);
+}
+
+// count > 0 
+inline static const uint8_t* mcp251x__send_bytes(const uint8_t* buffer, uint8_t count) {
+    do {
+        spi__write(*buffer++);
+    }
+    while (--count > 0);
+    return buffer;
+}
+
+// count > 0 
+inline static const uint8_t * PROGMEM mcp251x__send_bytes_P(const uint8_t * PROGMEM buffer, uint8_t count) {
+    do {
+        spi__write(__LPM_increment__(buffer));
+    }
+    while (--count > 0);
+    return buffer;
+}
+
+// count > 0
+inline static uint8_t* mcp251x__receive_bytes(uint8_t* buffer, uint8_t count) {
+    do {
+        *(buffer++) = spi__exchange(0);
+    }
+    while (--count > 0);
+    return buffer;
+}
+
+
 
 void mcp251x_reset (void) MCP251X_attrs;
 
@@ -39,7 +81,7 @@ void mcp251x_read_bytes (uint8_t* buffer, const uint8_t address, uint8_t count) 
  * Note: associated RX flag bit in CANINTF will be clearead automatically once CS is set high.
  * @param instruction must be one of MCP251X_INSTRUCTION_READ_BUFFER_* commands
  */
-void mcp2515_read_rx_buffer (uint8_t* buffer, const uint8_t instruction, uint8_t count) MCP251X_attrs;
+uint8_t* mcp2515_read_rx_buffer (uint8_t* buffer, const uint8_t instruction, uint8_t count) MCP251X_attrs;
 
 
 /**

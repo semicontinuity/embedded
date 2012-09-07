@@ -126,6 +126,13 @@
 // Operations with X register
 // ----------------------------------------------
 
+#define ST_XPLUS(ptr,val) do {               \
+  __asm__ __volatile__ (			\
+    "st x+,%1			        \n\t"   \
+    :"+x"(ptr):"r"(val)                  \
+  );						\
+} while(0)
+
 #define STORE_TO_XPLUS(var) do {		\
   __asm__ __volatile__ (			\
     "st	   X+, %0\n\t"	                        \
@@ -249,13 +256,12 @@
 
 #define __LPM_increment__(addr) \
 (__extension__({                \
-    uint16_t __addr16 = (uint16_t)(addr); \
     uint8_t __result;           \
     __asm__                     \
     (                           \
         "lpm %0, Z+" "\n\t"     \
         : "=r" (__result),      \
-          "+z" (__addr16)       \
+          "+z" (addr)           \
     );                          \
     __result;                   \
 }))

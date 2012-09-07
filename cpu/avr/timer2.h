@@ -33,4 +33,13 @@
 #endif
 
 
+
+
+#ifndef timer2__comp_a__run__attrs
+#define timer2__comp_a__run__attrs
+#endif
+
+INLINE void timer2__comp_a__run(void) timer2__comp_a__run__attrs;
+
+
 #endif

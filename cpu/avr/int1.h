@@ -46,6 +46,9 @@ inline static void int1__start(void) {
 
 #endif
 
+#ifndef int1__run__attrs
+#define int1__run__attrs
+#endif
 
 INLINE void int1__run(void) int1__run__attrs;
 

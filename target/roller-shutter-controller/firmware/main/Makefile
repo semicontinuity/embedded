@@ -55,16 +55,14 @@ SRC += $(CAN_C)
 SRC += motor_callbacks_nop.c
 SRC += motor_controller.c
 SRC += motor_controller_prescaler.c
-SRC += system_timer.c
 
 # Library
-ifeq ($(CAN_EMU),1)
-else
+SRC += cpu/avr/timer2.c
+ifneq ($(CAN_EMU),1)
 SRC += cpu/avr/int0.c
 endif
 SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
-
-
+SRC += cpu/avr/util/debug.c
 endif
 
 

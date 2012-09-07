@@ -13,6 +13,7 @@
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
 
+
 /**
  * Dispatches the incoming packets, based on the matched filter number.
  * The code must be consistent with CAN masks and filters.

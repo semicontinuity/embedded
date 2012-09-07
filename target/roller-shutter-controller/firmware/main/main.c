@@ -21,6 +21,9 @@
 #include "comm_service__buttons_scanner.h"
 #include "comm_service__motor_controller.h"
 
+#include "cpu/avr/usart0.h"
+#include "cpu/avr/util/debug.h"
+
 
 // =============================================================================
 // Controller.
@@ -113,7 +116,7 @@ inline static void application__stop(void) {
 }
 
 inline static void kernel__init(void) {
-    spi__init(SPI_CLKDIV_128);
+    spi__init(SPI_CLKDIV_64);
     can_selector__init();
     mcp251x__init();
 
@@ -128,6 +131,8 @@ inline static void kernel__start(void) {
 // =============================================================================
 // Entry point
 // TODO: investigate brown-out behaviour (are ports re-initialized?)
+// NOTE: possible optimization:
+// Ext I/O registers (e.g. USART) accessed with lds/sts.
 // =============================================================================
 int main(void) {
     if (MCUCR == 0x02) {
@@ -136,6 +141,10 @@ int main(void) {
     else {
         kernel__init();
         kernel__start();
+
+        usart__rate__set(USART_BAUD_RATE);
+        usart__init();
+        usart__out__enabled__set();
 
         application__init();
         application__start();

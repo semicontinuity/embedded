@@ -17,6 +17,10 @@
 
 #include "cpu/avr/spi_polled.h"
 
+#include "cpu/avr/usart0.h"
+#include "cpu/avr/util/debug.h"
+#include <util/delay.h>
+
 
 // RX Filters 0-2 (uploaded as one piece)
 extern mcp251x_message_id can__rxf0_2[3] PROGMEM;
@@ -54,6 +58,8 @@ inline static void can__init(void) {
 
 
 inline static void can__start(void) {
+    //can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_RXB1CTRL, 0x60));
+
     can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANCTRL, MCP251X_OPMODE_NORMAL));
 }
 
@@ -61,13 +67,41 @@ inline static void can__start(void) {
 inline static uint8_t can__read_frame(uint8_t *buffer) {
     uint8_t status;
     can_selector__run(status = mcp2515_rx_status());
+    debug__print_byte_as_hex(status);
+    debug__putc(',');
+_delay_ms(10);
 
     // For remote frames, read just the header.
     // For data frames, read the header + all 8 bytes of payload, even though DLC can be less than 8.
-    uint8_t count = status & MCP251X__RX_STATUS__TYPE__REMOTE ? sizeof(struct mcp251x_message_id) : sizeof(struct mcp251x_frame_header);
-    uint8_t instruction = status & MCP251X__RX_STATUS__BUFFER__0 ? MCP251X_REGISTER_RXB0SIDH : MCP251X_REGISTER_RXB1SIDH;
+    // (Optimize: start reading RX buffer, read header, check DLC and read DLC bytes additionally - all as one RX Buffer read.
 
+    uint8_t count = status & MCP251X__RX_STATUS__TYPE__REMOTE ? sizeof(struct mcp251x_frame_header) : sizeof(struct mcp251x_message_buffer);
+    debug__print_byte_as_hex(count);
+_delay_ms(10);
+    debug__putc(',');
+
+    uint8_t instruction = status & MCP251X__RX_STATUS__BUFFER__0 ? MCP251X_INSTRUCTION_READ_BUFFER_0_SIDH : MCP251X_INSTRUCTION_READ_BUFFER_1_SIDH;
+    debug__print_byte_as_hex(instruction);
+_delay_ms(10);
+
+/*
+    debug__print_byte_as_hex(sizeof(struct mcp251x_message_id));
+    debug__putc(13);
+    debug__putc(10);
+
+    debug__print_byte_as_hex(sizeof(struct mcp251x_frame_header));
+    debug__putc(13);
+    debug__putc(10);
+*/
+//    debug__putc(13);
+//    debug__putc(10);
+
+    debug__putc('\n');
     can_selector__run(mcp2515_read_rx_buffer(buffer, instruction, count));
+
+    uint8_t *ptr = (uint8_t *)&comm_service__packet;
+    for (uint8_t i=0; i < 13; i++) {debug__print_byte_as_hex(*ptr++); _delay_ms(10);}
+    debug__putc('\n');
 
     return status & MCP251X__RX_STATUS__FILTER__MASK;
 }

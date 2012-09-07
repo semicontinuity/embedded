@@ -12,10 +12,12 @@
 #include "target/roller-shutter-controller/bsp/motor_callbacks_nop.c"
 #include "target/roller-shutter-controller/bsp/motor_controller.c"
 #include "target/roller-shutter-controller/bsp/motor_controller_prescaler.c"
-#include "target/roller-shutter-controller/bsp/system_timer.c"
 
 // Library
+#include "cpu/avr/timer2.c"
 #ifndef CAN_EMU
 #  include "cpu/avr/int0.c"
 #endif
 #include "cpu/avr/drivers/net/can/mcp251x/operations.c"
+
+#include "cpu/avr/util/debug.c"

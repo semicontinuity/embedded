@@ -25,10 +25,6 @@
 
 INLINE void system_timer__on_system_tick(void);
 
-#ifdef SYSTEM_TIMER__SECOND_TICK
-INLINE void system_timer__on_second_tick(void);
-#endif
-
 
 inline void system_timer__init(void) {
     TCCR2A = (WGM21 << 1) | (WGM20 << 0);	// CTC mode (WGM22 must be 0 in TCCR2B)
