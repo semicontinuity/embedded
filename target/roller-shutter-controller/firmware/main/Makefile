@@ -10,7 +10,7 @@ vpath %.c $(BSP) $(ROOT)
 
 
 CAN_EMU = 0
-CDEFS += -Wl,--section-start=.kernel=0x00000A00 -Wl,--section-start=.noinit=0x008002F3 -Wl,-Tdata,0x00800100  -Wl,--defsym=__stack=0x02f2
+CDEFS += -Wl,--section-start=.kernel=0x00000A00 -Wl,--section-start=.noinit=0x008002F3  -Wl,--defsym=__stack=0x02f2
 # -Wl,--defsym=__stack=0x008002f2
 
 # Configuration

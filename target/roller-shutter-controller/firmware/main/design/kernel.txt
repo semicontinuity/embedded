@@ -1,0 +1,73 @@
+Kernel
+======
+
+Kernel is a concept very similar to bootloader.
+Its purpose is to allow in-system firmware update over the CAN bus.
+The update is not performed at the boot time, but at any time when device is running and connected to the CAN bus.
+The kernel itself cannot be updated over the wire.
+
+The kernel contains most of the CAN-related stuff: the CAN interrupt service routine, the driver for the MCP2515 chip,
+the CAN frame buffer, and the Administrative interface handler.
+The application is also using this code and CAN frame buffer.
+
+The application and the kernel occupy separate sections in memory.
+To keep things simple, there is no linker script, there are only special memory sections.
+The addresses of memory sections are specified in the Makefile.
+
+Flash layout:
+
+0x0000: .vectors
+        Interrupt vectors shared between the application and the kernel.
+        The kernel uses INT0 interrupt.
+
+0x0034: .progmem.data:
+	The replacement for jump table typical for bootloaders.
+        Starts with the function comm_service__handler__handle() that is assigned to .progmem.data.
+        This way, this function has a fixed address 0x0034.
+        This function belongs to the application, but it is invoked by the kernel code to handle CAN requests,
+        thus it needs to be at the fixed address.
+
+        The real progmem data follows the function comm_service__handler__handle().
+        Then follow the standard sections like .ini, .fini, .text, etc.
+	The application code does not have any special section attributes and goes here.
+
+0x0A00: Kernel code.
+        Placed at the fixed address.
+        Functions that belong to the kernel are assigned to the section .kernel with function attribute.
+        These are:
+
+        00000a00 T kernel__send_response
+	00000a60 T mcp251x_reset
+	00000a6c T mcp251x_write
+	00000a82 T mcp251x_write_one_byte
+	00000aa0 T mcp251x_write_bytes
+	00000ac4 T mcp251x_write_bytes_progmem
+	00000aea T mcp251x_read_byte
+	00000b0a T mcp251x_read_bytes
+	00000b34 T mcp251x_bit_modify
+	00000b5a T mcp2515_read_rx_buffer
+	00000b8a T mcp2515_load_tx_buffer
+	00000ba4 T mcp2515_request_to_send
+	00000bae T mcp2515_read_status
+	00000bc4 T mcp2515_rx_status
+	00000bda T __vector_1
+
+	For the actual list, see the symbols file.
+
+
+RAM layout:
+
+00800100: .data, .bss, and other RAM sections except .noinit sections
+        Application memory and stack.
+008002F3: .noinit section
+        Kernel memory.
+        This is a space for the 13-byte CAN frame buffer that is used by the kernel and the application,
+        so it needs to be at the fixed address. Achieved by specifying address of .noinit section.
+        Nothing else must be in the .noinit section!
+        The proper way is to have linker script, but it is also more complex.
+
+
+The main() function is an application function, and it should initialize the CAN controller and enable CAN controller interrupt.
+Obviously, this is not a bullet-proof approach, but rather quick-and-dirty.
+Uploading the wrong firmware can brick the device, and it must be then flashed via ISP connector only.
+So, the updated firmware should be created carefully.
