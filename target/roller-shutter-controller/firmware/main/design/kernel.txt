@@ -31,26 +31,27 @@ Flash layout:
         Then follow the standard sections like .ini, .fini, .text, etc.
 	The application code does not have any special section attributes and goes here.
 
-0x0A00: Kernel code.
+0x0B00: Kernel code.
         Placed at the fixed address.
         Functions that belong to the kernel are assigned to the section .kernel with function attribute.
         These are:
 
-        00000a00 T kernel__send_response
-	00000a60 T mcp251x_reset
-	00000a6c T mcp251x_write
-	00000a82 T mcp251x_write_one_byte
-	00000aa0 T mcp251x_write_bytes
-	00000ac4 T mcp251x_write_bytes_progmem
-	00000aea T mcp251x_read_byte
-	00000b0a T mcp251x_read_bytes
-	00000b34 T mcp251x_bit_modify
-	00000b5a T mcp2515_read_rx_buffer
-	00000b8a T mcp2515_load_tx_buffer
-	00000ba4 T mcp2515_request_to_send
-	00000bae T mcp2515_read_status
-	00000bc4 T mcp2515_rx_status
-	00000bda T __vector_1
+
+        00000b00 T kernel__send_response
+        00000b60 T mcp251x_reset
+        00000b6c T mcp251x_write
+        00000b82 T mcp251x_write_one_byte
+        00000ba0 T mcp251x_write_bytes
+        00000bc4 T mcp251x_write_bytes_progmem
+        00000bea T mcp251x_read_byte
+        00000c0a T mcp251x_read_bytes
+        00000c34 T mcp251x_bit_modify
+        00000c5a T mcp2515_read_rx_buffer
+        00000c8a T mcp2515_load_tx_buffer
+        00000ca4 T mcp2515_request_to_send
+        00000cae T mcp2515_read_status
+        00000cc4 T mcp2515_rx_status
+        00000cda T __vector_1
 
 	For the actual list, see the symbols file.
 

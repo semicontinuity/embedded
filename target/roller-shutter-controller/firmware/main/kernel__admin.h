@@ -38,6 +38,14 @@ static inline void kernel__admin__handle(void) {
             kernel__send_response(8, (const uint8_t*)&kernel__frame.data);
         }
         break;
+    case CANP_REPORT__MEMORY_WRITE:
+        // Write 8 bits of memory, given the address in data[0..3] and data in [4]
+        if (kernel__frame.data[3] == 0 && kernel__frame.data[2] == 0) {
+            uint8_t* ptr = (uint8_t*)(kernel__frame.data[0] | (kernel__frame.data[1] << 8));
+            *ptr = kernel__frame.data[4];
+        }
+        break;
+
     case CANP_REPORT__EEPROM_READ:
         // Read 4 bytes of EEPROM memory, given the address in data[0..3]
         {
@@ -73,10 +81,17 @@ static inline void kernel__admin__handle(void) {
         break;
     case CANP_REPORT__CAN_READ:
         // DLC ignored.
-        // Read 8 bits of memory, given the address in data[0]
+        // Read a CAN register, given the address in data[0]
         if (kernel__frame.data[3] == 0 && kernel__frame.data[2] == 0 && kernel__frame.data[1] == 0) {
             can_selector__run(kernel__frame.data[4] = mcp251x_read_byte(kernel__frame.data[0]));
             kernel__send_response(5, (const uint8_t*)&kernel__frame.data);
+        }
+        break;
+    case CANP_REPORT__CAN_WRITE:
+        // DLC ignored.
+        // Write  8 bits of memory, given the address in data[0]
+        if (kernel__frame.data[3] == 0 && kernel__frame.data[2] == 0 && kernel__frame.data[1] == 0) {
+            can_selector__run(mcp251x_write_one_byte(kernel__frame.data[0], kernel__frame.data[4]));
         }
         break;
     case CANP_REPORT__FLASH_READ:
@@ -88,6 +103,31 @@ static inline void kernel__admin__handle(void) {
             kernel__frame.data[6] = pgm_read_byte(ptr + 2);
             kernel__frame.data[7] = pgm_read_byte(ptr + 3);
             kernel__send_response(8, (const uint8_t*)&kernel__frame.data);
+        }
+        break;
+    case CANP_REPORT__FLASH_WRITE:
+        // Flash programming
+        // Data format:
+        // [0..1] address -> Z
+        // [2..3] must be 0
+        // [4]    value for SPMCSR
+        // [5]    must be 0
+        // [6..7] data ->r0:r1
+        if (kernel__frame.data[3] == 0 && kernel__frame.data[2] == 0) {
+            // optimize
+            asm ("push r0");
+            asm ("push r1");
+
+            asm ("mov r0, %0" ::"r"(kernel__frame.data[6]):"r0");
+            asm ("mov r1, %0" ::"r"(kernel__frame.data[7]):"r1");
+            asm ("mov r30, %0" ::"r"(kernel__frame.data[3]):"r30");
+            asm ("mov r31, %0" ::"r"(kernel__frame.data[1]):"r31");
+            SPMCSR = kernel__frame.data[4];
+
+            asm ("spm");
+
+            asm ("pop r1");
+            asm ("pop r0");
         }
         break;
     case CANP_REPORT__STOP:
