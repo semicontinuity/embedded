@@ -2,6 +2,9 @@
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include CAN_H
 
+
+struct kernel__status kernel__status;
+
 volatile mcp251x_message_buffer kernel__frame;
 
 void kernel__send_response(const uint8_t count, const uint8_t* data) {

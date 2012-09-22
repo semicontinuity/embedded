@@ -31,38 +31,36 @@ Flash layout:
         Then follow the standard sections like .ini, .fini, .text, etc.
 	The application code does not have any special section attributes and goes here.
 
-0x0B00: Kernel code.
+0x0AC0: Kernel code.
         Placed at the fixed address.
         Functions that belong to the kernel are assigned to the section .kernel with function attribute.
         These are:
 
-
-        00000b00 T kernel__send_response
-        00000b60 T mcp251x_reset
-        00000b6c T mcp251x_write
-        00000b82 T mcp251x_write_one_byte
-        00000ba0 T mcp251x_write_bytes
-        00000bc4 T mcp251x_write_bytes_progmem
-        00000bea T mcp251x_read_byte
-        00000c0a T mcp251x_read_bytes
-        00000c34 T mcp251x_bit_modify
-        00000c5a T mcp2515_read_rx_buffer
-        00000c8a T mcp2515_load_tx_buffer
-        00000ca4 T mcp2515_request_to_send
-        00000cae T mcp2515_read_status
-        00000cc4 T mcp2515_rx_status
-        00000cda T __vector_1
+        00000ac0 T kernel__send_response
+        00000b20 T mcp251x_reset
+        00000b2c T mcp251x_write
+        00000b42 T mcp251x_write_one_byte
+        00000b60 T mcp251x_write_bytes
+        00000b84 T mcp251x_write_bytes_progmem
+        00000baa T mcp251x_read_byte
+        00000bca T mcp251x_read_bytes
+        00000bf4 T mcp251x_bit_modify
+        00000c1a T mcp2515_read_rx_buffer
+        00000c4a T mcp2515_load_tx_buffer
+        00000c64 T mcp2515_request_to_send
+        00000c6e T mcp2515_read_status
+        00000c84 T mcp2515_rx_status
+        00000c9a T __vector_1
 
 	For the actual list, see the symbols file.
-
 
 RAM layout:
 
 00800100: .data, .bss, and other RAM sections except .noinit sections
         Application memory and stack.
-008002F3: .noinit section
+008002EB: .noinit section
         Kernel memory.
-        This is a space for the 13-byte CAN frame buffer that is used by the kernel and the application,
+        This is RAM spaces used by the kernel for the 8-byte stats data and the 13-byte CAN frame buffer,
         so it needs to be at the fixed address. Achieved by specifying address of .noinit section.
         Nothing else must be in the .noinit section!
         The proper way is to have linker script, but it is also more complex.

@@ -16,6 +16,8 @@
 #define CANP_REPORT__CAN_WRITE      0xF9
 #define CANP_REPORT__FLASH_READ     0xFA
 #define CANP_REPORT__FLASH_WRITE    0xFB
+#define CANP_REPORT__STATS_READ     0xFC
+#define CANP_REPORT__STATS_WRITE    0xFD
 #define CANP_REPORT__STOP           0xFE
 #define CANP_REPORT__RESET          0xFF
 
@@ -92,6 +94,16 @@ static inline void kernel__admin__handle(void) {
         // Write  8 bits of memory, given the address in data[0]
         if (kernel__frame.data[3] == 0 && kernel__frame.data[2] == 0 && kernel__frame.data[1] == 0) {
             can_selector__run(mcp251x_write_one_byte(kernel__frame.data[0], kernel__frame.data[4]));
+        }
+        break;
+    case CANP_REPORT__STATS_READ:
+        kernel__send_response(8, (const uint8_t*)&kernel__status);
+        break;
+    case CANP_REPORT__STATS_WRITE:
+        {
+            uint8_t* r_ptr = (uint8_t*)(&kernel__frame.data);
+            uint8_t* w_ptr = (uint8_t*)(&kernel__status);
+            for (int8_t c = 7; c >= 0; c--) *w_ptr++ = *r_ptr++;
         }
         break;
     case CANP_REPORT__FLASH_READ:
