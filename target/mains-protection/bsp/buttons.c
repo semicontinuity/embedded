@@ -11,12 +11,14 @@
 
 
 // Support for repeated key events.
-// REPEAT_DELAY and REPEAT_PERIOD must be different, greater than 0 and less than 256
+// REPEAT_DELAY and REPEAT_PERIOD must be different (don't remember why), greater than 0 and less than 256
+#if BUTTONS__REPEAT_DELAY < 0 || BUTTONS__REPEAT_DELAY > 255
+#  error "BUTTONS__REPEAT_DELAY must be greater than 0 and less than 256"
+#endif
 
-// The initial delay of repeat events is 250 system ticks (1 second)
-#define BUTTONS__REPEAT_DELAY (250)
-// The initial delay of repeat events is 25 system ticks (0.1 seconds)
-#define BUTTONS__REPEAT_PERIOD (25)
+#if BUTTONS__REPEAT_PERIOD < 0 || BUTTONS__REPEAT_PERIOD > 255
+#  error "BUTTONS__REPEAT_PERIOD must be greater than 0 and less than 256"
+#endif
 
 #define BUTTONS_MASK (_BV(BUTTON1__PIN) | _BV(BUTTON2__PIN) | _BV(BUTTON3__PIN))
 
