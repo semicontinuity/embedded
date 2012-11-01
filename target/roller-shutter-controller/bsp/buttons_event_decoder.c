@@ -1,5 +1,6 @@
 // =============================================================================
 // The event decoder for 2 buttons at pins BUTTON1 and BUTTON2.
+// The buttons must connected to the same port.
 // =============================================================================
 #include "buttons_event_decoder.h"
 

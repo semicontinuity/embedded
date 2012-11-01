@@ -1,5 +1,21 @@
 // =============================================================================
-// System timer
+// System timer driver.
+// Generates all tick signals required by the system.
+//
+// Implemented with Timer 2,
+// programmed to generate 250 COMPA interrupts (system ticks) per second.
+// 
+// For the CPU frequency 8 MHz:
+// system_tick: 8000000/256/125 = 250Hz
+//
+// For the CPU frequency 1 MHz:
+// system_tick: 1000000/32/125 = 250Hz
+//
+// Then, the following frequencies are generated in software:
+// second_tick:      250/250 = 1Hz
+// ten_seconds_tick: 1/10 = 1 per 10 seconds
+// phase_off:        at the beginning of every second
+// phase_ofn:        in the middle of every second
 // =============================================================================
 
 #include "system_timer.h"

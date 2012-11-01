@@ -1,12 +1,5 @@
 // =============================================================================
-// Motor controller.
-// Assumes that there is a dedicated port (MOTOR__PORT) for the motor control.
-// If the MOTOR_UP signal is set to 1, the motor rotates 'up'.
-// If the MOTOR_DOWN signal is set to 1, the motor rotates 'down'.
-// It is prohibited to set both MOTOR_UP and MOTOR_DOWN to 1 at the same time.
-// 
-// The motor controller has properties 'position' and 'target_position',
-// that can take values from 0 to 100, inclusive.
+// Motor controller service.
 // =============================================================================
 
 #include <stdint.h>
@@ -45,7 +38,7 @@ uint8_t motor_controller__timer                 = 0;
  * and generate signals to drive the motor.
  */
 INLINE void motor_controller__run(void) {
-    // MOTOR_CONTROLLER__STATE__OFF not matched, do nothing.
+    // MOTOR_CONTROLLER__STATE__OFF not matched (nothing to do in this state).
     switch (motor_controller__state) {
     case MOTOR_CONTROLLER__STATE__DEAD_TIME:
         if (--motor_controller__timer != 0) break;
@@ -148,6 +141,7 @@ void motor_controller__stop(void) {
     case MOTOR_CONTROLLER__STATE__RUN:
         motor_controller__position += motor_controller__position_delta;
         motor_controller__target_position = motor_controller__position;
+        // proceed further to switch to STOP state
     case MOTOR_CONTROLLER__STATE__OVERRUN:
     case MOTOR_CONTROLLER__STATE__CHECK_REVERSE:
         motor_controller__state = MOTOR_CONTROLLER__STATE__STOP;

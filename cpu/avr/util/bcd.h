@@ -2,7 +2,7 @@
 // Limited support for binary-to-bcd conversion.
 // Used e.g. for printing decimal numbers, or displaying them on displays.
 //
-// Currently, only numbers with the range 0-511 are supported.
+// Currently, only numbers in the range 0-511 are supported.
 // =============================================================================
 
 #ifndef __BCD_H

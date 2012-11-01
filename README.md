@@ -11,4 +11,4 @@ Projects for AVR microcontrollers.
 - [Servo controller - unfinished, no firmware yet](embedded/tree/master/target/motor-controller/hardware)
 - [LED dimmer, controlled via CAN bus](embedded/tree/master/target/plc-3u-a/firmware/network-led-dimmer)
 - [CAN bus router - firmware under development](embedded/tree/master/target/plc-6u-a/firmware/can_router)
-- [Roller shutter controller, controlled via CAN bus - firmware under development](embedded/tree/master/target/roller-shutter-controller/firmware/main)
+- [Roller shutter controller, controlled via CAN bus](embedded/tree/master/target/roller-shutter-controller/firmware/main)

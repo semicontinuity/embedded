@@ -1,5 +1,6 @@
 // =============================================================================
 // CAN service emulator.
+// CAN communications are emulated with USART (13-byte packets).
 // Handles CAN communications (services incoming requests).
 // Extends comm_service__rx.
 // =============================================================================

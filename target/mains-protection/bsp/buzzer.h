@@ -1,5 +1,5 @@
 // =============================================================================
-// Buzzer.
+// Buzzer driver.
 // Implemented with Timer 0,
 // that is programmed to toggle the buzzer 1000 times per second. (500 Hz sound)
 // 

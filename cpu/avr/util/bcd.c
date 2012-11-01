@@ -2,7 +2,7 @@
 // Limited support for binary-to-bcd conversion.
 // Used e.g. for printing decimal numbers, or displaying them on displays.
 //
-// Currently, only numbers with the range 0-511 are supported.
+// Currently, only numbers in the range 0-511 are supported.
 // =============================================================================
 
 #include <cpu/avr/util/bcd.h>
@@ -27,7 +27,7 @@ uint8_t const BCD_OF_HIGH_NIBBLE[] = {
 };
 
 /**
- * Converts the value (with the range 0-511) to BCD representation. 
+ * Converts the value (in the range 0-511) to BCD representation. 
  */
 uint16_t uint9_to_bcd(const uint16_t number) {
 
@@ -52,14 +52,14 @@ uint16_t uint9_to_bcd(const uint16_t number) {
     
     // BCD correction of 'a'
     __asm__ __volatile__ (
-        "subi %0, -6              \n\t"       // add 6 to correct. will set H flag for 0..9, clear for 10..15
+        "subi %0, -6              \n\t"       // add 6 to perform BCD correction - will set H flag for 0..9, clear for 10..15
         "brhc L_%=                \n\t"       // if half carry was NOT set, skip the following:
         "subi %0, 6               \n\t"       //     restore 'a' by subtracting 6
-"L_%=:"
+    "L_%=:"
         : "+d"(a)
     );
 
-    // Extract b = bits 7-4 of number. Shift it to get the proper offset in the BCD_OF_HIGH_NIBBLE.
+    // Extract b = bits 7-4 of number. Then multiply by 2 to get the proper offset in the BCD_OF_HIGH_NIBBLE.
     register uint8_t b;
     __asm__ __volatile__ (
         "mov  %0, %A1  \n\t"
@@ -78,34 +78,33 @@ uint16_t uint9_to_bcd(const uint16_t number) {
 
 
     // Compute BCD(a) + BCD(b). BCD(b) is in r_h and r_l.
-    // b is re-used to save the SREG.
     __asm__ __volatile__ (
-        "subi %0, -102                  \n\t" // add 0x66 to r_l produce half-carry and carry
-        "add  %0, %2                    \n\t" // r_l += a (binary)
-        "in   __tmp_reg__, __SREG__     \n\t"	// save SREG to b
+        "subi %0, -(0x66)               \n\t" // add 0x66 to r_l produce half-carry and carry (BCD correction)
+        "add  %0, %2                    \n\t" // r_l += a (binary) ... H and C okay after another add?
+        "in   __tmp_reg__, __SREG__     \n\t" // save SREG for later checks
+
         "adc  %1, __zero_reg__          \n\t" // if carry was set, increment r_h.
         "sbrs __tmp_reg__, 0            \n\t" // if carry was not set...
-        "subi %0, 0x60                  \n\t" //     restore high nibble of r_l
+        "subi %0, 0x60                  \n\t" //     ... restore high nibble of r_l, increased by BCD correction by 0x60 - subtract it back
         "sbrs __tmp_reg__, 5            \n\t" // if half-carry was not set...
-        "subi %0, 0x06                  \n\t" //     restore low nibble of r_l
+        "subi %0, 0x06                  \n\t" //     ... restore low nibble of r_l, increased by BCD correction by 0x06 - subtract it back
         : "+d"(r_l), "+d"(r_h)
         : "r"(a)
     );
 
     // If 'number' is in the range 256-511, BCD add 0x0256 to the result.
-    // b is re-used to save the SREG.
     __asm__ __volatile__ (
-        "andi %B2, 0x01                 \n\t" // Check if bit 8 is set (number in range 256-511)
-        "breq L_%=                      \n\t" // If not set, skip...
+        "andi %B2, 0x01                 \n\t" // check if bit 8 is set (number in range 256-511)
+        "breq L_%=                      \n\t" // if not set, skip...
 
         "subi %0, -(0x66)-(0x56)        \n\t" // add 0x56 (lower 2 digits of 256 in BCD), and also 0x66 to r_l produce half-carry and carry
-        "in   __tmp_reg__, __SREG__     \n\t"	// save SREG to b
+        "in   __tmp_reg__, __SREG__     \n\t" // save SREG for later checks
 
-        "sbci %1, -3                    \n\t" // Need to add 0x02 (hundreds) + carry after "addi" == "add 2, then add 1 if no borrow"
-        "sbrc __tmp_reg__, 0            \n\t" // if there was no borrow (C clear)...
-        "subi %0, 0x60                  \n\t" //     restore high nibble of r_l
-        "sbrc __tmp_reg__, 5            \n\t" // if there was no half-borrow (H clear)...
-        "subi %0, 0x06                  \n\t" //     restore low nibble of r_l
+        "sbci %1, -2-1                  \n\t" // add 0x02 (hundreds of 256) + carry after BCD correction == "add 2, then add 1 if no borrow"
+        "sbrc __tmp_reg__, 0            \n\t" // if there was no borrow after addition with BCD correction (C clear - bit 0)...
+        "subi %0, 0x60                  \n\t" //     ... restore high nibble of r_l, increased by BCD correction by 0x60 - subtract it back
+        "sbrc __tmp_reg__, 5            \n\t" // if there was no half-borrow after addition with BCD correction (H clear - bit 5)...
+        "subi %0, 0x06                  \n\t" //     ... restore low nibble of r_l, increased by BCD correction by 0x06 - subtract it back
     "L_%=:"
         : "+d"(r_l), "+d"(r_h)
         : "r"(number)

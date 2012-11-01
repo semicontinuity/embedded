@@ -1,3 +1,8 @@
+// =============================================================================
+// The thread (service) that renders patterns on red+green LED.
+// See the list of LED_THREAD__MODE constants for patterns that can be rendered.
+// =============================================================================
+
 #ifndef __LED_THREAD_H
 #define __LED_THREAD_H
 
@@ -8,7 +13,6 @@
 #define LED_THREAD__GREEN       (1)
 #define LED_THREAD__RED         (2)
 
-// Modes for blinking
 
 #define LED_THREAD__MODE__BLACK         (LED_THREAD__BLACK        | LED_THREAD__BLACK<<4)
 #define LED_THREAD__MODE__BLACK_GREEN   (LED_THREAD__BLACK        | LED_THREAD__GREEN<<4)
@@ -23,6 +27,9 @@
 #define LED_THREAD__MODE__RED           (LED_THREAD__RED          | LED_THREAD__RED<<4  )
 
 
+/**
+ * Initialize the LED thread.
+ */
 INLINE void led_thread__init(void);
 
 /**

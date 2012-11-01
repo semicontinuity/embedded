@@ -1,3 +1,8 @@
+// =============================================================================
+// The scanner service for 2 buttons at pins BUTTON1 and BUTTON2.
+// (The buttons must connected to the same port.)
+// Does not support concurrent button presses.
+// =============================================================================
 #ifndef __BUTTONS_SCANNER_H
 #define __BUTTONS_SCANNER_H
 

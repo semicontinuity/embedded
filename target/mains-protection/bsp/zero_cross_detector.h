@@ -1,5 +1,5 @@
 // =============================================================================
-// Zero cross detector.
+// Zero cross detector driver.
 // Attached to INT0 pin, low-to-high transition shortly after zero cross.
 // =============================================================================
 

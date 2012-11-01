@@ -1,5 +1,5 @@
 // =============================================================================
-// Mains voltmeter.
+// Mains voltmeter driver.
 // Measures the mains voltage at the specified time moment
 // after the zero cross event.
 // Invoke voltmeter__delayed_run() with the proper delay parameter

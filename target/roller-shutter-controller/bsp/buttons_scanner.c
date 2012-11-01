@@ -1,6 +1,6 @@
 // =============================================================================
-// The buttons scanner for 2 buttons at pins BUTTON1 and BUTTON2,
-// all on the same BUTTONS__PORT.
+// The scanner service for 2 buttons at pins BUTTON1 and BUTTON2.
+// (The buttons must connected to the same port.)
 // Does not support concurrent button presses.
 // =============================================================================
 #include "buttons_scanner.h"

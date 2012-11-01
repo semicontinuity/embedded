@@ -3,15 +3,15 @@
 //
 // The program continuously compares the measured mains voltage
 // against the parameters 'voltage_min' and 'voltage_max'.
-// If the voltage is outside of this range, disconnect the load.
+// If the voltage is outside of this range, the load is disconnected with relay.
 // When the voltage returns back to the safe range, it waits 'on_delay' seconds
-// and reconnect the load back.
+// and connects the load back.
 //
-// If 'on_delay' is 0, the device will not switch on back after voltage anomaly.
+// If 'on_delay' is 0, the device will not switch back on after voltage anomaly.
 //
 // User interface:
 //
-// Typically, the display shows the current voltage (voltage display mode).
+// Normally, the display shows the current voltage (voltage display mode).
 // In this mode, the digits are not blinking.
 // The load can be manually connected and disconnected with "+" and "-" buttons.
 // When the LED is green, the voltage is within limits and load is connected.
@@ -26,8 +26,8 @@
 // - on_delay:    when the LED alternates between red and green
 // - angle:       (the time instant at which the voltage is measured)
 //                when the LED is off.
-// Press "SET" to change the parameter to edit
-// and finally return to voltage display mode.
+// Press "SET" to switch between the parameters edited,
+// and finally to return the to voltage display mode.
 //
 // Impl note: moving state to registers should make the code smaller and faster,
 // but some obscure bugs appeared when trying to do it.
@@ -37,6 +37,8 @@
 // from configuration mode if no button is pressed for the long time.
 //
 // Possible improvement: compile for hardware with no buzzer.
+//
+// Possible improvement: UART communications.
 // =============================================================================
 
 #include "cpu/avr/util/bcd.h"
@@ -514,22 +516,18 @@ INLINE void update_voltage(const uint16_t value) {
 INLINE void on_voltage_measured(uint16_t reading) {
 
 /*
-    voltage_integral += MAKE_WORD(ADCL, ADCH);
+    voltage_integral += reading;
 
     // count from 64 to 0, then start over
     --counter;    
     if (counter < 0) {
         counter = 64;
-        on_voltage_measured((voltage_integral * 825) >> 16);
+        on_voltage_measured((voltage_integral * (VOLTAGE_MULTIPLIER/64)) >> 16);
         voltage_integral = 0;
     }
 */
-//    uint32_t mult = (uint32_t)52650UL;
-//    uint16_t voltage    = (reading * mult) >> 16;
-//    uint32_t temp    = (reading * mult);
-//    uint16_t voltage = (temp) >> 16;
 
-
+    // voltage = reading * mult
     uint16_t mult = (uint16_t)VOLTAGE_MULTIPLIER;
     uint16_t voltage;
     MultiU16X16toH16(voltage, reading, mult);
@@ -616,6 +614,6 @@ int main(void) {
 #endif
 
     sleep_enable(); // IDLE mode by default
-    system_timer__loop();
+    for(;;);
     return 0;
 }

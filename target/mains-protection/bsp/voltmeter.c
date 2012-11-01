@@ -1,5 +1,5 @@
 // =============================================================================
-// Mains voltmeter.
+// Mains voltmeter driver.
 // Measures the mains voltage at the specified time moment
 // after the zero cross event.
 // Invoke voltmeter__delayed_run() with the proper delay parameter
@@ -13,8 +13,7 @@
 #include <avr/interrupt.h>
 
 
-typedef union 
-{ 
+typedef union { 
     uint8_t bytes[2]; 
     uint16_t word; 
 } CompositeVal; 
@@ -69,8 +68,7 @@ ISR(ADC_vect) {
 }
 
 
-ISR(TIMER1_COMPB_vect)
-{
+ISR(TIMER1_COMPB_vect) {
     TCCR1B = 0; // stop the timer
     TCNT1H = 0; // reset the timer value (is it done by hardware already?)
     TCNT1L = 0;

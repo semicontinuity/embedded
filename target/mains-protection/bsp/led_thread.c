@@ -1,5 +1,5 @@
 // =============================================================================
-// A thread that renders patterns on red+green LED.
+// The thread (service) that renders patterns on red+green LED.
 // =============================================================================
 
 #include <stdint.h>

@@ -1,3 +1,7 @@
+// =============================================================================
+// Motor controller service.
+// =============================================================================
+
 #ifndef __MOTOR_CONTROLLER_H
 #define __MOTOR_CONTROLLER_H
 
@@ -5,11 +9,16 @@
 #include "cpu/avr/gpio.h"
 
 
+// Valid modes for motor_controller__motor_mode. Make enum.
 // bit 0 is 1 if UP motor is on, bit 1 is 1 if DOWN motor is on
 #define MOTOR_CONTROLLER__MOTOR_MODE__STOPPED            (0)
 #define MOTOR_CONTROLLER__MOTOR_MODE__RUNNING_UP         (1)
 #define MOTOR_CONTROLLER__MOTOR_MODE__RUNNING_DOWN       (2)
 
+/**
+ * Motor mode.
+ * Can take values from 0 to 100, inclusive.
+ */
 extern uint8_t motor_controller__motor_mode;
 
 /**

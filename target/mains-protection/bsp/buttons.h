@@ -1,3 +1,9 @@
+// =============================================================================
+// The driver for 3 buttons at pins BUTTON1, BUTTON2 and BUTTON3,
+// all on the same BUTTONS__PORT.
+// Does not support concurrent button presses.
+// =============================================================================
+
 #ifndef __BUTTONS_H
 #define __BUTTONS_H
 

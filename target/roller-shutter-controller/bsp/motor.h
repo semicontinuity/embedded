@@ -1,5 +1,9 @@
 // =============================================================================
 // Motor driver.
+//
+// If the MOTOR_UP signal is set to 1, the motor rotates 'up'.
+// If the MOTOR_DOWN signal is set to 1, the motor rotates 'down'.
+// It is prohibited to set both MOTOR_UP and MOTOR_DOWN to 1 at the same time.
 // =============================================================================
 
 #ifndef __MOTOR_H

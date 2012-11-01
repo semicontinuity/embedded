@@ -1,3 +1,8 @@
+// =============================================================================
+// The driver for two buttons BUTTON1 and BUTTON2 (active low).
+// The buttons must connected to the same port.
+// =============================================================================
+
 #ifndef __BUTTONS_H
 #define __BUTTONS_H
 

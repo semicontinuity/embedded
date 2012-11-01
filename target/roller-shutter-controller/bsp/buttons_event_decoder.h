@@ -1,9 +1,10 @@
 // =============================================================================
 // The event decoder for 2 buttons at pins BUTTON1 and BUTTON2.
+// (The buttons must connected to the same port.)
 // Decodes button events delivered at every call of buttons_event_decoder__put().
 // (Called at every system tick).
 // At most one event is decoded at every call,
-// to allow for sequential processing of events, at most one per tick.
+// to allow for sequential processing of events - at most one per tick.
 // This is necessary because the processing can involve long-lasting
 // operations (such as network operations).
 // =============================================================================
