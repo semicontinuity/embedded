@@ -7,7 +7,7 @@
 #include "led_thread.h"
 
 
-volatile uint8_t led_thread__mode;
+volatile led_thread__mode_t led_thread__mode;
 
 
 INLINE void led_thread__init(void) {
@@ -50,7 +50,7 @@ INLINE void led_thread__set_red() {
  * Should be used mainly for modes when LED is blinking.
  * The change is effective at the start of the next phase.
  */
-INLINE void led_thread__mode__set(const uint8_t mode) {
+INLINE void led_thread__mode__set(const led_thread__mode_t mode) {
     led_thread__mode = mode;
 }
 
