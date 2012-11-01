@@ -8,6 +8,7 @@
 #include "cpu/avr/spi.h"
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
 
+#include "kernel.h"
 #include "can_selector.h"
 #include "unused.h"
 #include "buttons.h"
@@ -139,7 +140,7 @@ inline static void kernel__start(void) {
 // =============================================================================
 int main(void) {
     // TODO abstract the logic
-    if (MCUCR == 0x02) {
+    if (kernel__mode__is_set()) {
         application__stop();
     }
     else {

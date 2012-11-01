@@ -143,14 +143,12 @@ static inline void kernel__admin__handle(void) {
         }
         break;
     case CANP_REPORT__STOP:
-        MCUCR = 0x01;
-        MCUCR = 0x02; // set IVSEL to switch to KERNEL_ONLY mode
-        // Executed in context of the interrupt, so interrupts are disabled.
+        kernel__mode__set();
+        // Executed in context of the interrupt, so interrupts are disabled. Safe to perform soft reset.
         asm("rjmp __vectors");
     case CANP_REPORT__RESET:
-        MCUCR = 0x01;
-        MCUCR = 0x00; // clear IVSEL to switch to NORMAL mode
-        // Executed in context of the interrupt, so interrupts are disabled.
+        kernel__mode__clear();
+        // Executed in context of the interrupt, so interrupts are disabled. Safe to perform soft reset.
         asm("rjmp __vectors");
     }
 }
