@@ -4,30 +4,29 @@
 #include "alarm_timer.h"
 
 
-// device is "disarmed" - ignores all events from sensor
-#define ALARM__STATE__DISARMED      (0)
+enum {
+    // device is "disarmed" - ignores all events from sensor
+    ALARM__STATE__DISARMED,
 
-// valid password was entered, device ignores events from sensor for TIME_ARMING
-#define ALARM__STATE__ARMING        (1)
+    // valid password was entered, device ignores events from sensor for TIME_ARMING
+    ALARM__STATE__ARMING,
 
-// device is "armed", actively watching sensor. 
-#define ALARM__STATE__ARMED         (2)
+    // device is "armed", actively watching sensor. 
+    ALARM__STATE__ARMED,
 
-// Sensor was active when alarm is in state ARMED, that is, intruder was detected.
-// If password is not entered during TIME_ALERT/alarm__time_alert, alarm will turned on
-#define ALARM__STATE__ALERT         (3)
+    // Sensor was active when alarm is in state ARMED, that is, intruder was detected.
+    // If password is not entered during TIME_ALERT/alarm__time_alert, alarm will turned on
+    ALARM__STATE__ALERT,
 
-// valid password was not entered within TIME_ALERT. Alarm is turned on for TIME_ALARM
-#define ALARM__STATE__ALARM         (4)
+    // valid password was not entered within TIME_ALERT. Alarm is turned on for TIME_ALARM
+    ALARM__STATE__ALARM,
 
-// alarm was active for TIME_ALARM, now is muted for TIME_MUTE
-// after TIME_MUTE time, device goes to ALARM__STATE__ARMED state if there is no signal from sensor,
-// or immediately again
-#define ALARM__STATE__MUTE_ALARM    (5)
+    // alarm was active for TIME_ALARM, now is muted for TIME_MUTE
+    // after TIME_MUTE time, device goes to ALARM__STATE__ARMED state if there is no signal from sensor,
+    // or immediately again
+    ALARM__STATE__MUTE_ALARM
+} alarm__state;
 
-
-
-unsigned char alarm__state;
 unsigned char alarm__time_alert;
 
 
@@ -87,15 +86,11 @@ void alarm_timer__output__run(void) {
 
         // if an operator was late the alarm will be turned on immediately
         if (sensor_line__is_active()) alarm__state = ALARM__STATE__ALERT;
-
-
-//        NB! fall thru deliberately (to save flash size)!
-//        break;
-//        NB! fall thru deliberately (to save flash size)!
-//    case ALARM__STATE__ALERT:
-//        break;
-
-// IF THERE IS A LACK OF MEMORY, goto STATEMENT CAN BE USED HERE
+        break;
+    case ALARM__STATE__ARMED:
+    case ALARM__STATE__ALERT:
+    case ALARM__STATE__DISARMED:
+        break;
     }
 
     if (alarm__state == ALARM__STATE__ALERT) {
