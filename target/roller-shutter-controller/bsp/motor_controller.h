@@ -9,24 +9,26 @@
 #include "cpu/avr/gpio.h"
 
 
-// Valid modes for motor_controller__motor_mode. Make enum.
-// bit 0 is 1 if UP motor is on, bit 1 is 1 if DOWN motor is on
-#define MOTOR_CONTROLLER__MOTOR_MODE__STOPPED            (0)
-#define MOTOR_CONTROLLER__MOTOR_MODE__RUNNING_UP         (1)
-#define MOTOR_CONTROLLER__MOTOR_MODE__RUNNING_DOWN       (2)
+/**
+ * Valid modes for motor_controller__motor_mode.
+ * bit 0 is 1 if UP motor is on, bit 1 is 1 if DOWN motor is on
+ */
+typedef enum {
+    MOTOR_CONTROLLER__MOTOR_MODE__STOPPED            = 0,
+    MOTOR_CONTROLLER__MOTOR_MODE__RUNNING_UP         = 1,
+    MOTOR_CONTROLLER__MOTOR_MODE__RUNNING_DOWN       = 2
+} motor_controller__motor_mode_t;
 
 /**
  * Motor mode.
- * Can take values from 0 to 100, inclusive.
  */
-extern uint8_t motor_controller__motor_mode;
+extern motor_controller__motor_mode_t motor_controller__motor_mode;
 
 /**
  * Callback function, called when the motor status has been changed.
  * To be implemented by user.
  */
 void motor_controller__motor_mode__on_change(void);
-
 
 
 #define MOTOR_CONTROLLER__POSITION__UP          (0)
@@ -93,12 +95,11 @@ inline void motor_controller__move_up(void) {
 
 
 /**
- * Sets the desired motor mode.
- * (Can trigger the motion)
+ * Sets the desired motor mode (can trigger the motion).
  */
 inline void motor_controller__motor_mode__set_from_raw_ptr(const void* ptr) {
-    const uint8_t *motor_mode_ptr = (const uint8_t *)ptr;
-    const uint8_t motor_mode = *motor_mode_ptr;
+    const motor_controller__motor_mode_t *motor_mode_ptr = (const motor_controller__motor_mode_t *)ptr;
+    const motor_controller__motor_mode_t motor_mode = *motor_mode_ptr;
 
     if (motor_mode == MOTOR_CONTROLLER__MOTOR_MODE__STOPPED) {
         motor_controller__stop();
@@ -114,12 +115,12 @@ inline void motor_controller__motor_mode__set_from_raw_ptr(const void* ptr) {
 
 
 /**
- * Sets the control structure.
- * (Can trigger the motion)
+ * Sets the control structure (can trigger the motion).
  */
 inline void motor_controller__control__set_from_raw_ptr(const void* ptr) {
     const struct motor_controller__control *control = (const struct motor_controller__control *)ptr;
-    int8_t target_position = control->target_position;
+    const int8_t target_position = control->target_position;
+
     if (target_position >= MOTOR_CONTROLLER__POSITION__UP && target_position <= MOTOR_CONTROLLER__POSITION__DOWN) {
         motor_controller__move(control->target_position);
     }

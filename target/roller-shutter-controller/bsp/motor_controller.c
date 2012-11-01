@@ -7,17 +7,16 @@
 #include "motor.h"
 
 
-uint8_t motor_controller__motor_mode = MOTOR_CONTROLLER__MOTOR_MODE__STOPPED;
 
-
-#define MOTOR_CONTROLLER__STATE__OFF            (0)
-#define MOTOR_CONTROLLER__STATE__DEAD_TIME      (1)
-#define MOTOR_CONTROLLER__STATE__CHECK_START    (2)
-#define MOTOR_CONTROLLER__STATE__RUN            (3)
-#define MOTOR_CONTROLLER__STATE__OVERRUN        (4)
-#define MOTOR_CONTROLLER__STATE__CHECK_REVERSE  (5)
-#define MOTOR_CONTROLLER__STATE__STOP           (6)
-
+typedef enum {
+    MOTOR_CONTROLLER__STATE__OFF,
+    MOTOR_CONTROLLER__STATE__DEAD_TIME,
+    MOTOR_CONTROLLER__STATE__CHECK_START,
+    MOTOR_CONTROLLER__STATE__RUN,
+    MOTOR_CONTROLLER__STATE__OVERRUN,
+    MOTOR_CONTROLLER__STATE__CHECK_REVERSE,
+    MOTOR_CONTROLLER__STATE__STOP
+} motor_controller__state_t;
 
 struct motor_controller__control motor_controller__control = {
     .target_position    = MOTOR_CONTROLLER__POSITION__MIDDLE
@@ -28,9 +27,10 @@ struct motor_controller__status motor_controller__status = {
     .position_error     = MOTOR_CONTROLLER__POSITION__MIDDLE
 };
 
-uint8_t motor_controller__state                 = MOTOR_CONTROLLER__STATE__OFF;
-uint8_t motor_controller__timer                 = 0;
- int8_t motor_controller__position_delta        = 0;
+motor_controller__state_t       motor_controller__state                 = MOTOR_CONTROLLER__STATE__OFF;
+motor_controller__motor_mode_t  motor_controller__motor_mode            = MOTOR_CONTROLLER__MOTOR_MODE__STOPPED;
+uint8_t                         motor_controller__timer                 = 0;
+ int8_t                         motor_controller__position_delta        = 0;
 
 
 /**
@@ -38,7 +38,6 @@ uint8_t motor_controller__timer                 = 0;
  * and generate signals to drive the motor.
  */
 INLINE void motor_controller__run(void) {
-    // MOTOR_CONTROLLER__STATE__OFF not matched (nothing to do in this state).
     switch (motor_controller__state) {
     case MOTOR_CONTROLLER__STATE__DEAD_TIME:
         if (--motor_controller__timer != 0) break;
@@ -102,6 +101,9 @@ INLINE void motor_controller__run(void) {
         motor_controller__timer = MOTOR_CONTROLLER__DEAD_TIME;
         motor_controller__state = MOTOR_CONTROLLER__STATE__DEAD_TIME;
         break;
+    case MOTOR_CONTROLLER__STATE__OFF:
+        // do nothing
+        break;
     }
 }
 
@@ -145,6 +147,9 @@ void motor_controller__stop(void) {
     case MOTOR_CONTROLLER__STATE__OVERRUN:
     case MOTOR_CONTROLLER__STATE__CHECK_REVERSE:
         motor_controller__state = MOTOR_CONTROLLER__STATE__STOP;
+        break;
+    case MOTOR_CONTROLLER__STATE__OFF:
+        // do nothing
+        break;
     }
-    // MOTOR_CONTROLLER__STATE__OFF: do nothing
 }
