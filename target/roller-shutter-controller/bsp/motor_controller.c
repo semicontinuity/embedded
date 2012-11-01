@@ -148,6 +148,9 @@ void motor_controller__stop(void) {
     case MOTOR_CONTROLLER__STATE__CHECK_REVERSE:
         motor_controller__state = MOTOR_CONTROLLER__STATE__STOP;
         break;
+    case MOTOR_CONTROLLER__STATE__STOP:
+        // Very unlikely to be in this state, because STOP mode is set only in this function, and changes quickly.
+        // Nevertheless, do nothing in this state, because the controller has been already instructed to stop.
     case MOTOR_CONTROLLER__STATE__OFF:
         // do nothing
         break;
