@@ -5,11 +5,7 @@
 #include <avr/interrupt.h>
 #include <avr/eeprom.h>
 
-#include "cpu/avr/spi.h"
-#include "cpu/avr/drivers/net/can/mcp251x/conf.h"
-
 #include "kernel.h"
-#include "can_selector.h"
 #include "unused.h"
 #include "buttons.h"
 #include "buttons_scanner.h"
@@ -17,12 +13,9 @@
 #include "motor_controller.h"
 #include "motor_controller_prescaler.h"
 #include "system_timer.h"
-#include CAN_SERVICE_H
 
 #include "comm_service__buttons_scanner.h"
 #include "comm_service__motor_controller.h"
-
-#include <avr/io.h>
 
 
 // =============================================================================
@@ -115,20 +108,6 @@ inline static void application__start(void) {
 
 inline static void application__stop(void) {
     system_timer__stop();
-}
-
-inline static void kernel__init(void) {
-    spi__init(SPI_CLKDIV_4);
-    spi__double_speed__set(1);
-    can_selector__init();
-    mcp251x__init();
-
-    comm_service__rx__init();
-    comm_service__rx__start();
-}
-
-inline static void kernel__start(void) {
-    comm_service__rx__start();
 }
 
 // =============================================================================
