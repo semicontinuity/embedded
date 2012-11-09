@@ -29,7 +29,13 @@
 // Controller.
 // =============================================================================
 
-uint8_t  controller__enabled;
+uint8_t EEMEM ee__controller__enabled = CONTROLLER__ENABLED;
+uint8_t controller__enabled;
+
+inline static void controller__init(void) {
+    controller__enabled = eeprom_read_byte(&ee__controller__enabled);
+}
+
 
 inline static void controller__run(void) {
     if (controller__enabled) {
@@ -92,19 +98,15 @@ INLINE void system_timer__on_system_tick(void) {
 // Kernel and application
 // =============================================================================
 
-uint8_t  EEMEM  ee__controller__enabled                 = CONTROLLER__ENABLED;
-uint8_t  EEMEM  ee__motor_controller__prescaler__value  = MOTOR_CONTROLLER__PRESCALER;
-
-inline static void application__init(void) {
-    controller__enabled                 = eeprom_read_byte(&ee__controller__enabled);
-    motor_controller__prescaler__value  = eeprom_read_byte(&ee__motor_controller__prescaler__value);
-
+inline static void application__init(void) {    
+    motor_controller__prescaler__init();
     buttons__init();
     motor__init();
     unused1__init();
     unused2__init();
     unused3__init();
     system_timer__init();
+    controller__init();
 }
 
 inline static void application__start(void) {
