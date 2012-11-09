@@ -13,39 +13,10 @@
 #include "motor_controller.h"
 #include "motor_controller_prescaler.h"
 #include "system_timer.h"
+#include "controller.h"
 
 #include "comm_service__buttons_scanner.h"
 #include "comm_service__motor_controller.h"
-
-
-// =============================================================================
-// Controller.
-// =============================================================================
-
-uint8_t EEMEM ee__controller__enabled = CONTROLLER__ENABLED;
-uint8_t controller__enabled;
-
-inline static void controller__init(void) {
-    controller__enabled = eeprom_read_byte(&ee__controller__enabled);
-}
-
-
-inline static void controller__run(void) {
-    if (controller__enabled) {
-        if (buttons_scanner__button1__is_changed()) {
-            if (buttons_scanner__button1__is_released())
-                motor_controller__stop();
-            else
-                motor_controller__move_up();
-        }
-        if (buttons_scanner__button2__is_changed()) {
-            if (buttons_scanner__button2__is_released())
-                motor_controller__stop();
-            else
-                motor_controller__move_down();
-        }
-    }
-}
 
 
 
@@ -88,7 +59,7 @@ INLINE void system_timer__on_system_tick(void) {
 
 
 // =============================================================================
-// Kernel and application
+// Application
 // =============================================================================
 
 inline static void application__init(void) {    
@@ -110,6 +81,7 @@ inline static void application__stop(void) {
     system_timer__stop();
 }
 
+
 // =============================================================================
 // Entry point.
 //
@@ -120,7 +92,6 @@ inline static void application__stop(void) {
 // Ext I/O registers (e.g. USART) accessed with lds/sts.
 // =============================================================================
 int main(void) {
-    // TODO abstract the logic
     if (kernel__mode__is_set()) {
         application__stop();
     }
