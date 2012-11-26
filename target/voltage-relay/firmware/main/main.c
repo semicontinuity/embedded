@@ -77,6 +77,61 @@
 #define is_voltage_display_mode() (!mode)
 
 
+
+#if VOLTAGE_GAP < 0 || VOLTAGE_GAP > 32
+#  error "VOLTAGE_GAP must be greater than 0 and less than 32"
+#endif
+
+#if VOLTAGE_MAX < 128 || VOLTAGE_MAX > 383
+#  error "VOLTAGE_MAX must be greater than 128 and less than 384 (and within limits of hardware)"
+#endif
+
+#if VOLTAGE_MIN < 128 || VOLTAGE_MIN > 383
+#  error "VOLTAGE_MIN must be greater than 128 and less than 384 (and within limits of hardware)"
+#endif
+
+#if VOLTAGE_MAX - VOLTAGE_MIN < VOLTAGE_GAP
+#  error "VOLTAGE_MAX and VOLTAGE_NIN must be at least VOLTAGE_GAP volts apart"
+#endif
+
+#if EE_VOLTAGE_MAX < 128 || EE_VOLTAGE_MAX > 383
+#  error "EE_VOLTAGE_MAX must be greater than 128 and less than 384 (and within limits of hardware)"
+#endif
+
+#if EE_VOLTAGE_MIN < 128 || EE_VOLTAGE_MIN > 383
+#  error "EE_VOLTAGE_MIN must be greater than 128 and less than 384 (and within limits of hardware)"
+#endif
+
+#if EE_VOLTAGE_MAX > VOLTAGE_MAX
+#  error "EE_VOLTAGE_MAX must not be greater than VOLTAGE_MAX"
+#endif
+
+#if EE_VOLTAGE_MIN > VOLTAGE_MIN
+#  error "EE_VOLTAGE_MIN must not be less than VOLTAGE_MAX"
+#endif
+
+#if EE_VOLTAGE_MAX - EE_VOLTAGE_MIN < VOLTAGE_GAP
+#  error "EE_VOLTAGE_MAX and EE_VOLTAGE_NIN must be at least VOLTAGE_GAP volts apart"
+#endif
+
+#if ANGLE_MAX < 1 || ANGLE_MAX > 255
+#  error "ANGLE_MAX must be greater than 0 and less than 256"
+#endif
+
+#if ANGLE_MIN < 1 || ANGLE_MIN > 255
+#  error "ANGLE_MIN must be greater than 0 and less than 256"
+#endif
+
+#if ANGLE_MIN > ANGLE_MAX
+#  error "ANGLE_MIN must not be greater than ANGLE_MAX"
+#endif
+
+#if EE_ANGLE < ANGLE_MIN || EE_ANGLE > ANGLE_MAX
+#  error "EE_ANGLE must be not less than ANGLE_MIN and not greater than ANGLE_MAX"
+#endif
+
+
+
 //#define time_to_turn_on GPIOR1
 volatile uint8_t  time_to_turn_on;
 //register uint8_t  time_to_turn_on asm("r14");
@@ -132,11 +187,11 @@ uint8_t  t_buzzer;
 // For voltages, signed voltage-256 value is stored.
 // =============================================================================
 
-uint8_t  EEMEM          ee_voltage_max	= (uint8_t)(280 - 256);
-uint8_t  EEMEM          ee_voltage_min  = (uint8_t)(180 - 256);
-uint8_t  EEMEM          ee_on_delay     = 6;
-uint8_t  EEMEM          ee_angle        = 130;
-uint8_t  EEMEM          ee_buzzer       = 1;
+uint8_t  EEMEM          ee_voltage_max	= (uint8_t)(EE_VOLTAGE_MAX - 256);
+uint8_t  EEMEM          ee_voltage_min  = (uint8_t)(EE_VOLTAGE_MIN - 256);
+uint8_t  EEMEM          ee_on_delay     = EE_ON_DELAY;
+uint8_t  EEMEM          ee_angle        = EE_ANGLE;
+uint8_t  EEMEM          ee_buzzer       = EE_BUZZER;
 
 
 // =============================================================================
@@ -378,12 +433,12 @@ inline static void ui_controller__run(void) {
             to_edit_voltage_min_mode();
         }
         else {
-            if (button2__was_just_pressed_or_repeated() && (t_voltage_max > voltage_min + 5)) {
+            if (button2__was_just_pressed_or_repeated() && (t_voltage_max > voltage_min + VOLTAGE_GAP)) {
                 --t_voltage_max;
                 display_thread__blink__off();
                 display_voltage_max();
             }
-            if (button3__was_just_pressed_or_repeated() && (t_voltage_max < 280)) {
+            if (button3__was_just_pressed_or_repeated() && (t_voltage_max < VOLTAGE_MAX)) {
                 ++t_voltage_max;
                 display_thread__blink__off();
                 display_voltage_max();
@@ -399,12 +454,12 @@ inline static void ui_controller__run(void) {
             to_edit_on_delay_mode();
         }
         else {
-            if (button2__was_just_pressed_or_repeated() && (t_voltage_min > 180)) {
+            if (button2__was_just_pressed_or_repeated() && (t_voltage_min > VOLTAGE_MIN)) {
                 --t_voltage_min;
                 display_thread__blink__off();
                 display_voltage_min();
             }
-            if (button3__was_just_pressed_or_repeated() && (t_voltage_min < voltage_max - 5)) {
+            if (button3__was_just_pressed_or_repeated() && (t_voltage_min < voltage_max - VOLTAGE_GAP)) {
                 ++t_voltage_min;
                 display_thread__blink__off();
                 display_voltage_min();
@@ -441,12 +496,12 @@ inline static void ui_controller__run(void) {
             to_edit_buzzer_mode();
         }
         else {
-            if (button2__was_just_pressed_or_repeated() && (t_angle > 2)) {
+            if (button2__was_just_pressed_or_repeated() && (t_angle > ANGLE_MIN)) {
                 --t_angle;
                 display_thread__blink__off();
                 display_angle();
             }
-            if (button3__was_just_pressed_or_repeated() && (t_angle < 255)) {
+            if (button3__was_just_pressed_or_repeated() && (t_angle < ANGLE_MAX)) {
                 ++t_angle;
                 display_thread__blink__off();
                 display_angle();

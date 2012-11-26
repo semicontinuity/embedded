@@ -1,12 +1,12 @@
 #include "main.c"
 
 // BSP
-#include "target/mains-protection/bsp/buttons.c"
-#include "target/mains-protection/bsp/buzzer.c"
-#include "target/mains-protection/bsp/led_thread.c"
-#include "target/mains-protection/bsp/system_timer.c"
-#include "target/mains-protection/bsp/voltmeter.c"
-#include "target/mains-protection/bsp/zero_cross_detector.c"
+#include "target/voltage-relay/bsp/buttons.c"
+#include "target/voltage-relay/bsp/buzzer.c"
+#include "target/voltage-relay/bsp/led_thread.c"
+#include "target/voltage-relay/bsp/system_timer.c"
+#include "target/voltage-relay/bsp/voltmeter.c"
+#include "target/voltage-relay/bsp/zero_cross_detector.c"
 
 // Library
 #include "cpu/avr/util/bcd.c"
