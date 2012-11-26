@@ -1,4 +1,5 @@
-The device for protection against abnormal mains voltage
+Voltage relay
+(The device for protection against abnormal mains voltage)
 ================================================================================
 
 This device monitors the mains voltage,
