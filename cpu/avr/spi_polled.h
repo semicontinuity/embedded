@@ -1,8 +1,9 @@
 #ifndef __CPU_AVR_SPI_POLLED_H
 #define __CPU_AVR_SPI_POLLED_H
 
-#include <avr/io.h>
 #include <stdint.h>
+#include <avr/io.h>
+#include <avr/pgmspace.h>
 
 #include "cpu/avr/asm.h"
 
