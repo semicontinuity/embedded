@@ -12,3 +12,4 @@ Projects for AVR microcontrollers.
 - [LED dimmer, controlled via CAN bus](embedded/tree/master/target/plc-3u-a/firmware/network-led-dimmer)
 - [CAN bus router - firmware under development](embedded/tree/master/target/plc-6u-a/firmware/can_router)
 - [Roller shutter controller, controlled via CAN bus](embedded/tree/master/target/roller-shutter-controller/firmware/main)
+- [Humidity meter](embedded/tree/master/target/plc-3u-b/firmware/humidity-meter)

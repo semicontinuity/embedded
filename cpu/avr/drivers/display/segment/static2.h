@@ -15,18 +15,6 @@
 #include "cpu/avr/spi_polled.h"
 
 
-#define DISPLAY_SEGMENT_VALUE_0 0x21
-#define DISPLAY_SEGMENT_VALUE_1 0xEB
-#define DISPLAY_SEGMENT_VALUE_2 0x32
-#define DISPLAY_SEGMENT_VALUE_3 0x62
-#define DISPLAY_SEGMENT_VALUE_4 0xE8
-#define DISPLAY_SEGMENT_VALUE_5 0x64
-#define DISPLAY_SEGMENT_VALUE_6 0x24
-#define DISPLAY_SEGMENT_VALUE_7 0xE3
-#define DISPLAY_SEGMENT_VALUE_8 0x20
-#define DISPLAY_SEGMENT_VALUE_9 0x60
-
-
 inline void display__init(void) {
     USE_AS_OUTPUT(DISPLAY_OE);
     USE_AS_OUTPUT(DISPLAY_RESET);
@@ -43,7 +31,7 @@ inline void display__off(void) {
     OUT_1(DISPLAY_OE);
 }
 
-/** Raw */
+/** Output raw data, every bit corresponds to a segment */
 inline void display__set(const uint16_t v) {
     OUT_0(DISPLAY_RCK);
     spi__write(v >> 8);
@@ -51,6 +39,6 @@ inline void display__set(const uint16_t v) {
     OUT_1(DISPLAY_RCK);
 }
 
-INLINE void display__render(const uint8_t bcd);
+INLINE void display__render_bcd(const uint8_t bcd);
 
 #endif

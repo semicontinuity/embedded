@@ -50,7 +50,7 @@ inline static void measure__run(void) {
         uint16_t humidity;
         MultiU16X16toH16(humidity, hygrometer_value, multiplier);
 
-        display__render((uint8_t) uint9_to_bcd(humidity));
+        display__render_bcd((uint8_t) uint9_to_bcd(humidity));
         _delay_ms(DELAY);
     }
 }

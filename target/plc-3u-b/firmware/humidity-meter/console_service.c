@@ -51,12 +51,12 @@ void console_service__run(void) {
         else if (input_length == 3 && input_buffer[0] == 'd') {
             // dxx = print number to display in binary
             register uint8_t value = parseByte(input_buffer + 1);
-            display__render((uint8_t) uint9_to_bcd(value));
+            display__render_bcd((uint8_t) uint9_to_bcd(value));
         }
         else if (input_length == 3 && input_buffer[0] == 'h') {
             // hxx = print number to display in hex
             register uint8_t value = parseByte(input_buffer + 1);
-            display__render(value);
+            display__render_bcd(value);
         }
         else if (input_length == 5 && input_buffer[0] == 'b') {
             // bxx = BCD convert number and print it

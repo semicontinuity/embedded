@@ -1,4 +1,5 @@
 #include "cpu/avr/drivers/display/segment/static2.h"
+#include "cpu/avr/drivers/display/segment/values.h"
 
 uint8_t const DIGITS[] = {
     DISPLAY_SEGMENT_VALUE_0,
@@ -13,6 +14,6 @@ uint8_t const DIGITS[] = {
     DISPLAY_SEGMENT_VALUE_9
 };
 
-INLINE void display__render(const uint8_t bcd) {
+INLINE void display__render_bcd(const uint8_t bcd) {
     display__set(((DIGITS[(bcd >> 4) & 0x0F]) << 8) | DIGITS[bcd & 0x0F]);
 }
