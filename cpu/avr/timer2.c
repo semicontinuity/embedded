@@ -1,6 +1,9 @@
 #include <avr/interrupt.h>
 #include "cpu/avr/timer2.h"
 
+
+#ifdef timer2__comp_a__run
+
 #ifndef TIMER2_COMPA_vect_attrs
 #define TIMER2_COMPA_vect_attrs
 #endif
@@ -16,4 +19,8 @@ ISR(TIMER2_COMPA_vect, TIMER2_COMPA_vect_attrs) {
 #ifdef TIMER2_COMPA_vect_naked
     reti();
 #endif
+
 }
+
+#endif
+

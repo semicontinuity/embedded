@@ -11,20 +11,7 @@
 #include "voltmeter.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
-
-
-typedef union { 
-    uint8_t bytes[2]; 
-    uint16_t word; 
-} CompositeVal; 
-
-#define MAKE_WORD(lo, hi) \
-({                        \
-    CompositeVal val;     \
-    val.bytes[0] = lo;    \
-    val.bytes[1] = hi;    \
-    val.word;             \
-}) 
+#include "util/bitops.h"
 
 
 /**
@@ -34,9 +21,6 @@ typedef union {
 INLINE void voltmeter__init(void) {
     // Reference voltage at AVCC+AREF, no left adjustment, ADC0.
     ADMUX = (0 << REFS1) | (1 << REFS0) | (0 << ADLAR) | (0 << MUX0);
-
-    // ADC Enable, don't start conversion, no auto conversion, enable interrupt, division factor 64
-    //ADCSRA = (1 << ADEN) | (0 << ADSC) | (0 << ADATE) | (1 << ADIE) | (6 << ADPS0);
 
     // ADC Enable, don't start conversion, auto conversion, enable interrupt, division factor 64
     ADCSRA = (1 << ADEN) | (0 << ADSC) | (1 << ADATE) | (1 << ADIE) | (6 << ADPS0);
@@ -64,7 +48,7 @@ INLINE void voltmeter__delayed_run(const uint16_t delay) {
 
 
 ISR(ADC_vect) {
-    on_voltage_measured (MAKE_WORD(ADCL, ADCH));
+    on_voltage_measured (U16(ADCL, ADCH));
 }
 
 

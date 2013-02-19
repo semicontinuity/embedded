@@ -3,6 +3,20 @@
 
 #include <stdbool.h>
 
+typedef union { 
+    uint8_t bytes[2]; 
+    uint16_t word; 
+} u16_as_bytes; 
+
+#define U16(lo, hi) \
+({                        \
+    u16_as_bytes val;     \
+    val.bytes[0] = lo;    \
+    val.bytes[1] = hi;    \
+    val.word;             \
+}) 
+
+
 // =============================================================================
 // Helper macros for bit variables
 // =============================================================================

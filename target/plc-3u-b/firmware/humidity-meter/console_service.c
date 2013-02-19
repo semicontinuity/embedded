@@ -59,7 +59,7 @@ void console_service__run(void) {
             display__render_bcd(value);
         }
         else if (input_length == 5 && input_buffer[0] == 'b') {
-            // bxx = BCD convert number and print it
+            // bxxxx = BCD convert number and print it
             register uint8_t h = parseByte(input_buffer + 1);
             register uint8_t l = parseByte(input_buffer + 3);
             register uint16_t bcd = uint9_to_bcd((h<<8)|l);

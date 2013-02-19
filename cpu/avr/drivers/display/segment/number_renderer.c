@@ -34,6 +34,6 @@ INLINE void number_renderer__render(const uint16_t number, uint8_t *buffer) {
     buffer[2] = DIGITS[number & 0x0F];
 }
 
-INLINE void number_renderer__add_decimal_point(uint8_t *buffer) {
+INLINE void number_renderer__render_decimal_point(uint8_t *buffer) {
     *buffer = DISPLAY_SEGMENT_VALUE_ADD_DP(*buffer);
 }
