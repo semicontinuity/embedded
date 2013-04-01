@@ -23,6 +23,22 @@
 #define SCK__PORT     B
 #define SCK__PIN      5
 
+#elif defined(__AVR_ATmega16__)
+
+// SS signal of SPI interface. For SPI master, usually configured as output.
+#define SS__PORT      B
+#define SS__PIN       4
+
+#define MOSI__PORT    B
+#define MOSI__PIN     5
+
+#define SCK__PORT     B
+#define SCK__PIN      7
+
+#else
+#   error "Unsupported MCU"
+#endif
+
 
 // There are the following 8 modes:
 // (add 2x modes)
@@ -60,13 +76,6 @@ static inline void spi__double_speed__set(const uint8_t is2x) {
     else
         SPSR &=~_BV(SPI2X);
 }
-
-
-
-#else
-#   error "Unsupported MCU"
-#endif
-
 
 
 
