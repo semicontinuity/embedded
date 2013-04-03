@@ -123,4 +123,28 @@ inline static void timer2__ctc__interrupt__disable(void) {
 } while(0)
 
 
+
+#ifdef timer2__comp_a__run
+
+#ifndef timer2__comp_a__run__attrs
+#define timer2__comp_a__run__attrs
+#endif
+
+INLINE void timer2__comp_a__run(void) timer2__comp_a__run__attrs;
+
+#endif
+
+
+
+#ifdef timer2__comp_b__run
+
+#ifndef timer2__comp_b__run__attrs
+#define timer2__comp_b__run__attrs
+#endif
+
+INLINE void timer2__comp_b__run(void) timer2__comp_b__run__attrs;
+
+#endif
+
+
 #endif

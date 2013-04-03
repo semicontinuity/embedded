@@ -85,4 +85,16 @@ inline static void timer2__ctc__interrupt__disable(void) {
 } while(0)
 
 
+
+#ifdef timer2__comp__run
+
+#ifndef timer2__comp__run__attrs
+#define timer2__comp__run__attrs
+#endif
+
+INLINE void timer2__comp__run(void) timer2__comp__run__attrs;
+
+#endif
+
+
 #endif
