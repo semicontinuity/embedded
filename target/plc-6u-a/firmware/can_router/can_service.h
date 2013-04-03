@@ -23,7 +23,6 @@ inline void can_service__start(void) {
 
     // Enable RX0 interrupt in the CAN controller
     can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)));
-    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_BFPCTRL, 0xFF));
 }
 
 #endif // __CAN_SERVICE_H
