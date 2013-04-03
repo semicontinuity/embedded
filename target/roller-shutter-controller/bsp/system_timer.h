@@ -23,28 +23,31 @@
 #include "cpu/avr/timer2.h"
 
 
+#define SYSTEM_TIMER__CONF__DEFAULT     (TIMER2_CONF_DEFAULT)
+#define SYSTEM_TIMER__CONF__INITIALIZED (TIMER2_CONF_WGM_CTC | TIMER2_CONF_TOP(125) | TIMER2_CONF_STOPPED)
+#define SYSTEM_TIMER__CONF__STARTED     (TIMER2_CONF_WGM_CTC | TIMER2_CONF_TOP(125) | TIMER2_CONF_PRESCALER_256)
+
 INLINE void system_timer__on_system_tick(void);
 
 
-inline void system_timer__init(void) {
-    TCCR2A = (WGM21 << 1) | (WGM20 << 0);	// CTC mode (WGM22 must be 0 in TCCR2B)
-    OCR2A = 125;				// Period: 125 cycles, then Compare A interrupt is triggered
+inline static void system_timer__init(void) {
+    timer2__switch_conf(SYSTEM_TIMER__CONF__DEFAULT, SYSTEM_TIMER__CONF__INITIALIZED);
 }
 
 
-inline void system_timer__start(void) {
-    TIMSK2 |= _BV(OCIE2A);
-    TCCR2B = TIMER2_MODE_RUN_PRESCALER_256;
+inline static void system_timer__start(void) {
+    timer2__ctc__interrupt__enable();
+    timer2__switch_conf(SYSTEM_TIMER__CONF__INITIALIZED, SYSTEM_TIMER__CONF__STARTED);
 }
 
 
-inline void system_timer__stop(void) {
-    TIMSK2 &= ~_BV(OCIE2A);
-    TCCR2B = TIMER2_MODE_STOPPED;
+inline static void system_timer__stop(void) {
+    timer2__ctc__interrupt__disable();
+    timer2__switch_conf(SYSTEM_TIMER__CONF__STARTED, SYSTEM_TIMER__CONF__INITIALIZED);
 }
 
 
-inline void system_timer__loop(void) {
+inline static void system_timer__loop(void) {
     for(;;);
 }
 

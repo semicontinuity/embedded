@@ -16,13 +16,12 @@
 #define TIMER2_MODE_RUN_PRESCALER_1024	(_BV(CS22) | _BV(CS21) | _BV(CS20))
 
 
-
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) 
 
 #   include "cpu/avr/timer2__mx8.h"
 
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
 
 #   include "cpu/avr/timer2__m8.h"
 

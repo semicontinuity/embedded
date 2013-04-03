@@ -7,16 +7,42 @@
 #ifndef __CPU_AVR_EEPROM_H
 #define __CPU_AVR_EEPROM_H
 
+#include <stdbool.h>
 #include <avr/io.h>
 
 
-#if defined(__AVR_ATmega48__)
+#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
+    defined(__AVR_ATmega168__) ||\
+    defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
+
+
+#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
+    defined(__AVR_ATmega168__)
+# define EEPROM__MASTER_WRITE_ENABLE_BIT EEMPE
+# define EEPROM__WRITE_ENABLE_BIT EEPE
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
+# define EEPROM__MASTER_WRITE_ENABLE_BIT EEMWE
+# define EEPROM__WRITE_ENABLE_BIT EEWE
+#endif
+
+
+inline static void eeprom__write(void) {
+    /* Master write enable */
+    EECR |= (1<<EEPROM__MASTER_WRITE_ENABLE_BIT);
+    /* Start eeprom write by setting write enable */
+    EECR |= (1<<EEPROM__WRITE_ENABLE_BIT);
+}
+
+inline static bool eeprom__is_writing(void) {
+    return EECR & (1<<EEPROM__WRITE_ENABLE_BIT);
+}
+
 
 inline static unsigned char eeprom__read_byte(unsigned char *address) {
     /* Wait for completion of previous write */
-    while(EECR & (1<<EEPE));
+    while(eeprom__is_writing());
     /* Set up address register */
-    EEARH = 0;
+    EEARH = ((int)address >> 8);
     EEARL = ((int)address & 0xFF);
     /* Start eeprom read*/
     EECR |= (1<<EERE);
@@ -27,15 +53,12 @@ inline static unsigned char eeprom__read_byte(unsigned char *address) {
 
 inline static void eeprom__write_byte(unsigned char *address, unsigned char data) {
     /* Wait for completion of previous write */
-    while(EECR & (1<<EEPE));
+    while(eeprom__is_writing());
     /* Set up address and Data Registers */
-    EEARH = 0;
+    EEARH = ((int)address >> 8);
     EEARL = ((int)address & 0xFF);
     EEDR = data;
-    /* Write logical one to EEMPE */
-    EECR |= (1<<EEMPE);
-    /* Start eeprom write by setting EEPE */
-    EECR |= (1<<EEPE);
+    eeprom__write();
 }
 
 

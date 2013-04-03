@@ -17,6 +17,7 @@
 
 #include "can_selector.h"
 #include "cpu/avr/spi.h"
+#include "cpu/avr/bootloader.h"
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
 
 extern volatile mcp251x_message_buffer kernel__frame __attribute__((section(".noinit")));
@@ -34,29 +35,27 @@ extern struct kernel__status kernel__status __attribute__((section(".noinit")));
 // In ATMEGA48, bits 0 (IVCE) and 1 (IVSEL) have no effect.
 // So, IVSEL bit is used to indicate KERNEL mode.
 // The IVSEL bit can be changed as described in the datasheet, with setting IVCE bit first.
-#if defined (__AVR_ATmega48__) || defined (__AVR_ATmega168__)
+#if defined (__AVR_ATmega48__) || defined (__AVR_ATmega16__)
 
 /**
  * Activates the kernel only mode.
  */
-inline void kernel__mode__set(void) {
-    MCUCR = 0x01;
-    MCUCR = 0x02; // set IVSEL to switch to KERNEL_ONLY mode
+inline static void kernel__mode__set(void) {
+    bootloader__set_place_int_vectors_at_beginning(true); // use IVSEL to indicate KERNEL_ONLY mode
 }
 
 /**
  * Activates the normal mode.
  */
-inline void kernel__mode__clear(void) {
-    MCUCR = 0x01;
-    MCUCR = 0x00; // clear IVSEL to switch to NORMAL mode
+inline static void kernel__mode__clear(void) {
+    bootloader__set_place_int_vectors_at_beginning(false); // use IVSEL to indicate KERNEL_ONLY mode
 }
 
 /**
  * Checks if in the kernel only mode.
  */
-inline bool kernel__mode__is_set(void) {
-    return MCUCR == 0x02;
+inline static bool kernel__mode__is_set(void) {
+    return bootloader__is_place_int_vectors_at_beginning();
 }
 
 #endif

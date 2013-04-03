@@ -27,15 +27,27 @@
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
     defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
 
-#define usart0__rx__complete_interrupt__VECTOR         (USART_RX_vect)
-#define usart0__rx__complete_interrupt__enabled__HOST  (UCSR0B)
-#define usart0__rx__complete_interrupt__enabled__BIT   (RXCIE0)
+
+#define usart0__rx__complete_interrupt__VECTOR                    (USART_RX_vect)
+
+#define usart0__rx__complete_interrupt__enabled__HOST             (UCSR0B)
+#define usart0__rx__complete_interrupt__enabled__BIT              (RXCIE0)
+
+#define usart0__tx__data_register_empty_interrupt__enabled__HOST  (UCSR0B)
+#define usart0__tx__data_register_empty_interrupt__enabled__BIT   (UDRIE0)
+
 
 #elif defined(__AVR_ATmega16__)
 
-#define usart0__rx__complete_interrupt__VECTOR         (USART_RXC_vect)
-#define usart0__rx__complete_interrupt__enabled__HOST  (UCSRB)
-#define usart0__rx__complete_interrupt__enabled__BIT   (RXCIE)
+
+#define usart0__rx__complete_interrupt__VECTOR                    (USART_RXC_vect)
+#define usart0__tx__data_register_empty_interrupt__VECTOR         (USART_UDRE_vect)
+
+#define usart0__rx__complete_interrupt__enabled__HOST             (UCSRB)
+#define usart0__rx__complete_interrupt__enabled__BIT              (RXCIE)
+
+#define usart0__tx__data_register_empty_interrupt__enabled__HOST  (UCSRB)
+#define usart0__tx__data_register_empty_interrupt__enabled__BIT   (UDRIE)
 
 #endif
 

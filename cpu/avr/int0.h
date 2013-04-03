@@ -26,12 +26,12 @@ inline static void int0__start(void) {
 }
 
 
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
 
 
 inline static void int0__init(void) {
     // pullup?
-    MCUCR = (1<<ISC01);
+    MCUCR |= (1<<ISC01);
 }
 
 

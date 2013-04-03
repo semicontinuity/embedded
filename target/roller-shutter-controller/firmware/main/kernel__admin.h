@@ -3,6 +3,7 @@
 
 #include <avr/pgmspace.h>
 #include "cpu/avr/eeprom.h"
+#include "cpu/avr/flash.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 #include "can_selector.h"
@@ -134,7 +135,7 @@ static inline void kernel__admin__handle(void) {
             asm ("mov r1, %0" ::"r"(kernel__frame.data[7]):"r1");
             asm ("mov r30, %0" ::"r"(kernel__frame.data[3]):"r30");
             asm ("mov r31, %0" ::"r"(kernel__frame.data[1]):"r31");
-            SPMCSR = kernel__frame.data[4];
+            FLASH__REGISTER = kernel__frame.data[4];
 
             asm ("spm");
 

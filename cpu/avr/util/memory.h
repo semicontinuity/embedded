@@ -13,7 +13,8 @@
 
 
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__) 
+    defined(__AVR_ATmega168__) ||\
+    defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__) 
 
 
 inline static void memory__copy_P(void* dst, const void *src, uint8_t size) {
