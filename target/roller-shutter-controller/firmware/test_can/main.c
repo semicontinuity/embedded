@@ -4,6 +4,7 @@
 
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/usart0__rx_polled.h"
+#include "cpu/avr/usart0__tx_polled.h"
 
 #include "cpu/avr/spi.h"
 #include "can_selector.h"

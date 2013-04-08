@@ -10,6 +10,7 @@
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 
 #include "cpu/avr/usart0.h"
+#include "cpu/avr/usart0__tx_polled.h"
 
 
 extern mcp251x_message_buffer can__txb0;

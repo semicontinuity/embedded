@@ -8,6 +8,8 @@
 #include "cpu/avr/asm.h"
 
 #include "cpu/avr/usart0.h"
+#include "cpu/avr/usart0__tx_polled.h"
+
 
 uint8_t usart_rx_buffer[PACKET_LENGTH] __attribute__ ((section (".noinit")));
 
