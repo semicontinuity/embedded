@@ -24,7 +24,7 @@ SRC += parse.c
 SRC += cpu/avr/util/debug.c
 
 
-CDEFS += -Ddebug__putc=usart__out__write
+CDEFS += -Ddebug__putc=usart0__out__write
 
 
 include $(ROOT)/cpu/avr/Makefile

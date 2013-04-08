@@ -16,7 +16,7 @@ inline static void usart_rx_thread__on_packet_transferred(void) {
     volatile register uint8_t *packet	asm("r28");
     LOAD_ADDRESS(packet, usart_rx_buffer);
 
-    usart__out__write(packet[0]);
+    usart0__out__write(packet[0]);
 
     // prepare to receive the next packet
     usart_rx_thread__init();

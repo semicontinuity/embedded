@@ -37,7 +37,7 @@ inline static void can__txb0__load_response_(const uint8_t dlc, const uint8_t* i
 }
 
 inline static void can__txb0__request_to_send(void) {
-    usart__out__send((const char *)&can__txb0, sizeof(can__txb0));
+    usart0__out__send((const char *)&can__txb0, sizeof(can__txb0));
 }
 
 // TXB1 functions
@@ -59,7 +59,7 @@ inline static void can__txb1__load_response(const uint8_t sidh, const uint8_t si
 }
 
 inline static void can__txb1__request_to_send(void) {
-    usart__out__send((const char *)&can__txb1, sizeof(can__txb1));
+    usart0__out__send((const char *)&can__txb1, sizeof(can__txb1));
 }
 
 
@@ -72,7 +72,7 @@ inline static void can__txb2__load_data(const uint8_t* data, uint8_t count) {
 }
 
 inline static void can__txb2__request_to_send(void) {
-    usart__out__send((const char *)&can__txb2, sizeof(can__txb2));
+    usart0__out__send((const char *)&can__txb2, sizeof(can__txb2));
 }
 
 

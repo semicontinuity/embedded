@@ -14,10 +14,10 @@ void sms__send(const uint8_t index) {
     const uint8_t* PROGMEM ptr = MESSAGE;
     const uint8_t* PROGMEM end = MESSAGE + sizeof(MESSAGE);
     while (ptr <= end) {
-        usart__out__write(pgm_read_byte(ptr));
+        usart0__out__write(pgm_read_byte(ptr));
         ptr++;
     }
-    usart__out__write(index);
-    usart__out__write(10);
+    usart0__out__write(index);
+    usart0__out__write(10);
 }
     

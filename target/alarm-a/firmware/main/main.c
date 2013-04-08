@@ -105,10 +105,10 @@ int main(void) {
     unused__init();
 
     // Debug/Mobile phone UART
-    usart__rate__set(USART_BAUD_RATE);
-    usart__init();
-    usart__out__enabled__set();
-    usart__in__enabled__set();
+    usart0__rate__set(USART_BAUD_RATE);
+    usart0__init();
+    usart0__out__enabled__set();
+    usart0__in__enabled__set();
 
     water_sensor_a__init();
     water_sensor_b__init();

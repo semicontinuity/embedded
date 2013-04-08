@@ -18,13 +18,13 @@ int main(void) {
     motor__init();
     motor__up__on();
 
-    usart__rate__set(USART_BAUD_RATE);
-    usart__init();
-    usart__out__enabled__set();
-    usart__in__enabled__set();
+    usart0__rate__set(USART_BAUD_RATE);
+    usart0__init();
+    usart0__out__enabled__set();
+    usart0__in__enabled__set();
 
-    usart__out__write(0xAA);
-    usart__out__write(0x55);
+    usart0__out__write(0xAA);
+    usart0__out__write(0x55);
 
     spi__init(SPI_CLKDIV_128);
     can_selector__init();
@@ -37,7 +37,7 @@ int main(void) {
     while (1) {
         uint8_t a = usart0__in__read();
         can_selector__run(b = mcp251x_read_byte(a));
-        usart__out__write(b);
+        usart0__out__write(b);
     }
     return 0;
 }

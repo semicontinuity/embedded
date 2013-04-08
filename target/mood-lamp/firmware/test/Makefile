@@ -14,7 +14,7 @@ CDEFS += $(CONF)
 
 
 CDEFS += -DF_CPU=19660800UL
-CDEFS += -Ddebug__putc=usart__out__write
+CDEFS += -Ddebug__putc=usart0__out__write
 
 SRC += main.c
 SRC += pwm.c

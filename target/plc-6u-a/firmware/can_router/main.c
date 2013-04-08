@@ -21,10 +21,10 @@
 //int main(void) __attribute__ ((noreturn));
 int main(void)
 {
-    usart__rate__set(USART_BAUD_RATE);
-    usart__init();
-    usart__out__enabled__set();
-    usart__in__enabled__set();
+    usart0__rate__set(USART_BAUD_RATE);
+    usart0__init();
+    usart0__out__enabled__set();
+    usart0__in__enabled__set();
 
 
     usart_tx_q__init();

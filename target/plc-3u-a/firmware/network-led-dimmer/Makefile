@@ -30,7 +30,7 @@ SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
 SRC += cpu/avr/util/debug.c
 
 
-CDEFS += -Ddebug__putc=usart__out__write
+CDEFS += -Ddebug__putc=usart0__out__write
 
 
 include $(ROOT)/cpu/avr/Makefile
