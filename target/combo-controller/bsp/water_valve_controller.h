@@ -13,8 +13,8 @@
  * Valid values for water_valve_controller__value.
  */
 typedef enum {
-    WATER_VALVE_CONTROLLER__VALUE__CLOSED            = 0,
-    WATER_VALVE_CONTROLLER__VALUE__OPENED            = 1
+    WATER_VALVE_CONTROLLER__VALUE__OPENED            = 0,
+    WATER_VALVE_CONTROLLER__VALUE__CLOSED            = 1
 } water_valve_controller__value_t;
 
 /**
@@ -27,11 +27,11 @@ INLINE void water_valve_controller__value__on_change(void);
 
 
 inline static void water_valve_controller__set_value(uint8_t value) {
-    if (value == WATER_VALVE_CONTROLLER__VALUE__CLOSED) {
-        water_valve__on();
+    if (value == WATER_VALVE_CONTROLLER__VALUE__OPENED) {
+        water_valve__off();
     }
     else {
-        water_valve__off();
+        water_valve__on();
     }
 
     water_valve_controller__value = value;
@@ -45,5 +45,9 @@ inline static void water_valve_controller__value__set_from_raw_ptr(const void* p
     const water_valve_controller__value_t *value_ptr = (const water_valve_controller__value_t *)ptr;
     water_valve_controller__set_value(*value_ptr);
 }
+
+inline void water_valve_controller__init(void) {
+}
+
 
 #endif
