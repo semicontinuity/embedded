@@ -6,11 +6,18 @@
 
 // The user must define "DEBUG_IMPL_H" and "debug__putc" that prints one character debug output
 #if !defined(DEBUG_IMPL_H)
+# include "cpu/avr/usart0.h"
+# include "cpu/avr/usart0__rx_polled.h"
+# include "cpu/avr/usart0__tx_polled.h"
+
 # if !defined(debug__putc)
 #  define debug__putc usart0__out__write
 # endif
-# include "cpu/avr/usart0.h"
-# include "cpu/avr/usart0__tx_polled.h"
+
+# if !defined(debug__in__read)
+#  define debug__in__read usart0__in__read
+# endif
+
 #endif
 
 
