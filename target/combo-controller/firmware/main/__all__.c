@@ -16,6 +16,7 @@
 
 
 // BSP
+#include "seconds_timer.c"
 #include CAN_C
 
 #include "../../bsp/water_leak_sensors_scanner.c"

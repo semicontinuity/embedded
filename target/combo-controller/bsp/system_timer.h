@@ -27,7 +27,8 @@
 #define SYSTEM_TIMER__CONF__INITIALIZED (TIMER2_CONF_WGM_CTC | TIMER2_CONF_TOP(125) | TIMER2_CONF_STOPPED)
 #define SYSTEM_TIMER__CONF__STARTED     (TIMER2_CONF_WGM_CTC | TIMER2_CONF_TOP(125) | TIMER2_CONF_PRESCALER_256)
 
-INLINE void system_timer__on_system_tick(void);
+/* Callback function prototype, must be defined by the application code */ 
+INLINE void system_timer__out__run(void);
 
 
 inline static void system_timer__init(void) {
@@ -44,11 +45,6 @@ inline static void system_timer__start(void) {
 inline static void system_timer__stop(void) {
     timer2__ctc__interrupt__disable();
     timer2__switch_conf(SYSTEM_TIMER__CONF__STARTED, SYSTEM_TIMER__CONF__INITIALIZED);
-}
-
-
-inline static void system_timer__loop(void) {
-    for(;;);
 }
 
 #endif
