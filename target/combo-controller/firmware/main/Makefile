@@ -48,6 +48,10 @@ SRC += kernel.c
 SRC += $(CAN_SERVICE_C)
 SRC += comm_service__descriptor_memory.c
 SRC += comm_service__handler.c
+# ifdef CONSOLE_SERVICE
+SRC += services/console/console_service.c
+SRC += services/console/parse.c
+# endif
 
 # BSP
 SRC += water_leak_sensors_scanner.c
@@ -55,6 +59,7 @@ SRC += water_valve_controller.c
 SRC += $(CAN_C)
 
 # Library
+SRC += cpu/avr/util/debug.c
 SRC += cpu/avr/timer2.c
 ifneq ($(CAN_EMU),1)
 SRC += cpu/avr/int0.c

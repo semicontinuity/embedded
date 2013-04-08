@@ -15,6 +15,8 @@
 
 #include "comm_service__water_valve_controller.h"
 
+#include "console_service.h"
+
 
 // =============================================================================
 // Implementation of callbacks from other modules (bindings)
@@ -64,16 +66,22 @@ INLINE void system_timer__on_system_tick(void) {
 // Application
 // =============================================================================
 
-inline static void application__init(void) {    
+inline static void application__init(void) {
+    console_service__init();
+
 //    motor_controller__prescaler__init();
     water_leak_sensors__init();
     water_leak_sensors_scanner__init();
-//    motor__init();
+
+    water_valve__init();
+    water_valve_controller__init();
+
 //    unused1__init();
 //    unused2__init();
 //    unused3__init();
 //    system_timer__init();
     water_leak_handler__init();
+    system_timer__init();
 }
 
 inline static void application__start(void) {
@@ -108,6 +116,8 @@ int main(void) {
 
     sei();
 
-    for(;;);
+    //for(;;);
+    console_service__run();
+
     return 0;
 }
