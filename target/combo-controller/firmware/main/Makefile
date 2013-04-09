@@ -47,7 +47,7 @@ SRC += main.c
 SRC += kernel.c
 SRC += $(CAN_SERVICE_C)
 SRC += comm_service__descriptor_memory.c
-SRC += comm_service__handler.c
+SRC += comm_service__rx.c
 # ifdef CONSOLE_SERVICE
 SRC += services/console/console_service.c
 SRC += services/console/parse.c

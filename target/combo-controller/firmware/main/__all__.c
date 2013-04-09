@@ -6,7 +6,7 @@
 #include "kernel.c"
 #include CAN_SERVICE_C
 #include "comm_service__descriptor_memory.c"
-#include "comm_service__handler.c"
+#include "comm_service__rx.c"
 #include "main.c"
 
 //#if defined(SERVICE_CONSOLE)

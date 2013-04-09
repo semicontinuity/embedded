@@ -8,6 +8,7 @@
 #include "kernel.h"
 #include "kernel__rx__handler__spi.h"
 #include "comm_service__descriptor_memory.h"
+#include "comm_service__gpio.h"
 #include "comm_service__water_valve_controller.h"
 
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
@@ -23,11 +24,12 @@ void comm_service__handler__handle(const uint8_t filter, const uint8_t is_get) {
         comm_service__descriptor_memory__handle(is_get);
         break;
     case CANP_FILTER__USER:
-    case CANP_FILTER__USER_MCAST:
-        switch (CANP_SLOT_BITS(kernel__frame.header.id)) {
-        case CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE:
-            comm_service__water_valve_controller__value__handle(is_get);
-            break;
+    case CANP_FILTER__USER_MCAST: {
+            uint8_t slot = CANP_SLOT_BITS(kernel__frame.header.id);
+            if (slot <= CANP_REPORT__GPIO__PORT_CNF3) 
+                comm_service__gpio__handle(is_get);
+            else if (slot <= CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE) 
+                comm_service__water_valve_controller__value__handle(is_get);
         }
     }
 }
