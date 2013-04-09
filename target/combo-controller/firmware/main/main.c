@@ -14,7 +14,8 @@
 #include "water_leak_sensors_scanner.h"
 #include "water_valve.h"
 
-#include "comm_service__water_valve_controller.h"
+#include "comm_service__endpoint__gpio.h"
+#include "comm_service__endpoint__water_valve_controller.h"
 
 #include "console_service.h"
 
@@ -34,7 +35,7 @@ INLINE void water_leak_sensors_scanner__status__on_change(void) {
  * Called by motor_controller__run() when motor_controller__status has been changed.
  */
 INLINE void water_valve_controller__value__on_change(void) {
-    comm_service__water_valve_controller__value__broadcast();
+    comm_service__endpoint__water_valve_controller__value__broadcast();
 }
 
 
