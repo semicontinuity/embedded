@@ -82,14 +82,20 @@ SID10 ..     SID3 SID2..0 IDE EID17 EID15  ..    EID8 EID7    ..   EID0
 - Owner (1 bit): Set for a packet with the payload, transmitted by the owner of the parameter (from the owner to the client)
                  Reset for a packet with the payload, transmitted by the non-owner of the parameter (from the client to the owner)
 
-- Auxillary: Auxillary bit, for now used to distinguish SYSTEM (1) and USER (0) messages.
+- Auxiliary: Auxiliary bit, for now used to distinguish SYSTEM (1) and USER (0) messages.
 
 The combination of Auxillary, RTR and Owner bits defines the message type:
 
 - AUX=0, RTR=0, OWN=0:  PUT request, the client asks the node to set the certain parameter.
-- AUX=0, RTR=0, OWN=1:  Parameter VALUE, sent by the parameter owner. Either the response to PUT or the owner-initiated notification.
-- AUX=0, RTR=1, OWN=0:  NOT_OK response to PUT.
+- AUX=0, RTR=0, OWN=1:  Parameter VALUE, sent by the parameter owner. Either the response to GET or the owner-initiated notification.
+- AUX=0, RTR=1, OWN=0:  NOT_OK response to PUT. DLC may contain the error code.
 - AUX=0, RTR=1, OWN=1:  GET request, the client asks the node to send out the value of a certain parameter.
+
+- AUX=1, RTR=0, OWN=0:  System PUT request, can be used to enable or disable notifications for a certain parameter.
+- AUX=1, RTR=0, OWN=1:  Configuration memory range, sent in response to System GET.
+- AUX=1, RTR=1, OWN=0:  NOT_OK response to System PUT. DLC may contain the error code.
+- AUX=1, RTR=1, OWN=1:  System GET request for the range of configuration memory.
+
 
 The router must examine RTR and OWNER bits, to identify the destination network of the packet.
 
@@ -147,57 +153,86 @@ Router sees RTR==0 && Owner==1 => destination net is counterparty net
 Parallel GPIO Profile
 --------------------------------------------------------------------------------
 
-The Parallel GPIO profile describes a set of CAN messages (reports)
-to for performing I/O on 8-bit GPIO port.
-It is designed to be similar to one of CAN Extender,
-to allow for at least partially compatible software.
+The Parallel GPIO profile describes a set of CAN parameters (registers),
+pertaining to GPIO port,
+and messages (reports) for configuration of every bit in the port
+and performing I/O on a port.
 
-There are the following registers in the profile:
-- PORT_OUT_MASK:    the mask for writes into PORT_OUT.
-                    write only.
-- PORT_OUT:         determines the pins driven by the port.
+The virtual port width can be any number of bits up to 64.
+The information about the pins of the port and their capabilities
+(e.g input-only, output-only, configurable input or output, or unavailable)
+should be accessible via device descriptor.
 
-- PORT_IN_MASK:     the mask of bits in PORT_IN changed since the last report.
-                    read only.
-- PORT_IN:          contains the value that is read by the port.
+Parameters (8 bytes per parameter):
 
-- PORT_DIR:         determines the direction of the port pins (1=output, 0=input).
-- PORT_CNF1:        reserved
-- PORT_CNF2:        reserved
-- PORT_CNF3:        reserved
-- PORT_MODE0:       port mode bits
-- PORT_MODE1:       port mode bits
-
-If the port is configured for input, the bits in PORT_MODE1 and PORT_MODE0
-are interpreted as follows:
-
-- 00: changes on the pin do not generate notifications.
-- 01: positive edge generates notifications.
-- 10: negative edge generates notifications.
-- 11: positive and negative edge generates notifications.
-
-When a notification is generated, the corresponding bit in PORT_IN_MASK
-is set.
-
-
-There are the following fields in the profile ROM:
-- PORT_DIR_MASK:    the mask of the bits of PORT_DIR that can be changed.
-
-
-There are the following reports in the profile:
-
-- PORT_OUT:
-  - byte 0:         register PORT_OUT_MASK
-  - byte 1:         register PORT_OUT
-
+- PORT_OUT:         The value if output latch, R/W.
 - PORT_IN:
-  - byte 0:         register PORT_IN_MASK
-  - byte 1:         register PORT_IN
+                    R: The value read by the port.
+                    W: The bits to be toggled in the port, configured for output.
+- PORT_CLEAR:
+                    R: The bits that were cleared since the last read of PORT_CLEAR.
+                    W: The bits to be cleared in the port, configured for output.
+- PORT_SET:
+                    R: The bits that were set since the last read of PORT_SET.
+                    W: The bits to be set in the port, configured for output.
 
-- PORT_CONF:
-  - byte 0:         register PORT_DIR
-  - byte 1:         register PORT_CNF1
-  - byte 2:         register PORT_CNF2
-  - byte 3:         register PORT_CNF3
-  - byte 4:         register PORT_MODE0
-  - byte 5:         register PORT_MODE1
+- PORT_CNF0:        Configuration for bits 0-15 of the port, R/W
+- PORT_CNF1:        Configuration for bits 16-31 of the port, R/W
+- PORT_CNF2:        Configuration for bits 32-47 of the port, R/W
+- PORT_CNF3:        Configuration for bits 48-63 of the port, R/W
+
+
+Configuration registers are organized in 4-byte units,
+each unit specifies the configuration for one byte of the port:
+
+- PORT_CNF0:        MODE00 MODE01 MODE02 MODE03 MODE10 MODE11 MODE12 MODE13
+- PORT_CNF1:        MODE20 MODE21 MODE22 MODE23 MODE30 MODE31 MODE32 MODE33
+- PORT_CNF2:        MODE40 MODE41 MODE42 MODE43 MODE50 MODE51 MODE52 MODE53
+- PORT_CNF3:        MODE60 MODE61 MODE62 MODE63 MODE70 MODE71 MODE72 MODE73
+
+E.g, MODE00..MODE03 configures the first 8 bits of the port.
+
+For each bit in the port, 4 bits from bytes MODEx0..MODEx3 are interpreted as follows:
+
+Bits 0 and 1 specify the pin mode:
+
+- 00: High-impedance input.
+- 01: High-impedance input, pull-up enabled.
+- 10: High-impedance input, pull-down enabled.
+- 11: Output.
+
+If pin is confugured as input, bits 2 and 3 specify the pin change detection mode:
+
+- 00: changes on the pin are not detected.
+- 01: positive edge (setting a bit) is detected.
+- 10: negative edge (clearing a bit) is detected.
+- 11: any change is detected.
+
+When the corresponding change occurs, if the change detection is enabled for the given bit,
+the respective bit is set in PORT_CLEAR or PORT_SET, and can be read or sent as a notification.
+
+The details of change detection are implementation-dependent;
+change detection can be implemented with pin change interrupts, if present, or by polling the port value.
+
+If pin is confugured as output, bits 2 and 3 specify the output driver properties:
+
+- 00: push/pull output, fast.
+- 01: open drain output, fast.
+- 10: push/pull output, slow.
+- 11: open drain output, slow.
+
+If the corresponding bit in the port is not available,
+the configuration bits read from CNFx registers are undefined.
+Writing to these bits MUST have no effect, the bits read from the register SHOULD be the same as before,
+and the error (NOT_OK) COULD be reported.
+
+If the corresponding pin is configured for alternative use,
+it is recommended that the configuration values SHOULD reflect the properties of the pin.
+
+If some configuration bit values are not possible for the pin,
+(e.g. pin is output-only, or input-only without the possibility of enabling pull-down, etc.)
+setting unsupported values MUST have no effect, the bits read from the register SHOULD be the same as before,
+and the error (NOT_OK) COULD be reported.
+
+Reports can be smaller than 8 bytes;
+in this cases, the affected bits are determined from the Data Length Code of the message.
