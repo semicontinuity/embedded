@@ -12,6 +12,7 @@
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/util/debug.h"
+#include "cpu/avr/asm.h"
 
 
 uint8_t console_service__command[16];
@@ -20,7 +21,7 @@ uint16_t console_service__command_length;
 
 // Format: 'cXX?'
 inline static bool console_service__handle__mcp2515_read_register(void) {
-    if (console_service__command_length == 2 && console_service__command[0] == 'c' && console_service__command[3] == '?') {
+    if (console_service__command_length == 4 && console_service__command[0] == 'c' && console_service__command[3] == '?') {
         uint8_t addr = parseByte(console_service__command);
         register uint8_t v;
         can_selector__run(v = mcp251x_read_byte(addr));
@@ -63,7 +64,7 @@ inline static void console_service__handle_command(void) {
 
 
 inline static void console_service__read_line(void) {
-    while (1) {
+    for(;;) {
         console_service__command_length = 0;
         register uint8_t c = debug__in__read();
 
@@ -74,7 +75,7 @@ inline static void console_service__read_line(void) {
 
 
 void console_service__run(void) {
-    while(1) {
+    for(;;) {
         console_service__read_line();
         console_service__handle_command();
     }

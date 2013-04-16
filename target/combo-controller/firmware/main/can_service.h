@@ -40,9 +40,10 @@ inline static void comm_service__rx__start(void) {
     can__start();
 
     // TODO: abstract
-    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)|_BV(MCP251X_RX1IE)));
+    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)|_BV(MCP251X_RX1IE)|_BV(MCP251X_TX1IE)|_BV(MCP251X_TX2IE)));
 }
 
 #include "kernel__rx__handler.h"
+#include "kernel__tx__handler.h"
 
 #endif

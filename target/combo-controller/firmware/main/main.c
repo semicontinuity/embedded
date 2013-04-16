@@ -1,23 +1,28 @@
 // =============================================================================
-// Roller shutter controller - main module.
+// Combo controller - main module.
 // =============================================================================
 
-#include <avr/interrupt.h>
-#include <avr/eeprom.h>
-
-#include "kernel.h"
-#include "unused.h"
 #include "seconds_timer.h"
 #include "system_timer.h"
-#include "water_leak_handler.h"
-#include "water_leak_sensors.h"
 #include "water_leak_sensors_scanner.h"
-#include "water_valve.h"
 
-#include "comm_service__endpoint__gpio.h"
-#include "comm_service__endpoint__water_valve_controller.h"
+#include "out/amplifier_relay.h"
+#include "out/siren1.h"
+#include "out/siren2.h"
+#include "out/water_valve.h"
+#include "out/unused.h"
 
+#include "in/water_leak_sensors.h"
+
+#include "flags/gpio_notifications__pending.h"
+#include "flags/water_leak_sensors__changed.h"
+#include "flags/water_valve__changed.h"
+
+#include "kernel.h"
 #include "console_service.h"
+#include "water_leak_handler.h"
+
+#include <avr/interrupt.h>
 
 
 // =============================================================================
@@ -28,14 +33,10 @@
  * Callback function, called by water_leak_sensors_scanner__run() when any of the sensors has changed state.
  */
 INLINE void water_leak_sensors_scanner__status__on_change(void) {
-    water_leak_handler__run();
-}
+    water_leak_sensors__changed__set(1);
+    gpio_notifications__pending__set(1);
 
-/**
- * Called by motor_controller__run() when motor_controller__status has been changed.
- */
-INLINE void water_valve_controller__value__on_change(void) {
-    comm_service__endpoint__water_valve_controller__value__broadcast();
+    water_leak_handler__run();
 }
 
 
@@ -59,17 +60,26 @@ INLINE void seconds_timer__out__run(void) {
 // =============================================================================
 
 inline static void application__init(void) {
-    console_service__init();
+//    out__unused1__init();
+//    out__unused2__init();
+//    out__unused3__init();
+    out__amplifier_relay__init();
+    out__siren1__init();
+    out__siren2__init();
+    out__water_valve__init();
 
-    water_leak_sensors__init();
+    // inputs
+    in__water_leak_sensors__init();
+
+    // flags
+    gpio_notifications__pending__init();
+    water_leak_sensors__changed__init();
+    water_valve__changed__init();
+
+    // services
     water_leak_sensors_scanner__init();
 
-    water_valve__init();
-    water_valve_controller__init();
-
-//    unused1__init();
-//    unused2__init();
-//    unused3__init();
+//    console_service__init();
     water_leak_handler__init();
     system_timer__init();
 }
@@ -104,10 +114,12 @@ int main(void) {
         application__start();
     }
 
-    sei();
-
-    //for(;;);
-    console_service__run();
+    // run background tasks
+    for(;;) {
+        cli();
+        comm_service__endpoint__io__broadcast();
+        sei();
+    }
 
     return 0;
 }

@@ -20,7 +20,7 @@
 #include "cpu/avr/bootloader.h"
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
 
-extern volatile mcp251x_message_buffer kernel__frame __attribute__((section(".noinit")));
+extern mcp251x_message_buffer kernel__frame __attribute__((section(".noinit")));
 extern void kernel__send_response(const uint8_t count, const uint8_t* data) __attribute__((section(".kernel")));
 
 struct kernel__status {

@@ -5,7 +5,7 @@
 
 struct kernel__status kernel__status;
 
-volatile mcp251x_message_buffer kernel__frame;
+mcp251x_message_buffer kernel__frame;
 
 void kernel__send_response(const uint8_t count, const uint8_t* data) {
     kernel__frame.header.id.eid8 = CANP_EID8(CANP_TXB0_HOST_NET, CANP_TXB0_HOST_ADDR);

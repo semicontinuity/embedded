@@ -11,7 +11,7 @@
 #include <stdbool.h>
 
 
-#define WATER_LEAK_SENSORS_SCANNER__STATE__INACTIVE     (SIGNAL_MASK(WATER_LEAK_SENSOR1) | SIGNAL_MASK(WATER_LEAK_SENSOR2))
+#define WATER_LEAK_SENSORS_SCANNER__STATE__INACTIVE     (SIGNAL_MASK(IN__WATER_LEAK_SENSOR1) | SIGNAL_MASK(IN__WATER_LEAK_SENSOR2))
 
 
 struct water_leak_sensors_scanner__status {
@@ -28,8 +28,7 @@ INLINE void water_leak_sensors_scanner__status__on_change(void);
 
 
 
-inline void water_leak_sensors_scanner__init(void) {
-}
+inline void water_leak_sensors_scanner__init(void) {}
 
 
 /**
@@ -37,17 +36,7 @@ inline void water_leak_sensors_scanner__init(void) {
  * Sensors readings are filtered.
  * Will invoke the callback water_leak_sensors_scanner__status__on_change() when any of the sensors has changed state.
  */
-inline static void water_leak_sensors_scanner__run(void) {
-    uint8_t sensors_state = PORT_VALUE(WATER_LEAK_SENSORS) & WATER_LEAK_SENSORS_SCANNER__STATE__INACTIVE;
-    uint8_t prev_state = water_leak_sensors_scanner__status.prev_state;
-    uint8_t filtered_state = sensors_state | prev_state;
-    uint8_t state = water_leak_sensors_scanner__status.state;
-
-    water_leak_sensors_scanner__status.prev_state = sensors_state;
-    water_leak_sensors_scanner__status.state = filtered_state;
-    if (filtered_state != state) water_leak_sensors_scanner__status__on_change();
-}
-
+void water_leak_sensors_scanner__run(void);
 
 /** Returns true when at least one sensor is active, i.e. water leak detected */
 inline static bool water_leak_sensors_scanner__is_active(void) {

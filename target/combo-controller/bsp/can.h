@@ -6,6 +6,7 @@
 #define __CAN_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "can_selector.h"
 
@@ -16,9 +17,10 @@
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 
 #include "cpu/avr/spi_polled.h"
-
 #include "cpu/avr/usart0.h"
-#include "cpu/avr/util/debug.h"
+
+#include "util/bitops.h"
+
 #include <util/delay.h>
 
 
@@ -36,6 +38,28 @@ extern mcp251x_frame_header can__txb1_h PROGMEM;
 
 // TX Buffer 2 Header
 extern mcp251x_frame_header can__txb2_h PROGMEM;
+
+
+#if defined(can__txb0__available__HOST) && defined(can__txb0__available__BIT)
+DECLARE_BITVAR(can__txb0__available, can__txb0__available__HOST, can__txb0__available__BIT);
+#else
+inline void can__txb0__available__set(uint8_t value) {}
+inline bool can__txb0__available__is_set(void) { return true; }
+#endif
+
+#if defined(can__txb1__available__HOST) && defined(can__txb1__available__BIT)
+DECLARE_BITVAR(can__txb1__available, can__txb1__available__HOST, can__txb1__available__BIT);
+#else
+inline void can__txb1__available__set(uint8_t value) {}
+inline bool can__txb1__available__is_set(void) { return true; }
+#endif
+
+#if defined(can__txb2__available__HOST) && defined(can__txb2__available__BIT)
+DECLARE_BITVAR(can__txb2__available, can__txb2__available__HOST, can__txb2__available__BIT);
+#else
+inline void can__txb2__available__set(uint8_t value) {}
+inline bool can__txb2__available__is_set(void) { return true; }
+#endif
 
 
 /**
@@ -58,12 +82,17 @@ inline static void can__init(void) {
 
 
 inline static void can__start(void) {
-    //can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_RXB1CTRL, 0x60));
-
+    can__txb0__available__set(1);
+    can__txb1__available__set(1);
+    can__txb2__available__set(1);
     can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANCTRL, MCP251X_OPMODE_NORMAL));
 }
 
 
+/**
+ * Reads the received CAN frame into the specified buffer.
+ * @return the ID of the filter matched (one of MCP251X__RX_STATUS__FILTER__x constants)
+ */
 inline static uint8_t can__read_frame(uint8_t *buffer) {
     uint8_t status;
     can_selector__run(status = mcp2515_rx_status());
@@ -160,6 +189,7 @@ inline static void can__txb0__load_response_(const uint8_t dlc, const uint8_t* i
 }
 
 inline static void can__txb0__request_to_send(void) {
+    can__txb0__available__set(0);
     can__request_to_send(MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0);
 }
 
@@ -181,6 +211,7 @@ inline static void can__txb1__load_report(const uint8_t report_id, const uint8_t
 }
 
 inline static void can__txb1__request_to_send(void) {
+    can__txb1__available__set(0);
     can__request_to_send(MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B1);
 }
 
@@ -201,6 +232,7 @@ inline static void can__txb2__load_report(const uint8_t report_id, const uint8_t
 }
 
 inline static void can__txb2__request_to_send(void) {
+    can__txb2__available__set(0);
     can__request_to_send(MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B2);
 }
 

@@ -1,4 +1,4 @@
-#include "int0.h"
+#include "cpu/avr/int0.h"
 #include <avr/interrupt.h>
 
 

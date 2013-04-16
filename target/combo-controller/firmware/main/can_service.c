@@ -13,19 +13,37 @@
 // =============================================================================
 #include "can_service.h"
 
-#include <util/delay.h>
+#include "can_selector.h"
+#include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
+#include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 
 /**
  *  Handler for the interrupt from MCP2515 CAN controller (falling edge).
  */
 static inline void can_service__rx__run(void) {
-    // Interrupt flag cleared automatically when proper RX buffer is read.
-    kernel__rx__handle(can__read_frame((uint8_t*)&kernel__frame));
-    // Clear all interrupts
-    //can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTF, 0));
+    uint8_t status;
+    can_selector__run(status = mcp2515_read_status());
+
+    if (status & (MCP251X__STATUS__RX0IF | MCP251X__STATUS__RX1IF)) {
+        // Interrupt flag cleared automatically when proper RX buffer is read.
+        kernel__rx__handle(can__read_frame((uint8_t*)&kernel__frame));
+    }
+    else {
+        uint8_t mask;
+        if (status & (MCP251X__STATUS__TX1IF)) {
+            mask = 1 << MCP251X_TX1IF;
+        }
+        else {
+            // MCP251X__STATUS__TX2IF
+            mask = 1 << MCP251X_TX2IF;
+        }
+        // clear corresponding interrupt
+        can_selector__run(mcp251x_bit_modify(MCP251X_REGISTER_CANINTF, mask, 0));
+        kernel__tx__handle(mask);
+    }
 }
 
 
-INLINE void int0__run(void) {
-    can_service__rx__run();
-}
+//INLINE void int0__run(void) {
+//    can_service__rx__run();
+//}

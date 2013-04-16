@@ -10,6 +10,8 @@ vpath %.c $(BSP) $(ROOT)
 
 
 CAN_EMU = 0
+CDEFS += -Wl,--relax
+CDEFS += --combine -fwhole-program
 CDEFS += -Wl,--section-start=.kernel=0x0001000 -Wl,--section-start=.noinit=0x008004EB  -Wl,--defsym=__stack=0x04EA
 # -Wl,--defsym=__stack=0x008002f2
 
@@ -47,7 +49,7 @@ SRC += main.c
 SRC += kernel.c
 SRC += $(CAN_SERVICE_C)
 SRC += comm_service__descriptor_memory.c
-SRC += comm_service__rx.c
+SRC += comm_service.c
 # ifdef CONSOLE_SERVICE
 SRC += services/console/console_service.c
 SRC += services/console/parse.c
@@ -56,7 +58,6 @@ SRC += services/console/parse.c
 # BSP
 SRC += seconds_timer.c
 SRC += water_leak_sensors_scanner.c
-SRC += water_valve_controller.c
 SRC += $(CAN_C)
 
 # Library

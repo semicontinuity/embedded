@@ -6,7 +6,7 @@
 #include "kernel.c"
 #include CAN_SERVICE_C
 #include "comm_service__descriptor_memory.c"
-#include "comm_service__rx.c"
+#include "comm_service.c"
 #include "main.c"
 
 //#if defined(SERVICE_CONSOLE)
@@ -20,7 +20,6 @@
 #include CAN_C
 
 #include "../../bsp/water_leak_sensors_scanner.c"
-#include "../../bsp/water_valve_controller.c"
 
 // Library
 #include "cpu/avr/timer2.c"

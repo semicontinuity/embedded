@@ -1,6 +1,8 @@
 #ifndef __CPU__AVR__ASM_H
 #define __CPU__AVR__ASM_H
 
+#define FIX_POINTER(_ptr) __asm__ __volatile__("" : "=b" (_ptr) : "0" (_ptr))
+
 // =============================================================================
 // Macros for some of the instructions from the AVR instruction set.
 // =============================================================================

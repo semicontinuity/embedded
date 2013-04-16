@@ -54,4 +54,15 @@
 #define MCP251X__RX_STATUS__FILTER__1_RXB1      (0x07)
 
 
+// Result byte of MCP251X_INSTRUCTION_READ_STATUS
+#define MCP251X__STATUS__RX0IF                  (0x01)
+#define MCP251X__STATUS__RX1IF                  (0x02)
+#define MCP251X__STATUS__TX0REQ                 (0x04)
+#define MCP251X__STATUS__TX0IF                  (0x08)
+#define MCP251X__STATUS__TX1REQ                 (0x10)
+#define MCP251X__STATUS__TX1IF                  (0x20)
+#define MCP251X__STATUS__TX2REQ                 (0x40)
+#define MCP251X__STATUS__TX2IF                  (0x80)
+
+
 #endif

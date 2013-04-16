@@ -8,7 +8,7 @@
 
 #include <stdint.h>
 #include "kernel.h"
-#include "kernel__rx__handler__spi.h"
+#include "kernel__handler__spi.h"
 #include "kernel__admin.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
@@ -34,14 +34,13 @@ static inline void kernel__rx__handle(const uint8_t filter) {
     if (!supported) return;
 
 
-
     if (filter == CANP_FILTER__ADMIN) {
         if (CANP_REQUEST_PUT(rtr_bits))  {
             kernel__admin__handle();
         }
     }
     else {
-        kernel__rx__handle_delegate(filter, rtr_bits);
+        kernel__out__handle(filter, rtr_bits);
     }
 }
 
