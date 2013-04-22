@@ -88,6 +88,15 @@
 #define CANP_REQUEST_PUT(request_type)  (request_type == 0)
 
 
+// Macros for CANP message types. Message type is defined OWNER and RTR bits.
+// -----------------------------------------------------------------------------
+#define CANP_MSG_TYPE(header)           (CANP_RTR_BITS((header)) | CANP_OWNER_BITS((header).id))
+
+#define CANP_MSG_TYPE_POST              (0)
+#define CANP_MSG_TYPE_VALUE             (                    CANP_SIDL_MASK_OWNER)
+#define CANP_MSG_TYPE_STATUS            (CANP_DLC_MASK_RTR                       )
+#define CANP_MSG_TYPE_GET               (CANP_DLC_MASK_RTR | CANP_SIDL_MASK_OWNER)
+
 
 #define CANP_EID8(host_net, host_addr) ((uint8_t) (((host_net) << 5) | (host_addr)))
 #define CANP_HEADER(exide, tag, cpty_net, cpty_addr, host_net, host_addr, owner, aux, slot) {   \

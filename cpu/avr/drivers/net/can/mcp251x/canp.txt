@@ -86,14 +86,14 @@ SID10 ..     SID3 SID2..0 IDE EID17 EID15  ..    EID8 EID7    ..   EID0
 
 The combination of Auxillary, RTR and Owner bits defines the message type:
 
-- AUX=0, RTR=0, OWN=0:  PUT request, the client asks the node to set the certain parameter.
+- AUX=0, RTR=0, OWN=0:  POST request, the client asks the node to set the certain parameter to a specified value, or invoke a function.
 - AUX=0, RTR=0, OWN=1:  Parameter VALUE, sent by the parameter owner. Either the response to GET or the owner-initiated notification.
-- AUX=0, RTR=1, OWN=0:  NOT_OK response to PUT. DLC may contain the error code.
+- AUX=0, RTR=1, OWN=0:  STATUS response to PUT. DLC contains the status code.
 - AUX=0, RTR=1, OWN=1:  GET request, the client asks the node to send out the value of a certain parameter.
 
-- AUX=1, RTR=0, OWN=0:  System PUT request, can be used to enable or disable notifications for a certain parameter.
+- AUX=1, RTR=0, OWN=0:  System POST request, can be used to e.g. enable or disable notifications for a certain parameter.
 - AUX=1, RTR=0, OWN=1:  Configuration memory range, sent in response to System GET.
-- AUX=1, RTR=1, OWN=0:  NOT_OK response to System PUT. DLC may contain the error code.
+- AUX=1, RTR=1, OWN=0:  STATUS response to System PUT. DLC macontains the status code.
 - AUX=1, RTR=1, OWN=1:  System GET request for the range of configuration memory.
 
 

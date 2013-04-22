@@ -5,13 +5,10 @@
 #include <stdint.h>
 
 
-inline static void comm_service__endpoint__io__handle_tty(const uint8_t is_get) {
-    if (is_get) {
-    }
-    else {
-        // Handle PUT request
+inline static void comm_service__endpoint__io__handle_tty(void) {
+    {
         uint8_t* data = kernel__frame.data;
-        for (int8_t n = kernel__frame.header.dlc; n-- >= 0;) {
+        for (int8_t n = kernel__frame.header.dlc; --n >= 0;) {
             terminal_displayChar(*data++);
         }
     }

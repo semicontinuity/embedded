@@ -19,28 +19,15 @@
  * The code must be consistent with CAN masks and filters.
  */
 static inline void kernel__rx__handle(const uint8_t filter) {
-    // use CANP_IS_RESPONSE
-    uint8_t supported = 0;
-    const uint8_t owner_bits = CANP_OWNER_BITS(kernel__frame.header.id);
-    const uint8_t rtr_bits = CANP_RTR_BITS(kernel__frame.header);
+    const uint8_t message_type = CANP_MSG_TYPE(kernel__frame.header);
 
-    if (rtr_bits) {
-        if (owner_bits) supported = 1;
-    }
-    else {
-        if (!owner_bits) supported = 1;
-    }
-    // possible to send error response...
-    if (!supported) return;
-
-
-    if (filter == CANP_FILTER__ADMIN) {
-        if (CANP_REQUEST_PUT(rtr_bits))  {
+    if (CANP_SLOT_BITS(kernel__frame.header.id) >= CANP_REPORT__ADMIN) {
+        if (message_type == CANP_MSG_TYPE_POST) {
             kernel__admin__handle();
         }
     }
     else {
-        kernel__out__handle(filter, rtr_bits);
+        kernel__out__handle(filter, message_type);
     }
 }
 
