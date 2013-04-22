@@ -51,9 +51,13 @@ SRC += $(CAN_SERVICE_C)
 SRC += comm_service__descriptor_memory.c
 SRC += comm_service.c
 # ifdef CONSOLE_SERVICE
-SRC += services/console/console_service.c
-SRC += services/console/parse.c
+#SRC += console_service.c
+#SRC += parse.c
 # endif
+SRC += auth_server.c
+SRC += alarm.c
+SRC += alarm_timer.c
+
 
 # BSP
 SRC += seconds_timer.c
