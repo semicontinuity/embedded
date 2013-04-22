@@ -4,6 +4,8 @@
 #include "out/water_valve.h"
 
 #include "kernel.h"
+
+#include "alarm_client__auth.h"
 #include "lcd_backlight_service.h"
 #include "console_service.h"
 
@@ -25,6 +27,7 @@ inline static void application__init(void) {
     out__water_valve__init();
 
     terminal_init();
+    alarm_client__auth__init();
 }
 
 inline static void application__start(void) {
