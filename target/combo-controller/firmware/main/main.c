@@ -24,7 +24,8 @@
 
 #include "alarm.h"
 #include "alarm_timer.h"
-#include "auth_server.h"
+#include "alarm__auth.h"
+
 #include "seconds_timer.h"
 #include "system_timer.h"
 #include "motion_sensors_scanner.h"
@@ -127,7 +128,7 @@ inline static void application__init(void) {
 
     // services
     alarm__init();
-    auth_server__init();
+    alarm__auth__init();
     water_leak_sensors_scanner__init();
     motion_sensors_scanner__init();
 

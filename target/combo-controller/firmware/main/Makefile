@@ -54,7 +54,7 @@ SRC += comm_service.c
 #SRC += console_service.c
 #SRC += parse.c
 # endif
-SRC += auth_server.c
+SRC += alarm__auth.c
 SRC += alarm.c
 SRC += alarm_timer.c
 

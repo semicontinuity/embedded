@@ -10,7 +10,7 @@
 
 #include "alarm.c"
 #include "alarm_timer.c"
-#include "auth_server.c"
+#include "alarm__auth.c"
 
 #include "main.c"
 

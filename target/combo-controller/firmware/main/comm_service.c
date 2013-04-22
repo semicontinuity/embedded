@@ -8,8 +8,8 @@
 #include "kernel.h"
 #include "kernel__handler__spi.h"
 #include "comm_service__descriptor_memory.h"
-#include "comm_service__endpoint__alarm_server.h"
-#include "comm_service__endpoint__auth.h"
+#include "comm_service__endpoint__alarm__state.h"
+#include "comm_service__endpoint__alarm__auth.h"
 #include "comm_service__endpoint__io.h"
 
 #include CAN_H
@@ -32,10 +32,10 @@ void comm_service__handle(const uint8_t event, const uint8_t is_get) {
             comm_service__endpoint__io__handle_input(is_get, report);
         }
         else if (report == CANP_REPORT__AUTH) {
-            comm_service__endpoint__auth__handle(is_get);
+            comm_service__endpoint__alarm__auth__handle(is_get);
         }
         else if (report == CANP_REPORT__ALARM_SERVER) {
-            comm_service__endpoint__alarm_server__handle(is_get);
+            comm_service__endpoint__alarm__state__handle(is_get);
         }
     }
     else if (event == KERNEL__EVENT__TX1_COMPLETE) {

@@ -80,5 +80,4 @@ void alarm_timer__output__run(void) {
         // alarm timer is stopped in these states, so will never get here.
         break;
     }
-
 }
