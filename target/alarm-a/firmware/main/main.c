@@ -23,6 +23,24 @@
 // Component bindings
 // =============================================================================
 
+void alarm__sound__on(void) {
+    alarm_line__on();
+    buzzer__on();
+}
+
+void alarm__sound__off(void) {
+    alarm_line__off();
+    buzzer__off();
+}
+
+void alarm__state__on_arming(void) {
+    alarm_state_line__on();
+}
+
+void alarm__state__on_disarmed(void) {
+    alarm_state_line__off();
+}
+
 /**
  * This procedure is called by alarm when it decided to notify about alarm condition.
  * It is called only once per session, not when alarm is switched on after it was mute.
@@ -52,26 +70,18 @@ void water_leak_detector__out__run(void) {
 }
 
 
-void sensor_line__on_active(void) {    
+INLINE void sensor_line__on_active(void) {    
     alarm__sensor_active();
 }
 
 void pwd_entered__on_active(void) {    
-    alarm__correct_password_entered();
+    if (alarm__state == ALARM__STATE__DISARMED) {
+        alarm__arm();
+    }
+    else {
+        alarm__disarm();
+    }
 }
-
-
-
-void alarm__sound__on(void) {
-    alarm_line__on();
-    buzzer__on();
-}
-
-void alarm__sound__off(void) {
-    alarm_line__off();
-    buzzer__off();
-}
-
 
 
 
