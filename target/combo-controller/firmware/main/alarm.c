@@ -56,7 +56,7 @@ void alarm_timer__output__run(void) {
         // ALARM state has expired, let's mute the sound and switch to ALARM_MUTE state.
         alarm__sound__off();
         alarm__state = ALARM__STATE__ALARM_MUTE;
-        alarm_timer__set(ALARM__TIME_MUTE);
+        alarm_timer__set(ALARM__TIME_ALARM_MUTE);
         break;
     case ALARM__STATE__ALARM_MUTE:
         // Muting period expired, switch to ARMED_MUTE
