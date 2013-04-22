@@ -1,6 +1,32 @@
 #ifndef __ALARM_H
 #define __ALARM_H
 
+#include <stdint.h>
+#include <avr/eeprom.h>
+
+
+extern uint8_t EEMEM ee__alarm__time_arming;
+extern uint8_t EEMEM ee__alarm__time_alert;
+extern uint8_t EEMEM ee__alarm__time_alert_mute;
+extern uint8_t EEMEM ee__alarm__time_alarm;
+extern uint8_t EEMEM ee__alarm__time_alarm_mute;
+
+extern uint8_t alarm__time_arming;
+extern uint8_t alarm__time_alert;
+extern uint8_t alarm__time_alert_mute;
+extern uint8_t alarm__time_alarm;
+extern uint8_t alarm__time_alarm_mute;
+
+
+inline static void alarm__init(void) {
+    alarm__time_arming     = eeprom_read_byte(&ee__alarm__time_arming);
+    alarm__time_alert      = eeprom_read_byte(&ee__alarm__time_alert);
+    alarm__time_alert_mute = eeprom_read_byte(&ee__alarm__time_alert_mute);
+    alarm__time_alarm      = eeprom_read_byte(&ee__alarm__time_alarm);
+    alarm__time_alarm_mute = eeprom_read_byte(&ee__alarm__time_alarm_mute);
+}
+
+
 enum alarm__state {
     // device is "disarmed" - ignores all events from sensor
     ALARM__STATE__DISARMED,

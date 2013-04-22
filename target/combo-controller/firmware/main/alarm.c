@@ -2,12 +2,24 @@
 #include "alarm_timer.h"
 
 
+uint8_t EEMEM ee__alarm__time_arming     = ALARM__TIME_ARMING;
+uint8_t EEMEM ee__alarm__time_alert      = ALARM__TIME_ALERT;
+uint8_t EEMEM ee__alarm__time_alert_mute = ALARM__TIME_ALERT_MUTE;
+uint8_t EEMEM ee__alarm__time_alarm      = ALARM__TIME_ALARM;
+uint8_t EEMEM ee__alarm__time_alarm_mute = ALARM__TIME_ALARM_MUTE;
+
+uint8_t alarm__time_arming;
+uint8_t alarm__time_alert;
+uint8_t alarm__time_alert_mute;
+uint8_t alarm__time_alarm;
+uint8_t alarm__time_alarm_mute;
+
 enum alarm__state alarm__state;
 
 
 void alarm__arm(void) {
     alarm__state = ALARM__STATE__ARMING;
-    alarm_timer__set(ALARM__TIME_ARMING);
+    alarm_timer__set(alarm__time_arming);
 }
 
 
@@ -24,11 +36,11 @@ void alarm__disarm(void) {
 void alarm__sensor_active(void) {
     if (alarm__state == ALARM__STATE__ARMED) {
         alarm__state = ALARM__STATE__ALERT;
-        alarm_timer__set(ALARM__TIME_ALERT);
+        alarm_timer__set(alarm__time_alert);
     }
     else if (alarm__state == ALARM__STATE__ARMED_MUTE) {
         alarm__state = ALARM__STATE__ALERT_MUTE;
-        alarm_timer__set(ALARM__TIME_ALERT_MUTE);
+        alarm_timer__set(alarm__time_alert_mute);
     }
     // ignore in other states
 }
@@ -49,14 +61,14 @@ void alarm_timer__output__run(void) {
     case ALARM__STATE__ALERT_MUTE:
         // Alert time expired, switching to ALARM state.
         alarm__state = ALARM__STATE__ALARM;
-        alarm_timer__set(ALARM__TIME_ALARM);
+        alarm_timer__set(alarm__time_alarm);
         alarm__sound__on();
         break;
     case ALARM__STATE__ALARM:
         // ALARM state has expired, let's mute the sound and switch to ALARM_MUTE state.
         alarm__sound__off();
         alarm__state = ALARM__STATE__ALARM_MUTE;
-        alarm_timer__set(ALARM__TIME_ALARM_MUTE);
+        alarm_timer__set(alarm__time_alarm_mute);
         break;
     case ALARM__STATE__ALARM_MUTE:
         // Muting period expired, switch to ARMED_MUTE

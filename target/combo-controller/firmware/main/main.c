@@ -91,9 +91,10 @@ INLINE void system_timer__out__run(void) {
 }
 
 /**
- * Called every second
+ * Called every second.
  */ 
 INLINE void seconds_timer__out__run(void) {
+    alarm_timer__run();
 }
 
 
@@ -124,6 +125,7 @@ inline static void application__init(void) {
     water_leak_sensors__changed__init();
 
     // services
+    alarm__init();
     water_leak_sensors_scanner__init();
     motion_sensors_scanner__init();
 
