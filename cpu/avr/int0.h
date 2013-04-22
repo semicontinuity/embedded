@@ -13,9 +13,10 @@
 
 
 inline static void int0__init(void) {
-    // pullup?
-    // external interrupt from INT0 pin, falling edge
-    // interrupt on INT0 pin falling edge
+#ifdef INT0__PULLUP
+    PORTD |= (1<<2); // INT0 is on PD2 pin
+#endif
+    // interrupt from INT0 pin, falling edge
     EICRA = (1<<ISC01);
 }
 
@@ -30,7 +31,10 @@ inline static void int0__start(void) {
 
 
 inline static void int0__init(void) {
-    // pullup?
+#ifdef INT0__PULLUP
+    PORTD |= (1<<2); // INT0 is on PD2 pin
+#endif
+    // interrupt from INT0 pin, falling edge
     MCUCR |= (1<<ISC01);
 }
 

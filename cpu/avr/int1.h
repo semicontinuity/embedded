@@ -13,7 +13,9 @@
 
 
 inline static void int1__init(void) {
-    // pullup?
+#ifdef INT1__PULLUP
+    PORTD |= (1<<3); // INT1 is on PD3 pin
+#endif
     // external interrupt from INT1 pin, falling edge
     // interrupt on INT1 pin falling edge
     EICRA = (1<<ISC11);
@@ -26,11 +28,13 @@ inline static void int1__start(void) {
 }
 
 
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
 
 
 inline static void int1__init(void) {
-    // pullup?
+#ifdef INT1__PULLUP
+    PORTD |= (1<<3); // INT1 is on PD3 pin
+#endif
     MCUCR = (1<<ISC11);
 }
 
