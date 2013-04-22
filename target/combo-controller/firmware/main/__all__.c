@@ -7,6 +7,10 @@
 #include CAN_SERVICE_C
 #include "comm_service__descriptor_memory.c"
 #include "comm_service.c"
+
+#include "alarm.c"
+#include "alarm_timer.c"
+
 #include "main.c"
 
 //#if defined(SERVICE_CONSOLE)
@@ -19,6 +23,7 @@
 #include "seconds_timer.c"
 #include CAN_C
 
+#include "../../bsp/motion_sensors_scanner.c"
 #include "../../bsp/water_leak_sensors_scanner.c"
 
 // Library

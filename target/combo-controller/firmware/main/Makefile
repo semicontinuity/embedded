@@ -57,6 +57,7 @@ SRC += services/console/parse.c
 
 # BSP
 SRC += seconds_timer.c
+SRC += motion_sensors_scanner.c
 SRC += water_leak_sensors_scanner.c
 SRC += $(CAN_C)
 

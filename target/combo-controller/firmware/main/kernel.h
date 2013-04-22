@@ -71,7 +71,6 @@ inline static void kernel__init(void) {
     mcp251x__init();
 
     comm_service__rx__init();
-    comm_service__rx__start();
 }
 
 inline static void kernel__start(void) {
