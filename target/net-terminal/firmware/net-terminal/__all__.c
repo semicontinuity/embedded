@@ -20,7 +20,7 @@
 
 
 // Library
-#include "cpu/avr/timer2.c"
+#include "cpu/avr/timer0.c"
 #ifndef CAN_EMU
 #  include "cpu/avr/int1.c"
 #endif

@@ -65,6 +65,7 @@ SRC += keypad.c
 SRC += system_timer.c
 
 # Library
+SRC += cpu/avr/timer0.c
 SRC += cpu/avr/drivers/display/mt12864/terminal.c
 SRC += cpu/avr/drivers/display/mt12864/text-output.c
 SRC += cpu/avr/drivers/display/mt12864/bitblt.c

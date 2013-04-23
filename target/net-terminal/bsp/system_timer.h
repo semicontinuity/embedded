@@ -1,6 +1,6 @@
 // =============================================================================
 // System timer.
-// Implemented with Timer 2,
+// Implemented with Timer 0,
 // that is programmed to generate system ticks 250 times per second.
 // 
 // For the CPU frequency 8 MHz:
@@ -20,31 +20,31 @@
 
 #include <stdint.h>
 #include "cpu/avr/gpio.h"
-#include "cpu/avr/timer2.h"
+#include "cpu/avr/timer0.h"
 
 
-#define SYSTEM_TIMER__CONF__DEFAULT     (TIMER2_CONF_DEFAULT)
-#define SYSTEM_TIMER__CONF__INITIALIZED (TIMER2_CONF_WGM_CTC | TIMER2_CONF_TOP(125) | TIMER2_CONF_STOPPED)
-#define SYSTEM_TIMER__CONF__STARTED     (TIMER2_CONF_WGM_CTC | TIMER2_CONF_TOP(125) | TIMER2_CONF_PRESCALER_256)
+#define SYSTEM_TIMER__CONF__DEFAULT     (TIMER0_CONF_DEFAULT)
+#define SYSTEM_TIMER__CONF__INITIALIZED (TIMER0_CONF_WGM_CTC | TIMER0_CONF_TOP(125) | TIMER0_CONF_STOPPED)
+#define SYSTEM_TIMER__CONF__STARTED     (TIMER0_CONF_WGM_CTC | TIMER0_CONF_TOP(125) | TIMER0_CONF_PRESCALER_256)
 
 /* Callback function prototype, must be defined by the application code */ 
 INLINE void system_timer__out__run(void);
 
 
 inline static void system_timer__init(void) {
-    timer2__switch_conf(SYSTEM_TIMER__CONF__DEFAULT, SYSTEM_TIMER__CONF__INITIALIZED);
+    timer0__switch_conf(SYSTEM_TIMER__CONF__DEFAULT, SYSTEM_TIMER__CONF__INITIALIZED);
 }
 
 
 inline static void system_timer__start(void) {
-    timer2__ctc__interrupt__enable();
-    timer2__switch_conf(SYSTEM_TIMER__CONF__INITIALIZED, SYSTEM_TIMER__CONF__STARTED);
+    timer0__ctc__interrupt__enable();
+    timer0__switch_conf(SYSTEM_TIMER__CONF__INITIALIZED, SYSTEM_TIMER__CONF__STARTED);
 }
 
 
 inline static void system_timer__stop(void) {
-    timer2__ctc__interrupt__disable();
-    timer2__switch_conf(SYSTEM_TIMER__CONF__STARTED, SYSTEM_TIMER__CONF__INITIALIZED);
+    timer0__ctc__interrupt__disable();
+    timer0__switch_conf(SYSTEM_TIMER__CONF__STARTED, SYSTEM_TIMER__CONF__INITIALIZED);
 }
 
 #endif
