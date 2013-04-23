@@ -1,58 +1,63 @@
+// =============================================================================
+// Keypad driver.
+// =============================================================================
 #include "keypad.h"
-#include <avr/pgmspace.h>
-#include <util/delay.h>
-#define KEYBOARD_SCAN_DELAY (F_CPU/100000)
+#include <stdint.h>
+
+static inline void keypad__out(const uint8_t v) { OUT(KEYPAD__OUT, v); }
+static inline uint8_t keypad__in(void) { return IN(KEYPAD__IN); }
+
+uint8_t keypad__state[] = {0xFF, 0xFF, 0xFF, 0xFF};
 
 
-#define COL0_SCAN_MASK      (~_BV(4) & 0xFF)
-#define COL1_SCAN_MASK      (~_BV(5) & 0xFF)
-#define COL2_SCAN_MASK      (~_BV(6) & 0xFF)
-#define COL3_SCAN_MASK      (~_BV(7) & 0xFF)
-
-
-#define outputScanValue(v)  OUT(KEYPAD, (v))
-#define inputScanValue()    IN(KEYPAD)
-
-
-
-/** An application must define this event handler */
-void keypad__on_event(uint8_t keyevent);
-
-
-char keyboardState[] = {-1, -1, -1, -1};
+#ifdef KEYPAD__ASCII_SCANCODES
+uint8_t keypad__scancodes[] = {
+    '#', '0', '*', 'D',
+    '9', '8', '7', 'C',
+    '6', '5', '4', 'B',
+    '3', '2', '1', 'A'
+};
+#endif
 
 
 INLINE void keypad__run(void) {
-    uint8_t scanMask = COL0_SCAN_MASK;
+    uint8_t scanMask = ~(1<<(KEYPAD__OUT__PIN));
     for (uint8_t column = 0; column < 4; column++)
     {
-        outputScanValue (scanMask);	// always pull up lower 4 lines (inputs)
-        scanMask = ((uint8_t)(scanMask << 1)) | ((uint8_t)1);
-       _delay_loop_1(KEYBOARD_SCAN_DELAY);
+        keypad__out(scanMask);	// always pull up lower 4 lines (inputs)
+        scanMask = ((uint8_t)(scanMask << 1)) | ((uint8_t)1);  // produce mask for the next column
 
-//DDRB=0; // all inputs (temporary - will avoid collisions?)
-//PORTB=scanMask;
-//DDRB=(~scanMask)&0xF0; // lower bits always 0 (input)
-        uint8_t scanValue = inputScanValue ();
-        uint8_t tempScanValue = scanValue;
-        uint8_t changedLines = (uint8_t) (scanValue ^ keyboardState[column]);
+        uint8_t scanValue = keypad__in();
+        uint8_t changedLines = (uint8_t) (scanValue ^ keypad__state[column]);
+        keypad__state[column] = scanValue;
+
+        scanValue >>= KEYPAD__IN__PIN;
+        changedLines >>= KEYPAD__IN__PIN;
+
         for (uint8_t row = 0; row < 4; row++)
         {
             if ((changedLines & 1) == 1)
             {
-//                print('~');
-//                print(96+column);
-//                print(96+row);
-//                print(96+(scanMask>>4));
-                // if lower bit of tempScanValue=1 => now key released; 0 => pressed
-                uint8_t scancode =
-                    (uint8_t) ((tempScanValue & 1) | ROW(row) | COL(column));
+                // if lower bit of scanValue=1 => now key released; 0 => pressed
+                uint8_t scancode = ROW(row) | COL(column);
+#ifdef KEYPAD__ASCII_SCANCODES
+                scancode = keypad__scancodes[scancode];
+#endif
+
+#ifdef KEYPAD__KEY_RELEASE_EVENTS
+                if (scanValue & 1) {
+                    scancode |= KEYPAD__EVENT__FLAG__RELEASED;
+                }
                 keypad__on_event(scancode);
+#else
+                if (!(scanValue & 1)) {
+                    keypad__on_event(scancode);
+                }
+#endif                
             }
-            tempScanValue >>= 1;
+            scanValue >>= 1;
             changedLines >>= 1;
         }
-        keyboardState[column] = scanValue;        
     }
 }
  
