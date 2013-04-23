@@ -94,5 +94,13 @@
 #define MCP251X_WAKFIL          (6)
 #define MCP251X_SOF             (7)
 
+// Bit definitions for register BFPCTRL
+#define MCP251X_B0BFM           (0)
+#define MCP251X_B1BFM           (1)
+#define MCP251X_B0BFE           (2)
+#define MCP251X_B1BFE           (3)
+#define MCP251X_B0BFS           (4)
+#define MCP251X_B1BFS           (5)
+
 
 #endif
