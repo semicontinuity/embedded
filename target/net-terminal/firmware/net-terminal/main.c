@@ -1,3 +1,4 @@
+#include "drivers/in/sensors.h"
 #include "drivers/out/lcd_backlight.h"
 #include "flags/password__changed.h"
 
@@ -42,6 +43,9 @@ INLINE void keypad__on_event(const uint8_t keyevent) {
 inline static void application__init(void) {
     // Outputs
     lcd_backlight__init();
+
+    // Inputs
+    sensors__init();
 
     // Flags
     password__changed__init();
