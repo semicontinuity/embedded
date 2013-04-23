@@ -5,6 +5,7 @@
 #include "comm_service.c"
 
 #include "alarm_client__auth.c"
+#include "alarm_client__ui.c"
 #include "keypad.c"
 
 #include "main.c"

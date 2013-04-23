@@ -1,7 +1,6 @@
 #ifndef __ALARM_CLIENT__AUTH_H
 #define __ALARM_CLIENT__AUTH_H
 
-#include "cpu/avr/drivers/display/mt12864/terminal.h"
 #include <stdint.h>
 
 
@@ -23,18 +22,6 @@ inline void alarm_client__auth__password__set(const uint8_t length, const uint8_
     for (int8_t n = length; --n >= 0;) {
         *dst++ = *data++;
     }
-
-    terminal_displayChar('A');
-    terminal_displayChar('=');
-
-
-        uint8_t* p = alarm_client__auth__password.data;
-        for (int8_t n = alarm_client__auth__password.length; --n >= 0;) {
-            terminal_displayChar(*p++);
-        }
-
-    terminal_displayChar('\n');
-
 }
 
 #endif

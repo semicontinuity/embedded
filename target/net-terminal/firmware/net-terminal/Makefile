@@ -56,6 +56,7 @@ SRC += main.c
 
 # BSP
 SRC += alarm_client__auth.c
+SRC += alarm_client__ui.c
 SRC += keypad.c
 #SRC += keypad_handler.c
 #SRC += lcd_backlight_service.c

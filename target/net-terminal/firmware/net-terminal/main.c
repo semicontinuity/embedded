@@ -6,6 +6,7 @@
 #include "kernel.h"
 
 #include "alarm_client__auth.h"
+#include "alarm_client__ui.h"
 #include "lcd_backlight_service.h"
 #include "keypad.h"
 #include "cpu/avr/drivers/display/mt12864/terminal.h"
@@ -25,7 +26,7 @@ INLINE void system_timer__out__run(void) {
 }
 
 INLINE void keypad__on_event(const uint8_t keyevent) {
-    terminal_displayChar(0x40 + keyevent);
+    alarm_client__ui__on_key_event(keyevent);
 }
 
 // =============================================================================
