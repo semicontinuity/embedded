@@ -10,7 +10,6 @@
 #include "comm_service__descriptor_memory.h"
 #include "comm_service__endpoint__alarm_client__auth.h"
 #include "comm_service__endpoint__alarm_client__state.h"
-#include "comm_service__endpoint__io.h"
 #include "comm_service__endpoint__tty.h"
 #include CAN_H
 
@@ -23,10 +22,7 @@ void comm_service__handle(const uint8_t event, const uint8_t message_type) {
     if (event <= CANP_FILTER__BROADCAST) {
         const uint8_t report = CANP_SLOT_BITS(kernel__frame.header.id);
 
-        if (report >= CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE && report <= CANP_REPORT__SIREN2__VALUE) {
-            comm_service__endpoint__io__handle_output(message_type, report);
-        }
-        else if (report == CANP_REPORT__TTY) {
+        if (report == CANP_REPORT__TTY) {
             comm_service__endpoint__io__handle_tty();
         }
     }

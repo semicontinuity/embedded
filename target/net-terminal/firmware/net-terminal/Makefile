@@ -63,6 +63,8 @@ SRC += keypad.c
 #SRC += alarm_client.c
 #SRC += state_change_pulse_transmitter.c
 SRC += system_timer.c
+SRC += services/lcd_backlight_fader.c
+SRC += services/lcd_backlight_service.c
 
 # Library
 SRC += cpu/avr/timer0.c
