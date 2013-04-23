@@ -23,7 +23,7 @@
 
 #   include "cpu/avr/timer0__mx8.h"
 
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
 
 #   include "cpu/avr/timer0__m8.h"
 
