@@ -57,11 +57,7 @@ SRC += main.c
 # BSP
 SRC += alarm_client__auth.c
 SRC += alarm_client__ui.c
-SRC += keypad.c
-#SRC += keypad_handler.c
-#SRC += lcd_backlight_service.c
-#SRC += alarm_client.c
-#SRC += state_change_pulse_transmitter.c
+SRC += drivers/keypad.c
 SRC += system_timer.c
 SRC += services/lcd_backlight_fader.c
 SRC += services/lcd_backlight_service.c

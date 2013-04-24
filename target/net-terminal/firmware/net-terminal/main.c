@@ -1,5 +1,9 @@
 #include "drivers/in/sensors.h"
 #include "drivers/out/lcd_backlight.h"
+
+#include "drivers/system_timer.h"
+#include "drivers/keypad.h"
+
 #include "flags/password__changed.h"
 
 #include "kernel.h"
@@ -8,9 +12,7 @@
 #include "alarm_client__ui.h"
 #include "services/lcd_backlight_fader.h"
 #include "services/lcd_backlight_service.h"
-#include "keypad.h"
 #include "cpu/avr/drivers/display/mt12864/terminal.h"
-#include "system_timer.h"
 //#include "console_service.h"
 
 //#include <avr/pgmspace.h>

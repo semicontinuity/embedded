@@ -1,7 +1,7 @@
 // =============================================================================
 // Keypad driver.
 // =============================================================================
-#include "keypad.h"
+#include "drivers/keypad.h"
 #include <stdint.h>
 
 static inline void keypad__out(const uint8_t v) { OUT(KEYPAD__OUT, v); }

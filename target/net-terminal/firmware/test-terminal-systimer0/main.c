@@ -1,5 +1,5 @@
 #include "cpu/avr/drivers/display/mt12864/terminal.h"
-#include "system_timer.h"
+#include "drivers/system_timer.h"
 #include <avr/interrupt.h>
 
 
