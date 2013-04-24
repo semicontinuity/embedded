@@ -2,8 +2,8 @@
 // Keypad driver.
 // =============================================================================
 
-#ifndef __KEYPAD_H
-#define __KEYPAD_H
+#ifndef __DRIVERS__KEYPAD_H
+#define __DRIVERS__KEYPAD_H
 
 #include "cpu/avr/gpio.h"
 

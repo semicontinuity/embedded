@@ -15,8 +15,8 @@
 // =============================================================================
 
 
-#ifndef __SYSTEM_TIMER_H
-#define __SYSTEM_TIMER_H
+#ifndef __DRIVERS__SYSTEM_TIMER_H
+#define __DRIVERS__SYSTEM_TIMER_H
 
 #include <stdint.h>
 #include "cpu/avr/gpio.h"
