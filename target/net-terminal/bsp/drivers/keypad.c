@@ -3,6 +3,7 @@
 // =============================================================================
 #include "drivers/keypad.h"
 #include <stdint.h>
+#include <util/delay.h>
 
 static inline void keypad__out(const uint8_t v) { OUT(KEYPAD__OUT, v); }
 static inline uint8_t keypad__in(void) { return IN(KEYPAD__IN); }
@@ -26,7 +27,7 @@ INLINE void keypad__run(void) {
     {
         keypad__out(scanMask);	// always pull up lower 4 lines (inputs)
         scanMask = ((uint8_t)(scanMask << 1)) | ((uint8_t)1);  // produce mask for the next column
-
+        _delay_us(1);
         uint8_t scanValue = keypad__in();
         uint8_t changedLines = (uint8_t) (scanValue ^ keypad__state[column]);
         keypad__state[column] = scanValue;
