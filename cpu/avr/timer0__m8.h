@@ -41,11 +41,11 @@
 inline static void timer0__switch_conf(uint16_t old_conf, uint16_t new_conf) {
     uint8_t old_tccr = old_conf & 0xFF;
     uint8_t new_tccr = new_conf & 0xFF;
-    if (old_tccr != new_tccr) TCCR2 = new_tccr;
+    if (old_tccr != new_tccr) TCCR0 = new_tccr;
 
     uint8_t old_ocr = (old_conf >> 8) & 0xFF;
     uint8_t new_ocr = (new_conf >> 8) & 0xFF;
-    if (old_ocr != new_ocr) OCR2 = new_ocr;
+    if (old_ocr != new_ocr) OCR0 = new_ocr;
 }
 
 
