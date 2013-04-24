@@ -19,11 +19,14 @@ uint8_t  lcd_backlight_fader__settings__brightness_target;
  * The change is effective on the next run of run() function.
  */
 void lcd_backlight_fader__settings__set(const uint8_t brightness_target, const int8_t brightness_change_step) {
-    lcd_backlight_fader__settings__brightness_target      = brightness_target;
-    lcd_backlight_fader__settings__brightness_change_step = brightness_change_step;
+    const uint8_t brightness = lcd_backlight_pwm__get();
+    if (brightness != brightness_target) {
+        lcd_backlight_fader__settings__brightness_target      = brightness_target;
+        lcd_backlight_fader__settings__brightness_change_step = brightness_change_step;
 
-    if (lcd_backlight_pwm__get() == 0 && brightness_target > 0) {
-        lcd_backlight_pwm__start();
+        if (brightness == 0) {
+            lcd_backlight_pwm__start();
+        }
     }    
 } 
 
