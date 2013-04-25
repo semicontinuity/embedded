@@ -15,42 +15,39 @@ uint8_t startPage = 0;
 
 #define   setStartPage(startPage) { uint8_t cmd = MT12864_CMD_SET_DISPLAY_START_LINE((startPage) << 3); Write_Cmd_to_LCD(0, cmd); Write_Cmd_to_LCD(1, cmd); }
 
+
+void terminal_feed(void) {
+    x = 0;
+    ++startPage;
+    startPage &= 0x07;
+    ++y;
+    y &= 0x07;    
+    setStartPage(startPage);
+
+    // Установим страницу.
+    Write_Cmd_Page_Addr_Set(0, y);
+    Write_Cmd_Page_Addr_Set(1, y);
+    // Очистим все столбцы страницы.
+    Write_Cmd_Column_Addr_Set(0, 0);
+    Write_Cmd_Column_Addr_Set(1, 0);
+    Write_Data_to_LCD_n(0, (uint8_t)0x00, 64);
+    Write_Data_to_LCD_n(1, (uint8_t)0x00, 64);
+}
+
+
 void terminal_displayChar(char c)
-{
-    // perhaps it's time to make a line feed
-    if (x==126)
-    {
-        x = 0;
-        ++startPage;
-        if (startPage == 8) startPage = 0;
-        ++y;
-        if (y==8) y = 0;
-    
-        setStartPage(startPage);
-
-        // Установим страницу.
-        Write_Cmd_Page_Addr_Set(0, y);
-        Write_Cmd_Page_Addr_Set(1, y);
-        // Очистим все столбцы страницы.
-        Write_Cmd_Column_Addr_Set(0, 0);
-        Write_Cmd_Column_Addr_Set(1, 0);
-        Write_Data_to_LCD_n(0, (uint8_t)0x00, 64);
-        Write_Data_to_LCD_n(1, (uint8_t)0x00, 64);            
+    if (c == 13) {
     }
-
-    if (c==13)
-    {
-        // ignore
+    else if (c == 10) {
+        terminal_feed();
     }
-    else if (c==10)
-    {
-        x = 126; // will feed the line
-    }
-    else
-    {
+    else {
+        if (x == 126) {
+            terminal_feed();
+        }
         Draw_Char(c, x, y<<3, &Font_6x8, 0);
-        x+=6;            
-    }        
+        x+=6;
+    }
 }
 
 
