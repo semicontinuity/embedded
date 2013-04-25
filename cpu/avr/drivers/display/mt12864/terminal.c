@@ -35,7 +35,7 @@ void terminal_feed(void) {
 }
 
 
-void terminal_displayChar(char c)
+void terminal_displayChar(char c) {
     if (c == 13) {
     }
     else if (c == 10) {
@@ -51,10 +51,8 @@ void terminal_displayChar(char c)
 }
 
 
-void lcd_print_string_progmem(const char * PROGMEM str)
-{
-    for(;;)
-    {
+void lcd_print_string_progmem(const char * PROGMEM str) {
+    for(;;) {
         uint8_t data = pgm_read_byte(str);
         if (data == 0) break;
         terminal_displayChar(data);
