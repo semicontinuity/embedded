@@ -1,6 +1,8 @@
 #include "alarm_client__auth.h"
 #include "alarm_client__state.h"
+#include "alarm_client__ui.h"
 #include "drivers/out/led.h"
+#include "flags/password__changed.h"
 #include "cpu/avr/drivers/display/mt12864/terminal.h"
 #include "cpu/avr/drivers/display/mt12864/text-output.h"
 #include <stdint.h>
@@ -11,6 +13,14 @@ int  alarm_client__ui__entered_password_length;
 
 const char ALARM_CLIENT__UI__MSG_ARMED[] PROGMEM = "\n\n\nПоставлено на охрану\n\nДля снятия с охраны\nвведите код\n\n";
 const char ALARM_CLIENT__UI__MSG_DISARMED[] PROGMEM = "\n\n\nСнято с охраны\n\nДля постановки\nна охрану введите код\n\n";
+const char ALARM_CLIENT__UI__MSG_CONNECTING[] PROGMEM = "Соединение с сервером\n";
+
+
+/*INLINE */void alarm_client__ui__start(void) {
+    lcd_print_string_progmem(ALARM_CLIENT__UI__MSG_CONNECTING);
+    while (!password__changed__is_set());
+}
+
 
 void alarm_client__ui__display_state(void) {
     const char * PROGMEM message;
@@ -26,8 +36,6 @@ void alarm_client__ui__display_state(void) {
 }
 
 
-// The application must implement these callbacks
-// ----------------------------------------------
 INLINE void alarm_client__ui__on_correct_password(void) {
     alarm_client__server_state__set(!alarm_client__state);
 }

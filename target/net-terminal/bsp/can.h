@@ -10,6 +10,7 @@
 
 #include "can_selector.h"
 
+#include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
 #include "cpu/avr/drivers/net/can/mcp251x/registers.h"
 #include "cpu/avr/drivers/net/can/mcp251x/opmodes.h"
 #include "cpu/avr/drivers/net/can/mcp251x/struct.h"
@@ -159,6 +160,14 @@ inline static void can__load_txb_response_(
     can_selector__off();
 }
 
+inline static void can__load_txb_request(const uint8_t address, const uint8_t report_id) {
+    can_selector__on();
+    mcp2515_write(address);
+    spi__write(report_id);              // to EID0 register
+    spi__write(1 << MCP251X_RTR);       // to RTR DLC register; request 0 bytes
+    can_selector__off();
+}
+
 inline static void can__request_to_send(const uint8_t instruction) {
     can_selector__run(mcp2515_request_to_send(instruction));
 }
@@ -188,6 +197,10 @@ inline static void can__txb0__load_response_(const uint8_t dlc, const uint8_t* i
     can__load_txb_response_(MCP251X_REGISTER_TXB0SIDH, dlc, id, data);
 }
 
+inline static void can__txb0__load_request(const uint8_t report_id) {
+    can__load_txb_request(MCP251X_REGISTER_TXB0EID0, report_id);
+}
+
 inline static void can__txb0__request_to_send(void) {
     can__txb0__available__set(0);
     can__request_to_send(MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0);
@@ -210,6 +223,10 @@ inline static void can__txb1__load_report(const uint8_t report_id, const uint8_t
     can__load_txb_report(report_id, count, buffer, MCP251X_REGISTER_TXB1EID0);
 }
 
+inline static void can__txb1__load_request(const uint8_t report_id) {
+    can__load_txb_request(MCP251X_REGISTER_TXB1EID0, report_id);
+}
+
 inline static void can__txb1__request_to_send(void) {
     can__txb1__available__set(0);
     can__request_to_send(MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B1);
@@ -229,6 +246,10 @@ inline static void can__txb2__load_data(const uint8_t* buffer, uint8_t count) {
 
 inline static void can__txb2__load_report(const uint8_t report_id, const uint8_t count, const uint8_t* buffer) {
     can__load_txb_report(report_id, count, buffer, MCP251X_REGISTER_TXB2EID0);
+}
+
+inline static void can__txb2__load_request(const uint8_t report_id) {
+    can__load_txb_request(MCP251X_REGISTER_TXB2EID0, report_id);
 }
 
 inline static void can__txb2__request_to_send(void) {

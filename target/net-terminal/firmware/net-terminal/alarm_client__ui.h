@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+/*INLINE */void alarm_client__ui__start(void);
+
 INLINE void alarm_client__ui__on_key_event(uint8_t keyevent);
 
 INLINE void alarm_client__ui__on_state_changed(void);

@@ -13,10 +13,6 @@ struct alarm_client__auth__password {
 extern struct alarm_client__auth__password alarm_client__auth__password;
 
 
-inline static void alarm_client__auth__init(void) {
-    // TODO request
-}
-
 inline void alarm_client__auth__password__set(const uint8_t length, const uint8_t* data) {
     alarm_client__auth__password.length = length;
     uint8_t* dst = alarm_client__auth__password.data;
@@ -24,6 +20,14 @@ inline void alarm_client__auth__password__set(const uint8_t length, const uint8_
         *dst++ = *data++;
     }
     password__changed__set(1);
+}
+
+
+INLINE void alarm_client__auth__password__invalidate(void);
+
+
+inline static void alarm_client__auth__start(void) {
+    alarm_client__auth__password__invalidate();
 }
 
 #endif

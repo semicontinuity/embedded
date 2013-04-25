@@ -22,11 +22,7 @@
 
 //#include "console_service.h"
 
-//#include <avr/pgmspace.h>
 #include <avr/interrupt.h>
-//#include <util/delay.h>
-
-const char CONNECTING[] PROGMEM = "Соединение с сервером\n";
 
 
 // =============================================================================
@@ -65,6 +61,11 @@ void sensors__status__on_change(void) {
 }
 
 
+INLINE void alarm_client__auth__password__invalidate(void) {
+    comm_service__endpoint__alarm_client__auth__request();
+}
+
+
 // =============================================================================
 // Application lifecycle
 // =============================================================================
@@ -85,13 +86,12 @@ inline static void application__init(void) {
     // Services
     keypad__init();
     terminal_init();
-    alarm_client__auth__init();
 }
 
 
 inline static void application__start(void) {
-    lcd_print_string_progmem(CONNECTING);
-//    while(!password__changed__is_set());
+    alarm_client__auth__start();
+    alarm_client__ui__start();
     system_timer__start();
 }
 
