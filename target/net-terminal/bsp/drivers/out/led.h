@@ -9,6 +9,7 @@
 #include "can_selector.h"
 #include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
+#include "cpu/avr/drivers/net/can/mcp251x/registers.h"
 
 
 INLINE void led__on(void) {
