@@ -1,4 +1,6 @@
 #include "alarm_client__auth.h"
+#include "alarm_client__state.h"
+#include "drivers/out/led.h"
 #include "cpu/avr/drivers/display/mt12864/terminal.h"
 #include "cpu/avr/drivers/display/mt12864/text-output.h"
 #include <stdint.h>
@@ -7,20 +9,40 @@
 char alarm_client__ui__entered_password[8];
 int  alarm_client__ui__entered_password_length;
 
-const char MSG_PASSWORD_NOT_ACCEPTED[] PROGMEM = "\nНеверный код\n";
+const char ALARM_CLIENT__UI__MSG_ARMED[] PROGMEM = "\n\n\nПоставлено на охрану\n\nДля снятия с охраны\nвведите код\n\n";
+const char ALARM_CLIENT__UI__MSG_DISARMED[] PROGMEM = "\n\n\nСнято с охраны\n\nДля постановки\nна охрану введите код\n\n";
+
+void alarm_client__ui__display_state(void) {
+    const char * PROGMEM message;
+    if (alarm_client__state) {
+        led__on();
+        message = ALARM_CLIENT__UI__MSG_ARMED;
+    }
+    else {
+        led__off();
+        message = ALARM_CLIENT__UI__MSG_DISARMED;
+    }
+    lcd_print_string_progmem(message);
+}
 
 
 // The application must implement these callbacks
 // ----------------------------------------------
 INLINE void alarm_client__ui__on_correct_password(void) {
+    alarm_client__server_state__set(!alarm_client__state);
 }
 
 INLINE void alarm_client__ui__on_incorrect_password(void) {
-    lcd_print_string_progmem(MSG_PASSWORD_NOT_ACCEPTED);
+    alarm_client__ui__display_state();
 }
 
 inline void alarm_client__ui__on_password_char_typed(const uint8_t c) {
     terminal_displayChar('*');
+}
+
+INLINE void alarm_client__ui__on_state_changed(void) {
+    alarm_client__ui__entered_password_length = 0;
+    alarm_client__ui__display_state();
 }
 
 inline unsigned char alarm_client__ui__password_matches(void) {

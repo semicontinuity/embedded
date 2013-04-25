@@ -5,6 +5,7 @@
 #include "comm_service.c"
 
 #include "alarm_client__auth.c"
+#include "alarm_client__state.c"
 #include "alarm_client__ui.c"
 #include "services/lcd_backlight_fader.c"
 #include "services/lcd_backlight_service.c"

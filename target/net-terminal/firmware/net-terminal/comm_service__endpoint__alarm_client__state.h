@@ -1,17 +1,18 @@
 #ifndef __COMM_SERVICE__ENDPOINT__AlARM_CLIENT__STATE_H
 #define __COMM_SERVICE__ENDPOINT__AlARM_CLIENT__STATE_H
 
-#include "cpu/avr/drivers/display/mt12864/terminal.h"
-#include <stdint.h>
+#include "alarm_client__state.h"
+#include CAN_H
 
 
-inline static void comm_service__endpoint__alarm_client__state__handle(void) {
-    terminal_displayChar('S');
-    terminal_displayChar('=');
+INLINE void comm_service__endpoint__alarm_client__state__handle(void) {
+    alarm_client__state__set(kernel__frame.data[0]);
+    alarm_client__state__on_changed();
+}
 
-    terminal_displayChar(kernel__frame.data[0] == 0 ? '0' : '1');
-
-    terminal_displayChar('\n');
+INLINE void comm_service__endpoint__alarm_client__state__send(void) {
+    can__txb1__load_report(CANP_REPORT__ALARM__STATE, sizeof(alarm_client__new_state), (const uint8_t*)&alarm_client__new_state);
+    can__txb1__request_to_send();
 }
 
 

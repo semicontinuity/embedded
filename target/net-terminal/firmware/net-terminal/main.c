@@ -9,15 +9,23 @@
 #include "kernel.h"
 
 #include "alarm_client__auth.h"
+#include "alarm_client__state.h"
 #include "alarm_client__ui.h"
+
+#include "comm_service__endpoint__alarm_client__state.h"
+
 #include "services/lcd_backlight_fader.h"
 #include "services/lcd_backlight_service.h"
 #include "cpu/avr/drivers/display/mt12864/terminal.h"
+#include "cpu/avr/drivers/display/mt12864/text-output.h"
+
 //#include "console_service.h"
 
 //#include <avr/pgmspace.h>
 #include <avr/interrupt.h>
 //#include <util/delay.h>
+
+const char CONNECTING[] PROGMEM = "Соединение с сервером\n";
 
 
 // =============================================================================
@@ -29,14 +37,25 @@
  */
 INLINE void system_timer__out__run(void) {
     keypad__run();
-    lcd_backlight_fader__run();
     lcd_backlight_service__run();
+    lcd_backlight_fader__run();
 }
+
 
 INLINE void keypad__on_event(const uint8_t keyevent) {
     lcd_backlight_service__signal();
     alarm_client__ui__on_key_event(keyevent);
 }
+
+
+INLINE void alarm_client__state__on_changed(void) {
+    alarm_client__ui__on_state_changed();
+}
+
+INLINE void alarm_client__new_state__on_changed(void) {
+    comm_service__endpoint__alarm_client__state__send();
+}
+
 
 // =============================================================================
 // Application lifecycle
@@ -63,6 +82,8 @@ inline static void application__init(void) {
 
 
 inline static void application__start(void) {
+    lcd_print_string_progmem(CONNECTING);
+//    while(!password__changed__is_set());
     system_timer__start();
 }
 

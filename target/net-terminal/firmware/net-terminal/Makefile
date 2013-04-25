@@ -56,6 +56,7 @@ SRC += main.c
 
 # BSP
 SRC += alarm_client__auth.c
+SRC += alarm_client__state.c
 SRC += alarm_client__ui.c
 SRC += drivers/keypad.c
 SRC += system_timer.c
