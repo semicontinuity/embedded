@@ -45,7 +45,7 @@ void terminal_displayChar(char c) {
         if (x == 126) {
             terminal_feed();
         }
-        Draw_Char(c, x, y<<3, &Font_6x8, 0);
+        Draw_Char(c, x, (y << 3), &Font_6x8, 0);
         x+=6;
     }
 }
