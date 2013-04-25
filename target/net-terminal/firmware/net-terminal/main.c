@@ -13,6 +13,7 @@
 #include "alarm_client__ui.h"
 
 #include "comm_service__endpoint__alarm_client__state.h"
+#include "comm_service__endpoint__sensors.h"
 
 #include "services/lcd_backlight_fader.h"
 #include "services/lcd_backlight_service.h"
@@ -39,6 +40,7 @@ INLINE void system_timer__out__run(void) {
     keypad__run();
     lcd_backlight_service__run();
     lcd_backlight_fader__run();
+    sensors__run();
 }
 
 
@@ -52,11 +54,14 @@ INLINE void alarm_client__state__on_changed(void) {
     alarm_client__ui__on_state_changed();
 }
 
+
 INLINE void alarm_client__new_state__on_changed(void) {
     comm_service__endpoint__alarm_client__state__send();
 }
 
+
 void sensors__status__on_change(void) {
+    comm_service__endpoint__sensors__send();
 }
 
 

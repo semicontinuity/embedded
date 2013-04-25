@@ -4,11 +4,12 @@
 #include "drivers/in/sensors.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include CAN_H
+#include "kernel.h"
 
 
 INLINE void comm_service__endpoint__sensors__handle(const uint8_t message_type) {
     if (message_type == CANP_MSG_TYPE_GET) {
-        
+        kernel__send_response(1, (const uint8_t*)&sensors__status.state);        
     }
 }
 

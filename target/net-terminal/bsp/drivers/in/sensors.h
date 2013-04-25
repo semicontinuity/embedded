@@ -18,7 +18,7 @@ struct sensors__status {
 extern struct sensors__status sensors__status;
 
 
-inline uint8_t sensors_read(void) {
+inline uint8_t sensors__read(void) {
     return IN(SENSORS) & SENSORS__MASK;
 }
 
@@ -29,6 +29,8 @@ inline void sensors__init(void) {
     ENABLE_PULLUP(SENSOR2);
     ENABLE_PULLUP(SENSOR3);
 }
+
+void sensors__run(void);
 
 /**
  * Callback function, called by sensors__run() when any of the sensors has changed state.

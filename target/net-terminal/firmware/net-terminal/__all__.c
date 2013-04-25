@@ -21,7 +21,7 @@
 // BSP
 #include CAN_C
 #include "drivers/keypad.c"
-//#include "drivers/in/sensors.c"
+#include "drivers/in/sensors.c"
 
 // Library
 #include "cpu/avr/timer0.c"
