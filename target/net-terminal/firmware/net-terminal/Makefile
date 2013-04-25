@@ -59,7 +59,7 @@ SRC += alarm_client__auth.c
 SRC += alarm_client__state.c
 SRC += alarm_client__ui.c
 SRC += drivers/keypad.c
-SRC += system_timer.c
+SRC += drivers/in/sensors.c
 SRC += services/lcd_backlight_fader.c
 SRC += services/lcd_backlight_service.c
 

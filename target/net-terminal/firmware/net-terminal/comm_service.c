@@ -10,6 +10,7 @@
 #include "comm_service__descriptor_memory.h"
 #include "comm_service__endpoint__alarm_client__auth.h"
 #include "comm_service__endpoint__alarm_client__state.h"
+#include "comm_service__endpoint__sensors.h"
 #include "comm_service__endpoint__tty.h"
 #include CAN_H
 
@@ -20,10 +21,14 @@
  */
 void comm_service__handle(const uint8_t event, const uint8_t message_type) {
     if (event <= CANP_FILTER__BROADCAST) {
+        // Received frame into RXB0 or RXB1
         const uint8_t report = CANP_SLOT_BITS(kernel__frame.header.id);
 
         if (report == CANP_REPORT__TTY) {
-            comm_service__endpoint__io__handle_tty();
+            comm_service__endpoint__tty__handle(message_type);
+        }
+        else if (report == CANP_REPORT__SENSORS__STATE) {
+            comm_service__endpoint__sensors__handle(message_type);
         }
     }
     else if (event == CANP_FILTER__ALARM_SERVER__AUTH && message_type == CANP_MSG_TYPE_VALUE) {

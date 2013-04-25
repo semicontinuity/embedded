@@ -56,6 +56,9 @@ INLINE void alarm_client__new_state__on_changed(void) {
     comm_service__endpoint__alarm_client__state__send();
 }
 
+void sensors__status__on_change(void) {
+}
+
 
 // =============================================================================
 // Application lifecycle
