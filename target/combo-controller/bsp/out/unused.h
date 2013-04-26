@@ -13,9 +13,5 @@ inline void out__unused2__init(void) {
     USE_AS_OUTPUT(OUT__UNUSED2);
 }
 
-inline void out__unused3__init(void) {
-    USE_AS_OUTPUT(OUT__UNUSED3);
-}
-
 
 #endif

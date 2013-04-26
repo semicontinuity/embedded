@@ -88,7 +88,6 @@ INLINE void seconds_timer__out__run(void) {
 inline static void application__init(void) {
     out__unused1__init();
     out__unused2__init();
-    out__unused3__init();
     out__amplifier_relay__init();
     out__siren1__init();
     out__siren2__init();
