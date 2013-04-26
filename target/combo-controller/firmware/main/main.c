@@ -32,7 +32,7 @@
 #include "motion_sensors_scanner.h"
 #include "water_leak_sensors_scanner.h"
 #include "water_leak_handler.h"
-
+#include "comm_service__notifications__1.h"
 //#include "console_service.h"
 
 #include <avr/interrupt.h>
@@ -174,7 +174,7 @@ int main(void) {
     // run background tasks
     for(;;) {
         cli();
-        comm_service__endpoint__io__broadcast();
+        comm_service__notifications__1__run();
         sei();
     }
 
