@@ -29,8 +29,8 @@
 #include "comm_service__descriptor_memory.c"
 #include "comm_service.c"
 
-#include "alarm.c"
-#include "alarm_timer.c"
-#include "alarm__auth.c"
+#include "services/alarm.c"
+#include "services/alarm__timer.c"
+#include "services/alarm__auth.c"
 
 #include "main.c"

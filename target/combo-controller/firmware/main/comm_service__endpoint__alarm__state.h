@@ -4,7 +4,7 @@
 #include "kernel.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 
-#include "alarm.h"
+#include "services/alarm.h"
 
 
 inline static void comm_service__endpoint__alarm__state__handle(const uint8_t is_get) {

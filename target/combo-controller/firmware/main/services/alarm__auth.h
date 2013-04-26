@@ -1,5 +1,5 @@
-#ifndef __ALARM__AUTH_H
-#define __ALARM__AUTH_H
+#ifndef __SERVICES__ALARM_AUTH_H
+#define __SERVICES__ALARM_AUTH_H
 
 #include <stdint.h>
 #include <avr/eeprom.h>

@@ -54,9 +54,9 @@ SRC += comm_service.c
 #SRC += console_service.c
 #SRC += parse.c
 # endif
-SRC += alarm__auth.c
-SRC += alarm.c
-SRC += alarm_timer.c
+SRC += services/alarm__auth.c
+SRC += services/alarm.c
+SRC += services/alarm__timer.c
 
 
 # BSP

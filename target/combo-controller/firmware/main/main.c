@@ -23,9 +23,6 @@
 
 #include "kernel.h"
 
-#include "alarm.h"
-#include "alarm_timer.h"
-#include "alarm__auth.h"
 
 #include "drivers/system_timer.h"
 
@@ -34,6 +31,9 @@
 #include "comm_service__notifications__1.h"
 //#include "services/console.h"
 
+#include "services/alarm.h"
+#include "services/alarm__timer.h"
+#include "services/alarm__auth.h"
 #include "services/seconds_timer.h"
 #include "services/alarm_handler.h"
 #include "services/water_leak_handler.h"
@@ -78,7 +78,7 @@ INLINE void system_timer__out__run(void) {
  * Called every second.
  */ 
 INLINE void seconds_timer__out__run(void) {
-    alarm_timer__run();
+    alarm__timer__run();
 }
 
 
