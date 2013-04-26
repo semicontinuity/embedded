@@ -1,3 +1,6 @@
+#ifndef __SERVICES__WATER_LEAK_HANDLER_H
+#define __SERVICES__WATER_LEAK_HANDLER_H
+
 // =============================================================================
 // Water leak handler service.
 // - Listens for water leak sensors
@@ -11,6 +14,7 @@
 #include "out/water_valve.h"
 #include "flags/water_valve__changed.h"
 #include "flags/notifications__pending.h"
+
 
 uint8_t EEMEM ee__water_leak_handler__enabled = WATER_LEAK_HANDLER__ENABLED;
 uint8_t water_leak_handler__enabled;
@@ -26,3 +30,5 @@ INLINE void water_leak_handler__run(void) {
         out__water_valve__on();  // not switched off automatically, must be switched off manually
     }
 }
+
+#endif

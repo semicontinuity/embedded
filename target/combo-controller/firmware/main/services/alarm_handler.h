@@ -1,3 +1,6 @@
+#ifndef __SERVICES__ALARM_HANDLER_H
+#define __SERVICES__ALARM_HANDLER_H
+
 // =============================================================================
 // Alarm handler service.
 // - Listens for alarm events
@@ -52,3 +55,5 @@ INLINE void alarm__state__on_change(void) {
  */
 INLINE void alarm__out__run(void) {    
 }
+
+#endif
