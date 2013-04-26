@@ -34,7 +34,7 @@ void comm_service__handle(const uint8_t event, const uint8_t is_get) {
         else if (report == CANP_REPORT__AUTH) {
             comm_service__endpoint__alarm__auth__handle(is_get);
         }
-        else if (report == CANP_REPORT__ALARM_SERVER) {
+        else if (report == CANP_REPORT__ALARM__STATE) {
             comm_service__endpoint__alarm__state__handle(is_get);
         }
     }

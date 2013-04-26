@@ -20,6 +20,7 @@
 #include "flags/siren2__changed.h"
 #include "flags/water_valve__changed.h"
 #include "flags/water_leak_sensors__changed.h"
+#include "flags/alarm__state__changed.h"
 
 
 inline static void comm_service__endpoint__io__handle_input(const uint8_t is_get, const uint8_t report) {
@@ -126,6 +127,12 @@ inline static void comm_service__endpoint__io__broadcast(void) {
             siren2__changed__set(0);
             report_id = CANP_REPORT__SIREN2__VALUE;
             if (out__siren2__is_on()) value = 1;
+            *data = value;
+        }
+        else if (alarm__state__changed__is_set()) {
+            alarm__state__changed__set(0);
+            report_id = CANP_REPORT__ALARM__STATE;
+            value = alarm__state;
             *data = value;
         }
         else {
