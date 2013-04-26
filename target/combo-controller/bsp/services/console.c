@@ -8,6 +8,8 @@
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/util/debug.h"
 
+#include "out/water_valve.h"
+
 #include <stdbool.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>

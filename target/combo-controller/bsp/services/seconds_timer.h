@@ -3,8 +3,8 @@
 // Divides the output of the system timer to get 1 Hz frequency.
 // =============================================================================
 
-#ifndef __SECONDS_TIMER_H
-#define __SECONDS_TIMER_H
+#ifndef __SERVICES__SECONDS_TIMER_H
+#define __SERVICES__SECONDS_TIMER_H
 
 #include <stdint.h>
 

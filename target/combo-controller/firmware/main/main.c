@@ -29,12 +29,12 @@
 
 #include "drivers/system_timer.h"
 
-#include "seconds_timer.h"
 #include "motion_sensors_scanner.h"
 #include "water_leak_sensors_scanner.h"
 #include "comm_service__notifications__1.h"
-//#include "console_service.h"
+//#include "services/console.h"
 
+#include "services/seconds_timer.h"
 #include "services/alarm_handler.h"
 #include "services/water_leak_handler.h"
 
