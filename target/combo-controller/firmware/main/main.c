@@ -31,9 +31,11 @@
 #include "system_timer.h"
 #include "motion_sensors_scanner.h"
 #include "water_leak_sensors_scanner.h"
-#include "water_leak_handler.h"
 #include "comm_service__notifications__1.h"
 //#include "console_service.h"
+
+#include "services/alarm_handler.h"
+#include "services/water_leak_handler.h"
 
 #include <avr/interrupt.h>
 
@@ -41,27 +43,6 @@
 // =============================================================================
 // Implementation of callbacks from other modules (bindings)
 // =============================================================================
-
-void alarm__sound__on(void) {
-}
-
-void alarm__sound__off(void) {
-}
-
-void alarm__state__on_change(void) {
-    alarm__state__changed__set(1);
-    notifications__pending__set(1);
-}
-
-
-/**
- * This procedure is called by alarm when it decided to notify about alarm condition.
- * It is called only once per session, not when alarm is switched on after it was mute.
- * Our reaction is to send SMS.
- */
-void alarm__out__run(void) {    
-}
-
 
 /**
  * Callback function, called by water_leak_sensors_scanner__run() when any of the sensors has changed state.
@@ -132,16 +113,18 @@ inline static void application__init(void) {
     alarm__auth__init();
     water_leak_sensors_scanner__init();
     motion_sensors_scanner__init();
-
-    water_leak_handler__init();
     system_timer__init();
 
+    alarm_handler__init();
+    water_leak_handler__init();
     // console_service__init();
 }
+
 
 inline static void application__start(void) {
     system_timer__start();
 }
+
 
 inline static void application__stop(void) {
     system_timer__stop();

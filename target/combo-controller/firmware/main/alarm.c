@@ -1,5 +1,6 @@
 #include "alarm.h"
 #include "alarm_timer.h"
+#include <stdbool.h>
 
 
 uint8_t EEMEM ee__alarm__time_arming     = ALARM__TIME_ARMING;
@@ -31,7 +32,7 @@ void alarm__arm(void) {
  * The alarm state should be broadcasted at the call site.
  */
 void alarm__disarm(void) {
-    alarm__sound__off(); // alarm may be on
+    alarm__sound__set(false); // alarm may be on
     alarm__state = ALARM__STATE__DISARMED;
     // stop counting any timeouts for current state, ALARM__STATE__DISARMED does not have timeout
     alarm_timer__reset(); 
@@ -75,11 +76,11 @@ void alarm_timer__output__run(void) {
         // Alert time expired, switching to ALARM state.
         alarm__state__set(ALARM__STATE__ALARM);
         alarm_timer__set(alarm__time_alarm);
-        alarm__sound__on();
+        alarm__sound__set(true);
         break;
     case ALARM__STATE__ALARM:
         // ALARM state has expired, let's mute the sound and switch to ALARM_MUTE state.
-        alarm__sound__off();
+        alarm__sound__set(false);
         alarm__state__set(ALARM__STATE__ALARM_MUTE);
         alarm_timer__set(alarm__time_alarm_mute);
         break;

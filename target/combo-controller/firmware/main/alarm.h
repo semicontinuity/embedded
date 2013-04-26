@@ -60,15 +60,14 @@ enum alarm__state {
 extern enum alarm__state alarm__state;
 
 // Alarm API
-void alarm__arm(void);
-void alarm__disarm(void);
-void alarm__sensor_active(void);
+INLINE void alarm__arm(void);
+INLINE void alarm__disarm(void);
+INLINE void alarm__sensor_active(void);
 
 // Alarm callbacks - to be implemented by user
-void alarm__out__run(void);
-void alarm__sound__on(void);
-void alarm__sound__off(void);
-void alarm__state__on_change(void);
+INLINE void alarm__out__run(void);
+INLINE void alarm__state__on_change(void);
+void alarm__sound__set(const bool on);
 
 #endif
     
