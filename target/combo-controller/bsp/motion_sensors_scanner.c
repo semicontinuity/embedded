@@ -15,8 +15,8 @@ struct motion_sensors_scanner__status motion_sensors_scanner__status = {
  * Sensors readings are filtered.
  * Will invoke the callback motion_sensors_scanner__status__on_change() when any of the sensors has changed state.
  */
-void motion_sensors_scanner__run(void) {
-    uint8_t sensors_state = PORT_VALUE(IN__MOTION_SENSORS) & MOTION_SENSORS_SCANNER__STATE__INACTIVE;
+INLINE void motion_sensors_scanner__run(void) {
+    uint8_t sensors_state = motion_sensors__read();
     uint8_t prev_state = motion_sensors_scanner__status.prev_state;
     uint8_t filtered_state = sensors_state | prev_state;
     uint8_t state = motion_sensors_scanner__status.state;

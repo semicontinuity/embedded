@@ -6,12 +6,13 @@
 #ifndef __WATER_LEAK_SENSORS_SCANNER_H
 #define __WATER_LEAK_SENSORS_SCANNER_H
 
+#include "drivers/in/water_leak_sensors.h"
 #include "cpu/avr/gpio.h"
 #include <stdint.h>
 #include <stdbool.h>
 
 
-#define WATER_LEAK_SENSORS_SCANNER__STATE__INACTIVE     (SIGNAL_MASK(IN__WATER_LEAK_SENSOR1) | SIGNAL_MASK(IN__WATER_LEAK_SENSOR2))
+#define WATER_LEAK_SENSORS_SCANNER__STATE__INACTIVE     WATER_LEAK_SENSORS__MASK
 
 
 struct water_leak_sensors_scanner__status {
@@ -36,7 +37,7 @@ inline void water_leak_sensors_scanner__init(void) {}
  * Sensors readings are filtered.
  * Will invoke the callback water_leak_sensors_scanner__status__on_change() when any of the sensors has changed state.
  */
-void water_leak_sensors_scanner__run(void);
+INLINE void water_leak_sensors_scanner__run(void);
 
 /** Returns true when at least one sensor is active, i.e. water leak detected */
 inline static bool water_leak_sensors_scanner__is_active(void) {

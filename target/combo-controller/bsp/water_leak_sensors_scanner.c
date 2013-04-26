@@ -15,8 +15,8 @@ struct water_leak_sensors_scanner__status water_leak_sensors_scanner__status = {
  * Sensors readings are filtered.
  * Will invoke the callback water_leak_sensors_scanner__status__on_change() when any of the sensors has changed state.
  */
-void water_leak_sensors_scanner__run(void) {
-    uint8_t sensors_state = PORT_VALUE(IN__WATER_LEAK_SENSORS) & WATER_LEAK_SENSORS_SCANNER__STATE__INACTIVE;
+INLINE void water_leak_sensors_scanner__run(void) {
+    uint8_t sensors_state = water_leak_sensors__read();
     uint8_t prev_state = water_leak_sensors_scanner__status.prev_state;
     uint8_t filtered_state = sensors_state | prev_state;
     uint8_t state = water_leak_sensors_scanner__status.state;

@@ -10,10 +10,16 @@
 #include "cpu/avr/gpio.h"
 #include <stdint.h>
 
+#define MOTION_SENSORS__MASK (0xFF)
 
-inline void motion_sensors__init(void) {
+
+inline static void motion_sensors__init(void) {
     USE_PORT_AS_INPUT(IN__MOTION_SENSORS);
     ENABLE_PULLUPS(IN__MOTION_SENSORS);
+}
+
+inline static uint8_t motion_sensors__read(void) {
+    return IN(IN__MOTION_SENSORS) & MOTION_SENSORS__MASK;
 }
 
 

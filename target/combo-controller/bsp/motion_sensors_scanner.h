@@ -6,12 +6,13 @@
 #ifndef __MOTION_SENSORS_SCANNER_H
 #define __MOTION_SENSORS_SCANNER_H
 
+#include "drivers/in/motion_sensors.h"
 #include "cpu/avr/gpio.h"
 #include <stdint.h>
 #include <stdbool.h>
 
 
-#define MOTION_SENSORS_SCANNER__STATE__INACTIVE     (0xFF)
+#define MOTION_SENSORS_SCANNER__STATE__INACTIVE MOTION_SENSORS__MASK
 
 
 struct motion_sensors_scanner__status {
@@ -36,7 +37,8 @@ inline void motion_sensors_scanner__init(void) {}
  * Sensors readings are filtered.
  * Will invoke the callback motion_sensors_scanner__status__on_change() when any of the sensors has changed state.
  */
-void motion_sensors_scanner__run(void);
+INLINE void motion_sensors_scanner__run(void);
+
 
 /** Returns true when at least one sensor is active, i.e. motion detected */
 inline static bool motion_sensors_scanner__is_active(void) {
