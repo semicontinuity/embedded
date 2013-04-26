@@ -57,6 +57,7 @@ SRC += comm_service.c
 SRC += services/alarm__auth.c
 SRC += services/alarm.c
 SRC += services/alarm__timer.c
+SRC += services/water_leak_handler__timer.c
 
 
 # BSP

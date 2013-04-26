@@ -37,6 +37,7 @@
 #include "services/seconds_timer.h"
 #include "services/alarm_handler.h"
 #include "services/water_leak_handler.h"
+#include "services/water_leak_handler__timer.h"
 
 #include <avr/interrupt.h>
 
@@ -81,6 +82,7 @@ INLINE void system_timer__out__run(void) {
  */ 
 INLINE void seconds_timer__out__run(void) {
     alarm__timer__run();
+    water_leak_handler__timer__run();
 }
 
 

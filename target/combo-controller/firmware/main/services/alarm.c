@@ -61,7 +61,7 @@ void alarm__sensor_active(void) {
 
 
 // Called when alarm timer has expired
-void alarm__timer__output__run(void) {
+INLINE void alarm__timer__output__run(void) {
     switch (alarm__state)
     {
     case ALARM__STATE__ARMING:

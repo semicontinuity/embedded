@@ -15,7 +15,7 @@ inline static void alarm__timer__set(const uint8_t t) {
 
 
 // Alarm timer callback - to be implemented by user
-void alarm__timer__output__run(void);
+INLINE void alarm__timer__output__run(void);
 
 
 static inline void alarm__timer__run(void) {

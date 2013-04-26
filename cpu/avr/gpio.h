@@ -42,7 +42,7 @@
 #define OUT_1_RAW(signal)            (PORT_REG(CONCAT(signal,__PORT)) |= SIGNAL_MASK(signal))
 #define OUT_1(signal)                do {set_bit_in_reg (PORT_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
 
-#define PORT_VALUE(signal)           (PIN_REG(CONCAT(signal,__PORT)))
+#define PORT_VALUE(port)             IN(port)
 #define IS_0(signal)                 (bit_is_clear (PIN_REG(CONCAT(signal,__PORT)), signal##__PIN))
 #define IS_1(signal)                 (bit_is_set (PIN_REG(CONCAT(signal,__PORT)), signal##__PIN))
 
