@@ -27,8 +27,9 @@
 #include "alarm_timer.h"
 #include "alarm__auth.h"
 
+#include "drivers/system_timer.h"
+
 #include "seconds_timer.h"
-#include "system_timer.h"
 #include "motion_sensors_scanner.h"
 #include "water_leak_sensors_scanner.h"
 #include "comm_service__notifications__1.h"
@@ -86,6 +87,7 @@ INLINE void seconds_timer__out__run(void) {
 // =============================================================================
 
 inline static void application__init(void) {
+    // Output drivers
     out__unused1__init();
     out__unused2__init();
     out__amplifier_relay__init();
@@ -93,11 +95,11 @@ inline static void application__init(void) {
     out__siren2__init();
     out__water_valve__init();
 
-    // inputs
+    // Input drivers
     in__water_leak_sensors__init();
     in__motion_sensors__init();
 
-    // flags
+    // Flags
     notifications__pending__init();
     water_valve__changed__init();
     amplifier_relay__changed__init();
@@ -107,13 +109,14 @@ inline static void application__init(void) {
     water_leak_sensors__changed__init();
     alarm__state__changed__init();
 
-    // services
-    alarm__init();
-    alarm__auth__init();
+    // Other drivers
+    system_timer__init();
     water_leak_sensors_scanner__init();
     motion_sensors_scanner__init();
-    system_timer__init();
 
+    // Services
+    alarm__init();
+    alarm__auth__init();
     alarm_handler__init();
     water_leak_handler__init();
     // console_service__init();
