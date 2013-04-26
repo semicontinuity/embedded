@@ -17,33 +17,31 @@ uint8_t alarm__time_alarm_mute;
 
 enum alarm__state alarm__state;
 
-/**
- * Arm the alarm.
- * The alarm state should be broadcasted at the call site.
- */
-void alarm__arm(void) {
-    alarm__state = ALARM__STATE__ARMING;
-    alarm__timer__set(alarm__time_arming);
-}
-
-
-/**
- * Disarm the alarm.
- * The alarm state should be broadcasted at the call site.
- */
-void alarm__disarm(void) {
-    alarm__sound__set(false); // alarm may be on
-    alarm__state = ALARM__STATE__DISARMED;
-    // stop counting any timeouts for current state, ALARM__STATE__DISARMED does not have timeout
-    alarm__timer__set(0); 
-}
-
 
 static inline void alarm__state__set(const uint8_t state) {
     alarm__state = state;
     alarm__state__on_change();
 }
 
+
+/**
+ * Arm the alarm.
+ */
+void alarm__arm(void) {
+    alarm__state__set(ALARM__STATE__ARMING);
+    alarm__timer__set(alarm__time_arming);
+}
+
+
+/**
+ * Disarm the alarm.
+ */
+void alarm__disarm(void) {
+    alarm__sound__set(false); // alarm may be on
+    alarm__state__set(ALARM__STATE__DISARMED);
+    // stop counting any timeouts for current state, ALARM__STATE__DISARMED does not have timeout
+    alarm__timer__set(0); 
+}
 
 
 // Called when some sensor has detected an intruder

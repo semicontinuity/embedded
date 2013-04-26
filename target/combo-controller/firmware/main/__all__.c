@@ -34,4 +34,8 @@
 #include "services/alarm__auth.c"
 #include "services/water_leak_handler__timer.c"
 
+#include "endpoints/alarm__state.c"
+#include "endpoints/siren1.c"
+#include "endpoints/siren2.c"
+
 #include "main.c"

@@ -59,6 +59,9 @@ SRC += services/alarm.c
 SRC += services/alarm__timer.c
 SRC += services/water_leak_handler__timer.c
 
+SRC += endpoints/alarm__state.c
+SRC += endpoints/siren1.c
+SRC += endpoints/siren2.c
 
 # BSP
 SRC += services/seconds_timer.c
