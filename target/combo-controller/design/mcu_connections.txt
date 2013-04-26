@@ -31,5 +31,5 @@ PD2	INT0	MCP2515 INT
 PD3	INT1	MCP2515 CS
 PD4		Opto-isolated SSR			amplifier
 PD5		Opto-isolated SSR			siren 1
-PD6							reserved 3
+PD6		flag: alarm state changed               (possible to attach debug led)
 PD7		Opto-isolated SSR			water valve

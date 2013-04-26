@@ -68,6 +68,7 @@ void alarm__sensor_active(void);
 void alarm__out__run(void);
 void alarm__sound__on(void);
 void alarm__sound__off(void);
+void alarm__state__on_change(void);
 
 #endif
     

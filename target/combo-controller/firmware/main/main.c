@@ -12,13 +12,14 @@
 #include "in/water_leak_sensors.h"
 #include "in/motion_sensors.h"
 
-#include "flags/gpio_notifications__pending.h"
+#include "flags/notifications__pending.h"
 #include "flags/water_valve__changed.h"
 #include "flags/amplifier_relay__changed.h"
 #include "flags/siren1__changed.h"
 #include "flags/siren2__changed.h"
 #include "flags/motion_sensors__changed.h"
 #include "flags/water_leak_sensors__changed.h"
+#include "flags/alarm__state__changed.h"
 
 #include "kernel.h"
 
@@ -47,10 +48,9 @@ void alarm__sound__on(void) {
 void alarm__sound__off(void) {
 }
 
-void alarm__state__on_arming(void) {
-}
-
-void alarm__state__on_disarmed(void) {
+void alarm__state__on_change(void) {
+    alarm__state__changed__set(1);
+    notifications__pending__set(1);
 }
 
 
@@ -68,7 +68,7 @@ void alarm__out__run(void) {
  */
 INLINE void water_leak_sensors_scanner__status__on_change(void) {
     water_leak_sensors__changed__set(1);
-    gpio_notifications__pending__set(1);
+    notifications__pending__set(1);
 
     water_leak_handler__run();
 }
@@ -79,7 +79,7 @@ INLINE void water_leak_sensors_scanner__status__on_change(void) {
  */
 INLINE void motion_sensors_scanner__status__on_change(void) {
     motion_sensors__changed__set(1);
-    gpio_notifications__pending__set(1);
+    notifications__pending__set(1);
 }
 
 
@@ -118,13 +118,14 @@ inline static void application__init(void) {
     in__motion_sensors__init();
 
     // flags
-    gpio_notifications__pending__init();
+    notifications__pending__init();
     water_valve__changed__init();
     amplifier_relay__changed__init();
     siren1__changed__init();
     siren2__changed__init();
     motion_sensors__changed__init();
     water_leak_sensors__changed__init();
+    alarm__state__changed__init();
 
     // services
     alarm__init();
@@ -168,7 +169,7 @@ int main(void) {
         application__start();
 //    }
 
-    sei();
+    //sei();
 
     // run background tasks
     for(;;) {

@@ -14,7 +14,7 @@
 #include "out/siren1.h"
 #include "out/siren2.h"
 
-#include "flags/gpio_notifications__pending.h"
+#include "flags/notifications__pending.h"
 #include "flags/amplifier_relay__changed.h"
 #include "flags/siren1__changed.h"
 #include "flags/siren2__changed.h"
@@ -93,7 +93,7 @@ inline static void comm_service__endpoint__io__handle_output(const uint8_t is_ge
 
 
 inline static void comm_service__endpoint__io__broadcast(void) {
-    if (can__txb1__available__is_set() && gpio_notifications__pending__is_set()) {
+    if (can__txb1__available__is_set() && notifications__pending__is_set()) {
         uint8_t report_id;
         uint8_t *data = kernel__frame.data;
 //        FIX_POINTER(data);
@@ -129,7 +129,7 @@ inline static void comm_service__endpoint__io__broadcast(void) {
             *data = value;
         }
         else {
-            gpio_notifications__pending__set(0);
+            notifications__pending__set(0);
             return;
         }
 

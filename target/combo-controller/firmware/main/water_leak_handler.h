@@ -10,7 +10,7 @@
 #include "water_leak_sensors_scanner.h"
 #include "out/water_valve.h"
 #include "flags/water_valve__changed.h"
-#include "flags/gpio_notifications__pending.h"
+#include "flags/notifications__pending.h"
 
 uint8_t EEMEM ee__water_leak_handler__enabled = WATER_LEAK_HANDLER__ENABLED;
 uint8_t water_leak_handler__enabled;
