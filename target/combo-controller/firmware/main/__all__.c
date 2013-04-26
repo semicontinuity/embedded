@@ -15,8 +15,8 @@
 #include "main.c"
 
 //#if defined(SERVICE_CONSOLE)
-# include "console_service.c"
-# include "parse.c"
+# include "services/console.c"
+# include "util/hex.c"
 //#endif
 
 
