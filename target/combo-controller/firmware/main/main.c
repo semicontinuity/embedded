@@ -62,6 +62,8 @@ INLINE void water_leak_sensors_scanner__status__on_change(void) {
 INLINE void motion_sensors_scanner__status__on_change(void) {
     motion_sensors__changed__set(1);
     notifications__pending__set(1);
+
+    if (motion_sensors_scanner__is_active()) alarm__sensor_active();
 }
 
 
