@@ -58,7 +58,7 @@ inline void keypad__init(void) {
 INLINE void keypad__run(void);
 
 /** An application must define this event handler */
-INLINE void keypad__on_event(uint8_t keyevent);
+void keypad__on_event(uint8_t keyevent) __attribute__((noinline));
 
 
 #endif

@@ -8,17 +8,21 @@
 #include <stdint.h>
 
 
-char alarm_client__ui__entered_password[8];
-int  alarm_client__ui__entered_password_length;
+uint8_t alarm_client__ui__entered_password[8];
+uint8_t alarm_client__ui__entered_password_length;
 
 const char ALARM_CLIENT__UI__MSG_ARMED[] PROGMEM = "\n\n\nПоставлено на охрану\n\nДля снятия с охраны\nвведите код\n\n";
 const char ALARM_CLIENT__UI__MSG_DISARMED[] PROGMEM = "\n\n\nСнято с охраны\n\nДля постановки\nна охрану введите код\n\n";
-const char ALARM_CLIENT__UI__MSG_CONNECTING[] PROGMEM = "Соединение с сервером\n";
 
 
-/*INLINE */void alarm_client__ui__start(void) {
-    lcd_print_string_progmem(ALARM_CLIENT__UI__MSG_CONNECTING);
+INLINE void alarm_client__ui__start(void) {
+    terminal_displayChar('.');
+    alarm_client__auth__password__invalidate();
+    terminal_displayChar('.');
     while (!password__changed__is_set());
+    terminal_displayChar('.');
+    alarm_client__state__invalidate();
+    terminal_displayChar('.');
 }
 
 
@@ -44,7 +48,7 @@ INLINE void alarm_client__ui__on_incorrect_password(void) {
     alarm_client__ui__display_state();
 }
 
-inline void alarm_client__ui__on_password_char_typed(const uint8_t c) {
+INLINE void alarm_client__ui__on_password_char_typed(const uint8_t c) {
     terminal_displayChar('*');
 }
 
@@ -53,7 +57,7 @@ INLINE void alarm_client__ui__on_state_changed(void) {
     alarm_client__ui__display_state();
 }
 
-inline unsigned char alarm_client__ui__password_matches(void) {
+INLINE unsigned char alarm_client__ui__password_matches(void) {
     if (alarm_client__ui__entered_password_length != alarm_client__auth__password.length) return 0;
     for (unsigned char i = 0; i < alarm_client__auth__password.length; i++) {
         if (alarm_client__ui__entered_password[i] != alarm_client__auth__password.data[i]) return 0;

@@ -1,3 +1,5 @@
+#include "drivers/keypad.c"
+
 // Firmware
 #include "kernel.c"
 #include CAN_SERVICE_C
@@ -20,7 +22,6 @@
 
 // BSP
 #include CAN_C
-#include "drivers/keypad.c"
 #include "drivers/in/sensors.c"
 
 // Library
