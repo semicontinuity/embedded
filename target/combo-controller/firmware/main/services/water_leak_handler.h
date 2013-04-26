@@ -47,12 +47,18 @@ inline void water_leak_handler__sound__set(const bool on) {
     notifications__pending__set(1);
 }
 
+inline void water_leak_handler__water_valve__set(const bool on) {
+    if (on) water_valve__on(); else water_valve__off();
+    water_valve__changed__set(1);
+    notifications__pending__set(1);
+}
+
 
 /** Invoked by water_leak_sensors_scanner__run() when the state of water leak sensors has changed */
 INLINE void water_leak_handler__run(void) {
     if (water_leak_handler__action__enabled && water_leak_sensors_scanner__is_active()) {
         if (water_leak_handler__action__enabled) {
-            water_valve__on();  // not switched off automatically, must be switched off manually
+            water_leak_handler__water_valve__set(1);  // not switched off automatically, must be switched off manually
         }
         if (ee__water_leak_handler__sound__duration) {
             water_leak_handler__sound__set(1); // switched off after timeout

@@ -48,10 +48,9 @@ inline static void comm_service__endpoint__io__handle_output(const uint8_t is_ge
         kernel__send_response(1, kernel__frame.data);
     }
     else {
-        // Handle PUT request
-        // Should reject all values but 1
+        // Handle PUT message
         // Should check DLC
-
+        // Could answer with PUT message
         uint8_t value = kernel__frame.data[0];
         if (value == 0) {
             if (report == CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE) {
