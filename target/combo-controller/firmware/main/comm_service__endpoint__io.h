@@ -9,10 +9,10 @@
 
 #include "water_leak_sensors_scanner.h"
 
-#include "out/water_valve.h"
-#include "out/amplifier_relay.h"
-#include "out/siren1.h"
-#include "out/siren2.h"
+#include "drivers/out/water_valve.h"
+#include "drivers/out/amplifier_relay.h"
+#include "drivers/out/siren1.h"
+#include "drivers/out/siren2.h"
 
 
 inline static void comm_service__endpoint__io__handle_input(const uint8_t is_get, const uint8_t report) {
@@ -32,16 +32,16 @@ inline static void comm_service__endpoint__io__handle_output(const uint8_t is_ge
     if (is_get) {
         uint8_t value = 0;
         if (report == CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE) {
-            if (out__water_valve__is_on()) value = 1;
+            if (water_valve__is_on()) value = 1;
         }
         else if (report == CANP_REPORT__AMPLIFIER_RELAY_CONTROLLER__VALUE) {
-            if (out__amplifier_relay__is_on()) value = 1;
+            if (amplifier_relay__is_on()) value = 1;
         }
         else if (report == CANP_REPORT__SIREN1__VALUE) {
-            if (out__siren1__is_on()) value = 1;
+            if (siren1__is_on()) value = 1;
         }
         else if (report == CANP_REPORT__SIREN2__VALUE) {
-            if (out__siren2__is_on()) value = 1;
+            if (siren2__is_on()) value = 1;
         }
 
         kernel__frame.data[0] = value;
@@ -55,30 +55,30 @@ inline static void comm_service__endpoint__io__handle_output(const uint8_t is_ge
         uint8_t value = kernel__frame.data[0];
         if (value == 0) {
             if (report == CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE) {
-                out__water_valve__off();
+                water_valve__off();
             }
             else if (report == CANP_REPORT__AMPLIFIER_RELAY_CONTROLLER__VALUE) {
-                out__amplifier_relay__off();
+                amplifier_relay__off();
             }
             else if (report == CANP_REPORT__SIREN1__VALUE) {
-                out__siren1__off();
+                siren1__off();
             }
             else if (report == CANP_REPORT__SIREN2__VALUE) {
-                out__siren2__off();
+                siren2__off();
             }        
         }
         else {
             if (report == CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE) {
-                out__water_valve__on();
+                water_valve__on();
             }
             else if (report == CANP_REPORT__AMPLIFIER_RELAY_CONTROLLER__VALUE) {
-                out__amplifier_relay__on();
+                amplifier_relay__on();
             }
             else if (report == CANP_REPORT__SIREN1__VALUE) {
-                out__siren1__on();
+                siren1__on();
             }
             else if (report == CANP_REPORT__SIREN2__VALUE) {
-                out__siren2__on();
+                siren2__on();
             }        
         }
     }

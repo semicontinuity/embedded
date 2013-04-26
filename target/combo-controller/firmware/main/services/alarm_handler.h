@@ -9,7 +9,7 @@
 // =============================================================================
 
 #include "alarm.h"
-#include "out/siren1.h"
+#include "drivers/out/siren1.h"
 #include "flags/siren1__changed.h"
 #include "flags/notifications__pending.h"
 
@@ -35,7 +35,7 @@ inline static void alarm_handler__init(void) {
 
 void alarm__sound__set(const bool on) {
     if (alarm_handler__sound__enabled) {
-        if (on) out__siren1__on(); else out__siren1__off();
+        if (on) siren1__on(); else siren1__off();
         siren1__changed__set(1);
         notifications__pending__set(1);
     }

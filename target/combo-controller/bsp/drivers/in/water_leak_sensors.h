@@ -5,19 +5,19 @@
 // Sensors are reading 0 when active.
 // =============================================================================
 
-#ifndef __IN__WATER_LEAK_SENSORS_H
-#define __IN__WATER_LEAK_SENSORS_H
+#ifndef __DRIVERS__IN__WATER_LEAK_SENSORS_H
+#define __DRIVERS__IN__WATER_LEAK_SENSORS_H
 
 #include "cpu/avr/gpio.h"
 #include <stdint.h>
 
 
-inline void in__water_leak_sensor1__init(void) {
+inline void water_leak_sensor1__init(void) {
     USE_AS_INPUT(IN__WATER_LEAK_SENSOR1);
     ENABLE_PULLUP(IN__WATER_LEAK_SENSOR1);
 }
 
-inline void in__water_leak_sensor2__init(void) {
+inline void water_leak_sensor2__init(void) {
     USE_AS_INPUT(IN__WATER_LEAK_SENSOR2);
     ENABLE_PULLUP(IN__WATER_LEAK_SENSOR2);
 }
@@ -26,9 +26,9 @@ inline void in__water_leak_sensor2__init(void) {
 /**
  * Initialize the button pins.
  */
-inline void in__water_leak_sensors__init(void) {
-    in__water_leak_sensor1__init();
-    in__water_leak_sensor2__init();
+inline void water_leak_sensors__init(void) {
+    water_leak_sensor1__init();
+    water_leak_sensor2__init();
 }
 
 

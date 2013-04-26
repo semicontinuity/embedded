@@ -8,10 +8,10 @@
 
 #include "water_leak_sensors_scanner.h"
 
-#include "out/water_valve.h"
-#include "out/amplifier_relay.h"
-#include "out/siren1.h"
-#include "out/siren2.h"
+#include "drivers/out/water_valve.h"
+#include "drivers/out/amplifier_relay.h"
+#include "drivers/out/siren1.h"
+#include "drivers/out/siren2.h"
 
 #include "flags/notifications__pending.h"
 #include "flags/amplifier_relay__changed.h"
@@ -37,25 +37,25 @@ inline static void comm_service__notifications__1__run(void) {
         else if (water_valve__changed__is_set()) {
             water_valve__changed__set(0);
             report_id = CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE;
-            if (out__water_valve__is_on()) value = 1;
+            if (water_valve__is_on()) value = 1;
             *data = value;
         }
         else if (amplifier_relay__changed__is_set()) {
             amplifier_relay__changed__set(0);
             report_id = CANP_REPORT__AMPLIFIER_RELAY_CONTROLLER__VALUE;
-            if (out__amplifier_relay__is_on()) value = 1;
+            if (amplifier_relay__is_on()) value = 1;
             *data = value;
         }
         else if (siren1__changed__is_set()) {
             siren1__changed__set(0);
             report_id = CANP_REPORT__SIREN1__VALUE;
-            if (out__siren2__is_on()) value = 1;
+            if (siren2__is_on()) value = 1;
             *data = value;
         }
         else if (siren2__changed__is_set()) {
             siren2__changed__set(0);
             report_id = CANP_REPORT__SIREN2__VALUE;
-            if (out__siren2__is_on()) value = 1;
+            if (siren2__is_on()) value = 1;
             *data = value;
         }
         else if (alarm__state__changed__is_set()) {

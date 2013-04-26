@@ -3,14 +3,14 @@
 // =============================================================================
 
 
-#include "out/amplifier_relay.h"
-#include "out/siren1.h"
-#include "out/siren2.h"
-#include "out/water_valve.h"
-#include "out/unused.h"
+#include "drivers/out/amplifier_relay.h"
+#include "drivers/out/siren1.h"
+#include "drivers/out/siren2.h"
+#include "drivers/out/water_valve.h"
+#include "drivers/out/unused.h"
 
-#include "in/water_leak_sensors.h"
-#include "in/motion_sensors.h"
+#include "drivers/in/water_leak_sensors.h"
+#include "drivers/in/motion_sensors.h"
 
 #include "flags/notifications__pending.h"
 #include "flags/water_valve__changed.h"
@@ -88,16 +88,16 @@ INLINE void seconds_timer__out__run(void) {
 
 inline static void application__init(void) {
     // Output drivers
-    out__unused1__init();
-    out__unused2__init();
-    out__amplifier_relay__init();
-    out__siren1__init();
-    out__siren2__init();
-    out__water_valve__init();
+    unused1__init();
+    unused2__init();
+    amplifier_relay__init();
+    siren1__init();
+    siren2__init();
+    water_valve__init();
 
     // Input drivers
-    in__water_leak_sensors__init();
-    in__motion_sensors__init();
+    water_leak_sensors__init();
+    motion_sensors__init();
 
     // Flags
     notifications__pending__init();

@@ -8,7 +8,7 @@
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/util/debug.h"
 
-#include "out/water_valve.h"
+#include "drivers/out/water_valve.h"
 
 #include <stdbool.h>
 #include <avr/interrupt.h>
@@ -138,7 +138,7 @@ inline static bool console__handle__mcp2515_read_status(void) {
 // Format: 'v1'
 inline static bool console__handle__valve_on(void) {
     if (console__command_length == 2 && console__command[0] == 'v' && console__command[1] == '1') {
-        out__water_valve__on();
+        water_valve__on();
         return true;
     }
     else return false;
@@ -148,7 +148,7 @@ inline static bool console__handle__valve_on(void) {
 // Format: 'v0'
 inline static bool console__handle__valve_off(void) {
     if (console__command_length == 2 && console__command[0] == 'v' && console__command[1] == '0') {
-        out__water_valve__off();
+        water_valve__off();
         return true;
     }
     else return false;
