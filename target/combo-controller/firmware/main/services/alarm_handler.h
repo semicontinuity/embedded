@@ -9,8 +9,8 @@
 // =============================================================================
 
 #include "alarm.h"
-#include "drivers/out/siren1.h"
-#include "flags/siren1__changed.h"
+#include "drivers/out/siren2.h"
+#include "flags/siren2__changed.h"
 #include "flags/notifications__pending.h"
 
 #include <avr/eeprom.h>
@@ -35,8 +35,8 @@ inline static void alarm_handler__init(void) {
 
 void alarm__sound__set(const bool on) {
     if (alarm_handler__sound__enabled) {
-        if (on) siren1__on(); else siren1__off();
-        siren1__changed__set(1);
+        if (on) siren2__on(); else siren2__off();
+        siren2__changed__set(1);
         notifications__pending__set(1);
     }
 }
