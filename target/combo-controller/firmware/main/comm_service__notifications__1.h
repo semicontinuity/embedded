@@ -13,63 +13,71 @@
 #include "drivers/out/siren1.h"
 #include "drivers/out/siren2.h"
 
-#include "flags/notifications__pending.h"
-#include "flags/amplifier_relay__changed.h"
-#include "flags/siren1__changed.h"
-#include "flags/siren2__changed.h"
-#include "flags/water_valve__changed.h"
-#include "flags/water_leak_sensors__changed.h"
-#include "flags/alarm__state__changed.h"
+#include "flags/notifications_pending.h"
+#include "flags/notifications_pending__amplifier_relay.h"
+#include "flags/notifications_pending__siren1.h"
+#include "flags/notifications_pending__siren2.h"
+#include "flags/notifications_pending__water_valve.h"
+#include "flags/notifications_pending__water_leak_sensors.h"
+#include "flags/notifications_pending__alarm__state.h"
+#include "flags/notifications_pending__alarm__auth.h"
 
 
 inline static void comm_service__notifications__1__run(void) {
-    if (can__txb1__available__is_set() && notifications__pending__is_set()) {
+    if (can__txb1__available__is_set() && notifications_pending__is_set()) {
+
         uint8_t report_id;
+        uint8_t length = 1;
         uint8_t *data = kernel__frame.data;
 //        FIX_POINTER(data);
 
         uint8_t value = 0;
-        if (water_leak_sensors__changed__is_set()) {
-            water_leak_sensors__changed__set(0);
+        if (notifications_pending__water_leak_sensors__is_set()) {
+            notifications_pending__water_leak_sensors__set(0);
             report_id = CANP_REPORT__WATER_LEAK_SENSORS_SCANNER__VALUE;
             data = &water_leak_sensors_scanner__status.state;
         }
-        else if (water_valve__changed__is_set()) {
-            water_valve__changed__set(0);
+        else if (notifications_pending__water_valve__is_set()) {
+            notifications_pending__water_valve__set(0);
             report_id = CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE;
             if (water_valve__is_on()) value = 1;
             *data = value;
         }
-        else if (amplifier_relay__changed__is_set()) {
-            amplifier_relay__changed__set(0);
+        else if (notifications_pending__amplifier_relay__is_set()) {
+            notifications_pending__amplifier_relay__set(0);
             report_id = CANP_REPORT__AMPLIFIER_RELAY_CONTROLLER__VALUE;
             if (amplifier_relay__is_on()) value = 1;
             *data = value;
         }
-        else if (siren1__changed__is_set()) {
-            siren1__changed__set(0);
+        else if (notifications_pending__siren1__is_set()) {
+            notifications_pending__siren1__set(0);
             report_id = CANP_REPORT__SIREN1__VALUE;
             if (siren2__is_on()) value = 1;
             *data = value;
         }
-        else if (siren2__changed__is_set()) {
-            siren2__changed__set(0);
+        else if (notifications_pending__siren2__is_set()) {
+            notifications_pending__siren2__set(0);
             report_id = CANP_REPORT__SIREN2__VALUE;
             if (siren2__is_on()) value = 1;
             *data = value;
         }
-        else if (alarm__state__changed__is_set()) {
-            alarm__state__changed__set(0);
+        else if (notifications_pending__alarm__state__is_set()) {
+            notifications_pending__alarm__state__set(0);
             report_id = CANP_REPORT__ALARM__STATE;
-            value = alarm__state;
-            *data = value;
+            *data = alarm__state;
+        }
+        else if (notifications_pending__alarm__auth__is_set()) {
+            notifications_pending__alarm__auth__set(0);
+            report_id = CANP_REPORT__ALARM__AUTH;
+            length = alarm__auth__password.length;
+            data = alarm__auth__password.data;
         }
         else {
-            notifications__pending__set(0);
+            notifications_pending__set(0);
             return;
         }
 
-        can__txb1__load_report(report_id, 1, data);
+        can__txb1__load_report(report_id, length, data);
         can__txb1__request_to_send();
     }
 }

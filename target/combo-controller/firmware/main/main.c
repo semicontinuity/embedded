@@ -12,14 +12,15 @@
 #include "drivers/in/water_leak_sensors.h"
 #include "drivers/in/motion_sensors.h"
 
-#include "flags/notifications__pending.h"
-#include "flags/water_valve__changed.h"
-#include "flags/amplifier_relay__changed.h"
-#include "flags/siren1__changed.h"
-#include "flags/siren2__changed.h"
-#include "flags/motion_sensors__changed.h"
-#include "flags/water_leak_sensors__changed.h"
-#include "flags/alarm__state__changed.h"
+#include "flags/notifications_pending.h"
+#include "flags/notifications_pending__water_valve.h"
+#include "flags/notifications_pending__amplifier_relay.h"
+#include "flags/notifications_pending__siren1.h"
+#include "flags/notifications_pending__siren2.h"
+#include "flags/notifications_pending__motion_sensors.h"
+#include "flags/notifications_pending__water_leak_sensors.h"
+#include "flags/notifications_pending__alarm__state.h"
+#include "flags/notifications_pending__alarm__auth.h"
 
 #include "kernel.h"
 
@@ -50,8 +51,8 @@
  * Callback function, called by water_leak_sensors_scanner__run() when any of the sensors has changed state.
  */
 INLINE void water_leak_sensors_scanner__status__on_change(void) {
-    water_leak_sensors__changed__set(1);
-    notifications__pending__set(1);
+    notifications_pending__water_leak_sensors__set(1);
+    notifications_pending__set(1);
 
     water_leak_handler__run();
 }
@@ -61,8 +62,8 @@ INLINE void water_leak_sensors_scanner__status__on_change(void) {
  * Callback function, called by motion_sensors_scanner__run() when any of the sensors has changed state.
  */
 INLINE void motion_sensors_scanner__status__on_change(void) {
-    motion_sensors__changed__set(1);
-    notifications__pending__set(1);
+    notifications_pending__motion_sensors__set(1);
+    notifications_pending__set(1);
 
     if (motion_sensors_scanner__is_active()) alarm__sensor_active();
 }
@@ -104,14 +105,15 @@ inline static void application__init(void) {
     motion_sensors__init();
 
     // Flags
-    notifications__pending__init();
-    water_valve__changed__init();
-    amplifier_relay__changed__init();
-    siren1__changed__init();
-    siren2__changed__init();
-    motion_sensors__changed__init();
-    water_leak_sensors__changed__init();
-    alarm__state__changed__init();
+    notifications_pending__water_valve__init();
+    notifications_pending__amplifier_relay__init();
+    notifications_pending__siren1__init();
+    notifications_pending__siren2__init();
+    notifications_pending__motion_sensors__init();
+    notifications_pending__water_leak_sensors__init();
+    notifications_pending__alarm__state__init();
+    notifications_pending__alarm__auth__init();
+    notifications_pending__init();
 
     // Other drivers
     system_timer__init();
@@ -123,11 +125,23 @@ inline static void application__init(void) {
     alarm__auth__init();
     alarm_handler__init();
     water_leak_handler__init();
-    // console_service__init();
+    console__init();
 }
 
 
 inline static void application__start(void) {
+    notifications_pending__water_valve__set(0);
+    notifications_pending__amplifier_relay__set(0);
+    notifications_pending__siren1__set(0);
+    notifications_pending__siren2__set(0);
+    notifications_pending__motion_sensors__set(0);
+    notifications_pending__water_leak_sensors__set(0);
+
+    // Broadcast these values at startup - for terminals.
+    notifications_pending__alarm__state__set(1);
+    notifications_pending__alarm__auth__set(1);
+    notifications_pending__set(1);
+
     system_timer__start();
 }
 
@@ -158,15 +172,16 @@ int main(void) {
         application__start();
 //    }
 
-    //sei();
+    sei();
 
     // run background tasks
     for(;;) {
         cli();
         comm_service__notifications__1__run();
         sei();
+        _delay_us(1);
     }
 
-//    console_service__run();
+//    console__run();
     return 0;
 }

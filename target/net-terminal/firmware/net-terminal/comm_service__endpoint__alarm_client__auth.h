@@ -11,10 +11,4 @@ inline static void comm_service__endpoint__alarm_client__auth__handle(void) {
 }
 
 
-inline static void comm_service__endpoint__alarm_client__auth__request(void) {
-    can__txb2__load_request(ALARM_SERVER__REPORT__AUTH);
-    can__txb2__request_to_send();
-}
-
-
 #endif

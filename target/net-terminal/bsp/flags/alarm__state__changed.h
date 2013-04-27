@@ -13,6 +13,7 @@ DECLARE_BITVAR(alarm__state__changed, ALARM__STATE__CHANGED__HOST, ALARM__STATE_
 DECLARE_FAKE_BITVAR(alarm__state__changed);
 #endif
 
+
 /**
  * Sets the initial value of the flag.
  */

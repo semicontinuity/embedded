@@ -15,10 +15,4 @@ INLINE void comm_service__endpoint__alarm_client__state__send(void) {
     can__txb2__request_to_send();
 }
 
-INLINE void comm_service__endpoint__alarm_client__state__request(void) {
-    can__txb2__load_request(CANP_REPORT__ALARM__STATE);
-    can__txb2__request_to_send();
-}
-
-
 #endif

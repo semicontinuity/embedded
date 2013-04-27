@@ -16,20 +16,13 @@
 #include "can_selector.h"
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
-//#include "cpu/avr/util/debug.h"
 
 /**
  *  Handler for the interrupt from MCP2515 CAN controller (falling edge).
  */
 static inline void can_service__rx__run(void) {
     uint8_t status;
-//        debug__putc('!');
-
     can_selector__run(status = mcp2515_read_status());
-
-//        debug__print_byte_as_hex(status);
-//        debug__putc(13);
-//        debug__putc(10);
 
     if (status & (MCP251X__STATUS__RX0IF | MCP251X__STATUS__RX1IF)) {
         // Interrupt flag cleared automatically when proper RX buffer is read.

@@ -4,7 +4,7 @@
 #include "drivers/system_timer.h"
 #include "drivers/keypad.h"
 
-#include "flags/password__changed.h"
+#include "flags/alarm__state__changed.h"
 
 #include "kernel.h"
 
@@ -64,12 +64,10 @@ void sensors__status__on_change(void) {
 
 
 INLINE void alarm_client__auth__password__on_invalidated(void) {
-    comm_service__endpoint__alarm_client__auth__request();
 }
 
 
 INLINE void alarm_client__state__on_invalidated(void) {
-    comm_service__endpoint__alarm_client__state__request();
 }
 
 
@@ -85,7 +83,7 @@ inline static void application__init(void) {
     sensors__init();
 
     // Flags
-    password__changed__init();
+    alarm__state__changed__init();
 
     // Drivers
     mt12864_init();
@@ -111,18 +109,11 @@ inline static void application__stop(void) {
 
 int main(void) {
 //    console_service__init();
-        application__init();
-
-terminal_displayChar('1');
         kernel__init();
-terminal_displayChar('2');
-
         kernel__start();
-terminal_displayChar('3');
 
-        
+        application__init();
         application__start();
-terminal_displayChar('4');
 
 
     for(;;);

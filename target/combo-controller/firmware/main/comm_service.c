@@ -19,23 +19,21 @@
  * Dispatches the incoming packets, based on the matched filter number.
  * The code must be consistent with CAN masks and filters.
  */
-void comm_service__handle(const uint8_t event, const uint8_t is_get) {
-    if (event == CANP_FILTER__DESCRIPTOR_MEMORY) {
-        comm_service__descriptor_memory__handle(is_get);
-    }
-    else if (event == CANP_FILTER__USER || event == CANP_FILTER__USER_MCAST) {
+void comm_service__handle(const uint8_t event, const uint8_t message_type) {
+    if (event == CANP_FILTER__USER || event == CANP_FILTER__USER_MCAST) {
         const uint8_t report = CANP_SLOT_BITS(kernel__frame.header.id);
+
         if (report >= CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE && report <= CANP_REPORT__SIREN2__VALUE) {
-            comm_service__endpoint__io__handle_output(is_get, report);
+            comm_service__endpoint__io__handle_output(message_type, report);
         }
         else if (report == CANP_REPORT__WATER_LEAK_SENSORS_SCANNER__VALUE) {
-            comm_service__endpoint__io__handle_input(is_get, report);
+            comm_service__endpoint__io__handle_input(message_type, report);
         }
-        else if (report == CANP_REPORT__AUTH) {
-            comm_service__endpoint__alarm__auth__handle(is_get);
+        else if (report == CANP_REPORT__ALARM__AUTH) {
+            comm_service__endpoint__alarm__auth__handle(message_type);
         }
         else if (report == CANP_REPORT__ALARM__STATE) {
-            comm_service__endpoint__alarm__state__handle(is_get);
+            comm_service__endpoint__alarm__state__handle(message_type);
         }
     }
     else if (event == KERNEL__EVENT__TX1_COMPLETE) {

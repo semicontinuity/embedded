@@ -2,7 +2,7 @@
 #include "alarm_client__state.h"
 #include "alarm_client__ui.h"
 #include "drivers/out/led.h"
-#include "flags/password__changed.h"
+#include "flags/alarm__state__changed.h"
 #include "cpu/avr/drivers/display/mt12864/terminal.h"
 #include "cpu/avr/drivers/display/mt12864/text-output.h"
 #include <stdint.h>
@@ -19,7 +19,7 @@ INLINE void alarm_client__ui__start(void) {
     terminal_displayChar('.');
     alarm_client__auth__password__invalidate();
     terminal_displayChar('.');
-    while (!password__changed__is_set());
+    while (!alarm__state__changed__is_set());
     terminal_displayChar('.');
     alarm_client__state__invalidate();
     terminal_displayChar('.');

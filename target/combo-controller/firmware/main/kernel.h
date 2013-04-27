@@ -21,7 +21,7 @@
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
 
 extern mcp251x_message_buffer kernel__frame __attribute__((section(".noinit")));
-extern void kernel__send_response(const uint8_t count, const uint8_t* data) __attribute__((section(".kernel")));
+extern void kernel__send_response(const uint8_t count, const uint8_t* data) KERNEL__ATTR;
 
 struct kernel__status {
     uint16_t watchdog_reset_count;

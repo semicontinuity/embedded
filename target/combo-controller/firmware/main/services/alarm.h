@@ -57,7 +57,7 @@ enum alarm__state {
     ALARM__STATE__ALERT_MUTE
 };
 
-extern enum alarm__state alarm__state;
+extern volatile enum alarm__state alarm__state;
 
 // Alarm API
 INLINE void alarm__arm(void);

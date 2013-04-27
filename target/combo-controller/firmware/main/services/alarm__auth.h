@@ -16,6 +16,7 @@ extern struct alarm__auth__password alarm__auth__password;
 
 inline static void alarm__auth__init(void) {
     eeprom_read_block(&alarm__auth__password, &ee__alarm__auth__password, sizeof(alarm__auth__password));
+    alarm__auth__password.length = eeprom_read_byte(&ee__alarm__auth__password.length);
 }
 
 #endif

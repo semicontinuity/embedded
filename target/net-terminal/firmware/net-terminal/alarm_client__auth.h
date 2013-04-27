@@ -1,7 +1,6 @@
 #ifndef __ALARM_CLIENT__AUTH_H
 #define __ALARM_CLIENT__AUTH_H
 
-#include "flags/password__changed.h"
 #include <stdint.h>
 
 
@@ -21,7 +20,6 @@ inline void alarm_client__auth__password__set(const uint8_t length, const uint8_
     for (int8_t n = length; --n >= 0;) {
         *dst++ = *data++;
     }
-    password__changed__set(1);
 }
 
 

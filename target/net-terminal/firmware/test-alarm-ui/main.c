@@ -4,7 +4,7 @@
 #include "drivers/keypad.h"
 #include "drivers/system_timer.h"
 
-#include "flags/password__changed.h"
+#include "flags/alarm__state__changed.h"
 
 
 #include "alarm_client__auth.h"
@@ -69,7 +69,7 @@ inline static void application__init(void) {
     lcd_backlight__init();
 
     // Flags
-    password__changed__init();
+    alarm__state__changed__init();
 
     // Drivers
     system_timer__init();

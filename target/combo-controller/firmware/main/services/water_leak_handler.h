@@ -13,10 +13,10 @@
 
 #include "drivers/out/water_valve.h"
 #include "drivers/out/siren1.h"
-#include "flags/siren1__changed.h"
-#include "flags/notifications__pending.h"
-#include "flags/water_valve__changed.h"
-#include "flags/notifications__pending.h"
+#include "flags/notifications_pending__siren1.h"
+#include "flags/notifications_pending.h"
+#include "flags/notifications_pending__water_valve.h"
+#include "flags/notifications_pending.h"
 
 #include "services/water_leak_handler__timer.h"
 
@@ -43,14 +43,14 @@ inline static void water_leak_handler__init(void) {
 
 inline void water_leak_handler__sound__set(const bool on) {
     if (on) siren1__on(); else siren1__off();
-    siren1__changed__set(1);
-    notifications__pending__set(1);
+    notifications_pending__siren1__set(1);
+    notifications_pending__set(1);
 }
 
 inline void water_leak_handler__water_valve__set(const bool on) {
     if (on) water_valve__on(); else water_valve__off();
-    water_valve__changed__set(1);
-    notifications__pending__set(1);
+    notifications_pending__water_valve__set(1);
+    notifications_pending__set(1);
 }
 
 

@@ -1,8 +1,8 @@
 #include "services/alarm.h"
 #include "endpoints/alarm__state.h"
 
-#include "flags/alarm__state__changed.h"
-#include "flags/notifications__pending.h"
+#include "flags/notifications_pending__alarm__state.h"
+#include "flags/notifications_pending.h"
 
 #include <stdint.h>
 
@@ -27,6 +27,6 @@ INLINE void alarm__state__set_data(const uint8_t* data) {
  * Callback implementation
  */
 INLINE void alarm__state__on_change(void) {
-    alarm__state__changed__set(1);
-    notifications__pending__set(1);
+    notifications_pending__alarm__state__set(1);
+    notifications_pending__set(1);
 }

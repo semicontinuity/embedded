@@ -9,6 +9,8 @@
 #include "can_selector.h"
 
 
+#define CANP_REPORT__ADMIN          0xF0
+
 #define CANP_REPORT__MEMORY_READ    0xF0
 #define CANP_REPORT__MEMORY_WRITE   0xF1
 #define CANP_REPORT__EEPROM_READ    0xF2

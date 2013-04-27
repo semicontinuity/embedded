@@ -28,8 +28,8 @@ inline static void comm_service__endpoint__io__handle_input(const uint8_t is_get
 }
 
 
-inline static void comm_service__endpoint__io__handle_output(const uint8_t is_get, const uint8_t report) {
-    if (is_get) {
+inline static void comm_service__endpoint__io__handle_output(const uint8_t message_type, const uint8_t report) {
+    if (message_type == CANP_MSG_TYPE_GET) {
         uint8_t value = 0;
         if (report == CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE) {
             if (water_valve__is_on()) value = 1;
@@ -47,7 +47,7 @@ inline static void comm_service__endpoint__io__handle_output(const uint8_t is_ge
         kernel__frame.data[0] = value;
         kernel__send_response(1, kernel__frame.data);
     }
-    else {
+    else if (CANP_MSG_VALUE_IN(message_type)) {
         // Handle PUT message
         // Should check DLC
         // Could answer with PUT message

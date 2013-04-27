@@ -10,8 +10,8 @@
 
 extern const uint8_t comm_sevice__descriptor_memory__value[] PROGMEM;
 
-inline static void comm_service__descriptor_memory__handle(const uint8_t is_get) {
-    if (is_get) {
+inline static void comm_service__descriptor_memory__handle(const uint8_t message_type) {
+    if (message_type == CANP_MSG_TYPE_GET) {
         uint8_t slot = CANP_SLOT_BITS(kernel__frame.header.id);
         uint8_t length = CANP_DATA_LENGTH_BITS(kernel__frame.header);
         // Do not check SLOT
