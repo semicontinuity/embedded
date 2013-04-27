@@ -97,6 +97,8 @@
 #define CANP_MSG_TYPE_STATUS            (CANP_DLC_MASK_RTR                       )
 #define CANP_MSG_TYPE_GET               (CANP_DLC_MASK_RTR | CANP_SIDL_MASK_OWNER)
 
+#define CANP_MSG_VALUE_IN(msg_type)     (!(msg_type & CANP_DLC_MASK_RTR))
+
 
 #define CANP_EID8(host_net, host_addr) ((uint8_t) (((host_net) << 5) | (host_addr)))
 #define CANP_HEADER(exide, tag, cpty_net, cpty_addr, host_net, host_addr, owner, aux, slot) {   \
