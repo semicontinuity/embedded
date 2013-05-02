@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
@@ -16797,9 +16797,9 @@ Based on the following sources:
 <plain>
 <wire x1="0" y1="0" x2="165.1" y2="0" width="0.1524" layer="94"/>
 <wire x1="165.1" y1="0" x2="279.4" y2="0" width="0.1524" layer="94"/>
-<wire x1="279.4" y1="0" x2="279.4" y2="203.2" width="0.1524" layer="94"/>
-<wire x1="279.4" y1="203.2" x2="0" y2="203.2" width="0.1524" layer="94"/>
-<wire x1="0" y1="203.2" x2="0" y2="0" width="0.1524" layer="94"/>
+<wire x1="279.4" y1="0" x2="279.4" y2="200.66" width="0.1524" layer="94"/>
+<wire x1="279.4" y1="200.66" x2="0" y2="200.66" width="0.1524" layer="94"/>
+<wire x1="0" y1="200.66" x2="0" y2="0" width="0.1524" layer="94"/>
 <wire x1="279.4" y1="38.1" x2="165.1" y2="38.1" width="0.1524" layer="94"/>
 <wire x1="165.1" y1="38.1" x2="165.1" y2="0" width="0.1524" layer="94"/>
 <text x="40.64" y="119.38" size="1.778" layer="94">Keyboard</text>
