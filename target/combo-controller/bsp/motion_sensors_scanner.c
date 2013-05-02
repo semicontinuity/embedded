@@ -23,5 +23,8 @@ INLINE void motion_sensors_scanner__run(void) {
 
     motion_sensors_scanner__status.prev_state = sensors_state;
     motion_sensors_scanner__status.state = filtered_state;
-    if (filtered_state != state) motion_sensors_scanner__status__on_change();
+    if (filtered_state != state) {
+        motion_sensors_scanner__status__on_change();
+        if (motion_sensors_scanner__is_active()) motion_sensors_scanner__out__run();
+    }
 }

@@ -64,7 +64,8 @@ inline static void comm_service__notifications__1__run(void) {
         else if (notifications_pending__alarm__state__is_set()) {
             notifications_pending__alarm__state__set(0);
             report_id = CANP_REPORT__ALARM__STATE;
-            *data = alarm__state;
+//            *data = alarm__state;
+            data = &alarm__state;
         }
         else if (notifications_pending__alarm__auth__is_set()) {
             notifications_pending__alarm__auth__set(0);

@@ -8,6 +8,7 @@
 
 
 #include "water_leak_sensors_scanner.h"
+#include "motion_sensors_scanner.h"
 
 #include "drivers/out/water_valve.h"
 #include "drivers/out/amplifier_relay.h"
@@ -15,10 +16,13 @@
 #include "drivers/out/siren2.h"
 
 
-inline static void comm_service__endpoint__io__handle_input(const uint8_t is_get, const uint8_t report) {
-    if (is_get) {
+inline static void comm_service__endpoint__io__handle_input(const uint8_t message_type, const uint8_t report) {
+    if (message_type == CANP_MSG_TYPE_GET) {
         if (report == CANP_REPORT__WATER_LEAK_SENSORS_SCANNER__VALUE) {
             kernel__send_response(1, &water_leak_sensors_scanner__status.state);
+        }
+        else if (report == CANP_REPORT__MOTION_SENSORS_SCANNER__VALUE) {
+            kernel__send_response(1, &motion_sensors_scanner__status.state);
         }
     }
     else {

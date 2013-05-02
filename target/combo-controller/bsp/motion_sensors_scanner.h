@@ -39,6 +39,11 @@ inline void motion_sensors_scanner__init(void) {}
  */
 INLINE void motion_sensors_scanner__run(void);
 
+/**
+ * This procedure is called when motion sensor is active.
+ */
+INLINE void motion_sensors_scanner__out__run(void);
+
 
 /** Returns true when at least one sensor is active, i.e. motion detected */
 inline static bool motion_sensors_scanner__is_active(void) {

@@ -22,6 +22,8 @@
  */
 static inline void can_service__rx__run(void) {
     uint8_t status;
+    debug__putc('>');
+
     can_selector__run(status = mcp2515_read_status());
 
     if (status & (MCP251X__STATUS__RX0IF | MCP251X__STATUS__RX1IF)) {
@@ -41,4 +43,5 @@ static inline void can_service__rx__run(void) {
         can_selector__run(mcp251x_bit_modify(MCP251X_REGISTER_CANINTF, mask, 0));
         kernel__tx__handle(mask);
     }
+    debug__putc('<');
 }

@@ -8,7 +8,7 @@
 // - Sends SMS notification
 // =============================================================================
 
-#include "alarm.h"
+#include "services/alarm.h"
 #include "endpoints/siren2.h"
 
 #include <avr/eeprom.h>
@@ -44,6 +44,20 @@ void alarm__sound__set(const bool on) {
  * Our reaction is to send SMS.
  */
 INLINE void alarm__out__run(void) {    
+}
+
+
+/**
+ * Callback function, called by motion_sensors_scanner__run() when any of the sensors is in active state.
+ */
+INLINE void motion_sensors_scanner__out__run(void) {
+    alarm__sensor_active();
+}
+
+/**
+ * Callback function, called by motion_sensors_scanner__run() when any of the sensors has changed its state.
+ */
+INLINE void motion_sensors_scanner__status__on_change(void) {
 }
 
 #endif

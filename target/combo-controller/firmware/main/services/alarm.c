@@ -15,7 +15,7 @@ uint8_t alarm__time_alert_mute;
 uint8_t alarm__time_alarm;
 uint8_t alarm__time_alarm_mute;
 
-volatile enum alarm__state alarm__state;
+volatile enum alarm__state alarm__state = 0;
 
 
 static inline void alarm__state__set(const uint8_t state) {

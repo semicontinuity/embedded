@@ -67,4 +67,3 @@ INLINE void keypad__run(void) {
         keypad__state[column] = scanValue;        
     }
 }
- 

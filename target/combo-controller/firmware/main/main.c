@@ -58,16 +58,7 @@ INLINE void water_leak_sensors_scanner__status__on_change(void) {
 }
 
 
-/**
- * Callback function, called by motion_sensors_scanner__run() when any of the sensors has changed state.
- */
-INLINE void motion_sensors_scanner__status__on_change(void) {
-    notifications_pending__motion_sensors__set(1);
-    notifications_pending__set(1);
-
-    if (motion_sensors_scanner__is_active()) alarm__sensor_active();
-}
-
+	
 
 /**
  * Called on every system tick.

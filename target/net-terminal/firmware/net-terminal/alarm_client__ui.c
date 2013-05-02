@@ -75,7 +75,7 @@ INLINE void alarm_client__ui__on_password_entered(void) {
 
 
 INLINE void alarm_client__ui__on_key_event(const uint8_t keyevent) {
-    if (keyevent == '#') {
+    if (keyevent == '*') {
         alarm_client__ui__on_password_entered();
         alarm_client__ui__entered_password_length = 0;
     }
