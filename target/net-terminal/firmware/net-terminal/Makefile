@@ -16,9 +16,10 @@ CDEFS += $(CONF)
 
 
 CAN_EMU = 0
+CDEFS += -Wunsafe-loop-optimizations
 CDEFS += -Wl,--relax
-CDEFS += -fwhole-program
-#CDEFS += --combine -fwhole-program
+#CDEFS += -fwhole-program
+CDEFS += --combine -fwhole-program -fno-tree-loop-optimize -fno-unswitch-loops -finline-functions
 
 #CDEFS += -Wl,--section-start=.kernel=0x0001000 -Wl,--section-start=.noinit=0x008004EB  -Wl,--defsym=__stack=0x04EA
 # -Wl,--defsym=__stack=0x008002f2

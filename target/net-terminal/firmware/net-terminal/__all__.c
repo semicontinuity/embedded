@@ -1,4 +1,4 @@
-#include "drivers/keypad.c"
+#include "drivers/keypad2.c"
 
 // Firmware
 #include "kernel.c"
