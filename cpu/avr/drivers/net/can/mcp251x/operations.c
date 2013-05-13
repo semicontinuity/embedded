@@ -29,6 +29,20 @@ uint8_t mcp251x__command(const uint8_t instruction) {
 }
 
 
+void mcp251x__bit_modify(const uint8_t address, const uint8_t mask, const uint8_t value) {
+#ifdef MCP251X__USE_CS
+    mcp251x_select__on();
+#endif
+    spi__write(MCP251X_INSTRUCTION_BIT_MODIFY);
+    spi__write(address);
+    spi__write(mask);
+    spi__write(value);
+#ifdef MCP251X__USE_CS
+    mcp251x_select__off();
+#endif
+}
+
+
 void mcp251x__write(const uint8_t address, const uint8_t data) {
 #ifdef MCP251X__USE_CS
     mcp251x_select__on();
@@ -145,14 +159,70 @@ void mcp2515__load_tx_buffer(const uint8_t* buffer, const uint8_t instruction, u
 }
 
 
-void mcp251x__bit_modify(const uint8_t address, const uint8_t mask, const uint8_t value) {
+// Custom Load TX Buffer operations
+// =============================================================================
+
+/**
+ * Load data into the specified TX Buffer, starting from EID0 register.
+ * @param data          The pointer to the payload data to be loaded.
+ * @param data_length   The size of the payload data.
+ * @param address       The register address of one of EID0 registers.
+ * @param eid0          The least-significant byte of the message ID (EID0).
+ */
+void mcp2515__load_tx_buffer__eid0_data(const uint8_t* data, const uint8_t data_length, const uint8_t address, const uint8_t eid0) {
 #ifdef MCP251X__USE_CS
     mcp251x_select__on();
 #endif
-    spi__write(MCP251X_INSTRUCTION_BIT_MODIFY);
+    spi__write(MCP251X_INSTRUCTION_WRITE);
     spi__write(address);
-    spi__write(mask);
-    spi__write(value);
+    spi__write(eid0);                         // to EID0 register
+    spi__write(data_length);                  // to DLC register
+    spi__write_bytes(data, data_length);      // to D0 register and on (payload)
+#ifdef MCP251X__USE_CS
+    mcp251x_select__off();
+#endif
+}
+
+
+/**
+ * Load data into the specified TX Buffer.
+ * @param data          The pointer to the payload data to be loaded.
+ * @param data_length   The size of the payload data.
+ * @param address       The register address of one of EID0 registers.
+ * @param id            The pointer to ID bytes.
+ */
+void mcp2515__load_txb_buffer__id_data(
+    const uint8_t* data,
+    const uint8_t data_length,
+    const uint8_t address,
+    const uint8_t* id) {
+#ifdef MCP251X__USE_CS
+    mcp251x_select__on();
+#endif
+    spi__write(MCP251X_INSTRUCTION_WRITE);
+    spi__write(address);
+    spi__write_bytes(id, 4);
+    spi__write(data_length);
+    spi__write_bytes(data, data_length);
+#ifdef MCP251X__USE_CS
+    mcp251x_select__off();
+#endif
+}
+
+
+/**
+ * Load EID0 register into the specified TX Buffer and prepare to send RTR.
+ * @param address       The register address of one of EID0 registers.
+ * @param eid0          The least-significant byte of the message ID (EID0).
+ */
+void mcp2515__load_txb_buffer__eid0_rtr(const uint8_t address, const uint8_t eid0) {
+#ifdef MCP251X__USE_CS
+    mcp251x_select__on();
+#endif
+    spi__write(MCP251X_INSTRUCTION_WRITE);
+    spi__write(address);
+    spi__write(eid0);                   // to EID0 register
+    spi__write(1 << MCP251X_RTR);       // to RTR DLC register; request 0 bytes
 #ifdef MCP251X__USE_CS
     mcp251x_select__off();
 #endif

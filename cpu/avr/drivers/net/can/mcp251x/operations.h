@@ -83,6 +83,7 @@ inline uint8_t mcp2515__rx_status(void);
 
 // Implementation of generic 1-byte instructions
 // =============================================================================
+
 uint8_t mcp251x__command(const uint8_t instruction) MCP251X_attrs;
 
 inline void mcp251x__reset(void) {
@@ -100,6 +101,43 @@ inline uint8_t mcp251x__read_status(void) {
 inline uint8_t mcp2515__rx_status(void) {
     return mcp251x__command(MCP251X_INSTRUCTION_RX_STATUS);
 }
+
+
+// Custom Load TX Buffer operations
+// =============================================================================
+
+/**
+ * Load data into the specified TX Buffer, starting from EID0 register.
+ * @param data          The pointer to the payload data to be loaded.
+ * @param data_length   The size of the payload data.
+ * @param address       The register address of one of EID0 registers.
+ * @param eid0          The least-significant byte of the message ID (EID0).
+ */
+void mcp2515__load_tx_buffer__eid0_data(
+    const uint8_t* data,
+    const uint8_t data_length,
+    const uint8_t address,
+    const uint8_t eid0) MCP251X_attrs;
+
+/**
+ * Load data into the specified TX Buffer.
+ * @param data          The pointer to the payload data to be loaded.
+ * @param data_length   The size of the payload data.
+ * @param address       The register address of one of EID0 registers.
+ * @param id            The pointer to ID bytes.
+ */
+void mcp2515__load_txb_buffer__id_data(
+    const uint8_t* data,
+    const uint8_t data_length,
+    const uint8_t address,
+    const uint8_t* id) MCP251X_attrs;
+
+/**
+ * Load EID0 register into the specified TX Buffer and prepare to send RTR.
+ * @param address       The register address of one of EID0 registers.
+ * @param eid0          The least-significant byte of the message ID (EID0).
+ */
+void mcp2515__load_txb_buffer__eid0_rtr(const uint8_t address, const uint8_t eid0) MCP251X_attrs;
 
 
 #endif
