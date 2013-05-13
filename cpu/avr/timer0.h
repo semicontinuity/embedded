@@ -21,11 +21,15 @@
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) 
 
-#   include "cpu/avr/timer0__mx8.h"
+#   include "cpu/avr/timer0__2oc.h"
 
-#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
+#elif defined(__AVR_ATmega8__)
 
-#   include "cpu/avr/timer0__m8.h"
+#   include "cpu/avr/timer0__0oc.h"
+
+#elif defined(__AVR_ATmega16__)
+
+#   include "cpu/avr/timer0__1oc.h"
 
 #else
 

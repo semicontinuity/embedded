@@ -22,16 +22,7 @@ extern mcp251x_message_buffer can__txb2;
 // TXB0 functions
 // -----------------------------------------------------------------------------
 
-inline static void can__txb0__load_response(const uint8_t sidh, const uint8_t sidl, const uint8_t eid8, const uint8_t eid0, const uint8_t dlc, const uint8_t* data) {
-    can__txb0.header.id.sidh = sidh;
-    can__txb0.header.id.sidl = sidl;
-    can__txb0.header.id.eid8 = eid8;
-    can__txb0.header.id.eid0 = eid0;
-    can__txb0.header.dlc = dlc;
-    memcpy((void*)can__txb0.data, data, dlc);
-}
-
-inline static void can__txb0__load_response_(const uint8_t dlc, const uint8_t* id, const uint8_t* data) {
+inline static void can__txb0__load_response(const uint8_t dlc, const uint8_t* id, const uint8_t* data) {
     memcpy((void*)&can__txb0.header, id, 4);
     can__txb0.header.dlc = dlc;
     memcpy((void*)can__txb0.data, data, dlc);

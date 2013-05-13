@@ -127,26 +127,6 @@ inline static void can__load_txb_report(const uint8_t report_id, const uint8_t c
 
 inline static void can__load_txb_response(
     const uint8_t address,
-    const uint8_t sidh,
-    const uint8_t sidl,
-    const uint8_t eid8,
-    const uint8_t eid0,
-    const uint8_t dlc,
-    const uint8_t* data) {
-
-    can_selector__on();
-    mcp2515_write(address);
-    spi__write(sidh);
-    spi__write(sidl);
-    spi__write(eid8);
-    spi__write(eid0);
-    spi__write(dlc);
-    spi__write_bytes(data, dlc);
-    can_selector__off();
-}
-
-inline static void can__load_txb_response_(
-    const uint8_t address,
     const uint8_t dlc,
     const uint8_t* id,
     const uint8_t* data) {
@@ -180,12 +160,8 @@ inline static void can__txb0__load_report(const uint8_t report_id, const uint8_t
     can__load_txb_report(report_id, count, buffer, MCP251X_REGISTER_TXB0EID0);
 }
 
-inline static void can__txb0__load_response(const uint8_t sidh, const uint8_t sidl, const uint8_t eid8, const uint8_t eid0, const uint8_t dlc, const uint8_t* data) {
-    can__load_txb_response(MCP251X_REGISTER_TXB0SIDH, sidh, sidl, eid8, eid0, dlc, data);
-}
-
-inline static void can__txb0__load_response_(const uint8_t dlc, const uint8_t* id, const uint8_t* data) {
-    can__load_txb_response_(MCP251X_REGISTER_TXB0SIDH, dlc, id, data);
+inline static void can__txb0__load_response(const uint8_t dlc, const uint8_t* id, const uint8_t* data) {
+    can__load_txb_response(MCP251X_REGISTER_TXB0SIDH, dlc, id, data);
 }
 
 inline static void can__txb0__request_to_send(void) {

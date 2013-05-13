@@ -15,7 +15,7 @@ INLINE void system_timer__out__run(void) {
     keypad__run();
 }
 
-INLINE void keypad__on_event(const uint8_t keyevent) {
+void keypad__on_event(const uint8_t keyevent) {
     terminal_displayChar(keyevent);
 }
 
