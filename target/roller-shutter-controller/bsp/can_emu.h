@@ -59,10 +59,6 @@ inline static void can__txb1__request_to_send(void) {
 // TXB2 functions
 // -----------------------------------------------------------------------------
 
-inline static void can__txb2__load_data(const uint8_t* data, uint8_t count) {
-    memcpy((void*)can__txb2.data, data, count);
-}
-
 inline static void can__txb2__request_to_send(void) {
     usart0__out__send((const char *)&can__txb2, sizeof(can__txb2));
 }

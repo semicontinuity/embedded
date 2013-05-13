@@ -1,5 +1,5 @@
-#ifndef __CPU_AVR_TIMER0_MX8_H
-#define __CPU_AVR_TIMER0_MX8_H
+#ifndef __CPU_AVR_TIMER0_2OC_H
+#define __CPU_AVR_TIMER0_2OC_H
 
 #include <avr/io.h>
 

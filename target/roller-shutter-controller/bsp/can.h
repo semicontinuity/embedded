@@ -122,11 +122,6 @@ inline static void can__txb0__load_buffer(const uint8_t* buffer, uint8_t count) 
     can__load_txb_data(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, count);
 }
 
-// buggy, calling will somehow disrupt CAN communications
-inline static void can__txb0__load_data(const uint8_t* buffer, uint8_t count) {
-    can__load_txb_data(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_D0, count);
-}
-
 inline static void can__txb0__load_report(const uint8_t report_id, const uint8_t count, const uint8_t* buffer) {
     can__load_txb_report(report_id, count, buffer, MCP251X_REGISTER_TXB0EID0);
 }
@@ -147,11 +142,6 @@ inline static void can__txb1__load_buffer(const uint8_t* buffer, uint8_t count) 
     can__load_txb_data(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_1_SIDH, count);
 }
 
-// buggy, calling will somehow disrupt CAN communications
-inline static void can__txb1__load_data(const uint8_t* buffer, uint8_t count) {
-    can__load_txb_data(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_1_D0, count);
-}
-
 inline static void can__txb1__load_report(const uint8_t report_id, const uint8_t count, const uint8_t* buffer) {
     can__load_txb_report(report_id, count, buffer, MCP251X_REGISTER_TXB1EID0);
 }
@@ -165,11 +155,6 @@ inline static void can__txb1__request_to_send(void) {
 
 inline static void can__txb2__load_buffer(const uint8_t* buffer, uint8_t count) {
     can__load_txb_data(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_2_SIDH, count);
-}
-
-// buggy, calling will somehow disrupt CAN communications
-inline static void can__txb2__load_data(const uint8_t* buffer, uint8_t count) {
-    can__load_txb_data(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_2_D0, count);
 }
 
 inline static void can__txb2__load_report(const uint8_t report_id, const uint8_t count, const uint8_t* buffer) {
