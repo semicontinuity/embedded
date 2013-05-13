@@ -1,7 +1,7 @@
 #include "services/console.h"
 #include "util/hex.h"
 
-#include "can_selector.h"
+#include "drivers/out/mcp251x_select.h"
 
 #include "cpu/avr/gpio.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
@@ -77,7 +77,7 @@ inline static bool console__handle__mcp2515_read_register(void) {
         }
 
         register uint8_t v;
-        can_selector__run(v = mcp251x_read_byte((uint8_t)addr));
+        mcp251x_select__run(v = mcp251x_read_byte((uint8_t)addr));
         debug__print_byte_as_hex((uint8_t)addr);
         debug__putc('=');
         debug__print_byte_as_hex(v);
@@ -104,7 +104,7 @@ inline static bool console__handle__mcp2515_write_register(void) {
             return true;
         }
             
-        can_selector__run(mcp251x_write_one_byte((uint8_t)addr, (uint8_t)value));
+        mcp251x_select__run(mcp251x_write_one_byte((uint8_t)addr, (uint8_t)value));
         debug__putc('O');
         debug__putc('K');
         return true;
@@ -116,7 +116,7 @@ inline static bool console__handle__mcp2515_write_register(void) {
 // Format: 'cr'
 inline static bool console__handle__mcp2515_reset(void) {
     if (console__command_length == 2 && console__command[0] == 'c' && console__command[1] == 'r') {
-        can_selector__run(mcp251x_reset());
+        mcp251x_select__run(mcp251x_reset());
         return true;
     }
     else return false;
@@ -127,7 +127,7 @@ inline static bool console__handle__mcp2515_reset(void) {
 inline static bool console__handle__mcp2515_read_status(void) {
     if (console__command_length == 2 && console__command[0] == 'c' && console__command[1] == 's') {
         register uint8_t v;
-        can_selector__run(v = mcp2515_read_status());
+        mcp251x_select__run(v = mcp2515_read_status());
         debug__print_byte_as_hex(v);
         return true;
     }

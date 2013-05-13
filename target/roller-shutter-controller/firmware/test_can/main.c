@@ -7,7 +7,7 @@
 #include "cpu/avr/usart0__tx_polled.h"
 
 #include "cpu/avr/spi.h"
-#include "can_selector.h"
+#include "drivers/out/mcp251x_select.h"
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
 
 #include "motor.h"
@@ -28,7 +28,7 @@ int main(void) {
     usart0__out__write(0x55);
 
     spi__init(SPI_CLKDIV_128);
-    can_selector__init();
+    mcp251x_select__init();
     mcp251x__init();
 
     motor__down__on();
@@ -37,7 +37,7 @@ int main(void) {
 
     while (1) {
         uint8_t a = usart0__in__read();
-        can_selector__run(b = mcp251x_read_byte(a));
+        mcp251x_select__run(b = mcp251x_read_byte(a));
         usart0__out__write(b);
     }
     return 0;

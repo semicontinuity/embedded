@@ -4,7 +4,7 @@
 #define __CAN_SERVICE_H
 
 #include <avr/io.h>
-#include "can_selector.h"
+#include "drivers/out/mcp251x_select.h"
 #include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
 #include "cpu/avr/drivers/net/can/mcp251x/registers.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
@@ -22,7 +22,7 @@ inline void can_service__start(void) {
     PCICR |= _BV(PCIE1);
 
     // Enable RX0 interrupt in the CAN controller
-    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)));
+    mcp251x_select__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)));
 }
 
 #endif // __CAN_SERVICE_H

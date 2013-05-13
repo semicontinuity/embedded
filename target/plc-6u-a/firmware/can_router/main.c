@@ -1,4 +1,4 @@
-#include "can_selector.h"
+#include "drivers/out/mcp251x_select.h"
 #include "can_service.h"
 #include "can_tx_q.h"
 #include "usart_tx.h"
@@ -36,7 +36,7 @@ int main(void)
 
     spi__init(SPI_CLKDIV_128);
 
-    can_selector__init();
+    mcp251x_select__init();
 
     mcp251x__init();
 

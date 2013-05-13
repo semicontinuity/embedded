@@ -1,7 +1,7 @@
 #include <avr/io.h>
 
 #include "packet.h"
-#include "can_selector.h"
+#include "drivers/out/mcp251x_select.h"
 
 #include "server.h"
 #include "debug.h"
@@ -59,7 +59,7 @@ inline static void server__process_packet__read_mem(void) {
 inline static void server__process_packet__read_can(void) {
     volatile register uint8_t *packet	asm("r28");
     uint8_t d;
-    can_selector__run(d = mcp251x_read_byte(*packet));
+    mcp251x_select__run(d = mcp251x_read_byte(*packet));
     debug__write(d);
 }
 

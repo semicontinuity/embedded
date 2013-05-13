@@ -17,7 +17,7 @@
 #include <avr/interrupt.h>
 
 
-#include "can_selector.h"
+#include "drivers/out/mcp251x_select.h"
 #include "cpu/avr/spi.h"
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
 
@@ -102,7 +102,7 @@ inline static void application__stop(void) {
 int main(void) {
     spi__init(SPI_CLKDIV_4);
     spi__double_speed__set(1);
-    can_selector__init();
+    mcp251x_select__init();
     mcp251x__init();
 
     application__init();

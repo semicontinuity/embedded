@@ -13,7 +13,7 @@
 // =============================================================================
 #include "can_service.h"
 
-#include "can_selector.h"
+#include "drivers/out/mcp251x_select.h"
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 //#include "cpu/avr/util/debug.h"
@@ -25,7 +25,7 @@ static inline void can_service__rx__run(void) {
     uint8_t status;
 //        debug__putc('!');
 
-    can_selector__run(status = mcp2515_read_status());
+    mcp251x_select__run(status = mcp2515_read_status());
 
 //        debug__print_byte_as_hex(status);
 //        debug__putc(13);
@@ -45,7 +45,7 @@ static inline void can_service__rx__run(void) {
             mask = 1 << MCP251X_TX2IF;
         }
         // clear corresponding interrupt
-        can_selector__run(mcp251x_bit_modify(MCP251X_REGISTER_CANINTF, mask, 0));
+        mcp251x_select__run(mcp251x_bit_modify(MCP251X_REGISTER_CANINTF, mask, 0));
         kernel__tx__handle(mask);
     }
 }

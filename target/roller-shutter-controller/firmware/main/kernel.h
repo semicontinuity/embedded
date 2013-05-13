@@ -15,7 +15,7 @@
 #include <stdbool.h>
 #include "cpu/avr/drivers/net/can/mcp251x/struct.h"
 
-#include "can_selector.h"
+#include "drivers/out/mcp251x_select.h"
 #include "cpu/avr/spi.h"
 #include "cpu/avr/bootloader.h"
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
@@ -67,7 +67,7 @@ inline static bool kernel__mode__is_set(void) {
 inline static void kernel__init(void) {
     spi__init(SPI_CLKDIV_4);
     spi__double_speed__set(1);
-    can_selector__init();
+    mcp251x_select__init();
     mcp251x__init();
 
     comm_service__rx__init();

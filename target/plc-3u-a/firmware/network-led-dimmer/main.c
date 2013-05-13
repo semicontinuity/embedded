@@ -5,7 +5,7 @@
 
 
 #include "can.h"
-#include "can_selector.h"
+#include "drivers/out/mcp251x_select.h"
 
 #include "pwm.h"
 #include "console_service.h"
@@ -20,7 +20,7 @@ int main(void)
     pwm__start();
 
     spi__init(SPI_CLKDIV_16);
-    can_selector__init();
+    mcp251x_select__init();
 
     mcp251x__init();
 

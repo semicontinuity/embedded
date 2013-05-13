@@ -17,7 +17,7 @@
 #ifndef __CAN_H
 #define __CAN_H
 
-#include "can_selector.h"
+#include "drivers/out/mcp251x_select.h"
 
 #include "cpu/avr/drivers/net/can/mcp251x/registers.h"
 #include "cpu/avr/drivers/net/can/mcp251x/opmodes.h"
@@ -36,14 +36,14 @@ extern mcp251x_message_id rxm0_1[2] PROGMEM;
 
 
 inline static void can__init(void) {
-    can_selector__run(mcp251x_write_bytes_progmem(MCP251X_REGISTER_RXF0SIDH, sizeof(rxf0_2), (uint8_t* PROGMEM)rxf0_2));
-    can_selector__run(mcp251x_write_bytes_progmem(MCP251X_REGISTER_RXF3SIDH, sizeof(rxf3_5), (uint8_t* PROGMEM)rxf3_5));
-    can_selector__run(mcp251x_write_bytes_progmem(MCP251X_REGISTER_RXM0SIDH, sizeof(rxm0_1), (uint8_t* PROGMEM)rxm0_1));
+    mcp251x_select__run(mcp251x_write_bytes_progmem(MCP251X_REGISTER_RXF0SIDH, sizeof(rxf0_2), (uint8_t* PROGMEM)rxf0_2));
+    mcp251x_select__run(mcp251x_write_bytes_progmem(MCP251X_REGISTER_RXF3SIDH, sizeof(rxf3_5), (uint8_t* PROGMEM)rxf3_5));
+    mcp251x_select__run(mcp251x_write_bytes_progmem(MCP251X_REGISTER_RXM0SIDH, sizeof(rxm0_1), (uint8_t* PROGMEM)rxm0_1));
 }
 
 
 inline void can__start(void) {
-    can_selector__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANCTRL, MCP251X_OPMODE_NORMAL));
+    mcp251x_select__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANCTRL, MCP251X_OPMODE_NORMAL));
 }
 
 #endif
