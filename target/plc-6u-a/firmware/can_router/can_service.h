@@ -22,7 +22,7 @@ inline void can_service__start(void) {
     PCICR |= _BV(PCIE1);
 
     // Enable RX0 interrupt in the CAN controller
-    mcp251x_select__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)));
+    mcp251x_select__run(mcp251x__write(MCP251X_REGISTER_CANINTE, _BV(MCP251X_RX0IE)));
 }
 
 #endif // __CAN_SERVICE_H

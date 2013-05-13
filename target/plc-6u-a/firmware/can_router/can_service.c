@@ -13,7 +13,7 @@ uint8_t can_rx_buffer[PACKET_LENGTH] __attribute__ ((section (".noinit")));
 
 
 static void can_service__handle_rx(void) {
-    mcp251x_select__run(mcp251x_read_bytes(can_rx_buffer, MCP251X_REGISTER_RXB0SIDH, sizeof(can_rx_buffer)));
+    mcp251x_select__run(mcp251x__read_bytes(can_rx_buffer, MCP251X_REGISTER_RXB0SIDH, sizeof(can_rx_buffer)));
 
     volatile register uint8_t *packet	asm("r28");
     LOAD_ADDRESS(packet, can_rx_buffer);
@@ -29,7 +29,7 @@ CAN_CONTROLLER_INTERRUPT {
         can_service__handle_rx();
 
         // Clear all interrupts
-        mcp251x_select__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTF, 0));
+        mcp251x_select__run(mcp251x__write(MCP251X_REGISTER_CANINTF, 0));
     }
     RETI();
 }

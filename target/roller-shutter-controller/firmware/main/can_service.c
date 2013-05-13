@@ -22,7 +22,7 @@ static inline void can_service__rx__run(void) {
     // Interrupt flag cleared automatically when proper RX buffer is read.
     kernel__rx__handle(can__read_frame((uint8_t*)&kernel__frame));
     // Clear all interrupts
-    //mcp251x_select__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTF, 0));
+    //mcp251x_select__run(mcp251x__write(MCP251X_REGISTER_CANINTF, 0));
 }
 
 

@@ -8,8 +8,7 @@
 
 #define CHANGE 20
 
-void main(void)
-{
+int main(void) {
     pwm__init();
 
         OUT_1(LED_R);
@@ -107,4 +106,5 @@ sei();
         } while (t != 0);
 
     }
+    return 0;
 }

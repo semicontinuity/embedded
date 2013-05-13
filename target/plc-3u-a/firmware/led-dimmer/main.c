@@ -2,8 +2,7 @@
 #include <avr/interrupt.h>
 
 
- __attribute__ ((noreturn))
-void main(void) {
+int main(void) {
     colors[0] = 0;
     colors[1] = 50;
     colors[2] = 100;
@@ -17,4 +16,5 @@ void main(void) {
 
     sei();
     while(1);
+    return 0;
 }

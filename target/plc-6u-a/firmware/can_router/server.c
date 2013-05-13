@@ -59,7 +59,7 @@ inline static void server__process_packet__read_mem(void) {
 inline static void server__process_packet__read_can(void) {
     volatile register uint8_t *packet	asm("r28");
     uint8_t d;
-    mcp251x_select__run(d = mcp251x_read_byte(*packet));
+    mcp251x_select__run(d = mcp251x__read(*packet));
     debug__write(d);
 }
 

@@ -15,18 +15,18 @@
 #define TIMER0_CONF_DEFAULT                             (0)
 
 
-inline static void timer0__switch_conf(const uint16_t old_conf, const uint16_t new_conf) {
+inline void timer0__switch_conf(const uint16_t old_conf, const uint16_t new_conf) {
     const uint8_t old_tccr = old_conf & 0xFF;
     const uint8_t new_tccr = new_conf & 0xFF;
     if (old_tccr != new_tccr) TCCR0 = new_tccr;
 }
 
 
-inline static void timer0__overflow_interrupt_enable(void) {
+inline void timer0__overflow_interrupt_enable(void) {
     TIMSK |= _BV(TOIE0);
 }
 
-inline static void timer0__overflow_interrupt_disable(void) {
+inline void timer0__overflow_interrupt_disable(void) {
     TIMSK &= ~_BV(TOIE0);
 }
 

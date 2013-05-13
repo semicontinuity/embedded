@@ -31,7 +31,7 @@ inline void lcd_backlight_service__pwm__stop(void) {
     TCCR2 = 0;
 }
 
-void lcd_backlight_service__notify(void);
+void lcd_backlight_service__signal(void);
 
 void lcd_backlight_service__run(void);
 

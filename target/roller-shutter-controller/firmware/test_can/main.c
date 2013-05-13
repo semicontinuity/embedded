@@ -37,7 +37,7 @@ int main(void) {
 
     while (1) {
         uint8_t a = usart0__in__read();
-        mcp251x_select__run(b = mcp251x_read_byte(a));
+        mcp251x_select__run(b = mcp251x__read(a));
         usart0__out__write(b);
     }
     return 0;

@@ -6,60 +6,92 @@
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
 #include "cpu/avr/spi_polled.h"
 
+#include "drivers/out/mcp251x_select.h"
+
 // TODO: possible SPI failures not taken into account
 // TODO: use interrupts for SPI
 
-void mcp251x_reset() {
-    spi__write(MCP251X_INSTRUCTION_RESET);
+/**
+ * Generic 1-byte instruction - used to implement reset, RTS, read status, RX status.
+ * Saves FLASH space - only one function is used.
+ * Calling code is a bit larger (instruction is specified)
+ */
+uint8_t mcp251x__command(const uint8_t instruction) {
+#ifdef MCP251X__USE_CS
+    mcp251x_select__on();
+#endif
+    spi__write(instruction);
+    const uint8_t r = spi__read();
+#ifdef MCP251X__USE_CS
+    mcp251x_select__off();
+#endif
+    return r;
 }
 
 
-void mcp251x_write(const uint8_t address) {
-    spi__write(MCP251X_INSTRUCTION_WRITE);
-    spi__write(address);
-}
-
-
-void mcp251x_write_one_byte(const uint8_t address, const uint8_t data) {
+void mcp251x__write(const uint8_t address, const uint8_t data) {
+#ifdef MCP251X__USE_CS
+    mcp251x_select__on();
+#endif
     spi__write(MCP251X_INSTRUCTION_WRITE);
     spi__write(address);
     spi__write(data);
+#ifdef MCP251X__USE_CS
+    mcp251x_select__off();
+#endif
 }
 
 
-void mcp251x_write_bytes(const uint8_t* buffer, const uint8_t address, uint8_t count) {
+void mcp251x__write_bytes(const uint8_t* buffer, const uint8_t address, uint8_t count) {
+#ifdef MCP251X__USE_CS
+    mcp251x_select__on();
+#endif
     spi__write(MCP251X_INSTRUCTION_WRITE);
     spi__write(address);
     spi__write_bytes(buffer, count);
+#ifdef MCP251X__USE_CS
+    mcp251x_select__off();
+#endif
 }
 
 
-void mcp251x_write_bytes_progmem(const uint8_t address, uint8_t count, uint8_t * PROGMEM buffer) {
+void mcp251x__write_bytes_progmem(const uint8_t address, uint8_t count, uint8_t * PROGMEM buffer) {
+#ifdef MCP251X__USE_CS
+    mcp251x_select__on();
+#endif
     spi__write(MCP251X_INSTRUCTION_WRITE);
     spi__write(address);
     spi__write_bytes_P(buffer, count);
+#ifdef MCP251X__USE_CS
+    mcp251x_select__off();
+#endif
 }
 
 
-uint8_t mcp251x_read_byte(const uint8_t address) {
+uint8_t mcp251x__read(const uint8_t address) {
+#ifdef MCP251X__USE_CS
+    mcp251x_select__on();
+#endif
     spi__write(MCP251X_INSTRUCTION_READ);
     spi__write(address);
-    return spi__read();
+    const uint8_t r = spi__read();
+#ifdef MCP251X__USE_CS
+    mcp251x_select__off();
+#endif
+    return r;
 }
 
 
-void mcp251x_read_bytes(uint8_t* buffer, const uint8_t address, uint8_t count) {
+void mcp251x__read_bytes(uint8_t* buffer, const uint8_t address, uint8_t count) {
+#ifdef MCP251X__USE_CS
+    mcp251x_select__on();
+#endif
     spi__write(MCP251X_INSTRUCTION_READ);
     spi__write(address);
     spi__read_bytes(buffer, count);
-}
-
-
-void mcp251x_bit_modify(const uint8_t address, const uint8_t mask, const uint8_t value) {
-    spi__write(MCP251X_INSTRUCTION_BIT_MODIFY);
-    spi__write(address);
-    spi__write(mask);
-    spi__write(value);
+#ifdef MCP251X__USE_CS
+    mcp251x_select__off();
+#endif
 }
 
 
@@ -73,10 +105,18 @@ void mcp251x_bit_modify(const uint8_t address, const uint8_t mask, const uint8_t
  *                      * MCP251X_INSTRUCTION_READ_BUFFER_1_SIDH
  *                      * MCP251X_INSTRUCTION_READ_BUFFER_1_D0
  * @param count         The number of bytes to read.
+ * @return the updated pointer to the data buffer.
  */
-uint8_t* mcp2515_read_rx_buffer(uint8_t* buffer, const uint8_t instruction, uint8_t count) {
+uint8_t* mcp2515__read_rx_buffer(uint8_t* buffer, const uint8_t instruction, uint8_t count) {
+#ifdef MCP251X__USE_CS
+    mcp251x_select__on();
+#endif
     spi__write(instruction);
-    return spi__read_bytes(buffer, count);
+    uint8_t* end = spi__read_bytes(buffer, count);
+#ifdef MCP251X__USE_CS
+    mcp251x_select__off();
+#endif
+    return end;
 }
 
 
@@ -93,41 +133,27 @@ uint8_t* mcp2515_read_rx_buffer(uint8_t* buffer, const uint8_t instruction, uint
  *                      * MCP251X_INSTRUCTION_LOAD_BUFFER_2_D0
  * @param count         The number of bytes to load.
  */
-void mcp2515_load_tx_buffer(const uint8_t* buffer, const uint8_t instruction, uint8_t count) {
+void mcp2515__load_tx_buffer(const uint8_t* buffer, const uint8_t instruction, uint8_t count) {
+#ifdef MCP251X__USE_CS
+    mcp251x_select__on();
+#endif
     spi__write(instruction);
     spi__write_bytes(buffer, count);
+#ifdef MCP251X__USE_CS
+    mcp251x_select__off();
+#endif
 }
 
 
-/**
- * Issue Request To Send instruction.
- * @param instruction   The instruction that determines TX buffers for which to initiate transmission.
- *                      Must be a bitwise combination of MCP251X_INSTRUCTION_REQUEST_TO_SEND constant
- *                      and any number of the  following constants:
- *                      * MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0
- *                      * MCP251X_INSTRUCTION_REQUEST_TO_SEND_B1
- *                      * MCP251X_INSTRUCTION_REQUEST_TO_SEND_B2
- */
-void mcp2515_request_to_send(const uint8_t instruction) {
-    spi__write(instruction);
+void mcp251x__bit_modify(const uint8_t address, const uint8_t mask, const uint8_t value) {
+#ifdef MCP251X__USE_CS
+    mcp251x_select__on();
+#endif
+    spi__write(MCP251X_INSTRUCTION_BIT_MODIFY);
+    spi__write(address);
+    spi__write(mask);
+    spi__write(value);
+#ifdef MCP251X__USE_CS
+    mcp251x_select__off();
+#endif
 }
-
-
-/**
- * Issue Read Status instruction.
- */
-uint8_t mcp2515_read_status(void) {
-    spi__write(MCP251X_INSTRUCTION_READ_STATUS);
-    return spi__read();
-}
-
-
-/**
- * Issue RX Status instruction.
- * A command to quickly read RX Status byte.
- */
-uint8_t mcp2515_rx_status(void) {
-    spi__write(MCP251X_INSTRUCTION_RX_STATUS);
-    return spi__read();
-}
-

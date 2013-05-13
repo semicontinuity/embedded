@@ -38,7 +38,7 @@
 #define TIMER0_CONF_DEFAULT                             (0)
 
 
-inline static void timer0__switch_conf(uint16_t old_conf, uint16_t new_conf) {
+inline void timer0__switch_conf(uint16_t old_conf, uint16_t new_conf) {
     uint8_t old_tccr = old_conf & 0xFF;
     uint8_t new_tccr = new_conf & 0xFF;
     if (old_tccr != new_tccr) TCCR0 = new_tccr;
@@ -49,29 +49,29 @@ inline static void timer0__switch_conf(uint16_t old_conf, uint16_t new_conf) {
 }
 
 
-inline static void timer0__compare__interrupt_enable(void) {
+inline void timer0__compare__interrupt_enable(void) {
     TIMSK |= _BV(OCIE0);
 }
 
-inline static void timer0__compare__interrupt_disable(void) {
+inline void timer0__compare__interrupt_disable(void) {
     TIMSK &= ~_BV(OCIE0);
 }
 
 
-inline static void timer0__overflow_interrupt_enable(void) {
+inline void timer0__overflow_interrupt_enable(void) {
     TIMSK |= _BV(TOIE0);
 }
 
-inline static void timer0__overflow_interrupt_disable(void) {
+inline void timer0__overflow_interrupt_disable(void) {
     TIMSK &= ~_BV(TOIE0);
 }
 
 
-inline static void timer0__ctc__interrupt__enable(void) {
+inline void timer0__ctc__interrupt__enable(void) {
     timer0__compare__interrupt_enable();
 }
 
-inline static void timer0__ctc__interrupt__disable(void) {
+inline void timer0__ctc__interrupt__disable(void) {
     timer0__compare__interrupt_disable();
 }
 

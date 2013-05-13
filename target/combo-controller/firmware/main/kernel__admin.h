@@ -88,7 +88,7 @@ static inline void kernel__admin__handle(void) {
         // DLC ignored.
         // Read a CAN register, given the address in data[0]
         if (kernel__frame.data[3] == 0 && kernel__frame.data[2] == 0 && kernel__frame.data[1] == 0) {
-            mcp251x_select__run(kernel__frame.data[4] = mcp251x_read_byte(kernel__frame.data[0]));
+            mcp251x_select__run(kernel__frame.data[4] = mcp251x__read(kernel__frame.data[0]));
             kernel__send_response(5, (const uint8_t*)&kernel__frame.data);
         }
         break;
@@ -96,7 +96,7 @@ static inline void kernel__admin__handle(void) {
         // DLC ignored.
         // Write  8 bits of memory, given the address in data[0]
         if (kernel__frame.data[3] == 0 && kernel__frame.data[2] == 0 && kernel__frame.data[1] == 0) {
-            mcp251x_select__run(mcp251x_write_one_byte(kernel__frame.data[0], kernel__frame.data[4]));
+            mcp251x_select__run(mcp251x__write(kernel__frame.data[0], kernel__frame.data[4]));
         }
         break;
     case CANP_REPORT__STATS_READ:

@@ -9,16 +9,16 @@
 #include "cpu/avr/spi.h"
 
 
-static inline void mcp251x_select__init(void) {
+inline void mcp251x_select__init(void) {
     USE_AS_OUTPUT(MCP251X_CS);
     OUT_1(MCP251X_CS);
 }
 
-static inline void mcp251x_select__on(void) {
+inline void mcp251x_select__on(void) {
     OUT_0(MCP251X_CS);
 }
 
-static inline void mcp251x_select__off(void) {
+inline void mcp251x_select__off(void) {
     OUT_1(MCP251X_CS);
 }
 

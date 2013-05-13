@@ -35,7 +35,7 @@ static volatile mcp251x_message_buffer buffer;
 
 
 static void can_service__handle_rx(void) {
-    mcp251x_select__run(mcp251x_read_bytes((uint8_t*)&buffer.header, MCP251X_REGISTER_RXB0SIDH, sizeof(mcp251x_frame_header)));
+    mcp251x_select__run(mcp251x__read_bytes((uint8_t*)&buffer.header, MCP251X_REGISTER_RXB0SIDH, sizeof(mcp251x_frame_header)));
     uint8_t slot = CANP_SLOT_BITS(buffer.header.id);
 
     // Assume that extended frame was received.
@@ -49,16 +49,16 @@ static void can_service__handle_rx(void) {
         if (CANP_AUX_BITS(buffer.header.id)) {
             // Read ROM
             memcpy_P((void*)buffer.data, (PGM_VOID_P)(slot * 8), buffer.header.dlc);
-            mcp251x_select__run(mcp2515_load_tx_buffer ((uint8_t*)&buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, sizeof(buffer)));
-            mcp251x_select__run(mcp2515_request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
+            mcp251x_select__run(mcp2515__load_tx_buffer ((uint8_t*)&buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, sizeof(buffer)));
+            mcp251x_select__run(mcp2515__request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
             // TODO: check TXREQ
         }
         else {
             // Read RAM request
             if (slot == 0) {
                 COPY_8_BYTES(buffer.data, colors);
-                mcp251x_select__run(mcp2515_load_tx_buffer ((uint8_t*)&buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, sizeof(buffer)));
-                mcp251x_select__run(mcp2515_request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
+                mcp251x_select__run(mcp2515__load_tx_buffer ((uint8_t*)&buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_0_SIDH, sizeof(buffer)));
+                mcp251x_select__run(mcp2515__request_to_send (MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B0));
                 // TODO: check TXREQ
             }
         }
@@ -66,7 +66,7 @@ static void can_service__handle_rx(void) {
     else {
         // Received PUT request
         if (!CANP_AUX_BITS(buffer.header.id) && slot == 0) {
-            mcp251x_select__run(mcp251x_read_bytes((uint8_t*)buffer.data, MCP251X_REGISTER_RXB0D0, sizeof(buffer.data)));
+            mcp251x_select__run(mcp251x__read_bytes((uint8_t*)buffer.data, MCP251X_REGISTER_RXB0D0, sizeof(buffer.data)));
             COPY_8_BYTES(colors, buffer.data);
         }        
     }
@@ -82,14 +82,14 @@ ISR(INT1_vect) {
     can_service__handle_rx();
 
     // Clear all interrupts
-    mcp251x_select__run(mcp251x_write_one_byte(MCP251X_REGISTER_CANINTF, 0));
+    mcp251x_select__run(mcp251x__write(MCP251X_REGISTER_CANINTF, 0));
 }
 
 
 /*
 static void handle_error(void) {
     uint8_t eflg;
-    mcp251x_select__run(eflg = mcp251x_read_byte(MCP251X_REGISTER_EFLG));
+    mcp251x_select__run(eflg = mcp251x__read(MCP251X_REGISTER_EFLG));
 }
 */
 
@@ -97,7 +97,7 @@ static void handle_error(void) {
 ISR(INT1_vect) {
     // interrupt flag for INT1 cleared automatically
     uint8_t icod_bits;
-    mcp251x_select__run(icod_bits = mcp251x_read_byte(MCP251X_REGISTER_CANSTAT) & ICOD_BITS_MASK);
+    mcp251x_select__run(icod_bits = mcp251x__read(MCP251X_REGISTER_CANSTAT) & ICOD_BITS_MASK);
     
     switch(icod_bits) {
 //    case ICOD_BITS_MASKED(MCP251X_ICOD_ERROR):
