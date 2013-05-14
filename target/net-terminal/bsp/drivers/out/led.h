@@ -13,12 +13,12 @@
 
 
 INLINE void led__on(void) {
-    mcp251x_select__run(mcp251x__write(MCP251X_REGISTER_BFPCTRL, (1<<MCP251X_B0BFS)|(1<<MCP251X_B0BFE)));
+    mcp251x__write(MCP251X_REGISTER_BFPCTRL, (1<<MCP251X_B0BFS)|(1<<MCP251X_B0BFE));
 }
 
 
 INLINE void led__off(void) { 
-    mcp251x_select__run(mcp251x__write(MCP251X_REGISTER_BFPCTRL, 0));
+    mcp251x__write(MCP251X_REGISTER_BFPCTRL, 0);
 }
 
 

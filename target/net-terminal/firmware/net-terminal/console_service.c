@@ -1,8 +1,6 @@
 #include "console_service.h"
 #include "parse.h"
 
-#include "drivers/out/mcp251x_select.h"
-
 #include <stdbool.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -56,7 +54,7 @@ inline static uint8_t console_service__handle__mcp2515_read_register(void) {
     if (console_service__command_length == 4 && console_service__command[0] == 'c' && console_service__command[3] == '?') {
         uint8_t addr = parseByte(console_service__command + 1);
         register uint8_t v;
-        mcp251x_select__run(v = mcp251x__read(addr));
+        v = mcp251x__read(addr);
         debug__print_byte_as_hex(addr);
         debug__putc('=');
         debug__print_byte_as_hex(v);
@@ -72,7 +70,7 @@ inline static bool console_service__handle__mcp2515_write_register(void) {
         register uint8_t addr = parseByte(console_service__command + 1);
         register uint8_t value = parseByte(console_service__command + 4);
             
-        mcp251x_select__run(mcp251x__write(addr, value));
+        mcp251x__write(addr, value);
 
         debug__putc('O');
         debug__putc('K');
@@ -86,7 +84,7 @@ inline static bool console_service__handle__mcp2515_write_register(void) {
 // Format: 'cr'
 inline static bool console_service__handle__mcp2515_reset(void) {
     if (console_service__command_length == 2 && console_service__command[0] == 'c' && console_service__command[1] == 'r') {
-        mcp251x_select__run(mcp251x__reset());
+        mcp251x__reset();
         return true;
     }
     else return false;
@@ -97,7 +95,7 @@ inline static bool console_service__handle__mcp2515_reset(void) {
 inline static bool console_service__handle__mcp2515_read_status(void) {
     if (console_service__command_length == 2 && console_service__command[0] == 'c' && console_service__command[1] == 's') {
         register uint8_t v;
-        mcp251x_select__run(v = mcp2515__read_status());
+        v = mcp2515__read_status();
         debug__print_byte_as_hex(v);
         return true;
     }
