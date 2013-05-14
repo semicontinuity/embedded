@@ -15,9 +15,9 @@
 
 #include "main.c"
 
-//#include "console_service.c"
-//#include "parse.c"
-//# include "cpu/avr/util/debug.c"
+#include "console_service.c"
+#include "util/hex.c"
+#include "cpu/avr/util/debug.c"
 
 
 // BSP

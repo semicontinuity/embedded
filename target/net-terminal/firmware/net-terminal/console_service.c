@@ -1,5 +1,5 @@
 #include "console_service.h"
-#include "parse.h"
+#include "util/hex.h"
 
 #include <stdbool.h>
 #include <avr/interrupt.h>
@@ -19,7 +19,7 @@ uint8_t console_service__command_length;
 // Format: 'mXX?'
 inline static uint8_t console_service__handle__memory_read(void) {
     if (console_service__command_length == 4 && console_service__command[0] == 'm' && console_service__command[3] == '?') {
-        uint8_t addr = parseByte(console_service__command + 1);
+        uint8_t addr = byte__parse_hex(console_service__command + 1);
         uint16_t addr16 = addr;
 
         register uint8_t v = *((uint8_t*)addr16);
@@ -35,8 +35,8 @@ inline static uint8_t console_service__handle__memory_read(void) {
 // Format: 'mXX=YY'
 inline static bool console_service__handle__memory_write(void) {
     if (console_service__command_length == 6 && console_service__command[0] == 'm' && console_service__command[3] == '=') {
-        register uint8_t addr = parseByte(console_service__command + 1);
-        register uint8_t value = parseByte(console_service__command + 4);
+        register uint8_t addr = byte__parse_hex(console_service__command + 1);
+        register uint8_t value = byte__parse_hex(console_service__command + 4);
         uint16_t addr16 = addr;
         *((uint8_t*)addr16) = value;    
 
@@ -52,7 +52,7 @@ inline static bool console_service__handle__memory_write(void) {
 // Format: 'cXX?'
 inline static uint8_t console_service__handle__mcp2515_read_register(void) {
     if (console_service__command_length == 4 && console_service__command[0] == 'c' && console_service__command[3] == '?') {
-        uint8_t addr = parseByte(console_service__command + 1);
+        uint8_t addr = byte__parse_hex(console_service__command + 1);
         register uint8_t v;
         v = mcp251x__read(addr);
         debug__print_byte_as_hex(addr);
@@ -67,8 +67,8 @@ inline static uint8_t console_service__handle__mcp2515_read_register(void) {
 // Format: 'cXX=YY'
 inline static bool console_service__handle__mcp2515_write_register(void) {
     if (console_service__command_length == 6 && console_service__command[0] == 'c' && console_service__command[3] == '=') {
-        register uint8_t addr = parseByte(console_service__command + 1);
-        register uint8_t value = parseByte(console_service__command + 4);
+        register uint8_t addr = byte__parse_hex(console_service__command + 1);
+        register uint8_t value = byte__parse_hex(console_service__command + 4);
             
         mcp251x__write(addr, value);
 
