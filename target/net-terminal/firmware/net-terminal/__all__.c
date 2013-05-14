@@ -24,6 +24,9 @@
 #include CAN_C
 #include "drivers/in/sensors.c"
 
+#include "drivers/net/can/mcp251x/rx.c"
+#include "drivers/net/can/mcp251x/tx.c"
+
 // Library
 #include "cpu/avr/timer0.c"
 #ifndef CAN_EMU

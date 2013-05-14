@@ -25,21 +25,6 @@
 #include <util/delay.h>
 
 
-// RX Filters 0-2 (uploaded as one piece)
-extern mcp251x_message_id can__rxf0_2[3] PROGMEM;
-
-// RX Filters 3-5 (uploaded as one piece)
-extern mcp251x_message_id can__rxf3_5[3] PROGMEM;
-
-// RX Masks 0 and 1 (uploaded as one piece)
-extern mcp251x_message_id can__rxm0_1[2] PROGMEM;
-
-// TX Buffer 1 Header
-extern mcp251x_frame_header can__txb1_h PROGMEM;
-
-// TX Buffer 2 Header
-extern mcp251x_frame_header can__txb2_h PROGMEM;
-
 
 #if defined(can__txb0__available__HOST) && defined(can__txb0__available__BIT)
 DECLARE_BITVAR(can__txb0__available, can__txb0__available__HOST, can__txb0__available__BIT);
@@ -62,24 +47,6 @@ inline void can__txb2__available__set(uint8_t value) {}
 inline bool can__txb2__available__is_set(void) { return true; }
 #endif
 
-
-/**
- * Performs MCP251x controller configuration.
- * Uploads all the data that remains constant during the operation of the device
- * - Masks
- * - Filters
- * - TX Buffer 1 header
- * - TX Buffer 2 header
- */ 
-inline static void can__init(void) {
-    mcp2515__write_bytes_progmem(MCP251X_REGISTER_RXF0SIDH, sizeof(can__rxf0_2), (uint8_t* PROGMEM)&can__rxf0_2);
-    mcp2515__write_bytes_progmem(MCP251X_REGISTER_RXF3SIDH, sizeof(can__rxf3_5), (uint8_t* PROGMEM)&can__rxf3_5);
-    mcp2515__write_bytes_progmem(MCP251X_REGISTER_RXM0SIDH, sizeof(can__rxm0_1), (uint8_t* PROGMEM)&can__rxm0_1);
-
-    // Note: could implement mcp2515__load_tx_buffer_progmem
-    mcp2515__write_bytes_progmem(MCP251X_REGISTER_TXB1SIDH, sizeof(can__txb1_h), (uint8_t* PROGMEM)&can__txb1_h);
-    mcp2515__write_bytes_progmem(MCP251X_REGISTER_TXB2SIDH, sizeof(can__txb2_h), (uint8_t* PROGMEM)&can__txb2_h);
-}
 
 
 inline static void can__start(void) {

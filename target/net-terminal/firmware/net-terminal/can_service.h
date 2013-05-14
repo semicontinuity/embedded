@@ -14,10 +14,7 @@
 #ifndef __CAN_SERVICE_H
 #define __CAN_SERVICE_H
 
-#include "cpu/avr/int1.h"
-
 #include "can.h"
-#include "drivers/out/mcp251x_select.h"
 
 #include "cpu/avr/drivers/net/can/mcp251x/registers.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
@@ -27,8 +24,6 @@
  * Implements the function from comm_service__rx.
  */ 
 inline static void comm_service__rx__init(void) {
-    int1__init();
-    can__init();
 }
 
 
@@ -36,7 +31,6 @@ inline static void comm_service__rx__init(void) {
  * Implements the function from comm_service__rx.
  */ 
 inline static void comm_service__rx__start(void) {
-    int1__start();
     can__start();
 
     // TODO: abstract
