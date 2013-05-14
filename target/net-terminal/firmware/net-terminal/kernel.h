@@ -13,16 +13,17 @@
 #include <avr/interrupt.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include "cpu/avr/drivers/net/can/mcp251x/struct.h"
-#include "cpu/avr/int1.h"
 
 #include "drivers/net/can/mcp251x/rx.h"
 #include "drivers/net/can/mcp251x/tx.h"
+#include "drivers/net/can/mcp251x/int_handler.h"
 #include "drivers/out/mcp251x_select.h"
 
+#include "cpu/avr/int1.h"
 #include "cpu/avr/spi.h"
 #include "cpu/avr/bootloader.h"
 #include "cpu/avr/drivers/net/can/mcp251x/conf.h"
+#include "cpu/avr/drivers/net/can/mcp251x/struct.h"
 
 
 extern mcp251x_message_buffer kernel__frame __attribute__((section(".noinit")));
@@ -66,24 +67,24 @@ inline static bool kernel__mode__is_set(void) {
 #endif
 
 
-#include CAN_SERVICE_H
-
-
 inline static void kernel__init(void) {
     spi__init(SPI_CLKDIV_4);
     spi__double_speed__set(1);
+
     mcp251x_select__init();
     mcp251x__init();
     mcp251x__rx__init();
     mcp251x__tx__init();
-    int1__init();
 
-    comm_service__rx__init();
+    int1__init();
 }
 
+
 inline static void kernel__start(void) {
+    mcp251x__tx__start();
+    mcp251x__int_handler__start();
+
     int1__start();
-    comm_service__rx__start();
 }
 
 

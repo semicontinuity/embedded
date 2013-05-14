@@ -15,13 +15,13 @@
 
 
 // RX Filters 0-2 (uploaded as one piece)
-mcp251x_message_id can__rxf0_2[3] PROGMEM = {RXF0, RXF1, RXF2};
+mcp251x_message_id mcp2515__rx__rxf0_2[3] PROGMEM = {RXF0, RXF1, RXF2};
 
 // RX Filters 3-5 (uploaded as one piece)
-mcp251x_message_id can__rxf3_5[3] PROGMEM = {RXF3, RXF4, RXF5};
+mcp251x_message_id mcp2515__rx__rxf3_5[3] PROGMEM = {RXF3, RXF4, RXF5};
 
 // RX Masks 0 and 1 (uploaded as one piece)
-mcp251x_message_id can__rxm0_1[2] PROGMEM = {RXM0, RXM1};
+mcp251x_message_id mcp2515__rx__rxm0_1[2] PROGMEM = {RXM0, RXM1};
 
 
 /**
@@ -31,7 +31,7 @@ mcp251x_message_id can__rxm0_1[2] PROGMEM = {RXM0, RXM1};
  * - Filters
  */ 
 INLINE void mcp251x__rx__init(void) {
-    mcp2515__write_bytes_progmem(MCP251X_REGISTER_RXF0SIDH, sizeof(can__rxf0_2), (uint8_t* PROGMEM)&can__rxf0_2);
-    mcp2515__write_bytes_progmem(MCP251X_REGISTER_RXF3SIDH, sizeof(can__rxf3_5), (uint8_t* PROGMEM)&can__rxf3_5);
-    mcp2515__write_bytes_progmem(MCP251X_REGISTER_RXM0SIDH, sizeof(can__rxm0_1), (uint8_t* PROGMEM)&can__rxm0_1);
+    mcp2515__write_bytes_progmem(MCP251X_REGISTER_RXF0SIDH, sizeof(mcp2515__rx__rxf0_2), (uint8_t* PROGMEM)&mcp2515__rx__rxf0_2);
+    mcp2515__write_bytes_progmem(MCP251X_REGISTER_RXF3SIDH, sizeof(mcp2515__rx__rxf3_5), (uint8_t* PROGMEM)&mcp2515__rx__rxf3_5);
+    mcp2515__write_bytes_progmem(MCP251X_REGISTER_RXM0SIDH, sizeof(mcp2515__rx__rxm0_1), (uint8_t* PROGMEM)&mcp2515__rx__rxm0_1);
 }

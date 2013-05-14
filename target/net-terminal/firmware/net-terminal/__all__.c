@@ -2,7 +2,6 @@
 
 // Firmware
 #include "kernel.c"
-#include CAN_SERVICE_C
 #include "comm_service__descriptor_memory.c"
 #include "comm_service.c"
 
@@ -21,11 +20,11 @@
 
 
 // BSP
-#include CAN_C
 #include "drivers/in/sensors.c"
 
 #include "drivers/net/can/mcp251x/rx.c"
 #include "drivers/net/can/mcp251x/tx.c"
+#include "drivers/net/can/mcp251x/int_handler.c"
 
 // Library
 #include "cpu/avr/timer0.c"

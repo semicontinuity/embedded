@@ -12,7 +12,6 @@
 #include "comm_service__endpoint__alarm_client__state.h"
 #include "comm_service__endpoint__sensors.h"
 #include "comm_service__endpoint__tty.h"
-#include CAN_H
 
 
 /**
@@ -39,6 +38,6 @@ void comm_service__handle(const uint8_t event, const uint8_t message_type) {
     }
 
 //    else if (event == KERNEL__EVENT__TX1_COMPLETE) {
-//        can__txb1__available__set(1);
+//        mcp2515__tx__txb1__available__set(1);
 //    }
 }
