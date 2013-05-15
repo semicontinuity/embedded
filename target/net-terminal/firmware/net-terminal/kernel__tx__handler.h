@@ -5,7 +5,7 @@
 #define __kERNEL__TX__HANDLER_H
 
 #include <stdint.h>
-#include "kernel__handler__spi.h"
+#include "kernel__handler.h"
 
 
 static inline void kernel__tx__handle(const uint8_t event) {
