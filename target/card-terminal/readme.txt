@@ -1,51 +1,21 @@
 Card terminal
 
-A future device, featuturing smartcard slot, 1x or 2x SDIO slots, LCD display, keypad, serial and USB port.
+Device in development, featuring smartcard or SIM card slot, SPI interface, LCD display, keypad, serial and USB port.
 
 Possible uses:
 
-* CCID-compliant USB card terminal
+* CCID-compliant USB card terminal fith keypad and display
 * USB HID device
 * USB CDC device (USB-to-serial)
-* Application host - providing resources to application running on a AVR card
+* Application host - providing resources to application running on a AVR card (Funcard)
 * USB-to-SPI converter
+* AVR programmer
+* Generic development board
 
 
-Case: white plastic, about 100x80x20
-
-
-
-Board design:
-
-Size: about 76x96
-
-
-for serial connector, it is possible to use 6-pin or 4-pin FireWire connectors
+For serial connector, it is possible to use 6-pin or 4-pin FireWire connectors
 (small size, hard to attach wrong cable, right number of pins,
 crossed pairs in the cable - good for crossing RX/TX, RTS/CTS)
 
- serial connector       mini-usb connector 
- V                      V
- +-----------------------+
- |                       |
- |      MT12232A         |
- |                       |
- +-----------------------+
- |                       |
- +-------+       +-------+
- |       |       |       |
- | SD    |       | SD    |
- +-------+-------+-------+
- |                       |
- |                       |
- |                       |
- | smart card slot       |
- |                       |
- |                       |
- |                       |
- +-----------------------+
-
-microprocessors:
-
-AT90USB162: small number of pins (if want to use serial and SPI)
-AT83xxx355: ?
+Revision A board is designed for AT90USB162 and SIM card slot.
+Due to a small number of pins, peripherals are multiplexed and some glue logic is required.
