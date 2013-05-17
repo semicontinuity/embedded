@@ -18,6 +18,7 @@ CDEFS += -fno-tree-loop-optimize -fno-unswitch-loops -finline-functions
 # Firmware
 SRC += main.c
 SRC += cpu/avr/drivers/display/mt12232/lcd_graph_lib.c
+SRC += cpu/avr/drivers/display/mt12232/terminal.c
 SRC += util/font/Font_6x8.c
 
 include $(ROOT)/cpu/avr/Makefile
