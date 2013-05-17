@@ -62,7 +62,7 @@
 //команды
 #define COM_DISPLAY_ON       0xaf               //включает жкд
 #define COM_DISPLAY_OFF      0xae               //выключает жкд
-#define COM_START_LINE(x)    (0xc0&(0x1f&(x)))  //определяет верхнюю строку жкд
+#define COM_START_LINE(x)    (0xc0 | (0x1f & (x)))  //определяет верхнюю строку жкд
 #define COM_ADC_SELECT_OFF   0xa0               //прямое соответствие адреса и позиции
 #define COM_ADC_SELECT_ON    0xa1               //обратное соответствие адреса и позиции
 #define COM_STATIC_DRIVE_ON  0xa5               //статический режим управления

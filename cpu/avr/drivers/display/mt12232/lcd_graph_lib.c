@@ -131,11 +131,12 @@ void LCDG_SendData(unsigned char data)
 //настраивает правый и левый контроллеры
 void LCDG_InitLcd(void)
 {
+/*
   ClearBit(PORT_LCD_RES, RES);
   _delay_ms(400);
   SetBit(PORT_LCD_RES, RES);
   _delay_ms(400);
-  
+*/  
   SelectLeftChip();
   LCDG_SendCom(COM_CLEAR_RMW);
   LCDG_SendCom(COM_STATIC_DRIVE_OFF);

@@ -1,4 +1,4 @@
-TARGET = test-led-blink
+TARGET = test-display
 MCU = at90usb162
 OPT = 3 -mcall-prologues
 ROOT = ../../../..
