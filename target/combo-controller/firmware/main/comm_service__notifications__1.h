@@ -2,9 +2,7 @@
 #define __COMM_SERVICE__NOTIFICATIONS__1_H
 
 #include "kernel.h"
-#include "cpu/avr/asm.h"
-#include CAN_H
-
+//#include "cpu/avr/asm.h"
 
 #include "water_leak_sensors_scanner.h"
 
@@ -24,7 +22,7 @@
 
 
 inline static void comm_service__notifications__1__run(void) {
-    if (can__txb1__available__is_set() && notifications_pending__is_set()) {
+    if (mcp2515__tx__txb1__available__is_set() && notifications_pending__is_set()) {
 
         uint8_t report_id;
         uint8_t length = 1;
@@ -78,8 +76,8 @@ inline static void comm_service__notifications__1__run(void) {
             return;
         }
 
-        can__txb1__load_report(report_id, length, data);
-        can__txb1__request_to_send();
+        mcp2515__tx__txb1__load_report(report_id, length, data);
+        mcp2515__tx__txb1__request_to_send();
     }
 }
 #endif

@@ -3,7 +3,6 @@
 
 #include "services/alarm.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
-#include CAN_H
 #include "kernel.h"
 
 

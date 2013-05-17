@@ -13,8 +13,6 @@
 #include "comm_service__endpoint__io.h"
 #include "comm_service__endpoint__sensors.h"
 
-#include CAN_H
-
 
 /**
  * Dispatches the incoming packets, based on the matched filter number.
@@ -41,7 +39,14 @@ void comm_service__handle(const uint8_t event, const uint8_t message_type) {
     else if (event == CANP_REPORT__SENSORS__STATE && message_type == CANP_MSG_TYPE_VALUE) {
         comm_service__endpoint__sensors__handle_value();
     }
+#if defined(mcp2515__tx__txb1__available__HOST) && defined(mcp2515__tx__txb1__available__BIT)
     else if (event == KERNEL__EVENT__TX1_COMPLETE) {
-        can__txb1__available__set(1);
+        mcp2515__tx__txb1__available__set(1);
     }
+#endif
+#if defined(mcp2515__tx__txb2__available__HOST) && defined(mcp2515__tx__txb2__available__BIT)
+    else if (event == KERNEL__EVENT__TX2_COMPLETE) {
+        mcp2515__tx__txb2__available__set(1);
+    }
+#endif
 }

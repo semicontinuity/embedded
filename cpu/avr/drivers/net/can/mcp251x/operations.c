@@ -2,6 +2,7 @@
 #include <avr/pgmspace.h>
 
 #include "cpu/avr/asm.h"
+#include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
 #include "cpu/avr/spi_polled.h"

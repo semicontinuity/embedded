@@ -4,8 +4,6 @@
 #include "kernel.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include "cpu/avr/asm.h"
-#include CAN_H
-
 
 #include "water_leak_sensors_scanner.h"
 #include "motion_sensors_scanner.h"

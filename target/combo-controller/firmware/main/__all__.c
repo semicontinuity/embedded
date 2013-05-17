@@ -9,9 +9,11 @@
 
 
 // BSP
-#include "services/seconds_timer.c"
-#include CAN_C
+#include "drivers/net/can/mcp251x/rx.c"
+#include "drivers/net/can/mcp251x/tx.c"
+#include "drivers/net/can/mcp251x/int_handler.c"
 
+#include "services/seconds_timer.c"
 #include "motion_sensors_scanner.c"
 #include "water_leak_sensors_scanner.c"
 
@@ -25,7 +27,6 @@
 
 // Firmware
 #include "kernel.c"
-#include CAN_SERVICE_C
 #include "comm_service__descriptor_memory.c"
 #include "comm_service.c"
 
