@@ -1,8 +1,9 @@
 #ifndef __FONT_6X8_H
 #define __FONT_6X8_H
 
-#include "fixed-width-font.h"
+#include "util/font/fixed-width-font.h"
 
+extern prog_uint8_t Font_6x8_Data[];
 extern struct FONT Font_6x8;
 
 #endif
