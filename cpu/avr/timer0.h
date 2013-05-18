@@ -19,7 +19,8 @@
 
 
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__) 
+    defined(__AVR_ATmega168__) ||\
+    defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)\
 
 #   include "cpu/avr/timer0__2oc.h"
 

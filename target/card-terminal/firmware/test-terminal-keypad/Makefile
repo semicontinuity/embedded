@@ -12,6 +12,7 @@ vpath %.c  $(BSP) $(ROOT)
 # Configuration
 CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
+include $(TARGET).conf
 
 
 CDEFS += -Wl,--relax
@@ -19,13 +20,8 @@ CDEFS += --combine -fwhole-program
 #CDEFS += -Wl,--section-start=.kernel=0x0001000 -Wl,--section-start=.noinit=0x008004EB  -Wl,--defsym=__stack=0x04EA
 # -Wl,--defsym=__stack=0x008002f2
 
-# Configuration
-PROPS  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
-CDEFS += $(PROPS)
-
-
-# Compile all sources in one compilation util (because of the absent link-time optimizations)
-WHOLE_PROGRAM=1
+# Compile all sources in one compilation unit (because of the absent link-time optimizations)
+#WHOLE_PROGRAM=1
 
 ifeq ($(WHOLE_PROGRAM),1)
 
@@ -40,6 +36,7 @@ CDEFS += -DINLINE=
 SRC += main.c
 
 # BSP
+SRC += drivers/keypad.c
 
 # Library
 SRC += cpu/avr/timer0.c
