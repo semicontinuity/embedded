@@ -9,9 +9,6 @@ static uint8_t startPage = 0;
 
 
 void terminal__feed(void) {
-    // backlight off (debug)
-    PORTD &= ~(1<<0);
-
     x = 0;
     ++startPage;
     startPage &= 0x03;
@@ -26,7 +23,7 @@ void terminal__feed(void) {
     LCDG_SendCom(0xb8 + y);
     LCDG_SendCom(0);
     columnAddr = 0;
-    do { LCDG_SendData(0); } while (++columnAddr < 61);
+    do { LCDG_SendData(0); } while (++columnAddr < 80);
 
     //  Chip 2
     ClearBit(PORT_LCD_CON, CS); 
@@ -34,14 +31,12 @@ void terminal__feed(void) {
     LCDG_SendCom(0xb8 + y);
     LCDG_SendCom(0);
     columnAddr = 0;
-    do { LCDG_SendData(0); } while (++columnAddr < 61);
+    do { LCDG_SendData(0); } while (++columnAddr < 80);
 }
 
 
 void terminal__putc(char c) {
     if (c == 13) {
-    }
-    else if (c == 10) {
         terminal__feed();
     }
     else {
