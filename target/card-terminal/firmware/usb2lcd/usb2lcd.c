@@ -1,4 +1,6 @@
 /*
+ Based on LUFA example SerialToLCD
+
              LUFA Library
      Copyright (C) Dean Camera, 2013.
 
@@ -106,7 +108,7 @@ int main(void)
 		while (RingBuffer_GetCount(&FromHost_Buffer) > 0)
 		{
 			int16_t byte = RingBuffer_Remove(&FromHost_Buffer);
-                        terminal__putc(byte);
+                        terminal__putc(byte == '\r' ? '\n' : byte);
 			
 		}
 

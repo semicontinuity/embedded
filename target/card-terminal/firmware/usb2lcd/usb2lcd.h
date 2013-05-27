@@ -1,4 +1,6 @@
 /*
+ Based on LUFA example SerialToLCD
+
              LUFA Library
      Copyright (C) Dean Camera, 2013.
 
@@ -49,9 +51,6 @@
         #include <LUFA/Drivers/Misc/RingBuffer.h>
         #include <LUFA/Drivers/USB/USB.h>
 		
-	/* Macros: */
-		#define COMMAND_ESCAPE     0x1B
-
     /* Function Prototypes: */
         void SetupHardware(void);
 

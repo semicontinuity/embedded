@@ -36,7 +36,7 @@ void terminal__feed(void) {
 
 
 void terminal__putc(char c) {
-    if (c == 13) {
+    if (c == 10) {
         terminal__feed();
     }
     else {
