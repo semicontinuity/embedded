@@ -23,3 +23,14 @@ uint16_t byte__parse_hex(const uint8_t* __restrict const str) {
 
     return (last_error << 8) | (x1 << 4) | x2;
 }
+
+
+inline uint8_t byte__lower_nibble_to_hex_string(uint8_t value) {
+    if (value > 9) value += ('A' - ('9' + 1));
+    return value += '0';
+}
+
+
+uint16_t byte__to_hex_string(const uint8_t value) {
+    return (byte__lower_nibble_to_hex_string(value >> 4) << 8) | byte__lower_nibble_to_hex_string(value & 0x0F);
+}
