@@ -29,44 +29,46 @@ uint8_t keypad__scancodes[] = {
 void keypad__scan_column(const uint8_t scanMask, const uint8_t column) __attribute__((noinline));
 void keypad__scan_column(const uint8_t scanMask, const uint8_t column) {
     keypad__out(scanMask);
-    _delay_loop_1(100); // small delay is necessary
+    _delay_loop_1(4); // small delay is necessary
     const uint8_t scanValue = keypad__in();
     uint8_t changedLines = (uint8_t) (scanValue ^ keypad__state[column]);
     keypad__state[column] = scanValue;        
 
     uint8_t tempScanValue = scanValue;
-    tempScanValue >>= KEYPAD__IN__PIN;
-    changedLines >>= KEYPAD__IN__PIN;
+    tempScanValue <<= (8 - (KEYPAD__IN__PIN+4));
+    changedLines <<= (8 - (KEYPAD__IN__PIN+4));
     const uint8_t scancode_column = COL(column);
-    for (uint8_t row = 0; row < 4; row++) {
-        if (changedLines & 1) {
+    int8_t row = 3;
+    for (;;) {
+        if (changedLines & 0x80) {
             uint8_t scancode = ROW(row) | scancode_column;
 #ifdef KEYPAD__ASCII_SCANCODES
             scancode = keypad__scancodes[scancode];
 #endif
 
 #ifdef KEYPAD__KEY_RELEASE_EVENTS
-            if (tempScanValue & 1) {
+            if (tempScanValue & 0x80) {
                 scancode |= KEYPAD__EVENT__FLAG__RELEASED;
             }
             keypad__on_event(scancode);
 #else
-            if (tempScanValue & 1) {
+            if (tempScanValue & 0x80) {
             }
             else {
                 keypad__on_event(scancode);
             }
 #endif                
         }
-        tempScanValue >>= 1;
-        changedLines >>= 1;
+        tempScanValue <<= 1;
+        changedLines <<= 1;
+        if (--row < 0) break;
     }
 }
 
 
 INLINE void keypad__run(void) {
-    keypad__scan_column(~(1<<(KEYPAD__OUT__PIN)), 0);
-    keypad__scan_column(~(1<<(KEYPAD__OUT__PIN+1)), 1);
-    keypad__scan_column(~(1<<(KEYPAD__OUT__PIN+2)), 2);
-    keypad__scan_column(~(1<<(KEYPAD__OUT__PIN+3)), 3);
+    keypad__scan_column((uint8_t)~(1<<(KEYPAD__OUT__PIN)), 0);
+    keypad__scan_column((uint8_t)~(1<<(KEYPAD__OUT__PIN+1)), 1);
+    keypad__scan_column((uint8_t)~(1<<(KEYPAD__OUT__PIN+2)), 2);
+    keypad__scan_column((uint8_t)~(1<<(KEYPAD__OUT__PIN+3)), 3);
 }
