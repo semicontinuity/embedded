@@ -1,7 +1,7 @@
 // Firmware
 #include "main.c"
 
-#include "drivers/keypad.c"
+#include "drivers/keypad2.c"
 
 // Library
 #include "cpu/avr/timer0.c"

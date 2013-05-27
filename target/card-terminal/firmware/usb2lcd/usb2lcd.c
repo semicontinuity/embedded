@@ -136,7 +136,7 @@ void SetupHardware(void)
         PORTD |= (1<<0);
 
         LCDG_InitPort();
-        _delay_ms(30);  // takes longer?
+        _delay_ms(30);
         LCDG_InitLcd();
         LCDG_ClrAllDisp();
 	

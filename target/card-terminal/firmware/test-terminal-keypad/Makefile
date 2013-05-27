@@ -1,6 +1,6 @@
 TARGET = test-terminal-keypad
 MCU = at90usb162
-OPT = 3 -mcall-prologues
+OPT = 1 -mcall-prologues
 ROOT = ../../../..
 BSP = ../../bsp
 
@@ -15,8 +15,9 @@ CDEFS += $(CONF)
 include $(TARGET).conf
 
 
-CDEFS += -Wl,--relax
-CDEFS += --combine -fwhole-program
+#CDEFS += -Wl,--relax
+#CDEFS += --combine -fwhole-program
+CDEFS += -fno-tree-loop-optimize -fno-unswitch-loops -finline-functions
 #CDEFS += -Wl,--section-start=.kernel=0x0001000 -Wl,--section-start=.noinit=0x008004EB  -Wl,--defsym=__stack=0x04EA
 # -Wl,--defsym=__stack=0x008002f2
 
@@ -36,7 +37,7 @@ CDEFS += -DINLINE=
 SRC += main.c
 
 # BSP
-SRC += drivers/keypad.c
+#SRC += drivers/keypad.c
 
 # Library
 SRC += cpu/avr/timer0.c

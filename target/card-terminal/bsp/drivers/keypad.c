@@ -19,10 +19,10 @@ uint8_t keypad__state[] = {0xFF, 0xFF, 0xFF, 0xFF};
 
 #ifdef KEYPAD__ASCII_SCANCODES
 uint8_t keypad__scancodes[] = {
-    '#', '0', '*', 'D',
-    '9', '8', '7', 'C',
-    '6', '5', '4', 'B',
-    '3', '2', '1', 'A'
+    '6', '9', '#', '3',
+    '5', '8', '0', '2',
+    '4', '7', '*', '1',
+    'B', 'C', 'D', 'A'
 };
 #endif
 
