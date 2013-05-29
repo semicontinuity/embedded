@@ -15,13 +15,13 @@
 
 
 // RX Filters 0-2 (uploaded as one piece)
-mcp251x_message_id mcp2515__rx__rxf0_2[3] PROGMEM = {RXF0, RXF1, RXF2};
+const mcp251x_message_id mcp2515__rx__rxf0_2[3] PROGMEM = {RXF0, RXF1, RXF2};
 
 // RX Filters 3-5 (uploaded as one piece)
-mcp251x_message_id mcp2515__rx__rxf3_5[3] PROGMEM = {RXF3, RXF4, RXF5};
+const mcp251x_message_id mcp2515__rx__rxf3_5[3] PROGMEM = {RXF3, RXF4, RXF5};
 
 // RX Masks 0 and 1 (uploaded as one piece)
-mcp251x_message_id mcp2515__rx__rxm0_1[2] PROGMEM = {RXM0, RXM1};
+const mcp251x_message_id mcp2515__rx__rxm0_1[2] PROGMEM = {RXM0, RXM1};
 
 
 /**

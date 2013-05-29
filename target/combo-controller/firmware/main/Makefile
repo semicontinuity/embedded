@@ -1,4 +1,5 @@
 TARGET = main
+TARGET_CONF ?= $(TARGET).conf
 MCU = atmega16
 OPT = 3 -mcall-prologues
 ROOT = ../../../..
@@ -8,11 +9,16 @@ CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)
 
+include $(TARGET_CONF)
 
 CAN_EMU = 0
-CDEFS += -Wl,--relax
-CDEFS += --combine -fwhole-program
-CDEFS += -Wl,--section-start=.kernel=0x0001000 -Wl,--section-start=.noinit=0x008004EB  -Wl,--defsym=__stack=0x04EA
+CDEFS += -Wl,--relax 
+CDEFS += -fwhole-program
+#CDEFS += --combine -fwhole-program
+CDEFS += -fno-tree-loop-optimize -fno-unswitch-loops -finline-functions
+CDEFS += -Wl,--section-start=.kernel=0x0001000 
+CDEFS += -Wl,--section-start=.descriptor__address=$(DESCRIPTOR__ADDRESS)
+CDEFS += -Wl,--section-start=.noinit=0x008004EB  -Wl,--defsym=__stack=0x04EA
 # -Wl,--defsym=__stack=0x008002f2
 
 # Configuration
@@ -48,7 +54,7 @@ CDEFS += -DINLINE=
 SRC += main.c
 SRC += kernel.c
 SRC += $(CAN_SERVICE_C)
-SRC += comm_service__descriptor_memory.c
+SRC += descriptor.c
 SRC += comm_service.c
 # ifdef CONSOLE_SERVICE
 #SRC += console_service.c

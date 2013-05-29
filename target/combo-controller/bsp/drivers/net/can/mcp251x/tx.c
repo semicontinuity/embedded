@@ -10,10 +10,10 @@
 #include "mcp251x__tx__conf.h"
 
 // TX Buffer 1 Header
-mcp251x_frame_header mcp2515__tx__txb1_h PROGMEM = TXB1H;
+const mcp251x_frame_header mcp2515__tx__txb1_h PROGMEM = TXB1H;
 
 // TX Buffer 2 Header
-mcp251x_frame_header mcp2515__tx__txb2_h PROGMEM = TXB2H;
+const mcp251x_frame_header mcp2515__tx__txb2_h PROGMEM = TXB2H;
 
 
 /**

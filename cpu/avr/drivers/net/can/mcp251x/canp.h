@@ -14,6 +14,7 @@
 #define __CPU__AVR__DRIVERS__NET__MCP251X__CANP_H
 
 #include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
+#include <stdint.h>
 
 
 #define CANP_RESPONSE_HEADER_SIZE       (2)
@@ -69,6 +70,8 @@
 #define CANP_HOST_ADDR_BITS(id)         ((id).eid8 & CANP_SIDL_MASK_HOST_ADDR)
 #define CANP_SLOT_BITS(id)              ((id).eid0)
 
+#define CANP_TAG_BITS_FP(fp)            (*((uint8_t*)(fp)) & CANP_SIDH_MASK_TAG)
+#define CANP_SLOT_BITS_FP(fp)           (*((uint8_t*)(fp) + 3))
 
 // Macros for mcp251x_message structures
 // -----------------------------------------------------------------------------

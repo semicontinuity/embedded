@@ -8,7 +8,7 @@
 
 #include <stdint.h>
 #include "kernel.h"
-#include "kernel__handler__spi.h"
+#include "kernel__handler.h"
 #include "kernel__admin.h"
 #include "cpu/avr/drivers/net/can/mcp251x/canp.h"
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"

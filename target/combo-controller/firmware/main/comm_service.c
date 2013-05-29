@@ -6,8 +6,7 @@
 
 #include <stdint.h>
 #include "kernel.h"
-#include "kernel__handler__spi.h"
-#include "comm_service__descriptor_memory.h"
+#include "kernel__handler.h"
 #include "comm_service__endpoint__alarm__auth.h"
 #include "comm_service__endpoint__alarm__state.h"
 #include "comm_service__endpoint__io.h"

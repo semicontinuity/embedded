@@ -1,3 +1,15 @@
+// Kernel
+// -----------------------------------------------------------------------------
+#include "cpu/avr/drivers/net/can/mcp251x/operations.c"
+#include "drivers/net/can/mcp251x/rx.c"
+#include "drivers/net/can/mcp251x/tx.c"
+#include "drivers/net/can/mcp251x/int_handler.c"
+#include "cpu/avr/int0.c"
+#include "kernel.c"
+
+// Application
+// -----------------------------------------------------------------------------
+
 //#if defined(CPU_AVR_UTIL_DEBUG)
 # include "cpu/avr/util/debug.c"
 //#endif
@@ -9,9 +21,6 @@
 
 
 // BSP
-#include "drivers/net/can/mcp251x/rx.c"
-#include "drivers/net/can/mcp251x/tx.c"
-#include "drivers/net/can/mcp251x/int_handler.c"
 
 #include "services/seconds_timer.c"
 #include "motion_sensors_scanner.c"
@@ -19,15 +28,10 @@
 
 // Library
 #include "cpu/avr/timer2.c"
-#ifndef CAN_EMU
-#  include "cpu/avr/int0.c"
-#endif
-#include "cpu/avr/drivers/net/can/mcp251x/operations.c"
 
 
 // Firmware
-#include "kernel.c"
-#include "comm_service__descriptor_memory.c"
+#include "descriptor.c"
 #include "comm_service.c"
 
 #include "services/alarm.c"

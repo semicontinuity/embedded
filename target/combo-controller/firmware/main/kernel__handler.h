@@ -1,5 +1,5 @@
-#ifndef __KERNEL__HANDLER__SPI_H
-#define __kERNEL__HANDLER__SPI_H
+#ifndef __KERNEL__HANDLER_H
+#define __kERNEL__HANDLER_H
 
 #include <stdint.h>
 

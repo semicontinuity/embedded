@@ -1,7 +1,13 @@
 #ifndef __CPU__AVR__ASM_H
 #define __CPU__AVR__ASM_H
 
-#define FIX_POINTER(_ptr) __asm__ __volatile__("" : "=b" (_ptr) : "0" (_ptr))
+#define FIX_POINTER(_ptr)               __asm__ __volatile__("" : "=b" (_ptr) : "0" (_ptr))
+#define FIX_POINTER_XYZ(_ptr)           __asm__ __volatile__("" : "=e" (_ptr) : "0" (_ptr))
+#define FIX_POINTER_X(_ptr)             __asm__ __volatile__("" : "=x" (_ptr) : "0" (_ptr))
+#define FIX_POINTER_Y(_ptr)             __asm__ __volatile__("" : "=y" (_ptr) : "0" (_ptr))
+#define FIX_POINTER_Z(_ptr)             __asm__ __volatile__("" : "=z" (_ptr) : "0" (_ptr))
+
+#define POINTER_X(_ptr)                 __asm__ __volatile__("" : "=x" (_ptr) : "0" (_ptr))
 
 // =============================================================================
 // Macros for some of the instructions from the AVR instruction set.
@@ -262,6 +268,19 @@
     __asm__                     \
     (                           \
         "lpm %0, Z+" "\n\t"     \
+        : "=r" (__result),      \
+          "+z" (addr)           \
+    );                          \
+    __result;                   \
+}))
+
+#define __LPM_word__(addr)      \
+(__extension__({                \
+    uint16_t __result;          \
+    __asm__                     \
+    (                           \
+        "lpm %A0, Z+" "\n\t"    \
+        "lpm %B0, Z+" "\n\t"    \
         : "=r" (__result),      \
           "+z" (addr)           \
     );                          \
