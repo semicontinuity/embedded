@@ -1,0 +1,49 @@
+Testing the board in console
+================================================================================
+
+Read PHLCON PHY register (0x14):
+--------------------------------------------------------------------------------
+Input: p14?
+Output: 14=3422 (default value)
+
+
+Set mode for LEDA and LEDB (1):
+--------------------------------------------------------------------------------
+Input: p14=3AB2
+Result: LEDA mode = Blink fast, LEDB mode = blink slow
+
+
+Set mode for LEDA and LEDB (2):
+--------------------------------------------------------------------------------
+Input: p14=3892
+Result: LEDA mode = on, LEDB mode = off
+
+
+Set mode for LEDA and LEDB (3):
+--------------------------------------------------------------------------------
+Input: p14=3982
+Result: LEDA mode = off, LEDB mode = on
+
+
+Set mode for LEDA and LEDB (3):
+--------------------------------------------------------------------------------
+Input: p14=0452
+Result: LEDA mode = link status, LEDB mode = duplex status
+
+
+Read PHSTAT2 PHY register (0x11):
+--------------------------------------------------------------------------------
+Input: p11?
+Output: 11=0200
+0200 = full duplex,
+0400 = link up
+
+
+Read PHSTAT1 PHY register (0x01):
+--------------------------------------------------------------------------------
+Input: p01?
+Output: 01=1800
+1000 = full duplex capable
+0800 = half duplex capable
+
+

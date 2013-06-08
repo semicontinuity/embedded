@@ -1,12 +1,15 @@
 TARGET = test
-MCU = atmega8
-OPT = 3 -mcall-prologues
+MCU = atmega328p
+OPT = 2 -mcall-prologues
 ROOT = ../../../..
 BSP = ../../bsp/
 
+CINCS += -I.
 CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
-vpath %.c $(BSP) $(ROOT)
+CINCS += -Idrivers/sdkarte
+
+vpath %.c . $(BSP) $(ROOT)
 
 # Configuration
 CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
@@ -17,14 +20,19 @@ CDEFS += -DINLINE=
 
 # Firmware
 SRC += main.c
-SRC += console_service.c
-SRC += parse.c
+SRC += services/console.c
+SRC += util/hex.c
 
+SRC += drivers/net/enc28j60.c
 # Library
 SRC += cpu/avr/util/debug.c
 
 
-CDEFS += -Ddebug__putc=usart0__out__write
-
+SRC += drivers/sdkarte/fat16.c
+SRC += drivers/sdkarte/partition.c
+SRC += drivers/sdkarte/sd.c
+SRC += drivers/sdkarte/sd_raw.c
+SRC += drivers/sdkarte/sdcard.c
+SRC += drivers/sdkarte/spi.c
 
 include $(ROOT)/cpu/avr/Makefile
