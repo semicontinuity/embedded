@@ -34,9 +34,11 @@
 #if defined(__AVR_ATmega48__)\
  || defined(__AVR_ATmega88__)\
  || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega328__)\
  || defined(__AVR_ATmega48P__)\
  || defined(__AVR_ATmega88P__)\
- || defined(__AVR_ATmega168P__)
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)
 
 #define USART0_CONF_REGA(v)             (((v) & 0xFF) << 0)
 #define USART0_CONF_REGB(v)             (((v) & 0xFF) << 8)
@@ -103,9 +105,14 @@ inline void usart0__switch_conf(const uint32_t old_conf, const uint32_t new_conf
 
 
 
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
-    defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
-
+#if defined(__AVR_ATmega48__)\
+ || defined(__AVR_ATmega88__)\
+ || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega328__)\
+ || defined(__AVR_ATmega48P__)\
+ || defined(__AVR_ATmega88P__)\
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)
 
 #define usart0__rx__complete_interrupt__VECTOR                    (USART_RX_vect)
 
@@ -139,8 +146,14 @@ inline uint16_t UBRR_VALUE(uint32_t rate) {
 }
 
 
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
-    defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
+#if defined(__AVR_ATmega48__)\
+ || defined(__AVR_ATmega88__)\
+ || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega328__)\
+ || defined(__AVR_ATmega48P__)\
+ || defined(__AVR_ATmega88P__)\
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)
 
 inline void usart0__divisor__set(const uint16_t divisor) {
     UBRR0H = (uint8_t)(divisor>>8);
@@ -185,8 +198,14 @@ inline void usart0__rate__set(uint32_t rate) {
 
 inline void usart0__init(void) {
 //           Asynch UART               No parity             1 stopbit  8 bit(+reg B)   polarity
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
-    defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
+#if defined(__AVR_ATmega48__)\
+ || defined(__AVR_ATmega88__)\
+ || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega328__)\
+ || defined(__AVR_ATmega48P__)\
+ || defined(__AVR_ATmega88P__)\
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)
 //  UMSEL=00	Asynch UART
 //  UPM=00	No Parity
 //  USBS=0	1 stop bit
@@ -206,8 +225,14 @@ inline void usart0__init(void) {
 // =============================================================================
 
 inline void usart0__in__enabled__set(void) {
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
-    defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
+#if defined(__AVR_ATmega48__)\
+ || defined(__AVR_ATmega88__)\
+ || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega328__)\
+ || defined(__AVR_ATmega48P__)\
+ || defined(__AVR_ATmega88P__)\
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)
     set_bit_in_reg(UCSR0B, RXEN0);
 #elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     set_bit_in_reg(UCSRB, RXEN);
@@ -222,8 +247,14 @@ inline void usart0__in__enabled__set(void) {
 // =============================================================================
 
 inline char usart0__in__peek(void) {
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
-    defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
+#if defined(__AVR_ATmega48__)\
+ || defined(__AVR_ATmega88__)\
+ || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega328__)\
+ || defined(__AVR_ATmega48P__)\
+ || defined(__AVR_ATmega88P__)\
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)
     return UDR0;
 #elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     return UDR;
@@ -238,8 +269,14 @@ inline char usart0__in__peek(void) {
 // =============================================================================
 
 inline void usart0__in__complete_interrupt_enabled__set(void) {
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
-    defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
+#if defined(__AVR_ATmega48__)\
+ || defined(__AVR_ATmega88__)\
+ || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega328__)\
+ || defined(__AVR_ATmega48P__)\
+ || defined(__AVR_ATmega88P__)\
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)
     set_bit_in_reg(UCSR0B, RXCIE0);
 #elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     set_bit_in_reg(UCSRB, RXCIE);
@@ -254,8 +291,14 @@ inline void usart0__in__complete_interrupt_enabled__set(void) {
 // =============================================================================
 
 inline void usart0__out__enabled__set(void) {
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) || defined(__AVR_ATmega168__) || \
-    defined(__AVR_ATmega48P__) || defined(__AVR_ATmega88P__) || defined(__AVR_ATmega168P__)
+#if defined(__AVR_ATmega48__)\
+ || defined(__AVR_ATmega88__)\
+ || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega328__)\
+ || defined(__AVR_ATmega48P__)\
+ || defined(__AVR_ATmega88P__)\
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)
     set_bit_in_reg(UCSR0B, TXEN0);
 #elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     set_bit_in_reg(UCSRB, TXEN);
