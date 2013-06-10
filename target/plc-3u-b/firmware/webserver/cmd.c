@@ -336,6 +336,21 @@ void command_help (void)
 
 
 
+//Read all IP-Datas
+void read_ip_addresses (void)
+{
+	(*((unsigned long*)&myip[0]))      = get_eeprom_value(IP_EEPROM_STORE,MYIP);
+	(*((unsigned long*)&netmask[0]))   = get_eeprom_value(NETMASK_EEPROM_STORE,NETMASK);
+	(*((unsigned long*)&router_ip[0])) = get_eeprom_value(ROUTER_IP_EEPROM_STORE,ROUTER_IP);
+	//Broadcast-Adresse berechnen
+	(*((unsigned long*)&broadcast_ip[0])) = (((*((unsigned long*)&myip[0])) & (*((unsigned long*)&netmask[0]))) | (~(*((unsigned long*)&netmask[0]))));
+   
+	#if USE_DNS
+	//DNS-Server IP aus EEPROM auslesen
+	(*((unsigned long*)&dns_server_ip[0])) = get_eeprom_value(DNS_IP_EEPROM_STORE,DNS_IP);
+	#endif
+
+}
 
 
 

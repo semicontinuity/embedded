@@ -47,6 +47,8 @@
 	
 	extern unsigned char extract_cmd (char *);
 	extern void write_eeprom_ip (unsigned int);
+
+    extern void read_ip_addresses (void);;
 	
 	//reset the unit
 	extern void command_reset		(void);

@@ -89,6 +89,10 @@
 	#include "rc5/rc5.h"
 #endif
 
+#if USE_DHCP
+#include "dhcpc.h"
+#endif
+
 //#include "messung.h"
 
 /**
@@ -290,6 +294,19 @@ int main(void)
 #if USE_DNS
 		dns_init();
 #endif
+
+    #if USE_DHCP
+    dhcp_init();
+    if ( dhcp() == 0)
+    {
+//        save_ip_addresses();
+    }
+    else
+    {
+        usart_write("DHCP fail\r\n");
+        read_ip_addresses(); //get from EEPROM
+    }
+    #endif //USE_DHCP
 
 
 #if USE_NTP
