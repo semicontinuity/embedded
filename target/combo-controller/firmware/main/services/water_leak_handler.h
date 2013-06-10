@@ -15,10 +15,9 @@
 #include "drivers/out/siren1.h"
 #include "flags/notifications_pending__siren1.h"
 #include "flags/notifications_pending.h"
-#include "flags/notifications_pending__water_valve.h"
-#include "flags/notifications_pending.h"
 
 #include "services/water_leak_handler__timer.h"
+#include "endpoints/emergency__water_actuators__0.h"
 
 #include <stdbool.h>
 #include <avr/eeprom.h>
@@ -48,9 +47,8 @@ inline void water_leak_handler__sound__set(const bool on) {
 }
 
 inline void water_leak_handler__water_valve__set(const bool on) {
-    if (on) water_valve__on(); else water_valve__off();
-    notifications_pending__water_valve__set(1);
-    notifications_pending__set(1);
+    water_valve__set(on);
+    emergency__water_actuators__0__broadcast();
 }
 
 

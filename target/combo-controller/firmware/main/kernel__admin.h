@@ -5,22 +5,22 @@
 #include "cpu/avr/asm.h"
 #include "cpu/avr/eeprom.h"
 #include "cpu/avr/flash.h"
-#include "cpu/avr/drivers/net/can/mcp251x/canp.h"
+#include "cpu/avr/drivers/net/can/mcp251x/ucan.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
 
 #include "descriptor.h"
 
 
-#define CANP_REPORT__ADMIN          0xF8
+#define UCAN__PID__ADMIN          0xF8
 
-#define CANP_REPORT__MEMORY_READ    0xF8
-#define CANP_REPORT__MEMORY_WRITE   0xF9
-#define CANP_REPORT__EEPROM_READ    0xFA
-#define CANP_REPORT__EEPROM_WRITE   0xFB
-#define CANP_REPORT__FLASH_READ     0xFC
-#define CANP_REPORT__FLASH_WRITE    0xFD
-#define CANP_REPORT__AUTH           0xFE
-#define CANP_REPORT__MODE           0xFF
+#define UCAN__PID__MEMORY_READ    0xF8
+#define UCAN__PID__MEMORY_WRITE   0xF9
+#define UCAN__PID__EEPROM_READ    0xFA
+#define UCAN__PID__EEPROM_WRITE   0xFB
+#define UCAN__PID__FLASH_READ     0xFC
+#define UCAN__PID__FLASH_WRITE    0xFD
+#define UCAN__PID__AUTH           0xFE
+#define UCAN__PID__MODE           0xFF
 
 
 /**
@@ -34,8 +34,8 @@ static inline void kernel__admin__handle(void) {
     uint8_t* data = frame->data;
     uint16_t* wdata = (uint16_t*)(frame->data);
 
-    switch (CANP_SLOT_BITS_FP(frame)) {
-    case CANP_REPORT__MEMORY_READ:
+    switch (UCAN_PORT_BITS_FP(frame)) {
+    case UCAN__PID__MEMORY_READ:
         // Read data from memory (4 bytes).
         // Frame format:
         // TAG: memory id (0: kernel__status, 1: RAM)
@@ -49,7 +49,7 @@ static inline void kernel__admin__handle(void) {
 
             if (!(a2 | a3)) {
                 if (length == 4) {
-                    uint8_t* ptr = CANP_TAG_BITS_FP(frame) ? 0 : (uint8_t*)&kernel__status;
+                    uint8_t* ptr = UCAN_OBJ_ID(frame->header.id) ? 0 : (uint8_t*)&kernel__status;
                     ptr += w0;
 
                     do { *data++ = *ptr++; } while (--length);
@@ -58,7 +58,7 @@ static inline void kernel__admin__handle(void) {
             }
         }
         break;
-    case CANP_REPORT__MEMORY_WRITE:
+    case UCAN__PID__MEMORY_WRITE:
         // Write data to memory.
         // Frame format:
         // TAG: memory id (0: kernel__status, 1: RAM)
@@ -72,14 +72,14 @@ static inline void kernel__admin__handle(void) {
 
             if (!(a2 | a3)) {
                 if (length -= 4) {
-                    uint8_t* ptr = CANP_TAG_BITS_FP(frame) ? 0 : (uint8_t*)&kernel__status;
+                    uint8_t* ptr = UCAN_OBJ_ID(frame->header.id) ? 0 : (uint8_t*)&kernel__status;
                     ptr += w0;
                     do { *ptr++ = *data++; } while (--length);
                 }
             }
         }
         break;
-    case CANP_REPORT__EEPROM_READ:
+    case UCAN__PID__EEPROM_READ:
         // Read 4 bytes of EEPROM memory, given the address in data[0..3]
         {
             uint8_t length = frame->header.dlc;
@@ -95,7 +95,7 @@ static inline void kernel__admin__handle(void) {
             }
         }
         break;
-    case CANP_REPORT__EEPROM_WRITE:
+    case UCAN__PID__EEPROM_WRITE:
         // Write 1..4 bytes of EEPROM memory, given the address in data[0..3]
         // Can take a long time to disrupt the device operation,
         // so write EEPROM only when the device is not performing any time-critical tasks.
@@ -112,7 +112,7 @@ static inline void kernel__admin__handle(void) {
             }
         }
         break;
-    case CANP_REPORT__FLASH_READ:
+    case UCAN__PID__FLASH_READ:
         {
             // Read 32 bits of memory, given the address in data[0..3]
             uint8_t length = frame->header.dlc;
@@ -122,7 +122,7 @@ static inline void kernel__admin__handle(void) {
 
             if (!(a2 | a3)) {
                 if (length == 4) {
-                    if (!CANP_TAG_BITS_FP(frame)) {
+                    if (!UCAN_OBJ_ID(frame->header.id)) {
                         uint16_t offset_address = DESCRIPTOR__ADDRESS;
                         uint16_t offset = __LPM_word__(offset_address);
                         w0 += offset;
@@ -136,7 +136,7 @@ static inline void kernel__admin__handle(void) {
             }
         }
         break;
-    case CANP_REPORT__FLASH_WRITE:
+    case UCAN__PID__FLASH_WRITE:
         // Flash programming
         // Data format:
         // [0..1] address -> Z
@@ -166,9 +166,9 @@ static inline void kernel__admin__handle(void) {
             }
         }
         break;
-    case CANP_REPORT__AUTH:
+    case UCAN__PID__AUTH:
         break;
-    case CANP_REPORT__MODE:
+    case UCAN__PID__MODE:
         // DLC and value not checked.
         kernel__mode__set(kernel__frame.data[0]);
         // Executed in context of the interrupt, so interrupts are disabled. Safe to perform soft reset.

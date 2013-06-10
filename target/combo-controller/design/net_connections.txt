@@ -1,0 +1,51 @@
+Parameter family EMERGENCY (0x00)
+    Port FIRE__SENSORS (0x00)
+        Incoming VALUE messages contain state of fire/smoke sensors
+    Port GAS__SENSORS (0x01)
+        Incoming VALUE messages contain the state of gas sensors
+    Port WATER__SENSORS (0x02)
+        Incoming VALUE messages contain the state of water leak sensors
+    Port WATER__ACTUATORS (0x06)
+        Incoming GET requests: requests for the state of water valves
+        Incoming POST requests: requests to change the state of water valves
+        Outgoing VALUE messages contain the state of water valves
+
+Parameter family PRESENCE (0x10)
+    Port PRESENCE__MOTION_SENSORS (0x10)
+        Incoming VALUE messages contain state of motion sensors
+        Incoming GET requests: requests for the state of motion sensors
+        Outgoing VALUE messages contain the state of motion sensors
+    Port PRESENCE__DOOR_SENSORS (0x11)
+        Incoming VALUE messages contain state of door sensors
+    Port PRESENCE__WINDOW_SENSORS (0x12)
+        Incoming VALUE messages contain state of window sensors
+    Port PRESENCE__WINDOW_BREAK_SENSORS (0x13)
+        Incoming VALUE messages contain state of window break sensors
+
+Parameter family SECURITY (0x20)
+    Port SECURITY__AUTH (0x20)
+        Incoming GET requests: requests for the auth token (password)
+        Outgoing VALUE messages contain the auth token (password)
+    Port SECURITY__STATE (0x21)
+        Incoming GET requests: requests for the security state
+        Outgoing VALUE messages contain the security state
+
+Parameter family COMM (0x80)
+    Port COMM__BINARY (0x80)
+        Incoming GET requests: requests for the state of sirens
+        Incoming POST requests to change the state of sirens
+        Outgoing VALUE messages contain the state of sirens
+    Port COMM__ENUM (0x81)
+        Incoming POST messages with the number of pre-defined SMS message
+        Outgoing POST messages with the number of pre-defined SMS message
+    Port COMM__STREAM (0x82)
+        Incoming POST messages with stream data to be sent to mobile phone via USART
+        Outgoing POST messages with stream data received from mobile phone via USART
+
+Parameter family MEDIA (0x90)
+    Port MEDIA__AMPLIFIER (0x90)
+        Incoming GET requests: requests for the state of the amplier relay
+        Incoming POST requests to change the state of the amplier relay
+        Outgoing VALUE messages contain the state of the amplier relay
+
+Parameter family SYSTEM (0xF0)

@@ -6,16 +6,32 @@
 #define __DRIVERS__OUT__WATER_VALVE_H
 
 #include <stdbool.h>
+#include <stdint.h>
 #include "cpu/avr/gpio.h"
 
 
+extern uint8_t water_valve__state;
+
+
+inline void water_valve__set(const uint8_t value) {
+    water_valve__state = value;
+    if (value)
+        OUT_1(OUT__WATER_VALVE);
+    else
+        OUT_0(OUT__WATER_VALVE);
+}
 
 inline void water_valve__on(void) {
-    OUT_1(OUT__WATER_VALVE);
+    water_valve__set(1);
 }
 
 inline void water_valve__off(void) {
-    OUT_0(OUT__WATER_VALVE);
+    water_valve__set(0);
+}
+
+
+inline uint8_t water_valve__get(void) {
+    return water_valve__state;
 }
 
 inline bool water_valve__is_on(void) {

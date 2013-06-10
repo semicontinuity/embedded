@@ -31,7 +31,7 @@
 // ----------------------------------------------------------
 
 // .sidh (destination address)
-#define UCAN_SIDH_MASK_DEST_ADDR        (0xFF)
+#define UCAN_SIDH_MASK_DST              (0xFF)
 
 // .sidl (object id + flags)
 #define UCAN_SIDL_MASK_OBJ_ID           (0xE0)
@@ -40,7 +40,7 @@
 #define UCAN_SIDL_MASK_MCAST            (0x01)
 
 // .eid8 
-#define UCAN_EID8_MASK_SRC_ADDR         (0xFF)
+#define UCAN_EID8_MASK_SRC              (0xFF)
 
 // .eid0
 #define UCAN_EID0_MASK_PORT             (0xFF)
@@ -51,12 +51,16 @@
 
 // Macros for extraction of bits of the individual fields
 // -----------------------------------------------------------------------------
-#define UCAN_OBJ_ID_BITS(id)            ((id).sidl & UCAN_SIDL_MASK_DEST_ADDR_EXT)
+#define UCAN_OBJ_ID_BITS(id)            ((id).sidl & UCAN_SIDL_MASK_OBJ_ID)
 #define UCAN_PARAM_BITS(id)             ((id).sidl & UCAN_SIDL_MASK_PARAM)
 #define UCAN_MCAST_BITS(id)             ((id).sidl & UCAN_SIDL_MASK_MCAST)
-#define UCAN_SRC_ADDR_BITS(id)          ((id).eid8 & UCAN_EID8_MASK_SRC_ADDR)
+#define UCAN_SRC_ADDR_BITS(id)          ((id).eid8 & UCAN_EID8_MASK_SRC)
 #define UCAN_PORT_BITS(id)              ((id).eid0)
 
+#define UCAN_SET_SRC(id, src)           ((id).eid8 = (src))
+
+#define UCAN_PORT_BITS_FP(fp)           (*((uint8_t*)(fp) + 3))
+#define UCAN_OBJ_ID(id)                 (UCAN_OBJ_ID_BITS(id) >> 5)
 
 // Macros for mcp251x_message structures
 // -----------------------------------------------------------------------------
@@ -80,7 +84,7 @@
 // +-+-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+ +-+-+-+-+-+-+-+-+
 // |dest address   | |objid|     |P|M| | src address   | | port          |
 // +-----+---------+ +-----+     +-+-+ +-----+---------+ +---------------+
-#define UCAN_HEADER(exide, dest_addr, src_addr, port, param, mcast, obj_id) {                   \
+#define UCAN_HEADER(exide, dest_addr, obj_id, src_addr, port, param, mcast) {                   \
   .sidh=(uint8_t) ((dest_addr)),                                                                \
   .sidl=(uint8_t) (((obj_id) << 5) | ((exide) << 3) | ((param) << 1) | ((mcast) << 0)),	        \
   .eid8=(uint8_t) ((src_addr)),                                                                 \
@@ -93,26 +97,28 @@
 // Compare message bits with filter bits only when mask bit is 1.
 // -----------------------------------------------------------------------------
 
-#define UCAN_MASK(dest_addr, src_addr, port, param, mcast, obj_id)              \
-        UCAN_HEADER(0, dest_addr, src_addr, port, param, mcast, obj_id)
+#define UCAN_MASK(dest_addr, obj_id, src_addr, port, param, mcast)              \
+        UCAN_HEADER(0, dest_addr, obj_id, src_addr, port, param, mcast)
 
 // filter is applied only to standard frames
-#define UCAN_FILT_STD(dest_addr, src_addr, port, param, mcast, obj_id)          \
-        UCAN_HEADER(0, dest_addr, src_addr, port, param, mcast, obj_id)
+#define UCAN_FILT_STD(dest_addr, obj_id, src_addr, port, param, mcast)          \
+        UCAN_HEADER(0, dest_addr, obj_id, src_addr, port, param, mcast)
 
 // filter is applied only to extended frames
-#define UCAN_FILT_EXT(dest_addr, src_addr, port, param, mcast, obj_id)          \
-        UCAN_HEADER(0, dest_addr, src_addr, port, param, mcast, obj_id)
+#define UCAN_FILT_EXT(dest_addr, obj_id, src_addr, port, param, mcast)          \
+        UCAN_HEADER(1, dest_addr, obj_id, src_addr, port, param, mcast)
 
 
-#define UCAN_COMPARE_DEST_ADDR		(UCAN_EID8_MASK_SRC_ADDR)
-#define UCAN_COMPARE_SRC_ADDR		(UCAN_EID8_MASK_SRC_ADDR)
-#define UCAN_COMPARE_PARAM              (UCAN_SIDL_MASK_PARAM)
-#define UCAN_COMPARE_MCAST              (UCAN_SIDL_MASK_MCASST)
-#define UCAN_COMPARE_PORT               (UCAN_EID0_MASK_PORT)
+#define UCAN_COMPARE_DST        (0xFF)
+#define UCAN_COMPARE_OID        (0x07)
+#define UCAN_COMPARE_SRC        (0xFF)
+#define UCAN_COMPARE_PARAM      (0x01)
+#define UCAN_COMPARE_MCAST      (0x01)
+#define UCAN_COMPARE_PORT       (0xFF)
+#define UCAN_COMPARE_PF         (0xF0)
 
-#define UCAN_DONT_COMPARE               (0x00)
-#define UCAN_DONT_CARE                  (0x00)
+#define UCAN_DONT_COMPARE       (0x00)
+#define UCAN_DONT_CARE          (0x00)
 
 
 #endif

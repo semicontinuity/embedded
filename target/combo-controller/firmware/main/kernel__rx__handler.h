@@ -10,7 +10,7 @@
 #include "kernel.h"
 #include "kernel__handler.h"
 #include "kernel__admin.h"
-#include "cpu/avr/drivers/net/can/mcp251x/canp.h"
+#include "cpu/avr/drivers/net/can/mcp251x/ucan.h"
 #include "cpu/avr/drivers/net/can/mcp251x/instructions.h"
 
 
@@ -19,10 +19,10 @@
  * The code must be consistent with CAN masks and filters.
  */
 static inline void kernel__rx__handle(const uint8_t filter) {
-    const uint8_t message_type = CANP_MSG_TYPE(kernel__frame.header);
+    const uint8_t message_type = UCAN_MSG_TYPE(kernel__frame.header);
 
-    if (CANP_SLOT_BITS(kernel__frame.header.id) >= CANP_REPORT__ADMIN) {
-        if (message_type == CANP_MSG_TYPE_POST) {
+    if (UCAN_PORT_BITS(kernel__frame.header.id) >= UCAN__PF__SYSTEM) {
+        if (message_type == UCAN_MSG_TYPE_POST) {
             kernel__admin__handle();
         }
     }

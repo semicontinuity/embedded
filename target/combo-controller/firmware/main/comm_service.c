@@ -7,10 +7,13 @@
 #include <stdint.h>
 #include "kernel.h"
 #include "kernel__handler.h"
-#include "comm_service__endpoint__alarm__auth.h"
-#include "comm_service__endpoint__alarm__state.h"
-#include "comm_service__endpoint__io.h"
-#include "comm_service__endpoint__sensors.h"
+
+#include "endpoints/alarm__auth.h"
+#include "endpoints/alarm__state.h"
+#include "endpoints/presense__motion_sensors__0.h"
+#include "endpoints/emergency__water_actuators__0.h"
+#include "endpoints/emergency__water_sensors__0.h"
+#include "endpoints/media__amplifier__0.h"
 
 
 /**
@@ -18,25 +21,42 @@
  * The code must be consistent with CAN masks and filters.
  */
 void comm_service__handle(const uint8_t event, const uint8_t message_type) {
-    if (event <= CANP_FILTER__BROADCAST) {
+    if (event < UCAN_FILTER__SYSTEM) {
         // Received frame into RXB0 or RXB1
-        const uint8_t report = CANP_SLOT_BITS(kernel__frame.header.id);
+        const uint8_t report = UCAN_PORT_BITS(kernel__frame.header.id);
 
-        if (report >= CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE && report <= CANP_REPORT__SIREN2__VALUE) {
-            comm_service__endpoint__io__handle_output(message_type, report);
+        if (report == UCAN__PID__EMERGENCY__WATER_SENSORS) {
+            if (message_type == UCAN_MSG_TYPE_GET)
+                emergency__water_sensors__0__broadcast();
         }
-        else if (report == CANP_REPORT__WATER_LEAK_SENSORS_SCANNER__VALUE || report == CANP_REPORT__MOTION_SENSORS_SCANNER__VALUE) {
-            comm_service__endpoint__io__handle_input(message_type, report);
+        else if (report == UCAN__PID__EMERGENCY__WATER_ACTUATORS) {
+            if (message_type == UCAN_MSG_TYPE_GET)
+                emergency__water_actuators__0__broadcast();
+            else
+                emergency__water_actuators__0__set_data(kernel__frame.data);
         }
-        else if (report == CANP_REPORT__ALARM__AUTH) {
-            comm_service__endpoint__alarm__auth__handle(message_type);
+        else if (report == UCAN__PID__PRESENCE__MOTION_SENSORS) {
+            if (message_type == UCAN_MSG_TYPE_GET)
+                presense__motion_sensors__0__broadcast();
+            else if (message_type == UCAN_MSG_TYPE_VALUE)
+                presense__motion_sensors__0__handle(kernel__frame.data);
         }
-        else if (report == CANP_REPORT__ALARM__STATE) {
-            comm_service__endpoint__alarm__state__handle(message_type);
+        else if (report == UCAN__PID__SECURITY__AUTH) {
+            if (message_type == UCAN_MSG_TYPE_GET)
+                alarm__auth__broadcast();
         }
-    }
-    else if (event == CANP_REPORT__SENSORS__STATE && message_type == CANP_MSG_TYPE_VALUE) {
-        comm_service__endpoint__sensors__handle_value();
+        else if (report == UCAN__PID__SECURITY__STATE) {
+            if (message_type == UCAN_MSG_TYPE_GET)
+                alarm__state__broadcast();
+            else if (message_type == UCAN_MSG_TYPE_POST)
+                alarm__state__set_data(kernel__frame.data);
+        }
+        else if (report == UCAN__PID__MEDIA__AMPLIFIER) {
+            if (message_type == UCAN_MSG_TYPE_GET)
+                media__amplifier__0__broadcast();
+            else if (message_type == UCAN_MSG_TYPE_VALUE)
+                media__amplifier__0__set_data(kernel__frame.data);
+        }
     }
 #if defined(mcp2515__tx__txb1__available__HOST) && defined(mcp2515__tx__txb1__available__BIT)
     else if (event == KERNEL__EVENT__TX1_COMPLETE) {

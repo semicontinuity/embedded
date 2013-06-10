@@ -2,21 +2,17 @@
 #define __COMM_SERVICE__NOTIFICATIONS__1_H
 
 #include "kernel.h"
-//#include "cpu/avr/asm.h"
 
-#include "water_leak_sensors_scanner.h"
-
-#include "drivers/out/water_valve.h"
-#include "drivers/out/amplifier_relay.h"
 #include "drivers/out/siren1.h"
 #include "drivers/out/siren2.h"
 
 #include "flags/notifications_pending.h"
-#include "flags/notifications_pending__amplifier_relay.h"
+#include "flags/notifications_pending__media__amplifier__0.h"
 #include "flags/notifications_pending__siren1.h"
 #include "flags/notifications_pending__siren2.h"
-#include "flags/notifications_pending__water_valve.h"
-#include "flags/notifications_pending__water_leak_sensors.h"
+#include "flags/notifications_pending__emergency__water_actuators__0.h"
+#include "flags/notifications_pending__emergency__water_sensors__0.h"
+#include "flags/notifications_pending__presense__motion_sensors__0.h"
 #include "flags/notifications_pending__alarm__state.h"
 #include "flags/notifications_pending__alarm__auth.h"
 
@@ -30,44 +26,43 @@ inline static void comm_service__notifications__1__run(void) {
 //        FIX_POINTER(data);
 
         uint8_t value = 0;
-        if (notifications_pending__water_leak_sensors__is_set()) {
-            notifications_pending__water_leak_sensors__set(0);
-            report_id = CANP_REPORT__WATER_LEAK_SENSORS_SCANNER__VALUE;
-            data = &water_leak_sensors_scanner__status.state;
+        if (notifications_pending__emergency__water_sensors__0__is_set()) {
+            notifications_pending__emergency__water_sensors__0__set(0);
+            report_id = UCAN__PID__EMERGENCY__WATER_SENSORS;
+            data = emergency__water_sensors__0__get_data();
         }
-        else if (notifications_pending__water_valve__is_set()) {
-            notifications_pending__water_valve__set(0);
-            report_id = CANP_REPORT__WATER_VALVE_CONTROLLER__VALUE;
-            if (water_valve__is_on()) value = 1;
-            *data = value;
+        else if (notifications_pending__emergency__water_actuators__0__is_set()) {
+            notifications_pending__emergency__water_actuators__0__set(0);
+            report_id = UCAN__PID__EMERGENCY__WATER_ACTUATORS;
+            data = emergency__water_actuators__0__get_data();
         }
-        else if (notifications_pending__amplifier_relay__is_set()) {
-            notifications_pending__amplifier_relay__set(0);
-            report_id = CANP_REPORT__AMPLIFIER_RELAY_CONTROLLER__VALUE;
+        else if (notifications_pending__media__amplifier__0__is_set()) {
+            notifications_pending__media__amplifier__0__set(0);
+            report_id = UCAN__PID__MEDIA__AMPLIFIER;
             if (amplifier_relay__is_on()) value = 1;
             *data = value;
         }
-        else if (notifications_pending__siren1__is_set()) {
+        else if (notifications_pending__siren1__is_set()) { // fix
             notifications_pending__siren1__set(0);
-            report_id = CANP_REPORT__SIREN1__VALUE;
+            report_id = UCAN__PID__COMM__BINARY;
             if (siren2__is_on()) value = 1;
             *data = value;
         }
-        else if (notifications_pending__siren2__is_set()) {
+        else if (notifications_pending__siren2__is_set()) { // fix
             notifications_pending__siren2__set(0);
-            report_id = CANP_REPORT__SIREN2__VALUE;
+            report_id = UCAN__PID__COMM__BINARY;
             if (siren2__is_on()) value = 1;
             *data = value;
         }
         else if (notifications_pending__alarm__state__is_set()) {
             notifications_pending__alarm__state__set(0);
-            report_id = CANP_REPORT__ALARM__STATE;
+            report_id = UCAN__PID__SECURITY__STATE;
 //            *data = alarm__state;
             data = (uint8_t*)&alarm__state;
         }
         else if (notifications_pending__alarm__auth__is_set()) {
             notifications_pending__alarm__auth__set(0);
-            report_id = CANP_REPORT__ALARM__AUTH;
+            report_id = UCAN__PID__SECURITY__AUTH;
             length = alarm__auth__password.length;
             data = alarm__auth__password.data;
         }

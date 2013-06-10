@@ -13,12 +13,12 @@
 #include "drivers/in/motion_sensors.h"
 
 #include "flags/notifications_pending.h"
-#include "flags/notifications_pending__water_valve.h"
-#include "flags/notifications_pending__amplifier_relay.h"
+#include "flags/notifications_pending__emergency__water_sensors__0.h"
+#include "flags/notifications_pending__emergency__water_actuators__0.h"
+#include "flags/notifications_pending__motion_sensors__0.h"
+#include "flags/notifications_pending__media__amplifier__0.h"
 #include "flags/notifications_pending__siren1.h"
 #include "flags/notifications_pending__siren2.h"
-#include "flags/notifications_pending__motion_sensors.h"
-#include "flags/notifications_pending__water_leak_sensors.h"
 #include "flags/notifications_pending__alarm__state.h"
 #include "flags/notifications_pending__alarm__auth.h"
 
@@ -40,6 +40,8 @@
 #include "services/water_leak_handler.h"
 #include "services/water_leak_handler__timer.h"
 
+#include "endpoints/emergency__water_sensors__0.h"
+
 #include <avr/interrupt.h>
 
 
@@ -51,9 +53,7 @@
  * Callback function, called by water_leak_sensors_scanner__run() when any of the sensors has changed state.
  */
 INLINE void water_leak_sensors_scanner__status__on_change(void) {
-    notifications_pending__water_leak_sensors__set(1);
-    notifications_pending__set(1);
-
+    emergency__water_sensors__0__broadcast();
     water_leak_handler__run();
 }
 
@@ -96,12 +96,12 @@ inline static void application__init(void) {
     motion_sensors__init();
 
     // Flags
-    notifications_pending__water_valve__init();
-    notifications_pending__amplifier_relay__init();
+    notifications_pending__emergency__water_sensors__0__init();
+    notifications_pending__emergency__water_actuators__0__init();
+    notifications_pending__media__amplifier__0__init();
     notifications_pending__siren1__init();
     notifications_pending__siren2__init();
-    notifications_pending__motion_sensors__init();
-    notifications_pending__water_leak_sensors__init();
+    notifications_pending__presense__motion_sensors__0__init();
     notifications_pending__alarm__state__init();
     notifications_pending__alarm__auth__init();
     notifications_pending__init();
@@ -121,12 +121,12 @@ inline static void application__init(void) {
 
 
 inline static void application__start(void) {
-    notifications_pending__water_valve__set(0);
-    notifications_pending__amplifier_relay__set(0);
+    notifications_pending__emergency__water_sensors__0__set(0);
+    notifications_pending__emergency__water_actuators__0__set(0);
+    notifications_pending__media__amplifier__0__set(0);
     notifications_pending__siren1__set(0);
     notifications_pending__siren2__set(0);
-    notifications_pending__motion_sensors__set(0);
-    notifications_pending__water_leak_sensors__set(0);
+    notifications_pending__presense__motion_sensors__0__set(0);
 
     // Broadcast these values at startup - for terminals.
     notifications_pending__alarm__state__set(1);

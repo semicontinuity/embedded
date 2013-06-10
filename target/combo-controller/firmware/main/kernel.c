@@ -1,5 +1,5 @@
 #include "kernel.h"
-#include "cpu/avr/drivers/net/can/mcp251x/canp.h"
+#include "cpu/avr/drivers/net/can/mcp251x/ucan.h"
 #include "cpu/avr/eeprom.h"
 
 #include "drivers/net/can/mcp251x/tx.h"
@@ -11,7 +11,7 @@ mcp251x_message_buffer kernel__frame;
 
 
 void kernel__send_response(const uint8_t count, const uint8_t* data) {
-    kernel__frame.header.id.eid8 = CANP_EID8(CANP_TXB0_HOST_NET, CANP_TXB0_HOST_ADDR);
+    UCAN_SET_SRC(kernel__frame.header.id, UCAN_MODULE_ID);
     mcp2515__tx__txb0__load_response(
         count,
         (const uint8_t*)&kernel__frame.header.id.sidh,
