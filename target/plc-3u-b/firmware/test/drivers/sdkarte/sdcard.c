@@ -37,10 +37,12 @@
 #include "sd.h"
 #include "spi.h"
 #include "sdcard.h"
-#include "../timer.h"
+//#include "../timer.h"
 
 
-#include "../usart.h"
+#define usart_write(format, args...)   printf_P(PSTR(format) , ## args)
+
+//#include "../usart.h"
 #define SD_DEBUG	usart_write 
 //#define SD_DEBUG(...)	
 
@@ -146,11 +148,14 @@ void f16_check(void)
  */
 File* f16_open(const char *filename, const char *mode)
 {
-	if (!sd_get_fs())
-		return 0;
+    if (!sd_get_fs()) {
+        SD_DEBUG("\r\nsd_fs was 0\r\n");
+	return 0;
+    }
 
     struct fat16_dir_entry_struct file_entry;
 
+    SD_DEBUG("\r\nOpening file: reading directory \r\n");
     while(fat16_read_dir(cwdir_ptr, &file_entry))
     {
         if(strcasecmp(file_entry.long_name, filename) == 0)

@@ -153,5 +153,18 @@ uint32_t fat16_get_fs_free(const struct fat16_fs_struct* fs);
  * @}
  */
 
+/**
+ *	\ingroup sdkarte
+ *	FAT Dateistruktur
+ */
+typedef struct fat16_file_struct
+{
+    struct fat16_fs_struct* fs;					//!<
+    struct fat16_dir_entry_struct dir_entry;	//!<
+    uint32_t pos;								//!< aktuelle Schreib-/Lese-Position in Datei
+    uint16_t pos_cluster;						//!< aktueller Datei cluster im Puffer
+	char	mode;								//!< file open mode
+} File;
+
 #endif
 

@@ -19,6 +19,9 @@
     #include <stdlib.h>
 #endif
 
+#include <stdio.h>
+#include <avr/pgmspace.h>
+
 /**
  * \addtogroup sd
  *
@@ -132,6 +135,7 @@
  * For deleted lfn entries, the ordinal field is set to 0xe5.
  */
 
+/*
 struct fat16_file_struct
 {
     struct fat16_fs_struct* fs;
@@ -140,6 +144,7 @@ struct fat16_file_struct
     uint16_t pos_cluster;
 	char	mode;		// file open mode
 };
+*/
 
 struct fat16_read_dir_callback_arg
 {
@@ -212,8 +217,10 @@ struct fat16_fs_struct* fat16_open(struct partition_struct* partition)
 
         ++fs;
     }
-    if(i >= FAT16_FS_COUNT)
+    if(i >= FAT16_FS_COUNT) {
+        printf_P(PSTR("\n\rNo free partition handles\n\r"));
         return 0;
+    }
 #endif
 
     memset(fs, 0, sizeof(*fs));
@@ -226,6 +233,8 @@ struct fat16_fs_struct* fat16_open(struct partition_struct* partition)
 #else
         fs->partition = 0;
 #endif
+        printf_P(PSTR("\n\rProblem reading header\n\r"));
+
         return 0;
     }
     
@@ -312,7 +321,7 @@ uint8_t fat16_read_header(struct fat16_fs_struct* fs)
                                  - (uint32_t) sectors_per_fat * fat_copies
                                  - ((max_root_entries * 32 + bytes_per_sector - 1) / bytes_per_sector);
     uint32_t data_cluster_count = data_sector_count / sectors_per_cluster;
-    if(data_cluster_count < 4085 || data_cluster_count >= 65525)
+    if(data_cluster_count < /*4085*/1900 || data_cluster_count >= 65525)
         /* this is not a FAT16 */
         return 0;
 
@@ -439,17 +448,24 @@ uint8_t fat16_get_dir_entry_of_path(struct fat16_fs_struct* fs, const char* path
  */
 uint16_t fat16_get_next_cluster(const struct fat16_fs_struct* fs, uint16_t cluster_num)
 {
+    printf_P(PSTR("\n\rFind next cluster for %X\n\r"), cluster_num);
     if(!fs || cluster_num < 2)
         return 0;
 
     /* read appropriate fat entry */
     uint8_t fat_entry[2];
-    if(!fs->partition->device_read(fs->header.fat_offset + 2 * cluster_num, fat_entry, 2))
+    uint32_t offset = fs->header.fat_offset + 2 * cluster_num;
+    printf_P(PSTR("\n\rReading from partition, offset %lX\n\r"), offset);
+
+    if(!fs->partition->device_read(offset, fat_entry, 2)) {
+        printf_P(PSTR("\n\rProblem\n\r"));
         return 0;
+    }
 
     /* determine next cluster from fat */
     cluster_num = ((uint16_t) fat_entry[0]) |
                   ((uint16_t) fat_entry[1] << 8);
+    printf_P(PSTR("\n\rNext cluster %X\n\r"), cluster_num);
     
     if(cluster_num == FAT16_CLUSTER_FREE ||
        cluster_num == FAT16_CLUSTER_BAD ||

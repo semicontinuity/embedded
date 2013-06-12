@@ -7,6 +7,8 @@
  * published by the Free Software Foundation.
  */
 #include <stdint.h>
+#include <stdio.h>
+#include <avr/pgmspace.h>
 
 #include "fat16.h"
 #include "partition.h"
@@ -58,6 +60,8 @@ int8_t sd_open()
                                   0
                                  );
 
+    printf_P(PSTR("\n\rOpened partition: %X\n\r"), sd_partition);
+
     if(!sd_partition)
     {
         /* If the partition did not open, assume the storage device
@@ -70,14 +74,19 @@ int8_t sd_open()
                                       -1
                                      );
 
-        if(!sd_partition)
+        if(!sd_partition) {
+            printf_P(PSTR("\n\rProblem opening no-mbr partition\n\r"));
             return SD_ERROR_PARTITION;
+        }
     }
 
     /* open file system */
     sd_fs = fat16_open(sd_partition);
+    printf_P(PSTR("\n\rsd_fs = %X\n\r"), sd_fs);
+
     if(!sd_fs)
     {
+        printf_P(PSTR("\n\rProblem opening FS\n\r"));
         sd_close();
         return SD_ERROR_FS;
     }
@@ -87,6 +96,8 @@ int8_t sd_open()
     fat16_get_dir_entry_of_path(sd_fs, "/", &directory);
 
     sd_dd = fat16_open_dir(sd_fs, &directory);
+    printf_P(PSTR("\n\rsd_dd = %X\n\r"), sd_dd);
+
     if(!sd_dd)
     {
         sd_close();

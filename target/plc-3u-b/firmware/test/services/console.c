@@ -15,12 +15,42 @@
 
 #include "spi.h"
 #include "drivers/sdkarte/sd_raw.h"
+#include "drivers/sdkarte/fat16.h"
+#include "drivers/sdkarte/sdcard.h"
+#include "drivers/sdkarte/sd.h"
+#include "drivers/1-wire/ds18x20.h"
+
 
 
 uint8_t console__command[16];
 uint8_t console__command_length;
 
 uint8_t buffer[512];
+File *file;
+
+/**
+ * One-wire convert temperature, all devices
+ * Command format: 'oc'
+ */
+inline static bool console__handle__onewire_convert(void) {
+    if (console__command_length == 2 && console__command[0] == 'o' && console__command[1] == 'c') {
+        DS18X20_start_meas(DS18X20_POWER_EXTERN, 0);
+        return true;
+    }
+    else return false;
+}
+
+/**
+ * One-wire search
+ * Command format: 'os'
+ */
+inline static bool console__handle__onewire_search(void) {
+    if (console__command_length == 2 && console__command[0] == 'o' && console__command[1] == 's') {
+        DS18X20_read_meas_all_verbose();
+        return true;
+    }
+    else return false;
+}
 
 /**
  * Initialize SDCARD
@@ -29,14 +59,16 @@ uint8_t buffer[512];
 inline static bool console__handle__sd_init(void) {
     if (console__command_length == 2 && console__command[0] == 's' && console__command[1] == 'i') {
         spi_card_init();
-        debug__print_byte_as_hex(sd_raw_init());
+        //debug__print_byte_as_hex(sd_open());
+        f16_check();
         return true;
     }
     else return false;
 }
 
 /**
- * SDCARD available
+ * SDCARD available.
+ * Valid after init only.
  * Command format: 'sa'
  */
 inline static bool console__handle__sd_available(void) {
@@ -48,7 +80,8 @@ inline static bool console__handle__sd_available(void) {
 }
 
 /**
- * SDCARD locked
+ * SDCARD locked.
+ * Valid after init only.
  * Command format: 'sl'
  */
 inline static bool console__handle__sd_locked(void) {
@@ -60,13 +93,68 @@ inline static bool console__handle__sd_locked(void) {
 }
 
 /**
- * SDCARD read
+ * SDCARD read sector 0.
  * Command format: 'sr'
  */
 inline static bool console__handle__sd_read(void) {
     if (console__command_length == 2 && console__command[0] == 's' && console__command[1] == 'r') {
         debug__print_byte_as_hex(sd_raw_read(0, buffer, 512));
 
+        debug__putc('\n');
+        debug__putc('\r');
+        uint8_t *b = buffer;
+        for (uint8_t i = 0; i < 512/16; i++) {
+            for (uint8_t j = 0; j < 16; j++) {
+                debug__print_byte_as_hex(*b++);
+                debug__putc(' ');
+            }
+            debug__putc('\n');
+            debug__putc('\r');
+        }
+        return true;
+    }
+    else return false;
+}
+
+/**
+ * FAT open file.
+ * Command format: 'fo'
+ */
+inline static bool console__handle__fat_open(void) {
+    if (console__command_length == 2 && console__command[0] == 'f' && console__command[1] == 'o') {
+        file = f16_open("test.htm", "r");
+        debug__print_byte_as_hex(file);
+        debug__putc('\n');
+        debug__putc('\r');
+        return true;
+    }
+    else return false;
+}
+
+/**
+ * FAT close file.
+ * Command format: 'fc'
+ */
+inline static bool console__handle__fat_close(void) {
+    if (console__command_length == 2 && console__command[0] == 'f' && console__command[1] == 'c') {
+        f16_close(file);
+        debug__putc('\n');
+        debug__putc('\r');
+        return true;
+    }
+    else return false;
+}
+
+
+/**
+ * FAT read file.
+ * Command format: 'fr'
+ */
+inline static bool console__handle__fat_read(void) {
+    if (console__command_length == 2 && console__command[0] == 'f' && console__command[1] == 'r') {
+        uint16_t len = fat16_read_file(file, buffer, sizeof(buffer));
+        debug__print_byte_as_hex(len >> 8);
+        debug__print_byte_as_hex(len & 0xFF);
         debug__putc('\n');
         debug__putc('\r');
         uint8_t *b = buffer;
@@ -245,6 +333,9 @@ inline static bool console__handle__memory_read(void) {
 
 
 inline static void console__handle_command(void) {
+    if (console__handle__onewire_search()) return;
+    if (console__handle__onewire_convert()) return;
+
     if (console__handle__enc28j60_init()) return;
     if (console__handle__enc28j60_reset()) return;
     if (console__handle__enc28j60_read_register()) return;
@@ -256,6 +347,10 @@ inline static void console__handle_command(void) {
     if (console__handle__sd_locked()) return;
     if (console__handle__sd_init()) return;
     if (console__handle__sd_read()) return;
+
+    if (console__handle__fat_open()) return;
+    if (console__handle__fat_close()) return;
+    if (console__handle__fat_read()) return;
 
     if (console__handle__memory_read()) return;
 
@@ -277,12 +372,9 @@ inline static void console__read_line(void) {
 
 
 void console__run(void) {
-	// config enc chip select as output and deselect enc
-	ENC_CS_DDR  |= (1<<ENC_CS);
-	ENC_CS_PORT |= (1<<ENC_CS);
-
-	// init spi
-	//spi_init();
+    // config enc chip select as output and deselect enc
+    ENC_CS_DDR  |= (1<<ENC_CS);
+    ENC_CS_PORT |= (1<<ENC_CS);
 
     while(1) {
         debug__putc('#');

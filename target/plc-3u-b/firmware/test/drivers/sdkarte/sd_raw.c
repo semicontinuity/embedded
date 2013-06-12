@@ -181,8 +181,10 @@ uint8_t sd_raw_init()
     unselect_card();
 
     /* initialization procedure */
-    if(!sd_raw_available())
+    if(!sd_raw_available()) {
+        printf_P(PSTR("\n\rCard not available\n\r"));
         return 0;
+    }
 
     /* wait for the card being powered up */
     _delay_ms(10);
@@ -200,16 +202,20 @@ uint8_t sd_raw_init()
     /* address card */
     select_card();
 
+    printf_P(PSTR("\n\rCard reset\n\r"));
     /* reset card */
     uint8_t response;
     for(uint16_t i = 0; ; ++i)
     {
         response = sd_raw_send_command_r1(CMD_GO_IDLE_STATE, 0);
-        if(response == (1 << R1_IDLE_STATE))
+        if(response == (1 << R1_IDLE_STATE)) {
             break;
+        }
 
         if(i == 0x1ff)
         {
+            printf_P(PSTR("\n\rCard not idle within timeout\n\r"));
+
             unselect_card();
             spi_rec_byte();
             spi_high_frequency();
@@ -230,6 +236,8 @@ uint8_t sd_raw_init()
 
         if(i == 0x7fff)
         {
+            printf_P(PSTR("\n\rCard not ready\n\r"));
+
             unselect_card();
             spi_rec_byte();
             spi_high_frequency();
@@ -241,6 +249,8 @@ uint8_t sd_raw_init()
     /* set block size to 512 bytes */
     if(sd_raw_send_command_r1(CMD_SET_BLOCKLEN, 512))
     {
+        printf_P(PSTR("\n\rCard error for CMD1\n\r"));
+
         unselect_card();
         spi_rec_byte();
         spi_high_frequency();
@@ -260,8 +270,8 @@ uint8_t sd_raw_init()
 #if SD_RAW_WRITE_BUFFERING
     raw_block_written = 1;
 #endif
-    if(!sd_raw_read(0, raw_block, sizeof(raw_block)))
-        return 0;
+    if(!sd_raw_read(0, raw_block, sizeof(raw_block))) return 0;
+    
 #endif
 
     return 1;
