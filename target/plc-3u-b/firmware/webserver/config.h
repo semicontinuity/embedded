@@ -258,21 +258,17 @@
 	#define MAXADCHANNEL	5		//!< max. Anzahl der verwendeten Ports für AD-Wandler (PA0 bis PAn; n = MAXADCHANNEL - 1)
 
 /** 1-Wire ************/
-	#define USE_OW			0		//!< 1-Wire bus einbinden
-	#define MAXSENSORS		8		//!< max. Anzahl der 1-wire sensoren (DS18B20)
+	#define USE_OW			1		//!< 1-Wire bus einbinden
+	#define MAXSENSORS		1		//!< max. Anzahl der 1-wire sensoren (DS18B20)
 	#define OW_ONE_BUS		1		//!< nur ein fest eingestellter 1-wire bus; keine Auswahl
 									//   die Ports werden in onewire.h definiert
 	#define OW_EXTERN_POWERED 1		//!< falls der 1-Wire bus eine externe Versorgungsspannung hat
 	#define OW_ROMCODE_SIZE 8		//!< rom-code DS18B20 size including CRC
 
 	// hier die ausgelesenen ROM-IDs der DS18B20 eintragen
-	#define OW_ID_T01		{0x28,0xd7,0x00,0x32,0x01,0,0,0xbb}
-	#define OW_ID_T02		{0x28,0xc9,0x1f,0x32,0x01,0,0,0xe0}
+	#define OW_ID_T01		{0x28, 0x2E, 0x29, 0xA2, 0x04, 0x00, 0x00, 0x80}
 
-	#define OW_ID_T03		{0x28,0x11,0x22,0x33,0x44,0,0,0x77}
-	#define OW_ID_T04		{0x28,0x22,0x33,0x44,0x55,0,0,0x77}
-	#define OW_ID_Last		{0x00,0x00,0x00,0x00,0x00,0,0,0x00}
-
+        #define OW_IDS {OW_ID_T01}
 /** Kamera ************/
 	//Kamera mit einbinden
 	//Kamera arbeitet nur mit einem 14,7456Mhz Quarz!

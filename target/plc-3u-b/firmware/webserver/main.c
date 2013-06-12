@@ -93,6 +93,10 @@
 #include "dhcpc.h"
 #endif
 
+#if USE_OW
+#include "temperature.h"
+#endif
+
 //#include "messung.h"
 
 /**
@@ -233,6 +237,9 @@ int main(void)
 #if USE_ADC
 		ADC_Init();
 #endif
+
+start_OW();
+
 	
 	printf_P(PSTR("\n\rSystem Ready\n\r"));
 //    printf_P(PSTR("Compiliert am "__DATE__" um "__TIME__"\r\n"));
@@ -296,6 +303,7 @@ int main(void)
 #endif
 
     #if USE_DHCP
+/*
     dhcp_init();
     if ( dhcp() == 0)
     {
@@ -306,6 +314,7 @@ int main(void)
         usart_write("DHCP fail\r\n");
         read_ip_addresses(); //get from EEPROM
     }
+*/
     #endif //USE_DHCP
 
 
@@ -336,7 +345,8 @@ int main(void)
 	//**************************************************
 	#define logdata usart_write
 	//messung_init();
-	
+
+         read_T();	
 	 /**
 	 * \ingroup main
 	 * \anchor mainloop
@@ -691,24 +701,10 @@ int main(void)
  */
 void read_T(void)
 {
+printf_P(PSTR("Read temperature\n\r"));
 	lese_Temperatur();
-	machineStatus.LogSchreiben = true;		// danach gleich Logdatei schreiben
+	//machineStatus.LogSchreiben = true;		// danach gleich Logdatei schreiben
 	machineStatus.Timer3_func = NULL;		// vorsichtshalber Funktion löschen.
-
-	#if USE_SER_LCD
-	char zeile[20];
-
-	lcd_clear();
-	back_light = 10;	// 10 Sekunden einschalten
-	lcd_print(0,0,"Aussen ");
-	dtostrf(ow_array[0] / 10.0,5,1,zeile);
-	lcd_print_str(zeile);
-	lcd_print_str("C");
-	lcd_print(1,0,"Innen  ");
-	dtostrf(ow_array[1] / 10.0,5,1,zeile);
-	lcd_print_str(zeile);
-	lcd_print_str("C");
-	#endif
 }
 #endif
 

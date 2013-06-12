@@ -57,12 +57,10 @@
 #include "wol.h"
 #endif
     
-#if USE_CAM
-#include "camera/cam.h"
-#endif //USE_CAM
-	
 #if USE_OW
-#include "messung.h"
+//#include "messung.h"
+#include "temperature.h"
+
 #endif
 
 #include "usart.h"		// nur für HTTP_DEBUG
@@ -99,6 +97,14 @@ PROGMEM const char http_csv_header[]={	"HTTP/1.1 200 OK\r\n"
 									"Connection: close\r\n"
 									"Content-Type: file\r\n\r\n"};
 									// oder application/octet-stream
+
+#define HTTP_RESPONSE_200_APPLICATION_OCTET_STREAM (3)
+PROGMEM const char http_application_octet_stream_header[]={
+    "HTTP/1.1 200 OK\r\n"
+    "Content-Type: application/octet-stream\r\n\r\n"
+};
+
+
 #define HTTP_CSV_HEADER_LEN 141
 
 PROGMEM const char http_response_401_unauthorized[]={	"HTTP/1.0 401 Unauthorized\r\n"
@@ -109,7 +115,7 @@ PROGMEM const char http_response_401_unauthorized[]={	"HTTP/1.0 401 Unauthorized
 
 //----------------------------------------------------------------------------
 //Kein Zugriff Seite bei keinem Passwort
-PROGMEM const char Page0[] = {"401 Unauthorized%END"};
+PROGMEM const char RESPONSE_401_UNAUTHORIZED[] = {"401 Unauthorized%END"};
 
 unsigned char rx_header_end[5] = {"\r\n\r\n\0"};
 
@@ -191,9 +197,7 @@ void httpd_stack_clear (unsigned char index)
 	http_entry[index].post_ptr = post_in;
 	http_entry[index].post_ready_ptr = post_ready;
 	http_entry[index].hdr_end_pointer = rx_header_end;
-	#if USE_CAM
 	http_entry[index].cam = 0;
-	#endif //USE_CAM				
 #if USE_MMC
 	http_entry[index].mmc = 0;
 	http_entry[index].charcount = 0;
@@ -393,6 +397,12 @@ void httpd_header_check (unsigned char index)
 			var_array[MAX_VAR_ARRAY-1]++;
 		}
 
+                if (!strcmp_P((char*)http_entry[index].fname, PSTR("sys/t"))) {
+                    http_entry[index].http_header_type = HTTP_RESPONSE_200_APPLICATION_OCTET_STREAM;
+                    http_entry[index].cam = 1; // cam == 1 means serve temperature data (temp. abuse)
+                }
+                else {
+
 		HTTP_DEBUG("\r\nLookup %s on SD Card",http_entry[index].fname);
 		File *sdfile = f16_open((char *)http_entry[index].fname,"r");
 		if (sdfile) {
@@ -400,7 +410,9 @@ void httpd_header_check (unsigned char index)
 
 			http_entry[index].mmc = 1;	// File served from SD card
 
-			if (strncasecmp_P((char *)_dot,PSTR("htm"),3)==0) {			// falls htm-Datei
+			if (strncasecmp_P((char *)_dot,PSTR("html"),4)==0) {
+				http_entry[index].http_header_type = HTTP_RESPONSE_200_TEXT_HTML;
+			} else if (strncasecmp_P((char *)_dot,PSTR("htm"),3)==0) {			// falls htm-Datei
 				http_entry[index].http_header_type = HTTP_RESPONSE_200_TEXT_HTML;
 			} else if (strncasecmp_P((char *)_dot,PSTR("csv"),3)==0) {	// falls csv-Datendatei
 				http_entry[index].http_header_type = HTTP_RESPONSE_200_CSV;
@@ -420,6 +432,7 @@ void httpd_header_check (unsigned char index)
 #    include "httpd_render_builtin_page.inc"
 #if USE_MMC
 		}
+                }
 #endif
 	}
 
@@ -440,7 +453,7 @@ void httpd_header_check (unsigned char index)
 	if((!http_entry[index].http_auth) && tcp_entry[index].status&PSH_FLAG)
 	{	
 		//HTTP_AUTH_Header senden!
-		http_entry[index].new_page_pointer = Page0;                             
+		http_entry[index].new_page_pointer = RESPONSE_401_UNAUTHORIZED;
 		memcpy_P((char*)&eth_buffer[TCP_DATA_START_VAR],http_response_401_unauthorized,(sizeof(http_response_401_unauthorized)-1));
 		tcp_entry[index].status =  ACK_FLAG | PSH_FLAG;
 		create_new_tcp_packet((sizeof(http_response_401_unauthorized)-1),index);
@@ -453,6 +466,7 @@ void httpd_header_check (unsigned char index)
 	#if USE_MMC
 		&& !http_entry[index].mmc	// falls Zeiger noch nicht in Dateipuffer zeigt
 	#endif
+                && !http_entry[index].cam
 		)
 	{
 		http_entry[index].new_page_pointer = Page1;
@@ -484,6 +498,13 @@ void httpd_header_check (unsigned char index)
 			memcpy_P((char*)&eth_buffer[TCP_DATA_START_VAR],http_csv_header,a);
 			HTTP_DEBUG("\r\nsende OK für csv-header");
 			break;
+
+		case	HTTP_RESPONSE_200_APPLICATION_OCTET_STREAM:
+			a = (sizeof(http_application_octet_stream_header)-1);
+			memcpy_P((char*)&eth_buffer[TCP_DATA_START_VAR], http_application_octet_stream_header, a);
+			HTTP_DEBUG("\r\nSent 200 OK application/octet-stream");
+			break;
+
 	}
 
 	HTTP_DEBUG("\r\nmit Header antworten. Index %i L:%i",index,a);
@@ -504,43 +525,19 @@ void httpd_data_send (unsigned char index)
 	//Passwort wurde im Header nicht gefunden
 	if(!http_entry[index].http_auth)
 	{
-		http_entry[index].new_page_pointer = Page0;
-		#if USE_CAM
-		http_entry[index].cam = 0;
-		#endif //USE_CAM
+		http_entry[index].new_page_pointer = RESPONSE_401_UNAUTHORIZED;
 	}
-	
-	#if USE_CAM //*****************************************************************
-	unsigned long byte_counter = 0;
-	
+
 	if(http_entry[index].cam > 0)
 	{
-        //Neues Bild wird in den Speicher der Kamera geladen!
-		if(http_entry[index].cam == 1){
-			max_bytes = cam_picture_store(CAM_RESOLUTION);
-			http_entry[index].cam = 2;
-		}
-        
-		unsigned int a;
-		for (a = 0;a < (MTU_SIZE-(TCP_DATA_START)-10);a++)
-		{
-			byte_counter = ((tcp_entry[index].app_status - 3)*(MTU_SIZE-(TCP_DATA_START)-10)) + a;
-			
-			eth_buffer[TCP_DATA_START + a] = cam_data_get(byte_counter);
-			
-			if(byte_counter > max_bytes)
-			{
-				tcp_entry[index].app_status = 0xFFFD;
-				a++;
-				break;
-			}
-		}
-		//Erzeugte Packet kann nun gesendet werden!
-		tcp_entry[index].status =  ACK_FLAG | PSH_FLAG;
-		create_new_tcp_packet(a,index);
+                int16_t ow = ow_array[0];
+                eth_buffer[TCP_DATA_START + 0] = ow & 0xFF;
+                eth_buffer[TCP_DATA_START + 1] = ow >> 8;
+
+                tcp_entry[index].app_status = 0xFFFD;
+		create_new_tcp_packet(2, index);
 		return;	
 	}
-	#endif //USE_CAM***************************************************************
 
 	//kein Paket empfangen Retransmission des alten Paketes
 	if (tcp_entry[index].status == 0) 
@@ -574,7 +571,7 @@ void httpd_data_send (unsigned char index)
 		if (htmfile) {
 			f16_fseek(htmfile,http_entry[index].old_charcount,FAT16_SEEK_SET);
 
-			if (http_entry[index].http_header_type == HTTP_RESPONSE_200_TEXT_HTML) {
+			if (0/*http_entry[index].http_header_type == HTTP_RESPONSE_200_TEXT_HTML*/) {
 				// Datei zeilenweise lesen und vorhandene Variable ersetzen
 				while ( len < (MTU_SIZE-(TCP_DATA_START)-100) ) {
 					if ( f16_gets(buffer, sizeof(buffer), htmfile) == 0 ) {

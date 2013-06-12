@@ -93,6 +93,8 @@ SRC += networkcard/enc28j60.c
 SRC += httpd.c 
 SRC += translate.c
 
+SRC += temperature.c
+
 #SRC += telnetd.c ntp.c lcd.c wol.c
 #SRC += ntp.c
 #SRC += dns.c 
@@ -109,10 +111,10 @@ SRC += sdkarte/fat16.c sdkarte/sd.c
 SRC += sdkarte/sdcard.c
 SRC += sdkarte/sd_raw.c sdkarte/partition.c sdkarte/spi.c
 
-SRC += dhcpc.c
+#SRC += dhcpc.c
 #SRC += messung.c
 
-#SRC += 1-wire/crc8.c 1-wire/onewire.c 1-wire/ds18x20.c
+SRC += 1-wire/crc8.c 1-wire/onewire.c 1-wire/ds18x20.c
 
 #SRC += rc5/rc5.c
 

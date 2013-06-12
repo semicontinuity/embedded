@@ -61,9 +61,9 @@
 		unsigned char post				: 1		;
 		unsigned char *post_ptr					;
 		unsigned char *post_ready_ptr			;
-		#if USE_CAM
+//		#if USE_CAM
 		unsigned char cam				: 2		;
-		#endif //USE_CAM
+//		#endif //USE_CAM
 		#if USE_MMC
 		unsigned char 	mmc				: 1;	//!< Flag, falls Datei auf SD/MMC-Karte
 		unsigned char 	fname[13];

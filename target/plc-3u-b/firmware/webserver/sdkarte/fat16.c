@@ -313,7 +313,6 @@ printf_P(PSTR("FAT16 device read problem\n\r"));
         /* this is not a FAT16 */
         return 0;
 
-printf_P(PSTR("FAT16 1\n\r"));
     if(sector_count == 0)
     {
         if(sector_count_16 == 0)
@@ -322,14 +321,13 @@ printf_P(PSTR("FAT16 1\n\r"));
         else
             sector_count = sector_count_16;
     }
-printf_P(PSTR("FAT16 2\n\r"));
     /* ensure we really have a FAT16 fs here */
     uint32_t data_sector_count = sector_count
                                  - reserved_sectors
                                  - (uint32_t) sectors_per_fat * fat_copies
                                  - ((max_root_entries * 32 + bytes_per_sector - 1) / bytes_per_sector);
     uint32_t data_cluster_count = data_sector_count / sectors_per_cluster;
-
+/*
 printf_P(PSTR("FAT16 sec: %lX rsec: %X spf: %X copies: %X maxroot: %X bps: %X spc: %X clusters:%lX\n\r"),
 sector_count,
 reserved_sectors,
@@ -340,11 +338,10 @@ bytes_per_sector,
 sectors_per_cluster,
 data_cluster_count
 );
-
+*/
     if(data_cluster_count < /*4085*/1900 || data_cluster_count >= 65525)
         /* this is not a FAT16 */
         return 0;
-printf_P(PSTR("FAT16 3\n\r"));
     partition->type = PARTITION_TYPE_FAT16;
 
     /* fill header information */
@@ -371,7 +368,6 @@ printf_P(PSTR("FAT16 3\n\r"));
                                   header->root_dir_offset +
                                   /* skip root directory entries */
                                   (uint32_t) max_root_entries * 32;
-printf_P(PSTR("FAT16 4\n\r"));
     return 1;
 }
 
@@ -472,18 +468,35 @@ uint16_t fat16_get_next_cluster(const struct fat16_fs_struct* fs, uint16_t clust
         return 0;
 
     /* read appropriate fat entry */
-    uint8_t fat_entry[2];
-    if(!fs->partition->device_read(fs->header.fat_offset + 2 * cluster_num, fat_entry, 2))
+//    uint8_t fat_entry[2];
+//    if(!fs->partition->device_read(fs->header.fat_offset + 2 * cluster_num, fat_entry, 2))
+//        return 0;
+
+    /* determine next cluster from fat */
+//    cluster_num = ((uint16_t) fat_entry[0]) |
+//                  ((uint16_t) fat_entry[1] << 8);
+    
+//    if(cluster_num == FAT16_CLUSTER_FREE ||
+//       cluster_num == FAT16_CLUSTER_BAD ||
+//       (cluster_num >= FAT16_CLUSTER_RESERVED_MIN && cluster_num <= FAT16_CLUSTER_RESERVED_MAX) ||
+//       (cluster_num >= FAT16_CLUSTER_LAST_MIN && cluster_num <= FAT16_CLUSTER_LAST_MAX))
+//        return 0;
+
+
+    // FAT12 !!!
+
+    /* read appropriate fat entry */
+    uint8_t fat_entries[3];
+    uint32_t fat_entries_offset = fs->header.fat_offset + ((cluster_num >> 1) * 3);
+    if(!fs->partition->device_read(fat_entries_offset, fat_entries, 3))
         return 0;
 
     /* determine next cluster from fat */
-    cluster_num = ((uint16_t) fat_entry[0]) |
-                  ((uint16_t) fat_entry[1] << 8);
+    cluster_num = (cluster_num & 1)
+        ? (((uint16_t) fat_entries[2]) << 4) | (((uint16_t) fat_entries[1]) >> 4)
+        : (((uint16_t) (fat_entries[1] & 0x0F)) << 8) | ((uint16_t) fat_entries[0]);
     
-    if(cluster_num == FAT16_CLUSTER_FREE ||
-       cluster_num == FAT16_CLUSTER_BAD ||
-       (cluster_num >= FAT16_CLUSTER_RESERVED_MIN && cluster_num <= FAT16_CLUSTER_RESERVED_MAX) ||
-       (cluster_num >= FAT16_CLUSTER_LAST_MIN && cluster_num <= FAT16_CLUSTER_LAST_MAX))
+    if(cluster_num >= 0xff0 && cluster_num <= 0xfff)
         return 0;
     
     return cluster_num;

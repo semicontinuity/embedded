@@ -59,8 +59,8 @@
  * @}
  */
 
-//#define TIMER_DEBUG	usart_write 
-#define TIMER_DEBUG(...)	
+#define TIMER_DEBUG	usart_write 
+//#define TIMER_DEBUG(...)	
 
 /*
  * 	Vars
@@ -111,7 +111,7 @@ void timer_init (void)
 	TCNT1 = 0;
 	// der Compare-Interrupt wird alle 'TIMERBASE' Millisekunden ausgelöst
 	OCR1A = (F_CPU / 1024 / 1000 * TIMERBASE)  - 1;
-	TIMSK0 |= (1 << OCIE1A);		// enable overflow interrupt TODO
+	TIMSK1 |= (1 << OCIE1A);		// enable overflow interrupt TODO
 	machineStatus.Timer2_func = NULL;
 	machineStatus.Timer3_func = NULL;
 	
