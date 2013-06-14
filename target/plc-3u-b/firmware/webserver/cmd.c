@@ -22,6 +22,7 @@
  Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA. 
 ------------------------------------------------------------------------------*/
 
+#include "config.h"
 #include "cmd.h"
 
 volatile unsigned int variable[MAX_VAR];
@@ -62,7 +63,7 @@ COMMAND_STRUCTUR COMMAND_TABELLE[] = // Befehls-Tabelle
 };
 
 #if HELPTEXT
-	PROGMEM char helptext[] = {
+	PROGMEM const char helptext[] = {
 		"RESET  - reset the AVR - Controller\r\n"
 		"ARP    - list the ARP table\r\n"
 		"TCP    - list the tcp table\r\n"

@@ -40,6 +40,8 @@
 	/** EREVID value, filled with the enc_init() function. */
 	extern unsigned char            enc_revid;
 
+        void enc_wait_link(void);
+
 	void         enc_init(void);
 	void         enc_send_packet( unsigned int len, unsigned char *buf );
 	unsigned int enc_receive_packet( unsigned int bufsize, unsigned char *buf );

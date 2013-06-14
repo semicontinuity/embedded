@@ -82,6 +82,8 @@ UDP_PORT_ITEM UDP_PORT_TABLE[MAX_APP_ENTRY];
 unsigned char myip[4];
 unsigned char netmask[4];
 unsigned char router_ip[4];
+unsigned char broadcast_ip[4];
+
 
 unsigned int IP_id_counter;
 

@@ -82,7 +82,9 @@
   #include "tcpservice/tcpcmd.h"
   #include "tcpservice/tcpsrv.h"
 #else
-  #include "cmd.h"
+  #if USE_TERMINAL
+    #include "cmd.h"
+  #endif
 #endif
 
 #if USE_RC5
@@ -95,6 +97,10 @@
 
 #if USE_OW
 #include "temperature.h"
+#endif
+
+#if USE_NOTIFICATIONS
+	#include "http_get.h"
 #endif
 
 //#include "messung.h"
@@ -375,6 +381,9 @@ start_OW();
 	 *	  von USART->TCP geschickt <tt>telnetd_send_data();</tt>
 	 *
 	 */
+
+	printf_P(PSTR("\n\rWaiting for link\n\r"));
+        enc_wait_link();
 	printf_P(PSTR("\n\rLooping\n\r"));
 
 	while(1)
@@ -652,8 +661,8 @@ start_OW();
 
 
         //Wetterdaten empfangen (Testphase)
-#if GET_WEATHER
-        http_request ();
+#if USE_NOTIFICATIONS
+        notifications__run();
 #endif
 
 
@@ -701,7 +710,6 @@ start_OW();
  */
 void read_T(void)
 {
-printf_P(PSTR("Read temperature\n\r"));
 	lese_Temperatur();
 	//machineStatus.LogSchreiben = true;		// danach gleich Logdatei schreiben
 	machineStatus.Timer3_func = NULL;		// vorsichtshalber Funktion löschen.

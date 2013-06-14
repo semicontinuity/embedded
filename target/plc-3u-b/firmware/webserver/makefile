@@ -103,7 +103,8 @@ SRC += temperature.c
 
 #SRC += camera/cam.c camera/servo.c
 
-#SRC += cmd.c
+SRC += cmd.c
+SRC += http_get.c
 
 #SRC += tcpservice/tcpcmd.c tcpservice/tcpsrv.c
 
@@ -175,6 +176,7 @@ ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs
 #  -Map:      create map file
 #  --cref:    add cross reference to  map file
 LDFLAGS = -Wl,-Map=$(TARGET).map,--cref
+LDFLAGS += -Wl,--relax
 
 
 

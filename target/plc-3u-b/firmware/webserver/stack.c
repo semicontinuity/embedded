@@ -79,6 +79,8 @@ UDP_PORT_ITEM UDP_PORT_TABLE[MAX_APP_ENTRY] = //!< UDP Port-Tabelle
 unsigned char myip[4];			//!< meine eigene IP
 unsigned char netmask[4];		//!< die Netzwerk Maske
 unsigned char router_ip[4];		//!< der Router/Gateway
+unsigned char broadcast_ip[4];
+
 unsigned int IP_id_counter = 0;
 char eth_buffer[MTU_SIZE+1];	//!< Empfangs- und Sendepuffer für Netzwerk
 
@@ -182,7 +184,7 @@ void tcp_timer_call (void)
 					DEBUG("Eintrag wird entfernt MAX_ERROR STACK:%i\r\n",index);
 					ETH_INT_DISABLE;
 					tcp_entry[index].status =  RST_FLAG | ACK_FLAG;
-					create_new_tcp_packet(0,index);
+					create_new_tcp_packet(0, index);
 					ETH_INT_ENABLE;
 					tcp_index_del(index);
 				}
@@ -667,7 +669,7 @@ void arp_reply (void)
  */
 char arp_request (unsigned long dest_ip)
 {
-	char buffer[ARP_REQUEST_LEN];
+    char buffer[ARP_REQUEST_LEN];
     unsigned char index = 0;
     unsigned char index_tmp;
     unsigned char count;
@@ -1190,10 +1192,10 @@ void tcp_socket_process(void)
 //----------------------------------------------------------------------------
 /**
  *	\ingroup stack
- * Diese Routine Erzeugt ein neues TCP Packet
+ * Creates and sends new TCP Packet
  *
  */
-void create_new_tcp_packet(unsigned int data_length,unsigned char index)
+void create_new_tcp_packet(unsigned int data_length, unsigned char index)
 {
 	unsigned int  result16;
 	unsigned long result32;
@@ -1218,9 +1220,9 @@ void create_new_tcp_packet(unsigned int data_length,unsigned char index)
 	tcp->TCP_HdrFlags = tcp_entry[index].status;
 
 	//Verbindung wird aufgebaut
-	if(tcp_entry[index].status & SYN_FLAG)
+	if ((tcp_entry[index].status & SYN_FLAG))
 	{
-	    result32++;
+	    if (!tcp_entry[index].first_ack) result32++;
 	    // MSS-Option (siehe RFC 879) wil.
 	    eth_buffer[TCP_DATA_START]   = 2;
 	    eth_buffer[TCP_DATA_START+1] = 4;
@@ -1251,7 +1253,7 @@ void create_new_tcp_packet(unsigned int data_length,unsigned char index)
 	tcp->TCP_Chksum = htons(result16);
 
 	//Send the TCP packet
-	ETH_PACKET_SEND(bufferlen,(uint8_t *)eth_buffer);
+	ETH_PACKET_SEND (bufferlen, (uint8_t *)eth_buffer);
 	//Für Retransmission
 	tcp_entry[index].status = 0;
 	return;
@@ -1316,8 +1318,8 @@ void tcp_port_open (unsigned long dest_ip,unsigned int port_dst,unsigned int por
 			tcp_entry[index].ip = dest_ip;
 			tcp_entry[index].src_port = port_dst;
 			tcp_entry[index].dest_port = port_src;
-			tcp_entry[index].ack_counter = 1234;
-			tcp_entry[index].seq_counter = 2345;
+			tcp_entry[index].ack_counter = 0;
+			tcp_entry[index].seq_counter = 0;
 			tcp_entry[index].time = MAX_TCP_PORT_OPEN_TIME;
 			DEBUG("TCP Open neuer Eintrag %i\r\n",index);
 			break;
@@ -1330,7 +1332,7 @@ void tcp_port_open (unsigned long dest_ip,unsigned int port_dst,unsigned int por
 	}
 	
 	tcp_entry[index].status =  SYN_FLAG;
-	create_new_tcp_packet(0,index);
+	create_new_tcp_packet(0, index);
 	ETH_INT_ENABLE;
 	return;
 }

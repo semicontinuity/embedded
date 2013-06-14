@@ -281,7 +281,7 @@ static void enc_write_reg( unsigned char reg, unsigned char value )
 	enc_deselect();
 }
 
-#if 0
+//#if 0
 static unsigned int enc_read_phyreg( unsigned char phyreg )
 {
 	unsigned int value;
@@ -296,7 +296,7 @@ static unsigned int enc_read_phyreg( unsigned char phyreg )
 
 	return value;
 }
-#endif
+//#endif
 
 static void enc_write_phyreg( unsigned char phyreg, unsigned int value )
 {
@@ -569,6 +569,10 @@ static void enc_regdump(void)
 #endif
 
 //-----------------------------------------------------------------------------
+
+void enc_wait_link(void) {
+    while (!(enc_read_phyreg(ENC_REG_PHSTAT2) & (1 << ENC_BIT_LSTAT)));
+}
 
 /**
  *	\ingroup nic

@@ -173,6 +173,12 @@
 	#undef	USE_DNS
 	#define USE_DNS			0
 	#endif
+
+
+#define USE_NOTIFICATIONS          1
+#define NOTIFICATIONS__SERVER_HOST IP(192,168,2,20)
+#define NOTIFICATIONS__SERVER_PORT (8080)
+
 	
 	//Broadcast-Adresse für WOL
 	#define USE_WOL			0 				//!< 1 = WOL on
@@ -355,7 +361,7 @@
 	#define USE_TELNET 0
 
 /** Serial terminal ************/
-	#define USE_TERMINAL 0
+	#define USE_TERMINAL 1
 
 
 /** Passwort **********/
