@@ -36,6 +36,8 @@
 
 #include "drivers/out/amplifier_relay.c"
 #include "drivers/out/water_valve.c"
+#include "drivers/out/siren1.c"
+#include "drivers/out/siren2.c"
 
 #include "services/alarm.c"
 #include "services/alarm__timer.c"
@@ -43,11 +45,11 @@
 #include "services/water_leak_handler__timer.c"
 
 #include "endpoints/alarm__state.c"
-#include "endpoints/siren1.c"
-#include "endpoints/siren2.c"
+#include "endpoints/comm__binary__0.c"
+#include "endpoints/comm__binary__1.c"
 #include "endpoints/emergency__water_actuators__0.c"
 #include "endpoints/emergency__water_sensors__0.c"
-#include "endpoints/presense__motion_sensors__0.c"
 #include "endpoints/media__amplifier__0.c"
+#include "endpoints/presense__motion_sensors__0.c"
 
 #include "main.c"

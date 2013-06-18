@@ -12,6 +12,7 @@ void emergency__water_sensors__0__broadcast(void) {
 }
 
 
-uint8_t* emergency__water_sensors__0__get_data(void) {
-    return &water_leak_sensors_scanner__status.state;
+void emergency__water_sensors__0__do_broadcast(void) {
+    notifications_pending__emergency__water_sensors__0__set(0);
+    mcp2515__tx__txb1__send_report(UCAN__PID__EMERGENCY__WATER_SENSORS, 1, &water_leak_sensors_scanner__status.state);
 }

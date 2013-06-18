@@ -11,8 +11,9 @@ void emergency__water_actuators__0__broadcast(void) {
 }
 
 
-uint8_t* emergency__water_actuators__0__get_data(void) {
-    return &water_valve__state;
+void emergency__water_actuators__0__do_broadcast(void) {
+    notifications_pending__emergency__water_actuators__0__set(1);
+    mcp2515__tx__txb1__send_report(UCAN__PID__EMERGENCY__WATER_ACTUATORS, 1, &water_valve__state);
 }
 
 

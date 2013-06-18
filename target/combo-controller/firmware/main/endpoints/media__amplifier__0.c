@@ -2,6 +2,7 @@
 
 #include "flags/notifications_pending__media__amplifier__0.h"
 #include "flags/notifications_pending.h"
+#include "drivers/net/can/mcp251x/tx.h"
 
 
 void media__amplifier__0__broadcast(void) {
@@ -10,8 +11,9 @@ void media__amplifier__0__broadcast(void) {
 }
 
 
-uint8_t* media__amplifier__0__get_data(void) {
-    return &amplifier_relay__state;
+void media__amplifier__0__do_broadcast(void) {
+    notifications_pending__media__amplifier__0__set(0);
+    mcp2515__tx__txb1__send_report(UCAN__PID__MEDIA__AMPLIFIER, 1, &amplifier_relay__state);
 }
 
 

@@ -105,6 +105,11 @@ inline static void mcp2515__tx__txb1__request_to_send(void) {
     mcp2515__tx__request_to_send(MCP251X_INSTRUCTION_REQUEST_TO_SEND | MCP251X_INSTRUCTION_REQUEST_TO_SEND_B1);
 }
 
+inline static void mcp2515__tx__txb1__send_report(const uint8_t report_id, const uint8_t count, const uint8_t* buffer) {
+    mcp2515__tx__txb1__load_report(report_id, count, buffer);
+    mcp2515__tx__txb1__request_to_send();
+}
+
 // TXB2 functions
 // -----------------------------------------------------------------------------
 

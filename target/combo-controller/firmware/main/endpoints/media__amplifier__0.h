@@ -6,9 +6,7 @@
 
 void media__amplifier__0__broadcast(void);
 
-
-uint8_t* media__amplifier__0__get_data(void);
-
+void media__amplifier__0__do_broadcast(void);
 
 void media__amplifier__0__set_data(const uint8_t* data);
 

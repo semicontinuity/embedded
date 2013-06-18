@@ -10,13 +10,12 @@
 // =============================================================================
 
 #include "water_leak_sensors_scanner.h"
-
-#include "drivers/out/water_valve.h"
-#include "drivers/out/siren1.h"
-#include "flags/notifications_pending__siren1.h"
-#include "flags/notifications_pending.h"
-
 #include "services/water_leak_handler__timer.h"
+
+#include "drivers/out/siren1.h"
+#include "drivers/out/water_valve.h"
+
+#include "endpoints/comm__binary__0.h"
 #include "endpoints/emergency__water_actuators__0.h"
 
 #include <stdbool.h>
@@ -41,9 +40,8 @@ inline static void water_leak_handler__init(void) {
 
 
 inline void water_leak_handler__sound__set(const bool on) {
-    if (on) siren1__on(); else siren1__off();
-    notifications_pending__siren1__set(1);
-    notifications_pending__set(1);
+    siren1__set(on);
+    comm__binary__0__broadcast();
 }
 
 inline void water_leak_handler__water_valve__set(const bool on) {

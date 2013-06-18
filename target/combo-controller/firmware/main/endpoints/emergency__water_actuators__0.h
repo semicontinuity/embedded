@@ -5,7 +5,7 @@
 
 void emergency__water_actuators__0__broadcast(void);
 
-uint8_t* emergency__water_actuators__0__get_data(void);
+void emergency__water_actuators__0__do_broadcast(void);
 
 void emergency__water_actuators__0__set_data(const uint8_t* data);
 

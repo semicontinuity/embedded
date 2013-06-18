@@ -6,6 +6,8 @@
 
 INLINE void alarm__state__broadcast(void);
 
+INLINE void alarm__state__do_broadcast(void);
+
 INLINE void alarm__state__set_data(const uint8_t* data);
 
 
