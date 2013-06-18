@@ -6,6 +6,10 @@
 #ifndef __CPU_AVR_TIMER0_H
 #define __CPU_AVR_TIMER0_H
 
+#ifdef timer0__comp__run
+INLINE void timer0__comp__run(void);
+#endif
+
 
 #define TIMER0_MODE_STOPPED		(0)
 #define TIMER0_MODE_RUN_NO_PRESCALER	(                        _BV(CS00))

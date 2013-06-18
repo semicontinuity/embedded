@@ -16,10 +16,10 @@
 
 
 // TX Buffer 1 Header
-extern mcp251x_frame_header mcp2515__tx__txb1_h PROGMEM;
+extern const mcp251x_frame_header mcp2515__tx__txb1_h PROGMEM;
 
 // TX Buffer 2 Header
-extern mcp251x_frame_header mcp2515__tx__txb2_h PROGMEM;
+extern const mcp251x_frame_header mcp2515__tx__txb2_h PROGMEM;
 
 
 #if defined(mcp2515__tx__txb0__available__HOST) && defined(mcp2515__tx__txb0__available__BIT)

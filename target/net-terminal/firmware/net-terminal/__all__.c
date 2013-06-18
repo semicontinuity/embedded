@@ -1,3 +1,19 @@
+// Library
+#include "cpu/avr/spi_polled.c"
+#include "cpu/avr/timer0.c"
+#ifndef CAN_EMU
+#  include "cpu/avr/int1.c"
+#endif
+#include "cpu/avr/drivers/net/can/mcp251x/operations.c"
+
+#include "util/font/Font_6x8.c"
+
+#include "cpu/avr/drivers/display/mt12864/terminal.c"
+#include "cpu/avr/drivers/display/mt12864/text-output.c"
+#include "cpu/avr/drivers/display/mt12864/bitblt.c"
+#include "cpu/avr/drivers/display/mt12864/driver.c"
+
+
 #include "drivers/keypad2.c"
 
 // Firmware
@@ -25,17 +41,3 @@
 #include "drivers/net/can/mcp251x/rx.c"
 #include "drivers/net/can/mcp251x/tx.c"
 #include "drivers/net/can/mcp251x/int_handler.c"
-
-// Library
-#include "cpu/avr/timer0.c"
-#ifndef CAN_EMU
-#  include "cpu/avr/int1.c"
-#endif
-#include "cpu/avr/drivers/net/can/mcp251x/operations.c"
-
-#include "util/font/Font_6x8.c"
-
-#include "cpu/avr/drivers/display/mt12864/terminal.c"
-#include "cpu/avr/drivers/display/mt12864/text-output.c"
-#include "cpu/avr/drivers/display/mt12864/bitblt.c"
-#include "cpu/avr/drivers/display/mt12864/driver.c"

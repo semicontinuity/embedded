@@ -26,11 +26,9 @@ SRC += can.c
 SRC += pwm.c
 
 # Library
+SRC += cpu/avr/spi_polled.c
 SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
 SRC += cpu/avr/util/debug.c
-
-
-CDEFS += -Ddebug__putc=usart0__out__write
 
 
 include $(ROOT)/cpu/avr/Makefile

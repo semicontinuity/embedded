@@ -15,7 +15,7 @@ CDEFS += $(CONF)
 
 
 CDEFS += -Wl,--relax
-CDEFS += --combine -fwhole-program
+CDEFS += -fwhole-program
 #CDEFS += -Wl,--section-start=.kernel=0x0001000 -Wl,--section-start=.noinit=0x008004EB  -Wl,--defsym=__stack=0x04EA
 # -Wl,--defsym=__stack=0x008002f2
 

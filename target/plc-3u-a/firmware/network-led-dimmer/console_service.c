@@ -1,6 +1,5 @@
 #include "console_service.h"
 #include "parse.h"
-#include "drivers/out/mcp251x_select.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -43,7 +42,7 @@ void console_service__run(void) {
 
             uint8_t addr = parseByte(input_buffer);
             register uint8_t v;
-            mcp251x_select__run(v = mcp251x__read(addr));
+            v = mcp251x__read(addr);
 
 //            debug__putc('<');
 //            debug__putc('r');
@@ -63,7 +62,7 @@ void console_service__run(void) {
             register uint8_t addr = parseByte(input_buffer);
             register uint8_t value = parseByte(input_buffer + 3);
             
-            mcp251x_select__run(mcp251x__write(addr, value));
+            mcp251x__write(addr, value);
             
 //            debug__putc('<');
 //            debug__putc('w');
@@ -76,7 +75,7 @@ void console_service__run(void) {
 //            debug__putc(13);
 //            debug__putc(10);
 
-            mcp251x_select__run(mcp251x__reset());
+            mcp251x__reset();
 
 //            debug__putc('<');
 //            debug__putc('!');

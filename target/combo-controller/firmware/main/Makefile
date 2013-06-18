@@ -76,6 +76,7 @@ SRC += water_leak_sensors_scanner.c
 SRC += $(CAN_C)
 
 # Library
+SRC += cpu/avr/spi_polled.c
 SRC += cpu/avr/util/debug.c
 SRC += cpu/avr/timer2.c
 ifneq ($(CAN_EMU),1)

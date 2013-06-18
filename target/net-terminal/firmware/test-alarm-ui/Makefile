@@ -15,7 +15,7 @@ CDEFS += $(CONF)
 
 
 CDEFS += -Wl,--relax
-CDEFS += --combine -fwhole-program
+CDEFS += -fwhole-program
 #CDEFS += -Wl,--section-start=.kernel=0x0001000 -Wl,--section-start=.noinit=0x008004EB  -Wl,--defsym=__stack=0x04EA
 # -Wl,--defsym=__stack=0x008002f2
 
@@ -42,6 +42,7 @@ SRC += main.c
 # BSP
 
 # Library
+SRC += cpu/avr/spi_polled.c
 SRC += cpu/avr/timer0.c
 SRC += cpu/avr/drivers/display/mt12864/terminal.c
 SRC += cpu/avr/drivers/display/mt12864/text-output.c

@@ -23,19 +23,19 @@
 
 
 // RX Filters 0-2 (uploaded as one piece)
-extern mcp251x_message_id can__rxf0_2[3] PROGMEM;
+extern const mcp251x_message_id can__rxf0_2[3] PROGMEM;
 
 // RX Filters 3-5 (uploaded as one piece)
-extern mcp251x_message_id can__rxf3_5[3] PROGMEM;
+extern const mcp251x_message_id can__rxf3_5[3] PROGMEM;
 
 // RX Masks 0 and 1 (uploaded as one piece)
-extern mcp251x_message_id can__rxm0_1[2] PROGMEM;
+extern const mcp251x_message_id can__rxm0_1[2] PROGMEM;
 
 // TX Buffer 1 Header
-extern mcp251x_frame_header can__txb1_h PROGMEM;
+extern const mcp251x_frame_header can__txb1_h PROGMEM;
 
 // TX Buffer 2 Header
-extern mcp251x_frame_header can__txb2_h PROGMEM;
+extern const mcp251x_frame_header can__txb2_h PROGMEM;
 
 
 /**

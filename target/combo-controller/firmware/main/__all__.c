@@ -1,3 +1,7 @@
+// Library
+#include "cpu/avr/spi_polled.c"
+#include "cpu/avr/timer2.c"
+
 // Kernel
 // -----------------------------------------------------------------------------
 #include "cpu/avr/drivers/net/can/mcp251x/operations.c"
@@ -25,10 +29,6 @@
 #include "services/seconds_timer.c"
 #include "motion_sensors_scanner.c"
 #include "water_leak_sensors_scanner.c"
-
-// Library
-#include "cpu/avr/timer2.c"
-
 
 // Firmware
 #include "descriptor.c"

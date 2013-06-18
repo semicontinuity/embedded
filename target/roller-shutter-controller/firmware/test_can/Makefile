@@ -16,5 +16,6 @@ CDEFS += $(CONF)
 # Firmware
 SRC += main.c
 SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
+SRC += cpu/avr/spi_polled.c
 
 include $(ROOT)/cpu/avr/Makefile

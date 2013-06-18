@@ -33,7 +33,9 @@ inline static void usart_rx_thread__on_packet_transferred(void) {
 USART_RX_THREAD_INTERRUPT {
     USART_TO_YPLUS();
 
-    DEC(usart_rx_thread__size);
-    IF_ZERO(usart_rx_thread__on_packet_transferred());
+//    DEC(usart_rx_thread__size);
+//    IF_ZERO(usart_rx_thread__on_packet_transferred());
+    if (!(--usart_rx_thread__size)) usart_rx_thread__on_packet_transferred();
+
     RETI();    
 }

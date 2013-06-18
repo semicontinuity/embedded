@@ -19,7 +19,7 @@ CAN_EMU = 0
 CDEFS += -Wunsafe-loop-optimizations
 CDEFS += -Wl,--relax
 #CDEFS += -fwhole-program
-CDEFS += --combine -fwhole-program -fno-tree-loop-optimize -fno-unswitch-loops -finline-functions
+CDEFS += -fwhole-program -fno-tree-loop-optimize -fno-unswitch-loops -finline-functions
 
 #CDEFS += -Wl,--section-start=.kernel=0x0001000 -Wl,--section-start=.noinit=0x008004EB  -Wl,--defsym=__stack=0x04EA
 # -Wl,--defsym=__stack=0x008002f2
@@ -54,6 +54,16 @@ else
 
 CDEFS += -DINLINE=
 
+# Library
+SRC += cpu/avr/spi_polled.c
+SRC += cpu/avr/timer0.c
+SRC += cpu/avr/drivers/display/mt12864/terminal.c
+SRC += cpu/avr/drivers/display/mt12864/text-output.c
+SRC += cpu/avr/drivers/display/mt12864/bitblt.c
+SRC += cpu/avr/drivers/display/mt12864/driver.c
+SRC += util/font/Font_6x8.c
+SRC += util/hex.c
+
 # Firmware
 SRC += main.c
 
@@ -65,15 +75,6 @@ SRC += drivers/keypad.c
 SRC += drivers/in/sensors.c
 SRC += services/lcd_backlight_fader.c
 SRC += services/lcd_backlight_service.c
-
-# Library
-SRC += cpu/avr/timer0.c
-SRC += cpu/avr/drivers/display/mt12864/terminal.c
-SRC += cpu/avr/drivers/display/mt12864/text-output.c
-SRC += cpu/avr/drivers/display/mt12864/bitblt.c
-SRC += cpu/avr/drivers/display/mt12864/driver.c
-SRC += util/font/Font_6x8.c
-SRC += util/hex.c
 
 endif
 

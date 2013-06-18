@@ -42,6 +42,7 @@ SRC += can.c
 
 # Library
 SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
+SRC += cpu/avr/spi_polled.c
 
 endif
 

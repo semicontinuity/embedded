@@ -25,6 +25,7 @@
 //#include "drivers/in/sensors.c"
 
 // Library
+#include "cpu/avr/spi_polled.c"
 #include "cpu/avr/timer0.c"
 #ifndef CAN_EMU
 //#  include "cpu/avr/int1.c"

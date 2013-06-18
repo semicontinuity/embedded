@@ -102,38 +102,38 @@ inline static void timer0__switch_conf(uint32_t old_conf, uint32_t new_conf) {
 }
 
 
-inline static void timer0__compare_a__interrupt_enable(void) {
+inline void timer0__compare_a__interrupt_enable(void) {
     TIMSK0 |= _BV(OCIE0A);
 }
 
-inline static void timer0__compare_a__interrupt_disable(void) {
+inline void timer0__compare_a__interrupt_disable(void) {
     TIMSK0 &= ~_BV(OCIE0A);
 }
 
 
-inline static void timer0__compare_b__interrupt_enable(void) {
+inline void timer0__compare_b__interrupt_enable(void) {
     TIMSK0 |= _BV(OCIE0B);
 }
 
-inline static void timer0__compare_b__interrupt_disable(void) {
+inline void timer0__compare_b__interrupt_disable(void) {
     TIMSK0 &= ~_BV(OCIE0B);
 }
 
 
-inline static void timer0__overflow_interrupt_enable(void) {
+inline void timer0__overflow_interrupt_enable(void) {
     TIMSK0 |= _BV(TOIE0);
 }
 
-inline static void timer0__overflow_interrupt_disable(void) {
+inline void timer0__overflow_interrupt_disable(void) {
     TIMSK0 &= ~_BV(TOIE0);
 }
 
 
-inline static void timer0__ctc__interrupt__enable(void) {
+inline void timer0__ctc__interrupt__enable(void) {
     timer0__compare_a__interrupt_enable();
 }
 
-inline static void timer0__ctc__interrupt__disable(void) {
+inline void timer0__ctc__interrupt__disable(void) {
     timer0__compare_a__interrupt_disable();
 }
 

@@ -18,3 +18,4 @@
 
 // Library
 #include "cpu/avr/drivers/net/can/mcp251x/operations.c"
+#include "cpu/avr/spi_polled.c"

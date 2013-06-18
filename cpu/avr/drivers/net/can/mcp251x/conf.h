@@ -14,8 +14,6 @@
 
 #include <util/delay.h>
 
-#include "drivers/out/mcp251x_select.h"
-
 #include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
 #include "cpu/avr/drivers/net/can/mcp251x/registers.h"
 #include "cpu/avr/drivers/net/can/mcp251x/operations.h"
@@ -104,13 +102,13 @@ inline static void mcp251x__init(void) {
     // Rely on HW reset 
     _delay_us(50); // >2
 
-    mcp251x_select__run(mcp251x__reset());
+    mcp251x__reset();
 
     _delay_us(50); // >2
 
-    mcp251x_select__run(mcp251x__write(MCP251X_REGISTER_CNF1, MCP251X__CNF1));
-    mcp251x_select__run(mcp251x__write(MCP251X_REGISTER_CNF2, MCP251X__CNF2));
-    mcp251x_select__run(mcp251x__write(MCP251X_REGISTER_CNF3, MCP251X__CNF3));
+    mcp251x__write(MCP251X_REGISTER_CNF1, MCP251X__CNF1);
+    mcp251x__write(MCP251X_REGISTER_CNF2, MCP251X__CNF2);
+    mcp251x__write(MCP251X_REGISTER_CNF3, MCP251X__CNF3);
 }
 
 #endif
