@@ -18,7 +18,7 @@ void Draw_Bitmap(
     uint8_t Y,
     uint8_t W,
     uint8_t H,
-    prog_uint8_t *pData,
+    const uint8_t *pData,
     uint8_t flags);
 
 

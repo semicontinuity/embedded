@@ -3,7 +3,7 @@
 
 #include "util/font/fixed-width-font.h"
 
-extern prog_uint8_t Font_6x8_Data[];
+extern const uint8_t PROGMEM Font_6x8_Data[];
 extern struct FONT Font_6x8;
 
 #endif

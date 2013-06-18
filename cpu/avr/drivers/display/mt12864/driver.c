@@ -100,7 +100,7 @@ void Write_Data_to_LCD(uint8_t c, uint8_t data)
 /* Возвращает:  ничего не возвращает.                                                         */
 /*--------------------------------------------------------------------------------------------*/
 
-void Write_Data_to_LCD_prog(uint8_t c, prog_uint8_t* pData, uint8_t n)
+void Write_Data_to_LCD_prog(uint8_t c, uint8_t * pData , uint8_t n)
 {
   // Дождемся готовности контроллера ЖКИ.
   Wait_LCD_Ready(c);

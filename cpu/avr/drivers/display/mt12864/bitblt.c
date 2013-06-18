@@ -32,7 +32,7 @@ void Draw_Bitmap(
     uint8_t Y,
     uint8_t W,
     uint8_t H,
-    prog_uint8_t *pData,
+    const uint8_t *pData,
     uint8_t flags)
 {
   // Буфер для постраничной обработки изображения.
@@ -67,7 +67,7 @@ void Draw_Bitmap(
       // число битов до конца байта столбца изображения.
       if(((H - h) & 0x07) != 0) n = min(8 - ((H - h) & 0x07), n);
       // Накладываем на считанное изображение наше изображение.
-      prog_uint8_t *p = pData + W * ((H - h) >> 3);
+      const uint8_t *p = pData + W * ((H - h) >> 3);
       for(uint8_t i = 0; i < w; i++)
          {
 //           uint8_t data = *(p + i);
