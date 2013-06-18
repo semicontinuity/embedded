@@ -8,11 +8,13 @@
 #include "kernel.h"
 #include "kernel__handler.h"
 
-#include "endpoints/alarm__auth.h"
-#include "endpoints/alarm__state.h"
-#include "endpoints/presense__motion_sensors__0.h"
 #include "endpoints/emergency__water_actuators__0.h"
 #include "endpoints/emergency__water_sensors__0.h"
+#include "endpoints/security__auth.h"
+#include "endpoints/security__state.h"
+#include "endpoints/presense__motion_sensors__0.h"
+#include "endpoints/comm__binary__0.h"
+#include "endpoints/comm__binary__1.h"
 #include "endpoints/media__amplifier__0.h"
 
 
@@ -35,7 +37,7 @@ void comm_service__handle(const uint8_t event, const uint8_t message_type) {
             else
                 emergency__water_actuators__0__set_data(kernel__frame.data);
         }
-        else if (report == UCAN__PID__PRESENCE__MOTION_SENSORS) {
+        else if (report == UCAN__PID__PRESENSE__MOTION_SENSORS) {
             if (message_type == UCAN_MSG_TYPE_GET)
                 presense__motion_sensors__0__broadcast();
             else if (message_type == UCAN_MSG_TYPE_VALUE)
@@ -43,13 +45,28 @@ void comm_service__handle(const uint8_t event, const uint8_t message_type) {
         }
         else if (report == UCAN__PID__SECURITY__AUTH) {
             if (message_type == UCAN_MSG_TYPE_GET)
-                alarm__auth__broadcast();
+                security__auth__broadcast();
         }
         else if (report == UCAN__PID__SECURITY__STATE) {
             if (message_type == UCAN_MSG_TYPE_GET)
-                alarm__state__broadcast();
+                security__state__broadcast();
             else if (message_type == UCAN_MSG_TYPE_POST)
-                alarm__state__set_data(kernel__frame.data);
+                security__state__set_data(kernel__frame.data);
+        }
+        else if (report == UCAN__PID__COMM__BINARY) {
+            const uint8_t obj_id = UCAN_OBJ_ID(kernel__frame.header.id);
+            if (obj_id == 0) {
+                if (message_type == UCAN_MSG_TYPE_GET)
+                    comm__binary__0__broadcast();
+                else if (message_type == UCAN_MSG_TYPE_POST)
+                    comm__binary__0__set_data(kernel__frame.data);
+            }
+            else if (obj_id == 1) {
+                if (message_type == UCAN_MSG_TYPE_GET)
+                    comm__binary__1__broadcast();
+                else if (message_type == UCAN_MSG_TYPE_POST)
+                    comm__binary__1__set_data(kernel__frame.data);
+            }
         }
         else if (report == UCAN__PID__MEDIA__AMPLIFIER) {
             if (message_type == UCAN_MSG_TYPE_GET)

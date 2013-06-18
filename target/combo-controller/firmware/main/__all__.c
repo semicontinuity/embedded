@@ -44,7 +44,7 @@
 #include "services/alarm__auth.c"
 #include "services/water_leak_handler__timer.c"
 
-#include "endpoints/alarm__state.c"
+#include "endpoints/security__state.c"
 #include "endpoints/comm__binary__0.c"
 #include "endpoints/comm__binary__1.c"
 #include "endpoints/emergency__water_actuators__0.c"

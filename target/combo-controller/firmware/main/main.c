@@ -15,12 +15,12 @@
 #include "flags/notifications_pending.h"
 #include "flags/notifications_pending__emergency__water_sensors__0.h"
 #include "flags/notifications_pending__emergency__water_actuators__0.h"
-#include "flags/notifications_pending__motion_sensors__0.h"
+#include "flags/notifications_pending__presense__motion_sensors__0.h"
 #include "flags/notifications_pending__media__amplifier__0.h"
 #include "flags/notifications_pending__comm__binary__0.h"
 #include "flags/notifications_pending__comm__binary__1.h"
-#include "flags/notifications_pending__alarm__state.h"
-#include "flags/notifications_pending__alarm__auth.h"
+#include "flags/notifications_pending__security__state.h"
+#include "flags/notifications_pending__security__auth.h"
 
 #include "kernel.h"
 
@@ -102,8 +102,8 @@ inline static void application__init(void) {
     notifications_pending__comm__binary__0__init();
     notifications_pending__comm__binary__1__init();
     notifications_pending__presense__motion_sensors__0__init();
-    notifications_pending__alarm__state__init();
-    notifications_pending__alarm__auth__init();
+    notifications_pending__security__state__init();
+    notifications_pending__security__auth__init();
     notifications_pending__init();
 
     // Other drivers
@@ -129,8 +129,8 @@ inline static void application__start(void) {
     notifications_pending__presense__motion_sensors__0__set(0);
 
     // Broadcast these values at startup - for terminals.
-    notifications_pending__alarm__state__set(1);
-    notifications_pending__alarm__auth__set(1);
+    notifications_pending__security__state__set(1);
+    notifications_pending__security__auth__set(1);
     notifications_pending__set(1);
 
     system_timer__start();

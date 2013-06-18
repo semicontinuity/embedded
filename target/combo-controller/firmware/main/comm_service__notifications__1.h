@@ -7,12 +7,14 @@
 #include "endpoints/comm__binary__1.h"
 
 #include "flags/notifications_pending.h"
-#include "flags/notifications_pending__media__amplifier__0.h"
-#include "flags/notifications_pending__emergency__water_actuators__0.h"
 #include "flags/notifications_pending__emergency__water_sensors__0.h"
+#include "flags/notifications_pending__emergency__water_actuators__0.h"
+#include "flags/notifications_pending__security__state.h"
+#include "flags/notifications_pending__security__auth.h"
 #include "flags/notifications_pending__presense__motion_sensors__0.h"
-#include "flags/notifications_pending__alarm__state.h"
-#include "flags/notifications_pending__alarm__auth.h"
+#include "flags/notifications_pending__comm__binary__0.h"
+#include "flags/notifications_pending__comm__binary__1.h"
+#include "flags/notifications_pending__media__amplifier__0.h"
 
 #include <stdint.h>
 
@@ -31,8 +33,14 @@ inline static void comm_service__notifications__1__run(void) {
         else if (notifications_pending__emergency__water_actuators__0__is_set()) {
             emergency__water_actuators__0__do_broadcast();
         }
-        else if (notifications_pending__media__amplifier__0__is_set()) {
-            media__amplifier__0__do_broadcast();
+        else if (notifications_pending__security__state__is_set()) {
+            security__state__do_broadcast();
+        }
+        else if (notifications_pending__security__auth__is_set()) {
+            security__auth__do_broadcast();
+        }
+        else if (notifications_pending__presense__motion_sensors__0__is_set()) {
+            presense__motion_sensors__0__do_broadcast();
         }
         else if (notifications_pending__comm__binary__0__is_set()) {            
             comm__binary__0__do_broadcast();
@@ -40,11 +48,8 @@ inline static void comm_service__notifications__1__run(void) {
         else if (notifications_pending__comm__binary__1__is_set()) {
             comm__binary__1__do_broadcast();
         }
-        else if (notifications_pending__alarm__state__is_set()) {
-            alarm__state__do_broadcast();
-        }
-        else if (notifications_pending__alarm__auth__is_set()) {
-            alarm__auth__do_broadcast();
+        else if (notifications_pending__media__amplifier__0__is_set()) {
+            media__amplifier__0__do_broadcast();
         }
         else {
             notifications_pending__set(0);

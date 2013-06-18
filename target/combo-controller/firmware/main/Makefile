@@ -1,7 +1,7 @@
 TARGET = main
 TARGET_CONF ?= $(TARGET).conf
 MCU = atmega16
-OPT = 3 -mcall-prologues
+OPT = 2
 ROOT = ../../../..
 BSP = ../../bsp
 

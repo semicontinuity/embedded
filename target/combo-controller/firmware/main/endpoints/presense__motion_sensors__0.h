@@ -5,7 +5,7 @@
 
 void presense__motion_sensors__0__broadcast(void);
 
-uint8_t* presense__motion_sensors__0__get_data(void);
+void presense__motion_sensors__0__do_broadcast(void);
 
 void presense__motion_sensors__0__handle(const uint8_t* data);
 

@@ -5,4 +5,6 @@ void comm__binary__1__broadcast(void);
 
 void comm__binary__1__do_broadcast(void);
 
+void comm__binary__1__set_data(const uint8_t* data);
+
 #endif

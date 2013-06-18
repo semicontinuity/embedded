@@ -12,8 +12,9 @@ void presense__motion_sensors__0__broadcast(void) {
 }
 
 
-uint8_t* presense__motion_sensors__0__get_data(void) {
-    return &motion_sensors_scanner__status.state;
+void presense__motion_sensors__0__do_broadcast(void) {
+    notifications_pending__presense__motion_sensors__0__set(0);
+    mcp2515__tx__txb1__send_report(UCAN__PID__PRESENSE__MOTION_SENSORS, 1, &motion_sensors_scanner__status.state);
 }
 
 

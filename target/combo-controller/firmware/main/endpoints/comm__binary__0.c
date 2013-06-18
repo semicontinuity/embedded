@@ -16,3 +16,8 @@ void comm__binary__0__do_broadcast(void) {
     notifications_pending__comm__binary__0__set(0);
     mcp2515__tx__txb1__send_report(UCAN__PID__COMM__BINARY, 1, &siren1__state);
 }
+
+
+void comm__binary__0__set_data(const uint8_t* data) {
+    siren1__set(data[0]);
+}
