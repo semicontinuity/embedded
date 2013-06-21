@@ -34,7 +34,7 @@ void comm_service__handle(const uint8_t event, const uint8_t message_type) {
         else if (report == UCAN__PID__EMERGENCY__WATER_ACTUATORS) {
             if (message_type == UCAN_MSG_TYPE_GET)
                 emergency__water_actuators__0__broadcast();
-            else
+            else if (message_type == UCAN_MSG_TYPE_VALUE)
                 emergency__water_actuators__0__set_data(kernel__frame.data);
         }
         else if (report == UCAN__PID__PRESENSE__MOTION_SENSORS) {
@@ -58,13 +58,13 @@ void comm_service__handle(const uint8_t event, const uint8_t message_type) {
             if (obj_id == 0) {
                 if (message_type == UCAN_MSG_TYPE_GET)
                     comm__binary__0__broadcast();
-                else if (message_type == UCAN_MSG_TYPE_POST)
+                else if (message_type == UCAN_MSG_TYPE_VALUE)
                     comm__binary__0__set_data(kernel__frame.data);
             }
             else if (obj_id == 1) {
                 if (message_type == UCAN_MSG_TYPE_GET)
                     comm__binary__1__broadcast();
-                else if (message_type == UCAN_MSG_TYPE_POST)
+                else if (message_type == UCAN_MSG_TYPE_VALUE)
                     comm__binary__1__set_data(kernel__frame.data);
             }
         }

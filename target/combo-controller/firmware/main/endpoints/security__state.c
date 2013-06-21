@@ -5,6 +5,7 @@
 #include "flags/notifications_pending.h"
 
 #include "drivers/net/can/mcp251x/tx.h"
+#include "kernel.h"
 
 #include <stdint.h>
 

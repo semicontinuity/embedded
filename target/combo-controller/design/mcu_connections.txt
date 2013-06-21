@@ -8,7 +8,7 @@ PA6	ADC6	General purpose opto-isolated input	motion sensor
 PA7	ADC7	General purpose opto-isolated input	motion sensor
 
 PB0		Dry contact sensor			water leak sensor
-PB1							reserved 1
+PB1		flag: security auth notif. pending      (possible to attach debug led)
 PB2	INT2    flag: notifications pending		(possible to attach debug led, use as soft IRQ)
 PB3		Dry contact sensor			water leak sensor
 PB4	SS
@@ -18,12 +18,12 @@ PB7	SCK
 
 PC0	SCL	Low-voltage SSR				reserved 2
 PC1	SDA	Low-voltage SSR				siren 2
-PC2	TCK	flag: water valve changed		(possible to attach debug led)
-PC3	TMS	flag: amplifier relay changed           (possible to attach debug led)
-PC4	TDO	flag: siren 1 changed			(possible to attach debug led)
-PC5	TDI	flag: siren 2 changed			(possible to attach debug led)
-PC6	TOSC1   flag: motion sensors changed		(possible to attach debug led)
-PC7	TOSC2	flag: water leak sensors changed	(possible to attach debug led)
+PC2	TCK	flag: water valve notif. pending	(possible to attach debug led)
+PC3	TMS	flag: amplifier relay notif. pending    (possible to attach debug led)
+PC4	TDO	flag: siren 1 notif. pending            (possible to attach debug led)
+PC5	TDI	flag: siren 2 notif. pending            (possible to attach debug led)
+PC6	TOSC1   flag: motion sensors notif. pending     (possible to attach debug led)
+PC7	TOSC2	flag: water leak sensors notif. pending (possible to attach debug led)
 
 PD0	RXD	Modem / terminal
 PD1	TXD	Modem / terminal
@@ -31,5 +31,5 @@ PD2	INT0	MCP2515 INT
 PD3	INT1	MCP2515 CS
 PD4		Opto-isolated SSR			amplifier
 PD5		Opto-isolated SSR			siren 1
-PD6		flag: alarm state changed               (possible to attach debug led)
+PD6		flag: alarm state notif. pending        (possible to attach debug led)
 PD7		Opto-isolated SSR			water valve

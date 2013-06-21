@@ -5,10 +5,6 @@
 #include <stdint.h>
 
 
-inline void unused1__init(void) {
-    USE_AS_OUTPUT(OUT__UNUSED1);
-}
-
 inline void unused2__init(void) {
     USE_AS_OUTPUT(OUT__UNUSED2);
 }

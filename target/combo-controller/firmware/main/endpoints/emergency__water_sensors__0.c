@@ -4,6 +4,7 @@
 #include "flags/notifications_pending.h"
 
 #include "water_leak_sensors_scanner.h"
+#include "kernel.h"
 
 
 void emergency__water_sensors__0__broadcast(void) {
@@ -14,5 +15,9 @@ void emergency__water_sensors__0__broadcast(void) {
 
 void emergency__water_sensors__0__do_broadcast(void) {
     notifications_pending__emergency__water_sensors__0__set(0);
-    mcp2515__tx__txb1__send_report(UCAN__PID__EMERGENCY__WATER_SENSORS, 1, &water_leak_sensors_scanner__status.state);
+    mcp251x_message_id *id = &kernel__frame.header.id;
+    UCAN_SET_DST(*id, UCAN_DST);
+    UCAN_SET_VALUE_OBJID(*id, 1);
+    UCAN_SET_PORT(*id, UCAN__PID__EMERGENCY__WATER_SENSORS);
+    kernel__send_response(1, &water_leak_sensors_scanner__status.state);
 }

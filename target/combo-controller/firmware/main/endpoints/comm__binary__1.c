@@ -3,7 +3,7 @@
 #include "flags/notifications_pending__comm__binary__1.h"
 #include "flags/notifications_pending.h"
 #include "drivers/out/siren2.h"
-#include "drivers/net/can/mcp251x/tx.h"
+#include "kernel.h"
 
 
 void comm__binary__1__broadcast(void) {
@@ -13,7 +13,11 @@ void comm__binary__1__broadcast(void) {
 
 void comm__binary__1__do_broadcast(void) {
     notifications_pending__comm__binary__1__set(0);
-    mcp2515__tx__txb1__send_report(UCAN__PID__COMM__BINARY, 1, &siren2__state);
+    mcp251x_message_id *id = &kernel__frame.header.id;
+    UCAN_SET_DST(*id, UCAN_DST);
+    UCAN_SET_VALUE_OBJID(*id, 1);
+    UCAN_SET_PORT(*id, UCAN__PID__COMM__BINARY);
+    kernel__send_response(1, &siren2__state);
 }
 
 void comm__binary__1__set_data(const uint8_t* data) {

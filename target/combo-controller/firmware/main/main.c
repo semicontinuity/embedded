@@ -84,7 +84,6 @@ INLINE void seconds_timer__out__run(void) {
 
 inline static void application__init(void) {
     // Output drivers
-    unused1__init();
     unused2__init();
     amplifier_relay__init();
     siren1__init();

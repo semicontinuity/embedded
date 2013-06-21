@@ -19,12 +19,6 @@
 #include <stdint.h>
 
 
-inline static void comm_service__notifications__1__send(const uint8_t report_id, const uint8_t length, uint8_t *data) {
-    mcp2515__tx__txb1__load_report(report_id, length, data);
-    mcp2515__tx__txb1__request_to_send();
-}
-
-
 inline static void comm_service__notifications__1__run(void) {
     if (mcp2515__tx__txb1__available__is_set() && notifications_pending__is_set()) {
         if (notifications_pending__emergency__water_sensors__0__is_set()) {

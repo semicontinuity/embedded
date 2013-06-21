@@ -56,11 +56,16 @@
 #define UCAN_MCAST_BITS(id)             ((id).sidl & UCAN_SIDL_MASK_MCAST)
 #define UCAN_SRC_ADDR_BITS(id)          ((id).eid8 & UCAN_EID8_MASK_SRC)
 #define UCAN_PORT_BITS(id)              ((id).eid0)
-
-#define UCAN_SET_SRC(id, src)           ((id).eid8 = (src))
-
 #define UCAN_PORT_BITS_FP(fp)           (*((uint8_t*)(fp) + 3))
 #define UCAN_OBJ_ID(id)                 (UCAN_OBJ_ID_BITS(id) >> 5)
+
+// Macros for populating the fields
+// -----------------------------------------------------------------------------
+#define UCAN_SET_SRC(id, src)           do {(id).eid8 = (src);} while(0)
+#define UCAN_SET_PORT(id, port)         do {(id).eid0 = (port);} while(0)
+#define UCAN_SET_VALUE_OBJID(id, objid) do {(id).sidl = (((objid) << 5) | (1<<3) | (1<<1) | (1<<0));} while(0)
+#define UCAN_SET_DST(id, dst)           do {(id).sidh = (dst);} while(0)
+
 
 // Macros for mcp251x_message structures
 // -----------------------------------------------------------------------------

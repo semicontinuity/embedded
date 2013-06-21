@@ -12,10 +12,11 @@ vpath %.c $(BSP) $(ROOT)
 include $(TARGET_CONF)
 
 CAN_EMU = 0
-CDEFS += -Wl,--relax 
+#CDEFS += -Wl,--relax 
 CDEFS += -fwhole-program
 #CDEFS += --combine -fwhole-program
-CDEFS += -fno-tree-loop-optimize -fno-unswitch-loops -finline-functions
+CDEFS += -fno-inline-functions
+CDEFS += -fno-tree-loop-optimize -fno-unswitch-loops
 CDEFS += -Wl,--section-start=.kernel=0x0001000 
 CDEFS += -Wl,--section-start=.descriptor__address=$(DESCRIPTOR__ADDRESS)
 CDEFS += -Wl,--section-start=.noinit=0x008004EB  -Wl,--defsym=__stack=0x04EA
