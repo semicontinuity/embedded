@@ -84,26 +84,25 @@ INLINE void seconds_timer__out__run(void) {
 
 inline static void application__init(void) {
     // Output drivers
-    unused2__init();
     amplifier_relay__init();
     siren1__init();
     siren2__init();
     water_valve__init();
+    unused1__init();
+    unused2__init();
+    unused3__init();
+    unused4__init();
+    unused5__init();
+    unused6__init();
+    unused7__init();
+    unused8__init();
+    unused9__init();
+    unused10__init();
+    unused11__init();
 
     // Input drivers
     water_leak_sensors__init();
     motion_sensors__init();
-
-    // Flags
-    notifications_pending__emergency__water_sensors__0__init();
-    notifications_pending__emergency__water_actuators__0__init();
-    notifications_pending__media__amplifier__0__init();
-    notifications_pending__comm__binary__0__init();
-    notifications_pending__comm__binary__1__init();
-    notifications_pending__presense__motion_sensors__0__init();
-    notifications_pending__security__state__init();
-    notifications_pending__security__auth__init();
-    notifications_pending__init();
 
     // Other drivers
     system_timer__init();

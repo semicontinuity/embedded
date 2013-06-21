@@ -13,11 +13,5 @@ DECLARE_BITVAR(notifications_pending__security__auth, NOTIFICATIONS_PENDING__SEC
 DECLARE_FAKE_BITVAR(notifications_pending__security__auth);
 #endif
 
-/**
- * Sets the initial value of the flag.
- */
-inline static void notifications_pending__security__auth__init(void) {
-    USE_AS_OUTPUT(NOTIFICATIONS_PENDING__SECURITY__AUTH);
-}
 
 #endif

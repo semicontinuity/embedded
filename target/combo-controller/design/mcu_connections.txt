@@ -8,28 +8,28 @@ PA6	ADC6	General purpose opto-isolated input	motion sensor
 PA7	ADC7	General purpose opto-isolated input	motion sensor
 
 PB0		Dry contact sensor			water leak sensor
-PB1		flag: security auth notif. pending      (possible to attach debug led)
-PB2	INT2    flag: notifications pending		(possible to attach debug led, use as soft IRQ)
+PB1		unused #1				flag: security auth notif. pending (possible to attach debug led)
+PB2	INT2    unused #2				flag: notifications pending (possible to attach debug led, use as soft IRQ)
 PB3		Dry contact sensor			water leak sensor
-PB4	SS
-PB5	MOSI
-PB6	MISO
-PB7	SCK
+PB4	SS      MCP2515 CS
+PB5	MOSI    MCP2515 MOSI
+PB6	MISO    MCP2515 MISO
+PB7	SCK     MCP2515 SCK
 
-PC0	SCL	Low-voltage SSR				reserved 2
+PC0	SCL	unused #3                               flag: TXB1 available (possible to attach debug led, solder low-voltage SSR)
 PC1	SDA	Low-voltage SSR				siren 2
-PC2	TCK	flag: water valve notif. pending	(possible to attach debug led)
-PC3	TMS	flag: amplifier relay notif. pending    (possible to attach debug led)
-PC4	TDO	flag: siren 1 notif. pending            (possible to attach debug led)
-PC5	TDI	flag: siren 2 notif. pending            (possible to attach debug led)
-PC6	TOSC1   flag: motion sensors notif. pending     (possible to attach debug led)
-PC7	TOSC2	flag: water leak sensors notif. pending (possible to attach debug led)
+PC2	TCK	unused #4                               flag: water valve notif. pending	(possible to attach debug led)
+PC3	TMS	unused #5                               flag: amplifier relay notif. pending    (possible to attach debug led)
+PC4	TDO	unused #6                               flag: siren 1 notif. pending            (possible to attach debug led)
+PC5	TDI	unused #7                               flag: siren 2 notif. pending            (possible to attach debug led)
+PC6	TOSC1   unused #8                               flag: motion sensors notif. pending     (possible to attach debug led)
+PC7	TOSC2	unused #9                               flag: water leak sensors notif. pending (possible to attach debug led)
 
 PD0	RXD	Modem / terminal
 PD1	TXD	Modem / terminal
 PD2	INT0	MCP2515 INT
-PD3	INT1	MCP2515 CS
+PD3	INT1	unused #10                              flag: USART data transmission pending	(possible to attach debug led, use as soft IRQ)
 PD4		Opto-isolated SSR			amplifier
 PD5		Opto-isolated SSR			siren 1
-PD6		flag: alarm state notif. pending        (possible to attach debug led)
+PD6		unused #11                              flag: alarm state notif. pending        (possible to attach debug led)
 PD7		Opto-isolated SSR			water valve
