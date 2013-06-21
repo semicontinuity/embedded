@@ -530,12 +530,10 @@ void httpd_data_send (unsigned char index)
 
 	if(http_entry[index].cam > 0)
 	{
-                int16_t ow = ow_array[0];
-                eth_buffer[TCP_DATA_START + 0] = ow & 0xFF;
-                eth_buffer[TCP_DATA_START + 1] = ow >> 8;
+            memcpy(&eth_buffer[TCP_DATA_START], ow_array, MAXSENSORS << 1);
 
                 tcp_entry[index].app_status = 0xFFFD;
-		create_new_tcp_packet(2, index);
+		create_new_tcp_packet(MAXSENSORS << 1, index);
 		return;	
 	}
 

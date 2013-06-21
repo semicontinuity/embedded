@@ -265,7 +265,7 @@
 
 /** 1-Wire ************/
 	#define USE_OW			1		//!< 1-Wire bus einbinden
-	#define MAXSENSORS		1		//!< max. Anzahl der 1-wire sensoren (DS18B20)
+	#define MAXSENSORS		4		//!< max. Anzahl der 1-wire sensoren (DS18B20)
 	#define OW_ONE_BUS		1		//!< nur ein fest eingestellter 1-wire bus; keine Auswahl
 									//   die Ports werden in onewire.h definiert
 	#define OW_EXTERN_POWERED 1		//!< falls der 1-Wire bus eine externe Versorgungsspannung hat
@@ -273,8 +273,11 @@
 
 	// hier die ausgelesenen ROM-IDs der DS18B20 eintragen
 	#define OW_ID_T01		{0x28, 0x2E, 0x29, 0xA2, 0x04, 0x00, 0x00, 0x80}
+	#define OW_ID_T02		{0x28, 0xA9, 0x39, 0xA3, 0x04, 0x00, 0x00, 0x1C}
+	#define OW_ID_T03		{0x28, 0x68, 0x4E, 0xA2, 0x04, 0x00, 0x00, 0x07}
+	#define OW_ID_T04		{0x28, 0xAE, 0xD7, 0xA2, 0x04, 0x00, 0x00, 0x6E}
 
-        #define OW_IDS {OW_ID_T01}
+        #define OW_IDS {OW_ID_T01, OW_ID_T02, OW_ID_T03, OW_ID_T04}
 /** Kamera ************/
 	//Kamera mit einbinden
 	//Kamera arbeitet nur mit einem 14,7456Mhz Quarz!
