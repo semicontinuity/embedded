@@ -53,3 +53,5 @@
 #include "endpoints/presense__motion_sensors__0.c"
 
 #include "main.c"
+#include "usart_rx_q.c"
+#include "usart_rx_thread.c"

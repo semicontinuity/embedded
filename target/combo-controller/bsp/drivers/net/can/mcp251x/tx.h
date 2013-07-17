@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <avr/pgmspace.h>
+#include <avr/io.h>
 
 #include "cpu/avr/drivers/net/can/mcp251x/bitdefs.h"
 #include "cpu/avr/drivers/net/can/mcp251x/registers.h"
@@ -115,6 +116,10 @@ inline static void mcp2515__tx__txb1__send_report(const uint8_t report_id, const
 
 inline static void mcp2515__tx__txb2__load_buffer(const uint8_t* buffer, uint8_t count) {
     mcp2515__tx__load_buffer(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_2_SIDH, count);
+}
+
+inline static void mcp2515__tx__txb2__load_data(const uint8_t* buffer, uint8_t count) {
+    mcp2515__tx__load_buffer(buffer, MCP251X_INSTRUCTION_LOAD_BUFFER_2_D0, count);
 }
 
 inline static void mcp2515__tx__txb2__load_report(const uint8_t report_id, const uint8_t count, const uint8_t* buffer) {

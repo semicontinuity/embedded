@@ -35,7 +35,7 @@
  *****************************************************************************************************
  */
 
-#define USART_RX_THREAD_INTERRUPT	ISR(USART_RX_vect, USART_RX_vect_attrs)
+#define USART_RX_THREAD_INTERRUPT	ISR(USART_RXC_vect, USART_RX_vect_attrs)
 #define usart_rx_thread__enabled__HOST  (UCSR0B)
 #define usart_rx_thread__enabled__BIT   (RXCIE0)
 DECLARE_BITVAR(usart_rx_thread__enabled, usart_rx_thread__enabled__HOST, usart_rx_thread__enabled__BIT);
