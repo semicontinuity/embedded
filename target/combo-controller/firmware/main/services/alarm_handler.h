@@ -34,7 +34,7 @@ inline static void alarm_handler__init(void) {
 void alarm__sound__set(const bool on) {
     if (alarm_handler__sound__enabled) {
         siren2__set(on);
-        comm__binary__1__broadcast();
+        comm__binary__1__request_broadcast();
     }
 }
 

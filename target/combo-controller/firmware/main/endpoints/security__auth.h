@@ -10,13 +10,13 @@
 #include "kernel.h"
 
 
-INLINE void security__auth__broadcast(void) {
+INLINE void security__auth__request_broadcast(void) {
     notifications_pending__security__auth__set(1);
     notifications_pending__set(1);
 }
 
 
-INLINE void security__auth__do_broadcast(void) {
+INLINE void security__auth__broadcast(void) {
     notifications_pending__security__auth__set(0);
     mcp251x_message_id *id = &kernel__frame.header.id;
     UCAN_SET_DST(*id, UCAN_DST);

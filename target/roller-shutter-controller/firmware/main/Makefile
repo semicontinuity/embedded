@@ -1,6 +1,7 @@
 TARGET = main
+TARGET_CONF ?= $(TARGET).conf
 MCU = atmega48
-OPT = 3 -mcall-prologues
+OPT = 2 -mcall-prologues
 ROOT = ../../../..
 BSP = ../../bsp
 
@@ -9,25 +10,19 @@ CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)
 
 
-CAN_EMU = 0
-CDEFS += -Wl,--section-start=.kernel=0x00000AC0 -Wl,--section-start=.noinit=0x008002EB  -Wl,--defsym=__stack=0x02EA
-# -Wl,--defsym=__stack=0x008002f2
+include $(TARGET_CONF)
+
+CDEFS += -Wl,--relax
+
+CDEFS += -Wl,--section-start=.module_descriptor__value=$(MODULE_DESCRIPTOR__VALUE)
+CDEFS += -Wl,--section-start=.module_descriptor__address=$(MODULE_DESCRIPTOR__ADDRESS)
+CDEFS += -Wl,--section-start=.kernel=$(KERNEL__ADDRESS)
+CDEFS += -Wl,--section-start=.noinit=$(NOINIT__ADDRESS)
+CDEFS += -Wl,--defsym=__stack=$(STACK__ADDRESS)
 
 # Configuration
 PROPS  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
 CDEFS += $(PROPS)
-ifeq ($(CAN_EMU),1)
-CDEFS += -DCAN_EMU=1
-CONF  = $(shell TARGET=$(TARGET)__can_emu sh $(ROOT)/parse_properties.sh)
-CDEFS += $(CONF)
-CAN_C = can_emu.c
-CAN_SERVICE_C = can_emu_service.c
-else
-CONF  = $(shell TARGET=$(TARGET)__can sh $(ROOT)/parse_properties.sh)
-CDEFS += $(CONF)
-CAN_C = can.c
-CAN_SERVICE_C = can_service.c
-endif
 
 # Compile all sources in one compilation unit (because of the absent link-time optimizations)
 # The goal is to have extra inlining of functions.
@@ -35,7 +30,7 @@ WHOLE_PROGRAM=1
 
 ifeq ($(WHOLE_PROGRAM),1)
 
-CDEFS += -DINLINE="inline static" -DCAN_C=\"$(CAN_C)\" -DCAN_SERVICE_C=\"$(CAN_SERVICE_C)\"
+CDEFS += -DINLINE="inline static"
 SRC += __all__.c
 
 else
@@ -45,22 +40,17 @@ CDEFS += -DINLINE=
 # Firmware
 SRC += main.c
 SRC += kernel.c
-SRC += $(CAN_SERVICE_C)
-SRC += comm_service__descriptor_memory.c
 SRC += comm_service__handler.c
 
 # BSP
 SRC += buttons_scanner.c
-SRC += $(CAN_C)
 SRC += motor_callbacks_nop.c
 SRC += motor_controller.c
 SRC += motor_controller_prescaler.c
 
 # Library
 SRC += cpu/avr/timer2.c
-ifneq ($(CAN_EMU),1)
 SRC += cpu/avr/int0.c
-endif
 SRC += cpu/avr/drivers/net/can/mcp251x/operations.c
 endif
 

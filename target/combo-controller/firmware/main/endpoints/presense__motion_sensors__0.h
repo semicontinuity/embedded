@@ -3,9 +3,9 @@
 
 #include <stdint.h>
 
-void presense__motion_sensors__0__broadcast(void);
+void presense__motion_sensors__0__request_broadcast(void);
 
-void presense__motion_sensors__0__do_broadcast(void);
+void presense__motion_sensors__0__broadcast(void);
 
 void presense__motion_sensors__0__handle(const uint8_t* data);
 

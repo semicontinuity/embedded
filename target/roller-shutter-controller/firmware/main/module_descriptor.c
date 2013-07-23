@@ -1,7 +1,7 @@
-#include "comm_service__descriptor_memory.h"
+#include "module_descriptor.h"
+#include <avr/pgmspace.h>
 
-const uint8_t comm_sevice__descriptor_memory__value[] PROGMEM = {
-
+const uint8_t module_descriptor__value[] __attribute__((section(".module_descriptor__value"))) = {
     // Device descriptor
     // -----------------
     0x4B, 0x49,                         // idVendor
@@ -42,5 +42,7 @@ const uint8_t comm_sevice__descriptor_memory__value[] PROGMEM = {
     0xFF,                               // bInterfaceSubclass
     1,                                  // bNumSlots
     1,                                  // bNumReports
-    4                                   // iInterface = "Keypad"    
+    4                                   // iInterface = "Keypad"
 };
+
+const uint8_t* const module_descriptor__address __attribute__((section(".module_descriptor__address"))) = module_descriptor__value;

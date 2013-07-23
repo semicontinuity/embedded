@@ -41,12 +41,12 @@ inline static void water_leak_handler__init(void) {
 
 inline void water_leak_handler__sound__set(const bool on) {
     siren1__set(on);
-    comm__binary__0__broadcast();
+    comm__binary__0__request_broadcast();
 }
 
 inline void water_leak_handler__water_valve__set(const bool on) {
     water_valve__set(on);
-    emergency__water_actuators__0__broadcast();
+    emergency__water_actuators__0__request_broadcast();
 }
 
 

@@ -1,5 +1,6 @@
 // =============================================================================
 // Controller.
+// Translates button events into motor motion.
 // =============================================================================
 
 #include <avr/eeprom.h>
@@ -9,6 +10,7 @@
 
 uint8_t EEMEM ee__controller__enabled = CONTROLLER__ENABLED;
 uint8_t controller__enabled;
+
 
 inline static void controller__init(void) {
     controller__enabled = eeprom_read_byte(&ee__controller__enabled);

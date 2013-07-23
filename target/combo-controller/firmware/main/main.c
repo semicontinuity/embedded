@@ -53,7 +53,7 @@
  * Callback function, called by water_leak_sensors_scanner__run() when any of the sensors has changed state.
  */
 INLINE void water_leak_sensors_scanner__status__on_change(void) {
-    emergency__water_sensors__0__broadcast();
+    emergency__water_sensors__0__request_broadcast();
     water_leak_handler__run();
 }
 

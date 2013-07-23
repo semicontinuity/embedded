@@ -3,9 +3,9 @@
 
 #include <stdint.h>
 
-void emergency__water_sensors__0__broadcast(void);
+void emergency__water_sensors__0__request_broadcast(void);
 
-void emergency__water_sensors__0__do_broadcast(void);
+void emergency__water_sensors__0__broadcast(void);
 
 #endif
 

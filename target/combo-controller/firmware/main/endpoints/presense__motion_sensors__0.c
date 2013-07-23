@@ -7,13 +7,13 @@
 #include "kernel.h"
 
 
-void presense__motion_sensors__0__broadcast(void) {
+void presense__motion_sensors__0__request_broadcast(void) {
     notifications_pending__presense__motion_sensors__0__set(1);
     notifications_pending__set(1);
 }
 
 
-void presense__motion_sensors__0__do_broadcast(void) {
+void presense__motion_sensors__0__broadcast(void) {
     notifications_pending__presense__motion_sensors__0__set(0);
     mcp251x_message_id *id = &kernel__frame.header.id;
     UCAN_SET_DST(*id, UCAN_DST);

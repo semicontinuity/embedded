@@ -46,9 +46,4 @@ inline static void system_timer__stop(void) {
     timer2__switch_conf(SYSTEM_TIMER__CONF__STARTED, SYSTEM_TIMER__CONF__INITIALIZED);
 }
 
-
-inline static void system_timer__loop(void) {
-    for(;;);
-}
-
 #endif

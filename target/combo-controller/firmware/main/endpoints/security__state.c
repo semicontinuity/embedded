@@ -10,12 +10,12 @@
 #include <stdint.h>
 
 
-INLINE void security__state__broadcast(void) {
+INLINE void security__state__request_broadcast(void) {
     notifications_pending__security__state__set(1);
     notifications_pending__set(1);
 }
 
-INLINE void security__state__do_broadcast(void) {
+INLINE void security__state__broadcast(void) {
     notifications_pending__security__state__set(0);
     mcp2515__tx__txb1__send_report(UCAN__PID__SECURITY__STATE, 1, (uint8_t*)&alarm__state);
 }
@@ -37,5 +37,5 @@ INLINE void security__state__set_data(const uint8_t* data) {
  * Callback implementation
  */
 INLINE void alarm__state__on_change(void) {
-    security__state__broadcast();
+    security__state__request_broadcast();
 }

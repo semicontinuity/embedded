@@ -6,12 +6,12 @@
 #include "kernel.h"
 
 
-void comm__binary__1__broadcast(void) {
+void comm__binary__1__request_broadcast(void) {
     notifications_pending__comm__binary__1__set(1);
     notifications_pending__set(1);
 }
 
-void comm__binary__1__do_broadcast(void) {
+void comm__binary__1__broadcast(void) {
     notifications_pending__comm__binary__1__set(0);
     mcp251x_message_id *id = &kernel__frame.header.id;
     UCAN_SET_DST(*id, UCAN_DST);

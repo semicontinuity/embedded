@@ -232,6 +232,10 @@ Parameter family COMM (0x80)
     Port COMM__STREAM (0x82)
         Incoming POST messages with stream data
         Outgoing POST messages with stream data
+    Port COMM__BITS (0x83)
+        Incoming GET requests: requests for the state of bit data
+        Incoming POST messages with bit data
+        Outgoing VALUE messages with bit data
 
 Parameter family MEDIA (0x90)
     Port MEDIA__AMPLIFIER (0x90)

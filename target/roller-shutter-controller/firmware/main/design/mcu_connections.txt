@@ -1,0 +1,24 @@
+PB0		Motor up
+PB1		Motor down
+PB2	SS      MCP2515 CS
+PB3	MOSI    MCP2515 MOSI
+PB4	MISO    MCP2515 MISO
+PB5	SCK     MCP2515 SCK
+PB6	XTAL1   Unused 10
+PB7	XTAL2   Unused 11
+
+PC0	        Unused 4
+PC1	        Unused 5
+PC2	        Unused 6
+PC3	        Unused 7
+PC4	        Unused 8
+PC5	        Unused 9
+
+PD0	RXD	Debug console
+PD1	TXD	Debug console
+PD2	INT0	MCP2515 INT
+PD3	        Unused 1
+PD4		Unused 2
+PD5		Button 1
+PD6		Button 2
+PD7             Unused 3
