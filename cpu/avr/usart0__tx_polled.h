@@ -16,10 +16,10 @@
 
 
 // =============================================================================
-// usart0__out__write
+// usart0__out__wait
 // =============================================================================
 
-inline void usart0__out__write(char c) {
+inline void usart0__out__wait(void) {
 #if defined(__AVR_ATmega48__)\
  || defined(__AVR_ATmega88__)\
  || defined(__AVR_ATmega168__)\
@@ -29,13 +29,23 @@ inline void usart0__out__write(char c) {
  || defined(__AVR_ATmega168P__)\
  || defined(__AVR_ATmega328P__)
     loop_until_bit_is_set(UCSR0A, UDRE0);
-    UDR0 = c;
 #elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     loop_until_bit_is_set(UCSRA, UDRE);
-    UDR = c;
+#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+    loop_until_bit_is_set(UCSR1A, UDRE1);
 #else
     #error "Unsupported MCU"
 #endif
+}
+
+
+// =============================================================================
+// usart0__out__write
+// =============================================================================
+
+inline void usart0__out__write(char c) {
+    usart0__out__wait();
+    usart0__putc(c);
 }
 
 

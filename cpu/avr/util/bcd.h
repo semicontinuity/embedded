@@ -15,4 +15,9 @@
  */
 uint16_t uint9_to_bcd(const uint16_t number);
 
+/**
+ * Converts the value to BCD representation. 
+ */
+uint16_t uint8_to_bcd(const uint8_t number);
+
 #endif

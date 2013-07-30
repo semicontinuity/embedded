@@ -99,6 +99,8 @@ inline void usart0__switch_conf(const uint32_t old_conf, const uint32_t new_conf
 }
 #elif defined(__AVR_ATmega16__) || defined(__AVR_ATmega8__)
     // usart0__switch_conf not supported yet
+#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+    // usart0__switch_conf not supported yet
 #else
     #error "Unsupported MCU"
 #endif
@@ -113,6 +115,7 @@ inline void usart0__switch_conf(const uint32_t old_conf, const uint32_t new_conf
  || defined(__AVR_ATmega88P__)\
  || defined(__AVR_ATmega168P__)\
  || defined(__AVR_ATmega328P__)
+
 
 #define usart0__rx__complete_interrupt__VECTOR                    (USART_RX_vect)
 
@@ -134,6 +137,7 @@ inline void usart0__switch_conf(const uint32_t old_conf, const uint32_t new_conf
 
 #define usart0__tx__data_register_empty_interrupt__enabled__HOST  (UCSRB)
 #define usart0__tx__data_register_empty_interrupt__enabled__BIT   (UDRIE)
+
 
 #endif
 
@@ -187,6 +191,18 @@ inline void usart0__rate__set(uint32_t rate) {
     UBRR=(uint8_t)(UBRR_VALUE(rate));
 }
 
+#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+
+inline void usart0__divisor__set(const uint16_t divisor) {
+    UBRR1H = (uint8_t)(divisor>>8);
+    UBRR1L = (uint8_t)(divisor);
+}
+
+inline void usart0__rate__set(const uint32_t rate) {
+    UBRR1H = (uint8_t)(UBRR_VALUE(rate)>>8);
+    UBRR1L = (uint8_t)(UBRR_VALUE(rate));
+}
+
 #else
     #error "Unsupported MCU"
 #endif
@@ -214,6 +230,8 @@ inline void usart0__init(void) {
     UCSR0C = (0<<UMSEL01)|(0<<UMSEL00)|(0<<UPM01)|(0<<UPM00)|(0<<USBS0)|(3<<UCSZ00)|(0<<UCPOL0);
 #elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     UCSRC = (1<<URSEL)|(0<<UMSEL)|(0<<UPM1)|(0<<UPM0)|(0<<USBS)|(3<<UCSZ0)|(0<<UCPOL);
+#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+    UCSR1C = (0<<UMSEL11)|(0<<UMSEL10)|(0<<UPM11)|(0<<UPM10)|(0<<USBS1)|(3<<UCSZ10)|(0<<UCPOL1);
 #else
     #error "Unsupported MCU"
 #endif
@@ -236,6 +254,8 @@ inline void usart0__in__enabled__set(void) {
     set_bit_in_reg(UCSR0B, RXEN0);
 #elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     set_bit_in_reg(UCSRB, RXEN);
+#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+    set_bit_in_reg(UCSR1B, RXEN1);
 #else
     #error "Unsupported MCU"
 #endif
@@ -258,6 +278,56 @@ inline char usart0__in__peek(void) {
     return UDR0;
 #elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     return UDR;
+#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+    return UDR1;
+#else
+    #error "Unsupported MCU"
+#endif
+}
+
+
+// =============================================================================
+// usart0__getc
+// =============================================================================
+
+inline uint8_t usart0__getc(void) {
+#if defined(__AVR_ATmega48__)\
+ || defined(__AVR_ATmega88__)\
+ || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega328__)\
+ || defined(__AVR_ATmega48P__)\
+ || defined(__AVR_ATmega88P__)\
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)
+    return UDR0;
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
+    return UDR;
+#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+    return UDR1;
+#else
+    #error "Unsupported MCU"
+#endif
+}
+
+
+// =============================================================================
+// usart0__putc
+// =============================================================================
+
+inline void usart0__putc(const uint8_t c) {
+#if defined(__AVR_ATmega48__)\
+ || defined(__AVR_ATmega88__)\
+ || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega328__)\
+ || defined(__AVR_ATmega48P__)\
+ || defined(__AVR_ATmega88P__)\
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)
+    UDR0 = c;
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
+    UDR = c;
+#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+    UDR1 = c;
 #else
     #error "Unsupported MCU"
 #endif
@@ -280,6 +350,8 @@ inline void usart0__in__complete_interrupt_enabled__set(void) {
     set_bit_in_reg(UCSR0B, RXCIE0);
 #elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     set_bit_in_reg(UCSRB, RXCIE);
+#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+    set_bit_in_reg(UCSR1B, RXCIE1);
 #else
     #error "Unsupported MCU"
 #endif
@@ -302,6 +374,8 @@ inline void usart0__out__enabled__set(void) {
     set_bit_in_reg(UCSR0B, TXEN0);
 #elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     set_bit_in_reg(UCSRB, TXEN);
+#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+    set_bit_in_reg(UCSR1B, TXEN1);
 #else
     #error "Unsupported MCU"
 #endif

@@ -99,7 +99,7 @@ void LCDG_ClrDisp(unsigned char x1, unsigned char x2);   //очищает дисплей от x1
 void LCDG_SetInv(unsigned char flag);                                                //устанавливает флаг инверсии - текст будет белым, а фон темным 
 void LCDG_SendSymbol(unsigned char xPos, unsigned char yPos, unsigned char data);   //выводит один символ в знакоместо
 void LCDG_SendString(unsigned char xPos, unsigned char yPos, char * string);        //выводит строку из ОЗУ
-void LCDG_SendStringFl(unsigned char xPos, unsigned char yPos, prog_char *string);  //выводит строку из флэш
+void LCDG_SendStringFl(unsigned char xPos, unsigned char yPos, char *string /*PROGMEM*/);  //выводит строку из флэш
 
 //графические функции
 void LCDG_SetMethod(unsigned char met);                                                 //устанавливает метод вывода пикселов на экран - И, ИЛИ, Искл ИЛИ

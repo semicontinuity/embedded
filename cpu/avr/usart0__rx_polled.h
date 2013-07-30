@@ -16,10 +16,10 @@
 
 
 // =============================================================================
-// usart0__in__read
+// usart0__in__wait
 // =============================================================================
 
-inline uint8_t usart0__in__read(void) {
+inline void usart0__in__wait(void) {
 #if defined(__AVR_ATmega48__)\
  || defined(__AVR_ATmega88__)\
  || defined(__AVR_ATmega168__)\
@@ -29,13 +29,23 @@ inline uint8_t usart0__in__read(void) {
  || defined(__AVR_ATmega168P__)\
  || defined(__AVR_ATmega328P__)
     loop_until_bit_is_set(UCSR0A, RXC0);
-    return UDR0;
 #elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
     loop_until_bit_is_set(UCSRA, RXC);
-    return UDR;
+#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
+    loop_until_bit_is_set(UCSR1A, RXC1);
 #else
     #error "Unsupported MCU"
 #endif
+}
+
+
+// =============================================================================
+// usart0__in__read
+// =============================================================================
+
+inline uint8_t usart0__in__read(void) {
+    usart0__in__wait();
+    return usart0__getc();
 }
 
 

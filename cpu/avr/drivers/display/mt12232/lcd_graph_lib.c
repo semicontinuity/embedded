@@ -289,7 +289,7 @@ void LCDG_SendString(unsigned char xPos, unsigned char yPos, char * string)
 
 
 //отображает на жкд строку из флэш памяти
-void LCDG_SendStringFl(unsigned char xPos, unsigned char yPos, prog_char * string)
+void LCDG_SendStringFl(unsigned char xPos, unsigned char yPos, char *string /*PROGMEM*/)
 {
   unsigned char data = pgm_read_byte(string);
   while(data){
