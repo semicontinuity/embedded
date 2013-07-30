@@ -62,11 +62,11 @@ int main(int argc, char **argv) {
     usart0__out__enabled__set();
     usart0__in__enabled__set();
 
-    usart0__rate__set(USART_BAUD_RATE);
+    usart0__rate__set(9600);
     print_result(PSTR("echo at   9600"), test('a'));
-    print_result(PSTR("echo at 115200"), test(115200));
-    print_result(PSTR("write/read 'c'"), test('c'));
-    print_result(PSTR("write/read 'd'"), test('d'));
+
+    usart0__rate__set(115200);
+    print_result(PSTR("echo at 115200"), test('a'));
 
     while(1);
     return 0;

@@ -10,7 +10,7 @@ vpath %.c $(BSP) $(ROOT)
 
 
 CDEFS += -Wl,--relax
-CDEFS += --combine -fwhole-program
+CDEFS += -fwhole-program
 # -Wl,--defsym=__stack=0x008002f2
 
 
