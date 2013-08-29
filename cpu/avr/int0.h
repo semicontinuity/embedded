@@ -1,5 +1,6 @@
 // =============================================================================
-// INT0 driver
+// INT0 driver.
+// (falling edge only)
 // =============================================================================
 
 #ifndef __CPU_AVR_INT0_H
@@ -17,7 +18,7 @@ inline static void int0__init(void) {
     PORTD |= (1<<2); // INT0 is on PD2 pin
 #endif
     // interrupt from INT0 pin, falling edge
-    EICRA = (1<<ISC01);
+    EICRA = (EICRA | (1<<ISC01)) & ~(1<<ISC00);
 }
 
 
@@ -35,7 +36,7 @@ inline static void int0__init(void) {
     PORTD |= (1<<2); // INT0 is on PD2 pin
 #endif
     // interrupt from INT0 pin, falling edge
-    MCUCR |= (1<<ISC01);
+    MCUCR = (MCUCR | (1<<ISC01)) & ~(1<<ISC00);
 }
 
 
@@ -43,6 +44,25 @@ inline static void int0__start(void) {
     // Enable interrupt from INT0
     GICR  |= (1<<INT0);	// enable external interrupt from INT0 pin
 }
+
+
+#elif defined(__AVR_AT90S8535__)
+
+
+inline static void int0__init(void) {
+#ifdef INT0__PULLUP
+    PORTD |= (1<<2); // INT0 is on PD2 pin
+#endif
+    // interrupt from INT0 pin, falling edge
+    MCUCR = (MCUCR | (1<<ISC01)) & ~(1<<ISC00);
+}
+
+
+inline static void int0__start(void) {
+    // Enable interrupt from INT0
+    GIMSK |= (1<<INT0);	// enable external interrupt from INT0 pin
+}
+
 
 #else
 

@@ -16,14 +16,14 @@ inline void pwm__init(void) {
 
 
 inline void pwm__start(void) {
-    timer0__overflow_interrupt_enable();
-    timer0__start(TIMER0_MODE_RUN_NO_PRESCALER);
+    timer0__overflow__interrupt__enable();
+    timer0__switch_conf(TIMER0_CONF_DEFAULT, TIMER0_CONF_NO_PRESCALER);
 }
 
 
 inline void pwm__stop(void) {
-    timer0__stop();
-    timer0__overflow_interrupt_disable();
+    timer0__switch_conf(TIMER0_CONF_NO_PRESCALER, TIMER0_CONF_DEFAULT);
+    timer0__overflow__interrupt__disable();
 }
 
 

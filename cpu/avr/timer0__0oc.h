@@ -1,3 +1,17 @@
+// =============================================================================
+// Timer 0 driver for parts with 2 Output Compare modules
+// and the following configuration registers:
+//
+// TCCR0
+//
+// The 32-bit value, created by concatenation of the values of these registers,
+// is referred to as "configuration value" of the timer.
+// To get the particular configuration value,
+// combine the appropriate with TIMER0_CONF_* constants with logical OR.
+//
+// Timer configurations can be switched with timer0__switch_conf().
+// It produces optimal code, if configuration values are compile-time constants.
+// =============================================================================
 #ifndef __CPU_AVR_TIMER0_0OC_H
 #define __CPU_AVR_TIMER0_0OC_H
 
@@ -22,22 +36,13 @@ inline void timer0__switch_conf(const uint16_t old_conf, const uint16_t new_conf
 }
 
 
-inline void timer0__overflow_interrupt_enable(void) {
+inline void timer0__overflow__interrupt__enable(void) {
     TIMSK |= _BV(TOIE0);
 }
 
-inline void timer0__overflow_interrupt_disable(void) {
+inline void timer0__overflow__interrupt__disable(void) {
     TIMSK &= ~_BV(TOIE0);
 }
-
-
-#define timer0__start(mode) do {\
-    TCCR0 = mode;	/* start timer in the user-defined mode  */\
-} while(0)
-
-#define timer0__stop() do {\
-    TCCR0 = TIMER0_MODE_STOPPED; /* stop timer 0 */\
-} while(0)
 
 
 #endif

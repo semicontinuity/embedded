@@ -58,11 +58,11 @@ inline void timer0__compare__interrupt_disable(void) {
 }
 
 
-inline void timer0__overflow_interrupt_enable(void) {
+inline void timer0__overflow__interrupt__enable(void) {
     TIMSK |= _BV(TOIE0);
 }
 
-inline void timer0__overflow_interrupt_disable(void) {
+inline void timer0__overflow__interrupt__disable(void) {
     TIMSK &= ~_BV(TOIE0);
 }
 

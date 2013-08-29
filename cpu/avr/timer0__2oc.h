@@ -7,8 +7,8 @@
 // OCR0A
 // OCR0B
 //
-// The values of these registers, concatenated together into 32-bit value,
-// is referrd to as "configuration value" of the timer.
+// The 32-bit value, created by concatenation of the values of these registers,
+// is referred to as "configuration value" of the timer.
 // To get the particular configuration value,
 // combine the appropriate with TIMER0_CONF_* constants with logical OR.
 //
@@ -102,50 +102,65 @@ inline static void timer0__switch_conf(uint32_t old_conf, uint32_t new_conf) {
 }
 
 
-inline void timer0__compare_a__interrupt_enable(void) {
+inline void timer0__compare_a__interrupt__enable(void) {
     TIMSK0 |= _BV(OCIE0A);
 }
 
-inline void timer0__compare_a__interrupt_disable(void) {
+inline void timer0__compare_a__interrupt__disable(void) {
     TIMSK0 &= ~_BV(OCIE0A);
 }
 
+inline void timer0__compare_a__interrupt_enabled__set(const uint8_t enable) {
+    if (enable)
+        timer0__compare_a__interrupt__enable();
+    else
+        timer0__compare_a__interrupt__disable();
+}
 
-inline void timer0__compare_b__interrupt_enable(void) {
+
+inline void timer0__compare_b__interrupt__enable(void) {
     TIMSK0 |= _BV(OCIE0B);
 }
 
-inline void timer0__compare_b__interrupt_disable(void) {
+inline void timer0__compare_b__interrupt__disable(void) {
     TIMSK0 &= ~_BV(OCIE0B);
 }
 
+inline void timer0__compare_b__interrupt__enabled__set(const uint8_t enable) {
+    if (enable)
+        timer0__compare_b__interrupt__enable();
+    else
+        timer0__compare_b__interrupt__disable();
+}
 
-inline void timer0__overflow_interrupt_enable(void) {
+
+inline void timer0__overflow__interrupt__enable(void) {
     TIMSK0 |= _BV(TOIE0);
 }
 
-inline void timer0__overflow_interrupt_disable(void) {
+inline void timer0__overflow__interrupt__disable(void) {
     TIMSK0 &= ~_BV(TOIE0);
+}
+
+inline void timer0__overflow_interrupt_enabled__set(const uint8_t enable) {
+    if (enable)
+        timer0__overflow__interrupt__enable();
+    else
+        timer0__overflow__interrupt__disable();
 }
 
 
 inline void timer0__ctc__interrupt__enable(void) {
-    timer0__compare_a__interrupt_enable();
+    timer0__compare_a__interrupt__enable();
 }
 
 inline void timer0__ctc__interrupt__disable(void) {
-    timer0__compare_a__interrupt_disable();
+    timer0__compare_a__interrupt__disable();
 }
 
-#define timer0__start(mode) do {\
-    TCCR0B = mode;	/* start timer in the user-defined mode  */\
-} while(0)
-
-
-#define timer0__stop() do {\
-    TCCR0B = TIMER0_MODE_STOPPED;					\
-} while(0)
-
+inline void timer0__ctc__interrupt__enabled__set(const uint8_t enable) {
+    timer0__compare_a__interrupt_enabled__set(enable);
+}
 
 
 #ifdef timer0__comp_a__run

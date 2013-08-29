@@ -18,7 +18,7 @@ inline static void int1__init(void) {
 #endif
     // external interrupt from INT1 pin, falling edge
     // interrupt on INT1 pin falling edge
-    EICRA = (1<<ISC11);
+    EICRA = (EICRA | (1<<ISC11)) & ~(1<<ISC10);
 }
 
 
@@ -35,7 +35,7 @@ inline static void int1__init(void) {
 #ifdef INT1__PULLUP
     PORTD |= (1<<3); // INT1 is on PD3 pin
 #endif
-    MCUCR = (1<<ISC11);
+    MCUCR = (MCUCR | (1<<ISC11)) & ~(1<<ISC10);
 }
 
 
@@ -44,11 +44,31 @@ inline static void int1__start(void) {
     GICR  |= (1<<INT1);	// enable external interrupt from INT1 pin
 }
 
+
+#elif defined(__AVR_AT90S8535__)
+
+
+inline static void int1__init(void) {
+#ifdef INT1__PULLUP
+    PORTD |= (1<<3); // INT1 is on PD3 pin
+#endif
+    // interrupt from INT1 pin, falling edge
+    MCUCR = (MCUCR | (1<<ISC11)) & ~(1<<ISC10);
+}
+
+
+inline static void int1__start(void) {
+    // Enable interrupt from INT1
+    GIMSK |= (1<<INT1);	// enable external interrupt from INT1 pin
+}
+
+
 #else
 
 #   error "Unsupported MCU"
 
 #endif
+
 
 #ifndef int1__run__attrs
 #define int1__run__attrs

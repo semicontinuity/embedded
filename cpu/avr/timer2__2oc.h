@@ -1,3 +1,21 @@
+// =============================================================================
+// Driver for Timer 2 for parts where Time 2 has 2 Output Compare modules,
+// and the following configuration registers:
+//
+// TCCR2A
+// TCCR2B
+// OCR2A
+// OCR2B
+//
+// The 32-bit value, created by concatenation of the values of these registers,
+// is referred to as "configuration value" of the timer.
+// To get the particular configuration value,
+// combine the appropriate with TIMER2_CONF_* constants with logical OR.
+//
+// Timer configurations can be switched with timer2__switch_conf().
+// It produces optimal code, if configuration values are compile-time constants.
+// =============================================================================
+
 #ifndef __CPU_AVR_TIMER2_2OC_H
 #define __CPU_AVR_TIMER2_2OC_H
 

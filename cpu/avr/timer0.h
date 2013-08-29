@@ -6,6 +6,7 @@
 #ifndef __CPU_AVR_TIMER0_H
 #define __CPU_AVR_TIMER0_H
 
+// Generic "Compare" callback for devices with at least 1 OC unit.
 #ifdef timer0__comp__run
 INLINE void timer0__comp__run(void);
 #endif
@@ -21,10 +22,18 @@ INLINE void timer0__comp__run(void);
 #define TIMER0_MODE_RUN_EXT_CLK_RISING	(_BV(CS02) | _BV(CS01) | _BV(CS00))
 
 
-
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__) ||\
-    defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)\
+#if defined(__AVR_ATmega48__)\
+ || defined(__AVR_ATmega48A__)\
+ || defined(__AVR_ATmega48P__)\
+ || defined(__AVR_ATmega88__)\
+ || defined(__AVR_ATmega88A__)\
+ || defined(__AVR_ATmega88P__)\
+ || defined(__AVR_ATmega88PA__)\
+ || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega168A__)\
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_AT90USB82__)\
+ || defined(__AVR_AT90USB162__)
 
 #   include "cpu/avr/timer0__2oc.h"
 
