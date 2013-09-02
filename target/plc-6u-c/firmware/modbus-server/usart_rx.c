@@ -13,48 +13,30 @@
 
 
 volatile bool usart_rx__enabled;
-volatile bool usart_rx__frame_received;
 
 
 void usart_rx__enable(void) {
     usart_rx__enabled = true;
-    usart_rx__frame_received = false;
 }
 
 
 void usart_rx__disable(void) {
     usart_rx__enabled = false;
-    buffer__clear();
-}
-
-
-void usart_rx__notify_t15_expired(void) {
-    usart_rx__disable();
-}
-
-
-void usart_rx__notify_t35_expired(void) {
-    usart_rx__frame_received = true;
-    delay_timer__stop();
-}
-
-
-bool usart_rx__is_frame_received(void) {
-    return usart_rx__frame_received;
 }
 
 
 ISR(usart0__rx__complete__interrupt__VECTOR) {
+    const uint8_t c = usart0__getc(); // read character in any case
     delay_timer__start();
     if (usart_rx__enabled) {
-        if (--buffer__remaining == 0) {
-            usart_rx__disable();
+        if (!buffer__is_full()) {
+            buffer__put(c);
         }
         else {
-            *buffer__ptr++ = usart0__getc();
+            usart_rx__on_buffer_overflow();            
         }
     }
     else {
-        buffer__remaining = 0; // received frame will be dropped
+        usart_rx__on_unexpected_data();
     }
 }

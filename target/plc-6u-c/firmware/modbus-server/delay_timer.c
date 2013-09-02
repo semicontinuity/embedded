@@ -3,7 +3,6 @@
 // during USART data reception
 // =============================================================================
 
-#include "usart_rx.h"
 #include "delay_timer.h"
 
 #include "cpu/avr/timer1.h"
@@ -35,7 +34,7 @@ void delay_timer__stop(void) {
  * 1.5 characters timeout expired
  */
 ISR(timer1__compare_a__interrupt__VECTOR) {
-    usart_rx__notify_t15_expired();
+    delay_timer__on_t15_expired();
 }
 
 
@@ -43,5 +42,5 @@ ISR(timer1__compare_a__interrupt__VECTOR) {
  * 3.5 characters timeout expired
  */
 ISR(timer1__compare_b__interrupt__VECTOR) {
-    usart_rx__notify_t35_expired();
+    delay_timer__on_t35_expired();
 }

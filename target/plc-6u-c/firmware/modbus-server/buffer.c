@@ -1,24 +1,34 @@
 // =============================================================================
-// Buffer.
+// Non-circular buffer.
+// Data are stored between 'position' and 'limit'.
 // =============================================================================
-
-#include <stdint.h>
-#include <stdbool.h>
 
 #include "buffer.h"
 
 
 uint8_t buffer__data[BUFFER__SIZE];
-uint8_t *buffer__ptr;
-uint8_t buffer__remaining;
+volatile uint8_t *buffer__position;
+volatile uint8_t *buffer__limit;
 
 
 void buffer__init(void) {
-    buffer__clear();
+    buffer__limit = buffer__data;
 }
 
 
-void buffer__clear(void) {
-    buffer__ptr = buffer__data;
-    buffer__remaining = (uint8_t)BUFFER__SIZE;
+uint8_t buffer__get(void) {
+    return *buffer__position++;
 }
+
+void buffer__put(const uint8_t c) {
+    *buffer__limit++ = c;
+}
+
+bool buffer__is_full(void) {
+    return buffer__limit >= buffer__data + BUFFER__SIZE;
+}
+
+bool buffer__is_empty(void) {
+    return buffer__position >= buffer__limit;
+}
+

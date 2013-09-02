@@ -12,8 +12,25 @@
 #include "cpu/avr/usart0.h"
 
 
-ISR(usart0__tx__data_register_empty__interrupt__VECTOR) {
+
+void usart_tx__enable(void) {
+    usart0__tx__data_register_empty__interrupt__enabled__set(1);
 }
+
+void usart_tx__disable(void) {
+    usart0__tx__data_register_empty__interrupt__enabled__set(0);
+}
+
+
+ISR(usart0__tx__data_register_empty__interrupt__VECTOR) {
+    if (!buffer__is_empty()) {
+        usart0__putc(buffer__get());
+    }
+    else {
+        usart_tx__on_frame_sent();
+    }
+}
+
 
 ISR(usart0__tx__complete__interrupt__VECTOR) {
 }
