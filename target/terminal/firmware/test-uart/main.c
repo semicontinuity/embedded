@@ -7,15 +7,14 @@
 int main(void) {
     terminal_init();
     usart0__rate__set(USART_BAUD_RATE);
-    usart0__init();
-    usart0__out__enabled__set();
-    usart0__in__enabled__set();
-//    usart0__in__complete_interrupt_enabled__set();
+    usart0__tx__enabled__set(1);
+    usart0__rx__enabled__set(1);
+//    usart0__rx__complete__interrupt__enabled__set(1);
 
 //    sei();
 
     for (;;) {
-        terminal_displayChar(usart0__in__read());
+        terminal_displayChar(usart0__getc());
     }
    
     return 0;

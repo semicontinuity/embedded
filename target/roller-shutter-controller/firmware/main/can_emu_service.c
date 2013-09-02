@@ -49,7 +49,7 @@ inline static void usart_rx_thread__on_packet_transferred(void) {
 
 
 USART_RX_THREAD_INTERRUPT {
-    ST_YPLUS(usart0__in__peek());
+    ST_YPLUS(usart0__getc());
 
     DEC(usart_rx_thread__size);
     IF_ZERO(usart_rx_thread__on_packet_transferred());

@@ -11,11 +11,11 @@
 # include "cpu/avr/usart0__tx_polled.h"
 
 # if !defined(debug__putc)
-#  define debug__putc usart0__out__write
+#  define debug__putc usart0__putc
 # endif
 
 # if !defined(debug__in__read)
-#  define debug__in__read usart0__in__read
+#  define debug__in__read usart0__getc
 # endif
 
 #endif

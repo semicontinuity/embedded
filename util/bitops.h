@@ -27,7 +27,8 @@ typedef union {
 
 #define DECLARE_BITVAR(name, host, bit) \
 	inline void name##__set(char v)	{ if ((v)) (host) |= (1 << (bit)); else (host) &= ~(1 << (bit));}	\
-	inline bool name##__is_set(void)	{ return (host) & (1 << (bit)); }
+	inline bool name##__is_set(void)	{ return (host) & (1 << (bit)); }                               \
+	inline char name##__get(void)	{ return (host) & (1 << (bit)); }
 
 #define DECLARE_BITVAR_WITH_BINDING(name, host, bit) \
 INLINE void name##__on_set_0(void);      \

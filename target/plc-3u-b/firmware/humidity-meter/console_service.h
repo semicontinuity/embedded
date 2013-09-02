@@ -7,9 +7,8 @@
 
 inline void console_service__init(void) {
     usart0__rate__set(USART_BAUD_RATE);
-    usart0__init();
-    usart0__out__enabled__set();
-    usart0__in__enabled__set();
+    usart0__tx__enabled__set(1);
+    usart0__rx__enabled__set(1);
 }
 
 void console_service__run(void);

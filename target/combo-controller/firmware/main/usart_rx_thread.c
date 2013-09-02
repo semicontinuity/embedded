@@ -13,5 +13,5 @@
 
 
 USART_RX_THREAD_INTERRUPT {
-    usart_rx_q__put(usart0__in__peek());
+    usart_rx_q__put(usart0__getc());
 }

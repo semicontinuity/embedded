@@ -109,10 +109,9 @@ inline static void application__init(void) {
     water_leak_sensors_scanner__init();
     motion_sensors_scanner__init();
     usart0__rate__set(USART_BAUD_RATE);
-    usart0__init();
-    usart0__out__enabled__set();
-    usart0__in__enabled__set();
-    usart0__in__complete_interrupt_enabled__set();
+    usart0__tx__enabled__set(1);
+    usart0__rx__enabled__set(1);
+    usart0__rx__complete__interrupt__enabled__set(1);
 
     // Services
     alarm__init();

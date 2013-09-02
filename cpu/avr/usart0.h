@@ -1,5 +1,5 @@
 // =============================================================================
-// USART0
+// Driver for the first USART (usually USART0, but sometimes USART1)
 //
 // API:
 //
@@ -28,10 +28,55 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include "cpu/avr/gpio.h"
+#include "util/bitops.h"
 
 
+#if defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
 
-#if defined(__AVR_ATmega48__)\
+
+#define USART0_REG_A                                                    (UCSR1A)
+#define USART0_REG_B                                                    (UCSR1B)
+#define USART0_REG_C                                                    (UCSR1C)
+#define USART0_REG_D                                                    (UCSR1D)
+
+#define USART0_DATA_REGISTER                                            (UDR1)
+#define USART0_BIT_RATE_REGISTER                                        (UBRR1)
+#define USART0_BIT_RATE_REGISTER_TYPE                                   uint16_t
+
+#define usart0__rx__enabled__HOST                                       (UCSR1B)
+#define usart0__rx__enabled__BIT                                        (RXEN1)
+#define usart0__tx__enabled__HOST                                       (UCSR1B)
+#define usart0__tx__enabled__BIT                                        (TXEN1)
+
+#define usart0__rx__complete__value__HOST                               (UCSR1A)
+#define usart0__rx__complete__value__BIT                                (RXC1)
+#define usart0__rx__complete__interrupt__VECTOR                         (USART1_RX_vect)
+#define usart0__rx__complete__interrupt__enabled__HOST                  (UCSR1B)
+#define usart0__rx__complete__interrupt__enabled__BIT                   (RXCIE1)
+
+#define usart0__tx__complete__value__HOST                               (UCSR1A)
+#define usart0__tx__complete__value__BIT                                (TXC1)
+#define usart0__tx__complete__interrupt__VECTOR                         (USART1_TX_vect)
+#define usart0__tx__complete__interrupt__enabled__HOST                  (UCSR1B)
+#define usart0__tx__complete__interrupt__enabled__BIT                   (TXCIE1)
+
+#define usart0__tx__data_register_empty__value__HOST                    (UCSR1A)
+#define usart0__tx__data_register_empty__value__BIT                     (UDRE1)
+#define usart0__tx__data_register_empty__interrupt__VECTOR              (USART1_UDRE_vect)
+#define usart0__tx__data_register_empty__interrupt__enabled__HOST       (UCSR1B)
+#define usart0__tx__data_register_empty__interrupt__enabled__BIT        (UDRIE1)
+
+#define usart0__double_speed__BIT                                       (U2X1)
+#define usart0__multiprocessor__BIT                                     (MPCM1)
+#define usart0__polarity__BIT                                           (UCPOL1)
+#define usart0__char_size0__BIT                                         (UCSZ10)
+#define usart0__char_size2__BIT                                         (UCSZ12)
+#define usart0__stop_bits__BIT                                          (USBS1)
+#define usart0__mode__BIT                                               (UMSEL10)
+#define usart0__parity__BIT                                             (UMPM1)
+
+
+#elif defined(__AVR_ATmega48__)\
  || defined(__AVR_ATmega88__)\
  || defined(__AVR_ATmega168__)\
  || defined(__AVR_ATmega328__)\
@@ -40,273 +85,255 @@
  || defined(__AVR_ATmega168P__)\
  || defined(__AVR_ATmega328P__)
 
-#define USART0_CONF_REGA(v)             (((v) & 0xFF) << 0)
-#define USART0_CONF_REGB(v)             (((v) & 0xFF) << 8)
-#define USART0_CONF_REGC(v)             (((v) & 0xFF) << 16)
-#define USART0_CONF_REGD(v)             (((v) & 0xFF) << 24)
+
+#define USART0_REG_A                                                    (UCSR0A)
+#define USART0_REG_B                                                    (UCSR0B)
+#define USART0_REG_C                                                    (UCSR0C)
+
+#define USART0_DATA_REGISTER                                            (UDR0)
+#define USART0_BIT_RATE_REGISTER                                        (UBRR0)
+#define USART0_BIT_RATE_REGISTER_TYPE                                   uint16_t
+
+#define usart0__rx__enabled__HOST                                       (UCSR0B)
+#define usart0__rx__enabled__BIT                                        (RXEN0)
+#define usart0__tx__enabled__HOST                                       (UCSR0B)
+#define usart0__tx__enabled__BIT                                        (TXEN0)
+
+#define usart0__rx__complete__value__HOST                               (UCSR0A)
+#define usart0__rx__complete__value__BIT                                (RXC0)
+#define usart0__rx__complete__interrupt__VECTOR                         (USART_RX_vect)
+#define usart0__rx__complete__interrupt__enabled__HOST                  (UCSR0B)
+#define usart0__rx__complete__interrupt__enabled__BIT                   (RXCIE0)
+
+#define usart0__tx__complete__value__HOST                               (UCSR0A)
+#define usart0__tx__complete__value__BIT                                (TXC0)
+#define usart0__tx__complete__interrupt__VECTOR                         (USART_TX_vect)
+#define usart0__tx__complete__interrupt__enabled__HOST                  (UCSR0B)
+#define usart0__tx__complete__interrupt__enabled__BIT                   (TXCIE0)
+
+#define usart0__tx__data_register_empty__value__HOST                    (UCSR0A)
+#define usart0__tx__data_register_empty__value__BIT                     (UDRE0)
+#define usart0__tx__data_register_empty__interrupt__VECTOR              (USART_UDRE_vect)
+#define usart0__tx__data_register_empty__interrupt__enabled__HOST       (UCSR0B)
+#define usart0__tx__data_register_empty__interrupt__enabled__BIT        (UDRIE0)
+
+#define usart0__double_speed__BIT                                       (U2X0)
+#define usart0__multiprocessor__BIT                                     (MPCM0)
+#define usart0__polarity__BIT                                           (UCPOL0)
+#define usart0__char_size0__BIT                                         (UCSZ00)
+#define usart0__char_size2__BIT                                         (UCSZ02)
+#define usart0__stop_bits__BIT                                          (USBS0)
+#define usart0__mode__BIT                                               (UMSEL00)
+#define usart0__parity__BIT                                             (UMPM0)
 
 
-#define USART0_CONF_DOUBLE_SPEED        USART0_CONF_REGA(1<<U2X0)
+#elif defined(__AVR_ATmega16__) || defined(__AVR_ATmega8__)
 
-#define USART0_CONF_MULTIPROCESSOR      USART0_CONF_REGA(1<<MPCM0)
 
-#define USART0_CONF_RX_COMPLETE_INT     USART0_CONF_REGB(1<<RXCIE0)
-#define USART0_CONF_TX_COMPLETE_INT     USART0_CONF_REGB(1<<TXCIE0)
-#define USART0_CONF_DATA_REG_EMPTY_INT  USART0_CONF_REGB(1<<UDRIE0)
-#define USART0_CONF_RX_ENABLED          USART0_CONF_REGB(1<<RXEN0)
-#define USART0_CONF_TX_ENABLED          USART0_CONF_REGB(1<<TXEN0)
+#define USART0_REG_A                                                    (UCSRA)
+#define USART0_REG_B                                                    (UCSRB)
+#define USART0_REG_C                                                    (UCSRC)
 
-#define USART0_CONF_MODE_ASYNC       	USART0_CONF_REGC((0<<UMSEL01)|(0<<UMSEL00))
-#define USART0_CONF_MODE_SYNC           USART0_CONF_REGC((0<<UMSEL01)|(1<<UMSEL00))
-#define USART0_CONF_MODE_RESERVED       USART0_CONF_REGC((1<<UMSEL01)|(0<<UMSEL00))
-#define USART0_CONF_MODE_SPI_MASTER     USART0_CONF_REGC((1<<UMSEL01)|(1<<UMSEL00))
+#define USART0_DATA_REGISTER                                            (UDR)
+#define USART0_BIT_RATE_REGISTER                                        (UBRR)
+#define USART0_BIT_RATE_REGISTER_TYPE                                   uint16_t
 
-#define USART0_CONF_PARITY_DISABLED     USART0_CONF_REGC((0<<UPM01)|(0<<UPM00))
-#define USART0_CONF_PARITY_RESERVED     USART0_CONF_REGC((0<<UPM01)|(1<<UPM00))
-#define USART0_CONF_PARITY_EVEN         USART0_CONF_REGC((1<<UPM01)|(0<<UPM00))
-#define USART0_CONF_PARITY_ODD          USART0_CONF_REGC((1<<UPM01)|(1<<UPM00))
+#define usart0__rx__enabled__HOST                                       (UCSRB)
+#define usart0__rx__enabled__BIT                                        (RXEN)
+#define usart0__tx__enabled__HOST                                       (UCSRB)
+#define usart0__tx__enabled__BIT                                        (TXEN)
 
-#define USART0_CONF_STOP_BITS_1         USART0_CONF_REGC(0<<USBS0)
-#define USART0_CONF_STOP_BITS_2         USART0_CONF_REGC(1<<USBS0)
+#define usart0__rx__complete__value__HOST                               (UCSRA)
+#define usart0__rx__complete__value__BIT                                (RXC)
+#define usart0__rx__complete__interrupt__VECTOR                         (USART_RXC_vect)
+#define usart0__rx__complete__interrupt__enabled__HOST                  (UCSRB)
+#define usart0__rx__complete__interrupt__enabled__BIT                   (RXCIE)
 
-#define USART0_CONF_CHAR_SIZE_5_BIT     (USART0_CONF_REGB(0<<UCSZ02) | USART0_CONF_REGC((0<<UCSZ01)|(0<<UCSZ00)))
-#define USART0_CONF_CHAR_SIZE_6_BIT     (USART0_CONF_REGB(0<<UCSZ02) | USART0_CONF_REGC((0<<UCSZ01)|(1<<UCSZ00)))
-#define USART0_CONF_CHAR_SIZE_7_BIT     (USART0_CONF_REGB(0<<UCSZ02) | USART0_CONF_REGC((1<<UCSZ01)|(0<<UCSZ00)))
-#define USART0_CONF_CHAR_SIZE_8_BIT     (USART0_CONF_REGB(0<<UCSZ02) | USART0_CONF_REGC((1<<UCSZ01)|(1<<UCSZ00)))
-#define USART0_CONF_CHAR_SIZE_RESERVED4 (USART0_CONF_REGB(1<<UCSZ02) | USART0_CONF_REGC((0<<UCSZ01)|(0<<UCSZ00)))
-#define USART0_CONF_CHAR_SIZE_RESERVED5 (USART0_CONF_REGB(1<<UCSZ02) | USART0_CONF_REGC((0<<UCSZ01)|(1<<UCSZ00)))
-#define USART0_CONF_CHAR_SIZE_RESERVED6 (USART0_CONF_REGB(1<<UCSZ02) | USART0_CONF_REGC((1<<UCSZ01)|(0<<UCSZ00)))
-#define USART0_CONF_CHAR_SIZE_9_BIT     (USART0_CONF_REGB(1<<UCSZ02) | USART0_CONF_REGC((1<<UCSZ01)|(1<<UCSZ00)))
+#define usart0__tx__complete__value__HOST                               (UCSRA)
+#define usart0__tx__complete__value__BIT                                (TXC)
+#define usart0__tx__complete__interrupt__VECTOR                         (USART_TXC_vect)
+#define usart0__tx__complete__interrupt__enabled__HOST                  (UCSRB)
+#define usart0__tx__complete__interrupt__enabled__BIT                   (TXCIE)
 
-#define USART0_CONF_POLARITY_0          (USART0_CONF_REGC(0<<UCPOL0)
-#define USART0_CONF_POLARITY_1          (USART0_CONF_REGC(1<<UCPOL0))
+#define usart0__tx__data_register_empty__value__HOST                    (UCSRA)
+#define usart0__tx__data_register_empty__value__BIT                     (UDRE)
+#define usart0__tx__data_register_empty__interrupt__VECTOR              (USART_UDRE_vect)
+#define usart0__tx__data_register_empty__interrupt__enabled__HOST       (UCSRB)
+#define usart0__tx__data_register_empty__interrupt__enabled__BIT        (UDRIE)
 
-#define USART0_CONF_DEFAULT             (USART0_CONF_CHAR_SIZE_8_BIT)
+#define usart0__double_speed__BIT                                       (U2X)
+#define usart0__multiprocessor__BIT                                     (MPCM)
+#define usart0__char_size0__BIT                                         (UCSZ0)
+#define usart0__char_size2__BIT                                         (UCSZ2)
+#define usart0__stop_bits__BIT                                          (USBS)
+#define usart0__mode__BIT                                               (UMSEL0)
+#define usart0__parity__BIT                                             (UMPM)
+
+
+
+#elif defined(__AVR_AT90S8535__) || defined(__AVR_AT90S2313__)
+
+
+#define USART0_REG_A                                                    (USR)
+#define USART0_REG_B                                                    (UCR)
+
+#define USART0_DATA_REGISTER                                            (UDR)
+#define USART0_BIT_RATE_REGISTER                                        (UBRR)
+#define USART0_BIT_RATE_REGISTER_TYPE                                   uint8_t
+
+#define usart0__rx__enabled__HOST                                       (UCR)
+#define usart0__rx__enabled__BIT                                        (RXEN)
+#define usart0__tx__enabled__HOST                                       (UCR)
+#define usart0__tx__enabled__BIT                                        (TXEN)
+
+#define usart0__rx__complete__value__HOST                               (USR)
+#define usart0__rx__complete__value__BIT                                (RXC)
+#define usart0__rx__complete__interrupt__VECTOR                         (UART_RX_vect)
+#define usart0__rx__complete__interrupt__enabled__HOST                  (UCR)
+#define usart0__rx__complete__interrupt__enabled__BIT                   (RXCIE)
+
+#define usart0__tx__complete__value__HOST                               (USR)
+#define usart0__tx__complete__value__BIT                                (TXC)
+#define usart0__tx__complete__interrupt__VECTOR                         (UART_TX_vect)
+#define usart0__tx__complete__interrupt__enabled__HOST                  (UCR)
+#define usart0__tx__complete__interrupt__enabled__BIT                   (TXCIE)
+
+#define usart0__tx__data_register_empty__value__HOST                    (USR)
+#define usart0__tx__data_register_empty__value__BIT                     (UDRE)
+#define usart0__tx__data_register_empty__interrupt__VECTOR              (UART_UDRE_vect)
+#define usart0__tx__data_register_empty__interrupt__enabled__HOST       (UCR)
+#define usart0__tx__data_register_empty__interrupt__enabled__BIT        (UDRIE)
+
+
+#else
+#error "Unsupported MCU!"
+#endif
+
+
+
+#define USART0_CONF_BYTE_A(v)                                           (((v) & 0xFF) << 0)
+#define USART0_CONF_BYTE_B(v)                                           (((v) & 0xFF) << 8)
+#define USART0_CONF_BYTE_C(v)                                           (((v) & 0xFF) << 16)
+#define USART0_CONF_BYTE_D(v)                                           (((v) & 0xFF) << 24)
 
 
 inline void usart0__switch_conf(const uint32_t old_conf, const uint32_t new_conf) {
     const uint8_t old_rega = old_conf & 0xFF;
     const uint8_t new_rega = new_conf & 0xFF;
-    if (old_rega != new_rega) UCSR0A = new_rega;
+    if (old_rega != new_rega) USART0_REG_A = new_rega;
 
     const uint8_t old_regb = (old_conf >> 8) & 0xFF;
     const uint8_t new_regb = (new_conf >> 8) & 0xFF;
-    if (old_regb != new_regb) UCSR0B = new_regb;
+    if (old_regb != new_regb) USART0_REG_B = new_regb;
 
+#if defined(USART0_REG_C)
     const uint8_t old_regc = (old_conf >> 16) & 0xFF;
     const uint8_t new_regc = (new_conf >> 16) & 0xFF;
-    if (old_regc != new_regc) UCSR0C = new_regc;
+    if (old_regc != new_regc) USART0_REG_C = new_regc;
+#endif
+
+#if defined(USART0_REG_D)
+    const uint8_t old_regd = (old_conf >> 24) & 0xFF;
+    const uint8_t new_regd = (new_conf >> 24) & 0xFF;
+    if (old_regd != new_regd) USART0_REG_D = new_regd;
+#endif
 }
-#elif defined(__AVR_ATmega16__) || defined(__AVR_ATmega8__)
-    // usart0__switch_conf not supported yet
-#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
-    // usart0__switch_conf not supported yet
+
+
+#ifdef usart0__double_speed__BIT
+#define USART0_CONF_DOUBLE_SPEED                (USART0_CONF_BYTE_A(1<<usart0__double_speed__BIT))
+#endif
+
+#ifdef usart0__multiprocessor__BIT
+#define USART0_CONF_MULTIPROCESSOR              (USART0_CONF_BYTE_A(1<<usart0__multiprocessor__BIT))
+#endif
+
+
+#define USART0_CONF_RX_COMPLETE_INT_ENABLED     (USART0_CONF_BYTE_B(1<<usart0__rx__complete__interrupt__enabled__BIT))
+#define USART0_CONF_TX_COMPLETE_INT_ENABLED     (USART0_CONF_BYTE_B(1<<usart0__tx__complete__interrupt__enabled__BIT))
+#define USART0_CONF_DATA_REG_EMPTY_INT_ENABLED  (USART0_CONF_BYTE_B(1<<usart0__data_register_empty__interrupt__enabled__BIT))
+#define USART0_CONF_RX_ENABLED                  (USART0_CONF_BYTE_B(1<<usart0__rx__enabled__BIT))
+#define USART0_CONF_TX_ENABLED                  (USART0_CONF_BYTE_B(1<<usart0__tx__enabled__BIT))
+
+
+#if defined(USART0_REG_C)
+
+#define USART0_CONF_MODE_ASYNC       	        (USART0_CONF_BYTE_C((0<<usart0__mode__BIT)))
+#define USART0_CONF_MODE_SYNC                   (USART0_CONF_BYTE_C((1<<usart0__mode__BIT)))
+#define USART0_CONF_MODE_RESERVED               (USART0_CONF_BYTE_C((2<<usart0__mode__BIT)))
+#define USART0_CONF_MODE_SPI_MASTER             (USART0_CONF_BYTE_C((3<<usart0__mode__BIT)))
+
+#define USART0_CONF_PARITY_DISABLED             (USART0_CONF_BYTE_C((0<<usart0__parity__BIT)))
+#define USART0_CONF_PARITY_RESERVED             (USART0_CONF_BYTE_C((1<<usart0__parity__BIT)))
+#define USART0_CONF_PARITY_EVEN                 (USART0_CONF_BYTE_C((2<<usart0__parity__BIT)))
+#define USART0_CONF_PARITY_ODD                  (USART0_CONF_BYTE_C((3<<usart0__parity__BIT)))
+
+#define USART0_CONF_STOP_BITS_1                 (USART0_CONF_BYTE_C(0<<usart0__stop_bits__BIT))
+#define USART0_CONF_STOP_BITS_2                 (USART0_CONF_BYTE_C(1<<usart0__stop_bits__BIT))
+
+#define USART0_CONF_POLARITY_0                  (USART0_CONF_BYTE_C(0<<usart0__polarity__BIT))
+#define USART0_CONF_POLARITY_1                  (USART0_CONF_BYTE_C(1<<usart0__polarity__BIT))
+
+#define USART0_CONF_CHAR_SIZE_5_BIT             (USART0_CONF_BYTE_B(0<<usart0__char_size2__BIT) | USART0_CONF_BYTE_C((0<<usart0__char_size0__BIT)))
+#define USART0_CONF_CHAR_SIZE_6_BIT             (USART0_CONF_BYTE_B(0<<usart0__char_size2__BIT) | USART0_CONF_BYTE_C((1<<usart0__char_size0__BIT)))
+#define USART0_CONF_CHAR_SIZE_7_BIT             (USART0_CONF_BYTE_B(0<<usart0__char_size2__BIT) | USART0_CONF_BYTE_C((2<<usart0__char_size0__BIT)))
+#define USART0_CONF_CHAR_SIZE_8_BIT             (USART0_CONF_BYTE_B(0<<usart0__char_size2__BIT) | USART0_CONF_BYTE_C((3<<usart0__char_size0__BIT)))
+#define USART0_CONF_CHAR_SIZE_RESERVED4         (USART0_CONF_BYTE_B(1<<usart0__char_size2__BIT) | USART0_CONF_BYTE_C((0<<usart0__char_size0__BIT)))
+#define USART0_CONF_CHAR_SIZE_RESERVED5         (USART0_CONF_BYTE_B(1<<usart0__char_size2__BIT) | USART0_CONF_BYTE_C((1<<usart0__char_size0__BIT)))
+#define USART0_CONF_CHAR_SIZE_RESERVED6         (USART0_CONF_BYTE_B(1<<usart0__char_size2__BIT) | USART0_CONF_BYTE_C((2<<usart0__char_size0__BIT)))
+#define USART0_CONF_CHAR_SIZE_9_BIT             (USART0_CONF_BYTE_B(1<<usart0__char_size2__BIT) | USART0_CONF_BYTE_C((3<<usart0__char_size0__BIT)))
+
 #else
-    #error "Unsupported MCU"
+
+#define USART0_CONF_CHAR_SIZE_8_BIT             (USART0_CONF_BYTE_B(0<<CHR9) | USART0_CONF_BYTE_B(1<<RXB8))
+#define USART0_CONF_CHAR_SIZE_9_BIT             (USART0_CONF_BYTE_B(1<<CHR9) | USART0_CONF_BYTE_B(1<<RXB8))
+
+#endif
+
+
+#ifdef URSEL
+#define USART0_CONF_DEFAULT                     (USART0_CONF_BYTE_C(1<<URSEL) | USART0_CONF_CHAR_SIZE_8_BIT)
+#else
+#define USART0_CONF_DEFAULT                     (USART0_CONF_CHAR_SIZE_8_BIT)
 #endif
 
 
-
-#if defined(__AVR_ATmega48__)\
- || defined(__AVR_ATmega88__)\
- || defined(__AVR_ATmega168__)\
- || defined(__AVR_ATmega328__)\
- || defined(__AVR_ATmega48P__)\
- || defined(__AVR_ATmega88P__)\
- || defined(__AVR_ATmega168P__)\
- || defined(__AVR_ATmega328P__)
-
-
-#define usart0__rx__complete_interrupt__VECTOR                    (USART_RX_vect)
-
-#define usart0__rx__complete_interrupt__enabled__HOST             (UCSR0B)
-#define usart0__rx__complete_interrupt__enabled__BIT              (RXCIE0)
-
-#define usart0__tx__data_register_empty_interrupt__enabled__HOST  (UCSR0B)
-#define usart0__tx__data_register_empty_interrupt__enabled__BIT   (UDRIE0)
-
-
-#elif defined(__AVR_ATmega16__)
-
-
-#define usart0__rx__complete_interrupt__VECTOR                    (USART_RXC_vect)
-#define usart0__tx__data_register_empty_interrupt__VECTOR         (USART_UDRE_vect)
-
-#define usart0__rx__complete_interrupt__enabled__HOST             (UCSRB)
-#define usart0__rx__complete_interrupt__enabled__BIT              (RXCIE)
-
-#define usart0__tx__data_register_empty_interrupt__enabled__HOST  (UCSRB)
-#define usart0__tx__data_register_empty_interrupt__enabled__BIT   (UDRIE)
-
-
-#endif
+DECLARE_BITVAR(usart0__rx__enabled, usart0__rx__enabled__HOST, usart0__rx__enabled__HOST);
+DECLARE_BITVAR(usart0__tx__enabled, usart0__tx__enabled__HOST, usart0__tx__enabled__HOST);
+DECLARE_BITVAR(usart0__rx__complete__value, usart0__rx__complete__value__HOST, usart0__rx__complete__value__BIT);
+DECLARE_BITVAR(usart0__rx__complete__interrupt__enabled, usart0__rx__complete__interrupt__enabled__HOST, usart0__rx__complete__interrupt__enabled__BIT);
+DECLARE_BITVAR(usart0__tx__complete__value, usart0__tx__complete__value__HOST, usart0__tx__complete__value__BIT);
+DECLARE_BITVAR(usart0__tx__complete__interrupt__enabled, usart0__tx__complete__interrupt__enabled__HOST, usart0__tx__complete__interrupt__enabled__BIT);
+DECLARE_BITVAR(usart0__tx__data_register_empty__value, usart0__tx__data_register_empty__value__HOST, usart0__tx__data_register_empty__value__BIT);
+DECLARE_BITVAR(usart0__tx__data_register_empty__interrupt__enabled, usart0__tx__data_register_empty__interrupt__enabled__HOST, usart0__tx__data_register_empty__interrupt__enabled__BIT);
 
 
 // =============================================================================
 // usart0__rate__set
 // =============================================================================
-inline uint16_t UBRR_VALUE(uint32_t rate) {
+inline uint16_t UBRR_VALUE(const uint32_t rate) {
     return (uint16_t)((F_CPU/8/(rate) - 1)/2);
 }
 
-
-#if defined(__AVR_ATmega48__)\
- || defined(__AVR_ATmega88__)\
- || defined(__AVR_ATmega168__)\
- || defined(__AVR_ATmega328__)\
- || defined(__AVR_ATmega48P__)\
- || defined(__AVR_ATmega88P__)\
- || defined(__AVR_ATmega168P__)\
- || defined(__AVR_ATmega328P__)
-
 inline void usart0__divisor__set(const uint16_t divisor) {
-    UBRR0H = (uint8_t)(divisor>>8);
-    UBRR0L = (uint8_t)(divisor);
-}
-
-inline void usart0__rate__set(const uint32_t rate) {
-    UBRR0H = (uint8_t)(UBRR_VALUE(rate)>>8);
-    UBRR0L = (uint8_t)(UBRR_VALUE(rate));
-}
-
-#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
-
-inline void usart0__divisor__set(const uint16_t divisor) {
+#if defined(UBRR) || defined(UBRR0) || defined(UBRR1)
+    USART0_BIT_RATE_REGISTER = (USART0_BIT_RATE_REGISTER_TYPE)(divisor);
+#else
     UBRRH = (uint8_t)(divisor>>8);
     UBRRL = (uint8_t)(divisor);
+#endif
 }
 
 inline void usart0__rate__set(const uint32_t rate) {
-    UBRRH = (uint8_t)(UBRR_VALUE(rate)>>8);
-    UBRRL = (uint8_t)(UBRR_VALUE(rate));
+    usart0__divisor__set(UBRR_VALUE(rate));
 }
-
-#elif defined(__AVR_AT90S2313__)
-
-inline void usart0__divisor__set(const uint16_t divisor) {
-    UBRR = (uint8_t)(divisor);
-}
-
-inline void usart0__rate__set(uint32_t rate) {
-    UBRR=(uint8_t)(UBRR_VALUE(rate));
-}
-
-#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
-
-inline void usart0__divisor__set(const uint16_t divisor) {
-    UBRR1H = (uint8_t)(divisor>>8);
-    UBRR1L = (uint8_t)(divisor);
-}
-
-inline void usart0__rate__set(const uint32_t rate) {
-    UBRR1H = (uint8_t)(UBRR_VALUE(rate)>>8);
-    UBRR1L = (uint8_t)(UBRR_VALUE(rate));
-}
-
-#else
-    #error "Unsupported MCU"
-#endif
-
-
-// =============================================================================
-// usart_init
-// =============================================================================
-
-inline void usart0__init(void) {
-//           Asynch UART               No parity             1 stopbit  8 bit(+reg B)   polarity
-#if defined(__AVR_ATmega48__)\
- || defined(__AVR_ATmega88__)\
- || defined(__AVR_ATmega168__)\
- || defined(__AVR_ATmega328__)\
- || defined(__AVR_ATmega48P__)\
- || defined(__AVR_ATmega88P__)\
- || defined(__AVR_ATmega168P__)\
- || defined(__AVR_ATmega328P__)
-//  UMSEL=00	Asynch UART
-//  UPM=00	No Parity
-//  USBS=0	1 stop bit
-//  UCSZ=011	8 bit
-//  UCPOL0=0	Polarity: Rising, 0 for Asynch.
-    UCSR0C = (0<<UMSEL01)|(0<<UMSEL00)|(0<<UPM01)|(0<<UPM00)|(0<<USBS0)|(3<<UCSZ00)|(0<<UCPOL0);
-#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
-    UCSRC = (1<<URSEL)|(0<<UMSEL)|(0<<UPM1)|(0<<UPM0)|(0<<USBS)|(3<<UCSZ0)|(0<<UCPOL);
-#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
-    UCSR1C = (0<<UMSEL11)|(0<<UMSEL10)|(0<<UPM11)|(0<<UPM10)|(0<<USBS1)|(3<<UCSZ10)|(0<<UCPOL1);
-#else
-    #error "Unsupported MCU"
-#endif
-}
-
-
-// =============================================================================
-// usart0__in__enabled__set
-// =============================================================================
-
-inline void usart0__in__enabled__set(void) {
-#if defined(__AVR_ATmega48__)\
- || defined(__AVR_ATmega88__)\
- || defined(__AVR_ATmega168__)\
- || defined(__AVR_ATmega328__)\
- || defined(__AVR_ATmega48P__)\
- || defined(__AVR_ATmega88P__)\
- || defined(__AVR_ATmega168P__)\
- || defined(__AVR_ATmega328P__)
-    set_bit_in_reg(UCSR0B, RXEN0);
-#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
-    set_bit_in_reg(UCSRB, RXEN);
-#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
-    set_bit_in_reg(UCSR1B, RXEN1);
-#else
-    #error "Unsupported MCU"
-#endif
-}
-
-
-// =============================================================================
-// usart0__in__peek
-// =============================================================================
-
-inline char usart0__in__peek(void) {
-#if defined(__AVR_ATmega48__)\
- || defined(__AVR_ATmega88__)\
- || defined(__AVR_ATmega168__)\
- || defined(__AVR_ATmega328__)\
- || defined(__AVR_ATmega48P__)\
- || defined(__AVR_ATmega88P__)\
- || defined(__AVR_ATmega168P__)\
- || defined(__AVR_ATmega328P__)
-    return UDR0;
-#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
-    return UDR;
-#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
-    return UDR1;
-#else
-    #error "Unsupported MCU"
-#endif
-}
-
 
 // =============================================================================
 // usart0__getc
 // =============================================================================
 
 inline uint8_t usart0__getc(void) {
-#if defined(__AVR_ATmega48__)\
- || defined(__AVR_ATmega88__)\
- || defined(__AVR_ATmega168__)\
- || defined(__AVR_ATmega328__)\
- || defined(__AVR_ATmega48P__)\
- || defined(__AVR_ATmega88P__)\
- || defined(__AVR_ATmega168P__)\
- || defined(__AVR_ATmega328P__)
-    return UDR0;
-#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
-    return UDR;
-#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
-    return UDR1;
-#else
-    #error "Unsupported MCU"
-#endif
+    return USART0_DATA_REGISTER;
 }
 
 
@@ -315,70 +342,7 @@ inline uint8_t usart0__getc(void) {
 // =============================================================================
 
 inline void usart0__putc(const uint8_t c) {
-#if defined(__AVR_ATmega48__)\
- || defined(__AVR_ATmega88__)\
- || defined(__AVR_ATmega168__)\
- || defined(__AVR_ATmega328__)\
- || defined(__AVR_ATmega48P__)\
- || defined(__AVR_ATmega88P__)\
- || defined(__AVR_ATmega168P__)\
- || defined(__AVR_ATmega328P__)
-    UDR0 = c;
-#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
-    UDR = c;
-#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
-    UDR1 = c;
-#else
-    #error "Unsupported MCU"
-#endif
-}
-
-
-// =============================================================================
-// usart0__in__complete_interrupt_enabled__set
-// =============================================================================
-
-inline void usart0__in__complete_interrupt_enabled__set(void) {
-#if defined(__AVR_ATmega48__)\
- || defined(__AVR_ATmega88__)\
- || defined(__AVR_ATmega168__)\
- || defined(__AVR_ATmega328__)\
- || defined(__AVR_ATmega48P__)\
- || defined(__AVR_ATmega88P__)\
- || defined(__AVR_ATmega168P__)\
- || defined(__AVR_ATmega328P__)
-    set_bit_in_reg(UCSR0B, RXCIE0);
-#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
-    set_bit_in_reg(UCSRB, RXCIE);
-#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
-    set_bit_in_reg(UCSR1B, RXCIE1);
-#else
-    #error "Unsupported MCU"
-#endif
-}
-
-
-// =============================================================================
-// usart0__out__enabled__set
-// =============================================================================
-
-inline void usart0__out__enabled__set(void) {
-#if defined(__AVR_ATmega48__)\
- || defined(__AVR_ATmega88__)\
- || defined(__AVR_ATmega168__)\
- || defined(__AVR_ATmega328__)\
- || defined(__AVR_ATmega48P__)\
- || defined(__AVR_ATmega88P__)\
- || defined(__AVR_ATmega168P__)\
- || defined(__AVR_ATmega328P__)
-    set_bit_in_reg(UCSR0B, TXEN0);
-#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
-    set_bit_in_reg(UCSRB, TXEN);
-#elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
-    set_bit_in_reg(UCSR1B, TXEN1);
-#else
-    #error "Unsupported MCU"
-#endif
+    USART0_DATA_REGISTER = c;
 }
 
 

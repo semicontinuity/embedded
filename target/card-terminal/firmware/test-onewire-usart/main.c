@@ -29,8 +29,8 @@ void print_result(const char *test_name, bool result) {
 
 
 bool test(char c) {
-    usart0__out__write(c);
-    return usart0__in__read() == c;
+    usart0__putc(c);
+    return usart0__getc() == c;
 }
 
 
@@ -58,9 +58,8 @@ int main(int argc, char **argv) {
     terminal__init();
 
 
-    usart0__init();
-    usart0__out__enabled__set();
-    usart0__in__enabled__set();
+    usart0__tx__enabled__set(1);
+    usart0__rx__enabled__set(1);
 
     usart0__rate__set(9600);
     print_result(PSTR("echo at   9600"), test('a'));

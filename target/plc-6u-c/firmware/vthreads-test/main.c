@@ -55,14 +55,14 @@ void blink_thread__run(void) {
     VT_BEGIN(blink_thread, blink_thread__ip);
 
     VT_MARK(blink_thread, "OFF");
-    PORTB |= (1<<0);
-    blink_thread__wait(8000);	// about 8 secs
+    PORTB &= ~(1<<0);
+    blink_thread__wait(64000);	// about 8 secs
     VT_YIELD(blink_thread, blink_thread__ip);  // next line will be executed in 8 seconds
 
 
     VT_MARK(blink_thread, "ON");
-    PORTB &= ~(1<<0);
-    blink_thread__wait(4000);	// about 4 secs
+    PORTB |= (1<<0);
+    blink_thread__wait(32000);	// about 4 secs
     VT_YIELD(blink_thread, blink_thread__ip);  // next line will be executed in 4 seconds
 
     VT_END(blink_thread);
@@ -114,16 +114,14 @@ int main(void) {
     set_sleep_mode(SLEEP_MODE_IDLE);
     sleep_enable();
 
-    sei();
-
     for(;;) {
         if (blink_thread__is_runnable()) {
-            cli();
             blink_thread__run();
-            sei();
         }
         else {
+            sei();
             sleep_cpu();
+            cli();
         }
     }
 

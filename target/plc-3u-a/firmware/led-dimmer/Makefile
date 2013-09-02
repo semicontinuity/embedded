@@ -4,6 +4,9 @@ OPT = 3 -mcall-prologues
 ROOT = ../../../..
 BSP = ../../bsp/
 
+CDEFS += -ffixed-r5 -ffixed-r6
+
+
 CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)

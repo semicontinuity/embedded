@@ -5,6 +5,9 @@ ROOT = ../../../..
 BSP = ../../bsp
 
 
+#CDEFS += -ffixed-r16 -ffixed-r17 -ffixed-r18 -ffixed-r19 -ffixed-r21 -ffixed-r26 -ffixed-r27 -ffixed-r28 -ffixed-r29 -ffixed-r30 -ffixed-r31
+CDEFS += -ffixed-r16 -ffixed-r17 -ffixed-r18 -ffixed-r19 -ffixed-r21 -ffixed-r26 -ffixed-r27 -ffixed-r28 -ffixed-r29
+
 CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)
