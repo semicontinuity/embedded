@@ -8,4 +8,10 @@
 #define MODBUS_FUNCTION_WRITE_SINGLE_COIL          (5)
 #define MODBUS_FUNCTION_WRITE_REGISTER             (6)
 
+#define MODBUS_FRAME_SIZE_MIN                      (4)
+
+#define MODBUS_FRAME_OFFSET_ADDRESS                (0)
+#define MODBUS_FRAME_OFFSET_FUNCTION               (1)
+#define MODBUS_FRAME_OFFSET_DATA                   (2)
+
 #endif

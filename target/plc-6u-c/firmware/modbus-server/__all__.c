@@ -4,3 +4,4 @@
 #include "usart_rx.c"
 #include "usart_tx.c"
 #include "util/crc16_table2x256.c"
+#include "modbus_server.c"
