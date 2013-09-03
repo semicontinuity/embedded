@@ -6,16 +6,19 @@
 #include "buffer.h"
 #include "usart_rx.h"
 #include "usart_tx.h"
+#include "util/crc16_table2x256.h"
 
 #include <avr/sleep.h>
 #include <stdbool.h>
+
+
+#define MODBUS_MIN_FRAME_SIZE   (4)
 
 
 // Module bindings
 // -----------------------------------------------------------------------------
 
 volatile bool frame_received;
-volatile bool protocol_error;
 
 
 void usart_rx__on_buffer_overflow(void) {
@@ -62,8 +65,11 @@ int main(void) {
 
     for(;;) {
         if (frame_received) {
-            // process frame
-            // send response
+            const uint16_t length = buffer__limit - buffer__data;
+            if (length >= MODBUS_MIN_FRAME_SIZE && crc16(0xFFFF, buffer__data, length) == 0) {
+                // process frame
+                // send response
+            }
             buffer__position = buffer__data;
             usart_tx__enable();
         }
