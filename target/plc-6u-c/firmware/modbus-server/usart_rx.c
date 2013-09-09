@@ -30,7 +30,7 @@ ISR(usart0__rx__complete__interrupt__VECTOR) {
     delay_timer__start();
     if (usart_rx__enabled) {
         if (!buffer__is_full()) {
-            buffer__put(c);
+            buffer__put_u8(c);
         }
         else {
             usart_rx__on_buffer_overflow();            

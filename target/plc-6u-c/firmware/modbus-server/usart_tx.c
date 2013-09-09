@@ -24,7 +24,7 @@ void usart_tx__disable(void) {
 
 ISR(usart0__tx__data_register_empty__interrupt__VECTOR) {
     if (!buffer__is_empty()) {
-        usart0__putc(buffer__get());
+        usart0__putc(buffer__get_u8());
     }
     else {
         usart_tx__on_frame_sent();

@@ -18,10 +18,16 @@ void usart_rx__notify_t35_expired(void);
 
 bool usart_rx__is_frame_received(void);
 
-/** Callback to be implemented */
+/**
+ * Called when data received would overflow the buffer.
+ * To be implemented by user.
+ */
 void usart_rx__on_buffer_overflow(void);
 
-/** Callback to be implemented */
+/**
+ * Called when data are received when they should not be.
+ * To be implemented by user.
+ */
 void usart_rx__on_unexpected_data(void);
 
 #endif
