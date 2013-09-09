@@ -5,6 +5,7 @@
 // =============================================================================
 
 #include "buffer.h"
+#include "cpu/avr/asm.h"
 
 
 uint8_t buffer__data[BUFFER__SIZE];
@@ -12,12 +13,17 @@ uint8_t buffer__data[BUFFER__SIZE];
 /**
  * Current read position.
  */
-buffer__position_t buffer__position;
+#ifndef BUFFER__POSITION__REG
+volatile uint8_t* buffer__position;
+#endif
 
 /**
  * Points to the end of data in the buffer; the current write position.
  */
-buffer__limit_t buffer__limit;
+#ifndef BUFFER__LIMIT__REG
+volatile uint8_t* buffer__limit;
+#endif
+
 
 
 /**
@@ -76,26 +82,40 @@ void buffer__limit__set(const uint16_t limit) {
 
 
 uint8_t buffer__get_u8(void) {
+#if BUFFER__POSITION__REG==26
+    return LOAD_XPLUS(buffer__position);
+#elif BUFFER__POSITION__REG==28
+    return LOAD_YPLUS(buffer__position);
+#elif BUFFER__POSITION__REG==30
+    return LOAD_ZPLUS(buffer__position);
+#else
     return *buffer__position++;
+#endif
 }
 
 uint16_t buffer__get_u16(void) {
-    const uint8_t h = *buffer__position++;
-    const uint8_t l = *buffer__position++;
+    const uint8_t h = buffer__get_u8();
+    const uint8_t l = buffer__get_u8();
     return (h << 8) | l;
 }
 
 
-buffer__limit_t buffer__put_u8(const uint8_t value) {
+void buffer__put_u8(const uint8_t value) {
+#if BUFFER__LIMIT__REG==26
+    STORE_XPLUS(buffer__limit, value);
+#elif BUFFER__LIMIT__REG==28
+    STORE_YPLUS(buffer__limit, value);
+#elif BUFFER__LIMIT__REG==30
+    STORE_ZPLUS(buffer__limit, value);
+#else
     *buffer__limit++ = value;
-    return buffer__limit;
+#endif
 }
 
 
-buffer__limit_t buffer__put_u16(const uint16_t value) {
-    *buffer__limit++ = (uint8_t)(value >> 8);
-    *buffer__limit++ = (uint8_t)(value & 0xFF);
-    return buffer__limit;
+void buffer__put_u16(const uint16_t value) {
+    buffer__put_u8((uint8_t)(value >> 8));
+    buffer__put_u8((uint8_t)(value & 0xFF));
 }
 
 

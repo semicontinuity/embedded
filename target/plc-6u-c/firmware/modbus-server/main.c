@@ -62,7 +62,7 @@ modbus_exception modbus_server__handle_read_holding_registers(void) {
 
 
     buffer__limit__set(MODBUS_FRAME_OFFSET_DATA);
-    buffer__put_u16((uint8_t) register_count << 1); // byte count
+    buffer__put_u8((uint8_t) register_count << 1); // byte count
     do {
         switch (register_address++) {
         case SERVER__REGISTER1:

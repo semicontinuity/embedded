@@ -4,7 +4,10 @@ TARGET = modbus-server
 MCU = at90s8535
 #MCU = atmega8
 #MCU = atmega16
-OPT = 3 -Wa,-a,-ad
+OPT = 2 -Wa,-a,-ad -save-temps
+OPT += -ffixed-r26 -ffixed-r27
+OPT += -ffixed-r28 -ffixed-r29
+
 #OPT += -mcall-prologues -ffixed-r30 -ffixed-r31
 ROOT = ../../../..
 BSP = ../../bsp

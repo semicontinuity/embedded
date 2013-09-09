@@ -43,7 +43,7 @@
 #define LOAD_CONST8(var, k)	do {	\
   __asm__ __volatile__ (		\
     "ldi %0, %1\n\t"			\
-        : "=d"(var)			\
+        : "=d"(v	ar)			\
         : "M"(k)			\
   );					\
 } while(0)
@@ -110,6 +110,7 @@
   );							\
 } while(0)
 
+
 #define SET_LO8_OF(u16_dst, src)	do {	\
   __asm__ __volatile__ (			\
     "mov %A0, %A1	\n\t"			\
@@ -133,6 +134,17 @@
 // ----------------------------------------------
 // Operations with X register
 // ----------------------------------------------
+
+#define LOAD_XPLUS(ptr)			        \
+(__extension__({                                \
+    uint8_t __result;                           \
+    __asm__ (                                   \
+    "ld %0, x+\n\t"                             \
+        : "=r"(__result), "+x"(ptr)             \
+    );                                          \
+    __result;                                   \
+}))
+
 
 #define ST_XPLUS(ptr,val) do {               \
   __asm__ __volatile__ (			\
@@ -165,9 +177,27 @@
 } while(0)
 
 
+#define STORE_XPLUS(ptr, var) do {              \
+  __asm__ __volatile__ (                        \
+    "st	   X+, %2\n\t"                          \
+    :"+x"(ptr)                                  \
+    :"0"(ptr), "r"(var)                         \
+  );                                            \
+} while(0)
+
 // ----------------------------------------------
 // Operations with Y register
 // ----------------------------------------------
+
+#define LOAD_YPLUS(ptr)			        \
+(__extension__({                                \
+    uint8_t __result;                           \
+    __asm__ (                                   \
+    "ld %0, y+\n\t"                             \
+        : "=r"(__result), "+y"(ptr)             \
+    );                                          \
+    __result;                                   \
+}))
 
 #define ADDRESS_TO_YPLUS(addr) do {		\
   __asm__ __volatile__ (			\
@@ -217,9 +247,29 @@
   );						\
 } while(0)
 
+
+#define STORE_YPLUS(ptr, var) do {              \
+  __asm__ __volatile__ (                        \
+    "st	   Y+, %2\n\t"                          \
+    :"+y"(ptr)                                  \
+    :"0"(ptr), "r"(var)                         \
+  );                                            \
+} while(0)
+
 // ----------------------------------------------
 // Operations with Z register
 // ----------------------------------------------
+
+#define LOAD_ZPLUS(ptr)			        \
+(__extension__({                                \
+    uint8_t __result;                           \
+    __asm__ (                                   \
+    "ld %0, z+\n\t"                             \
+        : "=r"(__result), "+z"(ptr)             \
+    );                                          \
+    __result;                                   \
+}))
+
 
 #define LD_ZPLUS(result,ptr) do {               \
   __asm__ __volatile__ (			\
@@ -243,6 +293,15 @@
     "ldd   %B0,Z + " QUOTE(d) " + 1      \n\t"  \
     : "=r" (result)                             \
   );						\
+} while(0)
+
+
+#define STORE_ZPLUS(ptr, var) do {              \
+  __asm__ __volatile__ (                        \
+    "st	   z+, %2\n\t"                          \
+    :"+z"(ptr)                                  \
+    :"0"(ptr), "r"(var)                         \
+  );                                            \
 } while(0)
 
 // ----------------------------------------------

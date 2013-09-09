@@ -11,11 +11,24 @@
 #include <stdbool.h>
 
 
-typedef volatile uint8_t* buffer__limit_t;
-typedef volatile uint8_t* buffer__position_t;
+#ifndef QUOTE
+#define _QUOTE(x) #x
+#define QUOTE(x) _QUOTE(x)
+#endif
 
-extern buffer__position_t buffer__position;
-extern buffer__limit_t buffer__limit;
+
+#ifdef BUFFER__POSITION__REG
+register uint8_t* buffer__position asm(QUOTE(BUFFER__POSITION__REG));
+#else
+extern volatile uint8_t* buffer__position;
+#endif
+
+
+#ifdef BUFFER__LIMIT__REG
+register uint8_t* buffer__limit asm(QUOTE(BUFFER__LIMIT__REG));
+#else
+extern volatile uint8_t* buffer__limit;
+#endif
 
 
 /**
@@ -62,9 +75,9 @@ uint8_t buffer__get_u8(void);
 uint16_t buffer__get_u16(void);
 
 
-buffer__limit_t buffer__put_u8(const uint8_t value);
+void buffer__put_u8(const uint8_t value);
 
-buffer__limit_t buffer__put_u16(const uint16_t value);
+void buffer__put_u16(const uint16_t value);
 
 
 bool buffer__is_full(void);
