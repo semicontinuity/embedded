@@ -18,16 +18,16 @@
 #include <stdint.h>
 #include "cpu/avr/drivers/display/segment/dynamic3_thread.h"
 #include "cpu/avr/drivers/display/segment/dynamic3.h"
-#include "cpu/avr/drivers/display/segment/values.h"
+#include "cpu/avr/drivers/display/segment/glyphs.h"
 
 /**
  * The data to be displayed.
  * These are the raw segment data to be writen to the segments port.
  */
 volatile uint8_t display_thread__segments[3] = {
-    DISPLAY_SEGMENT_VALUE_EMPTY,
-    DISPLAY_SEGMENT_VALUE_EMPTY,
-    DISPLAY_SEGMENT_VALUE_EMPTY
+    DISPLAY_SEGMENT_GLYPH_EMPTY,
+    DISPLAY_SEGMENT_GLYPH_EMPTY,
+    DISPLAY_SEGMENT_GLYPH_EMPTY
 };
 
 /**

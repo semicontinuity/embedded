@@ -43,7 +43,7 @@
 
 #include "cpu/avr/util/bcd.h"
 #include "cpu/avr/util/mult16x16.h"
-#include "cpu/avr/drivers/display/segment/values.h"
+#include "cpu/avr/drivers/display/segment/glyphs.h"
 #include "cpu/avr/drivers/display/segment/dynamic3_thread.h"
 #include "cpu/avr/drivers/display/segment/number_renderer.h"
 
@@ -336,14 +336,14 @@ inline static void display_angle(void) {
 inline static void display_buzzer(void) {
     // display message "On" or "OFF" 
     if (t_buzzer) {
-       display_thread__segments[0] = DISPLAY_SEGMENT_VALUE_EMPTY;
-       display_thread__segments[1] = DISPLAY_SEGMENT_VALUE_0;
-       display_thread__segments[2] = DISPLAY_SEGMENT_VALUE_n;
+       display_thread__segments[0] = DISPLAY_SEGMENT_GLYPH_EMPTY;
+       display_thread__segments[1] = DISPLAY_SEGMENT_GLYPH_0;
+       display_thread__segments[2] = DISPLAY_SEGMENT_GLYPH_n;
     }
     else {
-       display_thread__segments[0] = DISPLAY_SEGMENT_VALUE_0;
-       display_thread__segments[1] = DISPLAY_SEGMENT_VALUE_F;
-       display_thread__segments[2] = DISPLAY_SEGMENT_VALUE_F;
+       display_thread__segments[0] = DISPLAY_SEGMENT_GLYPH_0;
+       display_thread__segments[1] = DISPLAY_SEGMENT_GLYPH_F;
+       display_thread__segments[2] = DISPLAY_SEGMENT_GLYPH_F;
     }
 }
 

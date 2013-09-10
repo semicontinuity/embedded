@@ -8,6 +8,7 @@
 // Library
 #include "cpu/avr/spi_polled.c"
 #include "cpu/avr/util/bcd.c"
-#include "cpu/avr/drivers/display/segment/static2.c"
+#include "cpu/avr/drivers/display/segment/glyphs__digits__decimal.c"
+#include "cpu/avr/drivers/display/segment/static2_spi.c"
 
 

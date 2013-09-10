@@ -6,7 +6,7 @@
 #include "cpu/avr/util/debug.h"
 
 #include "cpu/avr/util/bcd.h"
-#include "cpu/avr/drivers/display/segment/static2.h"
+#include "cpu/avr/drivers/display/segment/static2_spi.h"
 
 
 uint8_t input_buffer[16];

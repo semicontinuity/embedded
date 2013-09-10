@@ -6,8 +6,8 @@
 // - DISPLAY_RESET
 // - DISPLAY_RCK
 // =============================================================================
-#ifndef __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__STATIC2_H
-#define __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__STATIC2_H
+#ifndef __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__STATIC2_SPI_H
+#define __CPU__AVR__DRIVERS__DISPLAY__SEGMENT__STATIC2_SPI_H
 
 #include "cpu/avr/gpio.h"
 #include <stdint.h>
