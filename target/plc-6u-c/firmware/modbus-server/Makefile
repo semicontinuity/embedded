@@ -4,7 +4,7 @@ TARGET = modbus-server
 MCU = at90s8535
 #MCU = atmega8
 #MCU = atmega16
-OPT = 2 -Wa,-a,-ad -save-temps
+OPT = 2 -Wa,-a,-ad 
 OPT += -ffixed-r26 -ffixed-r27
 OPT += -ffixed-r28 -ffixed-r29
 

@@ -1,6 +1,6 @@
 // =============================================================================
 // Non-circular buffer.
-// Data are stored in buffer__data up to buffer__limit.
+// Data are stored in buffer__data up to buffer__limit_ptr.
 // Use carefully - no bounds checking.
 // =============================================================================
 
@@ -13,15 +13,15 @@ uint8_t buffer__data[BUFFER__SIZE];
 /**
  * Current read position.
  */
-#ifndef BUFFER__POSITION__REG
-volatile uint8_t* buffer__position;
+#ifndef BUFFER__POSITION_PTR__REG
+volatile uint8_t* buffer__position_ptr;
 #endif
 
 /**
  * Points to the end of data in the buffer; the current write position.
  */
-#ifndef BUFFER__LIMIT__REG
-volatile uint8_t* buffer__limit;
+#ifndef BUFFER__LIMIT_PTR__REG
+volatile uint8_t* buffer__limit_ptr;
 #endif
 
 
@@ -31,7 +31,7 @@ volatile uint8_t* buffer__limit;
  * (The limit is set to the beginning of the buffer)
  */
 void buffer__clear(void) {
-    buffer__limit = buffer__data;
+    buffer__limit_ptr = buffer__data;
 }
 
 /**
@@ -39,8 +39,17 @@ void buffer__clear(void) {
  * (The position is set to the beginning of the buffer)
  */
 void buffer__rewind(void) {
-    buffer__position = buffer__data;
+    buffer__position_ptr = buffer__data;
 }
+
+
+/**
+ * Makes the buffer ready for writing at the current read position.
+ */
+void buffer__sync(void) {
+    buffer__limit_ptr = buffer__position_ptr;
+}
+
 
 /**
  * Initialize the buffer.
@@ -54,14 +63,14 @@ void buffer__init(void) {
  * Gets the buffer's position.
  */
 uint16_t buffer__position__get(void) {
-    return buffer__position - buffer__data;
+    return buffer__position_ptr - buffer__data;
 }
 
 /**
  * Sets the buffer's position.
  */
 void buffer__position__set(const uint16_t position) {
-    buffer__position = buffer__data + position;
+    buffer__position_ptr = buffer__data + position;
 }
 
 
@@ -69,27 +78,27 @@ void buffer__position__set(const uint16_t position) {
  * Gets the buffer's limit.
  */
 uint16_t buffer__limit__get(void) {
-    return buffer__limit - buffer__data;
+    return buffer__limit_ptr - buffer__data;
 }
 
 /**
  * Sets the buffer's limit.
  */
 void buffer__limit__set(const uint16_t limit) {
-    buffer__limit = buffer__data + limit;
+    buffer__limit_ptr = buffer__data + limit;
 }
 
 
 
 uint8_t buffer__get_u8(void) {
-#if BUFFER__POSITION__REG==26
-    return LOAD_XPLUS(buffer__position);
-#elif BUFFER__POSITION__REG==28
-    return LOAD_YPLUS(buffer__position);
-#elif BUFFER__POSITION__REG==30
-    return LOAD_ZPLUS(buffer__position);
+#if defined(BUFFER__POSITION_PTR__REG) && BUFFER__POSITION_PTR__REG==26
+    return LOAD_XPLUS(buffer__position_ptr);
+#elif defined(BUFFER__POSITION_PTR__REG) && BUFFER__POSITION_PTR__REG==28
+    return LOAD_YPLUS(buffer__position_ptr);
+#elif defined(BUFFER__POSITION_PTR__REG) && BUFFER__POSITION_PTR__REG==30
+    return LOAD_ZPLUS(buffer__position_ptr);
 #else
-    return *buffer__position++;
+    return *buffer__position_ptr++;
 #endif
 }
 
@@ -101,14 +110,14 @@ uint16_t buffer__get_u16(void) {
 
 
 void buffer__put_u8(const uint8_t value) {
-#if BUFFER__LIMIT__REG==26
-    STORE_XPLUS(buffer__limit, value);
-#elif BUFFER__LIMIT__REG==28
-    STORE_YPLUS(buffer__limit, value);
-#elif BUFFER__LIMIT__REG==30
-    STORE_ZPLUS(buffer__limit, value);
+#if defined(BUFFER__LIMIT_PTR__REG) && BUFFER__LIMIT_PTR__REG==26
+    STORE_XPLUS(buffer__limit_ptr, value);
+#elif defined(BUFFER__LIMIT_PTR__REG) && BUFFER__LIMIT_PTR__REG==28
+    STORE_YPLUS(buffer__limit_ptr, value);
+#elif defined(BUFFER__LIMIT_PTR__REG) && BUFFER__LIMIT_PTR__REG==30
+    STORE_ZPLUS(buffer__limit_ptr, value);
 #else
-    *buffer__limit++ = value;
+    *buffer__limit_ptr++ = value;
 #endif
 }
 
@@ -120,10 +129,10 @@ void buffer__put_u16(const uint16_t value) {
 
 
 bool buffer__is_full(void) {
-    return buffer__limit >= buffer__data + BUFFER__SIZE;
+    return buffer__limit_ptr >= buffer__data + BUFFER__SIZE;
 }
 
 bool buffer__is_empty(void) {
-    return buffer__position >= buffer__limit;
+    return buffer__position_ptr >= buffer__limit_ptr;
 }
 

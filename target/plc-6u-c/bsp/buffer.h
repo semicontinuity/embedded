@@ -17,17 +17,17 @@
 #endif
 
 
-#ifdef BUFFER__POSITION__REG
-register uint8_t* buffer__position asm(QUOTE(BUFFER__POSITION__REG));
+#ifdef BUFFER__POSITION_PTR__REG
+register uint8_t* buffer__position_ptr asm(QUOTE(BUFFER__POSITION_PTR__REG));
 #else
-extern volatile uint8_t* buffer__position;
+extern volatile uint8_t* buffer__position_ptr;
 #endif
 
 
-#ifdef BUFFER__LIMIT__REG
-register uint8_t* buffer__limit asm(QUOTE(BUFFER__LIMIT__REG));
+#ifdef BUFFER__LIMIT_PTR__REG
+register uint8_t* buffer__limit_ptr asm(QUOTE(BUFFER__LIMIT_PTR__REG));
 #else
-extern volatile uint8_t* buffer__limit;
+extern volatile uint8_t* buffer__limit_ptr;
 #endif
 
 
@@ -47,6 +47,12 @@ void buffer__clear(void);
  * (The position is set to the beginning of the buffer)
  */
 void buffer__rewind(void);
+
+
+/**
+ * Makes the buffer ready for writing at the current read position.
+ */
+void buffer__sync(void);
 
 
 /**
