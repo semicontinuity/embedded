@@ -55,13 +55,13 @@ void blink_thread__run(void) {
     VT_BEGIN(blink_thread, blink_thread__ip);
 
     VT_MARK(blink_thread, "OFF");
-    PORTB &= ~(1<<0);
+    PORTC &= ~(1<<0);
     blink_thread__wait(64000);	// about 8 secs
     VT_YIELD(blink_thread, blink_thread__ip);  // next line will be executed in 8 seconds
 
 
     VT_MARK(blink_thread, "ON");
-    PORTB |= (1<<0);
+    PORTC |= (1<<0);
     blink_thread__wait(32000);	// about 4 secs
     VT_YIELD(blink_thread, blink_thread__ip);  // next line will be executed in 4 seconds
 
@@ -95,8 +95,8 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED) {
 // -----------------------------------------------------------------------------
 
 int main(void) {
-    // pin B0: output
-    DDRB |= (1<<0);
+    // pin C0: output
+    DDRC |= (1<<0);
 
     // INT0 & INT1: interrups on falling edge
     int0__init();

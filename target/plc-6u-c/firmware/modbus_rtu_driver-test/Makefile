@@ -1,7 +1,7 @@
 TARGET = modbus_rtu_driver-test
 #MCU = at90s2313
 #MCU = at90usb162
-MCU = at90s8535
+MCU = atmega8535
 #MCU = atmega8
 #MCU = atmega16
 OPT = 2 -Wa,-a,-ad

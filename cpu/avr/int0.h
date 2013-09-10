@@ -28,7 +28,7 @@ inline static void int0__start(void) {
 }
 
 
-#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__) || defined(__AVR_ATmega8535__)
 
 
 inline static void int0__init(void) {

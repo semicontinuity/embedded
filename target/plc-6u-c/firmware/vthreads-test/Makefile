@@ -1,5 +1,5 @@
 TARGET = vthreads-test
-MCU = atmega168
+MCU = atmega8535
 OPT = 3 -Wa,-a,-ad
 OPT += -mcall-prologues -ffixed-r30 -ffixed-r31
 ROOT = ../../../..
