@@ -43,6 +43,10 @@ void modbus_rtu_driver__on_buffer_overflow(void) {
 // -----------------------------------------------------------------------------
 
 int main(void) {
+    // display
+    display__init();
+    display__render_packed(0);
+
     // sleeping
     set_sleep_mode(SLEEP_MODE_IDLE);
     modbus_rtu_driver__init();

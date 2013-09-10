@@ -8,6 +8,10 @@
 #include <stdbool.h>
 
 
+void modbus_rtu_driver__usart_rx__start(void);
+
+void modbus_rtu_driver__usart_rx__stop(void);
+
 void modbus_rtu_driver__usart_rx__enable(void);
 
 void modbus_rtu_driver__usart_rx__disable(void);

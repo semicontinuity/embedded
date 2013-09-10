@@ -23,4 +23,8 @@ void modbus_rtu_driver__on_protocol_error(void);
 
 void modbus_rtu_driver__on_buffer_overflow(void);
 
+void modbus_rtu_driver__on_transmission_begin(void);
+
+void modbus_rtu_driver__on_transmission_end(void);
+
 #endif

@@ -13,6 +13,7 @@
 
 
 void modbus_rtu_driver__usart_tx__enable(void) {
+    modbus_rtu_driver__on_transmission_begin();
     usart0__tx__data_register_empty__interrupt__enabled__set(1);
 }
 
@@ -26,10 +27,7 @@ ISR(usart0__tx__data_register_empty__interrupt__VECTOR) {
         usart0__putc(buffer__get_u8());
     }
     else {
+        modbus_rtu_driver__on_transmission_end();
         modbus_rtu_driver__usart_tx__on_frame_sent();
     }
-}
-
-
-ISR(usart0__tx__complete__interrupt__VECTOR) {
 }

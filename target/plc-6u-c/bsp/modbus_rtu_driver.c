@@ -61,8 +61,14 @@ void modbus_rtu_driver__init(void) {
 }
 
 void modbus_rtu_driver__start(void) {
-    modbus_rtu_driver__usart_rx__enable();
     modbus_rtu_driver__delay_timer__start();
+    modbus_rtu_driver__usart_rx__start();
+}
+
+
+void modbus_rtu_driver__stop(void) {
+    modbus_rtu_driver__delay_timer__stop();
+    modbus_rtu_driver__usart_rx__stop();
 }
 
 
