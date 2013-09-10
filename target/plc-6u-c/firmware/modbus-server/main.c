@@ -4,8 +4,8 @@
 
 
 #include "buffer.h"
-#include "delay_timer.h"
 #include "modbus_server.h"
+#include <avr/interrupt.h>
 #include <avr/sleep.h>
 #include <stdbool.h>
 #include <stdint.h>

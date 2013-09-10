@@ -2,19 +2,19 @@
 // USART transmitter
 // =============================================================================
 
-#ifndef USART_TX_H
-#define USART_TX_H
+#ifndef MODBUS_RTU_DRIVER__USART_TX_H
+#define MODBUS_RTU_DRIVER__USART_TX_H
 
 #include <stdbool.h>
 
 
-void usart_tx__enable(void);
+void modbus_rtu_driver__usart_tx__enable(void);
 
 
-void usart_tx__disable(void);
+void modbus_rtu_driver__usart_tx__disable(void);
 
 
 /** Callback to be implemented */
-void usart_tx__on_frame_sent(void);
+void modbus_rtu_driver__usart_tx__on_frame_sent(void);
 
 #endif
