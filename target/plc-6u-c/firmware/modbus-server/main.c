@@ -38,6 +38,9 @@ int main(void) {
 }
 
 
+#define SERVER__REGISTER__TCNT1     (MODBUS_SERVER__INPUT_REGISTERS_START + 0)
+
+
 #define SERVER__REGISTER__VALID_FRAMES_RECEIVED     (MODBUS_SERVER__HOLDING_REGISTERS_START + 0)
 volatile uint16_t valid_frames_received;
 
@@ -78,6 +81,22 @@ void modbus_rtu_driver__on_buffer_overflow(void) {
 /**
  * Handle reading of holding registers.
  */
+modbus_exception modbus_server__read_input_registers(uint16_t register_address, uint16_t register_count) {
+    do {
+        switch (register_address++) {
+        case SERVER__REGISTER__TCNT1:
+            buffer__put_u16(TCNT1);
+            break;
+        }
+    }
+    while (--register_count);
+    return MODBUS_EXCEPTION__NONE;
+}
+
+
+/**
+ * Handle reading of holding registers.
+ */
 modbus_exception modbus_server__read_holding_registers(uint16_t register_address, uint16_t register_count) {
     do {
         switch (register_address++) {
@@ -100,7 +119,6 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
     }
     while (--register_count);
     return MODBUS_EXCEPTION__NONE;
-
 }
 
 

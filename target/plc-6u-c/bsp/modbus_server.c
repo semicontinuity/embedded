@@ -36,6 +36,34 @@ modbus_exception modbus_server__handle_read_holding_registers(void) {
 #endif
 
 
+#if defined(MODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS) && MODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS > 0
+/**
+ * Handle reading of input registers.
+ */
+modbus_exception modbus_server__handle_read_input_registers(void) {
+    const uint16_t length = buffer__limit__get();
+    if (length != MODBUS_FRAME_SIZE_MIN + MODBUS_FUNCTION__READ_INPUT_REGISTERS__PAYLOAD_SIZE)
+        return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
+
+    buffer__sync(); // will write to the beginning of the payload section
+
+    uint16_t register_address = buffer__get_u16();
+    uint16_t register_count = buffer__get_u16();
+
+    if (register_count == 0 || register_count > MODBUS_FUNCTION__READ_INPUT_REGISTERS__MAX_COUNT)
+        return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
+
+    if (register_address < MODBUS_SERVER__INPUT_REGISTERS_START
+        || register_address + register_count >= MODBUS_SERVER__INPUT_REGISTERS_START + MODBUS_SERVER__INPUT_REGISTERS_COUNT)
+        return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
+
+
+    buffer__put_u8((uint8_t) register_count << 1); // byte count; the rest of the response is written by the handler
+    return modbus_server__read_input_registers(register_address, register_count);
+}
+#endif
+
+
 #if defined(MODBUS_SERVER__HANDLE_WRITE_REGISTER) && MODBUS_SERVER__HANDLE_WRITE_REGISTER > 0
 /**
  * Handle writing of holding register.
