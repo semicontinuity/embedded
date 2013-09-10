@@ -17,5 +17,10 @@ void modbus_rtu_driver__run(void);
 
 bool modbus_rtu_driver__on_frame_received(void);
 
+void modbus_rtu_driver__on_frame_sent(void);
+
+void modbus_rtu_driver__on_protocol_error(void);
+
+void modbus_rtu_driver__on_buffer_overflow(void);
 
 #endif

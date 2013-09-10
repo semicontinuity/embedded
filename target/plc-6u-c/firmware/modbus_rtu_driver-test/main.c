@@ -5,16 +5,37 @@
 
 #include "buffer.h"
 #include "modbus_rtu_driver.h"
+#include "cpu/avr/drivers/display/segment/static2.h"
+
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 #include <stdbool.h>
 #include <stdint.h>
 
 
+uint16_t frames_received;
+uint16_t errors;
+
+
 bool modbus_rtu_driver__on_frame_received(void) {
+    display__render_packed(++frames_received);
+
     // response is echoed request
     buffer__rewind();
     return true;
+}
+
+void modbus_rtu_driver__on_frame_sent(void) {
+}
+
+void modbus_rtu_driver__on_protocol_error(void) {
+    display__render_packed(++errors);
+    display__digits__0__add_dp();
+}
+
+void modbus_rtu_driver__on_buffer_overflow(void) {
+    display__render_packed(++errors);
+    display__digits__0__add_dp();
 }
 
 

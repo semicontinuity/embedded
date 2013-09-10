@@ -21,6 +21,7 @@ volatile bool modbus_rtu_driver__frame_received;
 void modbus_rtu_driver__usart_rx__on_buffer_overflow(void) {
     modbus_rtu_driver__usart_rx__disable();
     buffer__clear();  
+    modbus_rtu_driver__on_buffer_overflow();
 }
 
 void modbus_rtu_driver__delay_timer__on_t15_expired(void) {
@@ -33,6 +34,7 @@ void modbus_rtu_driver__delay_timer__on_t15_expired(void) {
 void modbus_rtu_driver__usart_rx__on_unexpected_data(void) {
     // empty frame will be received and dropped.
     // transmittion will be aborted, if ongoing.
+    modbus_rtu_driver__on_protocol_error();
     buffer__clear();
 }
 
@@ -46,6 +48,7 @@ void modbus_rtu_driver__usart_tx__on_frame_sent(void) {
     modbus_rtu_driver__usart_tx__disable();    
     modbus_rtu_driver__usart_rx__enable();
     buffer__clear();
+    modbus_rtu_driver__on_frame_sent();
 }
 
 

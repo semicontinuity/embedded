@@ -5,3 +5,5 @@
 #include "modbus_rtu_driver__usart_rx.c"
 #include "modbus_rtu_driver__usart_tx.c"
 #include "util/crc16_table2x256.c"
+#include "cpu/avr/drivers/display/segment/glyphs__digits__hex.c"
+#include "cpu/avr/drivers/display/segment/static2.c"
