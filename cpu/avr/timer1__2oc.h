@@ -42,9 +42,22 @@
 
 
 
-#if defined(__AVR_AT90S8535__) || defined(__AVR_ATmega16__) || defined(__AVR_ATmega8__) || defined(__AVR_AT90S2313__)
+#if defined(__AVR_AT90S8535__)\
+ || defined(__AVR_ATmega16__)\
+ || defined(__AVR_ATmega8__)\
+ || defined(__AVR_ATmega8535__)\
+ || defined(__AVR_AT90S2313__)
+#  define TIMER1_MASK_REGISTER TIMSK
+#else
+#  define TIMER1_MASK_REGISTER TIMSK1
+#endif
 
-#define TIMER1_MASK_REGISTER TIMSK
+
+
+#if defined(__AVR_AT90S8535__)\
+ || defined(__AVR_ATmega16__)\
+ || defined(__AVR_ATmega8__)\
+ || defined(__AVR_AT90S2313__)
 
 #define TIMER1_CONF_WGM_NORMAL                          (            0 |            0 |          0 |          0 )
 #define TIMER1_CONF_WGM_PHASE_CORRECT_PWM8              (            0 |            0 |          0 | _BV(PWM10) )
@@ -55,11 +68,7 @@
 #define TIMER1_CONF_WGM_FAST_PWM9                       (            0 | _BV(8+ CTC1) | _BV(PWM11) |          0 )
 #define TIMER1_CONF_WGM_FAST_PWM10                      (            0 | _BV(8+ CTC1) | _BV(PWM11) | _BV(PWM10) )
 
-
 #else
-
-
-#define TIMER1_MASK_REGISTER TIMSK1
 
 #define TIMER1_CONF_WGM_NORMAL                          (            0 |            0 |          0 |          0 )
 #define TIMER1_CONF_WGM_PHASE_CORRECT_PWM8              (            0 |            0 |          0 | _BV(WGM10) )
@@ -77,7 +86,6 @@
 #define TIMER1_CONF_WGM_RESERVED                        ( _BV(8+WGM13) | _BV(8+WGM12) |          0 | _BV(WGM10) )
 #define TIMER1_CONF_WGM_FAST_PWM_USE_ICR                ( _BV(8+WGM13) | _BV(8+WGM12) | _BV(WGM11) |          0 )
 #define TIMER1_CONF_WGM_FAST_PWM_USE_OCRA               ( _BV(8+WGM13) | _BV(8+WGM12) | _BV(WGM11) | _BV(WGM10) )
-
 
 #endif
 

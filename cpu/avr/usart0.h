@@ -31,6 +31,47 @@
 #include "util/bitops.h"
 
 
+#if defined(__AVR_AT90USB82__)\
+ || defined(__AVR_AT90USB162__)
+
+#  define usart0__rx__complete__interrupt__VECTOR                         (USART1_RX_vect)
+#  define usart0__tx__complete__interrupt__VECTOR                         (USART1_TX_vect)
+#  define usart0__tx__data_register_empty__interrupt__VECTOR              (USART1_UDRE_vect)
+
+#elif defined(__AVR_ATmega48__)\
+ || defined(__AVR_ATmega88__)\
+ || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega328__)\
+ || defined(__AVR_ATmega48P__)\
+ || defined(__AVR_ATmega88P__)\
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)\
+ || defined(__AVR_ATmega8535__)
+
+#  define usart0__rx__complete__interrupt__VECTOR                         (USART_RX_vect)
+#  define usart0__tx__complete__interrupt__VECTOR                         (USART_TX_vect)
+#  define usart0__tx__data_register_empty__interrupt__VECTOR              (USART_UDRE_vect)
+
+#elif defined(__AVR_ATmega16__)\
+ || defined(__AVR_ATmega8__)
+
+#  define usart0__rx__complete__interrupt__VECTOR                         (USART_RXC_vect)
+#  define usart0__tx__complete__interrupt__VECTOR                         (USART_TXC_vect)
+#  define usart0__tx__data_register_empty__interrupt__VECTOR              (USART_UDRE_vect)
+
+#elif defined(__AVR_AT90S8535__)\
+ || defined(__AVR_AT90S2313__)
+
+#  define usart0__rx__complete__interrupt__VECTOR                         (UART_RX_vect)
+#  define usart0__tx__complete__interrupt__VECTOR                         (UART_TX_vect)
+#  define usart0__tx__data_register_empty__interrupt__VECTOR              (UART_UDRE_vect)
+
+#else
+#  error "Unsupported MCU!"
+#endif
+
+
+
 #if defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
 
 
@@ -50,19 +91,16 @@
 
 #define usart0__rx__complete__value__HOST                               (UCSR1A)
 #define usart0__rx__complete__value__BIT                                (RXC1)
-#define usart0__rx__complete__interrupt__VECTOR                         (USART1_RX_vect)
 #define usart0__rx__complete__interrupt__enabled__HOST                  (UCSR1B)
 #define usart0__rx__complete__interrupt__enabled__BIT                   (RXCIE1)
 
 #define usart0__tx__complete__value__HOST                               (UCSR1A)
 #define usart0__tx__complete__value__BIT                                (TXC1)
-#define usart0__tx__complete__interrupt__VECTOR                         (USART1_TX_vect)
 #define usart0__tx__complete__interrupt__enabled__HOST                  (UCSR1B)
 #define usart0__tx__complete__interrupt__enabled__BIT                   (TXCIE1)
 
 #define usart0__tx__data_register_empty__value__HOST                    (UCSR1A)
 #define usart0__tx__data_register_empty__value__BIT                     (UDRE1)
-#define usart0__tx__data_register_empty__interrupt__VECTOR              (USART1_UDRE_vect)
 #define usart0__tx__data_register_empty__interrupt__enabled__HOST       (UCSR1B)
 #define usart0__tx__data_register_empty__interrupt__enabled__BIT        (UDRIE1)
 
@@ -101,19 +139,16 @@
 
 #define usart0__rx__complete__value__HOST                               (UCSR0A)
 #define usart0__rx__complete__value__BIT                                (RXC0)
-#define usart0__rx__complete__interrupt__VECTOR                         (USART_RX_vect)
 #define usart0__rx__complete__interrupt__enabled__HOST                  (UCSR0B)
 #define usart0__rx__complete__interrupt__enabled__BIT                   (RXCIE0)
 
 #define usart0__tx__complete__value__HOST                               (UCSR0A)
 #define usart0__tx__complete__value__BIT                                (TXC0)
-#define usart0__tx__complete__interrupt__VECTOR                         (USART_TX_vect)
 #define usart0__tx__complete__interrupt__enabled__HOST                  (UCSR0B)
 #define usart0__tx__complete__interrupt__enabled__BIT                   (TXCIE0)
 
 #define usart0__tx__data_register_empty__value__HOST                    (UCSR0A)
 #define usart0__tx__data_register_empty__value__BIT                     (UDRE0)
-#define usart0__tx__data_register_empty__interrupt__VECTOR              (USART_UDRE_vect)
 #define usart0__tx__data_register_empty__interrupt__enabled__HOST       (UCSR0B)
 #define usart0__tx__data_register_empty__interrupt__enabled__BIT        (UDRIE0)
 
@@ -127,7 +162,7 @@
 #define usart0__parity__BIT                                             (UMPM0)
 
 
-#elif defined(__AVR_ATmega16__) || defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega16__) || defined(__AVR_ATmega8__) || defined(__AVR_ATmega8535__)
 
 
 #define USART0_REG_A                                                    (UCSRA)
@@ -145,19 +180,16 @@
 
 #define usart0__rx__complete__value__HOST                               (UCSRA)
 #define usart0__rx__complete__value__BIT                                (RXC)
-#define usart0__rx__complete__interrupt__VECTOR                         (USART_RXC_vect)
 #define usart0__rx__complete__interrupt__enabled__HOST                  (UCSRB)
 #define usart0__rx__complete__interrupt__enabled__BIT                   (RXCIE)
 
 #define usart0__tx__complete__value__HOST                               (UCSRA)
 #define usart0__tx__complete__value__BIT                                (TXC)
-#define usart0__tx__complete__interrupt__VECTOR                         (USART_TXC_vect)
 #define usart0__tx__complete__interrupt__enabled__HOST                  (UCSRB)
 #define usart0__tx__complete__interrupt__enabled__BIT                   (TXCIE)
 
 #define usart0__tx__data_register_empty__value__HOST                    (UCSRA)
 #define usart0__tx__data_register_empty__value__BIT                     (UDRE)
-#define usart0__tx__data_register_empty__interrupt__VECTOR              (USART_UDRE_vect)
 #define usart0__tx__data_register_empty__interrupt__enabled__HOST       (UCSRB)
 #define usart0__tx__data_register_empty__interrupt__enabled__BIT        (UDRIE)
 
@@ -188,19 +220,16 @@
 
 #define usart0__rx__complete__value__HOST                               (USR)
 #define usart0__rx__complete__value__BIT                                (RXC)
-#define usart0__rx__complete__interrupt__VECTOR                         (UART_RX_vect)
 #define usart0__rx__complete__interrupt__enabled__HOST                  (UCR)
 #define usart0__rx__complete__interrupt__enabled__BIT                   (RXCIE)
 
 #define usart0__tx__complete__value__HOST                               (USR)
 #define usart0__tx__complete__value__BIT                                (TXC)
-#define usart0__tx__complete__interrupt__VECTOR                         (UART_TX_vect)
 #define usart0__tx__complete__interrupt__enabled__HOST                  (UCR)
 #define usart0__tx__complete__interrupt__enabled__BIT                   (TXCIE)
 
 #define usart0__tx__data_register_empty__value__HOST                    (USR)
 #define usart0__tx__data_register_empty__value__BIT                     (UDRE)
-#define usart0__tx__data_register_empty__interrupt__VECTOR              (UART_UDRE_vect)
 #define usart0__tx__data_register_empty__interrupt__enabled__HOST       (UCR)
 #define usart0__tx__data_register_empty__interrupt__enabled__BIT        (UDRIE)
 
