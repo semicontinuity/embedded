@@ -9,13 +9,6 @@
 #include <stdint.h>
 
 
-void modbus_server__init(void);
-
-void modbus_server__start(void);
-
-bool modbus_server__run(void);
-
-
 // Callbacks to be implemented
 // -----------------------------------------------------------------------------
 

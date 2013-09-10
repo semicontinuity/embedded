@@ -4,6 +4,7 @@
 
 
 #include "buffer.h"
+#include "modbus_rtu_driver.h"
 #include "modbus_server.h"
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
@@ -17,13 +18,16 @@
 int main(void) {
     // sleeping
     set_sleep_mode(SLEEP_MODE_IDLE);
-    modbus_server__init();
+    modbus_rtu_driver__init();
 
     sleep_enable();
-    modbus_server__start();
+    modbus_rtu_driver__start();
 
     for(;;) {
-        if (!modbus_server__run()) {
+        if (modbus_rtu_driver__is_runnable()) {
+            modbus_rtu_driver__run();
+        }
+        else {
             sei();
             sleep_cpu();
             cli();
