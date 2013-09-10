@@ -45,6 +45,7 @@ void modbus_rtu_driver__delay_timer__on_t35_expired(void) {
 void modbus_rtu_driver__usart_tx__on_frame_sent(void) {
     modbus_rtu_driver__usart_tx__disable();    
     modbus_rtu_driver__usart_rx__enable();
+    buffer__clear();
 }
 
 
