@@ -11,11 +11,21 @@
 #include "cpu/avr/usart0.h"
 
 
+void modbus_rtu_driver__usart_tx__start(void) {
+    usart0__tx__enabled__set(1);    
+}
+
+
+void modbus_rtu_driver__usart_tx__stop(void) {
+    usart0__tx__enabled__set(0);    
+}
+
 
 void modbus_rtu_driver__usart_tx__enable(void) {
     modbus_rtu_driver__on_transmission_begin();
     usart0__tx__data_register_empty__interrupt__enabled__set(1);
 }
+
 
 void modbus_rtu_driver__usart_tx__disable(void) {
     usart0__tx__data_register_empty__interrupt__enabled__set(0);

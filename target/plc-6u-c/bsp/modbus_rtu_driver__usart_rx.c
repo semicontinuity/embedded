@@ -16,6 +16,7 @@ volatile bool modbus_rtu_driver__usart_rx__enabled;
 
 
 void modbus_rtu_driver__usart_rx__start(void) {
+    usart0__rx__enabled__set(1);    
     usart0__rx__complete__interrupt__enabled__set(1);
     modbus_rtu_driver__usart_rx__enable();    
 }
@@ -23,6 +24,7 @@ void modbus_rtu_driver__usart_rx__start(void) {
 
 void modbus_rtu_driver__usart_rx__stop(void) {
     modbus_rtu_driver__usart_rx__disable();    
+    usart0__rx__enabled__set(0);    
     usart0__rx__complete__interrupt__enabled__set(0);    
 }
 
