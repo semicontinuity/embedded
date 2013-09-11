@@ -7,6 +7,7 @@
 #include "modbus_rtu_driver__delay_timer.h"
 #include "modbus_rtu_driver__usart_rx.h"
 #include "modbus_rtu_driver__usart_tx.h"
+#include "cpu/avr/usart0.h"
 
 
 // Modbus RTU driver - helper module bindings
@@ -56,6 +57,7 @@ void modbus_rtu_driver__usart_tx__on_frame_sent(void) {
 // -----------------------------------------------------------------------------
 
 void modbus_rtu_driver__init(void) {
+    usart0__rate__set(USART_BAUD_RATE);
     buffer__init();
     modbus_rtu_driver__delay_timer__init();
 }

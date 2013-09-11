@@ -55,7 +55,10 @@ void buffer__sync(void) {
  * Initialize the buffer.
  */ 
 void buffer__init(void) {
+    // possible to save a bit of memory by initializing only one pointer
+    // (depends on application)
     buffer__rewind();
+    buffer__sync();
 }
 
 

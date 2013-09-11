@@ -6,16 +6,29 @@
 #include "buffer.h"
 #include "modbus_rtu_driver.h"
 #include "modbus_server.h"
+#include "cpu/avr/drivers/display/segment/static2.h"
+
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 #include <stdbool.h>
 #include <stdint.h>
 
+void modbus_rtu_driver__on_transmission_begin(void) {
+//    display__render_packed(buffer__limit__get());
+}
+
+
+void modbus_rtu_driver__on_transmission_end(void) {
+}
 
 // main
 // -----------------------------------------------------------------------------
 
 int main(void) {
+    // display
+    display__init();
+    display__render_packed(0); // ready
+
     // sleeping
     set_sleep_mode(SLEEP_MODE_IDLE);
     modbus_rtu_driver__init();
@@ -62,6 +75,7 @@ void modbus_server__on_valid_frame_received(void) {
 }
 
 void modbus_server__on_invalid_frame_received(void) {
+    display__render_packed(0xfe);
     ++invalid_frames_received;
 }
 
@@ -70,10 +84,12 @@ void modbus_rtu_driver__on_frame_sent(void) {
 }
 
 void modbus_rtu_driver__on_protocol_error(void) {
+    display__render_packed(0xee);
     ++protocol_errors;
 }
 
 void modbus_rtu_driver__on_buffer_overflow(void) {
+    display__render_packed(0xbe);
     ++buffer_overflows;
 }
 
@@ -82,6 +98,7 @@ void modbus_rtu_driver__on_buffer_overflow(void) {
  * Handle reading of holding registers.
  */
 modbus_exception modbus_server__read_input_registers(uint16_t register_address, uint16_t register_count) {
+    //display__render_packed(0x04);
     do {
         switch (register_address++) {
         case SERVER__REGISTER__TCNT1:
@@ -98,6 +115,7 @@ modbus_exception modbus_server__read_input_registers(uint16_t register_address, 
  * Handle reading of holding registers.
  */
 modbus_exception modbus_server__read_holding_registers(uint16_t register_address, uint16_t register_count) {
+    //display__render_packed(0x03);
     do {
         switch (register_address++) {
         case SERVER__REGISTER__VALID_FRAMES_RECEIVED:
@@ -126,6 +144,7 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
  * Handle writing of holding register.
  */
 modbus_exception modbus_server__write_holding_register(uint16_t register_address, uint16_t register_value) {
+    //display__render_packed(0x06);
     switch (register_address++) {
     case SERVER__REGISTER__VALID_FRAMES_RECEIVED:
         valid_frames_received = register_value;

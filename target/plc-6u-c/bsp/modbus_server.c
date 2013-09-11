@@ -26,7 +26,7 @@ modbus_exception modbus_server__handle_read_holding_registers(void) {
         return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
 
     if (register_address < MODBUS_SERVER__HOLDING_REGISTERS_START
-        || register_address + register_count >= MODBUS_SERVER__HOLDING_REGISTERS_START + MODBUS_SERVER__HOLDING_REGISTERS_COUNT)
+        || register_address + register_count > MODBUS_SERVER__HOLDING_REGISTERS_START + MODBUS_SERVER__HOLDING_REGISTERS_COUNT)
         return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
 
 
@@ -54,7 +54,7 @@ modbus_exception modbus_server__handle_read_input_registers(void) {
         return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
 
     if (register_address < MODBUS_SERVER__INPUT_REGISTERS_START
-        || register_address + register_count >= MODBUS_SERVER__INPUT_REGISTERS_START + MODBUS_SERVER__INPUT_REGISTERS_COUNT)
+        || register_address + register_count > MODBUS_SERVER__INPUT_REGISTERS_START + MODBUS_SERVER__INPUT_REGISTERS_COUNT)
         return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
 
 
@@ -127,19 +127,24 @@ modbus_exception modbus_server__process_frame(void) {
 
 bool modbus_rtu_driver__on_frame_received(void) {
     const uint16_t length = buffer__limit__get();
+    if (length == 0) return false; // timeout expired, no data yet (ok)
+
     if (length < MODBUS_FRAME_SIZE_MIN || crc16(0xFFFF, buffer__data, length)) {
         modbus_server__on_invalid_frame_received();
         return false;
     }
 
     modbus_server__on_valid_frame_received();
+    buffer__rewind(); // start parsing frame
     buffer__get_u8(); // address
 
     // handle request; buffer__limit will point to the end of response payload
     modbus_server__process_frame();
 
     // finish response by computing CRC; buffer__limit will point to the end of frame
-    buffer__put_u16(crc16(0xFFFF, buffer__data, buffer__limit__get()));
+    uint16_t crc = crc16(0xFFFF, buffer__data, buffer__limit__get());
+    buffer__put_u8((uint8_t)(crc & 0xFF)); // wrong CRC? investigate
+    buffer__put_u8((uint8_t)(crc >> 8));
 
     // send response
     buffer__rewind();
