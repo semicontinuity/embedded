@@ -34,10 +34,15 @@
  */
 typedef void * vthread_ip_t;
 
+#ifndef QUOTE
+#define _QUOTE(x) #x
+#define QUOTE(x) _QUOTE(x)
+#endif
 
-#define FC_ASM_LABEL_NAME(thread, mark) #thread "__" mark
-#define FC_ASM_LABEL_BEGIN(thread)      FC_ASM_LABEL_NAME(thread, "BEGIN")
-#define FC_ASM_LABEL_STOP(thread)	FC_ASM_LABEL_NAME(thread, "STOP")
+#define FC_LABEL(thread, mark)          #thread "__" QUOTE(mark)
+#define FC_LABEL_BEGIN(thread)          FC_LABEL(thread, BEGIN)
+#define FC_LABEL_END(thread)	        FC_LABEL(thread, END)
+
 #define FC_ASM_LABEL(label)             do { __asm__ __volatile__( label ":"); } while(0)
 
 #define FC_ASM_LABEL_ADDRESS(label)	\
@@ -72,7 +77,7 @@ typedef void * vthread_ip_t;
  * \param thread  A name of the virtual thread
  * \param ip      An instruction pointer of the virtual thread
  */
-#define VT_INIT(thread, ip) do { ip = FC_POINTER(FC_ASM_LABEL_BEGIN(thread)); } while(0)
+#define VT_INIT(thread, ip) do { ip = FC_POINTER(FC_LABEL_BEGIN(thread)); } while(0)
 
 
 /**
@@ -84,6 +89,30 @@ typedef void * vthread_ip_t;
 
 
 /**
+ * Mark the current position in the virtual thread.
+ * Later, seek operation can be used to restore this position.
+ * \param thread  A virtual thread name
+ * \param mark    The name of the mark
+ */
+#define VT_MARK(thread, mark)                   \
+mark:                                           \
+  (void)&&mark;                                 \
+  FC_ASM_LABEL(FC_LABEL(thread, mark));
+
+
+/**
+ * Set the current position in the given virtual thread to the specified mark.
+ * Later, seek operation can be used to restore this position.
+ * \param thread  A virtual thread name
+ * \param ip      An instruction pointer of the virtual thread
+ * \param mark    The name of the mark
+ */
+#define VT_SEEK(thread, ip, mark) do {          \
+  ip = FC_POINTER(FC_LABEL(thread, mark));      \
+} while(0)
+
+
+/**
  * Declare the start of a virtual thread inside the function implementing the virtual thread.
  * \param thread A virtual thread variable
  * \param ip      An instruction pointer of the virtual thread
@@ -91,8 +120,9 @@ typedef void * vthread_ip_t;
 #define VT_BEGIN(thread, ip) do {               \
   char vt_flag = 1;                             \
   FC_RESUME(ip);                                \
-  for (;;) {                                    \
-      FC_ASM_LABEL(FC_ASM_LABEL_BEGIN(thread));
+  {                                             \
+      VT_MARK(thread, BEGIN);
+//      FC_ASM_LABEL(FC_LABEL_BEGIN(thread));
 
 
 /**
@@ -101,7 +131,7 @@ typedef void * vthread_ip_t;
  */
 #define VT_END(thread)                          \
   }                                             \
-  FC_ASM_LABEL(FC_ASM_LABEL_STOP(thread));      \
+  VT_MARK(thread, END);                         \
   (void)vt_flag;                                \
 } while(0)
 
@@ -113,35 +143,36 @@ typedef void * vthread_ip_t;
  * \param ip      An instruction pointer of the virtual thread
  */
 #define VT_YIELD(thread, ip) \
-  FC_CONCAT(FC_YIELD, __LINE__):   	        \
-  (void)&&FC_CONCAT(FC_YIELD, __LINE__);        \
 do {                                            \
+FC_CONCAT(YIELD, __LINE__):                     \
+  (void)&&FC_CONCAT(YIELD, __LINE__);           \
   vt_flag = 0;				        \
-  FC_CONCAT(FC_LABEL, __LINE__):                \
+  FC_CONCAT(RESUME, __LINE__):                  \
   if(vt_flag == 0) {                            \
-    (ip) = &&FC_CONCAT(FC_LABEL, __LINE__);	\
+    (ip) = &&FC_CONCAT(RESUME, __LINE__);	\
+    return;                                     \
+  }                                             \
+  FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(RESUME, __LINE__)));\
+} while(0)
+
+
+/**
+ * Program the current virtual thread to go to the specified mark.
+ * Once the virtual thread function is called again, it will resume from the specified mark.
+ * \param thread  A virtual thread name
+ * \param ip      An instruction pointer of the virtual thread
+ * \param mark    The name of the mark to proceed from
+ */
+#define VT_GOTO(thread, ip, mark)               \
+do {                                            \
+FC_CONCAT(GOTO, __LINE__):   	                \
+  (void)&&FC_CONCAT(GOTO, __LINE__);            \
+  vt_flag = 0;				        \
+  if(vt_flag == 0) {                            \
+    (ip) = &&mark;                              \
     return;                                     \
   }                                             \
 } while(0)
 
-
-/**
- * Mark the current position in the virtual thread.
- * Later, seek operation can be used to restore this position.
- * \param thread  A virtual thread name
- * \param mark    The name of the mark
- */
-#define VT_MARK(thread, mark) FC_ASM_LABEL(FC_ASM_LABEL_NAME(thread, mark))
-
-/**
- * Set the current position in the given virtual thread to the specified mark.
- * Later, seek operation can be used to restore this position.
- * \param thread  A virtual thread name
- * \param ip      An instruction pointer of the virtual thread
- * \param mark    The name of the mark
- */
-#define VT_SEEK(thread, ip, mark) do {          \
-  ip = FC_POINTER(FC_ASM_LABEL_NAME(thread, mark)); \
-} while(0)
 
 #endif

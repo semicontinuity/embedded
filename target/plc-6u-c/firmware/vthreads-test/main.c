@@ -43,24 +43,24 @@ static inline void blink_thread__notify(void) {
 }
 
 static inline void blink_thread__force_off(void) {
-    VT_SEEK(blink_thread, blink_thread__ip, "OFF");
+    VT_SEEK(blink_thread, blink_thread__ip, OFF);
 }
 
 static inline void blink_thread__force_on(void) {
-    VT_SEEK(blink_thread, blink_thread__ip, "ON");
+    VT_SEEK(blink_thread, blink_thread__ip, ON);
 }
 
 
 void blink_thread__run(void) {
     VT_BEGIN(blink_thread, blink_thread__ip);
 
-    VT_MARK(blink_thread, "OFF");
+    VT_MARK(blink_thread, OFF);
     PORTC &= ~(1<<0);
     blink_thread__wait(64000);	// about 8 secs
     VT_YIELD(blink_thread, blink_thread__ip);  // next line will be executed in 8 seconds
 
 
-    VT_MARK(blink_thread, "ON");
+    VT_MARK(blink_thread, ON);
     PORTC |= (1<<0);
     blink_thread__wait(32000);	// about 4 secs
     VT_YIELD(blink_thread, blink_thread__ip);  // next line will be executed in 4 seconds

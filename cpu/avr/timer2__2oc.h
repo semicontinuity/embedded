@@ -31,15 +31,6 @@
 #define TIMER2_CONF_WGM_CTC_RESERVED                    (_BV(WGM21)              | _BV(8+WGM22))
 #define TIMER2_CONF_WGM_FAST_PWM_USE_OCRA               (_BV(WGM21) | _BV(WGM20) | _BV(8+WGM22))
 
-#define TIMER2_CONF_STOPPED		                (0)
-#define TIMER2_CONF_NO_PRESCALER	                ((                        _BV(CS20)) << 8)
-#define TIMER2_CONF_PRESCALER_8                         ((            _BV(CS21)            ) << 8)
-#define TIMER2_CONF_PRESCALER_32	                ((            _BV(CS21) | _BV(CS20)) << 8)
-#define TIMER2_CONF_PRESCALER_64	                ((_BV(CS22)                        ) << 8)
-#define TIMER2_CONF_PRESCALER_128                       ((_BV(CS22)             | _BV(CS20)) << 8)
-#define TIMER2_CONF_PRESCALER_256	                ((_BV(CS22) | _BV(CS21)            ) << 8)
-#define TIMER2_CONF_PRESCALER_1024                      ((_BV(CS22) | _BV(CS21) | _BV(CS20)) << 8)
-
 #define TIMER2_CONF_OC2A_DISCONNECTED                   (0)
 #define TIMER2_CONF_OC2A_TOGGLE                         (              _BV(COM2A0))
 #define TIMER2_CONF_OC2A_CLEAR                          (_BV(COM2A1)              )
@@ -73,8 +64,6 @@
 #define TIMER2_CONF_TOP(value)                          ((value) * 65536L)
 #define TIMER2_CONF_OCRA(value)                         ((value) * 65536L)
 #define TIMER2_CONF_OCRB(value)                         ((value) * 65536L * 256L)
-
-#define TIMER2_CONF_DEFAULT                             (0)
 
 
 inline static void timer2__switch_conf(uint32_t old_conf, uint32_t new_conf) {
@@ -130,39 +119,6 @@ inline static void timer2__ctc__interrupt__enable(void) {
 inline static void timer2__ctc__interrupt__disable(void) {
     timer2__compare_a__interrupt_disable();
 }
-
-#define timer2__start(mode) do {\
-    TCCR2B = mode;	/* start timer in the user-defined mode  */\
-} while(0)
-
-
-#define timer2__stop() do {\
-    TCCR2B = TIMER2_MODE_STOPPED;					\
-} while(0)
-
-
-
-#ifdef timer2__comp_a__run
-
-#ifndef timer2__comp_a__run__attrs
-#define timer2__comp_a__run__attrs
-#endif
-
-INLINE void timer2__comp_a__run(void) timer2__comp_a__run__attrs;
-
-#endif
-
-
-
-#ifdef timer2__comp_b__run
-
-#ifndef timer2__comp_b__run__attrs
-#define timer2__comp_b__run__attrs
-#endif
-
-INLINE void timer2__comp_b__run(void) timer2__comp_b__run__attrs;
-
-#endif
 
 
 #endif

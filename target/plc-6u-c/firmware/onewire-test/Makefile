@@ -1,7 +1,6 @@
-TARGET = vthreads-test
+TARGET = onewire-test
 MCU = atmega8535
 OPT = 3 -Wa,-a,-ad
-OPT += -ffixed-r30 -ffixed-r31
 ROOT = ../../../..
 BSP = ../../bsp
 
@@ -17,6 +16,6 @@ CDEFS += $(CONF)
 CDEFS += -ffreestanding -fwhole-program -Wl,--relax
 
 # Firmware
-SRC += main.c
+SRC += __all__.c
 
 include $(ROOT)/cpu/avr/Makefile

@@ -143,8 +143,8 @@ bool modbus_rtu_driver__on_frame_received(void) {
 
     // finish response by computing CRC; buffer__limit will point to the end of frame
     uint16_t crc = crc16(0xFFFF, buffer__data, buffer__limit__get());
-    buffer__put_u8((uint8_t)(crc & 0xFF)); // wrong CRC? investigate
-    buffer__put_u8((uint8_t)(crc >> 8));
+    buffer__put_u8((uint8_t)(crc & 0xFF)); // low byte of CRC is sent first.
+    buffer__put_u8((uint8_t)(crc >> 8));   // cannot use buffer__put_u16 that sends 16-bit values MSB first.
 
     // send response
     buffer__rewind();
