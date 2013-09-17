@@ -8,6 +8,8 @@
 #include <avr/io.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
+
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -44,7 +46,7 @@ int main(void) {
 
     sei();
 
-    printf("Reading scratch\n");
+    printf_P(PSTR("Reading scratch\n"));
 
     onewire__command(sizeof(command), sizeof(response), command, response);
 
@@ -59,9 +61,10 @@ int main(void) {
 
     uint8_t *r = response;
     for(uint8_t i = 0; i < DS18X20_SP_SIZE; i++) {
-        printf("%02X ", *r++);
+        printf(PSTR("%02X "), *r++);
     }
-    printf(" ");
+
+    printf(PSTR("CRC: %02X\n"), onewire__crc__get());
 
     for(;;) {
         sleep_cpu();

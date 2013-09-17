@@ -34,3 +34,6 @@ void onewire__shutdown(void);
  * Poll onewire__thread__is_running() for completion status.
  */
 void onewire__command(uint8_t command_length, uint8_t response_length, uint8_t *command, uint8_t *response);
+
+/** Returns CRC of received data */
+uint8_t onewire__crc__get(void);

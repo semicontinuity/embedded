@@ -25,6 +25,7 @@
 
 #include "onewire.h"
 
+#include "util/crc8_ow.h"
 #include "cpu/avr/util/vthreads.h"
 #include "cpu/avr/timer2.h"
 #include "cpu/avr/gpio.h"
@@ -192,6 +193,9 @@ volatile uint8_t *onewire__thread__rx__ptr;
 /** Remaining RX data length */
 volatile uint8_t onewire__thread__rx__remaining;
 
+/** CRC of RX data */
+volatile uint8_t onewire__thread__crc;
+
 
 /** Allow thread to be scheduled */
 void onewire__thread__start(void) {
@@ -265,7 +269,9 @@ void onewire__thread__run(void) {
     while (onewire__thread__rx__remaining--) {
         onewire__thread__exchange_byte(0xFF);
         VT_YIELD(onewire__thread, onewire__thread__ip);
-        *onewire__thread__rx__ptr++ = onewire__bitbang_thread__data__get();
+        uint8_t data = onewire__bitbang_thread__data__get();
+        *onewire__thread__rx__ptr++ = data;
+        onewire__thread__crc = crc8_ow_update(onewire__thread__crc, data);
     }
 
     onewire__thread__stop();
@@ -296,5 +302,12 @@ void onewire__command(uint8_t command_length, uint8_t response_length, uint8_t *
     onewire__thread__tx__remaining = command_length;
     onewire__thread__rx__ptr = response;
     onewire__thread__rx__remaining = response_length;
+    onewire__thread__crc = 0;
     onewire__thread__start();
+}
+
+
+/** Returns CRC of received data */
+uint8_t onewire__crc__get(void) {
+    return onewire__thread__crc;
 }
