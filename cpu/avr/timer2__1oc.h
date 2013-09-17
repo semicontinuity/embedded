@@ -41,6 +41,11 @@ inline static void timer2__switch_conf(uint16_t old_conf, uint16_t new_conf) {
 }
 
 
+inline static void timer2__stop(void) {
+    TCCR2 = TIMER2_CONF_DEFAULT;
+}
+
+
 inline static void timer2__compare_a__interrupt__enable(void) {
     TIMSK |= _BV(OCIE2);
 }

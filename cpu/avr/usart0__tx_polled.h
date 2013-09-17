@@ -29,7 +29,7 @@ inline void usart0__out__wait(void) {
  || defined(__AVR_ATmega168P__)\
  || defined(__AVR_ATmega328P__)
     loop_until_bit_is_set(UCSR0A, UDRE0);
-#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
+#elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__) || defined(__AVR_ATmega8535__)
     loop_until_bit_is_set(UCSRA, UDRE);
 #elif defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
     loop_until_bit_is_set(UCSR1A, UDRE1);

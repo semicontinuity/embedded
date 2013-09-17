@@ -11,11 +11,14 @@
 //   parameters:
 //     ONEWIRE__PORT: AVR port to which 1-wire bus is attached
 //     ONEWIRE__PIN: Pin number of the AVR port
-// onewire__bitbang_thread:
-//   description: thread that handles transmission and reception of bits.
+// onewire__timer:
+//   description: timer that provides the necessary 1-wire timing
 //   parameters:
-//     ONEWIRE__BITBANG_THREAD__TIMER__CONF: Timer 2 configuration
-//     ONEWIRE__BITBANG_THREAD__TIMER__TIME_QUANTUM: Timeout value for 1 TQ
+//     ONEWIRE__TIMER__FAST_CONF: Timer 2 configuration for bit IO
+//     ONEWIRE__TIMER__SLOW_CONF: Timer 2 configuration for reset pulse handling
+//     ONEWIRE__TIMER__TIME_QUANTUM: Timer 2 timeout value for 1 TQ
+// onewire__bitbang_thread:
+//   description: thread that receives and transmits one byte and handles reset.
 // onewire__thread:
 //   description: handles frame transmission and reception.
 // =============================================================================
@@ -51,90 +54,116 @@ bool onewire__bus__get(void) {
 
 
 // -----------------------------------------------------------------------------
-// 1-wire bit-bang thread.
-// Receives and transmits individual bits (to reduce ISR stack overhead).
+// 1-wire timer.
 // -----------------------------------------------------------------------------
-/** Flag that indicates that the thread is running */
-volatile uint8_t onewire__bitbang_thread__running;
-/** Instruction pointer */
-volatile void *onewire__bitbang_thread__ip;
-/** Byte to be transmitted */
-volatile uint8_t onewire__bitbang_thread__data_out;
-/** Byte received */
-volatile uint8_t onewire__bitbang_thread__data_in;
-
-
-uint8_t onewire__bitbang_thread__is_running(void) {
-    return onewire__bitbang_thread__running;
+void onewire__timer__start(const uint8_t conf) {
+    timer2__value__set(0);
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, conf);
 }
 
 
-void onewire__bitbang_thread__init(void) {    
+void onewire__timer__stop(void) {
+    timer2__stop();
+}
+
+
+void onewire__timer__init(void) {    
     timer2__compare_a__interrupt__enabled__set(1);
 }
 
 
-void onewire__bitbang_thread__shutdown(void) {
+void onewire__timer__shutdown(void) {
     timer2__compare_a__interrupt__enabled__set(0);
 }
 
 
+void onewire__timer__timeout__set(const uint8_t tq) {
+    timer2__compare_a__value__set(tq);
+}
+
+
+// -----------------------------------------------------------------------------
+// 1-wire bit-bang thread.
+// Receives and transmits individual byte
+// -----------------------------------------------------------------------------
+
+/** Flag that indicates that the thread is running */
+volatile bool onewire__bitbang_thread__running;
+
+/** Thread instruction pointer */
+volatile void *onewire__bitbang_thread__ip;
+
+/** Data exchanged */
+volatile uint8_t onewire__bitbang_thread__data;
+
+/** Remaining number of bits to render */
+volatile uint8_t onewire__bitbang_thread__bit_count;
+
+
+bool onewire__bitbang_thread__is_running(void) {
+    return onewire__bitbang_thread__running;
+}
+
+
 void onewire__bitbang_thread__start(void) {
-    timer2__value__set(0);
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, ONEWIRE__BITBANG_THREAD__TIMER__CONF);
+    VT_INIT(onewire__bitbang_thread, onewire__bitbang_thread__ip);
+    onewire__bitbang_thread__bit_count = 8;
     onewire__bitbang_thread__running = 1;
 }
 
 
 void onewire__bitbang_thread__stop(void) {
-    timer2__switch_conf(ONEWIRE__BITBANG_THREAD__TIMER__CONF, TIMER2_CONF_DEFAULT);
+    onewire__timer__stop();
     onewire__bitbang_thread__running = 0;
 }
 
 
-void onewire__bitbang_thread__timeout__set(const uint8_t tq) {
-    timer2__compare_a__value__set(tq);
+void onewire__bitbang_thread__data__set(const uint8_t data) {
+    onewire__bitbang_thread__data = data;
+}
+
+uint8_t onewire__bitbang_thread__data__get(void) {
+    return onewire__bitbang_thread__data;
 }
 
 
 /**
- * Called when bitbang_thread thread timeout expired (certain amount of time quants programmed).
+ * Called when 1-wire timer timeout expired (certain amount of time quants programmed).
  */
 ISR(timer2__compare_a__interrupt__VECTOR) {
 
     VT_BEGIN(onewire__bitbang_thread, onewire__bitbang_thread__ip);
-
     // -------------------------------------------------------------------------
-    VT_MARK(onewire__bitbang_thread, RECEIVE);
-    // 1 for 1 TQ
-    onewire__bitbang_thread__timeout__set(1);
-    onewire__bus__set(1);
-    VT_YIELD(onewire__bitbang_thread, onewire__bitbang_thread__ip);
-    // sample bit
-    uint8_t data = onewire__bitbang_thread__data_in >> 1;
-    if (onewire__bus__get()) data |= 0x80;
-    onewire__bitbang_thread__data_in = data;
-    // 1 for 7 TQ (bus is 1 already)
-    onewire__bitbang_thread__timeout__set(7);
-    goto done;
+    do {
+        // generate 0 for 1 TQ
+        onewire__bus__set(0);
+        onewire__timer__timeout__set(1*ONEWIRE__TIMER__TIME_QUANTUM);
+        VT_YIELD(onewire__bitbang_thread, onewire__bitbang_thread__ip);
 
-    // -------------------------------------------------------------------------
-    VT_MARK(onewire__bitbang_thread, SEND_1TQ_1);
-    onewire__bitbang_thread__timeout__set(1);
-    onewire__bus__set(1);
-    goto done;
+        // generate 0 or 1 on the bus, depending on the data bit
+        if (onewire__bitbang_thread__data & 0x01) onewire__bus__set(1);
 
-    // -------------------------------------------------------------------------
-    VT_MARK(onewire__bitbang_thread, SEND_8TQ_1);
-    onewire__bitbang_thread__timeout__set(8);
-    onewire__bus__set(1);
-    goto done;
+        // wait for 1 TQ (timeout is valid already)
+        onewire__bus__set(1);
+        VT_YIELD(onewire__bitbang_thread, onewire__bitbang_thread__ip);
 
-    // -------------------------------------------------------------------------
-done:
-    VT_YIELD(onewire__bitbang_thread, onewire__bitbang_thread__ip);
+        // sample bit
+        uint8_t data = onewire__bitbang_thread__data >> 1;
+        if (onewire__bus__get()) data |= 0x80;
+        onewire__bitbang_thread__data = data;
+
+        // wait for 6 TQ
+        onewire__timer__timeout__set(6*ONEWIRE__TIMER__TIME_QUANTUM);
+        VT_YIELD(onewire__bitbang_thread, onewire__bitbang_thread__ip);
+
+        // generate 1 for 1 TQ (guard time)
+        onewire__bus__set(1);
+        onewire__timer__timeout__set(1*ONEWIRE__TIMER__TIME_QUANTUM);
+        VT_YIELD(onewire__bitbang_thread, onewire__bitbang_thread__ip);
+    }
+    while (--onewire__bitbang_thread__bit_count);
+
     onewire__bitbang_thread__stop();
-
     // -------------------------------------------------------------------------
     VT_END(onewire__bitbang_thread);
 }
@@ -142,6 +171,7 @@ done:
 
 // -----------------------------------------------------------------------------
 // 1-wire thread
+// Handles one 1-wire transaction.
 // -----------------------------------------------------------------------------
 
 /** Flag that indicates that the thread is running */
@@ -154,25 +184,91 @@ volatile void *onewire__thread__ip;
 volatile uint8_t *onewire__thread__tx__ptr;
 
 /** Remaining TX data length */
-volatile uint8_t *onewire__thread__tx__remaining;
+volatile uint8_t onewire__thread__tx__remaining;
 
 /** RX data pointer */
 volatile uint8_t *onewire__thread__rx__ptr;
 
 /** Remaining RX data length */
-volatile uint8_t *onewire__thread__rx__remaining;
+volatile uint8_t onewire__thread__rx__remaining;
 
 
+/** Allow thread to be scheduled */
 void onewire__thread__start(void) {
+    VT_INIT(onewire__thread, onewire__thread__ip);
+    onewire__thread__running = true; 
 }
 
 
+/** Disallow thread to be scheduled */
 void onewire__thread__stop(void) {
+    onewire__thread__running = false;
+}
+
+
+/** Check whether the thread can be scheduled (if the thread is running) */
+bool onewire__thread__is_running(void) {
+    return onewire__thread__running;
+}
+
+/** Check whether the thread can be scheduled (if the thread is running) */
+bool onewire__thread__is_runnable(void) {
+    return !onewire__bitbang_thread__is_running();
+}
+
+
+/**
+ * Exchange the byte on the 1-wire bus.
+ * When sending byte, ignore the result.
+ * When receiving byte, call with argument 0xFF and read result with onewire__bitbang_thread__data__get().
+ * Poll onewire__bitbang_thread__is_running() for the end of operation.
+ */
+void onewire__thread__exchange_byte(const uint8_t value) {
+    onewire__bitbang_thread__data__set(value);
+    onewire__bus__set(0);
+    
+    onewire__timer__timeout__set(1*ONEWIRE__TIMER__TIME_QUANTUM);
+    onewire__bitbang_thread__start();
+    onewire__timer__start(ONEWIRE__TIMER__FAST_CONF);
+}
+
+
+/**
+ * Reset 1-wire bus.
+ * Poll onewire__bitbang_thread__is_running() for the end of operation.
+ * The result is available via onewire__bitbang_thread__data__get().
+ * If presense pulse is generated, onewire__bitbang_thread__data will not equal to 0xFF.
+ */
+void onewire__thread__reset_bus(void) {
+    onewire__bitbang_thread__data__set(0xFF);
+    onewire__bus__set(0);
+    
+    onewire__timer__timeout__set(8*ONEWIRE__TIMER__TIME_QUANTUM);
+    onewire__bitbang_thread__start();
+    onewire__timer__start(ONEWIRE__TIMER__SLOW_CONF);    
 }
 
 
 void onewire__thread__run(void) {
     VT_BEGIN(onewire__thread, onewire__thread__ip);
+
+    onewire__thread__reset_bus();
+    // wait until bitbang thread finishes reset pulse.
+    VT_YIELD(onewire__thread, onewire__thread__ip);
+
+    do {
+        onewire__thread__exchange_byte(*onewire__thread__tx__ptr++);
+        VT_YIELD(onewire__thread, onewire__thread__ip);
+    }
+    while (--onewire__thread__rx__remaining);
+
+    while (onewire__thread__rx__remaining--) {
+        onewire__thread__exchange_byte(0xFF);
+        VT_YIELD(onewire__thread, onewire__thread__ip);
+        *onewire__thread__rx__ptr++ = onewire__bitbang_thread__data__get();
+    }
+
+    onewire__thread__stop();
     VT_END(onewire__thread);
 }
 
@@ -181,73 +277,24 @@ void onewire__thread__run(void) {
 // 1-wire client
 // -----------------------------------------------------------------------------
 
-void onewire__init(void) {    
-    onewire__bitbang_thread__init();
+void onewire__init(void) {
+    onewire__timer__init();
 }
 
 
-void onewire__shutdown(void) {    
-    onewire__bitbang_thread__shutdown();
-}
-
-/**
- * Send bit 0.
- *
- * --+               +-+-
- *   |0 0 0 0 0 0 0 0|1
- *   +-+-+-+-+-+-+-+-+
- *
- * Waveform: 0 for 8 TQ (1 TQ = 8ms), then guard time (stop bit) for 1 TQ.
- */
-void onewire__send_bit_0(void) {
-    // generate 0 for 8 TQ    
-    onewire__bitbang_thread__timeout__set(8);
-    onewire__bus__set(0);
-
-    // after timeout, proceed at SEND_1TQ_1 that will generate guard time for 1 TQ.
-    VT_SEEK(onewire__bitbang_thread, onewire__bitbang_thread__ip, SEND_1TQ_1);
-    onewire__bitbang_thread__start();
-    // poll onewire__bitbang_thread__is_running() for the end of operation
+void onewire__shutdown(void) {
+    onewire__timer__shutdown();
 }
 
 
 /**
- * Send bit 1.
- *
- * --+ +-+-+-+-+-+-+-+---
- *   |0|1 1 1 1 1 1 1 1
- *   +-+             +
- *
- * Waveform: 0 for 1 TQ (1 TQ = 8ms), then 1 for 7 TQ + guard time (stop bit) for 1 TQ.
+ * Perform 1-wire transaction.
+ * Poll onewire__thread__is_running() for completion status.
  */
-void onewire__send_bit_1(void) {
-    // generate 0 for 1 TQ    
-    onewire__bitbang_thread__timeout__set(1);
-    onewire__bus__set(0);
-
-    // after timeout, proceed at SEND_8TQ_1 that will generate guard time for 1 TQ.
-    VT_SEEK(onewire__bitbang_thread, onewire__bitbang_thread__ip, SEND_8TQ_1);
-    onewire__bitbang_thread__start();
-    // poll onewire__bitbang_thread__is_running() for the end of operation
-}
-
-
-/**
- * Receive bit.
- *
- * --+ +-+-+-+-+-+-+-+---
- *   |0|1 1 1 1 1 1 1 1
- *   +-+ S           +
- *
- * Waveform: 0 for 1 TQ (1 TQ = 8ms), then 1 for 1 TQ, sample bus, 1 for 6 TQ + guard time (stop bit) for 1 TQ.
- */
-void onewire__receive_bit(void) {    
-    // generate 0 for 1 TQ
-    onewire__bitbang_thread__timeout__set(1);
-    onewire__bus__set(0);
-
-    // after timeout, proceed at RECEIVE.
-    VT_SEEK(onewire__bitbang_thread, onewire__bitbang_thread__ip, RECEIVE);
-    onewire__bitbang_thread__start();
-    // poll onewire__bitbang_thread__is_running() for the end of operation
+void onewire__command(uint8_t command_length, uint8_t response_length, uint8_t *command, uint8_t *response) {
+    onewire__thread__tx__ptr = command;
+    onewire__thread__tx__remaining = command_length;
+    onewire__thread__rx__ptr = response;
+    onewire__thread__rx__remaining = response_length;
+    onewire__thread__start();
 }
