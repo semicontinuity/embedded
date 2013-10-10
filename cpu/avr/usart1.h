@@ -186,10 +186,10 @@ inline char usart1__in__peek(void) {
 
 
 // =============================================================================
-// usart1__in__complete_interrupt_enabled__set
+// usart1__in__complete_interrupt__enabled__set
 // =============================================================================
 
-inline void usart1__in__complete_interrupt_enabled__set(void) {
+inline void usart1__in__complete_interrupt__enabled__set(void) {
 #if defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
     set_bit_in_reg(UCSR1B, RXCIE1);
 #else

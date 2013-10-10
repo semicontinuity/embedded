@@ -27,10 +27,9 @@
  * A virtual thread instruction pointer type.
  * Stores the continuation of the thread (the address, from which the virtual thread function will proceed).
  * For good performance, place it to the general purpose I/O register.
- * For better performance, place it in the register.
- * For best performance, place it in the high register (r16-r24).
- * For utmost performance, place it to r30.
- * Beware of compiler bug when placed to the register (except r30).
+ * For better performance, place it in the register r2-r14. Define VTHREADS__FAST_RESUME and/or VTHREADS__FAST_YIELD for even higher speed.
+ * For best performance, place it in the high register (r16-r24). Define VTHREADS__FAST_RESUME for even higher speed.
+ * For utmost performance, place it to r30. Beware of other code that may use r30:r31, such as PROGMEM data access (lpm instruction).
  */
 typedef void * vthread_ip_t;
 
@@ -60,10 +59,29 @@ typedef void * vthread_ip_t;
 
 
 
+#ifdef VTHREADS__FAST_RESUME
+
 #define FC_RESUME(s)			\
   do {					\
-      goto *s;				\
+      void *ip_copy;                    \
+      ip_copy = s;                      \
+      __asm__ __volatile__(             \
+          ""                            \
+          : "=z" (ip_copy)              \
+          : "0" (ip_copy)               \
+      );                                \
+      goto *ip_copy;                    \
   } while(0)
+
+#else
+
+#define FC_RESUME(s)			\
+  do {					\
+      goto *s;                          \
+  } while(0)
+
+#endif
+
 
 #define FC_CONCAT2(s1, s2) s1##s2
 #define FC_CONCAT(s1, s2) FC_CONCAT2(s1, s2)
@@ -122,7 +140,6 @@ mark:                                           \
   FC_RESUME(ip);                                \
   {                                             \
       VT_MARK(thread, BEGIN);
-//      FC_ASM_LABEL(FC_LABEL_BEGIN(thread));
 
 
 /**
@@ -142,18 +159,44 @@ mark:                                           \
  * \param thread  A virtual thread name
  * \param ip      An instruction pointer of the virtual thread
  */
-#define VT_YIELD(thread, ip) \
-do {                                            \
-FC_CONCAT(YIELD, __LINE__):                     \
-  (void)&&FC_CONCAT(YIELD, __LINE__);           \
-  vt_flag = 0;				        \
-  FC_CONCAT(RESUME, __LINE__):                  \
-  if(vt_flag == 0) {                            \
-    (ip) = &&FC_CONCAT(RESUME, __LINE__);	\
-    return;                                     \
-  }                                             \
-  FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(RESUME, __LINE__)));\
+#ifdef VTHREADS__FAST_YIELD
+
+#define VT_YIELD(thread, ip)                                    \
+do {                                                            \
+FC_CONCAT(YIELD, __LINE__):                                     \
+  (void)&&FC_CONCAT(YIELD, __LINE__);                           \
+  vt_flag = 0;				                        \
+  FC_CONCAT(RESUME, __LINE__):                                  \
+  if(vt_flag == 0) {                                            \
+    void *ip_copy;                                              \
+    ip_copy = &&FC_CONCAT(RESUME, __LINE__);	                \
+      __asm__ __volatile__(                                     \
+          ""                                                    \
+          : "=z" (ip_copy)                                      \
+          : "0" (ip_copy)                                       \
+      );                                                        \
+    (ip) = ip_copy;                                             \
+    return;                                                     \
+  }                                                             \
+  FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(RESUME, __LINE__)));  \
 } while(0)
+
+#else
+
+#define VT_YIELD(thread, ip)                                    \
+do {                                                            \
+FC_CONCAT(YIELD, __LINE__):                                     \
+  (void)&&FC_CONCAT(YIELD, __LINE__);                           \
+  vt_flag = 0;				                        \
+  FC_CONCAT(RESUME, __LINE__):                                  \
+  if(vt_flag == 0) {                                            \
+    (ip) = &&FC_CONCAT(RESUME, __LINE__);	                \
+    return;                                                     \
+  }                                                             \
+  FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(RESUME, __LINE__)));  \
+} while(0)
+
+#endif
 
 
 /**

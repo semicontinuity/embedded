@@ -49,11 +49,11 @@ inline void timer0__switch_conf(uint16_t old_conf, uint16_t new_conf) {
 }
 
 
-inline void timer0__compare__interrupt_enable(void) {
+inline void timer0__compare__interrupt__enable(void) {
     TIMSK |= _BV(OCIE0);
 }
 
-inline void timer0__compare__interrupt_disable(void) {
+inline void timer0__compare__interrupt__disable(void) {
     TIMSK &= ~_BV(OCIE0);
 }
 
@@ -68,11 +68,11 @@ inline void timer0__overflow__interrupt__disable(void) {
 
 
 inline void timer0__ctc__interrupt__enable(void) {
-    timer0__compare__interrupt_enable();
+    timer0__compare__interrupt__enable();
 }
 
 inline void timer0__ctc__interrupt__disable(void) {
-    timer0__compare__interrupt_disable();
+    timer0__compare__interrupt__disable();
 }
 
 

@@ -110,7 +110,7 @@ inline void timer0__compare_a__interrupt__disable(void) {
     TIMSK0 &= ~_BV(OCIE0A);
 }
 
-inline void timer0__compare_a__interrupt_enabled__set(const uint8_t enable) {
+inline void timer0__compare_a__interrupt__enabled__set(const uint8_t enable) {
     if (enable)
         timer0__compare_a__interrupt__enable();
     else
@@ -142,7 +142,7 @@ inline void timer0__overflow__interrupt__disable(void) {
     TIMSK0 &= ~_BV(TOIE0);
 }
 
-inline void timer0__overflow_interrupt_enabled__set(const uint8_t enable) {
+inline void timer0__overflow_interrupt__enabled__set(const uint8_t enable) {
     if (enable)
         timer0__overflow__interrupt__enable();
     else
@@ -159,7 +159,7 @@ inline void timer0__ctc__interrupt__disable(void) {
 }
 
 inline void timer0__ctc__interrupt__enabled__set(const uint8_t enable) {
-    timer0__compare_a__interrupt_enabled__set(enable);
+    timer0__compare_a__interrupt__enabled__set(enable);
 }
 
 

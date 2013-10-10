@@ -115,4 +115,13 @@ static inline uint8_t timer2__value__get(void) {
 #endif
 
 
+inline static void timer2__ctc__interrupt__enable(void) {
+    timer2__compare_a__interrupt__enable();
+}
+
+inline static void timer2__ctc__interrupt__disable(void) {
+    timer2__compare_a__interrupt__disable();
+}
+
+
 #endif

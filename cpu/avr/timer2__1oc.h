@@ -68,11 +68,11 @@ inline static uint16_t timer2__compare_a__value__get(void) {
 
 
 
-inline static void timer2__overflow_interrupt_enable(void) {
+inline static void timer2__overflow_interrupt__enable(void) {
     TIMSK |= _BV(TOIE2);
 }
 
-inline static void timer2__overflow_interrupt_disable(void) {
+inline static void timer2__overflow_interrupt__disable(void) {
     TIMSK &= ~_BV(TOIE2);
 }
 
