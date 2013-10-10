@@ -9,6 +9,7 @@
 #include "cpu/avr/timer1.h"
 #include "cpu/avr/int0.h"
 #include "cpu/avr/int1.h"
+#include "cpu/avr/asm.h"
 
 
 // Timer 1
@@ -21,7 +22,16 @@
 // Blink thread
 // -----------------------------------------------------------------------------
 
-register vthread_ip_t blink_thread__ip asm("r30");
+#ifndef QUOTE
+#define _QUOTE(x) #x
+#define QUOTE(x) _QUOTE(x)
+#endif
+
+#ifdef BLINK_THREAD__IP__REG
+register uint8_t* blink_thread__ip asm(QUOTE(BLINK_THREAD__IP__REG));
+#else
+volatile uint8_t* blink_thread__ip;
+#endif
 
 
 static inline void blink_thread__init(void) {
@@ -54,16 +64,18 @@ static inline void blink_thread__force_on(void) {
 void blink_thread__run(void) {
     VT_BEGIN(blink_thread, blink_thread__ip);
 
-    VT_MARK(blink_thread, OFF);
-    PORTC &= ~(1<<0);
-    blink_thread__wait(64000);	// about 8 secs
-    VT_YIELD(blink_thread, blink_thread__ip);  // next line will be executed in 8 seconds
+    for(;;) {
+        VT_MARK(blink_thread, OFF);
+        PORTC &= ~(1<<0);
+        blink_thread__wait(64000);	// about 8 secs
+        VT_YIELD(blink_thread, blink_thread__ip);  // next line will be executed in 8 seconds
 
 
-    VT_MARK(blink_thread, ON);
-    PORTC |= (1<<0);
-    blink_thread__wait(32000);	// about 4 secs
-    VT_YIELD(blink_thread, blink_thread__ip);  // next line will be executed in 4 seconds
+        VT_MARK(blink_thread, ON);
+        PORTC |= (1<<0);
+        blink_thread__wait(32000);	// about 4 secs
+        VT_YIELD(blink_thread, blink_thread__ip);  // next line will be executed in 4 seconds
+    }
 
     VT_END(blink_thread);
 }
