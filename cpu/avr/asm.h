@@ -43,7 +43,7 @@
 #define LOAD_CONST8(var, k)	do {	\
   __asm__ __volatile__ (		\
     "ldi %0, %1\n\t"			\
-        : "=d"(v	ar)			\
+        : "=d"(var)			\
         : "M"(k)			\
   );					\
 } while(0)
