@@ -46,7 +46,7 @@ inline static void int0__start(void) {
 }
 
 
-#elif defined(__AVR_AT90S8535__)
+#elif defined(__AVR_AT90S8535__) || defined(__AVR_AT90S2313__)
 
 
 inline static void int0__init(void) {
