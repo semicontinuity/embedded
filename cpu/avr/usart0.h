@@ -361,6 +361,8 @@ inline void usart0__rate__set(const uint32_t rate) {
 // usart0__getc
 // =============================================================================
 
+#define USART0__GETC(result) do {__IN(result, USART0_DATA_REGISTER);} while(0)
+
 inline uint8_t usart0__getc(void) {
     return USART0_DATA_REGISTER;
 }
