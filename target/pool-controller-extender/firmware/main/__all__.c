@@ -1,3 +1,7 @@
 #include "main.c"
+#include "services/notifications_emitter.c"
+#include "services/usart_rx.c"
+#include "services/tx_ring_buffer.c"
+#include "drivers/buttons.c"
 #include "drivers/hd44780_watcher.c"
 #include "cpu/avr/int0.c"

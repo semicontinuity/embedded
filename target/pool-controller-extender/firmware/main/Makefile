@@ -1,7 +1,7 @@
 TARGET = main
 TARGET_CONF ?= $(TARGET).conf
 MCU = at90s2313
-OPT = 2 -mcall-prologues
+OPT = 3 -mcall-prologues
 ROOT = ../../../..
 BSP = ../../bsp
 
@@ -11,6 +11,12 @@ vpath %.c $(BSP) $(ROOT)
 
 
 include $(TARGET_CONF)
+
+
+ifdef FIXED_REGISTERS
+OPT += $(FIXED_REGISTERS)
+endif
+
 
 CDEFS += -Wl,--relax
 
@@ -33,9 +39,17 @@ CDEFS += -DINLINE=
 
 # Firmware
 SRC += main.c
+SRC += services/notifications_emitter.c
+SRC += services/usart_rx.c
+
+# BSP
+SRC += drivers/buttons.c
+SRC += drivers/hd44780_watcher.c
 
 # Library
 SRC += cpu/avr/int0.c
+SRC += services/tx_ring_buffer.c
+
 endif
 
 
