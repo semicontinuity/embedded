@@ -49,6 +49,7 @@ SRC += drivers/hd44780_watcher.c
 # Library
 SRC += cpu/avr/int0.c
 SRC += cpu/avr/drivers/usart0__rx.c
+SRC += cpu/avr/drivers/usart0__tx.c
 SRC += services/tx_ring_buffer.c
 
 endif

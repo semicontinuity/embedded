@@ -9,6 +9,7 @@
 #include "services/tx_ring_buffer.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/drivers/usart0__rx.h"
+#include "cpu/avr/drivers/usart0__tx.h"
 #include <avr/interrupt.h>
 
 
@@ -16,9 +17,21 @@
 // Handlers
 // =============================================================================
 
-void on_character_received(const uint8_t value) {
+void comm__rx__on_data(const uint8_t value) {
     buttons__set(value);
 }
+
+bool comm__tx__has_next(void) {
+    return false;
+}
+
+uint8_t comm__tx__next() {
+    return 0;
+}
+
+void comm__tx__on_done(void) {    
+}
+
 
 
 // =============================================================================
@@ -35,6 +48,7 @@ static void application__start(void) {
     tx_ring_buffer__start();
     notifications_pending__lcd__set(0);
     usart0__rx__start();
+    usart0__tx__start();
 }
 
 

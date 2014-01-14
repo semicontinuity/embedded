@@ -5,3 +5,4 @@
 #include "drivers/hd44780_watcher.c"
 #include "cpu/avr/int0.c"
 #include "cpu/avr/drivers/usart0__rx.c"
+#include "cpu/avr/drivers/usart0__tx.c"
