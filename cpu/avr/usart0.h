@@ -377,4 +377,14 @@ inline void usart0__putc(const uint8_t c) {
 }
 
 
+// =============================================================================
+// usart0__init
+// =============================================================================
+
+#ifdef USART0__BAUD_RATE
+inline void usart0__init(void) {
+    usart0__rate__set(USART0__BAUD_RATE);
+}
+#endif
+
 #endif

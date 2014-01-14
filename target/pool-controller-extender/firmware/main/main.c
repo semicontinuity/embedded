@@ -9,13 +9,24 @@
 #include "services/notifications_emitter.h"
 #include "services/tx_ring_buffer.h"
 #include "services/usart_rx.h"
+#include "cpu/avr/usart0.h"
+
+
+// =============================================================================
+// Handlers
+// =============================================================================
+
+void on_character_received(const uint8_t value) {
+    buttons__set(value);
+}
 
 
 // =============================================================================
 // Application
 // =============================================================================
 
-static void application__init(void) {    
+static void application__init(void) {
+    usart0__init();
     buttons__init();
     hd44780_watcher__init();
 }

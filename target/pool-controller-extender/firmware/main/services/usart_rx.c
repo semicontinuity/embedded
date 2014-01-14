@@ -1,9 +1,8 @@
 // =============================================================================
-// USART receiver and handler.
+// USART receiver driver.
 // =============================================================================
 
 #include "services/usart_rx.h"
-#include "drivers/buttons.h"
 
 #include "cpu/avr/asm.h"
 #include "cpu/avr/usart0.h"
@@ -32,5 +31,5 @@ ISR(usart0__rx__complete__interrupt__VECTOR, usart0__rx__complete__interrupt__AT
 #endif
 
     USART0__GETC(usart_rx__data);
-    buttons__set(usart_rx__data);
+    usart_rx__on_data(usart_rx__data);
 }
