@@ -13,13 +13,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-void modbus_rtu_driver__on_transmission_begin(void) {
-//    display__render_packed(buffer__limit__get());
-}
-
-
-void modbus_rtu_driver__on_transmission_end(void) {
-}
 
 // main
 // -----------------------------------------------------------------------------
@@ -98,7 +91,7 @@ void modbus_rtu_driver__on_buffer_overflow(void) {
  * Handle reading of holding registers.
  */
 modbus_exception modbus_server__read_input_registers(uint16_t register_address, uint16_t register_count) {
-    //display__render_packed(0x04);
+    display__render_packed(0x04);
     do {
         switch (register_address++) {
         case SERVER__REGISTER__TCNT1:
@@ -115,7 +108,7 @@ modbus_exception modbus_server__read_input_registers(uint16_t register_address, 
  * Handle reading of holding registers.
  */
 modbus_exception modbus_server__read_holding_registers(uint16_t register_address, uint16_t register_count) {
-    //display__render_packed(0x03);
+    display__render_packed(0x03);
     do {
         switch (register_address++) {
         case SERVER__REGISTER__VALID_FRAMES_RECEIVED:
@@ -144,7 +137,7 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
  * Handle writing of holding register.
  */
 modbus_exception modbus_server__write_holding_register(uint16_t register_address, uint16_t register_value) {
-    //display__render_packed(0x06);
+    display__render_packed(0x06);
     switch (register_address++) {
     case SERVER__REGISTER__VALID_FRAMES_RECEIVED:
         valid_frames_received = register_value;
