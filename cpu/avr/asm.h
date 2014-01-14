@@ -363,4 +363,22 @@
 #define BRNE_TMP_LABEL()        do { __asm__ __volatile__("brne " TMP_LABEL(L)); } while(0)
 #define IF_ZERO(body)           do { BRNE_TMP_LABEL(); body; MARK(TMP_LABEL(L)); } while(0)
 
+
+#define __IN(result, addr)              \
+    __asm__                             \
+    (                                   \
+        "in %0, %1" "\n\t"              \
+        : "=r" (result)                 \
+        : "I" (_SFR_IO_ADDR(addr))      \
+    );                          
+
+#define __OUT(addr, value)              \
+    __asm__                             \
+    (                                   \
+        "out %0, %1" "\n\t"             \
+        :                               \
+        :"I" (_SFR_IO_ADDR(addr)),      \
+         "r" (value)                    \
+    );                          
+
 #endif // __CPU__AVR__ASM_H
