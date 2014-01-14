@@ -2,14 +2,14 @@
 // Pool controller extender - main module.
 // =============================================================================
 
-#include <avr/interrupt.h>
 #include "drivers/buttons.h"
 #include "drivers/hd44780_watcher.h"
 #include "flags/notifications_pending__lcd.h"
 #include "services/notifications_emitter.h"
 #include "services/tx_ring_buffer.h"
-#include "services/usart_rx.h"
 #include "cpu/avr/usart0.h"
+#include "cpu/avr/drivers/usart0__rx.h"
+#include <avr/interrupt.h>
 
 
 // =============================================================================
@@ -34,7 +34,7 @@ static void application__init(void) {
 static void application__start(void) {
     tx_ring_buffer__start();
     notifications_pending__lcd__set(0);
-    usart_rx__start();
+    usart0__rx__start();
 }
 
 
