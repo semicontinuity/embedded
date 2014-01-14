@@ -60,6 +60,7 @@ uint8_t rx_ring_buffer__get(void) {
         rx_ring_buffer__head = rx_ring_buffer__data;
     if (rx_ring_buffer__tail == rx_ring_buffer__head)
         rx_ring_buffer__not_empty__set(0);
+    return b;
 }
 
 
