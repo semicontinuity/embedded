@@ -8,6 +8,7 @@
 #include "flags/notifications_pending__lcd.h"
 #include "services/notifications_emitter.h"
 #include "services/tx_ring_buffer.h"
+#include "services/usart_rx.h"
 
 
 // =============================================================================
