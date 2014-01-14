@@ -3,7 +3,7 @@
 
 #include "cpu/avr/gpio.h"
 
-#define sensors_read()    (IN(SENSORS) & (_BV(SENSOR0__PIN)|_BV(SENSOR1__PIN)|_BV(SENSOR2__PIN)|_BV(SENSOR3__PIN)))
+#define sensors_read()    (PORT_VALUE(SENSORS) & (_BV(SENSOR0__PIN)|_BV(SENSOR1__PIN)|_BV(SENSOR2__PIN)|_BV(SENSOR3__PIN)))
 
 // Configure PC2-PC5 for input
 // 1. (do nothing with DDRC - input by default)

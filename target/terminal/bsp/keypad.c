@@ -11,7 +11,7 @@
 
 
 #define outputScanValue(v)  OUT(KEYPAD, (v))
-#define inputScanValue()    IN(KEYPAD)
+#define inputScanValue()    PORT_VALUE(KEYPAD)
 
 
 

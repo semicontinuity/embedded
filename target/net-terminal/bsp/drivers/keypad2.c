@@ -12,7 +12,7 @@
 #include <util/delay.h>
 
 static inline void keypad__out(const uint8_t v) { OUT(KEYPAD__OUT, v); }
-static inline uint8_t keypad__in(void) { return IN(KEYPAD__IN); }
+static inline uint8_t keypad__in(void) { return PORT_VALUE(KEYPAD__IN); }
 
 uint8_t keypad__state[] = {0xFF, 0xFF, 0xFF, 0xFF};
 

@@ -19,7 +19,7 @@ inline static void motion_sensors__init(void) {
 }
 
 inline static uint8_t motion_sensors__read(void) {
-    return IN(IN__MOTION_SENSORS) & MOTION_SENSORS__MASK;
+    return PORT_VALUE(IN__MOTION_SENSORS) & MOTION_SENSORS__MASK;
 }
 
 

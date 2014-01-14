@@ -19,7 +19,7 @@ extern struct sensors__status sensors__status;
 
 
 inline uint8_t sensors__read(void) {
-    return IN(SENSORS) & SENSORS__MASK;
+    return PORT_VALUE(SENSORS) & SENSORS__MASK;
 }
 
 

@@ -36,7 +36,7 @@ inline void water_leak_sensors__init(void) {
 
 
 inline static uint8_t water_leak_sensors__read(void) {
-    return IN(IN__WATER_LEAK_SENSORS) & WATER_LEAK_SENSORS__MASK;
+    return PORT_VALUE(IN__WATER_LEAK_SENSORS) & WATER_LEAK_SENSORS__MASK;
 }
 
 #endif

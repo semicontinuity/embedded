@@ -28,5 +28,5 @@ void display__render_packed(const uint8_t packed) {
 }
 
 void display__digits__0__add_dp(void) {
-    OUT(DISPLAY_DIGIT0, DISPLAY_SEGMENT_GLYPH_ADD_DP(IN(DISPLAY_DIGIT0)));
+    OUT(DISPLAY_DIGIT0, DISPLAY_SEGMENT_GLYPH_ADD_DP(PORT_VALUE(DISPLAY_DIGIT0)));
 }
