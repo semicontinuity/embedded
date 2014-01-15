@@ -49,6 +49,15 @@
 } while(0)
 
 
+#define AND_CONST_LO8(var, k)	do {    \
+  __asm__ __volatile__ (                \
+    "andi %A0, %1\n\t"                  \
+        : "=d"(var)                     \
+        : "M"(k)                        \
+  );                                    \
+} while(0)
+
+
 #define LOAD_CONST_LO8(var, k)	do {	\
   __asm__ __volatile__ (		\
     "ldi %A0, %1\n\t"			\

@@ -16,7 +16,16 @@
 #include "cpu/avr/asm.h"
 
 
-uint8_t rx_ring_buffer__data[RX_RING_BUFFER__SIZE];
+uint8_t rx_ring_buffer__data[RX_RING_BUFFER__SIZE]
+#ifdef RX_RING_BUFFER__ALIGNED
+#if RX_RING_BUFFER__SIZE < 256 && ((RX_RING_BUFFER__SIZE & (RX_RING_BUFFER__SIZE - 1)) == 0)
+__attribute__((aligned(RX_RING_BUFFER__SIZE)))
+#else
+#error "If RX_RING_BUFFER__ALIGNED, RX_RING_BUFFER__SIZE must be power of 2 less than 256"
+#endif
+#endif
+;
+
 
 /**
  * Points to the the current read position (head).
@@ -56,8 +65,14 @@ uint8_t rx_ring_buffer__get(void) {
 #else
     b = *rx_ring_buffer__head++;
 #endif
+
+#ifdef TX_RING_BUFFER__ALIGNED
+    AND_CONST_LO8(rx_ring_buffer__head, (0xFF ^ (RX_RING_BUFFER__SIZE - 1)));
+#else
     if (rx_ring_buffer__head == rx_ring_buffer__data + RX_RING_BUFFER__SIZE)
         rx_ring_buffer__head = rx_ring_buffer__data;
+#endif
+
     if (rx_ring_buffer__tail == rx_ring_buffer__head)
         rx_ring_buffer__not_empty__set(0);
     return b;
@@ -74,8 +89,14 @@ void rx_ring_buffer__put(const uint8_t value) {
 #else
     *rx_ring_buffer__tail++ = value;
 #endif
+
+#ifdef TX_RING_BUFFER__ALIGNED
+    AND_CONST_LO8(rx_ring_buffer__tail, (0xFF ^ (RX_RING_BUFFER__SIZE - 1)));
+#else
     if (rx_ring_buffer__tail == rx_ring_buffer__data + RX_RING_BUFFER__SIZE)
         rx_ring_buffer__tail = rx_ring_buffer__data;
+#endif
+
     if (rx_ring_buffer__tail == rx_ring_buffer__head)
         rx_ring_buffer__not_full__set(0);
 }
