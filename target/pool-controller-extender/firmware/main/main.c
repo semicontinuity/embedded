@@ -2,11 +2,11 @@
 // Pool controller extender - main module.
 // =============================================================================
 
-#include "drivers/buttons.h"
-#include "drivers/hd44780_watcher.h"
-#include "flags/notifications_pending__lcd.h"
-#include "services/notifications_emitter.h"
+#include "drivers/pool_controller/buttons.h"
+#include "drivers/pool_controller/lcd_watcher.h"
+#include "drivers/pool_controller/leds_watcher.h"
 #include "services/tx_ring_buffer.h"
+#include "cpu/avr/int0.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/drivers/usart0__rx.h"
 #include "cpu/avr/drivers/usart0__tx.h"
@@ -59,14 +59,16 @@ void pool_controller__on_led_event(const uint8_t value) {
 static void application__init(void) {
     usart0__init();
     buttons__init();
-    hd44780_watcher__init();
+    leds_watcher__init();
+    lcd_watcher__init();
+    int0__init();
 }
 
 static void application__start(void) {
     tx_ring_buffer__start();
-    notifications_pending__lcd__set(0);
     usart0__rx__start();
     usart0__tx__start();
+    int0__start();
 }
 
 

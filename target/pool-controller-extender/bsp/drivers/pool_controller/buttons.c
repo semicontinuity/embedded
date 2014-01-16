@@ -10,7 +10,7 @@
 // The buttons must connected to the same port in the continuous block.
 // =============================================================================
 
-#include "drivers/buttons.h"
+#include "drivers/pool_controller/buttons.h"
 #include "cpu/avr/asm.h"
 
 

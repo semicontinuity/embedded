@@ -10,8 +10,8 @@
 // The buttons must connected to the same port in the continuous block.
 // =============================================================================
 
-#ifndef __BUTTONS_H
-#define __BUTTONS_H
+#ifndef __DRIVERS__POOL_CONTROLLER__BUTTONS_H
+#define __DRIVERS__POOL_CONTROLLER__BUTTONS_H
 
 #include "cpu/avr/gpio.h"
 #include <stdint.h>
