@@ -8,7 +8,7 @@
 // - rx_ring_buffer__not_full (indicates that it's possible to write)
 // These flags help to understand the state of the buffer when head==tail.
 // They are updated after get and put operations,
-// and can thus be used to e.g. to trigger interupts directly,
+// and can thus be used to e.g. to trigger interrupts directly,
 // if mapped to hardware interrupt enable bits.
 // =============================================================================
 
@@ -19,7 +19,7 @@
 uint8_t rx_ring_buffer__data[RX_RING_BUFFER__SIZE]
 #ifdef RX_RING_BUFFER__ALIGNED
 #if RX_RING_BUFFER__SIZE < 256 && ((RX_RING_BUFFER__SIZE & (RX_RING_BUFFER__SIZE - 1)) == 0)
-__attribute__((aligned(RX_RING_BUFFER__SIZE)))
+__attribute__((aligned(RX_RING_BUFFER__SIZE * 2)))
 #else
 #error "If RX_RING_BUFFER__ALIGNED, RX_RING_BUFFER__SIZE must be power of 2 less than 256"
 #endif
@@ -53,7 +53,10 @@ void rx_ring_buffer__start(void) {
 }
 
 
-
+/**
+ * Gets the 8-bit value from the buffer.
+ * Must be called only if the buffer is not empty.
+ */
 uint8_t rx_ring_buffer__get(void) {
     uint8_t b;
 #if defined(RX_RING_BUFFER__HEAD__REG) && RX_RING_BUFFER__HEAD__REG==26
@@ -67,18 +70,28 @@ uint8_t rx_ring_buffer__get(void) {
 #endif
 
 #ifdef TX_RING_BUFFER__ALIGNED
-    AND_CONST_LO8(rx_ring_buffer__head, (0xFF ^ (RX_RING_BUFFER__SIZE - 1)));
+    AND_CONST_LO8(rx_ring_buffer__head, (0xFF ^ RX_RING_BUFFER__SIZE));
 #else
     if (rx_ring_buffer__head == rx_ring_buffer__data + RX_RING_BUFFER__SIZE)
         rx_ring_buffer__head = rx_ring_buffer__data;
 #endif
 
-    if (rx_ring_buffer__tail == rx_ring_buffer__head)
+    rx_ring_buffer__not_full__set(1);
+
+#ifdef RX_RING_BUFFER__ALIGNED
+    IF_LO8_EQUAL(rx_ring_buffer__tail, rx_ring_buffer__head, rx_ring_buffer__not_empty__set(0));
+#else
+    if ((uint8_t)(uint16_t)rx_ring_buffer__tail == (uint8_t)(uint16_t)rx_ring_buffer__head)
         rx_ring_buffer__not_empty__set(0);
+#endif
     return b;
 }
 
 
+/**
+ * Puts the 8-bit value into the buffer.
+ * Must be called only if the buffer is not full.
+ */
 void rx_ring_buffer__put(const uint8_t value) {
 #if defined(RX_RING_BUFFER__TAIL__REG) && RX_RING_BUFFER__TAIL__REG==26
     STORE_XPLUS(rx_ring_buffer__tail, value);
@@ -91,12 +104,18 @@ void rx_ring_buffer__put(const uint8_t value) {
 #endif
 
 #ifdef TX_RING_BUFFER__ALIGNED
-    AND_CONST_LO8(rx_ring_buffer__tail, (0xFF ^ (RX_RING_BUFFER__SIZE - 1)));
+    AND_CONST_LO8(rx_ring_buffer__tail, (0xFF ^ RX_RING_BUFFER__SIZE));
 #else
     if (rx_ring_buffer__tail == rx_ring_buffer__data + RX_RING_BUFFER__SIZE)
         rx_ring_buffer__tail = rx_ring_buffer__data;
 #endif
 
-    if (rx_ring_buffer__tail == rx_ring_buffer__head)
+    rx_ring_buffer__not_empty__set(1);
+
+#ifdef RX_RING_BUFFER__ALIGNED
+    IF_LO8_EQUAL(rx_ring_buffer__tail, rx_ring_buffer__head, rx_ring_buffer__not_full__set(0));
+#else
+    if ((uint8_t)(uint16_t)rx_ring_buffer__tail == (uint8_t)(uint16_t)rx_ring_buffer__head)
         rx_ring_buffer__not_full__set(0);
+#endif
 }

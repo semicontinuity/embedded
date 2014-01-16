@@ -32,6 +32,9 @@ DECLARE_BITVAR(tx_ring_buffer__not_full, TX_RING_BUFFER__NOT_FULL__HOST, TX_RING
 #error "Define TX_RING_BUFFER__NOT_FULL__HOST and TX_RING_BUFFER__NOT_FULL__BIT"
 #endif
 
+inline bool tx_ring_buffer__is_writable(void) { return tx_ring_buffer__not_full__is_set(); }
+inline bool tx_ring_buffer__is_readable(void) { return tx_ring_buffer__not_empty__is_set(); }
+
 
 #ifndef QUOTE
 #define _QUOTE(x) #x
@@ -58,8 +61,16 @@ extern volatile uint8_t* tx_ring_buffer__tail;
  */
 void tx_ring_buffer__start(void);
 
+/**
+ * Puts the 8-bit value into the buffer.
+ * Must be called only if the buffer is not full.
+ */
 uint8_t tx_ring_buffer__get(void);
 
+/**
+ * Puts the 8-bit value into the buffer.
+ * Must be called only if the buffer is not full.
+ */
 void tx_ring_buffer__put(const uint8_t value);
 
 

@@ -33,6 +33,24 @@ void comm__tx__on_done(void) {
 }
 
 
+void pool_controller__on_lcd_event(const uint8_t value) {
+    if (tx_ring_buffer__is_writable()) {
+        tx_ring_buffer__put(0x40 | value);
+    }
+}
+
+void pool_controller__on_keypad_event(const uint8_t value) {
+    if (tx_ring_buffer__is_writable()) {
+        tx_ring_buffer__put(0x80 | value);
+    }
+}
+
+void pool_controller__on_led_event(const uint8_t value) {
+    if (tx_ring_buffer__is_writable()) {
+        tx_ring_buffer__put(0xC0 | value);
+    }
+}
+
 
 // =============================================================================
 // Application

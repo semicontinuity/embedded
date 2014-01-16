@@ -140,6 +140,30 @@
 } while(0)
 
 
+#define COMPARE_LO8_SKIP_IF_EQUAL(v1, v2, code) do {\
+  __asm__ __volatile__(                         \
+    "cpse %A0, %A1\n\t"                         \
+        :                                       \
+        : "r"(v1),"r"(v2)                       \
+  );					                        \
+  do {code;} while(0);                          \
+} while(0)
+
+
+#define IF_LO8_EQUAL(v1, v2, code) do {         \
+  __asm__ __volatile__(                         \
+    "cpse %A0, %A1\n\t"                         \
+    "rjmp L_" QUOTE(__LINE__) "\n\t"            \
+        :                                       \
+        : "r"(v1),"r"(v2)                       \
+  );					                        \
+  do {code;} while(0);                          \
+  __asm__ __volatile__(                         \
+    "L_" QUOTE(__LINE__) ":\n\t"::              \
+  );\
+} while(0)
+
+
 // ----------------------------------------------
 // Operations with X register
 // ----------------------------------------------
