@@ -1,6 +1,22 @@
 #ifndef __CPU__AVR__ASM_H
 #define __CPU__AVR__ASM_H
 
+unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, unsigned char val);
+
+uint32_t avr_insert_bits_map(
+    const uint32_t b7,
+    const uint32_t b6,
+    const uint32_t b5,
+    const uint32_t b4,
+    const uint32_t b3,
+    const uint32_t b2,
+    const uint32_t b1,
+    const uint32_t b0) {
+
+    return (b7<<(4*7)) | (b6<<(4*6)) | (b5<<(4*5)) | (b4<<(4*4)) | (b3<<(4*3)) | (b2<<(4*2)) | (b1<<(4*1)) | (b0<<(4*0));
+}
+
+
 #define FIX_POINTER(_ptr)               __asm__ __volatile__("" : "=b" (_ptr) : "0" (_ptr))
 #define FIX_POINTER_XYZ(_ptr)           __asm__ __volatile__("" : "=e" (_ptr) : "0" (_ptr))
 #define FIX_POINTER_X(_ptr)             __asm__ __volatile__("" : "=x" (_ptr) : "0" (_ptr))
