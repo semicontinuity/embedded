@@ -2,11 +2,13 @@
 // Pool controller extender - main module.
 // =============================================================================
 
+#include "main.h"
 #include "drivers/pool_controller/buttons.h"
 #include "drivers/pool_controller/lcd_watcher.h"
 #include "drivers/pool_controller/leds_watcher.h"
 #include "services/tx_ring_buffer.h"
 #include "cpu/avr/int0.h"
+#include "cpu/avr/timer0.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/drivers/usart0__rx.h"
 #include "cpu/avr/drivers/usart0__tx.h"
@@ -50,6 +52,10 @@ void pool_controller__on_led_event(const uint8_t value) {
     if (tx_ring_buffer__is_writable()) {
         tx_ring_buffer__put(0xC0 | value);
     }
+}
+
+
+void system_timer__on_event(void) {
 }
 
 

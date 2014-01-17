@@ -2,6 +2,29 @@
 #include "cpu/avr/timer0.h"
 
 
+#ifdef timer0__overflow__run
+
+#ifndef TIMER0_OVERFLOW_vect_attrs
+#define TIMER0_OVERFLOW_vect_attrs
+#endif
+
+#ifdef TIMER0_OVERFLOW_vect_naked
+ISR(TIMER0_OVF0_vect, TIMER0_OVERFLOW_vect_attrs ISR_NAKED) {
+#else
+ISR(TIMER0_OVF0_vect, TIMER0_OVERFLOW_vect_attrs) {
+#endif
+
+    timer0__overflow__run();
+
+#ifdef TIMER0_OVERFLOW_vect_naked
+    reti();
+#endif
+}
+
+#endif
+
+
+
 #ifdef timer0__comp__run
 
 #ifndef TIMER0_COMP_vect_attrs

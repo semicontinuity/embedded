@@ -37,7 +37,8 @@ INLINE void timer0__comp__run(void);
 
 #   include "cpu/avr/timer0__2oc.h"
 
-#elif defined(__AVR_ATmega8__)
+#elif defined(__AVR_ATmega8__)\
+ || defined(__AVR_AT90S2313__)
 
 #   include "cpu/avr/timer0__0oc.h"
 
