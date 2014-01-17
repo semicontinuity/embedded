@@ -36,7 +36,7 @@ ISR(usart0__tx__data_register_empty__interrupt__VECTOR, usart0__tx__data_registe
     uint8_t usart0__tx__data;
 #endif
 
-    if (!usart0__tx__has_next()) {
+    if (usart0__tx__has_next()) {
         usart0__tx__data = usart0__tx__next();
         USART0__PUTC(usart0__tx__data);
     }

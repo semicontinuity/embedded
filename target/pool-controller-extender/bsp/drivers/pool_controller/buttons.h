@@ -31,4 +31,12 @@ void buttons__init(void);
 void buttons__set(const uint8_t value);
 
 
+/**
+ * Read the buttons.
+ * Every set bit (for bits 0-5) will corresponds to press of the corresponding button.
+ * Bits 6 and 7 will be 0.
+ */
+uint8_t buttons__get(void);
+
+
 #endif
