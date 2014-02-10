@@ -1,7 +1,6 @@
-TARGET = main
+TARGET = main_atmega168
 TARGET_CONF ?= $(TARGET).conf
-MCU = at90s2313
-OPT = 3 -mcall-prologues
+OPT = 3
 ROOT = ../../../..
 BSP = ../../bsp
 
@@ -37,21 +36,19 @@ else
 
 CDEFS += -DINLINE=
 
-# Firmware
 SRC += main.c
-SRC += services/notifications_emitter.c
-SRC += services/usart_rx.c
 
-# BSP
+SRC += services/buttons_scanner.c
+SRC += services/leds_scanner.c
+SRC += services/tx_ring_buffer.c
+
 SRC += drivers/buttons.c
 SRC += drivers/hd44780_watcher.c
 
-# Library
 SRC += cpu/avr/int0.c
 SRC += cpu/avr/timer0.c
 SRC += cpu/avr/drivers/usart0__rx.c
 SRC += cpu/avr/drivers/usart0__tx.c
-SRC += services/tx_ring_buffer.c
 
 endif
 

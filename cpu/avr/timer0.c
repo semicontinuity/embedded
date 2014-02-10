@@ -4,14 +4,20 @@
 
 #ifdef timer0__overflow__run
 
+#if defined(__AVR_AT90S2313__)
+#define timer0__overflow__interrupt__VECTOR TIMER0_OVF0_vect
+#else
+#define timer0__overflow__interrupt__VECTOR TIMER0_OVF_vect
+#endif
+
 #ifndef TIMER0_OVERFLOW_vect_attrs
 #define TIMER0_OVERFLOW_vect_attrs
 #endif
 
 #ifdef TIMER0_OVERFLOW_vect_naked
-ISR(TIMER0_OVF0_vect, TIMER0_OVERFLOW_vect_attrs ISR_NAKED) {
+ISR(timer0__overflow__interrupt__VECTOR, TIMER0_OVERFLOW_vect_attrs ISR_NAKED) {
 #else
-ISR(TIMER0_OVF0_vect, TIMER0_OVERFLOW_vect_attrs) {
+ISR(timer0__overflow__interrupt__VECTOR, TIMER0_OVERFLOW_vect_attrs) {
 #endif
 
     timer0__overflow__run();

@@ -77,8 +77,11 @@ uint8_t tx_ring_buffer__get(void) {
 
     tx_ring_buffer__not_full__set(1);
 
-#ifdef TX_RING_BUFFER__ALIGNED
-    IF_LO8_EQUAL(tx_ring_buffer__tail, tx_ring_buffer__head, tx_ring_buffer__not_empty__set(0));
+#if defined(TX_RING_BUFFER__ALIGNED)\
+    && defined(TX_RING_BUFFER__NOT_EMPTY__HOST)\
+    && defined(TX_RING_BUFFER__NOT_EMPTY__BIT)\
+    && defined(TX_RING_BUFFER__NOT_EMPTY__IN_BIT_IO_MEM)
+    IF_LO8_EQUAL_CLEAR_IO_BIT(tx_ring_buffer__tail, tx_ring_buffer__head, TX_RING_BUFFER__NOT_EMPTY__HOST, TX_RING_BUFFER__NOT_EMPTY__BIT);
 #else
     if ((uint8_t)(uint16_t)tx_ring_buffer__tail == (uint8_t)(uint16_t)tx_ring_buffer__head)
         tx_ring_buffer__not_empty__set(0);
@@ -111,8 +114,11 @@ void tx_ring_buffer__put(const uint8_t value) {
 
     tx_ring_buffer__not_empty__set(1);
 
-#ifdef TX_RING_BUFFER__ALIGNED
-    IF_LO8_EQUAL(tx_ring_buffer__tail, tx_ring_buffer__head, tx_ring_buffer__not_full__set(0));
+#if defined(TX_RING_BUFFER__ALIGNED)\
+    && defined(TX_RING_BUFFER__NOT_FULL__HOST)\
+    && defined(TX_RING_BUFFER__NOT_FULL__BIT)\
+    && defined(TX_RING_BUFFER__NOT_FULL__IN_BIT_IO_MEM)
+    IF_LO8_EQUAL_CLEAR_IO_BIT(tx_ring_buffer__tail, tx_ring_buffer__head, TX_RING_BUFFER__NOT_FULL__HOST, TX_RING_BUFFER__NOT_FULL__BIT);
 #else
     if ((uint8_t)(uint16_t)tx_ring_buffer__tail == (uint8_t)(uint16_t)tx_ring_buffer__head)
         tx_ring_buffer__not_full__set(0);

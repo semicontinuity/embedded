@@ -36,7 +36,7 @@ ISR(usart0__rx__complete__interrupt__VECTOR, usart0__rx__complete__interrupt__AT
     uint8_t usart0__rx__data;
 #endif
 
-    USART0__GETC(usart0__rx__data);
+    usart0__rx__data = usart0__getc();
     usart0__rx__on_data(usart0__rx__data);
 
 #ifdef usart0__rx__complete__interrupt__NAKED

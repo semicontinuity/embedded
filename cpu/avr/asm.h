@@ -180,6 +180,21 @@ uint32_t avr_insert_bits_map(
 } while(0)
 
 
+#define IF_LO8_EQUAL_CLEAR_IO_BIT(v1, v2, addr, bit) do {\
+  __asm__ __volatile__(                         \
+    "cpse %A0, %A1\n\t"                         \
+    "rjmp L_%=\n\t"                             \
+    "cbi  %2, %3\n\t"                           \
+    "L_%=:\n\t"                                 \
+    :                                           \
+    : "r"(v1),                                  \
+      "r"(v2),                                  \
+      "I"(_SFR_IO_ADDR(addr)),                  \
+      "I"(bit)                                  \
+  );\
+} while(0)
+
+
 // ----------------------------------------------
 // Operations with X register
 // ----------------------------------------------

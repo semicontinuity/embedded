@@ -1,5 +1,5 @@
 AT90S2313
-
+========================================
 PB0	AIN0	LCD DATA + Button 1
 PB1	AIN1	LCD DATA + Button 2
 PB2		LCD DATA + Button 3
@@ -10,9 +10,39 @@ PB6	MISO    LCD RES
 PB7	SCK	LCD RW
 
 PD0	RXD	Serial port RX / RS485
-PD1	TXD	Serial port RX / RS485
+PD1	TXD	Serial port TX / RS485
 PD2	INT0	LCD E
 PD3	INT1	RX485 RTS
 PD4		LED 1
 PD5		LED 2
 PD6		LED 3
+
+ATMEGA168
+========================================
+PB0		LCD DATA + Button 1
+PB1		LCD DATA + Button 2
+PB2	SS	LCD DATA + Button 3
+PB3	MOSI	LCD DATA + Button 4
+PB4	MISO   	LCD RES
+PB5	SCK	LCD RW
+PB6	XTAL1
+PB7	XTAL2
+
+PC0		Button 1
+PC1		Button 2
+PC2		Button 3
+PC3		Button 4
+PC4	   	Button 5
+PC5		Button 6
+
+PD0	RXD	Serial port RX / RS485
+PD1	TXD	Serial port TX / RS485
+PD2	INT0	LCD E
+PD3	INT1	Sensor
+PD4		RTS
+PD5		LED 1
+PD6		LED 2
+PD7		LED 3
+
+
+		

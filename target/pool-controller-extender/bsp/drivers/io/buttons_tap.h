@@ -1,5 +1,5 @@
 // =============================================================================
-// The driver for 6 watched and driven buttons BUTTONS.
+// The driver for watched and driven buttons BUTTONS_TAP.
 // Buttons pins are Wired-Anded with pool controller buttons:
 // When watched:
 //   High level => button depressed
@@ -10,17 +10,17 @@
 // The buttons must connected to the same port in the continuous block.
 // =============================================================================
 
-#ifndef __DRIVERS__POOL_CONTROLLER__BUTTONS_H
-#define __DRIVERS__POOL_CONTROLLER__BUTTONS_H
+#ifndef __DRIVERS__IO__BUTTONS_TAP_H
+#define __DRIVERS__IO__BUTTONS_TAP_H
 
 #include "cpu/avr/gpio.h"
 #include <stdint.h>
 
 
 /**
- * Initialize button pins.
+ * Initialize the button tap pins.
  */
-void buttons__init(void);
+void buttons_tap__init(void);
 
 
 /**
@@ -28,15 +28,15 @@ void buttons__init(void);
  * Every set bit (for bits 0-5) will simulate button press of the corresponding button.
  * Bits 6 and 7 must be 0.
  */
-void buttons__set(const uint8_t value);
+void buttons_tap__set(const uint8_t value);
 
 
 /**
  * Read the buttons state.
- * Every set bit (for bits BUTTONS__PIN .. BUTTONS__PIN+5) corresponds to press of the corresponding button.
+ * Every set bit (for bits BUTTONS_TAP__PIN .. BUTTONS_TAP__PIN+5) corresponds to press of the corresponding button.
  * Remaining bits will be undefined.
  */
-uint8_t buttons__get(void);
+uint8_t buttons_tap__get(void);
 
 
 #endif
