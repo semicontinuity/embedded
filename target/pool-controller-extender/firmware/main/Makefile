@@ -38,17 +38,18 @@ CDEFS += -DINLINE=
 
 SRC += main.c
 
-SRC += services/buttons_scanner.c
-SRC += services/leds_scanner.c
-SRC += services/tx_ring_buffer.c
-
-SRC += drivers/buttons.c
-SRC += drivers/hd44780_watcher.c
-
 SRC += cpu/avr/int0.c
 SRC += cpu/avr/timer0.c
 SRC += cpu/avr/drivers/usart0__rx.c
 SRC += cpu/avr/drivers/usart0__tx.c
+
+SRC += drivers/io/leds_tap.c
+SRC += drivers/io/buttons_tap.c
+SRC += drivers/io/lcd_tap.c
+
+SRC += services/buttons_scanner.c
+SRC += services/leds_scanner.c
+SRC += services/tx_ring_buffer.c
 
 endif
 

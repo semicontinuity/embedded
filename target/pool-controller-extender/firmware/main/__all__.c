@@ -1,7 +1,6 @@
-#include "avr/sfr_defs.h"
 #include "main.h"
-#include "cpu/avr/usart0.h"
 
+#include "cpu/avr/usart0.h"
 #include "cpu/avr/int0.c"
 #include "cpu/avr/timer0.c"
 #include "cpu/avr/drivers/usart0__rx.c"
