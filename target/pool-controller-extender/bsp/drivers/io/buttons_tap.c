@@ -39,19 +39,5 @@ void buttons_tap__set(const uint8_t value) {
  * Remaining bits will be undefined.
  */
 uint8_t buttons_tap__get(void) {
-    uint8_t portValue = PORT_VALUE(BUTTONS_TAP);
-
-    return ~__builtin_avr_insert_bits(
-        avr_insert_bits_map(
-            0xF,
-            0xF,
-            BUTTONS_TAP__PIN + 5,
-            BUTTONS_TAP__PIN + 4,
-            BUTTONS_TAP__PIN + 3,
-            BUTTONS_TAP__PIN + 2,
-            BUTTONS_TAP__PIN + 1,
-            BUTTONS_TAP__PIN + 0),
-        portValue,
-        0
-    );
+    return ~PORT_VALUE(BUTTONS_TAP);
 }

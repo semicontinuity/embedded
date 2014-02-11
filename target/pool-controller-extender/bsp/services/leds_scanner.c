@@ -21,6 +21,12 @@ void leds_scanner__init(void) {
     leds_scanner__state = 0;
 }
 
+/**
+ * Return the latest state of LEDs.
+ */
+uint8_t leds_scanner__state__get(void) {
+    return leds_scanner__state;
+}
 
 /**
  * Called periodically to scan leds.

@@ -14,6 +14,11 @@
 void buttons_scanner__init(void);
 
 /**
+ * Return the latest state of the buttons.
+ */
+uint8_t buttons_scanner__state__get(void);
+
+/**
  * Callback to be implemented by user.
  * Invoked when the state of the buttons has changed.
  */

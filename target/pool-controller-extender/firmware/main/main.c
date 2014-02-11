@@ -41,23 +41,65 @@ void comm__tx__on_done(void) {
 
 /**
  * Callback for the LCD watcher.
- * Called with the state of LCD bus: bits 0-3: data lines, bit 4: RES line, bit 5: RW line.
+ * Called with the state of LCD bus: data in LCD_TAP__XXX bits.
  */
 void pool_controller__on_lcd_event(const uint8_t value) {
     if (tx_ring_buffer__is_writable()) {
-        tx_ring_buffer__put(0x40 | value);
+        tx_ring_buffer__put(
+            __builtin_avr_insert_bits(
+                avr_insert_bits_map(
+                    0xF,
+                    0xF,
+                    LCD_TAP__RW__PIN,
+                    LCD_TAP__RES__PIN,
+                    LCD_TAP__DATA__PIN + 3,
+                    LCD_TAP__DATA__PIN + 2,
+                    LCD_TAP__DATA__PIN + 1,
+                    LCD_TAP__DATA__PIN + 0),
+                value,
+                0x40
+            )
+        );
     }
 }
 
 void pool_controller__on_buttons_scanner_event(const uint8_t changed_pins) {
     if (tx_ring_buffer__is_writable()) {
-        tx_ring_buffer__put(0x80 | buttons_tap__get());
+        tx_ring_buffer__put(
+            __builtin_avr_insert_bits(
+                avr_insert_bits_map(
+                    0xF,
+                    0xF,
+                    BUTTONS_TAP__PIN + 5,
+                    BUTTONS_TAP__PIN + 4,
+                    BUTTONS_TAP__PIN + 3,
+                    BUTTONS_TAP__PIN + 2,
+                    BUTTONS_TAP__PIN + 1,
+                    BUTTONS_TAP__PIN + 0),
+                buttons_scanner__state__get(),
+                0x80
+            )
+        );
     }
 }
 
 void pool_controller__on_leds_scanner_event(const uint8_t changed_pins) {
     if (tx_ring_buffer__is_writable()) {
-        tx_ring_buffer__put(0xC0 | leds_tap__get());
+        tx_ring_buffer__put(
+            __builtin_avr_insert_bits(
+                avr_insert_bits_map(
+                    0xF,
+                    0xF,
+                    0xF,
+                    0xF,
+                    LEDS_TAP__PIN + 2,
+                    LEDS_TAP__PIN + 1,
+                    LEDS_TAP__PIN + 0,
+                    0xF),
+                leds_scanner__state__get(),
+                0x00
+            )
+        );
     }
 }
 

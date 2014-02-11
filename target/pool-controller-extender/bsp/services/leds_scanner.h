@@ -14,6 +14,11 @@
 void leds_scanner__init(void);
 
 /**
+ * Return the latest state of LEDs.
+ */
+uint8_t leds_scanner__state__get(void);
+
+/**
  * Callback to be implemented by user.
  * Invoked when the state of the leds has changed.
  */

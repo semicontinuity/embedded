@@ -21,6 +21,13 @@ void buttons_scanner__init(void) {
     buttons_scanner__state = 0;
 }
 
+/**
+ * Return the latest state of the buttons.
+ */
+uint8_t buttons_scanner__state__get(void) {
+    return buttons_scanner__state;
+}
+
 
 /**
  * Called periodically to scan buttons.
