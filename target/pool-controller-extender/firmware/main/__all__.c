@@ -1,7 +1,7 @@
 #include "main.h"
 
 #include "cpu/avr/usart0.h"
-#include "cpu/avr/int0.c"
+#include "cpu/avr/int1.c"
 #include "cpu/avr/timer0.c"
 #include "cpu/avr/drivers/usart0__rx.c"
 #include "cpu/avr/drivers/usart0__tx.c"

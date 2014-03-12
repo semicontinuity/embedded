@@ -13,7 +13,7 @@
 
 
 void usart0__rx__start(void) {
-    usart0__rx__enabled__set(1);    
+    usart0__rx__enabled__set(1);
     usart0__rx__complete__interrupt__enabled__set(1);
 }
 

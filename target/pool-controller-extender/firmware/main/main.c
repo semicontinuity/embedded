@@ -9,8 +9,9 @@
 #include "services/tx_ring_buffer.h"
 #include "services/buttons_scanner.h"
 #include "services/leds_scanner.h"
+#include "services/system_timer.h"
 #include "cpu/avr/asm.h"
-#include "cpu/avr/int0.h"
+#include "cpu/avr/int1.h"
 #include "cpu/avr/timer0.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/drivers/usart0__rx.h"
@@ -104,7 +105,7 @@ void pool_controller__on_leds_scanner_event(const uint8_t changed_pins) {
 }
 
 
-void system_timer__on_event(void) {
+void pool_controller__on_system_timer_event(void) {
     buttons_scanner__run();
     leds_scanner__run();
 }
@@ -124,14 +125,14 @@ static void application__init(void) {
     leds_scanner__init();
     buttons_scanner__init();
 
-    int0__init();
+    int1__init();
 }
 
 static void application__start(void) {
     tx_ring_buffer__start();
     usart0__rx__start();
     usart0__tx__start();
-    int0__start();
+    int1__start();
 }
 
 

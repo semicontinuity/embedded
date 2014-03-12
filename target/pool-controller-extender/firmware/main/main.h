@@ -26,7 +26,7 @@ void pool_controller__on_keypad_event(const uint8_t value);
 
 void pool_controller__on_led_event(const uint8_t value);
 
-void system_timer__on_event(void);
+void pool_controller__on_system_timer_event(void);
 
 
 #endif

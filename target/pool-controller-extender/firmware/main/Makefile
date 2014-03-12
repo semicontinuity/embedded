@@ -38,7 +38,7 @@ CDEFS += -DINLINE=
 
 SRC += main.c
 
-SRC += cpu/avr/int0.c
+SRC += cpu/avr/int1.c
 SRC += cpu/avr/timer0.c
 SRC += cpu/avr/drivers/usart0__rx.c
 SRC += cpu/avr/drivers/usart0__tx.c

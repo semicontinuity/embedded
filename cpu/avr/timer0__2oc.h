@@ -83,7 +83,7 @@
 #define TIMER0_CONF_DEFAULT                             (0)
 
 
-inline static void timer0__switch_conf(uint32_t old_conf, uint32_t new_conf) {
+inline void timer0__switch_conf(uint32_t old_conf, uint32_t new_conf) {
     uint8_t old_tccra = old_conf & 0xFF;
     uint8_t new_tccra = new_conf & 0xFF;
     if (old_tccra != new_tccra) TCCR0A = new_tccra;
