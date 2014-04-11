@@ -12,10 +12,14 @@ class LCD(object):
 
     def handle_command_write(self, lcd_byte):
         if lcd_byte & 0b10000000 == 0b10000000:
+            # 1xxxxxxx: Set Display Address
             self.lcd_display_address = lcd_byte & 0x7F
+            self.lcd_cgram_address = -1
             description = "Set Display Address %02X" % self.lcd_display_address
         elif lcd_byte & 0b11000000 == 0b01000000:
-            description = "Set CGRAM Address %02X" % (lcd_byte & 0x3F)
+            self.lcd_cgram_address = lcd_byte & 0x3F
+            self.lcd_display_address = -1
+            description = "Set CGRAM Address %02X" % self.lcd_cgram_address
         elif lcd_byte & 0b11100000 == 0b00100000:
             bus_width = "8" if lcd_byte & 0b00010000 == 0b00010000 else "4"
             n_lines = "2" if lcd_byte & 0b00001000 == 0b00001000 else "1"
@@ -49,22 +53,43 @@ class LCD(object):
     def handle_command_read(self, lcd_byte):
         return "Read status: Busy flag=%s" % "Yes" if lcd_byte & 0x80 else "No"
 
+    def display_address(self):
+        address = self.lcd_display_address
+        self.lcd_display_address = self.lcd_display_address + self.lcd_cursor_move_delta
+        if self.lcd_display_address == 128:
+            self.lcd_display_address = 0
+        elif self.lcd_display_address == -1:
+            self.lcd_display_address = 127
+        return address
+
+    def cgram_address(self):
+        address = self.lcd_cgram_address
+        self.lcd_cgram_address = self.lcd_cgram_address + self.lcd_cursor_move_delta
+        if self.lcd_cgram_address == 64:
+            self.lcd_cgram_address = 0
+        elif self.lcd_cgram_address == -1:
+            self.lcd_cgram_address = 63
+        return address
+
+    def display_memory(self, start, finish):
+        return ''.join(chr(c) if c >= 32 else "." for c in self.lcd_display_memory[start:finish])
+
     def handle_data_write(self, lcd_byte):
         if self.lcd_display_address > -1:
-            self.lcd_display_memory[self.lcd_display_address] = lcd_byte
-            self.lcd_display_address = self.lcd_display_address + self.lcd_cursor_move_delta
-            if self.lcd_display_address == 128:
-                self.lcd_display_address = 0
-            elif self.lcd_display_address == 0:
-                self.lcd_display_address = 127
+            address = self.display_address()
+            self.lcd_display_memory[address] = lcd_byte
+            return "%02X\t[%02X]\n[%s]\n[%s]\n[%s]\n[%s]" % (
+                lcd_byte,
+                address,
+                self.display_memory(0x00, 0x14),
+                self.display_memory(0x40, 0x54),
+                self.display_memory(0x14, 0x28),
+                self.display_memory(0x54, 0x68)
+            )
         else:
-            self.lcd_cgram_memory[self.lcd_cgram_address] = lcd_byte
-            self.lcd_cgram_address = self.lcd_cgram_address + self.lcd_cursor_move_delta
-            if self.lcd_cgram_address == 64:
-                self.lcd_cgram_address = 0
-            elif self.lcd_cgram_address == 0:
-                self.lcd_cgram_address = 63
-        return "%02X\n[%s]" % (lcd_byte, self.lcd_display_memory)
+            address = self.cgram_address()
+            self.lcd_cgram_memory[address] = lcd_byte
+            return "%02X\t[%02X]\n[%s]" % (lcd_byte, address, self.lcd_cgram_memory)
 
     def handle_data_read(self, lcd_byte):
         return "%02X" % lcd_byte
