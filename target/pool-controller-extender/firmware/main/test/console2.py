@@ -8,8 +8,9 @@ class LCD(object):
     lcd_display_address = 0
     lcd_cgram_memory  = bytearray(64)
     lcd_cgram_address = -1
+    lcd_cursor_move_delta = 1
 
-    def describe_command_write(self, lcd_byte):
+    def handle_command_write(self, lcd_byte):
         if lcd_byte & 0b10000000 == 0b10000000:
             self.lcd_display_address = lcd_byte & 0x7F
             description = "Set Display Address %02X" % self.lcd_display_address
@@ -31,10 +32,10 @@ class LCD(object):
             blink = "On" if lcd_byte & 0b00000001 == 0b00000001 else "Off"
             description = "Display: %s, Cursor: %s, Blink: %s" % (display, cursor, blink)
         elif lcd_byte & 0b11111100 == 0b00000100:
-            # Set Cursor Move Direction
-            inc_cursor = "On" if lcd_byte & 0b00000010 == 0b00000010 else "Off"
+            # Entry Mode Set
+            self.lcd_cursor_move_delta = 1 if lcd_byte & 0b00000010 == 0b00000010 else -1
             shift_display = "On" if lcd_byte & 0b00000001 == 0b00000001 else "Off"
-            description = "Increment cursor: %s, Shift display: %s" % (inc_cursor, shift_display)
+            description = "Move cursor: %s, Shift display: %s" % ("R" if self.lcd_cursor_move_delta == 1 else "L", shift_display)
         elif lcd_byte & 0b11111110 == 0b00000010:
             # Home
             description = "Return Cursor and LCD to home position"
@@ -45,23 +46,27 @@ class LCD(object):
             description = "UNKNOWN CMD %02X" % lcd_byte
         return description
 
-    def describe_command_read(self, lcd_byte):
+    def handle_command_read(self, lcd_byte):
         return "Read status: Busy flag=%s" % "Yes" if lcd_byte & 0x80 else "No"
 
-    def describe_data_write(self, lcd_byte):
+    def handle_data_write(self, lcd_byte):
         if self.lcd_display_address > -1:
             self.lcd_display_memory[self.lcd_display_address] = lcd_byte
-            self.lcd_display_address = self.lcd_display_address + 1
+            self.lcd_display_address = self.lcd_display_address + self.lcd_cursor_move_delta
             if self.lcd_display_address == 128:
                 self.lcd_display_address = 0
+            elif self.lcd_display_address == 0:
+                self.lcd_display_address = 127
         else:
             self.lcd_cgram_memory[self.lcd_cgram_address] = lcd_byte
-            self.lcd_cgram_address = self.lcd_cgram_address + 1
+            self.lcd_cgram_address = self.lcd_cgram_address + self.lcd_cursor_move_delta
             if self.lcd_cgram_address == 64:
                 self.lcd_cgram_address = 0
+            elif self.lcd_cgram_address == 0:
+                self.lcd_cgram_address = 63
         return "%02X\n[%s]" % (lcd_byte, self.lcd_display_memory)
 
-    def describe_data_read(self, lcd_byte):
+    def handle_data_read(self, lcd_byte):
         return "%02X" % lcd_byte
 
 
@@ -82,13 +87,13 @@ class LCD(object):
                 if res_rw == res_rw_prev:
                     lcd_byte = lcd_data | ((self.lcd_prev_reading & 0x0F) << 4)
                     if res_rw == 0x00:
-                        description = self.describe_command_write(lcd_byte)
+                        description = self.handle_command_write(lcd_byte)
                     elif res_rw == 0x10:
-                        description = self.describe_data_write(lcd_byte)
+                        description = self.handle_data_write(lcd_byte)
                     elif res_rw == 0x20:
-                        description = self.describe_command_read(lcd_byte)
+                        description = self.handle_command_read(lcd_byte)
                     else:
-                        description = self.describe_data_read(lcd_byte)
+                        description = self.handle_data_read(lcd_byte)
                 else:
                     description = "<Mismatch of RES and/or RW: %02X %02X>" % (res_rw, res_rw_prev)
 
