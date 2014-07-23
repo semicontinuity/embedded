@@ -15,6 +15,14 @@ bool modbus_rtu_driver__is_runnable(void);
 
 void modbus_rtu_driver__run(void);
 
+
+// Callback methods to be implemented by user
+// -----------------------------------------------------------------------------
+
+/**
+ * Invoked by the driver on every received frame
+ * @return true if the response must be sent (placed to the same buffer)
+ */
 bool modbus_rtu_driver__on_frame_received(void);
 
 void modbus_rtu_driver__on_frame_sent(void);

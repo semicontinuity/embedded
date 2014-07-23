@@ -125,6 +125,10 @@ modbus_exception modbus_server__process_frame(void) {
 }
 
 
+/**
+ * Invoked by the driver on every received frame
+ * @return true if the response must be sent (placed to the same buffer)
+ */
 bool modbus_rtu_driver__on_frame_received(void) {
     const uint16_t length = buffer__limit__get();
     if (length == 0) return false; // timeout expired, no data yet (ok)
@@ -146,7 +150,7 @@ bool modbus_rtu_driver__on_frame_received(void) {
     buffer__put_u8((uint8_t)(crc & 0xFF)); // low byte of CRC is sent first.
     buffer__put_u8((uint8_t)(crc >> 8));   // cannot use buffer__put_u16 that sends 16-bit values MSB first.
 
-    // send response
+    // indicate that response must be sent
     buffer__rewind();
     return true;
 }

@@ -22,7 +22,6 @@ void modbus_rtu_driver__usart_tx__stop(void) {
 
 
 void modbus_rtu_driver__usart_tx__enable(void) {
-    modbus_rtu_driver__dir_control__tx();
     usart0__tx__data_register_empty__interrupt__enabled__set(1);
 }
 
@@ -37,7 +36,16 @@ ISR(usart0__tx__data_register_empty__interrupt__VECTOR) {
         usart0__putc(buffer__get_u8());
     }
     else {
-        modbus_rtu_driver__dir_control__rx();
-        modbus_rtu_driver__usart_tx__on_frame_sent();
+        usart0__tx__complete__interrupt__enabled__set(1);
     }
+}
+
+
+/**
+ * Triggered when the last byte of the packed is transmitted completely.
+ */
+ISR(usart0__tx__complete__interrupt__VECTOR, ISR_NAKED) {
+    usart0__tx__complete__interrupt__enabled__set(0);
+    modbus_rtu_driver__usart_tx__on_frame_sent();
+    reti();
 }

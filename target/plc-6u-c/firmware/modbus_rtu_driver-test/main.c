@@ -17,6 +17,10 @@ uint16_t frames_received;
 uint16_t errors;
 
 
+/**
+ * Invoked by the driver on every received frame
+ * @return true if the response must be sent (placed to the same buffer)
+ */
 bool modbus_rtu_driver__on_frame_received(void) {
     display__render_packed(++frames_received);
 

@@ -13,26 +13,22 @@
 
 
 void modbus_rtu_driver__dir_control__init(void) {
-    rts__init();
+    rts__init(); // in RX mode 
 }
 
 
+/**
+ * Switch the transceiver to transmit mode.
+ * Should only be called when the tranceiver is in receive mode.
+ */
 void modbus_rtu_driver__dir_control__tx(void) {
     rts__set(1);
 }
 
 
-void modbus_rtu_driver__dir_control__rx(void) {
-    // TX completed interrupt will be triggered only when the last byte of the frame has been transmitted
-    usart0__tx__complete__interrupt__enabled__set(1);
-}
-
-
 /**
- * Enabled only for the last byte of the frame
+ * Switch the transceiver to receive mode.
  */
-ISR(usart0__tx__complete__interrupt__VECTOR, ISR_NAKED) {
+void modbus_rtu_driver__dir_control__rx(void) {
     rts__set(0);
-    usart0__tx__complete__interrupt__enabled__set(0);
-    reti();
 }
