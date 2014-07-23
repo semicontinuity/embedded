@@ -4,7 +4,7 @@ import time
 from threading import Thread
 
 
-ser = serial.Serial('COM6:', 250000)
+ser = serial.Serial('COM7:', 250000)
 
 
 class PortReader(Thread):

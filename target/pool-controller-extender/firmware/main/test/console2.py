@@ -167,9 +167,14 @@ def handle_event(event):
     else:
         return "U"
 
+if len(sys.argv) == 3:
+    import serial
+    in_stream = serial.Serial(sys.argv[1], int(sys.argv[2]))
+else:
+    in_stream = sys.stdin
 
 while 1:
-    c = sys.stdin.read(1)
+    c = in_stream.read(1)
     if len(c) == 0:
         break
 

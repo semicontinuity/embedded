@@ -28,7 +28,6 @@ uint8_t buttons_scanner__state__get(void) {
     return buttons_scanner__state;
 }
 
-
 /**
  * Called periodically to scan buttons.
  * Will invoke the callback buttons_scanner__status__on_change() when any of the buttons has changed state.

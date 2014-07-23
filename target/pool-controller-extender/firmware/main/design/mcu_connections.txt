@@ -37,9 +37,9 @@ PC5		Button 6
 
 PD0	RXD	Serial port RX / RS485
 PD1	TXD	Serial port TX / RS485
-PD2	INT0	LCD E
-PD3	INT1	Sensor
-PD4		RTS
+PD2	INT0	RTS
+PD3	INT1	LCD E
+PD4		Sensor
 PD5		LED 1
 PD6		LED 2
 PD7		LED 3

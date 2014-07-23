@@ -12,7 +12,6 @@
 #include "services/system_timer.h"
 #include "cpu/avr/asm.h"
 #include "cpu/avr/int1.h"
-#include "cpu/avr/timer0.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/drivers/usart0__rx.h"
 #include "cpu/avr/drivers/usart0__tx.h"
@@ -106,7 +105,7 @@ void pool_controller__on_leds_scanner_event(const uint8_t changed_pins) {
 
 
 void pool_controller__on_system_timer_event(void) {
-    buttons_scanner__run();
+    // buttons_scanner__run();
     leds_scanner__run();
 }
 
@@ -125,6 +124,7 @@ static void application__init(void) {
     leds_scanner__init();
     buttons_scanner__init();
 
+    system_timer__init();
     int1__init();
 }
 
@@ -132,6 +132,8 @@ static void application__start(void) {
     tx_ring_buffer__start();
     usart0__rx__start();
     usart0__tx__start();
+
+    system_timer__start();
     int1__start();
 }
 
@@ -147,9 +149,6 @@ int main(void) {
 
     // run background tasks
     for(;;) {
-//        cli();
-//        notifications_emitter__run();
-//        sei();
     }
 
     return 0;
