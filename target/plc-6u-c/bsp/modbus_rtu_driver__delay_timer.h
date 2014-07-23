@@ -1,5 +1,7 @@
 // =============================================================================
-// Delay timer
+// MODBUS RTU driver.
+// Delay timer for handling of 1.5 and 3.5 character timeouts
+// during USART data reception.
 // =============================================================================
 
 #ifndef MODBUS_RTU_DRIVER__DELAY_TIMER_H

@@ -1,5 +1,6 @@
 // =============================================================================
-// USART transmitter
+// MODBUS RTU driver.
+// USART transmitter module.
 // =============================================================================
 
 #ifndef MODBUS_RTU_DRIVER__USART_TX_H
@@ -20,7 +21,11 @@ void modbus_rtu_driver__usart_tx__enable(void);
 void modbus_rtu_driver__usart_tx__disable(void);
 
 
-/** Callback to be implemented */
+/**
+ * Called when the buffer has been fully transmitted.
+ * To be implemented by user.
+ */
 void modbus_rtu_driver__usart_tx__on_frame_sent(void);
+
 
 #endif

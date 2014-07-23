@@ -1,6 +1,7 @@
 // =============================================================================
+// MODBUS RTU driver.
 // Delay timer for handling of 1.5 and 3.5 character timeouts
-// during USART data reception
+// during USART data reception.
 // =============================================================================
 
 #include "modbus_rtu_driver__delay_timer.h"
@@ -31,7 +32,7 @@ void modbus_rtu_driver__delay_timer__stop(void) {
 
 
 /**
- * 1.5 characters timeout expired
+ * Invoked when 1.5 characters timeout expired.
  */
 ISR(timer1__compare_a__interrupt__VECTOR) {
     modbus_rtu_driver__delay_timer__on_t15_expired();
@@ -39,7 +40,7 @@ ISR(timer1__compare_a__interrupt__VECTOR) {
 
 
 /**
- * 3.5 characters timeout expired
+ * Invoked when 3.5 characters timeout expired.
  */
 ISR(timer1__compare_b__interrupt__VECTOR) {
     modbus_rtu_driver__delay_timer__on_t35_expired();
