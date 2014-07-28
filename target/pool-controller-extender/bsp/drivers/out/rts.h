@@ -21,7 +21,7 @@ inline void rts__set(const uint8_t value) {
 /**
  * Initialize the RTS line driver.
  * The out pin is forcibly driven low,
- * to ensure that amplifier relay is off (for the case of reset or brown-out).
+ * to ensure that RTS is off upon initialization.
  */
 inline void rts__init(void) {
     USE_AS_OUTPUT(RTS);
