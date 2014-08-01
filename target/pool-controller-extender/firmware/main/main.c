@@ -3,9 +3,11 @@
 // =============================================================================
 
 #include "main.h"
+#include "protocol_handler.h"
 #include "drivers/io/buttons_tap.h"
 #include "drivers/io/lcd_tap.h"
 #include "drivers/io/leds_tap.h"
+#include "drivers/out/alarm.h"
 #include "services/tx_ring_buffer.h"
 #include "services/buttons_scanner.h"
 #include "services/leds_scanner.h"
@@ -23,7 +25,7 @@
 // =============================================================================
 
 void comm__rx__on_data(const uint8_t value) {
-    buttons_tap__set(value);
+    protocol_handler__accept(value);
 }
 
 bool comm__tx__has_next(void) {
@@ -117,15 +119,16 @@ void pool_controller__on_system_timer_event(void) {
 static void application__init(void) {
     usart0__init();
 
+    alarm__init();
     buttons_tap__init();
     leds_tap__init();
-    lcd_tap__init();
+    lcd_tap__init();   
 
     leds_scanner__init();
     buttons_scanner__init();
 
     system_timer__init();
-    int1__init();
+    int1__init();    
 }
 
 static void application__start(void) {

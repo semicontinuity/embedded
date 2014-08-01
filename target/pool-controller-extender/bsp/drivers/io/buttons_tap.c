@@ -18,8 +18,7 @@
  * Initialize the button tap pins.
  */
 void buttons_tap__init(void) {
-    // Do nothing, assume that pins are inputs on startup
-    // Do nothing, assume that PORT register bits are 0 on startup
+    __OUT(DATA_DIR_REG(BUTTONS_TAP__PORT), 0);  // all tap pins are set as inputs
 }
 
 /**

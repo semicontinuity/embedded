@@ -107,9 +107,9 @@ typedef void * vthread_ip_t;
 
 
 /**
- * Mark the current position in the virtual thread.
- * Later, seek operation can be used to restore this position.
- * \param thread  A virtual thread name
+ * Place a named mark (label) in the virtual thread.
+ * Seek operations on the thread can be used to change the thread's instruction pointer to the position with the specified mark.
+ * \param thread  The name of the virtual thread
  * \param mark    The name of the mark
  */
 #define VT_MARK(thread, mark)                   \
@@ -119,8 +119,7 @@ mark:                                           \
 
 
 /**
- * Set the current position in the given virtual thread to the specified mark.
- * Later, seek operation can be used to restore this position.
+ * Set the instruction pointer of the given virtual thread to the specified mark.
  * \param thread  A virtual thread name
  * \param ip      An instruction pointer of the virtual thread
  * \param mark    The name of the mark
@@ -132,7 +131,7 @@ mark:                                           \
 
 /**
  * Declare the start of a virtual thread inside the function implementing the virtual thread.
- * \param thread A virtual thread variable
+ * \param thread  A virtual thread variable
  * \param ip      An instruction pointer of the virtual thread
  */
 #define VT_BEGIN(thread, ip) do {               \

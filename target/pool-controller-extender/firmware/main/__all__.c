@@ -14,4 +14,5 @@
 #include "services/leds_scanner.c"
 #include "services/tx_ring_buffer.c"
 
+#include "protocol_handler.c"
 #include "main.c"
