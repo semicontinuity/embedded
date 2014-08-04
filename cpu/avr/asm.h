@@ -1,20 +1,23 @@
 #ifndef __CPU__AVR__ASM_H
 #define __CPU__AVR__ASM_H
 
+#include <stdint.h>
+
 unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, unsigned char val);
 
-uint32_t avr_insert_bits_map(
-    const uint32_t b7,
-    const uint32_t b6,
-    const uint32_t b5,
-    const uint32_t b4,
-    const uint32_t b3,
-    const uint32_t b2,
-    const uint32_t b1,
-    const uint32_t b0) {
-
-    return (b7<<(4*7)) | (b6<<(4*6)) | (b5<<(4*5)) | (b4<<(4*4)) | (b3<<(4*3)) | (b2<<(4*2)) | (b1<<(4*1)) | (b0<<(4*0));
-}
+// macro to spare warnings about used registers in case when some interfering fixed registers are defined.
+#define avr_insert_bits_map(b7,b6,b5,b4,b3,b2,b1,b0) (\
+    (uint32_t)(\
+    (((uint32_t)b7)<<(4*7)) |\
+    (((uint32_t)b6)<<(4*6)) |\
+    (((uint32_t)b5)<<(4*5)) |\
+    (((uint32_t)b4)<<(4*4)) |\
+    (((uint32_t)b3)<<(4*3)) |\
+    (((uint32_t)b2)<<(4*2)) |\
+    (((uint32_t)b1)<<(4*1)) |\
+    (((uint32_t)b0)<<(4*0))\
+    )\
+)
 
 
 #define FIX_POINTER(_ptr)               __asm__ __volatile__("" : "=b" (_ptr) : "0" (_ptr))
@@ -41,7 +44,19 @@ uint32_t avr_insert_bits_map(
 
 #define MARKED_LABEL(prefix, mark)      #prefix "__" mark
 #define TMP_LABEL(p)	                MARKED_LABEL(p, QUOTE(__LINE__))
-#define MARK(label)		        do { __asm__ __volatile__( label ":"); } while(0)
+#define MARK(label)		                do { __asm__ __volatile__( #label ":"); } while(0)
+
+
+#define COPY_BIT(src, srcbit, dst, dstbit)      do {    \
+  asm volatile (                                        \
+    "bst  %1, %2 \r\n"                                  \
+    "bld  %0, %3 \r\n"                                  \
+    : "+r" (dst)                                        \
+    : "r" (src),                                        \
+      "I" (srcbit),                                     \
+      "I" (dstbit)                                      \
+  );                                                    \
+} while(0)
 
 
 #define CONST_LO8(k)			\
@@ -411,21 +426,25 @@ uint32_t avr_insert_bits_map(
 }))
 
 
-#define ADIW(to,k)		do { __asm__ __volatile__ ("adiw %0, %1" : "=w"(to) : "I"((k))); } while(0)
+#define ADIW(to,k)		    do { __asm__ __volatile__ ("adiw %0, %1" : "=w"(to) : "I"((k))); } while(0)
 #define MOVW(to,from)		do { __asm__ __volatile__ ("movw %0, %1" : "=r"(to) : "r"(from)); } while(0)
 
-#define LDI(k)			do { __asm__ __volatile__ ("ldi r24, %1" :: "r"(k)) : "r24"; } while(0)
+#define LDI(k)			    do { __asm__ __volatile__ ("ldi r24, %1" :: "r"(k)) : "r24"; } while(0)
 #define MOV(to,from)		do { __asm__ __volatile__ ("mov  %0, %1" : "=r"(to) : "r"(from)); } while(0)
-#define CLR(reg)		do { __asm__ __volatile__ ("clr  %0" : "+r"(reg)); } while(0)
-#define INC(reg)		do { __asm__ __volatile__ ("inc  %0" : "=r"(reg) : "r"(reg)); } while(0)
-#define DEC(reg)		do { __asm__ __volatile__ ("dec  %0" : "=r"(reg) : "r"(reg)); } while(0)
-#define BREQ(label)		do { __asm__ __volatile__ ("breq " #label); } while(0)
-#define BRNE(label)		do { __asm__ __volatile__ ("brne " #label); } while(0)
+#define CLR(reg)		    do { __asm__ __volatile__ ("clr  %0" : "+r"(reg)); } while(0)
+#define INC(reg)		    do { __asm__ __volatile__ ("inc  %0" : "=r"(reg) : "r"(reg)); } while(0)
+#define DEC(reg)		    do { __asm__ __volatile__ ("dec  %0" : "=r"(reg) : "r"(reg)); } while(0)
+#define ROR(reg)		    do { __asm__ __volatile__ ("ror  %0" : "=r"(reg) : "r"(reg)); } while(0)
+#define ROL(reg)		    do { __asm__ __volatile__ ("rol  %0" : "=r"(reg) : "r"(reg)); } while(0)
 
+#define BREQ(label)		    do { __asm__ __volatile__ ("breq " #label); } while(0)
+#define BRNE(label)		    do { __asm__ __volatile__ ("brne " #label); } while(0)
+
+#define RJMP(label)		    do { __asm__ __volatile__ ("rjmp " #label); } while(0)
 #define RETI()		        do { __asm__ __volatile__ ("reti"); } while(0)
 
-#define BRNE_TMP_LABEL()        do { __asm__ __volatile__("brne " TMP_LABEL(L)); } while(0)
-#define IF_ZERO(body)           do { BRNE_TMP_LABEL(); body; MARK(TMP_LABEL(L)); } while(0)
+#define BRNE_TMP_LABEL()    do { __asm__ __volatile__("brne " TMP_LABEL(L)); } while(0)
+#define IF_ZERO(body)       do { BRNE_TMP_LABEL(); body; MARK(TMP_LABEL(L)); } while(0)
 
 
 #define __IN(result, addr)              \

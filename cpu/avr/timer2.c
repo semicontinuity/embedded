@@ -39,7 +39,7 @@ ISR(TIMER2_COMPA_vect, TIMER2_COMPA_vect_attrs) {
 
     timer2__comp_a__run();
 
-#ifdef TIMER2_COMPA_vect_naked
+#if defined(TIMER2_COMPA_vect_naked) && !defined(TIMER2_COMPA_vect_no_reti)
     reti();
 #endif
 }
@@ -62,7 +62,7 @@ ISR(TIMER2_COMPB_vect, TIMER2_COMPB_vect_attrs) {
 
     timer2__comp_b__run();
 
-#ifdef TIMER2_COMPB_vect_naked
+#if defined(TIMER2_COMPB_vect_naked) && !defined(TIMER2_COMPB_vect_no_reti)
     reti();
 #endif
 }

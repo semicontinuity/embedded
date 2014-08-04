@@ -3,6 +3,7 @@
 // =============================================================================
 
 
+#include "cpu/avr/timer2.h"
 #include "cpu/avr/drivers/comm/soft_usart__tx.h"
 #include "cpu/avr/drivers/display/segment/static2.h"
 
@@ -11,11 +12,17 @@
 #include <stdint.h>
 
 
+void soft_usart__tx__on_write_complete(void) {
+    display__render_packed(1);
+}
+
+
 int main(void) {
+    timer2__init();
+    timer2__start();
+
     display__init();
     display__render_packed(0);
-
-    soft_usart__tx__rate__set(SOFT_USART__BAUD_RATE);
 
     sei();
     for(;;) {

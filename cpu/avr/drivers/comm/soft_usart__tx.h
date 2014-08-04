@@ -8,8 +8,6 @@
 #include <stdint.h>
 
 
-void soft_usart__tx__rate__set(const uint16_t rate);
-
 void soft_usart__tx__start(void);
 
 void soft_usart__tx__stop(void);
@@ -18,5 +16,6 @@ void soft_usart__tx__write(const uint8_t data);
 
 void soft_usart__tx__run(void);
 
+void soft_usart__tx__on_write_complete(void);
 
 #endif

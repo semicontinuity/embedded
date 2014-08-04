@@ -4,6 +4,15 @@
 #include <avr/io.h>
 #include <stdint.h>
 
+#define TIMER2_CONF_STOPPED		                (TIMER2_MODE_STOPPED)
+#define TIMER2_CONF_RUN_NO_PRESCALER	                (TIMER2_MODE_RUN_NO_PRESCALER)
+#define TIMER2_CONF_RUN_PRESCALER_8	                (TIMER2_MODE_RUN_PRESCALER_8)
+#define TIMER2_CONF_RUN_PRESCALER_32	                (TIMER2_MODE_RUN_PRESCALER_32)
+#define TIMER2_CONF_RUN_PRESCALER_64	                (TIMER2_MODE_RUN_PRESCALER_64)
+#define TIMER2_CONF_RUN_PRESCALER_128	                (TIMER2_MODE_RUN_PRESCALER_128)
+#define TIMER2_CONF_RUN_PRESCALER_256	                (TIMER2_MODE_RUN_PRESCALER_256)
+#define TIMER2_CONF_RUN_PRESCALER_1024	                (TIMER2_MODE_RUN_PRESCALER_1024)
+
 #define TIMER2_CONF_OC2_DISCONNECTED                    (0)
 #define TIMER2_CONF_OC2_TOGGLE                          (              _BV(COM20))
 #define TIMER2_CONF_OC2_CLEAR                           (_BV(COM21)              )
@@ -28,6 +37,7 @@
 #define TIMER2_CONF_TOP(value)                          ((value) << 8)
 #define TIMER2_CONF_OCR(value)                          ((value) << 8)
 
+#define TIMER2_CONF_DEFAULT                             (0)
 
 
 inline static void timer2__switch_conf(uint16_t old_conf, uint16_t new_conf) {
@@ -40,23 +50,6 @@ inline static void timer2__switch_conf(uint16_t old_conf, uint16_t new_conf) {
     if (old_ocr != new_ocr) OCR2 = new_ocr;
 }
 
-
-inline static void timer2__stop(void) {
-    TCCR2 = TIMER2_CONF_DEFAULT;
-}
-
-
-inline static void timer2__compare_a__interrupt__enable(void) {
-    TIMSK |= _BV(OCIE2);
-}
-
-inline static void timer2__compare_a__interrupt__disable(void) {
-    TIMSK &= ~_BV(OCIE2);
-}
-
-inline static void timer2__compare_a__interrupt__enabled__set(const uint8_t enabled) {
-    if (enabled) timer2__compare_a__interrupt__enable(); else timer2__compare_a__interrupt__disable();
-}
 
 inline static void timer2__compare_a__value__set(const uint16_t value) {
     OCR2 = value;
@@ -74,6 +67,44 @@ inline static void timer2__overflow_interrupt__enable(void) {
 
 inline static void timer2__overflow_interrupt__disable(void) {
     TIMSK &= ~_BV(TOIE2);
+}
+
+
+inline static void timer2__init(void) {
+#ifdef TIMER2__COMPARE_A__INTERRUPT__ENABLED
+    timer2__compare_a__interrupt__enabled__set(1);
+#endif
+
+#ifdef TIMER2__COMPARE_B__INTERRUPT__ENABLED
+    timer2__compare_b__interrupt__enabled__set(1);
+#endif
+}
+
+
+inline static void timer2__start(void) {
+    timer2__value__set(0);
+#if defined(TIMER2__CONF)
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF);
+#elif defined(TIMER2__PERIOD)
+#  if TIMER2__PERIOD <= 0 || TIMER2__PERIOD > F_CPU
+#    error "Invalid period setting for Timer 2"
+#  elif TIMER2__PERIOD <= 256
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_RUN_NO_PRESCALER | TIMER2_CONF_TOP(TIMER2__PERIOD-1));
+#  elif TIMER2__PERIOD <= 256*8
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_MODE_RUN_PRESCALER_8 | TIMER2_CONF_TOP((TIMER2__PERIOD/8)-1));
+#  elif TIMER2__PERIOD <= 256*32
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_MODE_RUN_PRESCALER_32 | TIMER2_CONF_TOP((TIMER2__PERIOD/32)-1));
+#  else
+#    error "Unsupported"
+#  endif
+#else
+#  warn "Timer 2 configuration missing"
+#endif
+}
+
+
+inline static void timer2__stop(void) {
+    TCCR2 = TIMER2_CONF_DEFAULT;
 }
 
 

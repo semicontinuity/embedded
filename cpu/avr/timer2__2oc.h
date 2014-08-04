@@ -22,6 +22,15 @@
 #include <avr/io.h>
 #include <stdint.h>
 
+#define TIMER2_CONF_STOPPED		                (TIMER2_MODE_STOPPED)
+#define TIMER2_CONF_RUN_NO_PRESCALER	                (TIMER2_MODE_RUN_NO_PRESCALER)
+#define TIMER2_CONF_RUN_PRESCALER_8	                (TIMER2_MODE_RUN_PRESCALER_8)
+#define TIMER2_CONF_RUN_PRESCALER_32	                (TIMER2_MODE_RUN_PRESCALER_32)
+#define TIMER2_CONF_RUN_PRESCALER_64	                (TIMER2_MODE_RUN_PRESCALER_64)
+#define TIMER2_CONF_RUN_PRESCALER_128	                (TIMER2_MODE_RUN_PRESCALER_128)
+#define TIMER2_CONF_RUN_PRESCALER_256	                (TIMER2_MODE_RUN_PRESCALER_256)
+#define TIMER2_CONF_RUN_PRESCALER_1024	                (TIMER2_MODE_RUN_PRESCALER_1024)
+
 #define TIMER2_CONF_WGM_NORMAL                          (0)
 #define TIMER2_CONF_WGM_PHASE_CORRECT_PWM               (             _BV(WGM20))
 #define TIMER2_CONF_WGM_CTC                             (_BV(WGM21)             )
@@ -65,6 +74,8 @@
 #define TIMER2_CONF_OCRA(value)                         ((value) * 65536L)
 #define TIMER2_CONF_OCRB(value)                         ((value) * 65536L * 256L)
 
+#define TIMER2_CONF_DEFAULT                             (0)
+
 
 inline static void timer2__switch_conf(uint32_t old_conf, uint32_t new_conf) {
     uint8_t old_tccra = old_conf & 0xFF;
@@ -82,15 +93,6 @@ inline static void timer2__switch_conf(uint32_t old_conf, uint32_t new_conf) {
     uint8_t old_ocrb = (old_conf >> 24) & 0xFF;
     uint8_t new_ocrb = (new_conf >> 24) & 0xFF;
     if (old_ocrb != new_ocrb) OCR2B = new_ocrb;
-}
-
-
-inline static void timer2__compare_a__interrupt__enable(void) {
-    TIMSK2 |= _BV(OCIE2A);
-}
-
-inline static void timer2__compare_a__interrupt__disable(void) {
-    TIMSK2 &= ~_BV(OCIE2A);
 }
 
 
