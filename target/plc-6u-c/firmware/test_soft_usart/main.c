@@ -3,6 +3,7 @@
 // =============================================================================
 
 
+#include "cpu/avr/int0.h"
 #include "cpu/avr/timer2.h"
 #include "cpu/avr/drivers/comm/soft_usart__tx.h"
 #include "cpu/avr/drivers/display/segment/static2.h"
@@ -18,6 +19,7 @@ void soft_usart__tx__on_write_complete(void) {
 
 
 int main(void) {
+    int0__init();
     timer2__init();
 
     display__init();

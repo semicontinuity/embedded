@@ -6,8 +6,6 @@
 #include "cpu/avr/asm.h"
 #include "cpu/avr/gpio.h"
 
-#include <avr/interrupt.h>
-
 
 #ifdef SOFT_USART__TX__DATA__REG
 register uint8_t soft_usart__tx__data asm(QUOTE(SOFT_USART__TX__DATA__REG));
