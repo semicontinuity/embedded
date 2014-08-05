@@ -15,7 +15,7 @@ void soft_usart__tx__stop(void);
 /** Request to start transmission of a byte of data */
 void soft_usart__tx__write(const uint8_t data);
 
-/** Invoked by periodic timer (if started) with the delay equal to 1 bit time */
+/** Invoked periodically by the associated timer (if it is started) with the delay equal to 1 bit time */
 void soft_usart__tx__run(void);
 
 

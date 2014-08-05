@@ -2,6 +2,7 @@
 #define __UTIL__BITOPS_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
 typedef union { 
     uint8_t bytes[2]; 

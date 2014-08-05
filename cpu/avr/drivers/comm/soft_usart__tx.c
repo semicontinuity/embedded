@@ -36,7 +36,11 @@ void soft_usart__tx__write(const uint8_t data) {
 }
 
 
-
+/**
+ * Invoked periodically by the associated timer (if it is started)
+ * with the delay, equal to 1 bit time, before every data bit, before and after stop bit.
+ * During every invocation, the output pin will be driven according to the value of the corresponding bit.
+ */
 void soft_usart__tx__run(void) {
     // Must produce SUBI rd, 0xFF instruction that will set CARRY flag for the first bit
     ++soft_usart__tx__index;
