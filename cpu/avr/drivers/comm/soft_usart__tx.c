@@ -31,9 +31,10 @@ void soft_usart__tx__stop(void) {
 
 
 void soft_usart__tx__write(const uint8_t data) {
-    // no checks performed
+    // does not check for concurrent transmission
     soft_usart__tx__data = data;
     soft_usart__tx__index = -(8+1+1);   // main branch of soft_usart__tx__run() will be run 8+1 times
+    soft_usart__tx__timer__start();
 }
 
 
@@ -59,15 +60,11 @@ void soft_usart__tx__run(void) {
 
     // everything is transmitted; stop
     MARK(soft_usart__tx__run__complete);
+    soft_usart__tx__timer__stop();
     soft_usart__tx__on_write_complete();
 #if defined(SOFT_USART__TX__RUN__IN_ISR)
     RETI();
 #endif
 
     MARK(soft_usart__tx__run__exit);
-}
-
-ISR(TIMER0_COMP_vect, ISR_NAKED) {
-    soft_usart__tx__run();
-    //reti();
 }

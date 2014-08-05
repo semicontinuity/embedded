@@ -7,8 +7,6 @@
 // 1st byte: 00XXXXXX, where XXXXXX is the bit mask of buttons pressed.
 // 2nd byte: 11XXXXXX, where XXXXXX is the bit mask of buttons pressed.
 // the bit masks in these two bytes must be the same, otherwise it's an error.
-//
-// Alarm output line is used for debug purposes.
 // =============================================================================
 
 #include "drivers/io/buttons_tap.h"
@@ -54,26 +52,15 @@ volatile uint8_t protocol_handler__last;
 
 void protocol_handler__accept(uint8_t value) {
     if (value & 0xC0) {
+        alarm__set(1);
         // erroneous first byte or second byte
         if ((protocol_handler__last ^ value) == 0xC0) {
             // conforms to protocol: two upper bits are 11, lower 6 bit are the same as in previous byte
-            alarm__set(1);
             buttons_tap__set(protocol_handler__last);
-
-            if (protocol_handler__last) {
-                // simulated press of at least one of the buttons
-                // button release even should arrive within 8s, otherwise system will be endlessly reset by WDT.
-                wdt__reset();
-                wdt__enable_unsafe(WDTO_8S);
-            }
-            else {
-                // similated release of all buttons
-                wdt__disable_unsafe();
-            }
         }
         else {
             // protocol error
-            alarm__set(0);
+            //alarm__set(0);
         }
         protocol_handler__last = 0;
     }

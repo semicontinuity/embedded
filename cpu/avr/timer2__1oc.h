@@ -5,13 +5,13 @@
 #include <stdint.h>
 
 #define TIMER2_CONF_STOPPED		                (TIMER2_MODE_STOPPED)
-#define TIMER2_CONF_RUN_NO_PRESCALER	                (TIMER2_MODE_RUN_NO_PRESCALER)
-#define TIMER2_CONF_RUN_PRESCALER_8	                (TIMER2_MODE_RUN_PRESCALER_8)
-#define TIMER2_CONF_RUN_PRESCALER_32	                (TIMER2_MODE_RUN_PRESCALER_32)
-#define TIMER2_CONF_RUN_PRESCALER_64	                (TIMER2_MODE_RUN_PRESCALER_64)
-#define TIMER2_CONF_RUN_PRESCALER_128	                (TIMER2_MODE_RUN_PRESCALER_128)
-#define TIMER2_CONF_RUN_PRESCALER_256	                (TIMER2_MODE_RUN_PRESCALER_256)
-#define TIMER2_CONF_RUN_PRESCALER_1024	                (TIMER2_MODE_RUN_PRESCALER_1024)
+#define TIMER2_CONF_NO_PRESCALER	                (TIMER2_MODE_RUN_NO_PRESCALER)
+#define TIMER2_CONF_PRESCALER_8                         (TIMER2_MODE_RUN_PRESCALER_8)
+#define TIMER2_CONF_PRESCALER_32                        (TIMER2_MODE_RUN_PRESCALER_32)
+#define TIMER2_CONF_PRESCALER_64                        (TIMER2_MODE_RUN_PRESCALER_64)
+#define TIMER2_CONF_PRESCALER_128                       (TIMER2_MODE_RUN_PRESCALER_128)
+#define TIMER2_CONF_PRESCALER_256                       (TIMER2_MODE_RUN_PRESCALER_256)
+#define TIMER2_CONF_PRESCALER_1024                      (TIMER2_MODE_RUN_PRESCALER_1024)
 
 #define TIMER2_CONF_OC2_DISCONNECTED                    (0)
 #define TIMER2_CONF_OC2_TOGGLE                          (              _BV(COM20))
@@ -81,26 +81,34 @@ inline static void timer2__init(void) {
 }
 
 
+#if defined(TIMER2__CONF) || defined(TIMER2__PERIOD)
 inline static void timer2__start(void) {
     timer2__value__set(0);
 #if defined(TIMER2__CONF)
     timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF);
 #elif defined(TIMER2__PERIOD)
-#  if TIMER2__PERIOD <= 0 || TIMER2__PERIOD > F_CPU
+#  if TIMER2__PERIOD <= 0
 #    error "Invalid period setting for Timer 2"
 #  elif TIMER2__PERIOD <= 256
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_RUN_NO_PRESCALER | TIMER2_CONF_TOP(TIMER2__PERIOD-1));
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_NO_PRESCALER | TIMER2_CONF_TOP(TIMER2__PERIOD-1));
 #  elif TIMER2__PERIOD <= 256*8
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_MODE_RUN_PRESCALER_8 | TIMER2_CONF_TOP((TIMER2__PERIOD/8)-1));
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_8 | TIMER2_CONF_TOP((TIMER2__PERIOD/8)-1));
 #  elif TIMER2__PERIOD <= 256*32
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_MODE_RUN_PRESCALER_32 | TIMER2_CONF_TOP((TIMER2__PERIOD/32)-1));
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_32 | TIMER2_CONF_TOP((TIMER2__PERIOD/32)-1));
+#  elif TIMER2__PERIOD <= 256*64
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_64 | TIMER2_CONF_TOP((TIMER2__PERIOD/64)-1));
+#  elif TIMER2__PERIOD <= 256*128
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_128 | TIMER2_CONF_TOP((TIMER2__PERIOD/128)-1));
+#  elif TIMER2__PERIOD <= 256*256
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_256 | TIMER2_CONF_TOP((TIMER2__PERIOD/256)-1));
+#  elif TIMER2__PERIOD <= 256*1024
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_1024 | TIMER2_CONF_TOP((TIMER2__PERIOD/1024)-1));
 #  else
-#    error "Unsupported"
+#    error "Period setting for Timer 2 is out of range"
 #  endif
-#else
-#  warn "Timer 2 configuration missing"
 #endif
 }
+#endif
 
 
 inline static void timer2__stop(void) {

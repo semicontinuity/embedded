@@ -20,23 +20,8 @@
 
 
 
-#ifdef timer2__comp__run
-
-#ifndef timer2__comp__run__attrs
-#  define timer2__comp__run__attrs
-#endif
-
-INLINE void timer2__comp__run(void) timer2__comp__run__attrs;
-
-#endif
-
-
-
 #ifdef timer2__comp_a__run
 
-#ifndef OCR2A
-#  error "Timer 2 does not have Compare A channel"
-#endif
 #ifndef timer2__comp_a__run__attrs
 #define timer2__comp_a__run__attrs
 #endif
@@ -50,7 +35,7 @@ INLINE void timer2__comp_a__run(void) timer2__comp_a__run__attrs;
 #ifdef timer2__comp_b__run
 
 #ifndef OCR2B
-#  error "Timer 2 does not have Compare A channel"
+#  error "Timer 2 does not have Compare B channel"
 #endif
 #ifndef timer2__comp_b__run__attrs
 #define timer2__comp_b__run__attrs

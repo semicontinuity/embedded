@@ -19,7 +19,6 @@ void soft_usart__tx__on_write_complete(void) {
 
 int main(void) {
     timer2__init();
-    timer2__start();
 
     display__init();
     display__render_packed(0);
