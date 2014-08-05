@@ -70,6 +70,51 @@ inline static void timer2__overflow_interrupt__disable(void) {
 }
 
 
+#if defined(TIMER2__PERIOD) && !defined(TIMER2__CONF__INITIALIZED)
+#  if TIMER2__PERIOD <= 0
+#    error "Invalid period setting for Timer 2"
+#  elif TIMER2__PERIOD <= 256
+#    define TIMER2__CONF__INITIALIZED  (TIMER2_CONF_STOPPED | TIMER2_CONF_TOP((TIMER2__PERIOD) - 1))
+#  elif TIMER2__PERIOD <= 256*8
+#    define TIMER2__CONF__INITIALIZED  (TIMER2_CONF_STOPPED | TIMER2_CONF_TOP((TIMER2__PERIOD/8) - 1))
+#  elif TIMER2__PERIOD <= 256*32
+#    define TIMER2__CONF__INITIALIZED  (TIMER2_CONF_STOPPED | TIMER2_CONF_TOP((TIMER2__PERIOD/32) - 1))
+#  elif TIMER2__PERIOD <= 256*64
+#    define TIMER2__CONF__INITIALIZED  (TIMER2_CONF_STOPPED | TIMER2_CONF_TOP((TIMER2__PERIOD/64) - 1))
+#  elif TIMER2__PERIOD <= 256*128
+#    define TIMER2__CONF__INITIALIZED  (TIMER2_CONF_STOPPED | TIMER2_CONF_TOP((TIMER2__PERIOD/128) - 1))
+#  elif TIMER2__PERIOD <= 256*256
+#    define TIMER2__CONF__INITIALIZED  (TIMER2_CONF_STOPPED | TIMER2_CONF_TOP((TIMER2__PERIOD/256) - 1))
+#  elif TIMER2__PERIOD <= 256*1024
+#    define TIMER2__CONF__INITIALIZED  (TIMER2_CONF_STOPPED | TIMER2_CONF_TOP((TIMER2__PERIOD/1024) - 1))
+#  else
+#    error "Period setting for Timer 2 is out of range"
+#  endif
+#endif
+
+#if defined(TIMER2__PERIOD) && !defined(TIMER2__CONF__STARTED)
+#  if TIMER2__PERIOD <= 0
+#    error "Invalid period setting for Timer 2"
+#  elif TIMER2__PERIOD <= 256
+#    define TIMER2__CONF__STARTED  (TIMER2_CONF_WGM_CTC | TIMER2_CONF_NO_PRESCALER | TIMER2_CONF_TOP((TIMER2__PERIOD) - 1))
+#  elif TIMER2__PERIOD <= 256*8
+#    define TIMER2__CONF__STARTED  (TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_8 | TIMER2_CONF_TOP((TIMER2__PERIOD/8) - 1))
+#  elif TIMER2__PERIOD <= 256*32
+#    define TIMER2__CONF__STARTED  (TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_32 | TIMER2_CONF_TOP((TIMER2__PERIOD/32) - 1))
+#  elif TIMER2__PERIOD <= 256*64
+#    define TIMER2__CONF__STARTED  (TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_64 | TIMER2_CONF_TOP((TIMER2__PERIOD/64) - 1))
+#  elif TIMER2__PERIOD <= 256*128
+#    define TIMER2__CONF__STARTED  (TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_128 | TIMER2_CONF_TOP((TIMER2__PERIOD/128) - 1))
+#  elif TIMER2__PERIOD <= 256*256
+#    define TIMER2__CONF__STARTED  (TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_256 | TIMER2_CONF_TOP((TIMER2__PERIOD/256) - 1))
+#  elif TIMER2__PERIOD <= 256*1024
+#    define TIMER2__CONF__STARTED  (TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_1024 | TIMER2_CONF_TOP((TIMER2__PERIOD/1024) - 1))
+#  else
+#    error "Period setting for Timer 2 is out of range"
+#  endif
+#endif
+
+
 inline static void timer2__init(void) {
 #ifdef TIMER2__COMPARE_A__INTERRUPT__ENABLED
     timer2__compare_a__interrupt__enabled__set(1);
@@ -78,42 +123,22 @@ inline static void timer2__init(void) {
 #ifdef TIMER2__COMPARE_B__INTERRUPT__ENABLED
     timer2__compare_b__interrupt__enabled__set(1);
 #endif
+
+#if defined(TIMER2__CONF__INITIALIZED)
+    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2__CONF__INITIALIZED);
+#endif
 }
 
 
-#if defined(TIMER2__CONF) || defined(TIMER2__PERIOD)
+#if defined(TIMER2__CONF__INITIALIZED) && defined(TIMER2__CONF__STARTED)
 inline static void timer2__start(void) {
     timer2__value__set(0);
-#if defined(TIMER2__CONF)
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF);
-#elif defined(TIMER2__PERIOD)
-#  if TIMER2__PERIOD <= 0
-#    error "Invalid period setting for Timer 2"
-#  elif TIMER2__PERIOD <= 256
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_NO_PRESCALER | TIMER2_CONF_TOP(TIMER2__PERIOD-1));
-#  elif TIMER2__PERIOD <= 256*8
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_8 | TIMER2_CONF_TOP((TIMER2__PERIOD/8)-1));
-#  elif TIMER2__PERIOD <= 256*32
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_32 | TIMER2_CONF_TOP((TIMER2__PERIOD/32)-1));
-#  elif TIMER2__PERIOD <= 256*64
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_64 | TIMER2_CONF_TOP((TIMER2__PERIOD/64)-1));
-#  elif TIMER2__PERIOD <= 256*128
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_128 | TIMER2_CONF_TOP((TIMER2__PERIOD/128)-1));
-#  elif TIMER2__PERIOD <= 256*256
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_256 | TIMER2_CONF_TOP((TIMER2__PERIOD/256)-1));
-#  elif TIMER2__PERIOD <= 256*1024
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, TIMER2_CONF_WGM_CTC | TIMER2_CONF_PRESCALER_1024 | TIMER2_CONF_TOP((TIMER2__PERIOD/1024)-1));
-#  else
-#    error "Period setting for Timer 2 is out of range"
-#  endif
-#endif
+    timer2__switch_conf(TIMER2__CONF__INITIALIZED, TIMER2__CONF__STARTED);
 }
-#endif
-
 
 inline static void timer2__stop(void) {
-    TCCR2 = TIMER2_CONF_DEFAULT;
+    timer2__switch_conf(TIMER2__CONF__STARTED, TIMER2__CONF__INITIALIZED);
 }
-
+#endif
 
 #endif

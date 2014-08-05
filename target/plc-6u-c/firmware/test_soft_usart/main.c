@@ -24,6 +24,8 @@ int main(void) {
     display__render_packed(0);
 
     sei();
+
+    soft_usart__tx__write('A');
     for(;;) {
     }
 
