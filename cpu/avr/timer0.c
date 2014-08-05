@@ -61,9 +61,9 @@ ISR(TIMER0_COMP_vect, TIMER0_COMP_vect_attrs) {
 #endif
 
 #ifdef TIMER0_COMPA_vect_naked
-ISR(TIMER0_COMPA_vect, TIMER0_COMPA_vect_attrs ISR_NAKED) {
+ISR(timer0__compare_a__interrupt__VECTOR, TIMER0_COMPA_vect_attrs ISR_NAKED) {
 #else
-ISR(TIMER0_COMPA_vect, TIMER0_COMPA_vect_attrs) {
+ISR(timer0__compare_a__interrupt__VECTOR, TIMER0_COMPA_vect_attrs) {
 #endif
 
     timer0__comp_a__run();

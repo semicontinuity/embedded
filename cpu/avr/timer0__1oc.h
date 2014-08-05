@@ -67,6 +67,70 @@ inline void timer0__overflow__interrupt__disable(void) {
 }
 
 
+#if defined(TIMER0__PERIOD) && !defined(TIMER0__CONF__INITIALIZED)
+#  if TIMER0__PERIOD <= 0
+#    error "Invalid period setting for Timer 2"
+#  elif TIMER0__PERIOD <= 256
+#    define TIMER0__CONF__INITIALIZED  (TIMER0_CONF_STOPPED | TIMER0_CONF_TOP((TIMER0__PERIOD) - 1))
+#  elif TIMER0__PERIOD <= 256*8
+#    define TIMER0__CONF__INITIALIZED  (TIMER0_CONF_STOPPED | TIMER0_CONF_TOP((TIMER0__PERIOD/8) - 1))
+#  elif TIMER0__PERIOD <= 256*64
+#    define TIMER0__CONF__INITIALIZED  (TIMER0_CONF_STOPPED | TIMER0_CONF_TOP((TIMER0__PERIOD/64) - 1))
+#  elif TIMER0__PERIOD <= 256*256
+#    define TIMER0__CONF__INITIALIZED  (TIMER0_CONF_STOPPED | TIMER0_CONF_TOP((TIMER0__PERIOD/256) - 1))
+#  elif TIMER0__PERIOD <= 256*1024
+#    define TIMER0__CONF__INITIALIZED  (TIMER0_CONF_STOPPED | TIMER0_CONF_TOP((TIMER0__PERIOD/1024) - 1))
+#  else
+#    error "Period setting for Timer 2 is out of range"
+#  endif
+#endif
+
+#if defined(TIMER0__PERIOD) && !defined(TIMER0__CONF__STARTED)
+#  if TIMER0__PERIOD <= 0
+#    error "Invalid period setting for Timer 2"
+#  elif TIMER0__PERIOD <= 256
+#    define TIMER0__CONF__STARTED  (TIMER0_CONF_WGM_CTC | TIMER0_CONF_NO_PRESCALER | TIMER0_CONF_TOP((TIMER0__PERIOD) - 1))
+#  elif TIMER0__PERIOD <= 256*8
+#    define TIMER0__CONF__STARTED  (TIMER0_CONF_WGM_CTC | TIMER0_CONF_PRESCALER_8 | TIMER0_CONF_TOP((TIMER0__PERIOD/8) - 1))
+#  elif TIMER0__PERIOD <= 256*64
+#    define TIMER0__CONF__STARTED  (TIMER0_CONF_WGM_CTC | TIMER0_CONF_PRESCALER_64 | TIMER0_CONF_TOP((TIMER0__PERIOD/64) - 1))
+#  elif TIMER0__PERIOD <= 256*256
+#    define TIMER0__CONF__STARTED  (TIMER0_CONF_WGM_CTC | TIMER0_CONF_PRESCALER_256 | TIMER0_CONF_TOP((TIMER0__PERIOD/256) - 1))
+#  elif TIMER0__PERIOD <= 256*1024
+#    define TIMER0__CONF__STARTED  (TIMER0_CONF_WGM_CTC | TIMER0_CONF_PRESCALER_1024 | TIMER0_CONF_TOP((TIMER0__PERIOD/1024) - 1))
+#  else
+#    error "Period setting for Timer 2 is out of range"
+#  endif
+#endif
+
+
+inline static void timer0__init(void) {
+#ifdef TIMER0__COMPARE_A__INTERRUPT__ENABLED
+    timer0__compare_a__interrupt__enabled__set(1);
+#endif
+
+#ifdef TIMER0__COMPARE_B__INTERRUPT__ENABLED
+    timer0__compare_b__interrupt__enabled__set(1);
+#endif
+
+#if defined(TIMER0__CONF__INITIALIZED)
+    timer0__switch_conf(TIMER0_CONF_DEFAULT, TIMER0__CONF__INITIALIZED);
+#endif
+}
+
+
+#if defined(TIMER0__CONF__INITIALIZED) && defined(TIMER0__CONF__STARTED)
+inline static void timer0__start(void) {
+    timer0__value__set(0);
+    timer0__switch_conf(TIMER0__CONF__INITIALIZED, TIMER0__CONF__STARTED);
+}
+
+inline static void timer0__stop(void) {
+    timer0__switch_conf(TIMER0__CONF__STARTED, TIMER0__CONF__INITIALIZED);
+}
+#endif
+
+
 inline void timer0__ctc__interrupt__enable(void) {
     timer0__compare__interrupt__enable();
 }

@@ -33,9 +33,17 @@ void soft_usart__rx__stop(void) {
  * During every invocation, the output pin will be driven according to the value of the corresponding bit.
  */
 void soft_usart__rx__run(void) {
+    // temp
+    if (soft_usart__rx__in_data_bits__get()) {
+        soft_usart__rx__data = 0xFF;
+    }
+    else {
+        soft_usart__rx__timer__stop();
+    }
 }
 
 
 /** Invoked when the start of character is detected */
 void soft_usart__rx__signal(void) {
+    soft_usart__rx__timer__start();
 }

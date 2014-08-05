@@ -1,4 +1,4 @@
-#include "int1.h"
+#include "cpu/avr/int1.h"
 #include <avr/interrupt.h>
 
 #ifndef INT1_vect_attrs

@@ -22,6 +22,11 @@ INLINE void timer0__comp__run(void);
 #define TIMER0_MODE_RUN_EXT_CLK_RISING	(_BV(CS02) | _BV(CS01) | _BV(CS00))
 
 
+#if defined(TIMER0__COMPARE_UNITS)
+#  error "Must not define TIMER0__COMPARE_UNITS"
+#endif
+
+
 #if defined(__AVR_ATmega48__)\
  || defined(__AVR_ATmega48A__)\
  || defined(__AVR_ATmega48P__)\
@@ -35,21 +40,71 @@ INLINE void timer0__comp__run(void);
  || defined(__AVR_AT90USB82__)\
  || defined(__AVR_AT90USB162__)
 
-#   include "cpu/avr/timer0__2oc.h"
+
+#  define TIMER0_REG_VALUE                              (TCNT0)
+#  define TIMER0__COMPARE_UNITS	                        (2)
+#  define timer0__compare_a__interrupt__VECTOR          TIMER0_COMPA_vect
+#  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK0)
+#  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE0A)
+
 
 #elif defined(__AVR_ATmega8__)\
  || defined(__AVR_AT90S2313__)
 
-#   include "cpu/avr/timer0__0oc.h"
 
-#elif defined(__AVR_ATmega16__)
+#  define TIMER0_REG_VALUE                              (TCNT0)
+#  define TIMER0__COMPARE_UNITS	                        (0)
 
-#   include "cpu/avr/timer0__1oc.h"
+
+#elif defined(__AVR_ATmega16__)\
+ || defined(__AVR_ATmega8535__)
+
+
+#  define TIMER0_REG_VALUE                              (TCNT0)
+
+#  define TIMER0__COMPARE_UNITS	                        (1)
+#  define timer0__compare_a__interrupt__VECTOR          TIMER0_COMP_vect
+#  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK)
+#  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE0)
+
 
 #else
 
 #   error "Unsupported MCU"
 
+#endif
+
+
+static inline void timer0__value__set(const uint8_t value) {
+    TIMER0_REG_VALUE = value;
+}
+
+static inline uint8_t timer0__value__get(void) {
+    return TIMER0_REG_VALUE;
+}
+
+
+#if defined(TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST) && defined(TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT)
+inline static void timer0__compare_a__interrupt__enable(void) {
+    TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST |= _BV(TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT);
+}
+
+inline static void timer0__compare_a__interrupt__disable(void) {
+    TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST &= ~_BV(TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT);
+}
+
+inline static void timer0__compare_a__interrupt__enabled__set(const uint8_t enabled) {
+    if (enabled) timer0__compare_a__interrupt__enable(); else timer0__compare_a__interrupt__disable();
+}
+#endif
+
+
+#if TIMER0__COMPARE_UNITS==0
+#  include "cpu/avr/timer0__1oc.h"
+#elif TIMER0__COMPARE_UNITS==1
+#  include "cpu/avr/timer0__1oc.h"
+#elif TIMER0__COMPARE_UNITS==2
+#  include "cpu/avr/timer0__2oc.h"
 #endif
 
 
