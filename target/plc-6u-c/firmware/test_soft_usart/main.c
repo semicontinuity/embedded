@@ -4,6 +4,7 @@
 
 
 #include "cpu/avr/int0.h"
+#include "cpu/avr/timer0.h"
 #include "cpu/avr/timer2.h"
 #include "cpu/avr/drivers/comm/soft_usart__tx.h"
 #include "cpu/avr/drivers/display/segment/static2.h"
@@ -24,7 +25,6 @@ int main(void) {
 
     display__init();
     display__render_packed(0);
-
     sei();
 
     soft_usart__tx__write('A');

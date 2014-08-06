@@ -99,6 +99,7 @@ inline static void timer0__compare_a__interrupt__enabled__set(const uint8_t enab
 #endif
 
 
+
 #if TIMER0__COMPARE_UNITS==0
 #  include "cpu/avr/timer0__1oc.h"
 #elif TIMER0__COMPARE_UNITS==1
