@@ -7,6 +7,7 @@
 #include "cpu/avr/timer0.h"
 #include "cpu/avr/timer2.h"
 #include "cpu/avr/drivers/comm/soft_usart__tx.h"
+#include "cpu/avr/drivers/comm/soft_usart__timer.h"
 #include "cpu/avr/drivers/display/segment/static2.h"
 
 #include <avr/interrupt.h>
@@ -22,9 +23,11 @@ void soft_usart__tx__on_write_complete(void) {
 int main(void) {
     int0__init();
     timer2__init();
+    soft_usart__timer__init();
 
     display__init();
-    display__render_packed(0);
+    
+    int0__start();
     sei();
 
     soft_usart__tx__write('A');

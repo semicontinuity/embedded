@@ -1,9 +1,24 @@
 // =============================================================================
 // Software USART driver, receiver module.
-// Implemented with TIMER 0.
+//
+// The overall state of RX module is determined by the combination of
+// bit soft_usart__rx__in_data_bits and soft_usart__rx__in_stop_bit:
+//
+// soft_usart__rx__in_data_bits == 0 and soft_usart__rx__in_stop_bit == 0:
+//   receiving start bit
+// soft_usart__rx__in_data_bits == 1:
+//   receiving data bits
+// soft_usart__rx__in_data_bits == 0 and soft_usart__rx__in_stop_bit == 1:
+//   receiving stop bit
+
+// In even more optimized version,
+// current state can be derived from timer's state
 // =============================================================================
 
+#include "cpu/avr/asm.h"
+#include "cpu/avr/gpio.h"
 #include "cpu/avr/drivers/comm/soft_usart__rx.h"
+#include "cpu/avr/drivers/comm/soft_usart__timer.h"
 
 
 #ifdef SOFT_USART__RX__DATA__REG
@@ -19,31 +34,47 @@ volatile  int8_t soft_usart__rx__index;
 #endif
 
 
-void soft_usart__rx__start(void) {
-}
-
-
-void soft_usart__rx__stop(void) {
-}
-
-
 /**
  * Invoked periodically by the associated timer (if it is started)
- * with the delay, equal to 1 bit time, before every data bit, before and after stop bit.
- * During every invocation, the output pin will be driven according to the value of the corresponding bit.
+ * with the delay, equal to 1 bit time, in the middle of start bit, every data bit, and stop bit.
  */
 void soft_usart__rx__run(void) {
-    // temp
     if (soft_usart__rx__in_data_bits__get()) {
-        soft_usart__rx__data = 0xFF;
+        if (--soft_usart__rx__index > 0) {
+            soft_usart__rx__data >>= 1;
+            uint8_t pin_data = PIN_REG(SOFT_USART__RX__PORT);
+            COPY_BIT(pin_data, SOFT_USART__RX__PIN, soft_usart__rx__data, 7);
+        }
+        else {
+            // for the next invocation (in stop bit)
+            soft_usart__rx__in_data_bits__set(0); 
+            soft_usart__rx__in_stop_bit__set(1);
+        }
     }
     else {
-        soft_usart__rx__timer__stop();
+        if (soft_usart__rx__in_stop_bit__get()) {
+            // in stop bit
+            soft_usart__timer__signal_stop_bit_middle();
+            soft_usart__rx__in_stop_bit__set(0); // for the next invocation (start bit)
+            soft_usart__rx__on_frame_end(); // not exacty - 1/2 of stop bit is still remaining.
+            if (IS_1(SOFT_USART__RX)) {
+                soft_usart__rx__on_character_received();
+            }
+            else {
+                soft_usart__rx__on_frame_error();
+            }
+        }
+        else {
+            // in start bit
+            soft_usart__timer__signal_start_bit_middle();
+            soft_usart__rx__in_data_bits__set(1); // for the next invocation (data bit 0)            
+        }
     }
 }
 
 
 /** Invoked when the start of character is detected */
-void soft_usart__rx__signal(void) {
-    soft_usart__rx__timer__start();
+void soft_usart__rx__signal_character_start(void) {
+    soft_usart__rx__on_frame_start();
+    soft_usart__timer__signal_start_bit_begin();
 }

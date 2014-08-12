@@ -4,7 +4,6 @@
 
 #include "cpu/avr/drivers/usart0__tx.h"
 
-#include "cpu/avr/asm.h"
 #include "cpu/avr/usart0.h"
 
 #include <avr/interrupt.h>

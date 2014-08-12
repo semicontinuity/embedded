@@ -85,6 +85,10 @@ inline uint16_t timer0__conf__ctc_prescaler_mask(const uint32_t period) {
     else return TIMER0_CONF_PRESCALER_1024; // should never be invoked with large period argument
 }
 
+inline uint16_t timer0__conf__default(void) {
+     return TIMER0_CONF_DEFAULT;
+}
+
 inline uint16_t timer0__conf__ctc_initialized(const uint8_t compare_a_value) {
      return TIMER0_CONF_STOPPED | TIMER0_CONF_TOP(compare_a_value);
 }

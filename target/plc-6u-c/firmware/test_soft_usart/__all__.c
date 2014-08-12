@@ -10,6 +10,7 @@ DECLARE_BITVAR(soft_usart__rx__in_stop_bit, SOFT_USART__RX__IN_STOP_BIT__HOST, S
 
 #include "cpu/avr/drivers/comm/soft_usart__rx.c"
 #include "cpu/avr/drivers/comm/soft_usart__tx.c"
+#include "cpu/avr/drivers/comm/soft_usart__timer_2x.c"
 #include "cpu/avr/timer2.c"
 #include "cpu/avr/timer0.c"
 #include "cpu/avr/int0.c"
