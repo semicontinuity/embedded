@@ -51,22 +51,17 @@ volatile uint8_t protocol_handler__last;
 
 
 void protocol_handler__accept(uint8_t value) {
-    if (value & 0xC0) {
-        alarm__set(1);
+    alarm__set(0);
+    if ((value & 0xC0) == 0xC0) {
         // erroneous first byte or second byte
         if ((protocol_handler__last ^ value) == 0xC0) {
             // conforms to protocol: two upper bits are 11, lower 6 bit are the same as in previous byte
             buttons_tap__set(protocol_handler__last);
+            alarm__set(1);
         }
         else {
             // protocol error
-            //alarm__set(0);
         }
-        protocol_handler__last = 0;
     }
-    else {
-        // first byte (0b00XXXXXX)
-        protocol_handler__last = value;
-        alarm__set(0);
-    }
+    protocol_handler__last = value;
 }

@@ -1,4 +1,4 @@
-TARGET = main_atmega168
+TARGET = test-usart-echo
 TARGET_CONF ?= $(TARGET).conf
 OPT = 3
 ROOT = ../../../..
@@ -29,24 +29,14 @@ CDEFS += $(PROPS)
 ifeq ($(WHOLE_PROGRAM),1)
 
 CDEFS += -fwhole-program
+CDEFS += -DINLINE="inline"
 SRC += __all__.c
 
 else
 
+CDEFS += -DINLINE=
+
 SRC += main.c
-
-SRC += cpu/avr/int1.c
-SRC += cpu/avr/timer0.c
-SRC += cpu/avr/drivers/usart0__rx.c
-SRC += cpu/avr/drivers/usart0__tx.c
-
-SRC += drivers/io/leds_tap.c
-SRC += drivers/io/buttons_tap.c
-SRC += drivers/io/lcd_tap.c
-
-SRC += services/buttons_scanner.c
-SRC += services/leds_scanner.c
-SRC += services/tx_ring_buffer.c
 
 endif
 

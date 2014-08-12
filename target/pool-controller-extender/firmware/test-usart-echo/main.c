@@ -1,22 +1,11 @@
 // =============================================================================
-// Pool controller extender - main module.
+// Pool controller extender - USART test.
 // =============================================================================
 
-#include "main.h"
-#include "protocol_handler.h"
-#include "drivers/out/alarm.h"
 #include "cpu/avr/usart0.h"
-#include "cpu/avr/drivers/usart0__rx.h"
-#include <avr/interrupt.h>
-
-
-// =============================================================================
-// Handlers
-// =============================================================================
-
-void comm__rx__on_data(const uint8_t value) {
-    protocol_handler__accept(value);
-}
+#include "cpu/avr/usart0__rx_polled.h"
+#include "cpu/avr/usart0__tx_polled.h"
+#include "drivers/out/alarm.h"
 
 
 // =============================================================================
@@ -24,13 +13,13 @@ void comm__rx__on_data(const uint8_t value) {
 // =============================================================================
 
 static void application__init(void) {
-    usart0__init();
-
     alarm__init();
+    usart0__init();
 }
 
 static void application__start(void) {
-    usart0__rx__start();
+    usart0__tx__enabled__set(1);
+    usart0__rx__enabled__set(1);
 }
 
 
@@ -41,10 +30,12 @@ int main(void) {
     application__init();
     application__start();
 
-    sei();
-
-    // run background tasks
+    char i = 0;
     for(;;) {
+        uint8_t c = usart0__in__read();
+        c = ~c;
+        alarm__set(i);
+        usart0__out__write(c);
     }
 
     return 0;

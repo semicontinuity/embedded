@@ -5,7 +5,7 @@
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/usart0__rx_polled.h"
 #include "cpu/avr/usart0__tx_polled.h"
-
+#include <util/delay.h>
 
 // =============================================================================
 // Application
@@ -30,7 +30,7 @@ int main(void) {
 
     for(;;) {
         usart0__out__write('A');
-
+        _delay_ms(200);
 //        uint8_t c = usart0__in__read();
 //        usart0__out__write(c);
     }
