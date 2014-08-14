@@ -4,7 +4,6 @@
 
 
 #include "cpu/avr/int0.h"
-#include "cpu/avr/timer0.h"
 #include "cpu/avr/timer2.h"
 #include "cpu/avr/drivers/comm/soft_usart__tx.h"
 #include "cpu/avr/drivers/comm/soft_usart__timer.h"
@@ -14,9 +13,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+register uint8_t counter asm("r15");
 
-void soft_usart__tx__on_write_complete(void) {
-    display__render_packed(1);
+void send_char(void) {
+    display__render_packed(++counter);
+    soft_usart__tx__write('A');
 }
 
 
@@ -28,9 +29,10 @@ int main(void) {
     display__init();
     
     int0__start();
-    sei();
 
-    soft_usart__tx__write('A');
+    send_char();
+
+    sei();    
     for(;;) {
     }
 
