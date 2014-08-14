@@ -46,5 +46,13 @@
 #define IS_0(signal)                 (bit_is_clear (PIN_REG(CONCAT(signal,__PORT)), signal##__PIN))
 #define IS_1(signal)                 (bit_is_set (PIN_REG(CONCAT(signal,__PORT)), signal##__PIN))
 
+#define DECLARE_OUT_SIGNAL(name) \
+	void name##__set(char v);\
+	char name##__get(void);
+
+#define DEFINE_OUT_SIGNAL(name,signal) \
+	void name##__set(char v)     { if ((v)) OUT_1(signal); else OUT_0(signal);}\
+	char name##__get(void)       { return IS_1(signal); }
+
 
 #endif // __GPIO_H

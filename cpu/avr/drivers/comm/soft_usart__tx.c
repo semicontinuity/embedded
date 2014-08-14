@@ -7,6 +7,9 @@
 #include "cpu/avr/gpio.h"
 
 
+DEFINE_OUT_SIGNAL(soft_usart__tx, SOFT_USART__TX);
+
+
 #ifdef SOFT_USART__TX__DATA__REG
 register uint8_t soft_usart__tx__data asm(QUOTE(SOFT_USART__TX__DATA__REG));
 #else
@@ -32,6 +35,7 @@ void soft_usart__tx__write(const uint8_t data) {
     // does not check for concurrent transmission
     soft_usart__tx__data = data;
     soft_usart__tx__index = -(8+1+1);   // main branch of soft_usart__tx__run() will be run 8+1 times
+    soft_usart__tx__set(0);
     soft_usart__tx__timer__start();
 }
 

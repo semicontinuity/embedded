@@ -6,6 +6,10 @@
 #define CPU__AVR__DRIVERS__COMM__SOFT_USART__TX_H
 
 #include <stdint.h>
+#include "cpu/avr/gpio.h"
+
+
+DECLARE_OUT_SIGNAL(soft_usart__tx);
 
 
 void soft_usart__tx__start(void);
