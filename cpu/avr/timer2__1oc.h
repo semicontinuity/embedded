@@ -115,7 +115,7 @@ inline static void timer2__overflow_interrupt__disable(void) {
 #endif
 
 
-inline static void timer2__init(void) {
+INLINE void timer2__init(void) {
 #ifdef TIMER2__COMPARE_A__INTERRUPT__ENABLED
     timer2__compare_a__interrupt__enabled__set(1);
 #endif
@@ -131,12 +131,12 @@ inline static void timer2__init(void) {
 
 
 #if defined(TIMER2__CONF__INITIALIZED) && defined(TIMER2__CONF__STARTED)
-inline static void timer2__start(void) {
+INLINE void timer2__start(void) {
     timer2__value__set(0);
     timer2__switch_conf(TIMER2__CONF__INITIALIZED, TIMER2__CONF__STARTED);
 }
 
-inline static void timer2__stop(void) {
+INLINE void timer2__stop(void) {
     timer2__switch_conf(TIMER2__CONF__STARTED, TIMER2__CONF__INITIALIZED);
 }
 #endif

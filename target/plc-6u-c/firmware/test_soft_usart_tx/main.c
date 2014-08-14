@@ -4,7 +4,6 @@
 
 
 #include "cpu/avr/int0.h"
-#include "cpu/avr/timer2.h"
 #include "cpu/avr/drivers/comm/soft_usart__tx.h"
 #include "cpu/avr/drivers/comm/soft_usart__timer.h"
 #include "cpu/avr/drivers/display/segment/static2.h"
@@ -23,9 +22,7 @@ void send_char(void) {
 
 int main(void) {
     int0__init();
-    timer2__init();
     soft_usart__timer__init();
-
     display__init();
     
     int0__start();

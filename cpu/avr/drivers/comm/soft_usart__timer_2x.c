@@ -5,8 +5,13 @@
 
 #include "cpu/avr/drivers/comm/soft_usart__timer.h"
 
+
+// =============================================================================
+// RX sub-module
+// =============================================================================
+
 #if SOFT_USART__TIMER__RX==0
-#include "cpu/avr/timer0.h"
+#include "cpu/avr/timer0.c"
 #else
 #error "Unsupported"
 #endif
@@ -59,7 +64,46 @@
 } while(0)
 
 
+// =============================================================================
+// TX sub-module
+// =============================================================================
+#include "cpu/avr/drivers/comm/soft_usart__tx.h"
+
+#if SOFT_USART__TIMER__TX==2
+
+// Only naked ISR supported
+#define TIMER2_COMPA_vect_naked                 1
+#define TIMER2_COMPA_vect_no_reti               1
+#define TIMER2__PERIOD                          (F_CPU / SOFT_USART__BAUD_RATE)
+#define TIMER2__COMPARE_A__INTERRUPT__ENABLED   1
+#define timer2__comp_a__run                     soft_usart__tx__run
+
+#include "cpu/avr/timer2.c"
+
+void soft_usart__timer__tx__init(void) {
+    timer2__init();
+}
+
+void soft_usart__tx__timer__start(void) {
+    timer2__start();
+}
+
+void soft_usart__tx__timer__stop(void) {
+    timer2__stop();
+}
+
+#else
+#error "Unsupported"
+#endif
+
+
+// =============================================================================
+// General
+// =============================================================================
+
+
 void soft_usart__timer__init(void) {
+    soft_usart__timer__tx__init();
     soft_usart__timer__rx__init_half_bit_delay(SOFT_USART__TIMER__RX);
 }
 
