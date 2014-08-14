@@ -55,6 +55,14 @@ typedef void * vthread_ip_t;
   __result;                             \
 }))
 
+#define FC_ASM_LOAD_LABEL_ADDRESS(var,label)	do {\
+  __asm__ __volatile__ (		\
+    "ldi %A0, pm_lo8(" label ")\n\t"	\
+    "ldi %B0, pm_hi8(" label ")\n\t"	\
+        : "=d"(var)                     \
+  );					\
+} while(0);
+
 #define FC_POINTER(label) ((void*)FC_ASM_LABEL_ADDRESS(label))
 
 
@@ -89,24 +97,6 @@ typedef void * vthread_ip_t;
 
 
 /**
- * Initialize the virtual thread.
- *
- * This macro MUST be called before the first call to the virtual thread function.
- * \param thread  A name of the virtual thread
- * \param ip      An instruction pointer of the virtual thread
- */
-#define VT_INIT(thread, ip) do { ip = FC_POINTER(FC_LABEL_BEGIN(thread)); } while(0)
-
-
-/**
- * Restart the virtual thread.
- * \param thread  A name of the virtual thread
- * \param ip      An instruction pointer of the virtual thread
- */
-#define VT_RESTART(thread, ip) VT_INIT(thread, ip)
-
-
-/**
  * Place a named mark (label) in the virtual thread.
  * Seek operations on the thread can be used to change the thread's instruction pointer to the position with the specified mark.
  * \param thread  The name of the virtual thread
@@ -125,8 +115,26 @@ mark:                                           \
  * \param mark    The name of the mark
  */
 #define VT_SEEK(thread, ip, mark) do {          \
-  ip = FC_POINTER(FC_LABEL(thread, mark));      \
+    FC_ASM_LOAD_LABEL_ADDRESS(ip, FC_LABEL(thread, mark));\
 } while(0)
+
+
+/**
+ * Initialize the virtual thread.
+ *
+ * This macro MUST be called before the first call to the virtual thread function.
+ * \param thread  A name of the virtual thread
+ * \param ip      An instruction pointer of the virtual thread
+ */
+#define VT_INIT(thread, ip) do { FC_ASM_LOAD_LABEL_ADDRESS(ip, FC_LABEL_BEGIN(thread)); } while(0)
+
+
+/**
+ * Restart the virtual thread.
+ * \param thread  A name of the virtual thread
+ * \param ip      An instruction pointer of the virtual thread
+ */
+#define VT_RESTART(thread, ip) VT_INIT(thread, ip)
 
 
 /**
@@ -149,6 +157,11 @@ mark:                                           \
   }                                             \
   VT_MARK(thread, END);                         \
   (void)vt_flag;                                \
+} while(0)
+
+
+#define VT_UNREACHEABLE_END(thread)             \
+  }                                             \
 } while(0)
 
 

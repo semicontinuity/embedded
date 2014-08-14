@@ -1,5 +1,6 @@
 // =============================================================================
 // vthreads test - blinking LED.
+// TODO: use Force Output Compare feature and run thread function in ISR.
 // =============================================================================
 #include <avr/io.h>
 #include <avr/sleep.h>
@@ -42,11 +43,22 @@ static inline uint8_t blink_thread__is_runnable(void) {
     return !timer1__is_running();
 }
 
-static inline void blink_thread__wait(const uint16_t cycles) {
+static inline void blink_thread__interval__set(const uint16_t cycles) {
     timer1__compare_a__value__set(cycles);
     timer1__switch_conf(TIMER1_STOPPED, TIMER1_RUNNING);
 }
 
+#define blink_thread__wait(cycles) do {\
+    blink_thread__interval__set((cycles));\
+    VT_YIELD(blink_thread, blink_thread__ip);\
+} while(0)
+
+#define blink_thread__wait_and_resume_from(cycles,mark) do {\
+    blink_thread__interval__set((cycles));\
+    VT_GOTO(blink_thread, blink_thread__ip, mark);\
+} while(0)
+
+/** Terminates the current wait() operation, if it is active */
 static inline void blink_thread__notify(void) {
     timer1__switch_conf(TIMER1_RUNNING, TIMER1_STOPPED);
     timer1__value__set(0);
@@ -68,16 +80,14 @@ void blink_thread__run(void) {
         VT_MARK(blink_thread, OFF);
         PORTC &= ~(1<<0);
         blink_thread__wait(64000);	// about 8 secs
-        VT_YIELD(blink_thread, blink_thread__ip);  // next line will be executed in 8 seconds
 
 
         VT_MARK(blink_thread, ON);
         PORTC |= (1<<0);
-        blink_thread__wait(32000);	// about 4 secs
-        VT_YIELD(blink_thread, blink_thread__ip);  // next line will be executed in 4 seconds
+        blink_thread__wait_and_resume_from(32000, BEGIN);	// about 4 secs
     }
 
-    VT_END(blink_thread);
+    VT_UNREACHEABLE_END(blink_thread);
 }
 
 
@@ -88,18 +98,18 @@ void blink_thread__run(void) {
 ISR(INT0_vect, ISR_NAKED) {
     blink_thread__force_on();
     blink_thread__notify();
-    asm("reti");
+    reti();
 }
 
 ISR(INT1_vect, ISR_NAKED) {
     blink_thread__force_off();
     blink_thread__notify();
-    asm("reti");
+    reti();
 }
 
 ISR(TIMER1_COMPA_vect, ISR_NAKED) {
     blink_thread__notify();
-    asm("reti");
+    reti();
 }
 
 
