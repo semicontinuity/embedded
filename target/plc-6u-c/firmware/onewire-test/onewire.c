@@ -210,7 +210,7 @@ void onewire__thread__stop(void) {
 }
 
 
-/** Check whether the thread can be scheduled (if the thread is running) */
+/** Check whether the thread is currently running */
 bool onewire__thread__is_running(void) {
     return onewire__thread__running;
 }

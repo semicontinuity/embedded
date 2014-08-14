@@ -22,10 +22,10 @@ int usart_putchar(char c, FILE *stream) {
 
 // main
 // -----------------------------------------------------------------------------
-#define OW_SKIP_ROM	    0xCC
-#define DS18X20_CONVERT_T	0x44
-#define DS18X20_READ		0xBE
-#define DS18X20_SP_SIZE  9
+#define OW_SKIP_ROM	        0xCC
+#define DS18X20_CONVERT_T       0x44
+#define DS18X20_READ	        0xBE
+#define DS18X20_SP_SIZE         9
 
 uint8_t command[] = {OW_SKIP_ROM, DS18X20_READ};
 uint8_t response[DS18X20_SP_SIZE];
@@ -50,6 +50,7 @@ int main(void) {
 
     onewire__command(sizeof(command), sizeof(response), command, response);
 
+    // schedule onewire__thread until it is alive
     for(;;) {
         if (!onewire__thread__is_running()) break;
 
