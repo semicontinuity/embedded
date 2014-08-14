@@ -16,8 +16,17 @@ void soft_usart__rx__run(void);
 void soft_usart__rx__signal_character_start(void);
 
 
-// Callbacks to be implemented
+// Functions to be implemented
 // -----------------------------------------------------------------------------
+
+/** Injected function to initialize RX start bit detector */
+void soft_usart__rx__init(void);
+
+/** Injected function to start RX start bit detector */
+void soft_usart__rx__start(void);
+
+/** Injected function to stop RX start bit detector */
+void soft_usart__rx__stop(void);
 
 /** Invoked when start of frame is detected */
 void soft_usart__rx__on_frame_end(void);

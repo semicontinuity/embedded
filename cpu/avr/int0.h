@@ -33,7 +33,7 @@
 
 
 
-inline static void int0__init(void) {
+INLINE void int0__init(void) {
 #ifdef INT0__PULLUP
     PORTD |= (1<<2); // INT0 is on PD2 pin
 #endif
@@ -42,13 +42,13 @@ inline static void int0__init(void) {
 }
 
 
-inline static void int0__start(void) {
+INLINE void int0__start(void) {
     // Enable interrupt from INT0
     INT0__ENABLED__HOST |= (1<<INT0);
 }
 
 
-inline static void int0__stop(void) {
+INLINE void int0__stop(void) {
     // Disable interrupt from INT0
     INT0__ENABLED__HOST &= ~(1<<INT0);
 }

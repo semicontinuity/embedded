@@ -3,6 +3,7 @@
 // =============================================================================
 
 #include "cpu/avr/drivers/comm/soft_usart__tx.h"
+#include "cpu/avr/drivers/comm/soft_usart__timer.h"
 #include "cpu/avr/asm.h"
 #include "cpu/avr/gpio.h"
 
@@ -23,20 +24,17 @@ volatile  int8_t soft_usart__tx__index;
 #endif
 
 
-void soft_usart__tx__start(void) {
-}
-
-
-void soft_usart__tx__stop(void) {
-}
-
-
+/** Request transmission */
 void soft_usart__tx__write(const uint8_t data) {
     // does not check for concurrent transmission
     soft_usart__tx__data = data;
     soft_usart__tx__index = -(8+1+1);   // main branch of soft_usart__tx__run() will be run 8+1 times
+    soft_usart__timer__signal_tx_requested();
+}
+
+/** Begin transmission */
+void soft_usart__tx__begin(void) {
     soft_usart__tx__set(0);
-    soft_usart__tx__timer__start();
 }
 
 
@@ -66,7 +64,7 @@ void soft_usart__tx__run(void) {
 
     // everything is transmitted; stop
     MARK(soft_usart__tx__run__complete);
-    soft_usart__tx__timer__stop();
+    soft_usart__timer__signal_tx_complete();
     soft_usart__tx__on_write_complete();
 #if defined(SOFT_USART__TX__RUN__IN_ISR)
     RETI();

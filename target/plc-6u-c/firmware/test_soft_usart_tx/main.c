@@ -3,9 +3,8 @@
 // =============================================================================
 
 
-#include "cpu/avr/int0.h"
+#include "cpu/avr/drivers/comm/soft_usart.h"
 #include "cpu/avr/drivers/comm/soft_usart__tx.h"
-#include "cpu/avr/drivers/comm/soft_usart__timer.h"
 #include "cpu/avr/drivers/display/segment/static2.h"
 
 #include <avr/interrupt.h>
@@ -21,11 +20,10 @@ void send_char(void) {
 
 
 int main(void) {
-    int0__init();
-    soft_usart__timer__init();
+    soft_usart__init();
     display__init();
     
-    int0__start();
+    soft_usart__start();
 
     send_char();
 

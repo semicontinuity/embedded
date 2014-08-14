@@ -11,6 +11,12 @@
 // =============================================================================
 
 #if SOFT_USART__TIMER__RX==0
+
+// Only naked ISR supported
+#define TIMER0_COMPA_vect_naked             	1
+#define TIMER0__COMPARE_A__INTERRUPT__ENABLED   1
+#define timer0__comp_a__run                     soft_usart__rx__run
+
 #include "cpu/avr/timer0.c"
 #else
 #error "Unsupported"
@@ -63,6 +69,18 @@
     );\
 } while(0)
 
+void soft_usart__timer__signal_start_bit_begin(void) {
+    soft_usart__timer__rx__start_half_bit_delay(SOFT_USART__TIMER__RX);
+}
+
+void soft_usart__timer__signal_start_bit_middle(void) {
+    soft_usart__timer__rx__start_full_bit_delay(SOFT_USART__TIMER__RX);
+}
+
+void soft_usart__timer__signal_stop_bit_middle(void) {
+    soft_usart__timer__rx__stop(SOFT_USART__TIMER__RX);
+}
+
 
 // =============================================================================
 // TX sub-module
@@ -84,11 +102,12 @@ void soft_usart__timer__tx__init(void) {
     timer2__init();
 }
 
-void soft_usart__tx__timer__start(void) {
+void soft_usart__timer__signal_tx_requested(void) {
+    soft_usart__tx__begin();
     timer2__start();
 }
 
-void soft_usart__tx__timer__stop(void) {
+void soft_usart__timer__signal_tx_complete(void) {
     timer2__stop();
 }
 
@@ -105,16 +124,4 @@ void soft_usart__tx__timer__stop(void) {
 void soft_usart__timer__init(void) {
     soft_usart__timer__tx__init();
     soft_usart__timer__rx__init_half_bit_delay(SOFT_USART__TIMER__RX);
-}
-
-void soft_usart__timer__signal_start_bit_begin(void) {
-    soft_usart__timer__rx__start_half_bit_delay(SOFT_USART__TIMER__RX);
-}
-
-void soft_usart__timer__signal_start_bit_middle(void) {
-    soft_usart__timer__rx__start_full_bit_delay(SOFT_USART__TIMER__RX);
-}
-
-void soft_usart__timer__signal_stop_bit_middle(void) {
-    soft_usart__timer__rx__stop(SOFT_USART__TIMER__RX);
 }
