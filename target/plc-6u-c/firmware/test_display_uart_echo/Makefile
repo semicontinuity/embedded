@@ -1,4 +1,4 @@
-TARGET = uart-display-test
+TARGET = test_display_uart_echo
 #MCU = at90s2313
 #MCU = at90usb162
 MCU = atmega8535
