@@ -1,11 +1,9 @@
-TARGET = test
-MCU = atmega8
-OPT = 3 -mcall-prologues
+TARGET = led-dimmer
+CONFIG ?= $(TARGET)
+CONFIG_FILE = $(TARGET).conf
+
 ROOT = ../../../..
 BSP = ../../bsp/
-
-CDEFS += -ffixed-r5 -ffixed-r6
-
 
 CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
@@ -14,6 +12,11 @@ vpath %.c $(BSP) $(ROOT)
 # Configuration
 CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
+include $(CONFIG_FILE)
+
+ifdef FIXED_REGISTERS
+OPT += $(FIXED_REGISTERS)
+endif
 
 
 # Firmware

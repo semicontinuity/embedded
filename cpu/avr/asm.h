@@ -45,6 +45,7 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 #define MARKED_LABEL(prefix, mark)      #prefix "__" mark
 #define TMP_LABEL(p)	                MARKED_LABEL(p, QUOTE(__LINE__))
 #define MARK(label)		                do { __asm__ __volatile__( #label ":"); } while(0)
+#define MARK0(label)                            do { __asm__ __volatile__( label ":"); } while(0)
 
 
 #define COPY_BIT(src, srcbit, dst, dstbit)      do {    \
@@ -443,8 +444,8 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 #define RJMP(label)		    do { __asm__ __volatile__ ("rjmp " #label); } while(0)
 #define RETI()		        do { __asm__ __volatile__ ("reti"); } while(0)
 
-#define BRNE_TMP_LABEL()    do { __asm__ __volatile__("brne " TMP_LABEL(L)); } while(0)
-#define IF_ZERO(body)       do { BRNE_TMP_LABEL(); body; MARK(TMP_LABEL(L)); } while(0)
+#define BRNE_TMP_LABEL()    do { __asm__ __volatile__("brne " MARKED_LABEL(L, QUOTE(__LINE__))); } while(0)
+#define IF_ZERO(body)       do { BRNE_TMP_LABEL(); body; MARK0(MARKED_LABEL(L, QUOTE(__LINE__))); } while(0)
 
 
 #define __IN(result, addr)              \

@@ -4,6 +4,6 @@
 #include "modbus_rtu_driver__delay_timer.c"
 #include "modbus_rtu_driver__usart_rx.c"
 #include "modbus_rtu_driver__usart_tx.c"
-#include "modbus_rtu_driver__no_rts.c"
+#include "modbus_rtu_driver__dir_control__nop.c"
 #include "cpu/avr/drivers/display/segment/glyphs__digits__hex.c"
 #include "cpu/avr/drivers/display/segment/static2.c"

@@ -64,7 +64,7 @@ void onewire__timer__start(const uint8_t conf) {
 
 
 void onewire__timer__stop(void) {
-    timer2__stop();
+    timer2__switch_conf(ONEWIRE__TIMER__FAST_CONF, TIMER2_CONF_DEFAULT);
 }
 
 
