@@ -50,7 +50,7 @@ OBJDIR = .obj
 
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC = 
+#CPPSRC =
 
 
 # List Assembler source files here.
@@ -136,7 +136,7 @@ CFLAGS += $(CSTANDARD)
 #  -Wall...:     warning level
 #  -Wa,...:      tell GCC to pass this to the assembler.
 #    -adhlns...: create assembler listing
-CPPFLAGS = -g$(DEBUG)
+CPPFLAGS += -g$(DEBUG)
 CPPFLAGS += $(CPPDEFS)
 CPPFLAGS += -O$(OPT)
 #CPPFLAGS += -mint8
