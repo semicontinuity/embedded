@@ -85,11 +85,11 @@ void onewire__timer__timeout__set(const uint8_t tq) {
 
 // -----------------------------------------------------------------------------
 // 1-wire bit-bang thread.
-// Receives and transmits individual byte
+// Receives and transmits individual bytes
 // -----------------------------------------------------------------------------
 
 /** Flag that indicates that the thread is running */
-volatile bool onewire__bitbang_thread__running;
+volatile bool onewire__bitbang_thread__alive;
 
 /** Thread instruction pointer */
 volatile void *onewire__bitbang_thread__ip;
@@ -101,21 +101,21 @@ volatile uint8_t onewire__bitbang_thread__data;
 volatile uint8_t onewire__bitbang_thread__bit_count;
 
 
-bool onewire__bitbang_thread__is_running(void) {
-    return onewire__bitbang_thread__running;
+bool onewire__bitbang_thread__is_alive(void) {
+    return onewire__bitbang_thread__alive;
 }
 
 
 void onewire__bitbang_thread__start(void) {
     VT_INIT(onewire__bitbang_thread, onewire__bitbang_thread__ip);
     onewire__bitbang_thread__bit_count = 8;
-    onewire__bitbang_thread__running = 1;
+    onewire__bitbang_thread__alive = 1;
 }
 
 
 void onewire__bitbang_thread__stop(void) {
     onewire__timer__stop();
-    onewire__bitbang_thread__running = 0;
+    onewire__bitbang_thread__alive = 0;
 }
 
 
@@ -175,8 +175,8 @@ ISR(timer2__compare_a__interrupt__VECTOR) {
 // Handles one 1-wire transaction.
 // -----------------------------------------------------------------------------
 
-/** Flag that indicates that the thread is running */
-volatile uint8_t onewire__thread__running;
+/** Flag that indicates that the thread is alive */
+volatile uint8_t onewire__thread__alive;
 
 /** Instruction pointer */
 volatile void *onewire__thread__ip;
@@ -197,27 +197,27 @@ volatile uint8_t onewire__thread__rx__remaining;
 volatile uint8_t onewire__thread__crc;
 
 
-/** Allow thread to be scheduled */
+/** Starts the thread */
 void onewire__thread__start(void) {
     VT_INIT(onewire__thread, onewire__thread__ip);
-    onewire__thread__running = true; 
+    onewire__thread__alive = true;
 }
 
 
-/** Disallow thread to be scheduled */
+/** Terminates the thread */
 void onewire__thread__stop(void) {
-    onewire__thread__running = false;
+    onewire__thread__alive = false;
 }
 
 
-/** Check whether the thread is currently running */
-bool onewire__thread__is_running(void) {
-    return onewire__thread__running;
+/** Check whether the thread is alive */
+bool onewire__thread__is_alive(void) {
+    return onewire__thread__alive;
 }
 
-/** Check whether the thread can be scheduled (if the thread is running) */
+/** Check whether the thread can be scheduled (applicable only if the thread is alive) */
 bool onewire__thread__is_runnable(void) {
-    return !onewire__bitbang_thread__is_running();
+    return !onewire__bitbang_thread__is_alive();
 }
 
 

@@ -50,10 +50,7 @@ int main(void) {
 
     onewire__command(sizeof(command), sizeof(response), command, response);
 
-    // schedule onewire__thread until it is alive
-    for(;;) {
-        if (!onewire__thread__is_running()) break;
-
+    while (onewire__thread__is_alive()) {
         if (onewire__thread__is_runnable())
             onewire__thread__run();
         else

@@ -15,8 +15,8 @@ void onewire__thread__start(void);
 /** Disallow thread to be scheduled */
 void onewire__thread__stop(void);
 
-/** Check whether the thread is running */
-bool onewire__thread__is_running(void);
+/** Check whether the thread is alive */
+bool onewire__thread__is_alive(void);
 
 /** Check whether the thread can be scheduled */
 bool onewire__thread__is_runnable(void);
