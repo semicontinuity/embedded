@@ -58,7 +58,7 @@ void soft_usart__rx__run(void) {
             soft_usart__rx__in_stop_bit__set(0); // for the next invocation (start bit)
             soft_usart__rx__on_frame_end(); // not exacty - 1/2 of stop bit is still remaining.
             if (IS_1(SOFT_USART__RX)) {
-                soft_usart__rx__on_character_received();
+                soft_usart__rx__on_character_received(soft_usart__rx__data);
             }
             else {
                 soft_usart__rx__on_frame_error();
