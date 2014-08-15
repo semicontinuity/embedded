@@ -18,6 +18,10 @@ void send_char(void) {
     soft_usart__tx__write('A');
 }
 
+void soft_usart__rx__on_character_received(uint8_t c) {}
+
+void soft_usart__rx__on_frame_error(void) {}
+
 
 int main(void) {
     soft_usart__init();

@@ -1,4 +1,4 @@
-TARGET = test_soft_usart_tx
+TARGET = test_display_soft_usart_tx
 CONFIG ?= $(TARGET)
 CONFIG_FILE = $(TARGET).conf
 
