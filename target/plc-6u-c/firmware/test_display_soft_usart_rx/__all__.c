@@ -1,3 +1,6 @@
+void do_nothing(void) {}
+
+
 #include <avr/io.h>
 
 #include "main.c"
