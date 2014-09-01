@@ -134,6 +134,37 @@ inline void timer0__overflow_interrupt__enabled__set(const uint8_t enable) {
 }
 
 
+inline uint8_t timer0__conf__ctc_compare_a_value(const uint32_t period) {
+    if (period <= 256UL)           return (uint8_t)(period      - 1);
+    else if (period <= 256UL*8)    return (uint8_t)(period/8    - 1);
+    else if (period <= 256UL*64)   return (uint8_t)(period/64   - 1);
+    else if (period <= 256UL*256)  return (uint8_t)(period/256  - 1);
+    else if (period <= 256UL*1024) return (uint8_t)(period/1024 - 1);
+    else return 0xFF; // should never be invoked with large period argument
+}
+
+inline uint16_t timer0__conf__ctc_prescaler_mask(const uint32_t period) {
+    if (period <= 256UL) return TIMER0_CONF_NO_PRESCALER;
+    else if (period <= 256UL*8) return TIMER0_CONF_PRESCALER_8;
+    else if (period <= 256UL*64) return TIMER0_CONF_PRESCALER_64;
+    else if (period <= 256UL*256) return TIMER0_CONF_PRESCALER_256;
+    else if (period <= 256UL*1024) return TIMER0_CONF_PRESCALER_1024;
+    else return TIMER0_CONF_PRESCALER_1024; // should never be invoked with large period argument
+}
+
+inline uint16_t timer0__conf__default(void) {
+     return TIMER0_CONF_DEFAULT;
+}
+
+inline uint16_t timer0__conf__ctc_initialized(const uint8_t compare_a_value) {
+     return TIMER0_CONF_STOPPED | TIMER0_CONF_TOP(compare_a_value);
+}
+
+inline uint16_t timer0__conf__ctc_started(const uint8_t compare_a_value, const uint16_t prescaler_mask) {
+     return TIMER0_CONF_WGM_CTC | TIMER0_CONF_TOP(compare_a_value) | prescaler_mask;
+}
+
+
 #ifdef timer0__comp_a__run
 
 #ifndef timer0__comp_a__run__attrs

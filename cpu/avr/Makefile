@@ -60,7 +60,7 @@ OBJDIR = .obj
 #     Even though the DOS/Win* filesystem matches both .s and .S the same,
 #     it will preserve the spelling of the filenames, and gcc itself does
 #     care about how the name is spelled on its command-line.
-ASRC =
+ASRC ?=
 
 
 # Optimization level, can be [0, 1, 2, 3, s]. 
@@ -164,7 +164,7 @@ CPPFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
 #             for use in COFF files, additional information about filenames
 #             and function names needs to be present in the assembler source
 #             files -- see avr-libc docs [FIXME: not yet described there]
-ASFLAGS = -Wa,-adhlns=$(<:%.S=$(OBJDIR)/%.lst),-gstabs 
+ASFLAGS += -Wa,-adhlns=$(<:%.S=$(OBJDIR)/%.lst),-gstabs
 
 
 #---------------- Library Options ----------------
