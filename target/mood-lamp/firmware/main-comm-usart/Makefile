@@ -17,10 +17,6 @@ endif
 CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
 
-
-#CDEFS += -DF_CPU=19660800UL
-#CDEFS += -Ddebug__putc=usart0__out__write
-
 SRC += __all__.c
 
 include $(ROOT)/cpu/avr/Makefile
