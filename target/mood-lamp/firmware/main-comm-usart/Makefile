@@ -17,6 +17,9 @@ endif
 CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
 
+CDEFS += -Wl,--relax
+CDEFS += -fwhole-program
+
 SRC += __all__.c
 
 include $(ROOT)/cpu/avr/Makefile
