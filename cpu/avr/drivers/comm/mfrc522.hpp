@@ -122,22 +122,22 @@ public:
 
     static void init(void);
     static void writeToRegister(uint8_t addr, uint8_t val);
-    uint8_t readFromRegister(uint8_t addr);
-    void setBitMask(uint8_t addr, uint8_t mask);
-    void clearBitMask(uint8_t addr, uint8_t mask);
-    void begin();
-    void reset();
-    uint8_t getFirmwareVersion();
-    bool digitalSelfTestPass();
-    int commandTag(uint8_t command, uint8_t *data, int dlen, uint8_t *result, int *rlen);
-    int requestTag(uint8_t mode, uint8_t *type);
-    int antiCollision(uint8_t *serial);
-    void calculateCRC(uint8_t *data, int len, uint8_t *result);
-    uint8_t selectTag(uint8_t *serial);
-    int authenticate(uint8_t mode, uint8_t block, uint8_t *key, uint8_t *serial);
-    int readFromTag(uint8_t blockAddr, uint8_t *recvData);
-    int writeToTag(uint8_t blockAddr, uint8_t *writeData);
-    int haltTag();
+    static uint8_t readFromRegister(uint8_t addr);
+    static void setBitMask(uint8_t addr, uint8_t mask);
+    static void clearBitMask(uint8_t addr, uint8_t mask);
+    static void start();
+    static void reset();
+    static uint8_t getFirmwareVersion();
+    static bool digitalSelfTestPass();
+    static int commandTag(uint8_t command, uint8_t *data, int dlen, uint8_t *result, int *rlen);
+    static int requestTag(uint8_t mode, uint8_t *type);
+    static int antiCollision(uint8_t *serial);
+    static void calculateCRC(uint8_t *data, int len, uint8_t *result);
+    static uint8_t selectTag(uint8_t *serial);
+    static int authenticate(uint8_t mode, uint8_t block, uint8_t *key, uint8_t *serial);
+    static int readFromTag(uint8_t blockAddr, uint8_t *recvData);
+    static int writeToTag(uint8_t blockAddr, uint8_t *writeData);
+    static int haltTag();
 };
 
 

@@ -86,8 +86,7 @@ void mfrc522<SPI, PIN_SELECT, PIN_RESET>::clearBitMask(uint8_t addr, uint8_t mas
 */
 /**************************************************************************/
 template<typename SPI, typename PIN_SELECT, typename PIN_RESET>
-void mfrc522<SPI, PIN_SELECT, PIN_RESET>::begin() {
-    PIN_SELECT::set(1);
+void mfrc522<SPI, PIN_SELECT, PIN_RESET>::start() {
     reset();
     //Timer: TPrescaler*TreloadVal/6.78MHz = 24ms
     writeToRegister(TModeReg, 0x8D); // Tauto=1; f(Timer) = 6.78MHz/TPreScaler
