@@ -17,9 +17,11 @@ endif
 # Configuration
 CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
+CPPFLAGS += $(CONF)
 
 #CDEFS += -fno-tree-loop-optimize -fno-unswitch-loops
 CDEFS += -ffreestanding -fwhole-program -Wl,--relax
+CPPFLAGS += -ffreestanding -fwhole-program -Wl,--relax
 
 # Firmware
 CPPSRC += __all__.cpp
