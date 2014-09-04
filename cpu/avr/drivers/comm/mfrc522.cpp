@@ -107,7 +107,7 @@ void mfrc522<SPI, PIN_SELECT, PIN_RESET>::begin() {
 /**************************************************************************/
 template<typename SPI, typename PIN_SELECT, typename PIN_RESET>
 void mfrc522<SPI, PIN_SELECT, PIN_RESET>::reset() {
-    writeToRegister(CommandReg, MFRC522_SOFTRESET);
+    writeToRegister(CommandReg, CommandWord::SOFTRESET);
 }
 
 
@@ -167,10 +167,10 @@ bool mfrc522<SPI, PIN_SELECT, PIN_RESET>::digitalSelfTestPass() {
     }
     reset();
     writeToRegister(FIFODataReg, 0x00);
-    writeToRegister(CommandReg, MFRC522_MEM);
+    writeToRegister(CommandReg, CommandWord::MEM);
     writeToRegister(AutoTestReg, 0x09);
     writeToRegister(FIFODataReg, 0x00);
-    writeToRegister(CommandReg, MFRC522_CALCCRC);
+    writeToRegister(CommandReg, CommandWord::CALCCRC);
     // Wait for the self test to complete.
     i = 0xFF;
     do {
@@ -210,11 +210,11 @@ int mfrc522<SPI, PIN_SELECT, PIN_RESET>::commandTag(uint8_t cmd, uint8_t *data, 
     int i;
 
     switch (cmd) {
-    case MFRC522_AUTHENT:
+    case CommandWord::AUTHENT:
         irqEn = 0x12;
         waitIRq = 0x10;
         break;
-    case MFRC522_TRANSCEIVE:
+    case CommandWord::TRANSCEIVE:
         irqEn = 0x77;
         waitIRq = 0x30;
         break;
@@ -224,14 +224,14 @@ int mfrc522<SPI, PIN_SELECT, PIN_RESET>::commandTag(uint8_t cmd, uint8_t *data, 
     writeToRegister(CommIEnReg, irqEn|0x80); // interrupt request
     clearBitMask(CommIrqReg, 0x80); // Clear all interrupt requests bits.
     setBitMask(FIFOLevelReg, 0x80); // FlushBuffer=1, FIFO initialization.
-    writeToRegister(CommandReg, MFRC522_IDLE); // No action, cancel the current command.
+    writeToRegister(CommandReg, CommandWord::IDLE); // No action, cancel the current command.
     // Write to FIFO
     for (i=0; i < dlen; i++) {
         writeToRegister(FIFODataReg, data[i]);
     }
     // Execute the command.
     writeToRegister(CommandReg, cmd);
-    if (cmd == MFRC522_TRANSCEIVE) {
+    if (cmd == CommandWord::TRANSCEIVE) {
         setBitMask(BitFramingReg, 0x80); // StartSend=1, transmission of data starts
     }
     // Waiting for the command to complete so we can receive data.
@@ -252,7 +252,7 @@ int mfrc522<SPI, PIN_SELECT, PIN_RESET>::commandTag(uint8_t cmd, uint8_t *data, 
             if (n & irqEn & 0x01) {
                 status = MI_NOTAGERR;
             }
-            if (cmd == MFRC522_TRANSCEIVE) {
+            if (cmd == CommandWord::TRANSCEIVE) {
                 n = readFromRegister(FIFOLevelReg);
                 lastBits = readFromRegister(ControlReg) & 0x07;
                 if (lastBits) {
@@ -300,7 +300,7 @@ int mfrc522<SPI, PIN_SELECT, PIN_RESET>::requestTag(uint8_t mode, uint8_t *data)
     int status, len;
     writeToRegister(BitFramingReg, 0x07); // TxLastBists = BitFramingReg[2..0]
     data[0] = mode;
-    status = commandTag(MFRC522_TRANSCEIVE, data, 1, data, &len);
+    status = commandTag(CommandWord::TRANSCEIVE, data, 1, data, &len);
     if ((status != MI_OK) || (len != 0x10)) {
         status = MI_ERR;
     }
@@ -326,7 +326,7 @@ int mfrc522<SPI, PIN_SELECT, PIN_RESET>::antiCollision(uint8_t *serial) {
     writeToRegister(BitFramingReg, 0x00); // TxLastBits = BitFramingReg[2..0]
     serial[0] = MF1_ANTICOLL;
     serial[1] = 0x20;
-    status = commandTag(MFRC522_TRANSCEIVE, serial, 2, serial, &len);
+    status = commandTag(CommandWord::TRANSCEIVE, serial, 2, serial, &len);
     len = len / 8; // len is in bits, and we want each byte.
     if (status == MI_OK) {
         // The checksum of the tag is the ^ of all the values.
@@ -362,7 +362,7 @@ void mfrc522<SPI, PIN_SELECT, PIN_RESET>::calculateCRC(uint8_t *data, int len, u
     for (i = 0; i < len; i++) {
         writeToRegister(FIFODataReg, data[i]);
     }
-    writeToRegister(CommandReg, MFRC522_CALCCRC);
+    writeToRegister(CommandReg, CommandWord::CALCCRC);
     // Wait for the CRC calculation to complete.
     i = 0xFF;
     do {
@@ -393,7 +393,7 @@ uint8_t mfrc522<SPI, PIN_SELECT, PIN_RESET>::selectTag(uint8_t *serial) {
         buffer[i+2] = serial[i];
     }
     calculateCRC(buffer, 7, &buffer[7]);
-    status = commandTag(MFRC522_TRANSCEIVE, buffer, 9, buffer, &len);
+    status = commandTag(CommandWord::TRANSCEIVE, buffer, 9, buffer, &len);
     if ((status == MI_OK) && (len == 0x18)) {
         sak = buffer[0];
     }
@@ -429,7 +429,7 @@ int mfrc522<SPI, PIN_SELECT, PIN_RESET>::authenticate(uint8_t mode, uint8_t bloc
     for (i = 0; i < 4; i++) { // 8th to 11th byte is the serial of the tag.
         buffer[i+8] = serial[i];
     }
-    status = commandTag(MFRC522_AUTHENT, buffer, 12, buffer, &len);
+    status = commandTag(CommandWord::AUTHENT, buffer, 12, buffer, &len);
     if ((status != MI_OK) || (!(readFromRegister(Status2Reg) & 0x08))) {
         status = MI_ERR;
     }
@@ -453,7 +453,7 @@ int mfrc522<SPI, PIN_SELECT, PIN_RESET>::readFromTag(uint8_t block, uint8_t *res
     result[0] = MF1_READ;
     result[1] = block;
     calculateCRC(result, 2, &result[2]);
-    status = commandTag(MFRC522_TRANSCEIVE, result, 4, result, &len);
+    status = commandTag(CommandWord::TRANSCEIVE, result, 4, result, &len);
     if ((status != MI_OK) || (len != 0x90)) {
         status = MI_ERR;
     }
@@ -478,7 +478,7 @@ int mfrc522<SPI, PIN_SELECT, PIN_RESET>::writeToTag(uint8_t block, uint8_t *data
     buffer[0] = MF1_WRITE;
     buffer[1] = block;
     calculateCRC(buffer, 2, &buffer[2]);
-    status = commandTag(MFRC522_TRANSCEIVE, buffer, 4, buffer, &len);
+    status = commandTag(CommandWord::TRANSCEIVE, buffer, 4, buffer, &len);
     if ((status != MI_OK) || (len != 4) || ((buffer[0] & 0x0F) != 0x0A)) {
         status = MI_ERR;
     }
@@ -487,7 +487,7 @@ int mfrc522<SPI, PIN_SELECT, PIN_RESET>::writeToTag(uint8_t block, uint8_t *data
             buffer[i] = data[i];
         }
         calculateCRC(buffer, 16, &buffer[16]);
-        status = commandTag(MFRC522_TRANSCEIVE, buffer, 18, buffer, &len);
+        status = commandTag(CommandWord::TRANSCEIVE, buffer, 18, buffer, &len);
         if ((status != MI_OK) || (len != 4) || ((buffer[0] & 0x0F) != 0x0A)) {
             status = MI_ERR;
         }
@@ -512,6 +512,6 @@ int mfrc522<SPI, PIN_SELECT, PIN_RESET>::haltTag() {
     buffer[1] = 0;
     calculateCRC(buffer, 2, &buffer[2]);
     clearBitMask(Status2Reg, 0x08); // turn off encryption
-    status = commandTag(MFRC522_TRANSCEIVE, buffer, 4, buffer, &len);
+    status = commandTag(CommandWord::TRANSCEIVE, buffer, 4, buffer, &len);
     return status;
 }

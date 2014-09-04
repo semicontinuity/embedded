@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdint.h>
-#include <avr/io.h>
+//#include <avr/io.h>
+#include "arch/avr/io.h"
 
 #include "cpu/avr/abi.hpp"
 #include "cpu/avr/drivers/comm/mfrc522.hpp"
@@ -30,7 +31,9 @@ public:
     static void set(bool value) { if (value) *((volatile uint8_t *)ADDRESS) |= (1<<BIT); else *((volatile uint8_t *)ADDRESS) &= ~(1<<BIT);}
 //    static void set(bool value) { if (value) *PORT::out_reg_ptr() |= (1<<PIN); else *PORT::out_reg_ptr() &= ~(1<<PIN);}
 
-    typedef bit<ADDRESS, BIT> out;
+    typedef bit<ADDRESS + 0, BIT> in;
+    typedef bit<ADDRESS + 1, BIT> dir;
+    typedef bit<ADDRESS + 2, BIT> out;
 };
 
 
@@ -40,7 +43,11 @@ public:
 };
 
 
-typedef mfrc522<spi, pin<0x30,1>::out, pin<0x30,2>::out> nfc;
+typedef mfrc522<
+    spi,
+    pin<MFRC522__SELECT__PORT, MFRC522__SELECT__PIN>::out,
+    pin<MFRC522__RESET__PORT, MFRC522__RESET__PIN>::out
+> nfc;
 
 
 void main(void) {

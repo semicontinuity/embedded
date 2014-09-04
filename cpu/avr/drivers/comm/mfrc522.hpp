@@ -17,17 +17,6 @@
 #define MI_OK 0 // Everything A-OK.
 #define MI_NOTAGERR 1 // No tag error
 #define MI_ERR 2 // General error
-// MF522 Command word
-#define MFRC522_IDLE 0x00 // NO action; Cancel the current command
-#define MFRC522_MEM 0x01 // Store 25 byte into the internal buffer.
-#define MFRC522_GENID 0x02 // Generates a 10 byte random ID number.
-#define MFRC522_CALCCRC 0x03 // CRC Calculate or selftest.
-#define MFRC522_TRANSMIT 0x04 // Transmit data
-#define MFRC522_NOCMDCH 0x07 // No command change.
-#define MFRC522_RECEIVE 0x08 // Receive Data
-#define MFRC522_TRANSCEIVE 0x0C // Transmit and receive data,
-#define MFRC522_AUTHENT 0x0E // Authentication Key
-#define MFRC522_SOFTRESET 0x0F // Reset
 // Mifare_One tag command word
 #define MF1_REQIDL 0x26 // find the antenna area does not enter hibernation
 #define MF1_REQALL 0x52 // find all the tags antenna area
@@ -115,7 +104,22 @@
 
 template<typename SPI, typename PIN_SELECT, typename PIN_RESET>
 class mfrc522 {
+
 public:
+
+    struct CommandWord {
+        static const uint8_t IDLE       = 0x00;
+        static const uint8_t MEM        = 0x01;
+        static const uint8_t GENID      = 0x02;
+        static const uint8_t CALCCRC    = 0x03;
+        static const uint8_t TRANSMIT   = 0x04;
+        static const uint8_t NOCMDCH    = 0x07;
+        static const uint8_t RECEIVE    = 0x08;
+        static const uint8_t TRANSCEIVE = 0x0C;
+        static const uint8_t AUTHENT    = 0x0E;
+        static const uint8_t SOFTRESET  = 0x0F;
+    };
+
     static void init(void);
     static void writeToRegister(uint8_t addr, uint8_t val);
     uint8_t readFromRegister(uint8_t addr);
