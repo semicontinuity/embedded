@@ -199,10 +199,10 @@ FC_CONCAT(YIELD, __LINE__):                                     \
 do {                                                            \
 FC_CONCAT(YIELD, __LINE__):                                     \
   (void)&&FC_CONCAT(YIELD, __LINE__);                           \
-  vt_flag = 0;				                        \
+  vt_flag = 0;				                                    \
   FC_CONCAT(RESUME, __LINE__):                                  \
   if(vt_flag == 0) {                                            \
-    (ip) = &&FC_CONCAT(RESUME, __LINE__);	                \
+    (ip) = &&FC_CONCAT(RESUME, __LINE__);	                    \
     return;                                                     \
   }                                                             \
   FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(RESUME, __LINE__)));  \
@@ -220,14 +220,144 @@ FC_CONCAT(YIELD, __LINE__):                                     \
  */
 #define VT_GOTO(thread, ip, mark)               \
 do {                                            \
-FC_CONCAT(GOTO, __LINE__):   	                \
+  FC_CONCAT(GOTO, __LINE__):                    \
   (void)&&FC_CONCAT(GOTO, __LINE__);            \
-  vt_flag = 0;				        \
+  vt_flag = 0;				                    \
   if(vt_flag == 0) {                            \
     (ip) = &&mark;                              \
     return;                                     \
   }                                             \
 } while(0)
 
+
+// =============================================================================
+// Specialized versions of macros, for writing vthread-enabled ISR.
+// (Only because GCC can't inline functions with computed goto, even static)
+//
+// for a new thread function f, the following symbols must be defined:
+// f__function_attrs:   possible values - ISR_NAKED and/or __attribute((signal))
+// f__function_naked:   possible values - 0 or 1 to insert reti at the end of ISR
+// f__yield_with_reti:  possible values - 0 or 1 to implement yield with reti
+// =============================================================================
+
+#if (__GNUC__ == 4 && __GNUC_MINOR__ >= 1) || (__GNUC__ > 4)
+#  define __VT_FUNC_ATTRS used, externally_visible
+#else /* GCC < 4.1 */
+#  define __VT_FUNC_ATTRS used
+#endif
+
+#ifdef __cplusplus
+#  define VT_FUNC(f, ...)                                                              \
+    extern "C" void f (void) __attribute__ ((__VT_FUNC_ATTRS)) __VA_ARGS__;            \
+    void f (void)
+#else
+#  define VT_FUNC(f, ...)                                                              \
+    void f (void) __attribute__ ((__VT_FUNC_ATTRS)) __VA_ARGS__;                       \
+    void f (void)
+#endif
+
+
+/**
+ * Declare the end of a virtual thread.
+ * \param thread A virtual thread name
+ */
+#define VT_END_S(thread)                                        \
+  }                                                             \
+  FC_ASM_LABEL(FC_LABEL(thread, END));                          \
+END:                                                            \
+  (void)vt_flag;                                                \
+  if (FC_CONCAT(thread, __function_naked))                      \
+    __asm__ __volatile__ ("reti"::);                            \
+  break;\
+} while(0)
+
+
+/**
+ * Yield control from the current virtual thread.
+ * Once the virtual thread function is called again, it will resume from the following operator.
+ * \param thread  A virtual thread name
+ * \param ip      An instruction pointer of the virtual thread
+ */
+#ifdef VTHREADS__FAST_YIELD
+
+
+#define VT_YIELD_S(thread, ip)                                                              \
+do {                                                                                        \
+  FC_CONCAT(YIELD, __LINE__):                                                               \
+  (void)&&FC_CONCAT(YIELD, __LINE__);                                                       \
+  if (FC_CONCAT(thread,__yield_with_reti) == 0 && FC_CONCAT(thread,__function_naked) == 0) {\
+    vt_flag = 0;				                                                            \
+    FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(RESUME_, __LINE__)));                           \
+    if(vt_flag == 0) {                                                                      \
+      void *ip_copy;                                                                        \
+      __asm__ __volatile__ (		                                                        \
+        "ldi %A0, pm_lo8(" FC_LABEL(thread, FC_CONCAT(RESUME_, __LINE__)) ")\n\t"	        \
+        "ldi %B0, pm_hi8(" FC_LABEL(thread, FC_CONCAT(RESUME_, __LINE__)) ")\n\t"	        \
+        : "=z"(ip_copy)                                                                     \
+      );					                                                                \
+      (ip) = ip_copy;                                                                       \
+      FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(DO_YIELD_, __LINE__)));                       \
+      return;                                                                               \
+    }                                                                                       \
+  }                                                                                         \
+  else {                                                                                    \
+    if (FC_CONCAT(thread,__yield_with_reti != 0)) {                                         \
+      void *ip_copy;                                                                        \
+      __asm__ __volatile__ (		                                                        \
+        "ldi %A0, pm_lo8(" FC_LABEL(thread, FC_CONCAT(RESUME__, __LINE__)) ")\n\t"	        \
+        "ldi %B0, pm_hi8(" FC_LABEL(thread, FC_CONCAT(RESUME__, __LINE__)) ")\n\t"	        \
+        : "=z"(ip_copy)                                                                     \
+      );					                                                                \
+      (ip) = ip_copy;                                                                       \
+      FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(DO_YIELD__, __LINE__)));                      \
+      __asm__ __volatile__ ("reti"::);                                                      \
+      FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(RESUME__, __LINE__)));                        \
+    }                                                                                       \
+    else {                                                                                  \
+      vt_flag = 0;				                                                            \
+      FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(RESUME, __LINE__)));                          \
+      if (vt_flag == 0) {                                                                   \
+        FC_ASM_LOAD_LABEL_ADDRESS(ip, FC_LABEL(thread, FC_CONCAT(RESUME, __LINE__)));       \
+        FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(DO_YIELD, __LINE__)));                      \
+        goto END;                                                                           \
+      }                                                                                     \
+    }                                                                                       \
+  }                                                                                         \
+} while(0)
+
+#else
+
+#define VT_YIELD_S(thread, ip)                                                              \
+do {                                                                                        \
+  FC_CONCAT(YIELD, __LINE__):                                                               \
+  (void)&&FC_CONCAT(YIELD, __LINE__);                                                       \
+  if (FC_CONCAT(thread,__yield_with_reti) == 0 && FC_CONCAT(thread,__function_naked) == 0) {\
+    vt_flag = 0;				                                                            \
+    FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(RESUME_, __LINE__)));                           \
+    if(vt_flag == 0) {                                                                      \
+      FC_ASM_LOAD_LABEL_ADDRESS(ip, FC_LABEL(thread, FC_CONCAT(RESUME_, __LINE__)));        \
+      FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(DO_YIELD_, __LINE__)));                       \
+      return;                                                                               \
+    }                                                                                       \
+  }                                                                                         \
+  else {                                                                                    \
+    if (FC_CONCAT(thread,__yield_with_reti != 0)) {                                         \
+        FC_ASM_LOAD_LABEL_ADDRESS(ip, FC_LABEL(thread, FC_CONCAT(RESUME, __LINE__)));       \
+      __asm__ __volatile__ ("reti"::);                                                      \
+    }                                                                                       \
+    else {                                                                                  \
+      vt_flag = 0;				                                                            \
+      FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(RESUME, __LINE__)));                          \
+      if (vt_flag == 0) {                                                                   \
+        FC_ASM_LOAD_LABEL_ADDRESS(ip, FC_LABEL(thread, FC_CONCAT(RESUME, __LINE__)));       \
+        FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(DO_YIELD, __LINE__)));                      \
+        goto END;                                                                           \
+      }                                                                                     \
+    }                                                                                       \
+  }                                                                                         \
+  FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(RESUME, __LINE__)));                              \
+} while(0)
+
+#endif
 
 #endif
