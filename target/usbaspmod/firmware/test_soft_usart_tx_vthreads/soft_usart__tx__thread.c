@@ -50,7 +50,6 @@ void soft_usart__tx__write(const uint8_t data) {
 } while(0)
 
 
-//ISR(TIMER2_COMPA_vect, ISR_NAKED) {
 VT_FUNC(soft_usart__tx__thread__function, soft_usart__tx__thread__function_attrs) {
     VT_BEGIN(soft_usart__tx__thread, soft_usart__tx__thread__ip);
 
@@ -78,5 +77,4 @@ VT_FUNC(soft_usart__tx__thread__function, soft_usart__tx__thread__function_attrs
 
     timer2__stop();
     VT_END_S(soft_usart__tx__thread);
-//    reti();
 }
