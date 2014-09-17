@@ -12,6 +12,7 @@
 #include <stdint.h>
 
 void send_char(void) {
+    _delay_ms(200);
     soft_usart__tx__write('A');
 }
 
@@ -22,8 +23,11 @@ void soft_usart__rx__on_frame_error(void) {}
 
 
 int main(void) {
+    USE_AS_OUTPUT(SOFT_USART__TX);
+    OUT_1(SOFT_USART__TX);
+
     soft_usart__init();
-    soft_usart__start();
+    //soft_usart__start();
 
     send_char();
 

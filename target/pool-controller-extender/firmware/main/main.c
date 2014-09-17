@@ -15,6 +15,7 @@
 #include "cpu/avr/asm.h"
 #include "cpu/avr/int1.h"
 #include "cpu/avr/usart0.h"
+#include "cpu/avr/gpio.h"
 #include "cpu/avr/drivers/usart0__rx.h"
 #include "cpu/avr/drivers/usart0__tx.h"
 #include <avr/interrupt.h>
@@ -117,6 +118,7 @@ void pool_controller__on_system_timer_event(void) {
 // =============================================================================
 
 static void application__init(void) {
+    ENABLE_PULLUP(USART0__RX);
     usart0__init();
 
     alarm__init();
