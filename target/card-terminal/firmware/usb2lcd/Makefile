@@ -1,32 +1,30 @@
-TARGET = usb2lcd
-MCU = at90usb162
-#OPT = 1 -mcall-prologues
-OPT = s
-ROOT = ../../../..
-BSP = ../../bsp
-LUFA_ROOT_PATH = $(LUFA_ROOT)/LUFA
+TARGET ?= $(shell basename `pwd`)
+CONFIG ?= $(TARGET)
+CONFIG_FILE = $(TARGET).conf
+include $(CONFIG_FILE)
 
-CINCS += -I$(LUFA_ROOT)
-CINCS += -I$(BSP)
-CINCS += -I$(ROOT)
-CINCS += -I$.
-
-vpath %.c  $(BSP) $(ROOT) $(LUFA_ROOT_PATH)
-
-
-# Configuration
 CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
-include $(TARGET).conf
 
+ROOT = ../../../..
+BSP = ../../bsp
+LUFA_ROOT_PATH = $(LUFA_ROOT)\LUFA
+
+LUFA_ROOT_FORWARD_SLASHES = $(subst \,/,$(LUFA_ROOT))
+CINCS += -I$(LUFA_ROOT_FORWARD_SLASHES)/LUFA/Drivers/USB/Core
+CINCS += -I$(LUFA_ROOT_FORWARD_SLASHES)/LUFA
+CINCS += -I$(LUFA_ROOT_FORWARD_SLASHES)
+CINCS += -I$(BSP)
+CINCS += -I$(ROOT)
+vpath %.c $(LUFA_ROOT_FORWARD_SLASHES)/LUFA $(BSP) $(ROOT)
 
 #CDEFS += --combine -fwhole-program
 #CDEFS += -fno-tree-loop-optimize -fno-unswitch-loops -finline-functions
 
 ifeq ($(WHOLE_PROGRAM),1)
 
-CDEFS += -DINLINE="inline static" 
 SRC += __all__.c
+CDEFS += -fwhole-program -Wl,--relax
 
 else
 

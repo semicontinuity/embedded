@@ -155,3 +155,19 @@ void EVENT_USB_Device_ControlRequest(void)
 {
 	CDC_Device_ProcessControlRequest(&VirtualSerial_CDC_Interface);
 }
+
+/** Event handler for the library USB Connection event. */
+void EVENT_USB_Device_Connect(void)
+{
+}
+
+/** Event handler for the library USB Disconnection event. */
+void EVENT_USB_Device_Disconnect(void)
+{
+}
+
+void EVENT_USB_Device_StartOfFrame(void) {
+}
+
+void EVENT_USB_Device_Reset(void) {
+}
