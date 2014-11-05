@@ -66,9 +66,12 @@ INLINE void timer2__comp_b__run(void) timer2__comp_b__run__attrs;
 #  define TIMER2_REG_B                                  (TCCR2B)
 #  define TIMER2_REG_MASK                               (TIMSK2)
 #  define TIMER2_REG_VALUE                              (TCNT2)
+#  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMER2_REG_MASK)
 #  define TIMER2__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE2A)
 #  define timer2__compare_a__interrupt__VECTOR          TIMER2_COMPA_vect
-#  define timer2__compare_b__interrupt__VECTOR          TIMER2_COMPA_vect
+#  define TIMER0__COMPARE_B__INTERRUPT__ENABLE__HOST    (TIMER2_REG_MASK)
+#  define TIMER2__COMPARE_B__INTERRUPT__ENABLE__BIT     (OCIE2B)
+#  define timer2__compare_b__interrupt__VECTOR          TIMER2_COMPB_vect
 
 
 
