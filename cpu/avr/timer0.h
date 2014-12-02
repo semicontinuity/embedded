@@ -38,14 +38,31 @@ INLINE void timer0__comp__run(void);
  || defined(__AVR_ATmega168A__)\
  || defined(__AVR_ATmega168P__)\
  || defined(__AVR_AT90USB82__)\
- || defined(__AVR_AT90USB162__)
+ || defined(__AVR_AT90USB162__)\
+ || defined(__AVR_ATtiny25__)\
+ || defined(__AVR_ATtiny45__)\
+ || defined(__AVR_ATtiny85__)
 
 
 #  define TIMER0_REG_VALUE                              (TCNT0)
 #  define TIMER0__COMPARE_UNITS	                        (2)
+#  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT      (TOIE0)
 #  define timer0__compare_a__interrupt__VECTOR          TIMER0_COMPA_vect
-#  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK0)
 #  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE0A)
+#  define timer0__compare_b__interrupt__VECTOR          TIMER0_COMPB_vect
+#  define TIMER0__COMPARE_B__INTERRUPT__ENABLE__BIT     (OCIE0B)
+
+#if defined(__AVR_ATtiny25__)\
+ || defined(__AVR_ATtiny45__)\
+ || defined(__AVR_ATtiny85__)
+#  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST     (TIMSK)
+#  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK)
+#  define TIMER0__COMPARE_B__INTERRUPT__ENABLE__HOST    (TIMSK)
+#else
+#  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST     (TIMSK0)
+#  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK0)
+#  define TIMER0__COMPARE_B__INTERRUPT__ENABLE__HOST    (TIMSK0)
+#endif
 
 
 #elif defined(__AVR_ATmega8__)\

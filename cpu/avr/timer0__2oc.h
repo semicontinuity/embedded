@@ -103,11 +103,11 @@ inline void timer0__switch_conf(uint32_t old_conf, uint32_t new_conf) {
 
 
 inline void timer0__compare_b__interrupt__enable(void) {
-    TIMSK0 |= _BV(OCIE0B);
+    TIMER0__COMPARE_B__INTERRUPT__ENABLE__HOST |= _BV(TIMER0__COMPARE_B__INTERRUPT__ENABLE__BIT);
 }
 
 inline void timer0__compare_b__interrupt__disable(void) {
-    TIMSK0 &= ~_BV(OCIE0B);
+    TIMER0__COMPARE_B__INTERRUPT__ENABLE__HOST &= ~_BV(TIMER0__COMPARE_B__INTERRUPT__ENABLE__BIT);
 }
 
 inline void timer0__compare_b__interrupt__enabled__set(const uint8_t enable) {
@@ -119,11 +119,11 @@ inline void timer0__compare_b__interrupt__enabled__set(const uint8_t enable) {
 
 
 inline void timer0__overflow__interrupt__enable(void) {
-    TIMSK0 |= _BV(TOIE0);
+    TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST |= _BV(TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT);
 }
 
 inline void timer0__overflow__interrupt__disable(void) {
-    TIMSK0 &= ~_BV(TOIE0);
+    TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST &= ~_BV(TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT);
 }
 
 inline void timer0__overflow_interrupt__enabled__set(const uint8_t enable) {
