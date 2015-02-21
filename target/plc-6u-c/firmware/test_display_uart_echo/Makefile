@@ -1,17 +1,15 @@
-TARGET = test_display_uart_echo
-#MCU = at90s2313
-#MCU = at90usb162
-MCU = atmega8535
-#MCU = atmega8
-#MCU = atmega16
-OPT = 2 -Wa,-a,-ad
+TARGET ?= $(shell basename `pwd`)
+TARGET_CONF ?= $(TARGET).conf
 
+#OPT += -mcall-prologues -ffixed-r30 -ffixed-r31
 ROOT = ../../../..
 BSP = ../../bsp
 
 CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)
+
+include $(TARGET_CONF)
 
 # Configuration
 CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
