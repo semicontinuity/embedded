@@ -45,18 +45,16 @@ except (KeyboardInterrupt, SystemExit):
 SLAVE_ADDRESS = 1
 MF_READ_HOLDING_REGISTER = 3
 
-
-port.write(chr(SLAVE_ADDRESS))
-port.write(chr(MF_READ_HOLDING_REGISTER))
-
-port.write(chr(0))
-port.write(chr(0))
-
-port.write(chr(0))
-port.write(chr(4))
-
-port.write(chr(0x44))
-port.write(chr(0x09))
+data = bytearray(8)
+data[0] = SLAVE_ADDRESS
+data[1] = MF_READ_HOLDING_REGISTER
+data[2] = 0
+data[3] = 0
+data[4] = 0
+data[5] = 4
+data[6] = 0x44
+data[7] = 0x09
+port.write(data)
 
 sys.stdin.readline()
 portReader.stop()

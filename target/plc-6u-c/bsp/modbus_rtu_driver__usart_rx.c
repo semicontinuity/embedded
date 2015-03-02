@@ -7,9 +7,6 @@
 #include "modbus_rtu_driver__delay_timer.h"
 #include "modbus_rtu_driver__usart_rx.h"
 
-#include <avr/interrupt.h>
-#include <stdint.h>
-#include <stdbool.h>
 #include "cpu/avr/usart0.h"
 
 

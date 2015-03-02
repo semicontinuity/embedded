@@ -10,13 +10,10 @@
 
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
-#include <stdbool.h>
-#include <stdint.h>
-
 
 // main
 // -----------------------------------------------------------------------------
-
+int main(void) __attribute__ ((naked));
 int main(void) {
     // display
     display__init();
@@ -29,6 +26,10 @@ int main(void) {
     sleep_enable();
     modbus_rtu_driver__start();
 
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
+#endif
     for(;;) {
         if (modbus_rtu_driver__is_runnable()) {
             modbus_rtu_driver__run();
@@ -39,8 +40,18 @@ int main(void) {
             cli();
         }
     }
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic pop
+#endif
 
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
+#endif
     return 0;
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic pop
+#endif
 }
 
 
@@ -97,6 +108,8 @@ modbus_exception modbus_server__read_input_registers(uint16_t register_address, 
         case SERVER__REGISTER__TCNT1:
             buffer__put_u16(TCNT1);
             break;
+        default:
+            return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
         }
     }
     while (--register_count);
@@ -126,6 +139,8 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
         case SERVER__REGISTER__BUFFER_OVERFLOWS:
             buffer__put_u16(buffer_overflows);
             break;
+        default:
+            return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
         }
     }
     while (--register_count);
@@ -138,7 +153,7 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
  */
 modbus_exception modbus_server__write_holding_register(uint16_t register_address, uint16_t register_value) {
     display__render_packed(0x06);
-    switch (register_address++) {
+    switch (register_address) {
     case SERVER__REGISTER__VALID_FRAMES_RECEIVED:
         valid_frames_received = register_value;
         break;
@@ -154,6 +169,8 @@ modbus_exception modbus_server__write_holding_register(uint16_t register_address
     case SERVER__REGISTER__BUFFER_OVERFLOWS:
         buffer_overflows = register_value;
         break;
+    default:
+        return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
     }
     return MODBUS_EXCEPTION__NONE;
 }

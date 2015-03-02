@@ -6,9 +6,6 @@
 
 #include "modbus_rtu_driver__dir_control.h"
 
-#include <stdint.h>
-#include <stdbool.h>
-
 
 void modbus_rtu_driver__dir_control__init(void) {
 }

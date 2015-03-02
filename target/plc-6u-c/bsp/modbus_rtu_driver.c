@@ -57,14 +57,13 @@ void modbus_rtu_driver__FRAME_RECEIVED_to_FRAME_PROCESSING(void) {
 
 void modbus_rtu_driver__FRAME_PROCESSING_to_TX(void) {
     modbus_rtu_driver__dir_control__tx();
-    modbus_rtu_driver__usart_tx__enable();
+    modbus_rtu_driver__usart_tx__signal();
 }
 
 void modbus_rtu_driver__TX_to_RX(void) {
     // NB: transmission is immediate, most likely, should receive only after 3.5T timeout.
     buffer__clear();    
     modbus_rtu_driver__dir_control__rx();
-    modbus_rtu_driver__usart_tx__disable();     // not really necessary - USART TX can always be enabled?
     modbus_rtu_driver__usart_rx__enable();      // indicate that any received data from now on are expected
 }
 
@@ -123,9 +122,10 @@ void modbus_rtu_driver__delay_timer__on_t35_expired(void) {
 // -----------------------------------------------------------------------------
 
 void modbus_rtu_driver__init(void) {
-    usart0__rate__set(USART_BAUD_RATE);
+    usart0__rate__set(USART0__BAUD_RATE);
     buffer__init();
     modbus_rtu_driver__delay_timer__init();
+    modbus_rtu_driver__dir_control__init();
 }
 
 void modbus_rtu_driver__start(void) {

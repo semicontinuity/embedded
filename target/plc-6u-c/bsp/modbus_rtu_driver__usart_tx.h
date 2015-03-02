@@ -15,10 +15,8 @@ void modbus_rtu_driver__usart_tx__start(void);
 void modbus_rtu_driver__usart_tx__stop(void);
 
 
-void modbus_rtu_driver__usart_tx__enable(void);
+void modbus_rtu_driver__usart_tx__signal(void);
 
-
-void modbus_rtu_driver__usart_tx__disable(void);
 
 
 /**

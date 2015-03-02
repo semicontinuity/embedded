@@ -10,6 +10,10 @@
 #include "cpu/avr/gpio.h"
 
 
+/**
+ * Set RTS line value.
+ * 1 = transmit, 0 = receive
+ */
 inline void rts__set(const uint8_t value) {
     if (value)
         OUT_1(OUT__RTS);
@@ -20,8 +24,7 @@ inline void rts__set(const uint8_t value) {
 
 /**
  * Initialize the RTS line driver.
- * The out pin is forcibly driven low,
- * to ensure that amplifier relay is off (for the case of reset or brown-out).
+ * The out pin is forcibly driven low (receive).
  */
 inline void rts__init(void) {
     USE_AS_OUTPUT(OUT__RTS);

@@ -25,7 +25,7 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS) && MODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS > 0
-//modbus_exception modbus_server__read_input_registers(void);
+modbus_exception modbus_server__read_input_registers(uint16_t register_address, uint16_t register_count);
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL) && MODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL > 0
@@ -33,7 +33,7 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_WRITE_REGISTER) && MODBUS_SERVER__HANDLE_WRITE_REGISTER > 0
-modbus_exception modbus_server__write_register(uint16_t register_address, uint16_t register_value);
+modbus_exception modbus_server__write_holding_register(uint16_t register_address, uint16_t register_value);
 #endif
 
 

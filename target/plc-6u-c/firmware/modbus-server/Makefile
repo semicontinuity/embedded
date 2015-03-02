@@ -1,4 +1,4 @@
-TARGET ?= modbus-server
+TARGET ?= $(shell basename `pwd`)
 TARGET_CONF ?= $(TARGET).conf
 
 ROOT = ../../../..

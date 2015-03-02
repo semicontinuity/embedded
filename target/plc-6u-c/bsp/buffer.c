@@ -5,8 +5,9 @@
 // =============================================================================
 
 #include "buffer.h"
+#if defined(BUFFER__POSITION_PTR__REG) || defined(BUFFER__LIMIT_PTR__REG)
 #include "cpu/avr/asm.h"
-
+#endif
 
 uint8_t buffer__data[BUFFER__SIZE];
 

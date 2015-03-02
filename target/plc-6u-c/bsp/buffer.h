@@ -17,6 +17,8 @@
 #endif
 
 
+extern uint8_t buffer__data[BUFFER__SIZE];
+
 #ifdef BUFFER__POSITION_PTR__REG
 register uint8_t* buffer__position_ptr asm(QUOTE(BUFFER__POSITION_PTR__REG));
 #else

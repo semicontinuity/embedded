@@ -7,8 +7,6 @@
 #include "modbus_rtu_driver__usart_tx.h"
 
 #include <avr/interrupt.h>
-#include <stdint.h>
-#include <stdbool.h>
 #include "cpu/avr/usart0.h"
 
 
@@ -22,13 +20,8 @@ void modbus_rtu_driver__usart_tx__stop(void) {
 }
 
 
-void modbus_rtu_driver__usart_tx__enable(void) {
+void modbus_rtu_driver__usart_tx__signal(void) {
     usart0__tx__data_register_empty__interrupt__enabled__set(1);
-}
-
-
-void modbus_rtu_driver__usart_tx__disable(void) {
-    usart0__tx__data_register_empty__interrupt__enabled__set(0);
 }
 
 
@@ -37,7 +30,10 @@ ISR(usart0__tx__data_register_empty__interrupt__VECTOR) {
         usart0__putc(buffer__get_u8());
     }
     else {
+        // clear by writing 1 (almost certainly it is set, and interrupt will be triggered immediately)
+        usart0__tx__complete__value__set(1);
         usart0__tx__complete__interrupt__enabled__set(1);
+        usart0__tx__data_register_empty__interrupt__enabled__set(0);    // prevent re-triggering
     }
 }
 
@@ -45,8 +41,7 @@ ISR(usart0__tx__data_register_empty__interrupt__VECTOR) {
 /**
  * Triggered when the last byte of the packed is transmitted completely.
  */
-ISR(usart0__tx__complete__interrupt__VECTOR, ISR_NAKED) {
+ISR(usart0__tx__complete__interrupt__VECTOR) {
     usart0__tx__complete__interrupt__enabled__set(0);
-    modbus_rtu_driver__usart_tx__on_frame_sent();
-    reti();
+    modbus_rtu_driver__usart_tx__on_frame_sent();   // in NAKED int, must not corrupt CPU state!
 }
