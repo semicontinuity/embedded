@@ -30,7 +30,11 @@ ISR(usart0__tx__data_register_empty__interrupt__VECTOR) {
         usart0__putc(buffer__get_u8());
     }
     else {
-        // clear by writing 1 (almost certainly it is set, and interrupt will be triggered immediately)
+        // Assuming, that this interrupt is handled fast enough,
+        // so that the last bit is not completely transmitted yet.
+
+        // Clear TX Complete flag by writing 1 (almost certainly it is set, and interrupt will be triggered immediately)
+        // The TX Complete interrupt will be triggered when the byte is completely transmitted.
         usart0__tx__complete__value__set(1);
         usart0__tx__complete__interrupt__enabled__set(1);
         usart0__tx__data_register_empty__interrupt__enabled__set(0);    // prevent re-triggering
