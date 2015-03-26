@@ -1,16 +1,25 @@
 // =============================================================================
 // 1-wire client.
-// Implemented with bit-banging and timer 2.
-// Logical 1 is driven by external pull-up resistor
-// (pin is switched to input).
+// Implemented with bit-banging and timer 2:
+//
+// Theory of operation:
+// --------------------
+// The bit waveform is divided into 32 quantums (TQ), 1 Time quantum is ~2 uS
+// The bit is started with 1->0 transition.
+// For Write0 and Read0 operations, the bus is held low for 2TQ (~4uS)
+// For Read operations, the bus is read at 6TQ (~12uS)
+// The total bit time (end of bit) is 32TQ ~= 64uS (>~ 60uS as per spec).
+// After the bit, 1TQ of guard time is inserted (~2uS, > 1uS per spec).
+
+// ---+   +-----------------------------------------------------------+-+
+//    |   |      read                                                end
+//    +---+       *
+//    0   2   4   6   8  10  12  14  16  18  20  22  24  26  28  30  32 33
+//
+// Reset pulse and presence pulse handling is implemented using overflow interrupt.
 //
 // Sub-modules:
-//
-// onewire__bus:
-//   description: low-level bus driver
-//   parameters:
-//     ONEWIRE__PORT: AVR port to which 1-wire bus is attached
-//     ONEWIRE__PIN: Pin number of the AVR port
+// ------------
 // onewire__timer:
 //   description: timer that provides the necessary 1-wire timing
 //   parameters:
@@ -24,39 +33,33 @@
 // =============================================================================
 
 #include "onewire.h"
+#include "onewire__bus.h"
 
 #include "util/crc8_ow.h"
 #include "cpu/avr/util/vthreads.h"
 #include "cpu/avr/timer2.h"
-#include "cpu/avr/gpio.h"
 
 #include <avr/interrupt.h>
-#include <stdint.h>
-#include <stdbool.h>
 
 
-// -----------------------------------------------------------------------------
-// 1-wire bus driver.
-// -----------------------------------------------------------------------------
-
-void onewire__bus__set(const uint8_t value) {
-    if (value) {
-        USE_AS_INPUT(ONEWIRE);  // External pull-up pulls up line high.
-    }
-    else {
-        USE_AS_OUTPUT(ONEWIRE);  // OUT bit is 0
-    }
-}
-
-
-bool onewire__bus__get(void) {
-    return IS_1(ONEWIRE);
-}
+#ifndef QUOTE
+#define _QUOTE(x) #x
+#define QUOTE(x) _QUOTE(x)
+#endif
 
 
 // -----------------------------------------------------------------------------
 // 1-wire timer.
 // -----------------------------------------------------------------------------
+void onewire__timer__init(void) {
+    timer2__compare_a__interrupt__enabled__set(1);
+}
+
+void onewire__timer__shutdown(void) {
+    timer2__compare_a__interrupt__enabled__set(0);
+}
+
+
 void onewire__timer__start(const uint8_t conf) {
     timer2__value__set(0);
     timer2__switch_conf(TIMER2_CONF_DEFAULT, conf);
@@ -68,15 +71,9 @@ void onewire__timer__stop(void) {
 }
 
 
-void onewire__timer__init(void) {    
-    timer2__compare_a__interrupt__enabled__set(1);
+void onewire__timer__clear(void) {
+    timer2__value__set(0);
 }
-
-
-void onewire__timer__shutdown(void) {
-    timer2__compare_a__interrupt__enabled__set(0);
-}
-
 
 void onewire__timer__timeout__set(const uint8_t tq) {
     timer2__compare_a__value__set(tq);
@@ -84,22 +81,42 @@ void onewire__timer__timeout__set(const uint8_t tq) {
 
 
 // -----------------------------------------------------------------------------
+// 1-wire reset thread.
+// Generates reset pulse and checks the presence pulse
+// -----------------------------------------------------------------------------
+
+
+ISR(timer2__overflow__interrupt__VECTOR) {
+}
+
+// -----------------------------------------------------------------------------
 // 1-wire bit-bang thread.
-// Receives and transmits individual bytes
+// Receives and transmits individual bits
 // -----------------------------------------------------------------------------
 
 /** Flag that indicates that the thread is running */
-volatile bool onewire__bitbang_thread__alive;
+volatile bool onewire__bitbang_thread__alive = 0;
 
 /** Thread instruction pointer */
+#ifdef ONEWIRE__BITBANG_THREAD__IP__REG
+register void* onewire__bitbang_thread__ip asm(QUOTE(ONEWIRE__BITBANG_THREAD__IP__REG));
+#else
 volatile void *onewire__bitbang_thread__ip;
+#endif
 
 /** Data exchanged */
+#ifdef ONEWIRE__BITBANG_THREAD__DATA__REG
+register uint8_t onewire__bitbang_thread__data asm(QUOTE(ONEWIRE__BITBANG_THREAD__DATA__REG));
+#else
 volatile uint8_t onewire__bitbang_thread__data;
+#endif
 
 /** Remaining number of bits to render */
+#ifdef ONEWIRE__BITBANG_THREAD__BIT_COUNT__REG
+register uint8_t onewire__bitbang_thread__bit_count asm(QUOTE(ONEWIRE__BITBANG_THREAD__BIT_COUNT__REG));
+#else
 volatile uint8_t onewire__bitbang_thread__bit_count;
-
+#endif
 
 bool onewire__bitbang_thread__is_alive(void) {
     return onewire__bitbang_thread__alive;
