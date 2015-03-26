@@ -14,12 +14,11 @@
 #include <stdint.h>
 #include <util/delay.h>
 
-uint8_t bytes_received;
-
 
 
 int main(void) {
-    // display
+    rts__init();
+
     display__init();
     display__render_packed(0);
 
@@ -31,10 +30,10 @@ int main(void) {
         uint8_t c = usart0__in__read();
         display__render_packed(c);
 
-        _delay_ms(30);
-
         rts__set(1);
+        _delay_ms(100);
         usart0__out__write(c);
+        _delay_ms(100);
         rts__set(0);
     }
 
