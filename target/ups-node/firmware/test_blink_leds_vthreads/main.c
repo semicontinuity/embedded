@@ -12,7 +12,7 @@
 
 #include "cpu/avr/util/vthreads.h"
 
-volatile uint8_t counter = 125;
+volatile uint8_t counter = 25;
 volatile uint8_t phase;
 
 
@@ -34,8 +34,30 @@ void blink_thread__run(void) {
         led_red__set(1);
         VT_YIELD(blink_thread, blink_thread__ip);
 
+        led_red__set(0);
+        VT_YIELD(blink_thread, blink_thread__ip);
+
+
+        led_red__set(1);
+        VT_YIELD(blink_thread, blink_thread__ip);
 
         led_red__set(0);
+        VT_YIELD(blink_thread, blink_thread__ip);
+
+
+        led_red__set(1);
+        VT_YIELD(blink_thread, blink_thread__ip);
+
+        led_red__set(0);
+        VT_YIELD(blink_thread, blink_thread__ip);
+
+
+        VT_YIELD(blink_thread, blink_thread__ip);
+        VT_YIELD(blink_thread, blink_thread__ip);
+        VT_YIELD(blink_thread, blink_thread__ip);
+        VT_YIELD(blink_thread, blink_thread__ip);
+        VT_YIELD(blink_thread, blink_thread__ip);
+
         VT_GOTO(blink_thread, blink_thread__ip, BEGIN);
     }
 
@@ -48,7 +70,7 @@ void blink_thread__run(void) {
  */
 void system_timer__on_system_tick(void) {
     if (--counter == 0) {
-        counter = 125;
+        counter = 25;
         blink_thread__run();
     }
 }
