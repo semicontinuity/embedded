@@ -1,12 +1,14 @@
-TARGET = onewire-test
-MCU = atmega8535
-OPT = 3 -Wa,-a,-ad
+TARGET ?= $(shell basename `pwd`)
+TARGET_CONF ?= $(TARGET).conf
+
 ROOT = ../../../..
 BSP = ../../bsp
 
 CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
 vpath %.c $(BSP) $(ROOT)
+
+include $(TARGET_CONF)
 
 # Configuration
 CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
