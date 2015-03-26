@@ -95,6 +95,9 @@ INLINE void timer2__comp_b__run(void) timer2__comp_b__run__attrs;
 #endif
 
 
+#  define timer2__overflow__interrupt__VECTOR          TIMER2_OVF_vect
+
+
 static inline void timer2__value__set(const uint8_t value) {
     TIMER2_REG_VALUE = value;
 }

@@ -51,7 +51,7 @@ inline static void timer2__switch_conf(uint16_t old_conf, uint16_t new_conf) {
 }
 
 
-inline static void timer2__compare_a__value__set(const uint16_t value) {
+inline static void timer2__compare_a__value__set(const uint8_t value) {
     OCR2 = value;
 }
 
