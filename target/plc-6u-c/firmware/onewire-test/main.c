@@ -2,16 +2,16 @@
 // one wire test 
 // =============================================================================
 #include "onewire.h"
+#include "onewire__bus.h"
+#include "drivers/out/rts.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/usart0__tx_polled.h"
+#include "cpu/avr/drivers/display/segment/static2.h"
 
-#include <avr/io.h>
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
-#include <avr/pgmspace.h>
+#include <util/delay.h>
 
-#include <stdint.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 
@@ -32,23 +32,37 @@ uint8_t response[DS18X20_SP_SIZE];
 
 
 int main(void) {
+    display__init();
 
-    usart0__rate__set(USART_BAUD_RATE);
+    rts__init();
+    rts__set(1);
+
+    usart0__rate__set(USART0__BAUD_RATE);
+    usart0__tx__enabled__set(1);
+
     FILE usart_out = FDEV_SETUP_STREAM(usart_putchar, NULL, _FDEV_SETUP_WRITE);
     stdout = &usart_out;
 
-    // 1-wire
+    onewire__bus__init();
     onewire__init();
     
     // sleeping
     set_sleep_mode(SLEEP_MODE_IDLE);
     sleep_enable();
 
+    display__init();
+    display__render_packed(1);
+
+    _delay_ms(1000);
+
+//    printf_P(PSTR("Reading scratch\n"));
+    printf_P(PSTR("Reset pulse\n"));
+    display__render_packed(2);
+
     sei();
 
-    printf_P(PSTR("Reading scratch\n"));
-
-    onewire__command(sizeof(command), sizeof(response), command, response);
+//    onewire__command(sizeof(command), sizeof(response), command, response);
+//    display__render_packed(3);
 
     while (onewire__thread__is_alive()) {
         if (onewire__thread__is_runnable())
@@ -56,13 +70,15 @@ int main(void) {
         else
             sleep_cpu();
     }
+    display__render_packed(4);
 
     uint8_t *r = response;
     for(uint8_t i = 0; i < DS18X20_SP_SIZE; i++) {
-        printf(PSTR("%02X "), *r++);
+        printf_P(PSTR("%02X "), *r++);
     }
 
-    printf(PSTR("CRC: %02X\n"), onewire__crc__get());
+    display__render_packed(5);
+    printf_P(PSTR("CRC: %02X\n"), onewire__crc__get());
 
     for(;;) {
         sleep_cpu();
