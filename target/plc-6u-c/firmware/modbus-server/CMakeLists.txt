@@ -3,6 +3,7 @@ project(modbus-server)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
+    ../../../../cpu/avr/int2.c
     ../../bsp/drivers/out/rts.h
     ../../bsp/drivers/water_counter.c
     ../../bsp/drivers/water_counter.h
@@ -30,6 +31,7 @@ add_executable(modbus-server ${SOURCE_FILES})
 
 
 add_definitions(-D__AVR_ATmega8535__)
+add_definitions(-DINLINE=)
 add_definitions(-DMCU=atmega8535)
 add_definitions(-DOPT="2 -Wa,-a,-ad")
 add_definitions(-DFIXED_REGISTERS="-ffixed-r26 -ffixed-r27 -ffixed-r28 -ffixed-r29")

@@ -10,14 +10,14 @@
 
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
+#include <cpu/avr/int2.h>
 
 // main
 // -----------------------------------------------------------------------------
 int main(void) __attribute__ ((naked));
 int main(void) {
-    // display
     display__init();
-    display__render_packed(0); // ready
+    int2__init();
 
     // sleeping
     set_sleep_mode(SLEEP_MODE_IDLE);
@@ -25,6 +25,9 @@ int main(void) {
 
     sleep_enable();
     modbus_rtu_driver__start();
+    int2__start();
+
+    display__render_packed(0); // ready
 
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic push
@@ -73,6 +76,14 @@ volatile uint16_t protocol_errors;
 #define SERVER__REGISTER__BUFFER_OVERFLOWS          (MODBUS_SERVER__HOLDING_REGISTERS_START + 4)
 volatile uint16_t buffer_overflows;
 
+#define SERVER__REGISTER__PULSE_COUNTER             (MODBUS_SERVER__HOLDING_REGISTERS_START + 5)
+volatile uint16_t pulse_counter;
+
+
+void int2__run(void) {
+    ++pulse_counter;
+    display__render_packed(pulse_counter & 0xFF);
+}
 
 void modbus_server__on_valid_frame_received(void) {
     ++valid_frames_received;
@@ -139,6 +150,9 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
         case SERVER__REGISTER__BUFFER_OVERFLOWS:
             buffer__put_u16(buffer_overflows);
             break;
+        case SERVER__REGISTER__PULSE_COUNTER:
+            buffer__put_u16(pulse_counter);
+            break;
         default:
             return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
         }
@@ -168,6 +182,9 @@ modbus_exception modbus_server__write_holding_register(uint16_t register_address
         break;
     case SERVER__REGISTER__BUFFER_OVERFLOWS:
         buffer_overflows = register_value;
+        break;
+    case SERVER__REGISTER__PULSE_COUNTER:
+        pulse_counter = register_value;
         break;
     default:
         return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
