@@ -20,6 +20,10 @@
 #define CONCAT(s1, s2)               CONCAT2(s1, s2)
 #endif
 
+#define SIGNAL_PORT(signal)          CONCAT(signal,__PORT)
+#define SIGNAL_PIN(signal)           CONCAT(signal,__PIN)
+#define SIGNAL_PORT_REG(port)        CONCAT(PORT, SIGNAL_PORT(port))
+
 #define DATA_DIR_REG(port)           CONCAT(DDR, port)
 #define PORT_REG(port)               CONCAT(PORT, port)
 #define PIN_REG(port)                CONCAT(PIN, port)

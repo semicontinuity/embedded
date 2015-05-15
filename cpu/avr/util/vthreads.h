@@ -164,6 +164,8 @@ mark:                                           \
   }                                             \
 } while(0)
 
+#define VT_BREAK(thread)             \
+  goto END;
 
 /**
  * Yield control from the current virtual thread.

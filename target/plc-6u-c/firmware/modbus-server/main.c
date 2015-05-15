@@ -10,14 +10,14 @@
 
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
-#include <cpu/avr/int2.h>
+#include <cpu/avr/int1.h>
 
 // main
 // -----------------------------------------------------------------------------
 int main(void) __attribute__ ((naked));
 int main(void) {
     display__init();
-    int2__init();
+    int1__init();
 
     // sleeping
     set_sleep_mode(SLEEP_MODE_IDLE);
@@ -25,7 +25,7 @@ int main(void) {
 
     sleep_enable();
     modbus_rtu_driver__start();
-    int2__start();
+    int1__start();
 
     display__render_packed(0); // ready
 
@@ -80,7 +80,7 @@ volatile uint16_t buffer_overflows;
 volatile uint16_t pulse_counter;
 
 
-void int2__run(void) {
+void int1__run(void) {
     ++pulse_counter;
     display__render_packed(pulse_counter & 0xFF);
 }

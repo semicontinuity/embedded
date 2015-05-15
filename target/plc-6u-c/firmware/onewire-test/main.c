@@ -7,18 +7,19 @@
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/usart0__tx_polled.h"
 #include "cpu/avr/drivers/display/segment/static2.h"
+#include "cpu/avr/util/debug.h"
 
 #include <avr/sleep.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include <stdio.h>
+//#include <stdio.h>
 
 
-int usart_putchar(char c, FILE *stream) {
-    usart0__out__write(c);
-    return 0;
-}
+//int usart_putchar(char c, FILE *stream) {
+//    usart0__out__write(c);
+//    return 0;
+//}
 
 // main
 // -----------------------------------------------------------------------------
@@ -40,8 +41,8 @@ int main(void) {
     usart0__rate__set(USART0__BAUD_RATE);
     usart0__tx__enabled__set(1);
 
-    FILE usart_out = FDEV_SETUP_STREAM(usart_putchar, NULL, _FDEV_SETUP_WRITE);
-    stdout = &usart_out;
+//    FILE usart_out = FDEV_SETUP_STREAM(usart_putchar, NULL, _FDEV_SETUP_WRITE);
+//    stdout = &usart_out;
 
     onewire__bus__init();
     onewire__init();
@@ -55,8 +56,7 @@ int main(void) {
 
     _delay_ms(1000);
 
-//    printf_P(PSTR("Reading scratch\n"));
-    printf_P(PSTR("Reset pulse\n"));
+    debug__print_P(PSTR("Reset pulse\n"));
     display__render_packed(2);
 
     sei();
@@ -74,14 +74,16 @@ int main(void) {
 
     uint8_t *r = response;
     for(uint8_t i = 0; i < DS18X20_SP_SIZE; i++) {
-        printf_P(PSTR("%02X "), *r++);
+        debug__print_byte_as_hex(*r++);
     }
 
     display__render_packed(5);
-    printf_P(PSTR("CRC: %02X\n"), onewire__crc__get());
+    debug__print_P(PSTR("CRC: "));
+    debug__print_byte_as_hex(onewire__crc__get());
+    debug__putc('\n');
 
     for(;;) {
-        sleep_cpu();
+//        sleep_cpu();
     }
 
     return 0;

@@ -431,8 +431,11 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 #define MOVW(to,from)		do { __asm__ __volatile__ ("movw %0, %1" : "=r"(to) : "r"(from)); } while(0)
 
 #define LDI(k)			    do { __asm__ __volatile__ ("ldi r24, %1" :: "r"(k)) : "r24"; } while(0)
+#define ORI(reg,k)			do { __asm__ __volatile__ ("ori  %0, %1" : "+d"(reg) : "M"((k))) ; } while(0)
 #define MOV(to,from)		do { __asm__ __volatile__ ("mov  %0, %1" : "=r"(to) : "r"(from)); } while(0)
 #define CLR(reg)		    do { __asm__ __volatile__ ("clr  %0" : "+r"(reg)); } while(0)
+#define LSR(reg)		    do { __asm__ __volatile__ ("lsr  %0" : "+r"(reg)); } while(0)
+#define LSL(reg)		    do { __asm__ __volatile__ ("lsl  %0" : "+r"(reg)); } while(0)
 #define INC(reg)		    do { __asm__ __volatile__ ("inc  %0" : "=r"(reg) : "r"(reg)); } while(0)
 #define DEC(reg)		    do { __asm__ __volatile__ ("dec  %0" : "=r"(reg) : "r"(reg)); } while(0)
 #define ROR(reg)		    do { __asm__ __volatile__ ("ror  %0" : "=r"(reg) : "r"(reg)); } while(0)

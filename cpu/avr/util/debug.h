@@ -11,24 +11,20 @@
 # include "cpu/avr/usart0__tx_polled.h"
 
 # if !defined(debug__putc)
-#  define debug__putc usart0__putc
+#  include "cpu/avr/usart0__tx_polled.h"
+#  define debug__putc usart0__out__write
 # endif
 
 # if !defined(debug__in__read)
-#  define debug__in__read usart0__getc
+#  include "cpu/avr/usart0__rx_polled.h"
+#  define debug__in__read usart0__in__read
 # endif
 
 #endif
 
 
-void debug__print_string_progmem(const char *str);
+void debug__print_P(const char * PROGMEM buffer);
+void debug__print_string_progmem(const char * PROGMEM buffer);
 void debug__print_byte_as_hex(uint8_t value);
-
-
-
-inline uint8_t debug__lower_nibble_to_hex(uint8_t value) {
-    if (value > 9) value += ('A' - ('9' + 1));
-    return value += '0';
-}
 
 #endif

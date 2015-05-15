@@ -3,7 +3,7 @@ project(modbus-server)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
-    ../../../../cpu/avr/int2.c
+    main.c
     ../../bsp/drivers/out/rts.h
     ../../bsp/drivers/water_counter.c
     ../../bsp/drivers/water_counter.h
@@ -23,7 +23,12 @@ set(SOURCE_FILES
     ../../bsp/modbus_rtu_driver__usart_tx.h
     ../../bsp/modbus_server.c
     ../../bsp/modbus_server.h
-    main.c)
+    ../../../../cpu/avr/int1.c
+    ../../../../cpu/avr/timer1.h
+    ../../../../cpu/avr/timer1__2oc.h
+    ../../../../cpu/avr/usart0.h
+    ../../../../ ../../../../../../avrgcc/avr/include/avr/iom8535.h
+)
 
 
 include_directories(. ../../bsp ../../../../ ../../../../../../avrgcc/avr/include ../../../../../../avrgcc/lib/gcc/avr/4.8.1/include)
@@ -46,6 +51,9 @@ add_definitions(-DF_CPU=16000000UL)
 add_definitions(-DOUT__RTS__PORT=D)
 add_definitions(-DOUT__RTS__PIN=7)
 
+# Inputs
+# ==============================================================================
+add_definitions(-DINT1__PULLUP=1)
 
 # USART
 # ==============================================================================
