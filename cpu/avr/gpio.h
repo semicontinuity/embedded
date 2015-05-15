@@ -7,6 +7,14 @@
 #define set_bit_in_reg(reg,bit)      do {(reg) |= _BV(bit);} while(0)
 #define clear_bit_in_reg(reg,bit)    do {(reg) &= ~_BV(bit);} while(0)
 
+#define DECLARE_CLEAR_ONLY_BITVAR(name)         \
+	inline void name##__clear(void);        \
+	inline char name##__get(void);
+
+#define DEFINE_CLEAR_ONLY_BITVAR(name, host, bit)                               \
+	inline void name##__clear(void)	{ (host) &= ~(1 << (bit));}             \
+	inline char name##__get(void)	{ return (host) & (1 << (bit)); }
+
 
 // New style
 #ifndef QUOTE

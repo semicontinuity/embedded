@@ -58,15 +58,6 @@ inline void timer0__compare__interrupt__disable(void) {
 }
 
 
-inline void timer0__overflow__interrupt__enable(void) {
-    TIMSK |= _BV(TOIE0);
-}
-
-inline void timer0__overflow__interrupt__disable(void) {
-    TIMSK &= ~_BV(TOIE0);
-}
-
-
 inline uint8_t timer0__conf__ctc_compare_a_value(const uint32_t period) {
     if (period <= 256UL)           return (uint8_t)(period      - 1);
     else if (period <= 256UL*8)    return (uint8_t)(period/8    - 1);

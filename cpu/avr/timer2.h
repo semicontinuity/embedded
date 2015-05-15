@@ -83,11 +83,19 @@ INLINE void timer2__comp_b__run(void) timer2__comp_b__run__attrs;
 
 
 #  define TIMER2__COMPARE_UNITS	                        1
+#  define TIMER2__OVERFLOW__INTERRUPT__ENABLE__HOST     (TIMSK)
+#  define TIMER2__OVERFLOW__INTERRUPT__ENABLE__BIT      (TOIE2)
+#  define TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST    (TIFR)
+#  define TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT     (TOV2)
+#  define timer2__compare_a__interrupt__VECTOR          TIMER2_COMP_vect
+#  define TIMER2__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK)
+#  define TIMER2__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE2)
+#  define TIMER2__COMPARE_A__INTERRUPT__PENDING__HOST   (TIFR)
+#  define TIMER2__COMPARE_A__INTERRUPT__PENDING__BIT    (OCF2)
+
 #  define TIMER2_REG_B                                  (TCCR2)
 #  define TIMER2_REG_MASK                               (TIMSK)
 #  define TIMER2_REG_VALUE                              (TCNT2)
-#  define TIMER2__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE2)
-#  define timer2__compare_a__interrupt__VECTOR          TIMER2_COMP_vect
 
 
 #else
@@ -105,6 +113,36 @@ static inline void timer2__value__set(const uint8_t value) {
 static inline uint8_t timer2__value__get(void) {
     return TIMER2_REG_VALUE;
 }
+
+
+#if defined(TIMER2__OVERFLOW__INTERRUPT__ENABLE__HOST) && defined(TIMER2__OVERFLOW__INTERRUPT__ENABLE__BIT)
+
+inline static void timer2__overflow__interrupt__enable(void) {
+    TIMER2__OVERFLOW__INTERRUPT__ENABLE__HOST |= _BV(TIMER2__OVERFLOW__INTERRUPT__ENABLE__BIT);
+}
+
+inline static void timer2__overflow__interrupt__disable(void) {
+    TIMER2__OVERFLOW__INTERRUPT__ENABLE__HOST &= ~_BV(TIMER2__OVERFLOW__INTERRUPT__ENABLE__BIT);
+}
+
+inline static void timer2__overflow__interrupt__enabled__set(const uint8_t enabled) {
+    if (enabled) timer2__overflow__interrupt__enable(); else timer2__overflow__interrupt__disable();
+}
+
+#endif
+
+
+#if defined(TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST) && defined(TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT)
+
+inline static char timer2__compare_a__interrupt__pending__get(void) {
+    return TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST & _BV(TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT);
+}
+
+inline static void timer2__compare_a__interrupt__pending__clear(void) {
+    TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST |= _BV(TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT);
+}
+
+#endif
 
 
 inline static void timer2__compare_a__interrupt__enable(void) {
