@@ -18,21 +18,21 @@
 
 
 #if defined(mcp2515__tx__txb0__available__HOST) && defined(mcp2515__tx__txb0__available__BIT)
-DECLARE_BITVAR(mcp2515__tx__txb0__available, mcp2515__tx__txb0__available__HOST, mcp2515__tx__txb0__available__BIT);
+DEFINE_BITVAR(mcp2515__tx__txb0__available, mcp2515__tx__txb0__available__HOST, mcp2515__tx__txb0__available__BIT);
 #else
 inline void mcp2515__tx__txb0__available__set(uint8_t value) {}
 inline bool mcp2515__tx__txb0__available__is_set(void) { return true; }
 #endif
 
 #if defined(mcp2515__tx__txb1__available__HOST) && defined(mcp2515__tx__txb1__available__BIT)
-DECLARE_BITVAR(mcp2515__tx__txb1__available, mcp2515__tx__txb1__available__HOST, mcp2515__tx__txb1__available__BIT);
+DEFINE_BITVAR(mcp2515__tx__txb1__available, mcp2515__tx__txb1__available__HOST, mcp2515__tx__txb1__available__BIT);
 #else
 inline void mcp2515__tx__txb1__available__set(uint8_t value) {}
 inline bool mcp2515__tx__txb1__available__is_set(void) { return true; }
 #endif
 
 #if defined(mcp2515__tx__txb2__available__HOST) && defined(mcp2515__tx__txb2__available__BIT)
-DECLARE_BITVAR(mcp2515__tx__txb2__available, mcp2515__tx__txb2__available__HOST, mcp2515__tx__txb2__available__BIT);
+DEFINE_BITVAR(mcp2515__tx__txb2__available, mcp2515__tx__txb2__available__HOST, mcp2515__tx__txb2__available__BIT);
 #else
 inline void mcp2515__tx__txb2__available__set(uint8_t value) {}
 inline bool mcp2515__tx__txb2__available__is_set(void) { return true; }

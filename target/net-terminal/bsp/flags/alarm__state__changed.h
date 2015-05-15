@@ -8,7 +8,7 @@
 #include "util/bitops.h"
 
 #if defined(ALARM__STATE__CHANGED__HOST) && defined(ALARM__STATE__CHANGED__BIT)
-DECLARE_BITVAR(alarm__state__changed, ALARM__STATE__CHANGED__HOST, ALARM__STATE__CHANGED__BIT);
+DEFINE_BITVAR(alarm__state__changed, ALARM__STATE__CHANGED__HOST, ALARM__STATE__CHANGED__BIT);
 #else
 DECLARE_FAKE_BITVAR(alarm__state__changed);
 #endif

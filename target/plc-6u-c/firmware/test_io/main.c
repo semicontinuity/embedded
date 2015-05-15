@@ -9,6 +9,7 @@
 #include <cpu/avr/int0.h>
 #include <cpu/avr/int1.h>
 #include <cpu/avr/int2.h>
+#include "cpu/avr/drivers/display/segment/static2.h"
 
 void int0__run(void) {
     display__render_packed(0x10);

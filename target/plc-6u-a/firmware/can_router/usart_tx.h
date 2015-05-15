@@ -65,7 +65,7 @@ static inline void usart_tx_thread__init(void) {
 #define USART_TX_Q_THREAD_INTERRUPT		ISR(EE_READY_vect, ISR_NAKED)
 #define usart_tx_q_thread__enabled__HOST	(EECR)
 #define usart_tx_q_thread__enabled__BIT		(EERIE)
-DECLARE_BITVAR(usart_tx_q_thread__enabled, usart_tx_q_thread__enabled__HOST, usart_tx_q_thread__enabled__BIT);
+DEFINE_BITVAR(usart_tx_q_thread__enabled, usart_tx_q_thread__enabled__HOST, usart_tx_q_thread__enabled__BIT);
 
 
 #endif // __USART_TX_H

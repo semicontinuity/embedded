@@ -28,6 +28,6 @@
 #define CAN_TX_Q_THREAD_INTERRUPT	ISR(SPM_READY_vect, ISR_NAKED)
 #define can_tx_q_thread__enabled__HOST	(SPMCSR)
 #define can_tx_q_thread__enabled__BIT	(SPMIE)
-DECLARE_BITVAR(can_tx_q_thread__enabled, SPMCSR, SPMIE)
+DEFINE_BITVAR(can_tx_q_thread__enabled, SPMCSR, SPMIE)
 
 #endif // __CAN_TX_H

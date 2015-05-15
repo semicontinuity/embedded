@@ -327,14 +327,14 @@ inline void usart0__switch_conf(const uint32_t old_conf, const uint32_t new_conf
 #endif
 
 
-DECLARE_BITVAR(usart0__rx__enabled, usart0__rx__enabled__HOST, usart0__rx__enabled__BIT);
-DECLARE_BITVAR(usart0__tx__enabled, usart0__tx__enabled__HOST, usart0__tx__enabled__BIT);
-DECLARE_BITVAR(usart0__rx__complete__value, usart0__rx__complete__value__HOST, usart0__rx__complete__value__BIT);
-DECLARE_BITVAR(usart0__rx__complete__interrupt__enabled, usart0__rx__complete__interrupt__enabled__HOST, usart0__rx__complete__interrupt__enabled__BIT);
-DECLARE_BITVAR(usart0__tx__complete__value, usart0__tx__complete__value__HOST, usart0__tx__complete__value__BIT);
-DECLARE_BITVAR(usart0__tx__complete__interrupt__enabled, usart0__tx__complete__interrupt__enabled__HOST, usart0__tx__complete__interrupt__enabled__BIT);
-DECLARE_BITVAR(usart0__tx__data_register_empty__value, usart0__tx__data_register_empty__value__HOST, usart0__tx__data_register_empty__value__BIT);
-DECLARE_BITVAR(usart0__tx__data_register_empty__interrupt__enabled, usart0__tx__data_register_empty__interrupt__enabled__HOST, usart0__tx__data_register_empty__interrupt__enabled__BIT);
+DEFINE_BITVAR(usart0__rx__enabled, usart0__rx__enabled__HOST, usart0__rx__enabled__BIT);
+DEFINE_BITVAR(usart0__tx__enabled, usart0__tx__enabled__HOST, usart0__tx__enabled__BIT);
+DEFINE_BITVAR(usart0__rx__complete__value, usart0__rx__complete__value__HOST, usart0__rx__complete__value__BIT);
+DEFINE_BITVAR(usart0__rx__complete__interrupt__enabled, usart0__rx__complete__interrupt__enabled__HOST, usart0__rx__complete__interrupt__enabled__BIT);
+DEFINE_BITVAR(usart0__tx__complete__value, usart0__tx__complete__value__HOST, usart0__tx__complete__value__BIT);
+DEFINE_BITVAR(usart0__tx__complete__interrupt__enabled, usart0__tx__complete__interrupt__enabled__HOST, usart0__tx__complete__interrupt__enabled__BIT);
+DEFINE_BITVAR(usart0__tx__data_register_empty__value, usart0__tx__data_register_empty__value__HOST, usart0__tx__data_register_empty__value__BIT);
+DEFINE_BITVAR(usart0__tx__data_register_empty__interrupt__enabled, usart0__tx__data_register_empty__interrupt__enabled__HOST, usart0__tx__data_register_empty__interrupt__enabled__BIT);
 
 
 // =============================================================================

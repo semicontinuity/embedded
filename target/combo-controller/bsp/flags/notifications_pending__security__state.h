@@ -8,7 +8,7 @@
 #include "util/bitops.h"
 
 #if defined(NOTIFICATIONS_PENDING__SECURITY__STATE__HOST) && defined(NOTIFICATIONS_PENDING__SECURITY__STATE__BIT)
-DECLARE_BITVAR(notifications_pending__security__state, NOTIFICATIONS_PENDING__SECURITY__STATE__HOST, NOTIFICATIONS_PENDING__SECURITY__STATE__BIT);
+DEFINE_BITVAR(notifications_pending__security__state, NOTIFICATIONS_PENDING__SECURITY__STATE__HOST, NOTIFICATIONS_PENDING__SECURITY__STATE__BIT);
 #else
 DECLARE_FAKE_BITVAR(notifications_pending__security__state);
 #endif

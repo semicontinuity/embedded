@@ -1,7 +1,7 @@
 #include "util/bitops.h"
 #include "cpu/avr/gpio.h"
 
-DECLARE_BITVAR(onewire__bitbang_thread__alive, SIGNAL_PORT_REG(DISPLAY_DIGIT1), SIGNAL_PIN(DISPLAY_SEGMENT_DP));
+DEFINE_BITVAR(onewire__bitbang_thread__alive, SIGNAL_PORT_REG(DISPLAY_DIGIT1), SIGNAL_PIN(DISPLAY_SEGMENT_DP));
 
 
 #include "main.c"

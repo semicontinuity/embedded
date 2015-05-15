@@ -22,6 +22,11 @@ typedef union {
 // Helper macros for bit variables
 // =============================================================================
 
+#define DEFINE_BITVAR(name, host, bit) \
+	inline void name##__set(char v)	{ if ((v)) (host) |= (1 << (bit)); else (host) &= ~(1 << (bit));}	\
+	inline bool name##__is_set(void)	{ return (host) & (1 << (bit)); }                               \
+	inline char name##__get(void)	{ return (host) & (1 << (bit)); }
+
 #define DECLARE_FAKE_BITVAR(name) \
 	inline void name##__set(char v)	{}	\
 	inline bool name##__is_set(void)	{ return false; }

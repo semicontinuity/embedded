@@ -31,12 +31,12 @@ extern uint8_t usart_rx_buffer[PACKET_LENGTH] __attribute__ ((section (".noinit"
  */
 
 #define USART_RX_THREAD_INTERRUPT	ISR(usart0__rx__complete__interrupt__VECTOR, ISR_NAKED)
-DECLARE_BITVAR(usart_rx_thread__enabled, usart0__rx__complete__interrupt__enabled__HOST, usart0__rx__complete__interrupt__enabled__BIT);
+DEFINE_BITVAR(usart_rx_thread__enabled, usart0__rx__complete__interrupt__enabled__HOST, usart0__rx__complete__interrupt__enabled__BIT);
 
 //#define USART_RX_THREAD_INTERRUPT	ISR(USART_RX_vect, ISR_NAKED)
 //#define usart_rx_thread__enabled__HOST  (UCSR0B)
 //#define usart_rx_thread__enabled__BIT   (RXCIE0)
-//DECLARE_BITVAR(usart_rx_thread__enabled, usart_rx_thread__enabled__HOST, usart_rx_thread__enabled__BIT);
+//DEFINE_BITVAR(usart_rx_thread__enabled, usart_rx_thread__enabled__HOST, usart_rx_thread__enabled__BIT);
 
 register uint8_t *usart_rx_thread__w_ptr        asm("r28");
 register uint8_t usart_rx_thread__size          asm("r19");
