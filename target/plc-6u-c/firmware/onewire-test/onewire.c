@@ -228,9 +228,6 @@ ISR(timer2__compare_a__interrupt__VECTOR) {
 // Handles one 1-wire transaction.
 // -----------------------------------------------------------------------------
 
-/** Flag that indicates that the thread is alive */
-volatile bool onewire__thread__alive;
-
 /** Instruction pointer */
 #ifdef ONEWIRE__THREAD__IP__REG
 register void* onewire__thread__ip asm(QUOTE(ONEWIRE__THREAD__IP__REG));
@@ -257,19 +254,19 @@ volatile uint8_t onewire__thread__crc;
 /** Starts the thread */
 void onewire__thread__start(void) {
     VT_INIT(onewire__thread, onewire__thread__ip);
-    onewire__thread__alive = true;
+    onewire__thread__alive__set(true);
 }
 
 
 /** Terminates the thread */
 void onewire__thread__stop(void) {
-    onewire__thread__alive = false;
+    onewire__thread__alive__set(false);
 }
 
 
 /** Check whether the thread is alive */
 bool onewire__thread__is_alive(void) {
-    return onewire__thread__alive;
+    return onewire__thread__alive__get();
 }
 
 /** Check whether the thread can be scheduled (applicable only if the thread is alive) */

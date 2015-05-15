@@ -8,6 +8,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+// Injected bit variables
+DECLARE_BITVAR(onewire__bitbang_thread__alive);
+DECLARE_BITVAR(onewire__thread__alive);
+
 
 /** Allow thread to be scheduled */
 void onewire__thread__start(void);
