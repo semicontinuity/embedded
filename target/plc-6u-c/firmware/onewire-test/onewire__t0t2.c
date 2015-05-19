@@ -5,37 +5,44 @@
 // Theory of operation:
 // --------------------
 // For 16MHz crystal, use prescaler 8 for both timers (64 for reset pulse).
+// Thus, 1uS=2TQ (1TQ=4uS for reset pulse).
+//
 // The bit is started with 1->0 transition at T=0.
 //
 // READ and WRITE1 waveforms:
 // ---+   +------------------------------------------------------+------+
-//    |   |      read                                         eof    next 
+//    |   |      read                                         eof        done
 //    +---+       *
 //    0   6us    15us                                           60us   70us
-//
+//    0   12TQ   30TQ                                          120TQ  140TQ
+//        T2CA   T2OVF                                                T0CA
 // 0->1 transition at 6us is generated in OC2 interrupt handler.
-// Reading bus at 15uS in T2OVF interrupt handler (disabled for WRITE1).
-// Signal the possibility to handle next bit by OC0 interrupt.
+// Bus is read and T2 stopped at 15uS in T2OVF interrupt handler.
+// Signal the possibility to handle next bit by OC0 interrupt at 70uS.
 //
 // WRITE0 waveform:
 // ---+                                                          +------+
-//    |                                                       eof|    next 
+//    |                                                       eof|    *  done
 //    +----------------------------------------------------------+
-//    0   6us    15us                                           60us   70us
+//    0                                                        60us 69us 70us
+//    0                                                       120TQ 138TQ 140TQ
+//                                                            T2CA  T2OVF T0CA
 //
 // 0->1 transition at 60us is generated in OC2 interrupt handler.
-// Reading bus at 15uS in T2OVF interrupt handler is disabled for WRITE0.
-// Signal the possibility to handle next bit by OC0 interrupt.
+// Bus is read and T2 stopped at 69uS in T2OVF interrupt handler.
+// Signal the possibility to handle next bit by OC0 interrupt at 70uS.
 //
 // RESET and presence pulse waveform:
 // ---+                            +------+   +-------------------------+
 //    |                            |      | * |                        done
 //    +----------------------------+      +---+
 //    0                          480us     552us                      960us
+//    0                          120TQ     138TQ                      240TQ
+//                               T2CA      T2OVF                      T0CA
 //
 // 0->1 transition at 480us is generated in OC2 interrupt handler.
-// Reading bus at 552uS in T2OVF interrupt handler.
-// Signal completion by OC0 interrupt.
+// Bus is read and T2 stopped at 552uS in T2OVF interrupt handler.
+// Signal completion by OC0 interrupt at 960uS (240TQ).
 // =============================================================================
 
 #include "onewire.h"
@@ -61,31 +68,38 @@
 // Abstract 1-wire timer, composed of Timer0 and Timer2.
 // -----------------------------------------------------------------------------
 void onewire__timer__init(void) {
-    timer2__compare_a__interrupt__enabled__set(1);
+    timer2__compare_a__interrupt__enable();
+    timer2__overflow__interrupt__enable();
+    timer0__compare_a__interrupt__enable();
 }
 
 void onewire__timer__shutdown(void) {
-    timer2__compare_a__interrupt__enabled__set(0);
+    timer0__compare_a__interrupt__disable();
+    timer2__overflow__interrupt__disable();
+    timer2__compare_a__interrupt__disable();
 }
 
-
-void onewire__timer__start(const uint8_t conf) {
-    timer2__value__set(0);
-    timer2__switch_conf(TIMER2_CONF_DEFAULT, conf);
+inline static void onewire__timer__start(
+    const uint16_t form_timer_conf,
+    const uint8_t form_timer_start_value,
+    const uint8_t form_timer_drive_high_value,
+    const uint16_t span_timer_conf,
+    const uint8_t span_timer_value)
+{
+    timer2__value__set(form_timer_start_value);
+    timer2__compare_a__value__set(form_timer_drive_high_value);
+    timer2__conf__set(form_timer_conf);
+    timer0__value__set(0);
+    timer0__compare_a__value__set(span_timer_value);
+    timer0__conf__set(span_timer_conf);
 }
 
-
-void onewire__timer__stop(void) {
-    timer2__switch_conf(ONEWIRE__TIMER__FAST_CONF, TIMER2_CONF_DEFAULT);
+bool onewire__timer__overrun__get(void) {
+    return timer0__compare_a__interrupt__pending__get();
 }
 
-
-void onewire__timer__clear(void) {
-    timer2__value__set(0);
-}
-
-void onewire__timer__timeout__set(const uint8_t tq) {
-    timer2__compare_a__value__set(tq);
+void onewire__timer__overrun__clear(void) {
+    timer0__compare_a__interrupt__pending__clear();
 }
 
 // -----------------------------------------------------------------------------
@@ -94,52 +108,35 @@ void onewire__timer__timeout__set(const uint8_t tq) {
 
 /** Generates 0->1 transition */
 ISR(timer2__compare_a__interrupt__VECTOR, ISR_NAKED) {
+    onewire__bus__set(1);
+    reti();
 }
 
-/** Reads the bit value from the bus */
+/** Reads the bit value from the bus and stops the 'form' timer */
 ISR(timer2__overflow__interrupt__VECTOR, ISR_NAKED) {
+    timer2__conf__set(TIMER2_CONF_DEFAULT);
+    reti();
 }
-
-// -----------------------------------------------------------------------------
-// 1-wire bit-bang thread.
-// Receives and transmits individual bits
-// -----------------------------------------------------------------------------
-
-/** Data exchanged */
-#ifdef ONEWIRE__BITBANG_THREAD__DATA__REG
-register uint8_t onewire__bitbang_thread__data asm(QUOTE(ONEWIRE__BITBANG_THREAD__DATA__REG));
-#else
-volatile uint8_t onewire__bitbang_thread__data;
-#endif
-
-/** Remaining number of bits to render */
-#ifdef ONEWIRE__BITBANG_THREAD__BIT_COUNT__REG
-register uint8_t onewire__bitbang_thread__bit_count asm(QUOTE(ONEWIRE__BITBANG_THREAD__BIT_COUNT__REG));
-#else
-volatile uint8_t onewire__bitbang_thread__bit_count;
-#endif
-
-
-void onewire__bitbang_thread__stop(void) {
-    onewire__timer__stop();
-    onewire__bitbang_thread__alive__set(false);
-}
-
-
-void onewire__bitbang_thread__data__set(const uint8_t data) {
-    onewire__bitbang_thread__data = data;
-}
-
-uint8_t onewire__bitbang_thread__data__get(void) {
-    return onewire__bitbang_thread__data;
-}
-
 
 
 // -----------------------------------------------------------------------------
 // 1-wire thread
 // Handles one 1-wire transaction.
 // -----------------------------------------------------------------------------
+
+/** Data exchanged */
+#ifdef ONEWIRE__THREAD__DATA__REG
+register uint8_t onewire__thread__data asm(QUOTE(ONEWIRE__THREAD__DATA__REG));
+#else
+volatile uint8_t onewire__thread__data;
+#endif
+
+/** Remaining number of bits to render */
+#ifdef ONEWIRE__THREAD__BIT_COUNT__REG
+register uint8_t onewire__thread__bit_count asm(QUOTE(ONEWIRE__THREAD__BIT_COUNT__REG));
+#else
+volatile uint8_t onewire__thread__bit_count;
+#endif
 
 /** Instruction pointer */
 #ifdef ONEWIRE__THREAD__IP__REG
@@ -170,13 +167,6 @@ void onewire__thread__start(void) {
     onewire__thread__alive__set(true);
 }
 
-
-/** Terminates the thread */
-void onewire__thread__stop(void) {
-    onewire__thread__alive__set(false);
-}
-
-
 /** Check whether the thread is alive */
 bool onewire__thread__is_alive(void) {
     return onewire__thread__alive__get();
@@ -184,7 +174,7 @@ bool onewire__thread__is_alive(void) {
 
 /** Check whether the thread can be scheduled (applicable only if the thread is alive) */
 bool onewire__thread__is_runnable(void) {
-    return !onewire__bitbang_thread__alive__get();
+    return onewire__timer__overrun__get();
 }
 
 
@@ -193,13 +183,15 @@ bool onewire__thread__is_runnable(void) {
  * Wait (yield) until onewire__bitbang_thread__alive__get() returns false.
  */
 void onewire__thread__write_byte(const uint8_t value) {
+/*
     onewire__bitbang_thread__data__set(value);
-    onewire__bitbang_thread__bit_count = 8;
+    onewire__thread__bit_count = 8;
     onewire__bitbang_thread__alive__set(true);
 
     onewire__bus__set(0);
     onewire__timer__timeout__set(1*ONEWIRE__TIMER__TIME_QUANTUM);
     onewire__timer__start(ONEWIRE__TIMER__FAST_CONF);
+*/
 }
 
 
@@ -209,37 +201,38 @@ void onewire__thread__write_byte(const uint8_t value) {
  * Call onewire__bitbang_thread__data__get() to get the received byte.
  */
 void onewire__thread__read_byte(void) {
-    onewire__bitbang_thread__bit_count = 8;
+/*
+    onewire__thread__bit_count = 8;
     onewire__bitbang_thread__alive__set(true);
 
     onewire__bus__set(0);
     onewire__timer__timeout__set(1*ONEWIRE__TIMER__TIME_QUANTUM);
     onewire__timer__start(ONEWIRE__TIMER__FAST_CONF);
+*/
 }
 
 
 /**
  * Reset 1-wire bus.
- * Wait (yield) until onewire__bitbang_thread__alive__get() returns false.
  * The result is available via onewire__bitbang_thread__data__get().
- * If presence pulse is generated, onewire__bitbang_thread__data will be false.
+ * If presence pulse is generated, onewire__thread__data will be false.
  */
 void onewire__thread__reset_bus(void) {
-    onewire__bitbang_thread__alive__set(true);
-
     onewire__bus__set(0);
-    onewire__timer__timeout__set(8*ONEWIRE__TIMER__TIME_QUANTUM);
-    onewire__timer__start(ONEWIRE__TIMER__SLOW_CONF);
+    onewire__timer__start(
+        ONEWIRE__BIT_FORM_TIMER__SLOW_CONF,
+        256 - ONEWIRE__BIT_FORM_TIMER__RESET_READ_TIME,
+        256 - ONEWIRE__BIT_FORM_TIMER__RESET_READ_TIME + ONEWIRE__BIT_FORM_TIMER__RESET_DRIVE_HIGH_TIME,
+        ONEWIRE__BIT_SPAN_TIMER__SLOW_CONF,
+        ONEWIRE__BIT_SPAN_TIMER__SLOW_CONF_TIMEOUT
+    );
 }
 
 
 void onewire__thread__run(void) {
     VT_BEGIN(onewire__thread, onewire__thread__ip);
 
-    onewire__thread__reset_bus();
-    // wait until bitbang thread finishes reset pulse.
-    VT_YIELD(onewire__thread, onewire__thread__ip);
-
+/*
     while (onewire__thread__tx__remaining--) {
         onewire__thread__write_byte(*onewire__thread__tx__ptr++);
         VT_YIELD(onewire__thread, onewire__thread__ip);
@@ -252,8 +245,9 @@ void onewire__thread__run(void) {
         *onewire__thread__rx__ptr++ = data;
         onewire__thread__crc = crc8_ow_update(onewire__thread__crc, data);
     }
+*/
 
-    onewire__thread__stop();
+    onewire__timer__overrun__clear();
     VT_END(onewire__thread);
 }
 
@@ -283,6 +277,7 @@ void onewire__command(uint8_t command_length, uint8_t response_length, uint8_t *
     onewire__thread__rx__remaining = response_length;
     onewire__thread__crc = 0;
     onewire__thread__start();
+    onewire__thread__reset_bus();
 }
 
 

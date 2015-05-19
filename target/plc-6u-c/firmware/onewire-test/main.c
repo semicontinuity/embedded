@@ -32,6 +32,33 @@ uint8_t command[] = {OW_SKIP_ROM, DS18X20_READ};
 uint8_t response[DS18X20_SP_SIZE];
 
 
+void main__thread__run(void) {
+    onewire__command(sizeof(command), sizeof(response), command, response);
+    do {
+        if (onewire__thread__is_runnable())
+            onewire__thread__run();
+        else
+            sleep_cpu();
+    }
+    while (onewire__thread__is_alive());
+
+    display__render_packed(response[0]);
+/*
+    display__render_packed(4);
+
+    uint8_t *r = response;
+    for(uint8_t i = 0; i < DS18X20_SP_SIZE; i++) {
+        debug__print_byte_as_hex(*r++);
+    }
+
+    display__render_packed(5);
+    debug__print_P(PSTR("CRC: "));
+    debug__print_byte_as_hex(onewire__crc__get());
+    debug__putc('\n');
+*/
+}
+
+
 int main(void) {
     display__init();
 
@@ -56,35 +83,29 @@ int main(void) {
 
     _delay_ms(1000);
 
-    debug__print_P(PSTR("Reset pulse\n"));
-    display__render_packed(2);
+//    debug__print_P(PSTR("Reset pulse\n"));
+//    display__render_packed(2);
 
     sei();
 
-//    onewire__command(sizeof(command), sizeof(response), command, response);
-//    display__render_packed(3);
-
-    while (onewire__thread__is_alive()) {
-        if (onewire__thread__is_runnable())
-            onewire__thread__run();
-        else
-            sleep_cpu();
-    }
-    display__render_packed(4);
-
-    uint8_t *r = response;
-    for(uint8_t i = 0; i < DS18X20_SP_SIZE; i++) {
-        debug__print_byte_as_hex(*r++);
-    }
-
-    display__render_packed(5);
-    debug__print_P(PSTR("CRC: "));
-    debug__print_byte_as_hex(onewire__crc__get());
-    debug__putc('\n');
-
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
+#endif
     for(;;) {
-//        sleep_cpu();
+        main__thread__run();
     }
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic pop
+#endif
 
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
+#endif
+    return 0;
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic pop
+#endif
     return 0;
 }

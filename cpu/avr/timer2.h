@@ -11,7 +11,7 @@
 
 #define TIMER2_MODE_STOPPED		(0)
 #define TIMER2_MODE_RUN_NO_PRESCALER	(                        _BV(CS20))
-#define TIMER2_MODE_RUN_PRESCALER_8	(            _BV(CS21)            )
+#define TIMER2_MODE_RUN_PRESCALER_8     (            _BV(CS21)            )
 #define TIMER2_MODE_RUN_PRESCALER_32	(            _BV(CS21) | _BV(CS20))
 #define TIMER2_MODE_RUN_PRESCALER_64	(_BV(CS22)                        )
 #define TIMER2_MODE_RUN_PRESCALER_128	(_BV(CS22)             | _BV(CS20))
@@ -87,6 +87,7 @@ INLINE void timer2__comp_b__run(void) timer2__comp_b__run__attrs;
 #  define TIMER2__OVERFLOW__INTERRUPT__ENABLE__BIT      (TOIE2)
 #  define TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST    (TIFR)
 #  define TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT     (TOV2)
+#  define timer2__compare_a__value                      (OCR2)
 #  define timer2__compare_a__interrupt__VECTOR          TIMER2_COMP_vect
 #  define TIMER2__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK)
 #  define TIMER2__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE2)
@@ -144,6 +145,14 @@ inline static void timer2__compare_a__interrupt__pending__clear(void) {
 
 #endif
 
+
+inline static void timer2__compare_a__value__set(const uint8_t value) {
+    timer2__compare_a__value = value;
+}
+
+inline static uint8_t timer2__compare_a__value__get(void) {
+    return timer2__compare_a__value;
+}
 
 inline static void timer2__compare_a__interrupt__enable(void) {
     TIMER2_REG_MASK |= _BV(TIMER2__COMPARE_A__INTERRUPT__ENABLE__BIT);

@@ -23,8 +23,8 @@
 #define TIMER0_CONF_WGM_CTC                             (_BV(WGM01)             )
 #define TIMER0_CONF_WGM_FAST_PWM                        (_BV(WGM01) | _BV(WGM00))
 
-#define TIMER0_CONF_STOPPED		                (0)
-#define TIMER0_CONF_NO_PRESCALER	                (                        _BV(CS00))
+#define TIMER0_CONF_STOPPED                             (0)
+#define TIMER0_CONF_NO_PRESCALER                        (                        _BV(CS00))
 #define TIMER0_CONF_PRESCALER_8                         (            _BV(CS01)            )
 #define TIMER0_CONF_PRESCALER_64                        (            _BV(CS01) | _BV(CS00))
 #define TIMER0_CONF_PRESCALER_256                       (_BV(CS02)                        )
@@ -37,6 +37,10 @@
 
 #define TIMER0_CONF_DEFAULT                             (0)
 
+
+inline static void timer0__conf__set(uint8_t conf) {
+    TCCR0 = conf;
+}
 
 inline void timer0__switch_conf(uint16_t old_conf, uint16_t new_conf) {
     uint8_t old_tccr = old_conf & 0xFF;

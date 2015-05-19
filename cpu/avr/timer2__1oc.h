@@ -4,8 +4,8 @@
 #include <avr/io.h>
 #include <stdint.h>
 
-#define TIMER2_CONF_STOPPED		                (TIMER2_MODE_STOPPED)
-#define TIMER2_CONF_NO_PRESCALER	                (TIMER2_MODE_RUN_NO_PRESCALER)
+#define TIMER2_CONF_STOPPED                             (TIMER2_MODE_STOPPED)
+#define TIMER2_CONF_NO_PRESCALER                        (TIMER2_MODE_RUN_NO_PRESCALER)
 #define TIMER2_CONF_PRESCALER_8                         (TIMER2_MODE_RUN_PRESCALER_8)
 #define TIMER2_CONF_PRESCALER_32                        (TIMER2_MODE_RUN_PRESCALER_32)
 #define TIMER2_CONF_PRESCALER_64                        (TIMER2_MODE_RUN_PRESCALER_64)
@@ -40,6 +40,10 @@
 #define TIMER2_CONF_DEFAULT                             (0)
 
 
+inline static void timer2__conf__set(uint8_t conf) {
+    TCCR2 = conf;
+}
+
 inline static void timer2__switch_conf(uint16_t old_conf, uint16_t new_conf) {
     uint8_t old_tccr = old_conf & 0xFF;
     uint8_t new_tccr = new_conf & 0xFF;
@@ -49,16 +53,6 @@ inline static void timer2__switch_conf(uint16_t old_conf, uint16_t new_conf) {
     uint8_t new_ocr = (new_conf >> 8) & 0xFF;
     if (old_ocr != new_ocr) OCR2 = new_ocr;
 }
-
-
-inline static void timer2__compare_a__value__set(const uint8_t value) {
-    OCR2 = value;
-}
-
-inline static uint16_t timer2__compare_a__value__get(void) {
-    return OCR2;
-}
-
 
 
 inline static void timer2__overflow_interrupt__enable(void) {

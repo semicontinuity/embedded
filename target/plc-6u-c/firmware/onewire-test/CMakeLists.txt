@@ -3,9 +3,18 @@ project(onewire-test)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES
+    globals.c
     main.c
-    onewire.c
+    onewire__t0t2.c
+    onewire.h
     onewire__bus__inverted_buffer.c
+    ../../../../util/crc8_ow_unrolled.c
+    ../../../../cpu/avr/drivers/display/segment/glyphs__digits__hex.c
+    ../../../../cpu/avr/drivers/display/segment/static2.c
+    ../../../../cpu/avr/util/debug.c
+
+    ../../../../util/bitops.h
+    ../../../../cpu/avr/util/vthreads.h
 )
 
 
@@ -38,15 +47,22 @@ add_definitions(-DONEWIRE__OUT__PIN=6)
 add_definitions(-DONEWIRE__IN__PORT=D)
 add_definitions(-DONEWIRE__IN__PIN=5)
 
-add_definitions(-DONEWIRE__BITBANG_THREAD__IP__REG=26)
-add_definitions(-DONEWIRE__BITBANG_THREAD__BIT_COUNT__REG=16)
-add_definitions(-DONEWIRE__BITBANG_THREAD__DATA__REG=17)
-
 add_definitions(-DONEWIRE__THREAD__IP__REG=28)
+add_definitions(-DONEWIRE__THREAD__BIT_COUNT__REG=16)
+add_definitions(-DONEWIRE__THREAD__DATA__REG=17)
 
-add_definitions(-DONEWIRE__TIMER__FAST_CONF=TIMER2_CONF_PRESCALER_32|TIMER2_CONF_WGM_CTC)
-add_definitions(-DONEWIRE__TIMER__SLOW_CONF=TIMER2_CONF_PRESCALER_256|TIMER2_CONF_WGM_CTC)
-add_definitions(-DONEWIRE__TIMER__TIME_QUANTUM=4)
+add_definitions(-DONEWIRE__BIT_SPAN_TIMER__FAST_CONF=TIMER0_CONF_PRESCALER_8|TIMER0_CONF_WGM_CTC)
+add_definitions(-DONEWIRE__BIT_SPAN_TIMER__FAST_CONF_TIMEOUT=140)
+add_definitions(-DONEWIRE__BIT_SPAN_TIMER__SLOW_CONF=TIMER0_CONF_PRESCALER_64|TIMER0_CONF_WGM_CTC)
+add_definitions(-DONEWIRE__BIT_SPAN_TIMER__SLOW_CONF_TIMEOUT=240)
+add_definitions(-DONEWIRE__BIT_FORM_TIMER__FAST_CONF=TIMER2_CONF_PRESCALER_8|TIMER2_CONF_WGM_CTC)
+add_definitions(-DONEWIRE__BIT_FORM_TIMER__SLOW_CONF=TIMER2_CONF_PRESCALER_64|TIMER2_CONF_WGM_CTC)
+add_definitions(-DONEWIRE__BIT_FORM_TIMER__WRITE1_DRIVE_HIGH_TIME=12)
+add_definitions(-DONEWIRE__BIT_FORM_TIMER__WRITE1_READ_TIME=30)
+add_definitions(-DONEWIRE__BIT_FORM_TIMER__WRITE1_DRIVE_HIGH_TIME=120)
+add_definitions(-DONEWIRE__BIT_FORM_TIMER__WRITE1_READ_TIME=138)
+add_definitions(-DONEWIRE__BIT_FORM_TIMER__RESET_DRIVE_HIGH_TIME=120)
+add_definitions(-DONEWIRE__BIT_FORM_TIMER__RESET_READ_TIME=138)
 
 
 # Display

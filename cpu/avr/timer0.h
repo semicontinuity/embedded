@@ -84,6 +84,7 @@ INLINE void timer0__comp__run(void);
 #  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT      (TOIE0)
 #  define TIMER0__OVERFLOW__INTERRUPT__PENDING__HOST    (TIFR)
 #  define TIMER0__OVERFLOW__INTERRUPT__PENDING__BIT     (TOV0)
+#  define timer0__compare_a__value                      (OCR0)
 #  define timer0__compare_a__interrupt__VECTOR          TIMER0_COMP_vect
 #  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK)
 #  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE0)
@@ -139,6 +140,14 @@ inline static void timer0__overflow__interrupt__pending__clear(void) {
 
 
 #if defined(TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST) && defined(TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT)
+
+inline static void timer0__compare_a__value__set(const uint8_t value) {
+    timer0__compare_a__value = value;
+}
+
+inline static uint8_t timer0__compare_a__value__get(void) {
+    return timer0__compare_a__value;
+}
 
 inline static void timer0__compare_a__interrupt__enable(void) {
     TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST |= _BV(TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT);

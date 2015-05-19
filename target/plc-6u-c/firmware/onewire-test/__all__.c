@@ -1,9 +1,4 @@
-#include "util/bitops.h"
-#include "cpu/avr/gpio.h"
-
-DEFINE_BITVAR(onewire__bitbang_thread__alive, SIGNAL_PORT_REG(DISPLAY_DIGIT1), SIGNAL_PIN(DISPLAY_SEGMENT_DP));
-DEFINE_BITVAR(onewire__thread__alive, SIGNAL_PORT_REG(DISPLAY_DIGIT0), SIGNAL_PIN(DISPLAY_SEGMENT_DP));
-
+#include "globals.c"
 #include "main.c"
 #include "onewire__t0t2.c"
 #include "onewire__bus__inverted_buffer.c"

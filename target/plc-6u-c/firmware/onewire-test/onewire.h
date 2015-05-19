@@ -7,9 +7,10 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include "util/bitops.h"
+#include "cpu/avr/gpio.h"
 
 // Injected bit variables
-DECLARE_BITVAR(onewire__bitbang_thread__alive);
 DECLARE_BITVAR(onewire__thread__alive);
 
 
@@ -27,6 +28,16 @@ bool onewire__thread__is_runnable(void);
 
 /** Thread function */
 void onewire__thread__run(void);
+
+
+/** Check whether the thread can be scheduled */
+bool onewire__bitbang_thread__runnable__get(void);
+
+/** Thread function */
+void onewire__bitbang_thread__run(void);
+
+/** Callback to be implemented */
+void onewire__bitbang_thread__terminated(void);
 
 
 void onewire__init(void);
