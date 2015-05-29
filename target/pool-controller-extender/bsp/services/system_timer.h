@@ -16,19 +16,19 @@
 #define SYSTEM_TIMER__CONF__STARTED     (SYSTEM_TIMER__CONF)
 
 
-inline void system_timer__init(void) {
+inline static void system_timer__init(void) {
     if (SYSTEM_TIMER__CONF__DEFAULT != SYSTEM_TIMER__CONF__INITIALIZED)
         timer0__switch_conf(SYSTEM_TIMER__CONF__DEFAULT, SYSTEM_TIMER__CONF__INITIALIZED);
 }
 
 
-inline void system_timer__start(void) {
+inline static void system_timer__start(void) {
     timer0__overflow__interrupt__enable();
     timer0__switch_conf(SYSTEM_TIMER__CONF__INITIALIZED, SYSTEM_TIMER__CONF__STARTED);
 }
 
 
-inline void system_timer__stop(void) {
+inline static void system_timer__stop(void) {
     timer0__switch_conf(SYSTEM_TIMER__CONF__STARTED, SYSTEM_TIMER__CONF__INITIALIZED);
     timer0__overflow__interrupt__disable();
 }

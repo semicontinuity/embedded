@@ -36,13 +36,4 @@ inline void timer0__switch_conf(const uint16_t old_conf, const uint16_t new_conf
 }
 
 
-inline void timer0__overflow__interrupt__enable(void) {
-    TIMSK |= _BV(TOIE0);
-}
-
-inline void timer0__overflow__interrupt__disable(void) {
-    TIMSK &= ~_BV(TOIE0);
-}
-
-
 #endif

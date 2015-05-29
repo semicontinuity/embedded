@@ -118,22 +118,6 @@ inline void timer0__compare_b__interrupt__enabled__set(const uint8_t enable) {
 }
 
 
-inline void timer0__overflow__interrupt__enable(void) {
-    TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST |= _BV(TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT);
-}
-
-inline void timer0__overflow__interrupt__disable(void) {
-    TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST &= ~_BV(TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT);
-}
-
-inline void timer0__overflow_interrupt__enabled__set(const uint8_t enable) {
-    if (enable)
-        timer0__overflow__interrupt__enable();
-    else
-        timer0__overflow__interrupt__disable();
-}
-
-
 inline uint8_t timer0__conf__ctc_compare_a_value(const uint32_t period) {
     if (period <= 256UL)           return (uint8_t)(period      - 1);
     else if (period <= 256UL*8)    return (uint8_t)(period/8    - 1);

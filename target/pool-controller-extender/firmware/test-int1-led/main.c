@@ -3,16 +3,14 @@
 // =============================================================================
 
 #include "main.h"
-#include "cpu/avr/asm.h"
 #include "cpu/avr/int1.h"
-#include "cpu/avr/usart0.h"
-#include "cpu/avr/usart0__tx_polled.h"
+#include "drivers/out/alarm.h"
 #include <avr/interrupt.h>
 
 
 
 void int1__run(void) {
-    usart0__out__write('A');
+    alarm__set(1);
 }
 
 
@@ -21,13 +19,11 @@ void int1__run(void) {
 // =============================================================================
 
 void application__init(void) {
-    ENABLE_PULLUP(USART0__RX);
-    usart0__init();
+    alarm__init();
     int1__init();
 }
 
 void application__start(void) {
-    usart0__tx__enabled__set(1);
     int1__start();
 }
 

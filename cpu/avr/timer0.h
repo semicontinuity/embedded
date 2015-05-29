@@ -11,6 +11,11 @@
 INLINE void timer0__comp__run(void);
 #endif
 
+// Generic "Overflow" callback.
+#ifdef timer0__overflow__run
+INLINE void timer0__overflow__run(void);
+#endif
+
 
 #define TIMER0_MODE_STOPPED		(0)
 #define TIMER0_MODE_RUN_NO_PRESCALER	(                        _BV(CS00))
@@ -47,8 +52,11 @@ INLINE void timer0__comp__run(void);
 #  define TIMER0_REG_VALUE                              (TCNT0)
 #  define TIMER0__COMPARE_UNITS	                        (2)
 #  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT      (TOIE0)
+#  define TIMER0__OVERFLOW__INTERRUPT__PENDING__BIT     (TOV0)
+#  define timer0__compare_a__value                      (OCR0A)
 #  define timer0__compare_a__interrupt__VECTOR          TIMER0_COMPA_vect
 #  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE0A)
+#  define timer0__compare_b__value                      (OCR0B)
 #  define timer0__compare_b__interrupt__VECTOR          TIMER0_COMPB_vect
 #  define TIMER0__COMPARE_B__INTERRUPT__ENABLE__BIT     (OCIE0B)
 
@@ -56,10 +64,12 @@ INLINE void timer0__comp__run(void);
  || defined(__AVR_ATtiny45__)\
  || defined(__AVR_ATtiny85__)
 #  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST     (TIMSK)
+#  define TIMER0__OVERFLOW__INTERRUPT__PENDING__HOST    (TIFR)
 #  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK)
 #  define TIMER0__COMPARE_B__INTERRUPT__ENABLE__HOST    (TIMSK)
 #else
 #  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST     (TIMSK0)
+#  define TIMER0__OVERFLOW__INTERRUPT__PENDING__HOST    (TIFR0)
 #  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK0)
 #  define TIMER0__COMPARE_B__INTERRUPT__ENABLE__HOST    (TIMSK0)
 #endif

@@ -1,5 +1,6 @@
-TARGET ?= $(shell basename `pwd`)
+TARGET = test-int1-led
 TARGET_CONF ?= $(TARGET).conf
+OPT = 2 -Wa,-a,-ad -finline-functions -fpredictive-commoning -fgcse-after-reload -fvect-cost-model  -fipa-cp-clone -ftree-loop-distribute-patterns -ftree-slp-vectorize
 ROOT = ../../../..
 BSP = ../../bsp
 
@@ -36,6 +37,8 @@ else
 CDEFS += -DINLINE=
 
 SRC += main.c
+
+SRC += cpu/avr/int1.c
 
 endif
 
