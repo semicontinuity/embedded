@@ -1,6 +1,5 @@
-TARGET = test-usart
+TARGET ?= $(shell basename `pwd`)
 TARGET_CONF ?= $(TARGET).conf
-OPT = 3
 ROOT = ../../../..
 BSP = ../../bsp
 
