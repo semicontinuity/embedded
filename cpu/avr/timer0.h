@@ -84,6 +84,7 @@ INLINE void timer0__overflow__run(void);
 
 
 #elif defined(__AVR_ATmega16__)\
+ || defined(__AVR_ATmega32__)\
  || defined(__AVR_ATmega8535__)
 
 

@@ -76,6 +76,7 @@ INLINE void timer2__comp_b__run(void) timer2__comp_b__run__attrs;
 
 
 #elif defined(__AVR_AT90S8535__)\
+ || defined(__AVR_ATmega32__)\
  || defined(__AVR_ATmega16__)\
  || defined(__AVR_ATmega8__)\
  || defined(__AVR_ATmega8535__)\

@@ -53,7 +53,8 @@
 #  define usart0__tx__data_register_empty__interrupt__VECTOR              (USART_UDRE_vect)
 
 #elif defined(__AVR_ATmega16__)\
- || defined(__AVR_ATmega8__)
+ || defined(__AVR_ATmega8__)\
+ || defined(__AVR_ATmega32__)
 
 #  define usart0__rx__complete__interrupt__VECTOR                         (USART_RXC_vect)
 #  define usart0__tx__complete__interrupt__VECTOR                         (USART_TXC_vect)
@@ -162,7 +163,7 @@
 #define usart0__parity__BIT                                             (UMPM0)
 
 
-#elif defined(__AVR_ATmega16__) || defined(__AVR_ATmega8__) || defined(__AVR_ATmega8535__)
+#elif defined(__AVR_ATmega16__) || defined(__AVR_ATmega8__) || defined(__AVR_ATmega8535__) || defined(__AVR_ATmega32__)
 
 
 #define USART0_REG_A                                                    (UCSRA)
