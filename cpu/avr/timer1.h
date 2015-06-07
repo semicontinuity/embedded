@@ -5,6 +5,9 @@
 #ifndef __CPU_AVR_TIMER1_H
 #define __CPU_AVR_TIMER1_H
 
+#include <stdint.h>
+#include <avr/io.h>
+
 #ifdef timer1__comp_a__run
 INLINE void timer1__comp_a__run(void);
 #endif

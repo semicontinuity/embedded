@@ -6,6 +6,9 @@
 #ifndef __CPU_AVR_TIMER0_H
 #define __CPU_AVR_TIMER0_H
 
+#include <stdint.h>
+#include <avr/io.h>
+
 // Generic "Compare" callback for devices with at least 1 OC unit.
 #ifdef timer0__comp__run
 INLINE void timer0__comp__run(void);
