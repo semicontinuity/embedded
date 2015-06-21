@@ -83,6 +83,11 @@
 #define TIMER0_CONF_DEFAULT                             (0)
 
 
+inline static void timer0__conf__set(uint16_t conf) {
+    TCCR0A = conf & 0xFF;
+    TCCR0B = (conf >> 8) & 0xFF;
+}
+
 inline void timer0__switch_conf(uint32_t old_conf, uint32_t new_conf) {
     uint8_t old_tccra = old_conf & 0xFF;
     uint8_t new_tccra = new_conf & 0xFF;

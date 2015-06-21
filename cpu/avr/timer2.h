@@ -66,6 +66,11 @@ INLINE void timer2__comp_b__run(void) timer2__comp_b__run__attrs;
 #  define TIMER2_REG_B                                  (TCCR2B)
 #  define TIMER2_REG_MASK                               (TIMSK2)
 #  define TIMER2_REG_VALUE                              (TCNT2)
+#  define TIMER2__OVERFLOW__INTERRUPT__ENABLE__HOST     (TIMER2_REG_MASK)
+#  define TIMER2__OVERFLOW__INTERRUPT__ENABLE__BIT      (TOIE2)
+#  define TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST    (TIFR2)
+#  define TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT     (TOV2)
+#  define timer2__compare_a__value                      (OCR2A)
 #  define TIMER2__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMER2_REG_MASK)
 #  define TIMER2__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE2A)
 #  define timer2__compare_a__interrupt__VECTOR          TIMER2_COMPA_vect

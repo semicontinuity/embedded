@@ -4,12 +4,6 @@
 
 #ifdef timer0__overflow__run
 
-#if defined(__AVR_AT90S2313__)
-#define timer0__overflow__interrupt__VECTOR TIMER0_OVF0_vect
-#else
-#define timer0__overflow__interrupt__VECTOR TIMER0_OVF_vect
-#endif
-
 #ifndef TIMER0_OVERFLOW_vect_attrs
 #define TIMER0_OVERFLOW_vect_attrs
 #endif

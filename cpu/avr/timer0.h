@@ -113,6 +113,13 @@ INLINE void timer0__overflow__run(void);
 #endif
 
 
+#if defined(__AVR_AT90S2313__)
+#define timer0__overflow__interrupt__VECTOR TIMER0_OVF0_vect
+#else
+#define timer0__overflow__interrupt__VECTOR TIMER0_OVF_vect
+#endif
+
+
 static inline void timer0__value__set(const uint8_t value) {
     TIMER0_REG_VALUE = value;
 }

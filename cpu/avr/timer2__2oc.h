@@ -22,15 +22,6 @@
 #include <avr/io.h>
 #include <stdint.h>
 
-#define TIMER2_CONF_STOPPED		                (TIMER2_MODE_STOPPED)
-#define TIMER2_CONF_NO_PRESCALER	                (TIMER2_MODE_RUN_NO_PRESCALER)
-#define TIMER2_CONF_PRESCALER_8	                (TIMER2_MODE_RUN_PRESCALER_8)
-#define TIMER2_CONF_PRESCALER_32	                (TIMER2_MODE_RUN_PRESCALER_32)
-#define TIMER2_CONF_PRESCALER_64	                (TIMER2_MODE_RUN_PRESCALER_64)
-#define TIMER2_CONF_PRESCALER_128	                (TIMER2_MODE_RUN_PRESCALER_128)
-#define TIMER2_CONF_PRESCALER_256	                (TIMER2_MODE_RUN_PRESCALER_256)
-#define TIMER2_CONF_PRESCALER_1024	                (TIMER2_MODE_RUN_PRESCALER_1024)
-
 #define TIMER2_CONF_WGM_NORMAL                          (0)
 #define TIMER2_CONF_WGM_PHASE_CORRECT_PWM               (             _BV(WGM20))
 #define TIMER2_CONF_WGM_CTC                             (_BV(WGM21)             )
@@ -39,6 +30,15 @@
 #define TIMER2_CONF_WGM_PHASE_CORRECT_PWM_USE_OCRA      (             _BV(WGM20) | _BV(8+WGM22))
 #define TIMER2_CONF_WGM_CTC_RESERVED                    (_BV(WGM21)              | _BV(8+WGM22))
 #define TIMER2_CONF_WGM_FAST_PWM_USE_OCRA               (_BV(WGM21) | _BV(WGM20) | _BV(8+WGM22))
+
+#define TIMER2_CONF_STOPPED		                (0)
+#define TIMER2_CONF_NO_PRESCALER	                ((                        _BV(CS20)) << 8)
+#define TIMER2_CONF_PRESCALER_8                         ((            _BV(CS21)            ) << 8)
+#define TIMER2_CONF_PRESCALER_32	                ((            _BV(CS21) | _BV(CS20)) << 8)
+#define TIMER2_CONF_PRESCALER_64	                ((_BV(CS22)                        ) << 8)
+#define TIMER2_CONF_PRESCALER_128                       ((_BV(CS22)             | _BV(CS20)) << 8)
+#define TIMER2_CONF_PRESCALER_256                       ((_BV(CS22) | _BV(CS21)            ) << 8)
+#define TIMER2_CONF_PRESCALER_1024                      ((_BV(CS22) | _BV(CS21) | _BV(CS20)) << 8)
 
 #define TIMER2_CONF_OC2A_DISCONNECTED                   (0)
 #define TIMER2_CONF_OC2A_TOGGLE                         (              _BV(COM2A0))
@@ -76,6 +76,11 @@
 
 #define TIMER2_CONF_DEFAULT                             (0)
 
+
+inline static void timer2__conf__set(uint16_t conf) {
+    TCCR2A = conf & 0xFF;
+    TCCR2B = (conf >> 8) & 0xFF;
+}
 
 inline static void timer2__switch_conf(uint32_t old_conf, uint32_t new_conf) {
     uint8_t old_tccra = old_conf & 0xFF;
