@@ -5,9 +5,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(SOURCE_FILES
     globals.c
     main.c
-    onewire__t0t2.c
+    onewire__t2_1oc.c
     onewire.h
-    onewire__bus__inverted_buffer.c
+    onewire__bus__noninverting_buffer.c
     ../../../../util/crc8_ow_unrolled.c
     ../../../../cpu/avr/drivers/display/segment/glyphs__digits__hex.c
     ../../../../cpu/avr/drivers/display/segment/static2.c
@@ -17,6 +17,7 @@ set(SOURCE_FILES
     ../../../../util/crc8_ow_unrolled.c
     ../../../../util/crc8_ow.h
     ../../../../cpu/avr/util/vthreads.h
+    ../../../../cpu/avr/timer2.h
 )
 
 
@@ -27,6 +28,7 @@ add_executable(onewire-test ${SOURCE_FILES})
 add_definitions(-D__AVR_ATmega8535__)
 add_definitions(-DMCU=atmega8535)
 add_definitions(-DOPT="2 -Wa,-a,-ad")
+add_definitions(-DINLINE=)
 
 # System
 # ==============================================================================
@@ -45,7 +47,7 @@ add_definitions(-DUSART0__BAUD_RATE=250000UL)
 # 1-Wire
 # ==============================================================================
 add_definitions(-DONEWIRE__OUT__PORT=D)
-add_definitions(-DONEWIRE__OUT__PIN=6)
+add_definitions(-DONEWIRE__OUT__PIN=2)
 add_definitions(-DONEWIRE__IN__PORT=D)
 add_definitions(-DONEWIRE__IN__PIN=5)
 
@@ -65,6 +67,17 @@ add_definitions(-DONEWIRE__BIT_FORM_TIMER__WRITE0_DRIVE_HIGH_TIME=120)
 add_definitions(-DONEWIRE__BIT_FORM_TIMER__WRITE0_READ_TIME=138)
 add_definitions(-DONEWIRE__BIT_FORM_TIMER__RESET_DRIVE_HIGH_TIME=120)
 add_definitions(-DONEWIRE__BIT_FORM_TIMER__RESET_READ_TIME=138)
+
+add_definitions(-DONEWIRE__TIMER__SLOW_CONF=TIMER2_CONF_PRESCALER_64|TIMER2_CONF_WGM_NORMAL)
+add_definitions(-DONEWIRE__TIMER__RESET_READ_TIME=138)
+add_definitions(-DONEWIRE__TIMER__READ_TO_NEXT_BIT_TIME=110)
+add_definitions(-DONEWIRE__TIMER__RESET_DRIVE_HIGH_TIME=120)
+add_definitions(-DONEWIRE__TIMER__FAST_CONF=TIMER2_CONF_PRESCALER_8|TIMER2_CONF_WGM_NORMAL)
+add_definitions(-DONEWIRE__TIMER__FAST_CONF_TIMEOUT=140)
+add_definitions(-DONEWIRE__TIMER__WRITE1_DRIVE_HIGH_TIME=12)
+add_definitions(-DONEWIRE__TIMER__WRITE0_DRIVE_HIGH_TIME=120)
+add_definitions(-DONEWIRE__TIMER__READ_DRIVE_HIGH_TIME=12)
+add_definitions(-DONEWIRE__TIMER__READ_TIME=30)
 
 
 # Display

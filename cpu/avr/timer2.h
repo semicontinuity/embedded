@@ -136,16 +136,21 @@ inline static void timer2__overflow__interrupt__enabled__set(const uint8_t enabl
     if (enabled) timer2__overflow__interrupt__enable(); else timer2__overflow__interrupt__disable();
 }
 
+inline static uint8_t timer2__overflow__interrupt__enabled__get(void) {
+    return TIMER2__OVERFLOW__INTERRUPT__ENABLE__HOST & _BV(TIMER2__OVERFLOW__INTERRUPT__ENABLE__BIT);
+}
+
+
 #endif
 
 
 #if defined(TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST) && defined(TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT)
 
-inline static char timer2__compare_a__interrupt__pending__get(void) {
+inline static uint8_t timer2__overflow__interrupt__pending__get(void) {
     return TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST & _BV(TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT);
 }
 
-inline static void timer2__compare_a__interrupt__pending__clear(void) {
+inline static void timer2__overflow__interrupt__pending__clear(void) {
     TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST |= _BV(TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT);
 }
 
@@ -159,6 +164,9 @@ inline static void timer2__compare_a__value__set(const uint8_t value) {
 inline static uint8_t timer2__compare_a__value__get(void) {
     return timer2__compare_a__value;
 }
+
+
+#if defined(TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST) && defined(TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT)
 
 inline static void timer2__compare_a__interrupt__enable(void) {
     TIMER2_REG_MASK |= _BV(TIMER2__COMPARE_A__INTERRUPT__ENABLE__BIT);
@@ -181,6 +189,20 @@ inline static void timer2__ctc__interrupt__disable(void) {
     timer2__compare_a__interrupt__disable();
 }
 
+#endif
+
+
+#if defined(TIMER2__COMPARE_A__INTERRUPT__PENDING__HOST) && defined(TIMER2__COMPARE_A__INTERRUPT__PENDING__BIT)
+
+inline static uint8_t timer2__compare_a__interrupt__pending__get(void) {
+    return TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST & _BV(TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT);
+}
+
+inline static void timer2__compare_a__interrupt__pending__clear(void) {
+    TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST |= _BV(TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT);
+}
+
+#endif
 
 
 #if TIMER2__COMPARE_UNITS==1
