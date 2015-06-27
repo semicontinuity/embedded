@@ -5,6 +5,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(SOURCE_FILES
     main.c
     services/temperature_reader.c
+
+    ../../bsp/drivers/comm/onewire__t0t2.c
+    ../../bsp/drivers/comm/onewire__bus__noninverting_buffer.c
+
     ../../bsp/drivers/out/rts.h
     ../../bsp/drivers/water_counter.c
     ../../bsp/drivers/water_counter.h

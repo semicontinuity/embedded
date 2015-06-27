@@ -6,43 +6,60 @@
 #include "buffer.h"
 #include "modbus_rtu_driver.h"
 #include "modbus_server.h"
+#include "drivers/out/rts.h"
+
+#include "drivers/comm/onewire__bus.h"
 
 #include "cpu/avr/drivers/display/segment/static2.h"
+#include "cpu/avr/util/bcd.h"
 
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 #include <cpu/avr/int1.h>
+
+
+void temperature_reader__reading__on_changed(void) {
+    display__render_packed((uint8_t)uint9_to_bcd(temperature_reader__reading >> 8));
+}
 
 // main
 // -----------------------------------------------------------------------------
 int main(void) __attribute__ ((naked));
 int main(void) {
     display__init();
-    int1__init();
+//    int1__init();
+//    rts__init();
+    onewire__bus__init();
+
 
     // sleeping
-    set_sleep_mode(SLEEP_MODE_IDLE);
+//    set_sleep_mode(SLEEP_MODE_IDLE);
     modbus_rtu_driver__init();
 
-    sleep_enable();
+//    sleep_enable();
     modbus_rtu_driver__start();
-    int1__start();
+//    int1__start();
 
     display__render_packed(0); // ready
+
+    sei();
 
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
+//    for(;;) {
+//        if (modbus_rtu_driver__is_runnable()) {
+//            modbus_rtu_driver__run();
+//        }
+//        else {
+//            sei();
+//            sleep_cpu();
+//            cli();
+//        }
+//    }
     for(;;) {
-        if (modbus_rtu_driver__is_runnable()) {
-            modbus_rtu_driver__run();
-        }
-        else {
-            sei();
-            sleep_cpu();
-            cli();
-        }
+        temperature_reader__thread__run();
     }
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic pop
