@@ -38,6 +38,7 @@ int main(void) {
 
 //    sleep_enable();
     modbus_rtu_driver__start();
+    temperature_reader__thread__start();
 //    int1__start();
 
     display__render_packed(0); // ready
@@ -59,7 +60,8 @@ int main(void) {
 //        }
 //    }
     for(;;) {
-        temperature_reader__thread__run();
+        if (temperature_reader__thread__is_runnable())
+            temperature_reader__thread__run();
     }
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic pop

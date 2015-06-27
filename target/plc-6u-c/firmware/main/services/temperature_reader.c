@@ -2,7 +2,8 @@
 
 #include "drivers/comm/onewire.h"
 #include "cpu/avr/util/vthreads.h"
-#include <util/delay.h>
+#include "cpu/avr/timer0.h"
+//#include <util/delay.h>
 
 
 #define OW_SKIP_ROM	        0xCC
@@ -24,34 +25,56 @@ uint8_t response[DS18X20_SP_SIZE];
 //    return 0;
 //}
 
-//bool temperature_reader__thread__is_runnable(void) {
-//
-//}
+/** Instruction pointer */
+#ifdef TEMPERATURE_READER__THREAD__IP__REG
+register void* temperature_reader__thread__ip asm(QUOTE(TEMPERATURE_READER__THREAD__IP__REG));
+#else
+volatile void *temperature_reader__thread__ip;
+#endif
+
+volatile uint8_t onewire__thread__delay_counter;
+
+
+void temperature_reader__thread__start(void) {
+    VT_INIT(temperature_reader__thread, temperature_reader__thread__ip);
+    timer0__conf__set(TIMER0_CONF_PRESCALER_1024|TIMER0_CONF_WGM_NORMAL);
+}
+
+bool temperature_reader__thread__is_runnable(void) {
+    return timer0__overflow__interrupt__pending__get();
+}
 
 void temperature_reader__thread__run(void) {
-    onewire__command((uint8_t)sizeof(command_convert), 0, command_convert, 0);
-    do {
-        if (onewire__thread__is_runnable())
+    VT_BEGIN(temperature_reader__thread, temperature_reader__thread__ip);
+    timer0__overflow__interrupt__pending__clear();
+    for (;;) {
+        onewire__command((uint8_t) sizeof(command_convert), 0, command_convert, 0);
+        do {
+            VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
             onewire__thread__run();
-//        else
-//            sleep_cpu();
-    }
-    while (onewire__thread__is_alive());
+        }
+        while (onewire__thread__is_alive());
 
-    _delay_ms(750);
+        onewire__thread__delay_counter = 46;
+        timer0__conf__set(TIMER0_CONF_PRESCALER_1024|TIMER0_CONF_WGM_NORMAL);
+        for (;;) {
+            VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
+            timer0__overflow__interrupt__pending__clear();
+            if (--onewire__thread__delay_counter == 0) break;
+        }
 
-    onewire__command(sizeof(command), sizeof(response), command, response);
-    do {
-        if (onewire__thread__is_runnable())
+        onewire__command(sizeof(command), sizeof(response), command, response);
+        do {
+            VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
             onewire__thread__run();
-//        else
-//            sleep_cpu();
+        }
+        while (onewire__thread__is_alive());
+
+        temperature_reader__reading = (response[0] | (response[1] << 8)) << 4;
+        temperature_reader__reading__on_changed();
+
+//        _delay_ms(1);
     }
-    while (onewire__thread__is_alive());
-
-    temperature_reader__reading = (response[0] | (response[1] << 8)) << 4;
-    temperature_reader__reading__on_changed();
-
-    _delay_ms(1);
+    VT_UNREACHEABLE_END(temperature_reader__thread);
 }
 
