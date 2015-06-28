@@ -44,23 +44,21 @@ except (KeyboardInterrupt, SystemExit):
 
 
 SLAVE_ADDRESS = 1
-MF_READ_HOLDING_REGISTER = 3
+MF_READ_INPUT_REGISTER = 4
 
 data = bytearray(8)
 data[0] = SLAVE_ADDRESS
-data[1] = MF_READ_HOLDING_REGISTER
+data[1] = MF_READ_INPUT_REGISTER
 data[2] = 0
 data[3] = 0
 data[4] = 0
-data[5] = 4
+data[5] = 1
 
 crc = crc16(0xFFFF, data, 6)
 
 data[6] = crc & 0xFF
 data[7] = crc >> 8
 
-#data[6] = 0x44
-#data[7] = 0x09
 port.write(data)
 
 sys.stdin.readline()

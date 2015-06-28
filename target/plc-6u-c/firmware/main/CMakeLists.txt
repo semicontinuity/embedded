@@ -81,13 +81,12 @@ add_definitions(-DMODBUS_RTU_DRIVER__DELAY_TIMER__T35_VALUE="\(\(F_CPU/USART0__B
 # ==============================================================================
 add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_START=0)
 add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_COUNT=5)
-add_definitions(-DMODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS=1)
-add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_REGISTER=1)
-
-
 add_definitions(-DMODBUS_SERVER__INPUT_REGISTERS_START=0)
 add_definitions(-DMODBUS_SERVER__INPUT_REGISTERS_COUNT=1)
+
+add_definitions(-DMODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS=1)
 add_definitions(-DMODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS=1)
+add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_REGISTER=1)
 
 
 # Display

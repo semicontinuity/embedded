@@ -2,20 +2,17 @@
 //
 // =============================================================================
 
+#include "drivers/comm/onewire__bus.h"
 #include "services/temperature_reader.h"
+
 #include "buffer.h"
 #include "modbus_rtu_driver.h"
 #include "modbus_server.h"
-#include "drivers/out/rts.h"
-
-#include "drivers/comm/onewire__bus.h"
 
 #include "cpu/avr/drivers/display/segment/static2.h"
 #include "cpu/avr/util/bcd.h"
-
+#include "cpu/avr/int1.h"
 #include <avr/interrupt.h>
-#include <avr/sleep.h>
-#include <cpu/avr/int1.h>
 
 
 void temperature_reader__reading__on_changed(void) {
@@ -28,7 +25,6 @@ int main(void) __attribute__ ((naked));
 int main(void) {
     display__init();
 //    int1__init();
-//    rts__init();
     onewire__bus__init();
 
 
@@ -60,8 +56,12 @@ int main(void) {
 //        }
 //    }
     for(;;) {
-        if (temperature_reader__thread__is_runnable())
+        if (modbus_rtu_driver__is_runnable()) {
+            modbus_rtu_driver__run();
+        }
+        if (temperature_reader__thread__is_runnable()) {
             temperature_reader__thread__run();
+        }
     }
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic pop
@@ -137,7 +137,7 @@ modbus_exception modbus_server__read_input_registers(uint16_t register_address, 
     do {
         switch (register_address++) {
         case SERVER__REGISTER__T:
-            buffer__put_u16(1);
+            buffer__put_u16(temperature_reader__reading);
             break;
         default:
             return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
