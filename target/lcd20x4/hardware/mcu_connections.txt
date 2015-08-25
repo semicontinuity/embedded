@@ -1,0 +1,27 @@
+ATMEGA328
+========================================
+PB0		LCD DATA + Button 1
+PB1		LCD DATA + Button 2
+PB2	SS	LCD DATA + Button 3
+PB3	MOSI	LCD DATA + Button 4
+PB4	MISO   	Sensor
+PB5	SCK	RTS
+PB6	XTAL1
+PB7	XTAL2
+
+PC0		Button 1
+PC1		Button 2
+PC2		Button 3
+PC3		Button 4
+PC4	   	Button 5
+PC5		Button 6
+
+PD0	RXD	Serial port RX / RS485
+PD1	TXD	Serial port TX / RS485
+PD2	INT0	LCD RES
+PD3	INT1	LCD RW
+PD4		LCD E
+PD5		LED 1 (or backlight)
+PD6		LED 2 (or backlight)
+PD7		LED 3
+		
