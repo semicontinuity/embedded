@@ -35,6 +35,7 @@ inline static void soft_usart__timer__stop(void) {
 }
 
 inline static void soft_usart__timer__rx__start(void) {
+    timer2__compare_a__value__set(timer2__value__get() + 128);  // first match at the middle of the start bit
     timer2__compare_a__interrupt__enable();
 }
 
