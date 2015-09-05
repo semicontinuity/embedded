@@ -56,12 +56,18 @@ INLINE void timer0__overflow__run(void);
 #  define TIMER0__COMPARE_UNITS	                        (2)
 #  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT      (TOIE0)
 #  define TIMER0__OVERFLOW__INTERRUPT__PENDING__BIT     (TOV0)
+
 #  define timer0__compare_a__value                      (OCR0A)
-#  define timer0__compare_a__interrupt__VECTOR          TIMER0_COMPA_vect
 #  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE0A)
+#  define TIMER0__COMPARE_A__INTERRUPT__PENDING__HOST   (TIFR0)
+#  define TIMER0__COMPARE_A__INTERRUPT__PENDING__BIT    (OCF0A)
+#  define timer0__compare_a__interrupt__VECTOR          TIMER0_COMPA_vect
+
 #  define timer0__compare_b__value                      (OCR0B)
-#  define timer0__compare_b__interrupt__VECTOR          TIMER0_COMPB_vect
 #  define TIMER0__COMPARE_B__INTERRUPT__ENABLE__BIT     (OCIE0B)
+#  define TIMER0__COMPARE_B__INTERRUPT__PENDING__HOST   (TIFR0)
+#  define TIMER0__COMPARE_B__INTERRUPT__PENDING__BIT    (OCF0B)
+#  define timer0__compare_b__interrupt__VECTOR          TIMER0_COMPB_vect
 
 #if defined(__AVR_ATtiny25__)\
  || defined(__AVR_ATtiny45__)\
@@ -84,6 +90,11 @@ INLINE void timer0__overflow__run(void);
 
 #  define TIMER0_REG_VALUE                              (TCNT0)
 #  define TIMER0__COMPARE_UNITS	                        (0)
+#  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST     (TIMSK)
+#  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT      (TOIE0)
+#  define TIMER0__OVERFLOW__INTERRUPT__PENDING__HOST    (TIFR)
+#  define TIMER0__OVERFLOW__INTERRUPT__PENDING__BIT     (TOV0)
+
 
 
 #elif defined(__AVR_ATmega16__)\
@@ -98,12 +109,13 @@ INLINE void timer0__overflow__run(void);
 #  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT      (TOIE0)
 #  define TIMER0__OVERFLOW__INTERRUPT__PENDING__HOST    (TIFR)
 #  define TIMER0__OVERFLOW__INTERRUPT__PENDING__BIT     (TOV0)
+
 #  define timer0__compare_a__value                      (OCR0)
-#  define timer0__compare_a__interrupt__VECTOR          TIMER0_COMP_vect
 #  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK)
 #  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE0)
 #  define TIMER0__COMPARE_A__INTERRUPT__PENDING__HOST   (TIFR)
 #  define TIMER0__COMPARE_A__INTERRUPT__PENDING__BIT    (OCF0)
+#  define timer0__compare_a__interrupt__VECTOR          TIMER0_COMP_vect
 
 
 #else
@@ -128,8 +140,13 @@ static inline uint8_t timer0__value__get(void) {
     return TIMER0_REG_VALUE;
 }
 
+inline static uint8_t timer0__overflow__interrupt__pending__get(void) {
+    return TIMER0__OVERFLOW__INTERRUPT__PENDING__HOST & _BV(TIMER0__OVERFLOW__INTERRUPT__PENDING__BIT);
+}
 
-#if defined(TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST) && defined(TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT)
+inline static void timer0__overflow__interrupt__pending__clear(void) {
+    TIMER0__OVERFLOW__INTERRUPT__PENDING__HOST |= _BV(TIMER0__OVERFLOW__INTERRUPT__PENDING__BIT);
+}
 
 inline static void timer0__overflow__interrupt__enable(void) {
     TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST |= _BV(TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT);
@@ -143,21 +160,12 @@ inline static void timer0__overflow__interrupt__enabled__set(const uint8_t enabl
     if (enabled) timer0__overflow__interrupt__enable(); else timer0__overflow__interrupt__disable();
 }
 
-#endif
-
-
-#if defined(TIMER0__OVERFLOW__INTERRUPT__PENDING__HOST) && defined(TIMER0__OVERFLOW__INTERRUPT__PENDING__BIT)
-
-inline static char timer0__overflow__interrupt__pending__get(void) {
-    return TIMER0__OVERFLOW__INTERRUPT__PENDING__HOST & _BV(TIMER0__OVERFLOW__INTERRUPT__PENDING__BIT);
+inline static uint8_t timer0__overflow__interrupt__enabled__get(void) {
+    return TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST & _BV(TIMER0__OVERFLOW__INTERRUPT__ENABLE__BIT);
 }
 
-inline static void timer0__overflow__interrupt__pending__clear(void) {
-    TIMER0__OVERFLOW__INTERRUPT__PENDING__HOST |= _BV(TIMER0__OVERFLOW__INTERRUPT__PENDING__BIT);
-}
 
-#endif
-
+#if TIMER0__COMPARE_UNITS >= 1
 
 inline static void timer0__compare_a__value__set(const uint8_t value) {
     timer0__compare_a__value = value;
@@ -166,9 +174,6 @@ inline static void timer0__compare_a__value__set(const uint8_t value) {
 inline static uint8_t timer0__compare_a__value__get(void) {
     return timer0__compare_a__value;
 }
-
-
-#if defined(TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST) && defined(TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT)
 
 inline static void timer0__compare_a__interrupt__enable(void) {
     TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST |= _BV(TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT);
@@ -182,12 +187,15 @@ inline static void timer0__compare_a__interrupt__enabled__set(const uint8_t enab
     if (enabled) timer0__compare_a__interrupt__enable(); else timer0__compare_a__interrupt__disable();
 }
 
-#endif
+inline static void timer0__ctc__interrupt__enable(void) {
+    timer0__compare_a__interrupt__enable();
+}
 
+inline static void timer0__ctc__interrupt__disable(void) {
+    timer0__compare_a__interrupt__disable();
+}
 
-#if defined(TIMER0__COMPARE_A__INTERRUPT__PENDING__HOST) && defined(TIMER0__COMPARE_A__INTERRUPT__PENDING__BIT)
-
-inline static char timer0__compare_a__interrupt__pending__get(void) {
+inline static uint8_t timer0__compare_a__interrupt__pending__get(void) {
     return TIMER0__COMPARE_A__INTERRUPT__PENDING__HOST & _BV(TIMER0__COMPARE_A__INTERRUPT__PENDING__BIT);
 }
 
@@ -197,6 +205,38 @@ inline static void timer0__compare_a__interrupt__pending__clear(void) {
 
 #endif
 
+
+#if TIMER0__COMPARE_UNITS >= 2
+
+inline static void timer0__compare_b__value__set(const uint8_t value) {
+    timer0__compare_b__value = value;
+}
+
+inline static uint8_t timer0__compare_b__value__get(void) {
+    return timer0__compare_b__value;
+}
+
+inline static void timer0__compare_b__interrupt__enable(void) {
+    TIMER0__COMPARE_B__INTERRUPT__ENABLE__HOST |= _BV(TIMER0__COMPARE_B__INTERRUPT__ENABLE__BIT);
+}
+
+inline static void timer0__compare_b__interrupt__disable(void) {
+    TIMER0__COMPARE_B__INTERRUPT__ENABLE__HOST &= ~_BV(TIMER0__COMPARE_B__INTERRUPT__ENABLE__BIT);
+}
+
+inline static void timer0__compare_b__interrupt__enabled__set(const uint8_t enabled) {
+    if (enabled) timer0__compare_b__interrupt__enable(); else timer0__compare_b__interrupt__disable();
+}
+
+inline static uint8_t timer0__compare_b__interrupt__pending__get(void) {
+    return TIMER0__COMPARE_B__INTERRUPT__PENDING__HOST & _BV(TIMER0__COMPARE_B__INTERRUPT__PENDING__BIT);
+}
+
+inline static void timer0__compare_b__interrupt__pending__clear(void) {
+    TIMER0__COMPARE_B__INTERRUPT__PENDING__HOST |= _BV(TIMER0__COMPARE_B__INTERRUPT__PENDING__BIT);
+}
+
+#endif
 
 
 #if TIMER0__COMPARE_UNITS==0

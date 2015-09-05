@@ -101,22 +101,4 @@ inline static void timer2__switch_conf(uint32_t old_conf, uint32_t new_conf) {
 }
 
 
-inline static void timer2__compare_b__interrupt__enable(void) {
-    TIMSK2 |= _BV(OCIE2B);
-}
-
-inline static void timer2__compare_b__interrupt__disable(void) {
-    TIMSK2 &= ~_BV(OCIE2B);
-}
-
-
-inline static void timer2__overflow_interrupt__enable(void) {
-    TIMSK2 |= _BV(TOIE2);
-}
-
-inline static void timer2__overflow_interrupt__disable(void) {
-    TIMSK2 &= ~_BV(TOIE2);
-}
-
-
 #endif
