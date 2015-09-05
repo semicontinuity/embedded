@@ -1,7 +1,6 @@
 #include "temp_reg.h"
 #include "soft_usart__timer.h"
 #include "cpu/avr/asm.h"
-#include "cpu/avr/int0.h"
 #include "cpu/avr/util/vthreads.h"
 
 
@@ -18,8 +17,12 @@ volatile uint8_t soft_usart__rx__data;
 #endif
 
 
-void soft_usart__on_start_bit_detected(void) {
-    int0__stop();
+void soft_usart__rx__detector__start(void);
+void soft_usart__rx__detector__stop(void);
+
+
+void soft_usart__rx__thread__start(void) {
+    soft_usart__rx__detector__stop();
     soft_usart__timer__rx__start();
     VT_INIT(soft_usart__rx__thread, soft_usart__rx__thread__ip);
 }
@@ -104,7 +107,7 @@ void soft_usart__rx__thread__run(void) {
 
     // In the middle of stop bit
     soft_usart__timer__rx__stop();
-    int0__start();
+    soft_usart__rx__detector__start();
 
     VT_UNREACHEABLE_END(soft_usart__rx__thread);
 }
