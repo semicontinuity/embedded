@@ -11,7 +11,7 @@
 
 void soft_usart__rx__on_data(void) {
     soft_usart__tx__data = soft_usart__rx__data;
-    soft_usart__tx__thread__start();
+    soft_usart__tx__start();
 }
 
 void soft_usart__tx__on_complete(void) {
@@ -22,9 +22,12 @@ void soft_usart__tx__on_complete(void) {
 // -----------------------------------------------------------------------------
 int main(void) __attribute__ ((naked));
 int main(void) {
-    int0__init();
+    soft_usart__rx__init();
+    soft_usart__rx__detector__init();
+    soft_usart__tx__init();
     soft_usart__timer__init();
     soft_usart__timer__start();
+    soft_usart__rx__detector__start();
 
     sei();
 

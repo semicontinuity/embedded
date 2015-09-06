@@ -30,14 +30,15 @@ add_definitions(-DF_CPU=20000000UL)
 
 # Global
 # ==============================================================================
-add_definitions(-DTEMP_REG=2)
+add_definitions(-DTEMP_REG=20)
 
 # Soft USART
 # ==============================================================================
 add_definitions(-DINT0__PULLUP=1)
-add_definitions(-Dint0__run=soft_usart__rx__thread__start)
+add_definitions(-Dint0__run=soft_usart__rx__start)
 #add_definitions(-DTIMER0_COMPA_vect_naked=1)
 add_definitions(-Dtimer0__comp_a__run=soft_usart__rx__thread__run)
+add_definitions(-Dsoft_usart__rx__detector__init=int0__init)
 add_definitions(-Dsoft_usart__rx__detector__start=int0__start)
 add_definitions(-Dsoft_usart__rx__detector__stop=int0__stop)
 add_definitions(-DSOFT_USART__RX__THREAD__IP__REG=16)

@@ -468,4 +468,90 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
          "r" (value)                    \
     );                          
 
+#define __LDS(result, addr)             \
+    __asm__                             \
+    (                                   \
+        "lds %0, %1" "\n\t"             \
+        : "=r" (result)                 \
+        : "n" (_SFR_MEM_ADDR(addr))     \
+    );
+
+#define __STS(addr, value)              \
+    __asm__                             \
+    (                                   \
+        "sts %0, %1" "\n\t"             \
+        :                               \
+        :"n" (_SFR_MEM_ADDR(addr)),     \
+         "r" (value)                    \
+    );
+
+
+
+#if defined(TEMP_REG)
+
+#define LD_IO_REG(result, ptr) do {                 \
+    if (_SFR_IO_ADDR(ptr) < 0x40) {                 \
+        __IN(result, ptr);                          \
+    } else {                                        \
+        __LDS(result, ptr);                         \
+    }                                               \
+} while(0)
+
+#define ST_IO_REG(ptr, result) do {                 \
+    if (_SFR_IO_ADDR(ptr) < 0x40) {                 \
+        __OUT(ptr, result);                         \
+    } else {                                        \
+        __STS(ptr, result);                         \
+    }                                               \
+} while(0)
+
+#endif
+
+
+#if defined(TEMP_REG) && TEMP_REG > 15
+#define ANDI_IO_REG(ptr, mask) do {                 \
+    if (_SFR_IO_ADDR(ptr) < 0x20) {                 \
+        ptr &= mask;                                \
+    } else if (_SFR_IO_ADDR(ptr) < 0x40) {          \
+        register uint8_t temp asm(QUOTE(TEMP_REG)); \
+        __IN(temp, ptr);                            \
+        temp &= mask;                               \
+        __OUT(ptr, temp);                           \
+    } else {                                        \
+        register uint8_t temp asm(QUOTE(TEMP_REG)); \
+        __LDS(temp, ptr);                           \
+        temp &= mask;                               \
+        __STS(ptr, temp);                           \
+    }                                               \
+} while(0)
+#else
+#define ANDI_IO_REG(ptr, mask) do {                 \
+    ptr &= mask;                                    \
+} while(0)
+#endif
+
+
+#if defined(TEMP_REG) && TEMP_REG > 15
+#define ORI_IO_REG(ptr, mask) do {                 \
+    if (_SFR_IO_ADDR(ptr) < 0x20) {                 \
+        ptr |= mask;                                \
+    } else if (_SFR_IO_ADDR(ptr) < 0x40) {          \
+        register uint8_t temp asm(QUOTE(TEMP_REG)); \
+        __IN(temp, ptr);                            \
+        temp |= mask;                               \
+        __OUT(ptr, temp);                           \
+    } else {                                        \
+        register uint8_t temp asm(QUOTE(TEMP_REG)); \
+        __LDS(temp, ptr);                           \
+        temp |= mask;                               \
+        __STS(ptr, temp);                           \
+    }                                               \
+} while(0)
+#else
+#define ORI_IO_REG(ptr, mask) do {                 \
+    ptr |= mask;                                    \
+} while(0)
+#endif
+
+
 #endif // __CPU__AVR__ASM_H

@@ -59,13 +59,13 @@ INLINE void timer0__overflow__run(void);
 
 #  define timer0__compare_a__value                      (OCR0A)
 #  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__BIT     (OCIE0A)
-#  define TIMER0__COMPARE_A__INTERRUPT__PENDING__HOST   (TIFR0)
+
 #  define TIMER0__COMPARE_A__INTERRUPT__PENDING__BIT    (OCF0A)
 #  define timer0__compare_a__interrupt__VECTOR          TIMER0_COMPA_vect
 
 #  define timer0__compare_b__value                      (OCR0B)
 #  define TIMER0__COMPARE_B__INTERRUPT__ENABLE__BIT     (OCIE0B)
-#  define TIMER0__COMPARE_B__INTERRUPT__PENDING__HOST   (TIFR0)
+
 #  define TIMER0__COMPARE_B__INTERRUPT__PENDING__BIT    (OCF0B)
 #  define timer0__compare_b__interrupt__VECTOR          TIMER0_COMPB_vect
 
@@ -75,12 +75,16 @@ INLINE void timer0__overflow__run(void);
 #  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST     (TIMSK)
 #  define TIMER0__OVERFLOW__INTERRUPT__PENDING__HOST    (TIFR)
 #  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK)
+#  define TIMER0__COMPARE_A__INTERRUPT__PENDING__HOST   (TIFR)
 #  define TIMER0__COMPARE_B__INTERRUPT__ENABLE__HOST    (TIMSK)
+#  define TIMER0__COMPARE_B__INTERRUPT__PENDING__HOST   (TIFR)
 #else
 #  define TIMER0__OVERFLOW__INTERRUPT__ENABLE__HOST     (TIMSK0)
 #  define TIMER0__OVERFLOW__INTERRUPT__PENDING__HOST    (TIFR0)
 #  define TIMER0__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMSK0)
+#  define TIMER0__COMPARE_A__INTERRUPT__PENDING__HOST   (TIFR0)
 #  define TIMER0__COMPARE_B__INTERRUPT__ENABLE__HOST    (TIMSK0)
+#  define TIMER0__COMPARE_B__INTERRUPT__PENDING__HOST   (TIFR0)
 #endif
 
 

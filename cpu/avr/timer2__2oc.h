@@ -82,6 +82,16 @@ inline static void timer2__conf__set(uint16_t conf) {
     TCCR2B = (conf >> 8) & 0xFF;
 }
 
+inline static void timer2__switch_basic_conf(uint16_t old_conf, uint16_t new_conf) {
+    uint8_t old_tccra = old_conf & 0xFF;
+    uint8_t new_tccra = new_conf & 0xFF;
+    if (old_tccra != new_tccra) TCCR2A = new_tccra;
+
+    uint8_t old_tccrb = (old_conf >> 8) & 0xFF;
+    uint8_t new_tccrb = (new_conf >> 8) & 0xFF;
+    if (old_tccrb != new_tccrb) TCCR2B = new_tccrb;
+}
+
 inline static void timer2__switch_conf(uint32_t old_conf, uint32_t new_conf) {
     uint8_t old_tccra = old_conf & 0xFF;
     uint8_t new_tccra = new_conf & 0xFF;
