@@ -86,9 +86,6 @@ void soft_usart__tx__thread__run(void) {
     OUT_1(SOFT_USART__TX);
     VT_YIELD(soft_usart__tx__thread, soft_usart__tx__thread__ip);
 
-//            temp_reg = 1;
-//            DDRD=_SFR_IO_ADDR(DDRD);
-//    TIMER2__COMPARE_B__INTERRUPT__ENABLE__HOST = _SFR_IO_ADDR(TIMER2__COMPARE_B__INTERRUPT__ENABLE__HOST);
     soft_usart__timer__tx__stop();
     soft_usart__tx__on_complete();
     VT_UNREACHEABLE_END(soft_usart__tx__thread);
