@@ -1,5 +1,9 @@
-#include "temp_reg.h"
+// =============================================================================
+// Soft USART RX driver.
+// =============================================================================
+#include "soft_usart__rx.h"
 #include "soft_usart__timer.h"
+#include "temp_reg.h"
 #include "cpu/avr/asm.h"
 #include "cpu/avr/util/vthreads.h"
 
@@ -103,6 +107,7 @@ void soft_usart__rx__thread__run(void) {
 
     uint8_t pin_data7 = PIN_REG(SOFT_USART__RX__PORT);
     COPY_BIT(pin_data7, SOFT_USART__RX__PIN, soft_usart__rx__data, 7);
+    soft_usart__rx__on_data();
     VT_YIELD(soft_usart__rx__thread, soft_usart__rx__thread__ip);
 
     // In the middle of stop bit

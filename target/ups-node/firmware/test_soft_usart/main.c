@@ -1,10 +1,21 @@
 // =============================================================================
-//
+// Test for soft USART
 // =============================================================================
 
 #include "soft_usart__timer.h"
+#include "soft_usart__rx.h"
+#include "soft_usart__tx.h"
 #include "cpu/avr/int0.h"
 #include <avr/interrupt.h>
+
+
+void soft_usart__rx__on_data(void) {
+    soft_usart__tx__data = soft_usart__rx__data;
+    soft_usart__tx__thread__start();
+}
+
+void soft_usart__tx__on_complete(void) {
+}
 
 
 // main

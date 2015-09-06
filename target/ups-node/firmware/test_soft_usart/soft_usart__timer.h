@@ -23,15 +23,15 @@
 
 
 inline static void soft_usart__timer__init(void) {
-    timer2__switch_conf(SOFT_USART__TIMER__CONF__DEFAULT, SOFT_USART__TIMER__CONF__INITIALIZED);
+    timer2__switch_basic_conf(SOFT_USART__TIMER__CONF__DEFAULT, SOFT_USART__TIMER__CONF__INITIALIZED);
 }
 
 inline static void soft_usart__timer__start(void) {
-    timer2__switch_conf(SOFT_USART__TIMER__CONF__INITIALIZED, SOFT_USART__TIMER__CONF__STARTED);
+    timer2__switch_basic_conf(SOFT_USART__TIMER__CONF__INITIALIZED, SOFT_USART__TIMER__CONF__STARTED);
 }
 
 inline static void soft_usart__timer__stop(void) {
-    timer2__switch_conf(SOFT_USART__TIMER__CONF__STARTED, SOFT_USART__TIMER__CONF__INITIALIZED);
+    timer2__switch_basic_conf(SOFT_USART__TIMER__CONF__STARTED, SOFT_USART__TIMER__CONF__INITIALIZED);
 }
 
 inline static void soft_usart__timer__rx__start(void) {
@@ -41,6 +41,15 @@ inline static void soft_usart__timer__rx__start(void) {
 
 inline static void soft_usart__timer__rx__stop(void) {
     timer2__compare_a__interrupt__disable();
+}
+
+inline static void soft_usart__timer__tx__start(void) {
+    timer2__compare_b__value__set(timer2__value__get());  // first match at the end of start bit, 1 period from now
+    timer2__compare_b__interrupt__enable();
+}
+
+inline static void soft_usart__timer__tx__stop(void) {
+    timer2__compare_b__interrupt__disable();
 }
 
 #endif
