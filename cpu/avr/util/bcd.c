@@ -120,11 +120,10 @@ uint16_t uint9_to_bcd(const uint16_t number) {
 uint16_t uint8_to_bcd(const uint8_t number) {
 
     // Algorithm:
-    // Split number into nibbles: c=(bit 8), b=(bits 7-4), a=(bits 3-0).
-    // Then compute BCD(number) = BCD(a) + BCD(b) + BCD(c).
+    // Split number into nibbles: b=(bits 7-4), a=(bits 3-0).
+    // Then compute BCD(number) = BCD(b) + BCD(c).
     //    BCD(a) is computed with BCD correction.
     //    BCD(b) is taken from the table BCD_OF_HIGH_NIBBLE.
-    //    BCD(c) is 0x0512 if number is in the range 256-511, 0x0000 otherwise.
 
     register uint8_t r_h;  // result's high byte (hundreds)
     register uint8_t r_l;  // higher's low byte (tens and ones)
