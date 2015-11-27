@@ -62,6 +62,16 @@ extern volatile uint8_t* rx_ring_buffer__tail;
 void rx_ring_buffer__start(void);
 
 /**
+ * Tells, whether the head pointer is the same as the tail pointer.
+ */
+bool rx_ring_buffer__is_at_limit(void);
+
+/**
+ * Waits until the head pointer and the tail pointer are different.
+ */
+void rx_ring_buffer__wait_until_not_at_limit(void);
+
+/**
  * Puts the 8-bit value into the buffer.
  * Must be called only if the buffer is not full.
  */

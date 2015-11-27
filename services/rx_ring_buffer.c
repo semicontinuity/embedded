@@ -18,14 +18,17 @@
 
 uint8_t rx_ring_buffer__data[RX_RING_BUFFER__SIZE]
 #ifdef RX_RING_BUFFER__ALIGNED
-#if RX_RING_BUFFER__SIZE < 256 && ((RX_RING_BUFFER__SIZE & (RX_RING_BUFFER__SIZE - 1)) == 0)
+#  if RX_RING_BUFFER__SIZE < 256 && ((RX_RING_BUFFER__SIZE & (RX_RING_BUFFER__SIZE - 1)) == 0)
 __attribute__((aligned(RX_RING_BUFFER__SIZE * 2)))
-#else
-#error "If RX_RING_BUFFER__ALIGNED, RX_RING_BUFFER__SIZE must be power of 2 less than 256"
-#endif
+#  else
+#    if RX_RING_BUFFER__SIZE == 256
+__attribute__((aligned(256)))
+#    else
+#      error "If RX_RING_BUFFER__ALIGNED, RX_RING_BUFFER__SIZE must be power of 2 less than 256"
+#    endif
+#  endif
 #endif
 ;
-
 
 /**
  * Points to the the current read position (head).
@@ -54,6 +57,30 @@ void rx_ring_buffer__start(void) {
 
 
 /**
+ * Tells, whether the head pointer is the same as the tail pointer.
+ */
+bool tx_ring_buffer__is_at_limit(void) {
+#if TX_RING_BUFFER__SIZE < 256 || (TX_RING_BUFFER__SIZE == 256 && TX_RING_BUFFER__ALIGNED)
+    return (uint8_t)(uint16_t)tx_ring_buffer__tail == (uint8_t)(uint16_t)tx_ring_buffer__head;
+#else
+    return (uint16_t)tx_ring_buffer__tail == (uint16_t)tx_ring_buffer__head;
+#endif
+}
+
+
+/**
+ * Waits until the head pointer and the tail pointer are different.
+ */
+void rx_ring_buffer__wait_until_not_at_limit(void) {
+#if RX_RING_BUFFER__SIZE < 256 || (RX_RING_BUFFER__SIZE == 256 && RX_RING_BUFFER__ALIGNED)
+    LOOP_WHILE_LO8_EQUAL(rx_ring_buffer__tail, rx_ring_buffer__head);
+#else
+    while (rx_ring_buffer__is_at_limit());
+#endif
+}
+
+
+/**
  * Gets the 8-bit value from the buffer.
  * Must be called only if the buffer is not empty.
  */
@@ -69,8 +96,12 @@ uint8_t rx_ring_buffer__get(void) {
     b = *rx_ring_buffer__head++;
 #endif
 
-#ifdef TX_RING_BUFFER__ALIGNED
+#ifdef RX_RING_BUFFER__ALIGNED
+#  if RX_RING_BUFFER__SIZE==256
+    LOAD_ADDRESS_HI8_OF(rx_ring_buffer__head, rx_ring_buffer__data);
+#  else
     AND_CONST_LO8(rx_ring_buffer__head, (0xFF ^ RX_RING_BUFFER__SIZE));
+#  endif    
 #else
     if (rx_ring_buffer__head == rx_ring_buffer__data + RX_RING_BUFFER__SIZE)
         rx_ring_buffer__head = rx_ring_buffer__data;
@@ -103,8 +134,12 @@ void rx_ring_buffer__put(const uint8_t value) {
     *rx_ring_buffer__tail++ = value;
 #endif
 
-#ifdef TX_RING_BUFFER__ALIGNED
+#ifdef RX_RING_BUFFER__ALIGNED
+#  if RX_RING_BUFFER__SIZE==256
+    LOAD_ADDRESS_HI8_OF(rx_ring_buffer__tail, rx_ring_buffer__data);
+#  else
     AND_CONST_LO8(rx_ring_buffer__tail, (0xFF ^ RX_RING_BUFFER__SIZE));
+#  endif    
 #else
     if (rx_ring_buffer__tail == rx_ring_buffer__data + RX_RING_BUFFER__SIZE)
         rx_ring_buffer__tail = rx_ring_buffer__data;

@@ -18,11 +18,15 @@
 
 uint8_t tx_ring_buffer__data[TX_RING_BUFFER__SIZE]
 #ifdef TX_RING_BUFFER__ALIGNED
-#if TX_RING_BUFFER__SIZE < 256 && ((TX_RING_BUFFER__SIZE & (TX_RING_BUFFER__SIZE - 1)) == 0)
+#  if TX_RING_BUFFER__SIZE < 256 && ((TX_RING_BUFFER__SIZE & (TX_RING_BUFFER__SIZE - 1)) == 0)
 __attribute__((aligned(TX_RING_BUFFER__SIZE * 2)))
-#else
-#error "If TX_RING_BUFFER__ALIGNED, TX_RING_BUFFER__SIZE must be power of 2 less than 256"
-#endif
+#  else
+#    if TX_RING_BUFFER__SIZE == 256
+__attribute__((aligned(256)))
+#    else
+#      error "If TX_RING_BUFFER__ALIGNED, TX_RING_BUFFER__SIZE must be power of 2 less than 256"
+#    endif
+#  endif
 #endif
 ;
 
@@ -53,6 +57,30 @@ void tx_ring_buffer__start(void) {
 
 
 /**
+ * Tells, whether the head pointer is the same as the tail pointer.
+ */
+bool tx_ring_buffer__is_at_limit(void) {
+#if TX_RING_BUFFER__SIZE < 256 || (TX_RING_BUFFER__SIZE == 256 && TX_RING_BUFFER__ALIGNED)
+    return (uint8_t)(uint16_t)tx_ring_buffer__tail == (uint8_t)(uint16_t)tx_ring_buffer__head;
+#else
+    return (uint16_t)tx_ring_buffer__tail == (uint16_t)tx_ring_buffer__head;
+#endif
+}
+
+
+/**
+ * Waits until the head pointer and the tail pointer are different.
+ */
+void tx_ring_buffer__wait_until_not_at_limit(void) {
+#if TX_RING_BUFFER__SIZE < 256 || (TX_RING_BUFFER__SIZE == 256 && TX_RING_BUFFER__ALIGNED)
+    LOOP_WHILE_LO8_EQUAL(tx_ring_buffer__tail, tx_ring_buffer__head);
+#else
+    while (tx_ring_buffer__is_at_limit());
+#endif
+}
+
+
+/**
  * Gets the 8-bit value from the buffer.
  * Must be called only if the buffer is not empty.
  */
@@ -69,7 +97,11 @@ uint8_t tx_ring_buffer__get(void) {
 #endif
 
 #ifdef TX_RING_BUFFER__ALIGNED
+#  if TX_RING_BUFFER__SIZE==256
+    LOAD_ADDRESS_HI8_OF(tx_ring_buffer__head, tx_ring_buffer__data);
+#  else
     AND_CONST_LO8(tx_ring_buffer__head, (0xFF ^ TX_RING_BUFFER__SIZE));
+#  endif    
 #else
     if (tx_ring_buffer__head == tx_ring_buffer__data + TX_RING_BUFFER__SIZE)
         tx_ring_buffer__head = tx_ring_buffer__data;
@@ -83,7 +115,7 @@ uint8_t tx_ring_buffer__get(void) {
     && defined(TX_RING_BUFFER__NOT_EMPTY__IN_BIT_IO_MEM)
     IF_LO8_EQUAL_CLEAR_IO_BIT(tx_ring_buffer__tail, tx_ring_buffer__head, TX_RING_BUFFER__NOT_EMPTY__HOST, TX_RING_BUFFER__NOT_EMPTY__BIT);
 #else
-    if ((uint8_t)(uint16_t)tx_ring_buffer__tail == (uint8_t)(uint16_t)tx_ring_buffer__head)
+    if (tx_ring_buffer__is_at_limit())
         tx_ring_buffer__not_empty__set(0);
 #endif
     return b;
@@ -106,7 +138,11 @@ void tx_ring_buffer__put(const uint8_t value) {
 #endif
 
 #ifdef TX_RING_BUFFER__ALIGNED
+#  if TX_RING_BUFFER__SIZE==256
+    LOAD_ADDRESS_HI8_OF(tx_ring_buffer__tail, tx_ring_buffer__data);
+#  else
     AND_CONST_LO8(tx_ring_buffer__tail, (0xFF ^ TX_RING_BUFFER__SIZE));
+#  endif    
 #else
     if (tx_ring_buffer__tail == tx_ring_buffer__data + TX_RING_BUFFER__SIZE)
         tx_ring_buffer__tail = tx_ring_buffer__data;
@@ -120,7 +156,7 @@ void tx_ring_buffer__put(const uint8_t value) {
     && defined(TX_RING_BUFFER__NOT_FULL__IN_BIT_IO_MEM)
     IF_LO8_EQUAL_CLEAR_IO_BIT(tx_ring_buffer__tail, tx_ring_buffer__head, TX_RING_BUFFER__NOT_FULL__HOST, TX_RING_BUFFER__NOT_FULL__BIT);
 #else
-    if ((uint8_t)(uint16_t)tx_ring_buffer__tail == (uint8_t)(uint16_t)tx_ring_buffer__head)
+    if (tx_ring_buffer__is_at_limit())
         tx_ring_buffer__not_full__set(0);
 #endif
 }

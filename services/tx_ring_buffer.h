@@ -22,14 +22,10 @@
 
 #if defined(TX_RING_BUFFER__NOT_EMPTY__HOST) && defined(TX_RING_BUFFER__NOT_EMPTY__BIT)
 DEFINE_BITVAR(tx_ring_buffer__not_empty, TX_RING_BUFFER__NOT_EMPTY__HOST, TX_RING_BUFFER__NOT_EMPTY__BIT);
-#else
-#error "Define TX_RING_BUFFER__NOT_EMPTY__HOST and TX_RING_BUFFER__NOT_EMPTY__BIT"
 #endif
 
 #if defined(TX_RING_BUFFER__NOT_FULL__HOST) && defined(TX_RING_BUFFER__NOT_FULL__BIT)
 DEFINE_BITVAR(tx_ring_buffer__not_full, TX_RING_BUFFER__NOT_FULL__HOST, TX_RING_BUFFER__NOT_FULL__BIT);
-#else
-#error "Define TX_RING_BUFFER__NOT_FULL__HOST and TX_RING_BUFFER__NOT_FULL__BIT"
 #endif
 
 inline bool tx_ring_buffer__is_writable(void) { return tx_ring_buffer__not_full__is_set(); }
@@ -43,14 +39,14 @@ inline bool tx_ring_buffer__is_readable(void) { return tx_ring_buffer__not_empty
 
 
 #ifdef TX_RING_BUFFER__HEAD__REG
-register uint8_t* tx_ring_buffer__head asm(QUOTE(TX_RING_BUFFER__HEAD__REG));
+register volatile uint8_t* tx_ring_buffer__head asm(QUOTE(TX_RING_BUFFER__HEAD__REG));
 #else
 extern volatile uint8_t* tx_ring_buffer__head;
 #endif
 
 
 #ifdef TX_RING_BUFFER__TAIL__REG
-register uint8_t* tx_ring_buffer__tail asm(QUOTE(TX_RING_BUFFER__TAIL__REG));
+register volatile uint8_t* tx_ring_buffer__tail asm(QUOTE(TX_RING_BUFFER__TAIL__REG));
 #else
 extern volatile uint8_t* tx_ring_buffer__tail;
 #endif
@@ -60,6 +56,16 @@ extern volatile uint8_t* tx_ring_buffer__tail;
  * Initializes the buffer.
  */
 void tx_ring_buffer__start(void);
+
+/**
+ * Tells, whether the head pointer is the same as the tail pointer.
+ */
+bool tx_ring_buffer__is_at_limit(void);
+
+/**
+ * Waits until the head pointer and the tail pointer are different.
+ */
+void tx_ring_buffer__wait_until_not_at_limit(void);
 
 /**
  * Puts the 8-bit value into the buffer.
