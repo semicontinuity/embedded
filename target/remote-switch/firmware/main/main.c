@@ -2,6 +2,10 @@
 // Remote switch
 // =============================================================================
 
+#include "drivers/out/led1.h"
+#include "drivers/out/led2.h"
+#include "drivers/out/led3.h"
+#include "drivers/out/led4.h"
 #include "drivers/comm/onewire__bus.h"
 #include "services/temperature_reader.h"
 
@@ -14,61 +18,35 @@
 #include <avr/interrupt.h>
 
 
+// =============================================================================
+// Callbacks implementation
+// =============================================================================
+
 void temperature_reader__reading__on_changed(void) {
     (void)temperature_reader__reading;
 }
 
-// main
-// -----------------------------------------------------------------------------
-int main(void) __attribute__ ((naked));
-int main(void) {
+// =============================================================================
+// Application
+// =============================================================================
+
+static void application__init(void) {
+    led1__init();
+    led2__init();
+    led3__init();
+    led4__init();
     onewire__bus__init();
 
 
     // sleeping
 //    set_sleep_mode(SLEEP_MODE_IDLE);
     modbus_rtu_driver__init();
+}
 
+static void application__start(void) {
 //    sleep_enable();
     modbus_rtu_driver__start();
-    temperature_reader__thread__start();
-
-    sei();
-
-#if !defined(__AVR_ARCH__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-noreturn"
-#endif
-//    for(;;) {
-//        if (modbus_rtu_driver__is_runnable()) {
-//            modbus_rtu_driver__run();
-//        }
-//        else {
-//            sei();
-//            sleep_cpu();
-//            cli();
-//        }
-//    }
-    for(;;) {
-        if (modbus_rtu_driver__is_runnable()) {
-            modbus_rtu_driver__run();
-        }
-        if (temperature_reader__thread__is_runnable()) {
-            temperature_reader__thread__run();
-        }
-    }
-#if !defined(__AVR_ARCH__)
-#pragma clang diagnostic pop
-#endif
-
-#if !defined(__AVR_ARCH__)
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "OCDFAInspection"
-#endif
-    return 0;
-#if !defined(__AVR_ARCH__)
-#pragma clang diagnostic pop
-#endif
+//    temperature_reader__thread__start();
 }
 
 
@@ -91,12 +69,28 @@ volatile uint16_t protocol_errors;
 volatile uint16_t buffer_overflows;
 
 
-void modbus_server__on_valid_frame_received(void) {
-    ++valid_frames_received;
+void modbus_rtu_driver__on_buffer_overflow(void) {
+    led1__set(1);
+    ++buffer_overflows;
 }
 
-void modbus_server__on_invalid_frame_received(void) {
-    ++invalid_frames_received;
+void modbus_rtu_driver__on_char_timeout(void) {
+    led1__set(1);;
+}
+
+void modbus_rtu_driver__on_frame_timeout(void) {
+    led2__set(1);
+}
+
+void modbus_rtu_driver__on_frame_processing(void) {
+    led3__set(1);
+}
+
+void modbus_rtu_driver__on_response(void) {
+    led4__set(1);
+}
+
+void modbus_rtu_driver__on_no_response(void) {
 }
 
 void modbus_rtu_driver__on_frame_sent(void) {
@@ -107,8 +101,12 @@ void modbus_rtu_driver__on_protocol_error(void) {
     ++protocol_errors;
 }
 
-void modbus_rtu_driver__on_buffer_overflow(void) {
-    ++buffer_overflows;
+void modbus_server__on_valid_frame_received(void) {
+    ++valid_frames_received;
+}
+
+void modbus_server__on_invalid_frame_received(void) {
+    ++invalid_frames_received;
 }
 
 
@@ -184,4 +182,49 @@ modbus_exception modbus_server__write_holding_register(uint16_t register_address
         return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
     }
     return MODBUS_EXCEPTION__NONE;
+}
+
+
+// main
+// -----------------------------------------------------------------------------
+int main(void) __attribute__ ((naked));
+int main(void) {
+    application__init();
+    application__start();
+    sei();
+
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
+#endif
+//    for(;;) {
+//        if (modbus_rtu_driver__is_runnable()) {
+//            modbus_rtu_driver__run();
+//        }
+//        else {
+//            sei();
+//            sleep_cpu();
+//            cli();
+//        }
+//    }
+    for(;;) {
+        if (modbus_rtu_driver__is_runnable()) {
+            modbus_rtu_driver__run();
+        }
+//        if (temperature_reader__thread__is_runnable()) {
+//            temperature_reader__thread__run();
+//        }
+    }
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic pop
+#endif
+
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
+#endif
+    return 0;
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic pop
+#endif
 }

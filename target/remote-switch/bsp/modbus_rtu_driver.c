@@ -94,7 +94,8 @@ void modbus_rtu_driver__usart_rx__on_buffer_overflow(void) {
 }
 
 void modbus_rtu_driver__delay_timer__on_t15_expired(void) {
-    modbus_rtu_driver__to_RX_REJECT();
+    modbus_rtu_driver__on_char_timeout();
+    modbus_rtu_driver__to_RX_REJECT();    
 }
 
 /**
@@ -113,6 +114,7 @@ void modbus_rtu_driver__usart_rx__on_unexpected_data(void) {
 
 
 void modbus_rtu_driver__delay_timer__on_t35_expired(void) {
+    modbus_rtu_driver__on_frame_timeout();
     modbus_rtu_driver__RX_REJECT_to_FRAME_RECEIVED();
 }
 
@@ -143,13 +145,16 @@ void modbus_rtu_driver__stop(void) {
 
 
 void modbus_rtu_driver__handle_received_frame(void) {
+    modbus_rtu_driver__on_frame_processing();
     modbus_rtu_driver__FRAME_RECEIVED_to_FRAME_PROCESSING();
     if (modbus_rtu_driver__on_frame_received()) {
         // Response must be sent
-        modbus_rtu_driver__FRAME_PROCESSING_to_TX();
+        modbus_rtu_driver__on_response();
+        modbus_rtu_driver__FRAME_PROCESSING_to_TX();        
     }
     else {
         // No response must be sent, ok to receive next frame
+        modbus_rtu_driver__on_no_response();
         modbus_rtu_driver__FRAME_PROCESSING_to_RX();
     }
 }
