@@ -4,8 +4,8 @@ PB0		LCD DATA + Button 1
 PB1		LCD DATA + Button 2
 PB2	SS	LCD DATA + Button 3
 PB3	MOSI	LCD DATA + Button 4
-PB4	MISO   	Sensor
-PB5	SCK	RTS
+PB4	MISO   	RTS
+PB5	SCK	Sensor (1-wire)
 PB6	XTAL1
 PB7	XTAL2
 
