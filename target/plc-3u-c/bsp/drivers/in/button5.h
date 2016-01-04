@@ -15,7 +15,8 @@ inline void button5__init(void) {
 }
 
 inline uint8_t button5__get(void) {
-    return IN(BUTTON5) & SIGNAL_MASK(BUTTON5);
+    //return IN(BUTTON5) & SIGNAL_MASK(BUTTON5);
+    return IS_1(BUTTON5);
 }
 
 
