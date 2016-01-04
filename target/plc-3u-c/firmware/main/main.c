@@ -22,6 +22,15 @@
 // =============================================================================
 
 static void application__init(void) {
+    ENABLE_PULLUP(UNUSED_D0);
+    ENABLE_PULLUP(UNUSED_D1);
+    ENABLE_PULLUP(UNUSED_D2);
+    ENABLE_PULLUP(UNUSED_D3);
+    ENABLE_PULLUP(UNUSED_D4);
+    ENABLE_PULLUP(UNUSED_B3);
+    ENABLE_PULLUP(UNUSED_B4);
+    ENABLE_PULLUP(UNUSED_B5);
+
     button1__init();
     button2__init();
     button3__init();
