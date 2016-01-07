@@ -8,6 +8,30 @@
 #include "util/crc16_table2x256.h"
 
 
+#if defined(MODBUS_SERVER__HANDLE_READ_COILS) && MODBUS_SERVER__HANDLE_READ_COILS > 0
+/**
+ * Handle reading of coils.
+ */
+modbus_exception modbus_server__handle_read_coils(void) {
+    const uint16_t length = buffer__limit__get();
+    if (length != MODBUS_FRAME_SIZE_MIN + MODBUS_FUNCTION__READ_COILS__PAYLOAD_SIZE)
+        return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
+
+    buffer__sync(); // will write to the beginning of the payload section
+
+    uint16_t address = buffer__get_u16();
+    uint16_t count = buffer__get_u16();
+
+    if (address != MODBUS_SERVER__COIL_ADDRESSES_START || count != MODBUS_SERVER__COIL_COUNT)
+        return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
+
+
+    buffer__put_u8((uint8_t) ((MODBUS_SERVER__COIL_COUNT + 7) >> 3) ); // byte count; the rest of the response is written by the handler
+    return modbus_server__read_coils();
+}
+#endif
+
+
 #if defined(MODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS) && MODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS > 0
 /**
  * Handle reading of holding registers.
@@ -60,6 +84,33 @@ modbus_exception modbus_server__handle_read_input_registers(void) {
 
     buffer__put_u8((uint8_t) register_count << 1); // byte count; the rest of the response is written by the handler
     return modbus_server__read_input_registers(register_address, register_count);
+}
+#endif
+
+
+#if defined(MODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL) && MODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL > 0
+/**
+ * Handle writing of single coil.
+ */
+modbus_exception modbus_server__handle_write_single_coil(void) {
+    const uint16_t length = buffer__limit__get();
+    if (length != MODBUS_FRAME_SIZE_MIN + MODBUS_FUNCTION__WRITE_SINGLE_COIL__PAYLOAD_SIZE)
+        return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
+
+    uint16_t address = buffer__get_u16();
+    uint16_t value = buffer__get_u16();
+
+    uint16_t value_l = (uint8_t) value;
+    if (value_l != 0) return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
+    uint8_t value_h = (uint8_t) (value >> 8);
+    if (value_h > 0 && value_h < 0xFF) return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
+
+    if (address < MODBUS_SERVER__COIL_ADDRESSES_START
+        || address >= MODBUS_SERVER__COIL_ADDRESSES_START + MODBUS_SERVER__COIL_COUNT)
+        return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
+
+    buffer__sync();    // will return the same data as arrived in the request (echo)
+    return modbus_server__write_single_coil(address, value_h);
 }
 #endif
 

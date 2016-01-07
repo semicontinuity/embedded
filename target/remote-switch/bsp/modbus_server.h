@@ -29,7 +29,7 @@ modbus_exception modbus_server__read_input_registers(uint16_t register_address, 
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL) && MODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL > 0
-//modbus_exception modbus_server__write_single_coil(void);
+modbus_exception modbus_server__write_single_coil(uint16_t register_address, uint8_t active);
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_WRITE_REGISTER) && MODBUS_SERVER__HANDLE_WRITE_REGISTER > 0
