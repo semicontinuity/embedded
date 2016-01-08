@@ -47,6 +47,34 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 #define MARK(label)		                do { __asm__ __volatile__( #label ":"); } while(0)
 #define MARK0(label)                            do { __asm__ __volatile__( label ":"); } while(0)
 
+#define __CLT() do {                                    \
+  asm volatile (                                        \
+    "clt\r\n"                                           \
+  );                                                    \
+} while(0)
+
+#define __SET() do {                                    \
+  asm volatile (                                        \
+    "set\r\n"                                           \
+  );                                                    \
+} while(0)
+
+#define __BST(src, srcbit) do {                         \
+  asm volatile (                                        \
+    "bst  %0, %1 \r\n"                                  \
+    :                                                   \
+    : "r" (src),                                        \
+      "I" (srcbit)                                      \
+  );                                                    \
+} while(0)
+
+#define __BLD(dst, dstbit) do {                         \
+  asm volatile (                                        \
+    "bld  %0, %1 \r\n"                                  \
+    : "+r" (dst)                                        \
+    : "I" (dstbit)                                      \
+  );                                                    \
+} while(0)
 
 #define COPY_BIT(src, srcbit, dst, dstbit)      do {    \
   asm volatile (                                        \
@@ -160,6 +188,13 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 } while(0)
 
 
+#define SET_HI8_OF(u16_dst, src)	do {	\
+  __asm__ __volatile__ (			\
+    "mov %B0, %B1	\n\t"			\
+        : "=r"(u16_dst) : "r"(src)		\
+  );						\
+} while(0)
+
 
 #define GOTO_IF_BIT_SET(r, b, l) do {	\
   __asm__ __volatile__ (		\
@@ -208,6 +243,17 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
       "I"(_SFR_IO_ADDR(addr)),                  \
       "I"(bit)                                  \
   );\
+} while(0)
+
+
+#define LOOP_WHILE_LO8_EQUAL(v1, v2) do {       \
+  __asm__ __volatile__(                         \
+    "L_" QUOTE(__LINE__) ":\n\t"                \
+    "cp %A0, %A1\n\t"                           \
+    "breq L_" QUOTE(__LINE__) "\n\t"            \
+        :                                       \
+        : "r"(v1),"r"(v2)                       \
+  );					                        \
 } while(0)
 
 
@@ -508,6 +554,26 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 #endif
 
 
+// Clobbers T bit
+#define CLEAR_BIT_IN_IO_REG(ptr, bit) do {          \
+    if (_SFR_IO_ADDR(ptr) < 0x20) {                 \
+        ptr &= (1 << (bit));                        \
+    } else if (_SFR_IO_ADDR(ptr) < 0x40) {          \
+        uint8_t temp;                               \
+        __IN(temp, ptr);                            \
+        __CLT();                                    \
+        __BLD(temp, bit);                           \
+        __OUT(ptr, temp);                           \
+    } else {                                        \
+        uint8_t temp;                               \
+        __LDS(temp, ptr);                           \
+        __CLT();                                    \
+        __BLD(temp, bit);                           \
+        __STS(ptr, temp);                           \
+    }                                               \
+} while(0)
+
+
 #if defined(TEMP_REG) && TEMP_REG > 15
 #define ANDI_IO_REG(ptr, mask) do {                 \
     if (_SFR_IO_ADDR(ptr) < 0x20) {                 \
@@ -529,6 +595,26 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
     ptr &= mask;                                    \
 } while(0)
 #endif
+
+
+// Clobbers T bit
+#define SET_BIT_IN_IO_REG(ptr, bit) do {            \
+    if (_SFR_IO_ADDR(ptr) < 0x20) {                 \
+        ptr &= (1 << (bit));                        \
+    } else if (_SFR_IO_ADDR(ptr) < 0x40) {          \
+        uint8_t temp;                               \
+        __IN(temp, ptr);                            \
+        __SET();                                    \
+        __BLD(temp, bit);                           \
+        __OUT(ptr, temp);                           \
+    } else {                                        \
+        uint8_t temp;                               \
+        __LDS(temp, ptr);                           \
+        __SET();                                    \
+        __BLD(temp, bit);                           \
+        __STS(ptr, temp);                           \
+    }                                               \
+} while(0)
 
 
 #if defined(TEMP_REG) && TEMP_REG > 15

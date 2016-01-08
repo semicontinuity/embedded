@@ -9,8 +9,10 @@
 #include <avr/io.h>
 
 
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__) 
+#if defined(__AVR_ATmega48__) ||\
+    defined(__AVR_ATmega88__) ||\
+    defined(__AVR_ATmega168__) ||\
+    defined(__AVR_ATmega328P__)
 
 #define INT0__PORT              (PORTD)
 #define INT0__PIN               (2)

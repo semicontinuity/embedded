@@ -59,7 +59,8 @@ INLINE void timer2__comp_b__run(void) timer2__comp_b__run__attrs;
  || defined(__AVR_ATmega88PA__)\
  || defined(__AVR_ATmega168__)\
  || defined(__AVR_ATmega168A__)\
- || defined(__AVR_ATmega168P__)
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)
 
 
 #  define TIMER2__COMPARE_UNITS	                        2
@@ -71,7 +72,6 @@ INLINE void timer2__comp_b__run(void) timer2__comp_b__run__attrs;
 #  define TIMER2__OVERFLOW__INTERRUPT__ENABLE__BIT      (TOIE2)
 #  define TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST    (TIFR2)
 #  define TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT     (TOV2)
-#  define timer2__overflow__interrupt__VECTOR           TIMER2_OVF_vect
 
 #  define timer2__compare_a__value                      (OCR2A)
 #  define TIMER2__COMPARE_A__INTERRUPT__ENABLE__HOST    (TIMER2_REG_MASK)
@@ -120,6 +120,7 @@ INLINE void timer2__comp_b__run(void) timer2__comp_b__run__attrs;
 #endif
 
 
+
 static inline void timer2__value__set(const uint8_t value) {
     TIMER2_REG_VALUE = value;
 }
@@ -127,6 +128,8 @@ static inline void timer2__value__set(const uint8_t value) {
 static inline uint8_t timer2__value__get(void) {
     return TIMER2_REG_VALUE;
 }
+
+#define timer2__overflow__interrupt__VECTOR             TIMER2_OVF_vect
 
 inline static uint8_t timer2__overflow__interrupt__pending__get(void) {
     return TIMER2__OVERFLOW__INTERRUPT__PENDING__HOST & _BV(TIMER2__OVERFLOW__INTERRUPT__PENDING__BIT);

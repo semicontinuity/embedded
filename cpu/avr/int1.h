@@ -8,8 +8,10 @@
 #include <avr/io.h>
 
 
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__) 
+#if defined(__AVR_ATmega48__) ||\
+    defined(__AVR_ATmega88__) ||\
+    defined(__AVR_ATmega168__) ||\
+    defined(__AVR_ATmega328P__)
 
 #define INT1__ENABLED__HOST     (EIMSK)
 #define INT1__CONFIG__HOST      (EICRA)

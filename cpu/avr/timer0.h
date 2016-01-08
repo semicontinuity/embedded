@@ -45,6 +45,7 @@ INLINE void timer0__overflow__run(void);
  || defined(__AVR_ATmega168__)\
  || defined(__AVR_ATmega168A__)\
  || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)\
  || defined(__AVR_AT90USB82__)\
  || defined(__AVR_AT90USB162__)\
  || defined(__AVR_ATtiny25__)\

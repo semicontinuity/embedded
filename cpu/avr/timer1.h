@@ -42,6 +42,7 @@ INLINE void timer1__comp_c__run(void);
  || defined(__AVR_ATmega168__)\
  || defined(__AVR_ATmega168A__)\
  || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)\
  || defined(__AVR_AT90S8535__)\
  || defined(__AVR_ATmega16__)\
  || defined(__AVR_ATmega8__)\
