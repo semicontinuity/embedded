@@ -59,14 +59,14 @@ int main(void) {
     case 0x16: PORTC |= (1<<6); break;
     case 0x17: PORTC |= (1<<7); break;
 
-    case 0x18: PORTD |= (1<<0); break;
-    case 0x19: PORTD |= (1<<1); break;
-    case 0x1A: PORTD |= (1<<2); break;
-    case 0x1B: PORTD |= (1<<3); break;
-    case 0x1C: PORTD |= (1<<4); break;
-    case 0x1D: PORTD |= (1<<5); break;
-    case 0x1E: PORTD |= (1<<6); break;
-    case 0x1F: PORTD |= (1<<7); break;
+    case 0x18: PORTA |= (1<<0); break;
+    case 0x19: PORTA |= (1<<1); break;
+    case 0x1A: PORTA |= (1<<2); break;
+    case 0x1B: PORTA |= (1<<3); break;
+    case 0x1C: PORTA |= (1<<4); break;
+    case 0x1D: PORTA |= (1<<5); break;
+    case 0x1E: PORTA |= (1<<6); break;
+    case 0x1F: PORTA |= (1<<7); break;
     }
 
 
