@@ -24,5 +24,5 @@ void onewire__bus__set(const uint8_t value) {
 
 
 bool onewire__bus__get(void) {
-    return IS_1(ONEWIRE);
+    return (bool)IS_1(ONEWIRE);
 }

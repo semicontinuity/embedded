@@ -4,7 +4,6 @@
 // =============================================================================
 
 #include "buffer.h"
-#include "modbus_rtu_driver__delay_timer.h"
 #include "modbus_rtu_driver__usart_rx.h"
 
 #include "cpu/avr/usart0.h"
@@ -39,13 +38,14 @@ void modbus_rtu_driver__usart_rx__enable(void) {
 
 ISR(usart0__rx__complete__interrupt__VECTOR) {
     const uint8_t c = usart0__getc(); // read character in any case
-    modbus_rtu_driver__delay_timer__start();
+    modbus_rtu_driver__usart_rx__on_char_received();
     if (modbus_rtu_driver__usart_rx__enabled) {
         if (!buffer__is_full()) {
             buffer__put_u8(c);
+            modbus_rtu_driver__usart_rx__on_char_buffered();
         }
         else {
-            modbus_rtu_driver__usart_rx__on_buffer_overflow();            
+            modbus_rtu_driver__usart_rx__on_buffer_overflow();
         }
     }
     else {

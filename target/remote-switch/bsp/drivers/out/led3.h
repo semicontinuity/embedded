@@ -11,6 +11,14 @@
 
 
 /**
+ * Toggle LED1.
+ */
+inline void led3__toggle(void) {
+    TOGGLE(OUT__LED3);
+}
+
+
+/**
  * Set LED3 line value.
  */
 inline void led3__set(const uint8_t value) {

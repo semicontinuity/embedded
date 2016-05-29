@@ -18,13 +18,15 @@
 #include "modbus_rtu_driver__usart_tx.h"
 #include "cpu/avr/usart0.h"
 
+#include "cpu/avr/gpio.h"
+#include "util/bitops.h"
+
 
 // Modbus RTU driver - frame_received flag
 // -----------------------------------------------------------------------------
 
-/**
- * Indicates that a frame has been received.
- */
+#if !defined(modbus_rtu_driver__frame_received__get) && !defined(modbus_rtu_driver__frame_received__set)
+
 volatile bool modbus_rtu_driver__frame_received;
 
 bool modbus_rtu_driver__frame_received__get(void) {
@@ -34,6 +36,8 @@ bool modbus_rtu_driver__frame_received__get(void) {
 void modbus_rtu_driver__frame_received__set(const bool value) {
     modbus_rtu_driver__frame_received = value;
 }
+
+#endif
 
 // State transitions
 // -----------------------------------------------------------------------------
@@ -46,6 +50,7 @@ void modbus_rtu_driver__to_RX_REJECT(void) {
     modbus_rtu_driver__usart_rx__disable();     // any received data from now on are unexpected - must be in 3.5T inter-frame timeout.
 }
 
+/** Invoked on 3.5 char timeout */
 void modbus_rtu_driver__RX_REJECT_to_FRAME_RECEIVED(void) {
     modbus_rtu_driver__delay_timer__stop();
     modbus_rtu_driver__frame_received__set(true);    
@@ -82,6 +87,15 @@ void modbus_rtu_driver__FRAME_PROCESSING_to_RX(void) {
 void modbus_rtu_driver__usart_tx__on_frame_sent(void) {
     modbus_rtu_driver__TX_to_RX();
     modbus_rtu_driver__on_frame_sent(); // called in any case, even if there was a protocol error and transmission was aborted
+}
+
+void modbus_rtu_driver__usart_rx__on_char_received(void) {
+    modbus_rtu_driver__on_char_received();
+    modbus_rtu_driver__delay_timer__start();
+}
+
+void modbus_rtu_driver__usart_rx__on_char_buffered(void) {
+    modbus_rtu_driver__on_char_buffered();
 }
 
 /**
@@ -131,14 +145,14 @@ void modbus_rtu_driver__init(void) {
 }
 
 void modbus_rtu_driver__start(void) {
-    modbus_rtu_driver__delay_timer__start();
+    //modbus_rtu_driver__delay_timer__start();
     modbus_rtu_driver__usart_rx__start();
     modbus_rtu_driver__usart_tx__start();
 }
 
 
 void modbus_rtu_driver__stop(void) {
-    modbus_rtu_driver__delay_timer__stop();
+    //modbus_rtu_driver__delay_timer__stop();
     modbus_rtu_driver__usart_tx__stop();
     modbus_rtu_driver__usart_rx__stop();
 }

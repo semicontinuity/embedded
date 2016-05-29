@@ -17,6 +17,20 @@ void modbus_rtu_driver__usart_rx__enable(void);
 
 void modbus_rtu_driver__usart_rx__disable(void);
 
+
+// Callback methods to be implemented
+// -----------------------------------------------------------------------------
+
+/**
+ * Invoked when a character is received.
+ */
+void modbus_rtu_driver__usart_rx__on_char_received(void);
+
+/**
+ * Invoked when reception is enabled and a character is placed to buffer.
+ */
+void modbus_rtu_driver__usart_rx__on_char_buffered(void);
+
 /**
  * Called when data received would overflow the buffer.
  * To be implemented by user.

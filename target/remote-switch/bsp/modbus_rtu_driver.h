@@ -33,6 +33,16 @@ void modbus_rtu_driver__on_protocol_error(void);
 void modbus_rtu_driver__on_buffer_overflow(void);
 
 /**
+ * Invoked by the driver, when a character is received.
+ */
+void modbus_rtu_driver__on_char_received(void);
+
+/**
+ * Invoked by the driver, when reception is enabled and a character is placed to buffer.
+ */
+void modbus_rtu_driver__on_char_buffered(void);
+
+/**
  * Invoked by the driver, when character timeout (normally 1.5 characters) has expired.
  */
 void modbus_rtu_driver__on_char_timeout(void);

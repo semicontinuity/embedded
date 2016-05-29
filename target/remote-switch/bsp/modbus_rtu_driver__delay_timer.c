@@ -32,9 +32,9 @@ void modbus_rtu_driver__delay_timer__stop(void) {
 /**
  * Invoked when 1.5 characters timeout expired.
  */
-ISR(timer1__compare_a__interrupt__VECTOR, ISR_NAKED) {
+ISR(timer1__compare_a__interrupt__VECTOR/*, ISR_NAKED*/) {
     modbus_rtu_driver__delay_timer__on_t15_expired();
-    reti();
+//    reti();
 }
 
 
