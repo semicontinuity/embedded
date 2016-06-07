@@ -18,9 +18,6 @@
 #include "modbus_rtu_driver__usart_tx.h"
 #include "cpu/avr/usart0.h"
 
-#include "cpu/avr/gpio.h"
-#include "util/bitops.h"
-
 
 // Modbus RTU driver - frame_received flag
 // -----------------------------------------------------------------------------
@@ -36,7 +33,9 @@ bool modbus_rtu_driver__frame_received__get(void) {
 void modbus_rtu_driver__frame_received__set(const bool value) {
     modbus_rtu_driver__frame_received = value;
 }
-
+#else
+# include "cpu/avr/gpio.h"
+# include "util/bitops.h"
 #endif
 
 // State transitions
