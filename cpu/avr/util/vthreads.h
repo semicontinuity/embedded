@@ -197,18 +197,20 @@ FC_CONCAT(YIELD, __LINE__):                                     \
 
 #else
 
-#define VT_YIELD(thread, ip)                                    \
+#define VT_YIELD_WITH_MARK(thread, ip, mark)                    \
 do {                                                            \
 FC_CONCAT(YIELD, __LINE__):                                     \
   (void)&&FC_CONCAT(YIELD, __LINE__);                           \
   vt_flag = 0;				                                    \
-  FC_CONCAT(RESUME, __LINE__):                                  \
+  mark:                                                         \
   if(vt_flag == 0) {                                            \
-    (ip) = &&FC_CONCAT(RESUME, __LINE__);	                    \
+    (ip) = &&mark;	                                            \
     return;                                                     \
   }                                                             \
-  FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(RESUME, __LINE__)));  \
+  FC_ASM_LABEL(FC_LABEL(thread, mark));                         \
 } while(0)
+
+#define VT_YIELD(thread, ip) VT_YIELD_WITH_MARK(thread, ip, FC_CONCAT(RESUME, __LINE__))
 
 #endif
 
