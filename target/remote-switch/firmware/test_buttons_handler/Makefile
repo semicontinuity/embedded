@@ -3,9 +3,10 @@ TARGET_CONF ?= $(TARGET).conf
 ROOT = ../../../..
 BSP = ../../bsp
 
+CINCS += -I.
 CINCS += -I$(BSP)
 CINCS += -I$(ROOT)
-vpath %.c $(BSP) $(ROOT)
+vpath %.c . $(BSP) $(ROOT)
 
 
 include $(TARGET_CONF)
@@ -28,7 +29,6 @@ CDEFS += $(PROPS)
 ifeq ($(WHOLE_PROGRAM),1)
 
 CDEFS += -fwhole-program
-CDEFS += -DINLINE="inline"
 SRC += __all__.c
 
 else
