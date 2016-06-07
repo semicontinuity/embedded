@@ -15,3 +15,6 @@
 #include "drivers/comm/onewire__t0t2.c"
 #include "drivers/comm/onewire__bus__direct.c"
 #include "util/crc8_ow_unrolled.c"
+
+#include "LCD.c"
+#include "init.c"

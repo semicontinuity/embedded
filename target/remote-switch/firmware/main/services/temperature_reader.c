@@ -1,3 +1,6 @@
+//#include "drivers/out/led1.h"
+//#include "drivers/out/led2.h"
+
 #include "services/temperature_reader.h"
 
 #include "drivers/comm/onewire.h"
@@ -48,12 +51,18 @@ void temperature_reader__thread__run(void) {
     VT_BEGIN(temperature_reader__thread, temperature_reader__thread__ip);
     timer0__overflow__interrupt__pending__clear();
     for (;;) {
+//        led1__set(1);
+//        led2__set(1);
+
         onewire__command((uint8_t) sizeof(command_convert), 0, command_convert, 0);
         do {
             VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
             onewire__thread__run();
         }
         while (onewire__thread__is_alive());
+
+//        led1__set(1);
+//        led2__set(0);
 
         onewire__thread__delay_counter = 46;
         timer0__conf__set(TIMER0_CONF_PRESCALER_1024|TIMER0_CONF_WGM_NORMAL);
@@ -63,12 +72,18 @@ void temperature_reader__thread__run(void) {
             if (--onewire__thread__delay_counter == 0) break;
         }
 
+//        led1__set(0);
+//        led2__set(1);
+
         onewire__command(sizeof(command), sizeof(response), command, response);
         do {
             VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
             onewire__thread__run();
         }
         while (onewire__thread__is_alive());
+
+//        led1__set(0);
+//        led2__set(0);
 
         temperature_reader__reading = (response[0] | (response[1] << 8)) << 4;
         temperature_reader__reading__on_changed();

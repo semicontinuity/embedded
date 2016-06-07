@@ -2,10 +2,15 @@
 // Remote switch
 // =============================================================================
 
+#include "cpu/avr/gpio.h"
+#include "LCD.h"          //Хедер для LCD дисплея
+#include "prototip_fun.h" //Прототипы функций
+
 #include "drivers/out/led1.h"
 #include "drivers/out/led2.h"
 #include "drivers/out/led3.h"
 #include "drivers/out/led4.h"
+#include "drivers/comm/onewire.h"
 #include "drivers/comm/onewire__bus.h"
 #include "services/temperature_reader.h"
 
@@ -16,6 +21,7 @@
 #include "cpu/avr/util/bcd.h"
 #include "cpu/avr/int1.h"
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 
 
 // =============================================================================
@@ -24,29 +30,6 @@
 
 void temperature_reader__reading__on_changed(void) {
     (void)temperature_reader__reading;
-}
-
-// =============================================================================
-// Application
-// =============================================================================
-
-static void application__init(void) {
-    led1__init();
-    led2__init();
-    led3__init();
-    led4__init();
-    onewire__bus__init();
-
-
-    // sleeping
-//    set_sleep_mode(SLEEP_MODE_IDLE);
-    modbus_rtu_driver__init();
-}
-
-static void application__start(void) {
-//    sleep_enable();
-    modbus_rtu_driver__start();
-//    temperature_reader__thread__start();
 }
 
 
@@ -69,25 +52,33 @@ volatile uint16_t protocol_errors;
 volatile uint16_t buffer_overflows;
 
 
+void modbus_rtu_driver__on_char_received(void) {
+//    led1__set(1);
+}
+
+void modbus_rtu_driver__on_char_buffered(void) {
+//    led2__set(1);
+}
+
 void modbus_rtu_driver__on_buffer_overflow(void) {
-    led1__set(1);
+//    led1__set(1);
     ++buffer_overflows;
 }
 
 void modbus_rtu_driver__on_char_timeout(void) {
-    led1__set(1);;
+//    led1__set(1);;
 }
 
 void modbus_rtu_driver__on_frame_timeout(void) {
-    led2__set(1);
+//    led2__set(1);
 }
 
 void modbus_rtu_driver__on_frame_processing(void) {
-    led3__set(1);
+//    led3__set(1);
 }
 
 void modbus_rtu_driver__on_response(void) {
-    led4__set(1);
+//    led4__set(1);
 }
 
 void modbus_rtu_driver__on_no_response(void) {
@@ -107,6 +98,38 @@ void modbus_server__on_valid_frame_received(void) {
 
 void modbus_server__on_invalid_frame_received(void) {
     ++invalid_frames_received;
+}
+
+
+/**
+ * Handle reading of holding registers.
+ */
+modbus_exception modbus_server__read_coils(void) {
+    buffer__put_u8((PORT_REG(OUT__LEDS__PORT) & (SIGNAL_MASK(OUT__LED1) | SIGNAL_MASK(OUT__LED2) | SIGNAL_MASK(OUT__LED3) | SIGNAL_MASK(OUT__LED4))) >> OUT__LED1__PIN);
+    return MODBUS_EXCEPTION__NONE;
+}
+
+
+
+
+/**
+ * Handle writing of single coil (output LEDs/relays).
+ */
+
+modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t active) {
+    if (address == 0) {
+        led1__set(active);
+    }
+    else if (--address == 0) {
+        led2__set(active);
+    }
+    else if (--address == 0) {
+        led3__set(active);
+    }
+    else if (--address == 0) {
+        led4__set(active);
+    }
+    return MODBUS_EXCEPTION__NONE;
 }
 
 
@@ -185,11 +208,35 @@ modbus_exception modbus_server__write_holding_register(uint16_t register_address
 }
 
 
+// =============================================================================
+// Application
+// =============================================================================
+
+static void application__init(void) {
+    led1__init();
+    led2__init();
+    led3__init();
+    led4__init();
+    modbus_rtu_driver__init();
+    onewire__bus__init();
+    onewire__thread__init();
+}
+
+static void application__start(void) {
+    modbus_rtu_driver__start();
+    temperature_reader__thread__start();
+}
+
+
 // main
 // -----------------------------------------------------------------------------
 int main(void) __attribute__ ((naked));
 int main(void) {
     application__init();
+
+    init();
+    LCDstring_of_flash(PSTR("Remote switch"), 0, 0);
+
     application__start();
     sei();
 
@@ -197,23 +244,13 @@ int main(void) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
-//    for(;;) {
-//        if (modbus_rtu_driver__is_runnable()) {
-//            modbus_rtu_driver__run();
-//        }
-//        else {
-//            sei();
-//            sleep_cpu();
-//            cli();
-//        }
-//    }
     for(;;) {
         if (modbus_rtu_driver__is_runnable()) {
             modbus_rtu_driver__run();
         }
-//        if (temperature_reader__thread__is_runnable()) {
-//            temperature_reader__thread__run();
-//        }
+        if (temperature_reader__thread__is_runnable()) {
+            temperature_reader__thread__run();
+        }
     }
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic pop
