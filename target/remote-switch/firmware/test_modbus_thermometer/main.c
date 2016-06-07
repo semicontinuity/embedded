@@ -2,8 +2,6 @@
 // Modbus test
 // =============================================================================
 
-#include "globals.c"
-
 #include "drivers/out/led1.h"
 #include "drivers/out/led2.h"
 #include "drivers/out/led3.h"
@@ -106,7 +104,6 @@ modbus_exception modbus_server__read_coils(void) {
 /**
  * Handle writing of single coil (output LEDs/relays).
  */
-
 modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t active) {
     if (address == 0) {
         led1__set(active);
@@ -114,8 +111,11 @@ modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t acti
     else if (--address == 0) {
         led2__set(active);
     }
-    else {
+    else if (--address == 0) {
         led3__set(active);
+    }
+    else {
+        led4__set(active);
     }
     return MODBUS_EXCEPTION__NONE;
 }
@@ -225,18 +225,6 @@ static void application__start(void) {
 int main(void) __attribute__ ((naked));
 int main(void) {
     application__init();
-
-    led1__set(1);
-    led2__set(1);
-    led3__set(1);
-    led4__set(1);
-    _delay_ms(500);
-    led1__set(0);
-    led2__set(0);
-    led3__set(0);
-    led4__set(0);
-    _delay_ms(100);
-
     application__start();
     sei();
 
@@ -255,9 +243,11 @@ int main(void) {
 //        }
 //    }
     for(;;) {
+        __asm__ __volatile__( "main__modbus_rtu_driver:");
         if (modbus_rtu_driver__is_runnable()) {
             modbus_rtu_driver__run();
         }
+        __asm__ __volatile__( "main__temperature_reader__thread:");
         if (temperature_reader__thread__is_runnable()) {
             temperature_reader__thread__run();
         }
