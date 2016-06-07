@@ -20,14 +20,14 @@
 extern uint8_t buffer__data[BUFFER__SIZE];
 
 #ifdef BUFFER__POSITION_PTR__REG
-register uint8_t* buffer__position_ptr asm(QUOTE(BUFFER__POSITION_PTR__REG));
+register volatile uint8_t* buffer__position_ptr asm(QUOTE(BUFFER__POSITION_PTR__REG));
 #else
 extern volatile uint8_t* buffer__position_ptr;
 #endif
 
 
 #ifdef BUFFER__LIMIT_PTR__REG
-register uint8_t* buffer__limit_ptr asm(QUOTE(BUFFER__LIMIT_PTR__REG));
+register volatile uint8_t* buffer__limit_ptr asm(QUOTE(BUFFER__LIMIT_PTR__REG));
 #else
 extern volatile uint8_t* buffer__limit_ptr;
 #endif
