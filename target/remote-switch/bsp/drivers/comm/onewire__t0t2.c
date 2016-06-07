@@ -256,7 +256,7 @@ void onewire__thread__reset_bus(void) {
 
 /**
  * 1-wire thread function.
- * Invoked when it's time to render new bit on the bus.
+ * Invoked multiple times to perform transaction on the bus until the thread is not alive.
  * Other interrupts in the system should not take much time (say, less than 3uS) not to skrew up 1-wire timings.
  */
 void onewire__thread__run(void) {
@@ -272,6 +272,7 @@ void onewire__thread__run(void) {
 
     timer0__conf__set(ONEWIRE__BIT_SPAN_TIMER__FAST_CONF);
     timer2__overflow__interrupt__disable();
+    VT_MARK(onewire__thread, SENDING);
     do {
         onewire__thread__data__load();
         onewire__thread__bit_count__reload();
@@ -283,7 +284,7 @@ void onewire__thread__run(void) {
             onewire__bus__set(0);
             timer2__value__set(start_value);
             timer0__value__set(256 - ONEWIRE__BIT_SPAN_TIMER__FAST_CONF_TIMEOUT);
-            VT_YIELD(onewire__thread, onewire__thread__ip);
+            VT_YIELD_WITH_MARK(onewire__thread, onewire__thread__ip, BIT_SENT);
             timer0__overflow__interrupt__pending__clear();
             onewire__thread__data >>= 1;
         }
@@ -292,6 +293,7 @@ void onewire__thread__run(void) {
     while (--onewire__thread__tx__remaining);
     timer2__overflow__interrupt__enable();
 
+    VT_MARK(onewire__thread, RECEIVING);
     if (onewire__thread__rx__remaining) {
         do {
             onewire__thread__bit_count__reload();
@@ -300,7 +302,7 @@ void onewire__thread__run(void) {
                 onewire__bus__set(0);
                 timer2__value__set(256 - ONEWIRE__BIT_FORM_TIMER__WRITE1_READ_TIME);
                 timer0__value__set(256 - ONEWIRE__BIT_SPAN_TIMER__FAST_CONF_TIMEOUT);
-                VT_YIELD(onewire__thread, onewire__thread__ip);
+                VT_YIELD_WITH_MARK(onewire__thread, onewire__thread__ip, BIT_RECEIVED);
                 timer0__overflow__interrupt__pending__clear();
             }
             while (--onewire__thread__bit_count);
@@ -310,7 +312,7 @@ void onewire__thread__run(void) {
         }
         while (--onewire__thread__rx__remaining);
     }
-
+    VT_MARK(onewire__thread, STOPPING);
 
     timer0__conf__set(TIMER0_CONF_DEFAULT);
     timer2__conf__set(TIMER2_CONF_DEFAULT);

@@ -174,7 +174,7 @@ void modbus_rtu_driver__handle_received_frame(void) {
 
 
 bool modbus_rtu_driver__is_runnable(void) {
-    return modbus_rtu_driver__frame_received__get();
+    return (bool) modbus_rtu_driver__frame_received__get();
 }
 
 
