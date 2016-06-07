@@ -18,10 +18,11 @@ endif
 CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
 
-#CDEFS += -fno-tree-loop-optimize -fno-unswitch-loops
-CDEFS += -fwhole-program -Wl,--relax
-
 # Firmware
 SRC += __all__.c
 
 include $(ROOT)/cpu/avr/Makefile
+
+ifdef CRC16__TABLE2x256__SECTION
+OBJDUMP_FLAGS = -j.text -j$(CRC16__TABLE2x256__SECTION)
+endif
