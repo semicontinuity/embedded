@@ -345,7 +345,7 @@ ALL_CFLAGS = -mmcu=$(MCU) -I. $(CFLAGS) $(GENDEPFLAGS)
 ALL_CPPFLAGS = -mmcu=$(MCU) -I. -x c++ $(CPPFLAGS) $(GENDEPFLAGS)
 ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
-
+OBJDUMP_FLAGS ?=
 
 
 
@@ -474,7 +474,7 @@ extcoff: $(TARGET).elf
 %.lss: %.elf
 	@echo
 	@echo $(MSG_EXTENDED_LISTING) $@
-	$(OBJDUMP) -h -S $< > $@
+	$(OBJDUMP) $(OBJDUMP_FLAGS) -h -S $< > $@
 
 # Create a symbol table from ELF output file.
 %.sym: %.elf
