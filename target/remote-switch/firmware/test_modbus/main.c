@@ -11,9 +11,6 @@
 #include "modbus_rtu_driver.h"
 #include "modbus_server.h"
 
-#include "LCD.h"          
-#include "prototip_fun.h" 
-
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 #include <util/delay.h>
@@ -230,9 +227,6 @@ int main(void) {
     led4__set(0);
     _delay_ms(100);
 
-
-    init();
-    LCDstring_of_flash(PSTR("MODBUS test"), 0, 0);
 
     application__start();
     sei();

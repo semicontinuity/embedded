@@ -8,6 +8,3 @@
 #include "modbus_rtu_driver__usart_tx.c"
 #include "modbus_server.c"
 #include "util/crc16_table2x256.c"
-
-#include "LCD.c"
-#include "init.c"
