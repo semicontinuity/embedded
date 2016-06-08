@@ -1,20 +1,23 @@
 // =============================================================================
-// Nokia5110 LCD terminal
+// Terminal with output to Nokia5110 LCD and LED strip
 // =============================================================================
 
 #include "nokia5110.h"
+#include "soft_spi1.h"
+
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
+#include "cpu/avr/gpio.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/usart0__rx_polled.h"
 
-#include "cpu/avr/gpio.h"
 
 // main
 // -----------------------------------------------------------------------------
 int main(void) __attribute__ ((naked));
 int main(void) {
+    soft_spi1__init();
     usart0__init();
     usart0__rx__enabled__set(1);
 
@@ -30,7 +33,7 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
-        char c = usart0__in__read();
+        uint8_t c = usart0__in__read();
         if (c == 0) {
             lcd__terminal__reset();
         } else if (c == 1) {
@@ -43,6 +46,13 @@ int main(void) {
         } else if (c == 13) {
         } else if (c == 10) {
             lcd__terminal__line_feed();
+        } else if (c == 0x1F) {
+            uint8_t count = usart0__in__read();
+            for (;;) {
+                c = usart0__in__read();
+                soft_spi1__write(c);
+                if (!(--count)) break;
+            }
         } else {
             lcd__terminal__putch(c);
         }

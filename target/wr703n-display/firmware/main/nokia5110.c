@@ -9,30 +9,11 @@
 // =============================================================================
 
 #include "cpu/avr/gpio.h"
-#include "cpu/avr/spi.h"
-#include "cpu/avr/spi_polled.h"
+#include "soft_spi0.h"
 #include <util/delay_basic.h>
 
 
 #define LCD__COMMAND__EXT__CONTRAST (0x80)
-
-
-void soft_spi0__init(void) {
-    USE_AS_OUTPUT(SOFT_SPI0__MOSI);
-    USE_AS_OUTPUT(SOFT_SPI0__SCK);
-}
-
-
-void soft_spi0__write(uint8_t value) {
-    uint8_t i = 8;
-    do {
-        OUT_0(SOFT_SPI0__SCK);
-        if (value & 0x80) OUT_1(SOFT_SPI0__MOSI); else OUT_0(SOFT_SPI0__MOSI);
-        value <<= 1;
-        OUT_1(SOFT_SPI0__SCK);
-    }
-    while (--i);
-}
 
 
 void lcd__mode__data(void) {
