@@ -4,6 +4,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#ifndef QUOTE
+#define _QUOTE(x) #x
+#define QUOTE(x) _QUOTE(x)
+#endif
+
 typedef union { 
     uint8_t bytes[2]; 
     uint16_t word; 
@@ -21,6 +26,9 @@ typedef union {
 // =============================================================================
 // Helper macros for bit variables
 // =============================================================================
+#define BITVAR_SET(host, bit, value) do { if ((value)) (host) |= (1 << (bit)); else (host) &= ~(1 << (bit));} while(0)
+#define BITVAR_GET(host, bit) ((host) & (1 << (bit)))
+
 
 #define DECLARE_BITVAR(name)                    \
 	inline void name##__set(char v);        \
