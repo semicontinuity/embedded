@@ -4,7 +4,6 @@
 
 #include "soft_usart__rx.h"
 #include "soft_usart__timer.h"
-#include "temp_reg.h"
 #include "cpu/avr/asm.h"
 #include "cpu/avr/util/vthreads.h"
 
@@ -47,46 +46,53 @@ void soft_usart__rx__start(void) {
  * Clobbers T bit.
  */
 void soft_usart__rx__thread__run(void) {
+#ifdef TEMP_REG
+    register uint8_t temp_reg asm(QUOTE(TEMP_REG));
+#else
+    uint8_t temp_reg;
+#endif
+
     VT_BEGIN(soft_usart__rx__thread, soft_usart__rx__thread__ip);
 
-    // In the middle of start bit
+    // In the middle of start bit - value not checked
     VT_YIELD(soft_usart__rx__thread, soft_usart__rx__thread__ip);
 
-    __IN(temp_reg,PORT_REG(SOFT_USART__TX__PORT));
+    __IN(temp_reg,PORT_REG(SOFT_USART__RX__PORT));
     COPY_BIT(temp_reg, SOFT_USART__RX__PIN, soft_usart__rx__data, 0);
     VT_YIELD(soft_usart__rx__thread, soft_usart__rx__thread__ip);
 
-    __IN(temp_reg,PORT_REG(SOFT_USART__TX__PORT));
+    __IN(temp_reg,PORT_REG(SOFT_USART__RX__PORT));
     COPY_BIT(temp_reg, SOFT_USART__RX__PIN, soft_usart__rx__data, 1);
     VT_YIELD(soft_usart__rx__thread, soft_usart__rx__thread__ip);
 
-    __IN(temp_reg,PORT_REG(SOFT_USART__TX__PORT));
+    __IN(temp_reg,PORT_REG(SOFT_USART__RX__PORT));
     COPY_BIT(temp_reg, SOFT_USART__RX__PIN, soft_usart__rx__data, 2);
     VT_YIELD(soft_usart__rx__thread, soft_usart__rx__thread__ip);
 
-    __IN(temp_reg,PORT_REG(SOFT_USART__TX__PORT));
+    __IN(temp_reg,PORT_REG(SOFT_USART__RX__PORT));
     COPY_BIT(temp_reg, SOFT_USART__RX__PIN, soft_usart__rx__data, 3);
     VT_YIELD(soft_usart__rx__thread, soft_usart__rx__thread__ip);
 
-    __IN(temp_reg,PORT_REG(SOFT_USART__TX__PORT));
+    __IN(temp_reg,PORT_REG(SOFT_USART__RX__PORT));
     COPY_BIT(temp_reg, SOFT_USART__RX__PIN, soft_usart__rx__data, 4);
     VT_YIELD(soft_usart__rx__thread, soft_usart__rx__thread__ip);
 
-    __IN(temp_reg,PORT_REG(SOFT_USART__TX__PORT));
+    __IN(temp_reg,PORT_REG(SOFT_USART__RX__PORT));
     COPY_BIT(temp_reg, SOFT_USART__RX__PIN, soft_usart__rx__data, 5);
     VT_YIELD(soft_usart__rx__thread, soft_usart__rx__thread__ip);
 
-    __IN(temp_reg,PORT_REG(SOFT_USART__TX__PORT));
+    __IN(temp_reg,PORT_REG(SOFT_USART__RX__PORT));
     COPY_BIT(temp_reg, SOFT_USART__RX__PIN, soft_usart__rx__data, 6);
     VT_YIELD(soft_usart__rx__thread, soft_usart__rx__thread__ip);
 
-    __IN(temp_reg,PORT_REG(SOFT_USART__TX__PORT));
+    __IN(temp_reg,PORT_REG(SOFT_USART__RX__PORT));
     COPY_BIT(temp_reg, SOFT_USART__RX__PIN, soft_usart__rx__data, 7);
     VT_YIELD(soft_usart__rx__thread, soft_usart__rx__thread__ip);
 
-    // In the middle of stop bit
+    // In the middle of stop bit - value not checked
     soft_usart__timer__rx__stop();
-    soft_usart__rx__detector__start();
+    soft_usart__rx__detector__start(); // not at the very end of the bit, but will do for a while
+    soft_usart__rx__on_data();
 
     VT_UNREACHEABLE_END(soft_usart__rx__thread);
 }

@@ -6,7 +6,7 @@
 #define __SOFT_USART__RX_H
 
 #include <stdint.h>
-
+#include "cpu/avr/asm.h"
 
 #ifdef SOFT_USART__RX__DATA__REG
 register uint8_t soft_usart__rx__data asm(QUOTE(SOFT_USART__RX__DATA__REG));
