@@ -261,47 +261,24 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 // Operations with X register
 // ----------------------------------------------
 
-#define LOAD_XPLUS(ptr)			        \
+#define LOAD_XPLUS(ptr)			                \
 (__extension__({                                \
     uint8_t __result;                           \
     __asm__ (                                   \
     "ld %0, x+\n\t"                             \
-        : "=r"(__result), "+x"(ptr)             \
+    : "=r"(__result), "+x"(ptr)                 \
     );                                          \
     __result;                                   \
 }))
 
 
-#define ST_XPLUS(ptr,val) do {               \
-  __asm__ __volatile__ (			\
-    "st x+,%1			        \n\t"   \
-    :"+x"(ptr):"r"(val)                  \
-  );						\
+#define ST_XPLUS(ptr, var) do {                 \
+  __asm__ __volatile__ (			            \
+    "st    x+, %2\n\t"                          \
+    :"+x"(ptr)                                  \
+    :"0"(ptr),"r"(var)                          \
+  );						                    \
 } while(0)
-
-#define STORE_TO_XPLUS(var) do {		\
-  __asm__ __volatile__ (			\
-    "st	   X+, %0\n\t"	                        \
-    ::"r"(var):"r26","r27"                      \
-  );						\
-} while(0)
-
-
-#define ADDRESS_TO_XPLUS(addr) do {		\
-  __asm__ __volatile__ (			\
-    "lds   __tmp_reg__," QUOTE(addr) "	\n\t"	\
-    "st	   X+, __tmp_reg__		\n\t"	\
-  );						\
-} while(0)
-
-
-#define XPLUS_TO_ADDRESS(addr) do {		\
-  __asm__ __volatile__ (			\
-    "ld	   __tmp_reg__, X+		\n\t"	\
-    "sts   " QUOTE(addr) ", __tmp_reg__	\n\t"	\
-  );						\
-} while(0)
-
 
 #define STORE_XPLUS(ptr, var) do {              \
   __asm__ __volatile__ (                        \
@@ -311,11 +288,48 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
   );                                            \
 } while(0)
 
+#define STORE_TO_XPLUS(var) do {		        \
+  __asm__ __volatile__ (			            \
+    "st	   X+, %0\n\t"	                        \
+    ::"r"(var):"r26","r27"                      \
+  );						                    \
+} while(0)
+
+
+#define ADDRESS_TO_XPLUS(addr) do {		        \
+  __asm__ __volatile__ (			            \
+    "lds   __tmp_reg__," QUOTE(addr) "	\n\t"	\
+    "st	   X+, __tmp_reg__		\n\t"	        \
+  );						                    \
+} while(0)
+
+
+#define XPLUS_TO_ADDRESS(addr) do {		        \
+  __asm__ __volatile__ (			            \
+    "ld	   __tmp_reg__, X+		\n\t"	        \
+    "sts   " QUOTE(addr) ", __tmp_reg__	\n\t"	\
+  );						                    \
+} while(0)
+
+
 // ----------------------------------------------
 // Operations with Y register
 // ----------------------------------------------
 
-#define LOAD_YPLUS(ptr)			        \
+#define INIT_Y(k)                               \
+(__extension__({                                \
+    uint16_t __result;                          \
+    __asm__ __volatile__ (                      \
+        "ldi %A0, %1\n\t"			            \
+        "ldi %B0, %2\n\t"			            \
+            : "=y"(__result)			        \
+            : "M"((uint8_t)((k) & 0xFF)),	    \
+              "M"((uint8_t)((k) >> 8))          \
+    );                                          \
+    __result;                                   \
+}))
+
+#define LOAD_YPLUS(ptr)			                \
 (__extension__({                                \
     uint8_t __result;                           \
     __asm__ (                                   \
@@ -325,52 +339,53 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
     __result;                                   \
 }))
 
-#define ADDRESS_TO_YPLUS(addr) do {		\
-  __asm__ __volatile__ (			\
+#define ADDRESS_TO_YPLUS(addr) do {		        \
+  __asm__ __volatile__ (			            \
     "lds   __tmp_reg__," QUOTE(addr) "	\n\t"	\
-    "st	   Y+, __tmp_reg__		\n\t"	\
-  );						\
+    "st	   Y+, __tmp_reg__		\n\t"	        \
+  );						                    \
 } while(0)
 
 
-#define YPLUS_TO_ADDRESS(addr) do {		\
-  __asm__ __volatile__ (			\
-    "ld	   __tmp_reg__, Y+		\n\t"	\
+#define YPLUS_TO_ADDRESS(addr) do {		        \
+  __asm__ __volatile__ (			            \
+    "ld	   __tmp_reg__, Y+		\n\t"	        \
     "sts   " QUOTE(addr) ", __tmp_reg__	\n\t"	\
-  );						\
+  );						                    \
 } while(0)
 
 
 #define LD_YPLUS(result,ptr) do {               \
-  __asm__ __volatile__ (			\
-    "ld	%0, y+			        \n\t"   \
+  __asm__ __volatile__ (			            \
+    "ld	%0, y+			        \n\t"           \
     : "=r" (result) : "y"(ptr)                  \
-  );						\
+  );						                    \
 } while(0)
 
 
 #define LDD_Y(result, d) do {                   \
-  __asm__ __volatile__ (			\
+  __asm__ __volatile__ (			            \
     "ldd   %0,Y + " QUOTE(d) "          \n\t"   \
     : "=r" (result)                             \
-  );						\
+  );						                    \
 } while(0)
 
 
 #define LDD_Y_U16(result, d) do {               \
-  __asm__ __volatile__ (			\
+  __asm__ __volatile__ (			            \
     "ldd   %A0,Y + " QUOTE(d) "          \n\t"  \
     "ldd   %B0,Y + " QUOTE(d) " + 1      \n\t"  \
     : "=r" (result)                             \
-  );						\
+  );						                    \
 } while(0)
 
 
-#define ST_YPLUS(var) do {                      \
-  __asm__ __volatile__ (                        \
-    "st	   Y+, %0\n\t"                          \
-    ::"r"(var):"r28","r29"                      \
-  );						\
+#define ST_YPLUS(ptr, var) do {                 \
+  __asm__ __volatile__ (			            \
+    "st    y+, %2\n\t"                          \
+    :"+y"(ptr)                                  \
+    :"0"(ptr),"r"(var)                          \
+  );						                    \
 } while(0)
 
 
@@ -382,11 +397,20 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
   );                                            \
 } while(0)
 
+// Document, why these variable specs are used
+#define STORE_PLUS_VIA_Y(ptr, var) do {         \
+  __asm__ __volatile__ (			            \
+    "st	y+, %1			        \n\t"           \
+    : "+y"(ptr) : "r"(var)                      \
+  );						                    \
+} while(0)
+
+
 // ----------------------------------------------
 // Operations with Z register
 // ----------------------------------------------
 
-#define LOAD_ZPLUS(ptr)			        \
+#define LOAD_ZPLUS(ptr)			                \
 (__extension__({                                \
     uint8_t __result;                           \
     __asm__ (                                   \
@@ -398,29 +422,37 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 
 
 #define LD_ZPLUS(result,ptr) do {               \
-  __asm__ __volatile__ (			\
-    "ld	%0, z+			        \n\t"   \
+  __asm__ __volatile__ (			            \
+    "ld	%0, z+			        \n\t"           \
     : "=r" (result),"+z"(ptr)                   \
-  );						\
+  );						                    \
 } while(0)
 
 
 #define LDD_Z(result, d) do {                   \
-  __asm__ __volatile__ (			\
+  __asm__ __volatile__ (			            \
     "ldd   %0,Z + " QUOTE(d) "          \n\t"   \
     : "=r" (result)                             \
-  );						\
+  );						                    \
 } while(0)
 
 
 #define LDD_Z_U16(result, d) do {               \
-  __asm__ __volatile__ (			\
+  __asm__ __volatile__ (			            \
     "ldd   %A0,Z + " QUOTE(d) "          \n\t"  \
     "ldd   %B0,Z + " QUOTE(d) " + 1      \n\t"  \
     : "=r" (result)                             \
-  );						\
+  );						                    \
 } while(0)
 
+
+#define ST_ZPLUS(ptr, var) do {                 \
+  __asm__ __volatile__ (			            \
+    "st    z+, %2\n\t"                          \
+    :"+z"(ptr)                                  \
+    :"0"(ptr),"r"(var)                          \
+  );						                    \
+} while(0)
 
 #define STORE_ZPLUS(ptr, var) do {              \
   __asm__ __volatile__ (                        \
@@ -430,15 +462,24 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
   );                                            \
 } while(0)
 
+// Document, why these variable specs are used
+#define STORE_PLUS_VIA_Z(ptr, var) do {         \
+  __asm__ __volatile__ (			            \
+    "st	z+, %1			        \n\t"           \
+    : "+z"(ptr) : "r"(var)                      \
+  );						                    \
+} while(0)
+
+
 // ----------------------------------------------
 // Transfers between X, Y and Z register
 // ----------------------------------------------
 
 #define YPLUS_TO_ZPLUS() do {			\
-  __asm__ __volatile__ (			\
+  __asm__ __volatile__ (			    \
     "ld	__tmp_reg__, Y+			\n\t"   \
     "st	Z+, __tmp_reg__			\n\t"   \
-  );						\
+  );						            \
 } while(0)
 
 
