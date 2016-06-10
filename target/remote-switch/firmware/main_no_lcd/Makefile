@@ -25,3 +25,7 @@ CDEFS += -fwhole-program -Wl,--relax
 SRC += __all__.c
 
 include $(ROOT)/cpu/avr/Makefile
+
+ifdef CRC16__TABLE2x256__SECTION
+OBJDUMP_FLAGS = -j.text -j$(CRC16__TABLE2x256__SECTION)
+endif

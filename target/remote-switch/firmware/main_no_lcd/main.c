@@ -93,6 +93,7 @@ void modbus_server__on_invalid_frame_received(void) {
  * Handle reading of holding registers.
  */
 modbus_exception modbus_server__read_coils(void) {
+    __asm__ __volatile__( "modbus_server__read_coils:");
     buffer__put_u8((PORT_REG(OUT__LEDS__PORT) & (SIGNAL_MASK(OUT__LED1) | SIGNAL_MASK(OUT__LED2) | SIGNAL_MASK(OUT__LED3))) >> OUT__LED1__PIN);
     return MODBUS_EXCEPTION__NONE;
 }
@@ -104,6 +105,7 @@ modbus_exception modbus_server__read_coils(void) {
  * Handle writing of single coil (output LEDs/relays).
  */
 modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t active) {
+    __asm__ __volatile__( "modbus_server__write_single_coil:");
     if (address == 0) {
         led1__set(active);
     }
@@ -124,6 +126,7 @@ modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t acti
  * Handle reading of holding registers.
  */
 modbus_exception modbus_server__read_input_registers(uint16_t register_address, uint16_t register_count) {
+    __asm__ __volatile__( "modbus_server__read_input_registers:");
     do {
         switch (register_address++) {
         case SERVER__REGISTER__T:
@@ -142,6 +145,7 @@ modbus_exception modbus_server__read_input_registers(uint16_t register_address, 
  * Handle reading of holding registers.
  */
 modbus_exception modbus_server__read_holding_registers(uint16_t register_address, uint16_t register_count) {
+    __asm__ __volatile__( "modbus_server__read_holding_registers:");
     do {
         switch (register_address++) {
         case SERVER__REGISTER__VALID_FRAMES_RECEIVED:
@@ -172,6 +176,7 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
  * Handle writing of holding register.
  */
 modbus_exception modbus_server__write_holding_register(uint16_t register_address, uint16_t register_value) {
+    __asm__ __volatile__( "modbus_server__write_holding_register:");
     switch (register_address) {
     case SERVER__REGISTER__VALID_FRAMES_RECEIVED:
         valid_frames_received = register_value;
@@ -245,10 +250,13 @@ int main(void) {
 //            cli();
 //        }
 //    }
+    __asm__ __volatile__( "main__loop:");
     for(;;) {
+        __asm__ __volatile__( "main__modbus_rtu_driver:");
         if (modbus_rtu_driver__is_runnable()) {
             modbus_rtu_driver__run();
         }
+        __asm__ __volatile__( "main__temperature_reader__thread:");
         if (temperature_reader__thread__is_runnable()) {
             temperature_reader__thread__run();
         }

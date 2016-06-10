@@ -57,7 +57,7 @@ void temperature_reader__thread__run(void) {
         onewire__setup_transaction((uint8_t) sizeof(command_convert), 0, command_convert, 0);
         onewire__transaction();
         do {
-            VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
+            VT_YIELD_WITH_MARK(temperature_reader__thread, temperature_reader__thread__ip, COMMAND_CONVERT);
             onewire__thread__run();
         }
         while (onewire__thread__is_alive());
@@ -67,8 +67,8 @@ void temperature_reader__thread__run(void) {
 
         onewire__thread__delay_counter = 46;
         timer0__conf__set(TIMER0_CONF_PRESCALER_1024|TIMER0_CONF_WGM_NORMAL);
-        for (;;) {
-            VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
+        for (;;) {            
+            VT_YIELD_WITH_MARK(temperature_reader__thread, temperature_reader__thread__ip, SLEEP);
             timer0__overflow__interrupt__pending__clear();
             if (--onewire__thread__delay_counter == 0) break;
         }
@@ -79,7 +79,7 @@ void temperature_reader__thread__run(void) {
         onewire__setup_transaction(sizeof(command), sizeof(response), command, response);
         onewire__transaction();
         do {
-            VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
+            VT_YIELD_WITH_MARK(temperature_reader__thread, temperature_reader__thread__ip, COMMAND_READ);
             onewire__thread__run();
         }
         while (onewire__thread__is_alive());
