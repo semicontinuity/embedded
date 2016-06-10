@@ -46,6 +46,6 @@ ISR(usart0__tx__data_register_empty__interrupt__VECTOR) {
  * Triggered when the last byte of the packed is transmitted completely.
  */
 ISR(usart0__tx__complete__interrupt__VECTOR) {
-    usart0__tx__complete__interrupt__enabled__set(0);
+    usart0__tx__complete__interrupt__enabled__set(0);   // quite heavyweight on ATMegaX8
     modbus_rtu_driver__usart_tx__on_frame_sent();   // in NAKED int, must not corrupt CPU state!
 }

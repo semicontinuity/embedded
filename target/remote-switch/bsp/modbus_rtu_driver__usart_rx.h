@@ -6,7 +6,11 @@
 #ifndef MODBUS_RTU_DRIVER__USART_RX_H
 #define MODBUS_RTU_DRIVER__USART_RX_H
 
+#include "util/bitops.h"
 #include <stdbool.h>
+
+// Injected bit variables
+DECLARE_BITVAR(modbus_rtu_driver__usart_rx__enabled);
 
 
 void modbus_rtu_driver__usart_rx__start(void);

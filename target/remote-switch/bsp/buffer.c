@@ -32,7 +32,7 @@ volatile uint8_t* buffer__limit_ptr;
  * (The limit is set to the beginning of the buffer)
  */
 void buffer__clear(void) {
-    buffer__limit_ptr = buffer__data;
+    LOAD_ADDRESS(buffer__limit_ptr, buffer__data);
 }
 
 /**
@@ -101,6 +101,8 @@ uint8_t buffer__get_u8(void) {
     return LOAD_YPLUS(buffer__position_ptr);
 #elif defined(BUFFER__POSITION_PTR__REG) && BUFFER__POSITION_PTR__REG==30
     return LOAD_ZPLUS(buffer__position_ptr);
+#elif defined(BUFFER__POSITION_PTR__REG)
+    return LOAD_ZPLUS(buffer__position_ptr);
 #else
     return *buffer__position_ptr++;
 #endif
@@ -120,6 +122,8 @@ void buffer__put_u8(const uint8_t value) {
     STORE_YPLUS(buffer__limit_ptr, value);
 #elif defined(BUFFER__LIMIT_PTR__REG) && BUFFER__LIMIT_PTR__REG==30
     STORE_ZPLUS(buffer__limit_ptr, value);
+#elif defined(BUFFER__LIMIT_PTR__REG)
+    STORE_PLUS_VIA_Z(buffer__limit_ptr, value);
 #else
     *buffer__limit_ptr++ = value;
 #endif

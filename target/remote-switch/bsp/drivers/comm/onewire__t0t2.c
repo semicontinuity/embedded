@@ -134,16 +134,34 @@ uint8_t onewire__thread__data__get(void) {
     return onewire__thread__data;
 }
 
+/** Loads onewire__thread__data with the next byte from TX buffer */
 void onewire__thread__data__load(void) {
 #if defined(ONEWIRE__THREAD__TX__PTR__REG) && ONEWIRE__THREAD__TX__PTR__REG==26
-    onewire__thread__data = LOAD_XPLUS(onewire__thread__tx__ptr);
+    LD_XPLUS(onewire__thread__data, onewire__thread__tx__ptr);
 #elif defined(ONEWIRE__THREAD__TX__PTR__REG) && ONEWIRE__THREAD__TX__PTR__REG==28
-    onewire__thread__data = LOAD_YPLUS(onewire__thread__tx__ptr);
+    LD_YPLUS(onewire__thread__data, onewire__thread__tx__ptr);
 #elif defined(ONEWIRE__THREAD__TX__PTR__REG) && ONEWIRE__THREAD__TX__PTR__REG==30
-    onewire__thread__data = LOAD_ZPLUS(onewire__thread__tx__ptr);
-#else
-//    onewire__thread__data = *onewire__thread__tx__ptr++;
     LD_ZPLUS(onewire__thread__data, onewire__thread__tx__ptr);
+#elif defined(ONEWIRE__THREAD__TX__PTR__REG)
+    LD_ZPLUS(onewire__thread__data, onewire__thread__tx__ptr);
+#else
+    onewire__thread__data = *onewire__thread__tx__ptr++;
+#endif
+}
+
+
+/** Stores onewire__thread__data into RX buffer */
+void onewire__thread__data__store(void) {
+#if defined(ONEWIRE__THREAD__RX__PTR__REG) && ONEWIRE__THREAD__RX__PTR__REG==26
+    STORE_XPLUS(onewire__thread__rx__ptr, onewire__thread__data);
+#elif defined(ONEWIRE__THREAD__RX__PTR__REG) && ONEWIRE__THREAD__RX__PTR__REG==28
+    STORE_YPLUS(onewire__thread__rx__ptr, onewire__thread__data);
+#elif defined(ONEWIRE__THREAD__RX__PTR__REG) && ONEWIRE__THREAD__RX__PTR__REG==30
+    STORE_ZPLUS(onewire__thread__rx__ptr, onewire__thread__data);
+#elif defined(ONEWIRE__THREAD__RX__PTR__REG)
+    STORE_PLUS_VIA_Z(onewire__thread__rx__ptr, onewire__thread__data);
+#else
+    *onewire__thread__rx__ptr++ = onewire__thread__data;
 #endif
 }
 
@@ -227,9 +245,10 @@ ISR(timer2__compare_a__interrupt__VECTOR, ISR_NAKED) {
 
 /** Reads the bit value from the bus */
 ISR(timer2__overflow__interrupt__VECTOR, ISR_NAKED) {
-    asm volatile("in r4, 0x31\n\r");
+    // r0 is clobbered (assume that is used only in interrupt handlers, than it's ok)
+    asm volatile("in r0, %0\n\r" :: "I"(_SFR_IO_ADDR(SREG)));
     if (onewire__bus__get()) onewire__thread__data |= 0x80;
-    asm volatile("out 0x31, r4\n\r");
+    asm volatile("out %0, r0\n\r" :: "I"(_SFR_IO_ADDR(SREG)));
     reti();
 }
 
@@ -250,7 +269,7 @@ void onewire__thread__reset_bus(void) {
 
     timer0__value__set(256 - ONEWIRE__BIT_SPAN_TIMER__SLOW_CONF_TIMEOUT);
     timer0__conf__set(ONEWIRE__BIT_SPAN_TIMER__SLOW_CONF);
-    onewire__thread__data = 0;
+    onewire__thread__data = 0;  // explain why set to 0
 }
 
 
@@ -307,8 +326,10 @@ void onewire__thread__run(void) {
             }
             while (--onewire__thread__bit_count);
 
-            *onewire__thread__rx__ptr++ = onewire__thread__data;
-            onewire__thread__crc = crc8_ow_update(onewire__thread__crc, onewire__thread__data);
+            onewire__thread__data__store();
+#if defined(ONEWIRE__THREAD__CHECK_CRC) && ONEWIRE__THREAD__CHECK_CRC == 1
+            onewire__thread__crc__set(crc8_ow_update(onewire__thread__crc, onewire__thread__data));
+#endif
         }
         while (--onewire__thread__rx__remaining);
     }
@@ -333,7 +354,7 @@ void onewire__thread__run(void) {
  * Perform 1-wire transaction.
  */
 void onewire__transaction(void) {
-    onewire__thread__data__set(0);
+    onewire__thread__data__set(0);  // start with 0; received 1 bits are ORed with it
     onewire__thread__crc__set(0);
     onewire__thread__start();
     onewire__thread__reset_bus();
