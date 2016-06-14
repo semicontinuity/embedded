@@ -1,25 +1,13 @@
 // =============================================================================
-// USART test.
+// Test for soft USART TX
 // =============================================================================
 
-#include <avr/io.h>
-#include <avr/sleep.h>
+#include "soft_usart__timer.h"
+#include "soft_usart__tx.h"
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#include "cpu/avr/gpio.h"
-#include "cpu/avr/usart0.h"
-#include "cpu/avr/usart0__rx_polled.h"
-#include "cpu/avr/usart0__tx_polled.h"
-
-
-void application__init(void) {
-    usart0__init();
-}
-
-void application__start(void) {
-    usart0__rx__enabled__set(1);
-    usart0__tx__enabled__set(1);
+void soft_usart__tx__on_complete(void) {
 }
 
 
@@ -27,18 +15,20 @@ void application__start(void) {
 // -----------------------------------------------------------------------------
 int main(void) __attribute__ ((naked));
 int main(void) {
-    DDRB |= _BV(5);
-    application__init();
-    application__start();
+    soft_usart__tx__init();
+    soft_usart__timer__init();
+    soft_usart__timer__start();
+
+    sei();
 
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
-        uint8_t c = usart0__in__read();
-        PINB |= _BV(5);
-        usart0__out__write(c);
+        soft_usart__tx__data = 'x';
+        soft_usart__tx__start();
+        _delay_ms(100);
     }
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic pop
