@@ -134,9 +134,10 @@ ISR(timer2__compare_a__interrupt__VECTOR, ISR_NAKED) {
 
 /** Reads the bit value from the bus */
 ISR(timer2__overflow__interrupt__VECTOR, ISR_NAKED) {
-    asm volatile("in r4, 0x31\n\r");
+    // r4 is clobbered (assume that is used only in interrupt handlers, than it's ok)
+    asm volatile("in r4, %0\n\r" :: "I"(_SFR_IO_ADDR(SREG)));
     if (onewire__bus__get()) onewire__thread__data |= 0x80;
-    asm volatile("out 0x31, r4\n\r");
+    asm volatile("out %0, r4\n\r" :: "I"(_SFR_IO_ADDR(SREG)));
     reti();
 }
 

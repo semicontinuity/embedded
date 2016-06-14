@@ -37,7 +37,7 @@ set(SOURCE_FILES
 
 
 include_directories(. ../../bsp ../../../../ ../../../../../../avrgcc/avr/include ../../../../../../avrgcc/lib/gcc/avr/4.8.1/include)
-add_executable(modbus-server ${SOURCE_FILES})
+add_executable(main ${SOURCE_FILES})
 
 
 add_definitions(-D__AVR_ATmega8535__)

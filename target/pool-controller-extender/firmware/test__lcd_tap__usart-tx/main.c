@@ -3,22 +3,37 @@
 // =============================================================================
 
 #include "drivers/io/lcd_tap.h"
+#include "services/tx_ring_buffer.h"
 #include "cpu/avr/asm.h"
 #include "cpu/avr/int1.h"
 #include "cpu/avr/usart0.h"
-#include "cpu/avr/usart0__tx_polled.h"
+//#include "cpu/avr/usart0__tx_polled.h"
+#include "cpu/avr/drivers/usart0__tx.h"
 #include <avr/interrupt.h>
 
 // =============================================================================
 // Handlers
 // =============================================================================
 
+bool comm__tx__has_next(void) {
+    return true; // interrupt triggered only if TX buffer is not empty
+}
+
+uint8_t comm__tx__next() {
+    return tx_ring_buffer__get();
+}
+
+void comm__tx__on_done(void) {    
+    // never invoked
+}
+
 /**
  * Callback for the LCD watcher.
  * Called with the state of LCD bus: data in LCD_TAP__XXX bits.
  */
 void pool_controller__on_lcd_event(const uint8_t value) {
-    usart0__out__write(
+    if (tx_ring_buffer__is_writable()) {
+        tx_ring_buffer__put(
             __builtin_avr_insert_bits(
                 avr_insert_bits_map(
                     0xF,
@@ -32,8 +47,10 @@ void pool_controller__on_lcd_event(const uint8_t value) {
                 value,
                 0x40
             )
-    );
+        );
+    }
 }
+
 
 // =============================================================================
 // Application
@@ -47,7 +64,8 @@ static void application__init(void) {
 }
 
 static void application__start(void) {
-    usart0__tx__enabled__set(1);
+    tx_ring_buffer__start();
+    usart0__tx__start();
     int1__start();
 }
 

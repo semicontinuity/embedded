@@ -60,7 +60,7 @@ void pool_controller__on_lcd_event(const uint8_t value) {
                     LCD_TAP__DATA__PIN + 1,
                     LCD_TAP__DATA__PIN + 0),
                 value,
-                0x40
+                EVENT__LCD
             )
         );
     }
@@ -80,7 +80,7 @@ void pool_controller__on_buttons_scanner_event(const uint8_t changed_pins) {
                     BUTTONS_TAP__PIN + 1,
                     BUTTONS_TAP__PIN + 0),
                 buttons_scanner__state__get(),
-                0x80
+                EVENT__BUTTONS
             )
         );
     }
@@ -100,7 +100,7 @@ void pool_controller__on_leds_scanner_event(const uint8_t changed_pins) {
                     LEDS_TAP__PIN + 0,
                     0xF),
                 leds_scanner__state__get(),
-                0x00
+                EVENT__LEDS
             )
         );
     }
@@ -108,7 +108,7 @@ void pool_controller__on_leds_scanner_event(const uint8_t changed_pins) {
 
 
 void pool_controller__on_system_timer_event(void) {
-    // buttons_scanner__run();
+    buttons_scanner__run();
     leds_scanner__run();
 }
 

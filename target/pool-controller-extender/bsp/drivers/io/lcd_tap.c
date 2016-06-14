@@ -7,6 +7,11 @@
 #include "cpu/avr/gpio.h"
 
 
+#ifdef LCD_TAP__VALUE__REG
+    register uint8_t lcd_tap__value asm(QUOTE(LCD_TAP__VALUE__REG));
+#endif
+
+
 /**
  * Initialize LCD tap.
  */
@@ -18,5 +23,10 @@ void lcd_tap__init(void) {
  * Called when high-to-low transition is detected on the clock (E) line of the LCD.
  */
 void lcd_tap__on_e_pin_low(void) {
-    lcd_tap__on_event(PORT_VALUE(LCD_TAP));
+#ifndef LCD_TAP__VALUE__REG
+    uint8_t lcd_tap__value;
+#endif
+
+    __IN(lcd_tap__value, PIN_REG(LCD_TAP__PORT));
+    lcd_tap__on_event(lcd_tap__value);
 }

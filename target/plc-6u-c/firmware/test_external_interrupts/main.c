@@ -34,10 +34,6 @@ int main(void) {
 
     display__render_packed(0); // ready
 
-    //PORTB |= (1<<2);
-    DDRD |= (1<<5);
-    PORTD |= (1<<5);
-
     int0__start();
     int1__start();
     int2__start();

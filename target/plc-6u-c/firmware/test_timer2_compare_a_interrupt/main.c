@@ -28,6 +28,8 @@ register uint16_t test asm("r16");
 
 int main(void) {
     DDRD |= _BV(2) | _BV(3) | _BV(4);
+        PORTD |= _BV(4);
+/*
 
     _delay_ms(500);
     PIND |= _BV(2);
@@ -48,7 +50,6 @@ int main(void) {
     _delay_ms(500);
     PIND |= _BV(2);
     PIND |= _BV(3);
-
     timer2__overflow__interrupt__enable();
 
     timer2__compare_a__value__set(64);
@@ -56,10 +57,16 @@ int main(void) {
     timer2__compare_a__interrupt__enable();
     
     sei();
-
+*/
     // reference 100ms pulses on PD4
     for(;;) {
-        _delay_ms(100);
-        PIND |= _BV(4);
+//        _delay_ms(100);
+//        PIND |= _BV(4);
+
+        _delay_ms(500);
+        PORTD |= _BV(4);
+        _delay_ms(500);
+        PORTD &= ~_BV(4);
+
     }
 }

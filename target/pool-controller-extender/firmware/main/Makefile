@@ -1,6 +1,6 @@
 TARGET = main_atmega168
 TARGET_CONF ?= $(TARGET).conf
-OPT = 3
+OPT = 2 -Wa,-a,-ad -finline-functions -fpredictive-commoning -fgcse-after-reload -fvect-cost-model  -fipa-cp-clone -ftree-loop-distribute-patterns -ftree-slp-vectorize
 ROOT = ../../../..
 BSP = ../../bsp
 

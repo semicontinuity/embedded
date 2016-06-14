@@ -1,25 +1,18 @@
 // =============================================================================
-// Pool controller extender - USART test.
+// Pool controller extender - test.
 // =============================================================================
 
-#include "cpu/avr/usart0.h"
-#include "cpu/avr/usart0__rx_polled.h"
-#include "cpu/avr/usart0__tx_polled.h"
 #include "drivers/out/alarm.h"
+#include <util/delay.h>
+
 
 
 // =============================================================================
 // Application
 // =============================================================================
 
-static void application__init(void) {
+void application__init(void) {
     alarm__init();
-    usart0__init();
-}
-
-static void application__start(void) {
-    usart0__tx__enabled__set(1);
-    usart0__rx__enabled__set(1);
 }
 
 
@@ -28,14 +21,13 @@ static void application__start(void) {
 // =============================================================================
 int main(void) {
     application__init();
-    application__start();
 
-    char i = 0;
+    // run background tasks
     for(;;) {
-        uint8_t c = usart0__in__read();
-        alarm__set(i);
-        i = 1 - i;
-        usart0__out__write(c);
+        alarm__set(1);
+        _delay_ms(1000);
+        alarm__set(0);
+        _delay_ms(1000);
     }
 
     return 0;

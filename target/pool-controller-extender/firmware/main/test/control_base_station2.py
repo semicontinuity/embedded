@@ -32,16 +32,26 @@ DELAY = 0.2 if len(sys.argv) == 3 else float(sys.argv[3])
 
 
 from threading import Thread
+from threading import Event
+
+
 class PortReader(Thread):
 
    def __init__ (self):
       Thread.__init__(self)
+      self._stop = Event()
 
    def run(self):
-      while 1:
+      while not self.stopped():
         while ser.inWaiting() > 0:
           c = ser.read(1)
           print "%02X " % ord(c)
+
+   def stop(self):
+      self._stop.set()
+
+   def stopped(self):
+      return self._stop.isSet()
 
 try:
     portReader = PortReader()
@@ -118,3 +128,6 @@ while True:
         enter()
     elif c1 == 8:
         backspace()
+    elif c1 == 32:
+        portReader.stop()
+        break

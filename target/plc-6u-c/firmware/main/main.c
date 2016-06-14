@@ -10,13 +10,13 @@
 #include "modbus_server.h"
 
 #include "cpu/avr/drivers/display/segment/static2.h"
-#include "cpu/avr/util/bcd.h"
+//#include "cpu/avr/util/bcd.h"
 #include "cpu/avr/int1.h"
 #include <avr/interrupt.h>
 
 
 void temperature_reader__reading__on_changed(void) {
-    display__render_packed((uint8_t)uint9_to_bcd(temperature_reader__reading >> 8));
+//    display__render_packed((uint8_t)uint9_to_bcd(temperature_reader__reading >> 8));
 }
 
 // main
@@ -24,7 +24,7 @@ void temperature_reader__reading__on_changed(void) {
 int main(void) __attribute__ ((naked));
 int main(void) {
     display__init();
-//    int1__init();
+    int1__init();
     onewire__bus__init();
 
 
@@ -35,7 +35,7 @@ int main(void) {
 //    sleep_enable();
     modbus_rtu_driver__start();
     temperature_reader__thread__start();
-//    int1__start();
+    int1__start();
 
     display__render_packed(0); // ready
 

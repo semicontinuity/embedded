@@ -15,7 +15,8 @@ class LCD(object):
             # 1xxxxxxx: Set Display Address
             self.lcd_display_address = lcd_byte & 0x7F
             self.lcd_cgram_address = -1
-            description = "Set Display Address %02X" % self.lcd_display_address
+            coordinates = self.display_coordinates(self.lcd_display_address)
+            description = "Set Display Address %02X=%02d:%d" % (self.lcd_display_address, coordinates[0], coordinates[1])
         elif lcd_byte & 0b11000000 == 0b01000000:
             self.lcd_cgram_address = lcd_byte & 0x3F
             self.lcd_display_address = -1
@@ -51,7 +52,19 @@ class LCD(object):
         return description
 
     def handle_command_read(self, lcd_byte):
-        return "Read status: Busy flag=%s" % "Yes" if lcd_byte & 0x80 else "No"
+        self.lcd_display_address = lcd_byte & 0x7F
+        coordinates = self.display_coordinates(self.lcd_display_address)
+        return "Read status: Busy flag=%s, Display address: %02X=%02d:%d" % ("Yes" if lcd_byte & 0x80 else "No", self.lcd_display_address, coordinates[0], coordinates[1])
+
+    def display_coordinates(self, address):
+        if (address >= 0x54):
+            return (address - 0x54, 3)
+        if (address >= 0x40):
+            return (address - 0x40, 1)
+        if (address >= 0x14):
+            return (address - 0x14, 2)
+        return (address, 0)
+
 
     def display_address(self):
         address = self.lcd_display_address
@@ -76,11 +89,14 @@ class LCD(object):
 
     def handle_data_write(self, lcd_byte):
         if self.lcd_display_address > -1:
+            coordinates = self.display_coordinates(self.lcd_display_address)
             address = self.display_address()
             self.lcd_display_memory[address] = lcd_byte
-            return "%02X\t[%02X]\n[%s]\n[%s]\n[%s]\n[%s]" % (
+            return "%02X\t[%02X=%02d:%d]\n[%s]\n[%s]\n[%s]\n[%s]" % (
                 lcd_byte,
                 address,
+                coordinates[0],
+                coordinates[1],
                 self.display_memory(0x00, 0x14),
                 self.display_memory(0x40, 0x54),
                 self.display_memory(0x14, 0x28),
@@ -158,11 +174,7 @@ def handle_leds(leds):
 lcd = LCD()
 
 def handle_event(event):
-    if event & 0xC0 == 0x80:
-        return "B\t%s" % handle_buttons(event & 0x3F)
-    elif event & 0xC0 == 0x00:
-        return "L\t%s" % handle_leds(event & 0x0E)
-    elif event & 0xC0 == 0x40:
+    if event & 0xC0 == 0x00:
         return "D\t%s" % lcd.handle(event & 0x3F)
     else:
         return "U"

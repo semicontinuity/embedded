@@ -2,19 +2,15 @@
 // Water counter driver.
 // =============================================================================
 
-#ifndef __DRIVERS__WATER_COUNTER_H
-#define __DRIVERS__WATER_COUNTER_H
 
+#include <avr/io.h>
 #include <drivers/water_counter.h>
 
 
 void water_counter__init(void) {
-    ACSR = 
+    ACSR = 0;
 }
 
 
 void water_counter__start(void) {
 }
-
-
-#endif
