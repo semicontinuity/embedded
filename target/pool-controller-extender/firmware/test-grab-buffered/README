@@ -1,0 +1,2 @@
+Test grabbing the LCD tap port with maximum possible speed, with buffering.
+Buffer overflows are not checked.
