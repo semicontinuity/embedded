@@ -20,6 +20,12 @@ inline void led2__set(const uint8_t value) {
         OUT_0(OUT__LED2);
 }
 
+/**
+ * Toggle LED2.
+ */
+inline void led2__toggle(void) {
+    TOGGLE(OUT__LED2);
+}
 
 /**
  * Initialize the LED2 line driver.

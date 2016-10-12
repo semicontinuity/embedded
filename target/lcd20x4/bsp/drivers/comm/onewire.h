@@ -51,7 +51,7 @@ void onewire__shutdown(void);
  * Perform 1-wire transaction.
  * Poll onewire__thread__is_running() for completion status.
  */
-void onewire__command(uint8_t command_length, uint8_t response_length, uint8_t *command, uint8_t *response);
+void onewire__command(const uint8_t command_length, const uint8_t response_length, const uint8_t *command, uint8_t *response);
 
 /** Returns CRC of received data */
 uint8_t onewire__crc__get(void);

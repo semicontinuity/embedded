@@ -116,7 +116,7 @@ volatile void *onewire__thread__ip;
 #endif
 
 /** TX data pointer */
-volatile uint8_t *onewire__thread__tx__ptr;
+volatile const uint8_t *onewire__thread__tx__ptr;
 
 /** Remaining TX data length */
 volatile uint8_t onewire__thread__tx__remaining;
@@ -160,9 +160,10 @@ ISR(timer2__compare_a__interrupt__VECTOR, ISR_NAKED) {
 
 /** Reads the bit value from the bus */
 ISR(timer2__overflow__interrupt__VECTOR, ISR_NAKED) {
-    asm volatile("in r4, 0x31\n\r");
+    // r4 is clobbered (assume that is used only in interrupt handlers, than it's ok)
+    asm volatile("in r4, %0\n\r" :: "I"(_SFR_IO_ADDR(SREG)));
     if (onewire__bus__get()) onewire__thread__data |= 0x80;
-    asm volatile("out 0x31, r4\n\r");
+    asm volatile("out %0, r4\n\r" :: "I"(_SFR_IO_ADDR(SREG)));
     reti();
 }
 
@@ -263,7 +264,7 @@ void onewire__thread__run(void) {
  * Perform 1-wire transaction.
  * Poll onewire__thread__is_running() for completion status.
  */
-void onewire__command(uint8_t command_length, uint8_t response_length, uint8_t *command, uint8_t *response) {
+void onewire__command(const uint8_t command_length, const uint8_t response_length, const uint8_t *command, uint8_t *response) {
     onewire__thread__tx__ptr = command;
     onewire__thread__tx__remaining = command_length;
     onewire__thread__rx__ptr = response;
