@@ -4,7 +4,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-void temperature_reader__on_measurement(const uint8_t sensor, const uint16_t value);
+extern uint16_t temperature_reader__readings[DS18X20_SENSOR_COUNT];
+
+void temperature_reader__readings__on_changed(void);
 
 void temperature_reader__thread__start(void);
 

@@ -10,8 +10,8 @@
 #include "drivers/out/led3.h"
 
 #include "cpu/avr/gpio.h"
-#include "LCD.h"          //Хедер для LCD дисплея
-#include "prototip_fun.h" //Прототипы функций
+#include "LCD.h"
+#include "prototip_fun.h"
 
 #include "drivers/comm/onewire.h"
 #include "drivers/comm/onewire__bus.h"
@@ -21,7 +21,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/pgmspace.h>
-#include <avr/interrupt.h>//Хедер прерываний. 
+#include <avr/interrupt.h>
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -60,9 +60,9 @@ uint16_t as_two_hex_chars(const uint8_t value) {
     return (hc<<8) | lc;
 }
 
-void display__print_temperature(const uint8_t x, const uint8_t y, const uint16_t value) {
+void display__print_temperature(const uint16_t value, const uint8_t x, const uint8_t y) {
     LCDGotoXY(x,y);
-/*
+
     uint8_t h = (uint8_t)(((uint16_t)value) >> 8);
     uint8_t l = (uint8_t)(((uint16_t)value) & 0xFF);
 
@@ -75,12 +75,11 @@ void display__print_temperature(const uint8_t x, const uint8_t y, const uint16_t
     LCDdata(l_chars & 0xFF);
 
     LCDdata('=');
-*/
+
     uint8_t bcd = uint8_to_bcd(value >> 8);
     uint16_t i_chars = bcd_to_chars(bcd);
     uint8_t f_chars = FRACTIONS[(value & 0xFF) >> 4];
 
-//    LCDGotoXY(x,y);
     LCDdata(i_chars >> 8);
     LCDdata(i_chars & 0xFF);
     LCDdata('.');
@@ -88,8 +87,13 @@ void display__print_temperature(const uint8_t x, const uint8_t y, const uint16_t
 }
 
 
-void temperature_reader__on_measurement(const uint8_t sensor, const uint16_t value) {
-    display__print_temperature(value, 0, sensor);
+void temperature_reader__readings__on_changed(void) {
+#if DS18X20_SENSOR_COUNT >= 1
+     display__print_temperature(temperature_reader__readings[0], 0, 0);
+#endif
+#if DS18X20_SENSOR_COUNT >= 2
+     display__print_temperature(temperature_reader__readings[1], 0, 1);
+#endif
 }
 
 

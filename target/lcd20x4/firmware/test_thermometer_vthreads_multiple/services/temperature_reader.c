@@ -9,22 +9,25 @@
 
 
 #define OW_MATCH_ROM	    0x55
-#define OW_SKIP_ROM	    0xCC
+#define OW_SKIP_ROM	        0xCC
 #define DS18X20_CONVERT_T   0x44
 #define DS18X20_READ	    0xBE
 #define DS18X20_SP_SIZE     9
+
+uint16_t temperature_reader__readings[DS18X20_SENSOR_COUNT];
 
 #define DS18X20_COMMAND_SIZE 10
 #define DS18X20_CONVERT_T_WITH_ROM(rom) OW_MATCH_ROM, rom, DS18X20_CONVERT_T
 #define DS18X20_READ_WITH_ROM(rom)      OW_MATCH_ROM, rom, DS18X20_READ
 
-
 uint8_t commands[] = {
 #if defined(DS18X20_1)
     DS18X20_CONVERT_T_WITH_ROM(DS18X20_1),
+    DS18X20_READ_WITH_ROM(DS18X20_1),
 #endif
 #if defined(DS18X20_2)
     DS18X20_CONVERT_T_WITH_ROM(DS18X20_2),
+    DS18X20_READ_WITH_ROM(DS18X20_2),
 #endif
 };
 uint8_t response[DS18X20_SP_SIZE];
@@ -50,17 +53,22 @@ bool temperature_reader__thread__is_runnable(void) {
 }
 
 
-const uint8_t* command = commands;
-uint8_t current_sensor = DS18X20_SENSOR_COUNT;
+const uint8_t* command;
+uint8_t current_sensor = DS18X20_SENSOR_COUNT - 1;
 
 void temperature_reader__thread__run(void) {
     VT_BEGIN(temperature_reader__thread, temperature_reader__thread__ip);
     timer0__overflow__interrupt__pending__clear();
     for (;;) {
+        if (++current_sensor == DS18X20_SENSOR_COUNT) {
+            current_sensor = 0;
+            command = commands;
+        }
+
         led1__set(1);
         led2__set(1);
 
-        onewire__command((uint8_t) sizeof(command), 0, command, 0);
+        onewire__command(DS18X20_COMMAND_SIZE, 0, command, 0);
         do {
             VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
             onewire__thread__run();
@@ -82,7 +90,7 @@ void temperature_reader__thread__run(void) {
         led1__set(0);
         led2__set(1);
 
-        onewire__command(sizeof(command), sizeof(response), command, response);
+        onewire__command(DS18X20_COMMAND_SIZE, sizeof(response), command, response);
         do {
             VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
             onewire__thread__run();
@@ -93,12 +101,8 @@ void temperature_reader__thread__run(void) {
         led1__set(0);
         led2__set(0);
 
-        if (--current_sensor == 0) {
-            current_sensor = DS18X20_SENSOR_COUNT;
-            command = commands;
-        }
-
-        temperature_reader__on_measurement(current_sensor, (response[0] | (response[1] << 8)) << 4);
+        temperature_reader__readings[current_sensor] = (response[0] | (response[1] << 8)) << 4;
+        temperature_reader__readings__on_changed();
     }
     VT_UNREACHEABLE_END(temperature_reader__thread);
 }
