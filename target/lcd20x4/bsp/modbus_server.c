@@ -13,6 +13,7 @@
  * Handle reading of coils.
  */
 modbus_exception modbus_server__handle_read_coils(void) {
+    __asm__ __volatile__( "modbus_server__handle_read_coils:");
     const uint16_t length = buffer__limit__get();
     if (length != MODBUS_FRAME_SIZE_MIN + MODBUS_FUNCTION__READ_COILS__PAYLOAD_SIZE)
         return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
@@ -37,6 +38,7 @@ modbus_exception modbus_server__handle_read_coils(void) {
  * Handle reading of holding registers.
  */
 modbus_exception modbus_server__handle_read_holding_registers(void) {
+    __asm__ __volatile__( "modbus_server__handle_read_holding_registers:");
     const uint16_t length = buffer__limit__get();
     if (length != MODBUS_FRAME_SIZE_MIN + MODBUS_FUNCTION__READ_HOLDING_REGISTERS__PAYLOAD_SIZE)
         return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
@@ -65,6 +67,7 @@ modbus_exception modbus_server__handle_read_holding_registers(void) {
  * Handle reading of input registers.
  */
 modbus_exception modbus_server__handle_read_input_registers(void) {
+    __asm__ __volatile__( "modbus_server__handle_read_input_registers:");
     const uint16_t length = buffer__limit__get();
     if (length != MODBUS_FRAME_SIZE_MIN + MODBUS_FUNCTION__READ_INPUT_REGISTERS__PAYLOAD_SIZE)
         return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
@@ -93,6 +96,7 @@ modbus_exception modbus_server__handle_read_input_registers(void) {
  * Handle writing of single coil.
  */
 modbus_exception modbus_server__handle_write_single_coil(void) {
+    __asm__ __volatile__( "modbus_server__handle_write_single_coil:");
     const uint16_t length = buffer__limit__get();
     if (length != MODBUS_FRAME_SIZE_MIN + MODBUS_FUNCTION__WRITE_SINGLE_COIL__PAYLOAD_SIZE)
         return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
@@ -120,6 +124,7 @@ modbus_exception modbus_server__handle_write_single_coil(void) {
  * Handle writing of holding register.
  */
 modbus_exception modbus_server__handle_write_register(void) {
+    __asm__ __volatile__( "modbus_server__handle_write_register:");
     const uint16_t length = buffer__limit__get();
     if (length != MODBUS_FRAME_SIZE_MIN + MODBUS_FUNCTION__WRITE_REGISTER__PAYLOAD_SIZE)
         return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
@@ -181,34 +186,38 @@ modbus_exception modbus_server__process_frame(void) {
  * @return true if the response must be sent (placed to the same buffer)
  */
 bool modbus_rtu_driver__on_frame_received(void) {
+    __asm__ __volatile__( "modbus_rtu_driver__on_frame_received:");
     const uint16_t length = buffer__limit__get();
     if (length == 0) return false; // timeout expired, no data yet (ok)
 
-    if (length < MODBUS_FRAME_SIZE_MIN || crc16(0xFFFF, buffer__data, length)) {
-        modbus_server__on_invalid_frame_received();
-        return false;
-    }
-    else {
-        modbus_server__on_valid_frame_received();
-        buffer__rewind(); // start parsing frame
-        uint8_t address = buffer__get_u8();
-        if (address == MODBUS_SERVER__ADDRESS) {
+    if (length >= MODBUS_FRAME_SIZE_MIN) {
+        __asm__ __volatile__( "modbus_rtu_driver__on_frame_received__compute_request_crc:");
+        uint16_t crc = crc16(0xFFFF, buffer__data, length);
+        if (!crc) {
+        __asm__ __volatile__( "modbus_rtu_driver__on_frame_received__handle_valid_frame:");
+            modbus_server__on_valid_frame_received();
+            buffer__rewind(); // start parsing frame
+            uint8_t address = buffer__get_u8();
+            if (address == MODBUS_SERVER__ADDRESS) {
+                __asm__ __volatile__( "modbus_rtu_driver__on_frame_received__process_frame:");
+                // handle request; buffer__limit will point to the end of response payload
+                modbus_server__process_frame();
 
-            // handle request; buffer__limit will point to the end of response payload
-            modbus_server__process_frame();
+                // finish response by computing CRC; buffer__limit will point to the end of frame
+                uint16_t crc = crc16(0xFFFF, buffer__data, buffer__limit__get());
+                buffer__put_u8((uint8_t) (crc & 0xFF)); // low byte of CRC is sent first.
+                buffer__put_u8((uint8_t) (crc >> 8));   // cannot use buffer__put_u16 that sends 16-bit values MSB first.
 
-            // finish response by computing CRC; buffer__limit will point to the end of frame
-            uint16_t crc = crc16(0xFFFF, buffer__data, buffer__limit__get());
-            buffer__put_u8((uint8_t) (crc & 0xFF)); // low byte of CRC is sent first.
-            buffer__put_u8((uint8_t) (crc >> 8));   // cannot use buffer__put_u16 that sends 16-bit values MSB first.
-
-            // indicate that response must be sent
-            buffer__rewind();
-            return true;
+                buffer__rewind();
+                return true; // indicate that response must be sent
+            }
+            else {
+                buffer__rewind();
+                return false;
+            }
         }
-        else {
-            buffer__rewind();
-            return false;
-        }
     }
+    __asm__ __volatile__( "modbus_rtu_driver__on_frame_received__handle_invalid_frame:");
+    modbus_server__on_invalid_frame_received();
+    return false;
 }
