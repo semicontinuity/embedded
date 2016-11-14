@@ -22,32 +22,58 @@
 #include <avr/pgmspace.h>
 
 
+uint16_t as_two_hex_chars(const uint8_t value) {
+    uint8_t hn = (value >> 4);
+    uint8_t hc = hn + (hn < 10 ? '0' : ('A' - 10));
+    uint8_t ln = (value & 0x0F);
+    uint8_t lc = ln + (ln < 10 ? '0' : ('A' - 10));
+    return (hc<<8) | lc;
+}
+
+
+void display__print_frame(void) {
+    LCDGotoXY(0, 0);
+
+    uint8_t l = buffer__limit__get();
+    uint8_t* p = buffer__data;
+    for (;;) {
+       if (l == 0) break;
+
+       uint8_t value = *p++;
+       uint16_t l_chars = as_two_hex_chars(value);
+       LCDdata(l_chars >> 8);
+       LCDdata(l_chars & 0xFF);
+
+       --l;
+    }
+    LCDdata('=');
+}
+
+
 void modbus_rtu_driver__on_frame_processing(void) {
-    led2__set(1);
+    led1__toggle();
+    display__print_frame();
 }
 
 void modbus_rtu_driver__on_char_received(void) {
-    led1__set(1);
 }
 
 void modbus_rtu_driver__on_char_buffered(void) {
-//    led2__set(1);
 }
 
 void modbus_rtu_driver__on_frame_timeout(void) {
-//    led2__set(1);
 }
 
 
 void modbus_rtu_driver__on_char_timeout(void) {
-//    led1__set(1);
 }
 
 void modbus_rtu_driver__on_response(void) {
-//    led2__set(1);
+    led3__set(1);
 }
 
 void modbus_rtu_driver__on_no_response(void) {
+    led3__set(0);
 }
 
 
@@ -124,11 +150,12 @@ volatile uint16_t pulse_counter;
 
 
 void modbus_server__on_valid_frame_received(void) {
-    led3__set(1);
+    led2__set(1);
     ++valid_frames_received;
 }
 
 void modbus_server__on_invalid_frame_received(void) {
+    led2__set(0);
     ++invalid_frames_received;
 }
 
