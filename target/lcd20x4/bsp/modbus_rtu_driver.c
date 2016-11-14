@@ -66,14 +66,15 @@ void modbus_rtu_driver__FRAME_PROCESSING_to_TX(void) {
 }
 
 void modbus_rtu_driver__TX_to_RX(void) {
-    // NB: transmission is immediate, most likely, should receive only after 3.5T timeout.
-    buffer__clear();    
+    // NB: trasition is immediate, most likely, should receive only after 3.5T timeout.
+    buffer__clear();
     modbus_rtu_driver__dir_control__rx();
     modbus_rtu_driver__usart_rx__enable();      // indicate that any received data from now on are expected
 }
 
 void modbus_rtu_driver__FRAME_PROCESSING_to_RX(void) {
-    modbus_rtu_driver__usart_rx__enable();
+    buffer__clear();
+    modbus_rtu_driver__usart_rx__enable();      // indicate that any received data from now on are expected
 }
 
 
