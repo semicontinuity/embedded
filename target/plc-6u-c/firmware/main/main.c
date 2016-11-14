@@ -1,19 +1,22 @@
 // =============================================================================
-//
+// Main firmware: MODBUS server for pulse counter and 1-wire thermometer.
 // =============================================================================
 
 #include "drivers/comm/onewire__bus.h"
 #include "services/temperature_reader.h"
 
-#include "buffer.h"
-#include "modbus_rtu_driver.h"
-#include "modbus_server.h"
+#include "cpu/avr/drivers/comm/modbus/buffer.h"
+#include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver.h"
+#include "cpu/avr/drivers/comm/modbus/modbus_server.h"
 
 #include "cpu/avr/drivers/display/segment/static2.h"
 //#include "cpu/avr/util/bcd.h"
 #include "cpu/avr/int1.h"
 #include <avr/interrupt.h>
 
+void debug_hex_byte(const uint8_t v) {
+//    display__render_packed(v);
+}
 
 void temperature_reader__reading__on_changed(void) {
 //    display__render_packed((uint8_t)uint9_to_bcd(temperature_reader__reading >> 8));
@@ -37,7 +40,7 @@ int main(void) {
     temperature_reader__thread__start();
     int1__start();
 
-    display__render_packed(0); // ready
+    debug_hex_byte(0); // ready
 
     sei();
 
@@ -102,7 +105,7 @@ volatile uint16_t pulse_counter;
 
 void int1__run(void) {
     ++pulse_counter;
-    display__render_packed(pulse_counter & 0xFF);
+    debug_hex_byte(pulse_counter & 0xFF);
 }
 
 void modbus_server__on_valid_frame_received(void) {
@@ -110,7 +113,7 @@ void modbus_server__on_valid_frame_received(void) {
 }
 
 void modbus_server__on_invalid_frame_received(void) {
-    display__render_packed(0xfe);
+    debug_hex_byte(0xfe);
     ++invalid_frames_received;
 }
 
@@ -119,21 +122,43 @@ void modbus_rtu_driver__on_frame_sent(void) {
 }
 
 void modbus_rtu_driver__on_protocol_error(void) {
-    display__render_packed(0xee);
+    debug_hex_byte(0xee);
     ++protocol_errors;
 }
 
 void modbus_rtu_driver__on_buffer_overflow(void) {
-    display__render_packed(0xbe);
+    debug_hex_byte(0xbe);
     ++buffer_overflows;
 }
+
+void modbus_rtu_driver__on_frame_processing(void) {
+}
+
+void modbus_rtu_driver__on_char_received(void) {
+}
+
+void modbus_rtu_driver__on_char_buffered(void) {
+}
+
+void modbus_rtu_driver__on_frame_timeout(void) {
+}
+
+void modbus_rtu_driver__on_char_timeout(void) {
+}
+
+void modbus_rtu_driver__on_response(void) {
+}
+
+void modbus_rtu_driver__on_no_response(void) {
+}
+
 
 
 /**
  * Handle reading of holding registers.
  */
 modbus_exception modbus_server__read_input_registers(uint16_t register_address, uint16_t register_count) {
-    display__render_packed(0x04);
+    debug_hex_byte(0x04);
     do {
         switch (register_address++) {
         case SERVER__REGISTER__T:
@@ -152,7 +177,7 @@ modbus_exception modbus_server__read_input_registers(uint16_t register_address, 
  * Handle reading of holding registers.
  */
 modbus_exception modbus_server__read_holding_registers(uint16_t register_address, uint16_t register_count) {
-    display__render_packed(0x03);
+    debug_hex_byte(0x03);
     do {
         switch (register_address++) {
         case SERVER__REGISTER__VALID_FRAMES_RECEIVED:
@@ -186,7 +211,7 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
  * Handle writing of holding register.
  */
 modbus_exception modbus_server__write_holding_register(uint16_t register_address, uint16_t register_value) {
-    display__render_packed(0x06);
+    debug_hex_byte(0x06);
     switch (register_address) {
     case SERVER__REGISTER__VALID_FRAMES_RECEIVED:
         valid_frames_received = register_value;
