@@ -7,24 +7,21 @@
 #include "drivers/out/led3.h"
 
 #include "cpu/avr/gpio.h"
-#include "LCD.h"         
-#include "prototip_fun.h"
-
-#include "drivers/comm/onewire__bus.h"
-#include "services/temperature_reader.h"
 
 #include "buffer.h"
 #include "modbus_rtu_driver.h"
 #include "modbus_server.h"
 
-//#include "cpu/avr/util/bcd.h"
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
 
 
+void modbus_rtu_driver__on_frame_processing(void) {
+    led2__set(1);
+}
 
 void modbus_rtu_driver__on_char_received(void) {
-//    led1__set(1);
+    led1__set(1);
 }
 
 void modbus_rtu_driver__on_char_buffered(void) {
@@ -35,9 +32,6 @@ void modbus_rtu_driver__on_frame_timeout(void) {
 //    led2__set(1);
 }
 
-void modbus_rtu_driver__on_frame_processing(void) {
-//    led3__set(1);
-}
 
 void modbus_rtu_driver__on_char_timeout(void) {
 //    led1__set(1);
@@ -48,13 +42,9 @@ void modbus_rtu_driver__on_response(void) {
 }
 
 void modbus_rtu_driver__on_no_response(void) {
-//    led3__set(1);
 }
 
 
-
-void temperature_reader__reading__on_changed(void) {
-}
 
 // main
 // -----------------------------------------------------------------------------
@@ -64,13 +54,8 @@ int main(void) {
     led2__init();
     led3__init();
 
-    init();
-    LCDstring_of_flash(PSTR("MODBUS test"), 0, 0);
-
-    onewire__bus__init();
     modbus_rtu_driver__init();
 
-    temperature_reader__thread__start();
     modbus_rtu_driver__start();
 
     sei();
@@ -82,9 +67,6 @@ int main(void) {
     for(;;) {
         if (modbus_rtu_driver__is_runnable()) {
             modbus_rtu_driver__run();
-        }
-        if (temperature_reader__thread__is_runnable()) {
-            temperature_reader__thread__run();
         }
     }
 #if !defined(__AVR_ARCH__)
@@ -125,6 +107,7 @@ volatile uint16_t pulse_counter;
 
 
 void modbus_server__on_valid_frame_received(void) {
+    led3__set(1);
     ++valid_frames_received;
 }
 
@@ -152,7 +135,7 @@ modbus_exception modbus_server__read_input_registers(uint16_t register_address, 
     do {
         switch (register_address++) {
         case SERVER__REGISTER__T:
-            buffer__put_u16(temperature_reader__reading);
+            buffer__put_u16(0xAA55);
             break;
         default:
             return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
