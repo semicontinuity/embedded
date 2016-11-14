@@ -9,6 +9,6 @@ extern volatile int16_t ow_array[MAXSENSORS];	// Speicherplatz für 1-wire Sensor
 
 void temperature_init(void);
 uint8_t start_OW(void);
-void lese_Temperatur(void);
+uint8_t lese_Temperatur(void);
 
 #endif

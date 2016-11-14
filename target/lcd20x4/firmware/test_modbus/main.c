@@ -8,9 +8,9 @@
 
 #include "cpu/avr/gpio.h"
 
-#include "buffer.h"
-#include "modbus_rtu_driver.h"
-#include "modbus_server.h"
+#include "cpu/avr/drivers/comm/modbus/buffer.h"
+#include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver.h"
+#include "cpu/avr/drivers/comm/modbus/modbus_server.h"
 
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>

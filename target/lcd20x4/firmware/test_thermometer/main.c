@@ -85,21 +85,15 @@ int main(void) {
     led3__init();
 
     ENABLE_PULLUP(UNUSED_B4);
-    ENABLE_PULLUP(UNUSED_B5);
-
-    ENABLE_PULLUP(UNUSED_C0);
-    ENABLE_PULLUP(UNUSED_C1);
-    ENABLE_PULLUP(UNUSED_C2);
-    ENABLE_PULLUP(UNUSED_C3);
-    ENABLE_PULLUP(UNUSED_C4);
 
     ENABLE_PULLUP(UNUSED_D0);
     ENABLE_PULLUP(UNUSED_D1);
 
     init();
+    LCDstring_of_flash(PSTR("Temperature"), 0, 1);
 
     while(1) {
-        start_OW();
+/*        start_OW();
         _delay_ms(750);
 
         led1__set(1);
@@ -111,6 +105,7 @@ int main(void) {
         }
         
         led1__set(0);
+*/
     }
 }
 
