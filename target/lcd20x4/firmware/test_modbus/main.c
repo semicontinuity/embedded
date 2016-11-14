@@ -1,18 +1,105 @@
 // =============================================================================
-// Modbus test
+// Test MODBUS communications
 // =============================================================================
 
 #include "drivers/out/led1.h"
 #include "drivers/out/led2.h"
 #include "drivers/out/led3.h"
 
+#include "cpu/avr/gpio.h"
+#include "LCD.h"         
+#include "prototip_fun.h"
+
+#include "drivers/comm/onewire__bus.h"
+#include "services/temperature_reader.h"
+
 #include "buffer.h"
 #include "modbus_rtu_driver.h"
 #include "modbus_server.h"
 
+//#include "cpu/avr/util/bcd.h"
 #include <avr/interrupt.h>
-#include <util/delay.h>
+#include <avr/pgmspace.h>
 
+
+
+void modbus_rtu_driver__on_char_received(void) {
+//    led1__set(1);
+}
+
+void modbus_rtu_driver__on_char_buffered(void) {
+//    led2__set(1);
+}
+
+void modbus_rtu_driver__on_frame_timeout(void) {
+//    led2__set(1);
+}
+
+void modbus_rtu_driver__on_frame_processing(void) {
+//    led3__set(1);
+}
+
+void modbus_rtu_driver__on_char_timeout(void) {
+//    led1__set(1);
+}
+
+void modbus_rtu_driver__on_response(void) {
+//    led2__set(1);
+}
+
+void modbus_rtu_driver__on_no_response(void) {
+//    led3__set(1);
+}
+
+
+
+void temperature_reader__reading__on_changed(void) {
+}
+
+// main
+// -----------------------------------------------------------------------------
+int main(void) __attribute__ ((naked));
+int main(void) {
+    led1__init();
+    led2__init();
+    led3__init();
+
+    init();
+    LCDstring_of_flash(PSTR("MODBUS test"), 0, 0);
+
+    onewire__bus__init();
+    modbus_rtu_driver__init();
+
+    temperature_reader__thread__start();
+    modbus_rtu_driver__start();
+
+    sei();
+
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
+#endif
+    for(;;) {
+        if (modbus_rtu_driver__is_runnable()) {
+            modbus_rtu_driver__run();
+        }
+        if (temperature_reader__thread__is_runnable()) {
+            temperature_reader__thread__run();
+        }
+    }
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic pop
+#endif
+
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
+#endif
+    return 0;
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic pop
+#endif
+}
 
 
 #define SERVER__REGISTER__T                         (MODBUS_SERVER__INPUT_REGISTERS_START + 0)
@@ -33,38 +120,16 @@ volatile uint16_t protocol_errors;
 #define SERVER__REGISTER__BUFFER_OVERFLOWS          (MODBUS_SERVER__HOLDING_REGISTERS_START + 4)
 volatile uint16_t buffer_overflows;
 
+#define SERVER__REGISTER__PULSE_COUNTER             (MODBUS_SERVER__HOLDING_REGISTERS_START + 5)
+volatile uint16_t pulse_counter;
 
-void modbus_rtu_driver__on_char_received(void) {
-//    led1__set(1);
+
+void modbus_server__on_valid_frame_received(void) {
+    ++valid_frames_received;
 }
 
-void modbus_rtu_driver__on_char_buffered(void) {
-//    led2__set(1);
-}
-
-void modbus_rtu_driver__on_buffer_overflow(void) {
-//    led3__set(1);
-    ++buffer_overflows;
-}
-
-void modbus_rtu_driver__on_char_timeout(void) {
-//    led1__set(1);
-}
-
-void modbus_rtu_driver__on_frame_timeout(void) {
-//    led2__set(1);
-}
-
-void modbus_rtu_driver__on_frame_processing(void) {
-//    led3__set(1);
-}
-
-void modbus_rtu_driver__on_response(void) {
-//    led2__set(1);
-}
-
-void modbus_rtu_driver__on_no_response(void) {
-//    led3__set(1);
+void modbus_server__on_invalid_frame_received(void) {
+    ++invalid_frames_received;
 }
 
 void modbus_rtu_driver__on_frame_sent(void) {
@@ -75,41 +140,8 @@ void modbus_rtu_driver__on_protocol_error(void) {
     ++protocol_errors;
 }
 
-void modbus_server__on_valid_frame_received(void) {
-    ++valid_frames_received;
-}
-
-void modbus_server__on_invalid_frame_received(void) {
-    ++invalid_frames_received;
-}
-
-
-/**
- * Handle reading of holding registers.
- */
-modbus_exception modbus_server__read_coils(void) {
-    buffer__put_u8((PORT_REG(OUT__LEDS__PORT) & (SIGNAL_MASK(OUT__LED1) | SIGNAL_MASK(OUT__LED2) | SIGNAL_MASK(OUT__LED3))) >> OUT__LED1__PIN);
-    return MODBUS_EXCEPTION__NONE;
-}
-
-
-
-
-/**
- * Handle writing of single coil (output LEDs/relays).
- */
-
-modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t active) {
-    if (address == 0) {
-        led1__set(active);
-    }
-    else if (--address == 0) {
-        led2__set(active);
-    }
-    else {
-        led3__set(active);
-    }
-    return MODBUS_EXCEPTION__NONE;
+void modbus_rtu_driver__on_buffer_overflow(void) {
+    ++buffer_overflows;
 }
 
 
@@ -120,8 +152,7 @@ modbus_exception modbus_server__read_input_registers(uint16_t register_address, 
     do {
         switch (register_address++) {
         case SERVER__REGISTER__T:
-            buffer__put_u16(0xAA55);
-//            buffer__put_u16(temperature_reader__reading);
+            buffer__put_u16(temperature_reader__reading);
             break;
         default:
             return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
@@ -153,6 +184,9 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
         case SERVER__REGISTER__BUFFER_OVERFLOWS:
             buffer__put_u16(buffer_overflows);
             break;
+        case SERVER__REGISTER__PULSE_COUNTER:
+            buffer__put_u16(pulse_counter);
+            break;
         default:
             return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
         }
@@ -182,79 +216,11 @@ modbus_exception modbus_server__write_holding_register(uint16_t register_address
     case SERVER__REGISTER__BUFFER_OVERFLOWS:
         buffer_overflows = register_value;
         break;
+    case SERVER__REGISTER__PULSE_COUNTER:
+        pulse_counter = register_value;
+        break;
     default:
         return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
     }
     return MODBUS_EXCEPTION__NONE;
-}
-
-
-// =============================================================================
-// Application
-// =============================================================================
-
-static void application__init(void) {
-    led1__init();
-    led2__init();
-    led3__init();
-    modbus_rtu_driver__init();
-}
-
-static void application__start(void) {
-    modbus_rtu_driver__start();
-}
-
-
-// main
-// -----------------------------------------------------------------------------
-int main(void) __attribute__ ((naked));
-int main(void) {
-    application__init();
-
-    led1__set(1);
-    led2__set(1);
-    led3__set(1);
-    _delay_ms(500);
-    led1__set(0);
-    led2__set(0);
-    led3__set(0);
-    _delay_ms(100);
-
-    application__start();
-    sei();
-
-#if !defined(__AVR_ARCH__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-noreturn"
-#endif
-//    for(;;) {
-//        if (modbus_rtu_driver__is_runnable()) {
-//            modbus_rtu_driver__run();
-//        }
-//        else {
-//            sei();
-//            sleep_cpu();
-//            cli();
-//        }
-//    }
-    for(;;) {
-        if (modbus_rtu_driver__is_runnable()) {
-            modbus_rtu_driver__run();
-        }
-//        if (temperature_reader__thread__is_runnable()) {
-//            temperature_reader__thread__run();
-//        }
-    }
-#if !defined(__AVR_ARCH__)
-#pragma clang diagnostic pop
-#endif
-
-#if !defined(__AVR_ARCH__)
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "OCDFAInspection"
-#endif
-    return 0;
-#if !defined(__AVR_ARCH__)
-#pragma clang diagnostic pop
-#endif
 }
