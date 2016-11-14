@@ -3,9 +3,9 @@
 // =============================================================================
 
 
-#include "buffer.h"
-#include "modbus_rtu_driver.h"
-#include "modbus_server.h"
+#include "cpu/avr/drivers/comm/modbus/buffer.h"
+#include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver.h"
+#include "cpu/avr/drivers/comm/modbus/modbus_server.h"
 #include "cpu/avr/drivers/display/segment/static2.h"
 
 #include <avr/interrupt.h>
@@ -107,6 +107,29 @@ void modbus_rtu_driver__on_buffer_overflow(void) {
     display__render_packed(0xbe);
     ++buffer_overflows;
 }
+
+void modbus_rtu_driver__on_frame_processing(void) {
+}
+
+void modbus_rtu_driver__on_char_received(void) {
+}
+
+void modbus_rtu_driver__on_char_buffered(void) {
+}
+
+void modbus_rtu_driver__on_frame_timeout(void) {
+}
+
+
+void modbus_rtu_driver__on_char_timeout(void) {
+}
+
+void modbus_rtu_driver__on_response(void) {
+}
+
+void modbus_rtu_driver__on_no_response(void) {
+}
+
 
 
 /**

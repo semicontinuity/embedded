@@ -7,22 +7,22 @@ set(SOURCE_FILES
     ../../bsp/drivers/out/rts.h
     ../../bsp/drivers/water_counter.c
     ../../bsp/drivers/water_counter.h
-    ../../bsp/buffer.c
-    ../../bsp/buffer.h
-    ../../bsp/modbus.h
-    ../../bsp/modbus_rtu_driver.c
-    ../../bsp/modbus_rtu_driver.h
-    ../../bsp/modbus_rtu_driver__delay_timer.c
-    ../../bsp/modbus_rtu_driver__delay_timer.h
-    ../../bsp/modbus_rtu_driver__dir_control.h
-    ../../bsp/modbus_rtu_driver__dir_control__nop.c
-    ../../bsp/modbus_rtu_driver__dir_control__rts.c
-    ../../bsp/modbus_rtu_driver__usart_rx.c
-    ../../bsp/modbus_rtu_driver__usart_rx.h
-    ../../bsp/modbus_rtu_driver__usart_tx.c
-    ../../bsp/modbus_rtu_driver__usart_tx.h
-    ../../bsp/modbus_server.c
-    ../../bsp/modbus_server.h
+
+    ../../../../cpu/avr/drivers/comm/modbus/buffer.c
+    ../../../../cpu/avr/drivers/comm/modbus/buffer.h
+    ../../../../cpu/avr/drivers/comm/modbus/modbus.h
+    ../../../../cpu/avr/drivers/comm/modbus/modbus_rtu_driver.c
+    ../../../../cpu/avr/drivers/comm/modbus/modbus_rtu_driver.h
+    ../../../../cpu/avr/drivers/comm/modbus/modbus_rtu_driver__delay_timer.c
+    ../../../../cpu/avr/drivers/comm/modbus/modbus_rtu_driver__delay_timer.h
+    ../../../../cpu/avr/drivers/comm/modbus/modbus_rtu_driver__dir_control.h
+    ../../../../cpu/avr/drivers/comm/modbus/modbus_rtu_driver__dir_control__rts.c
+    ../../../../cpu/avr/drivers/comm/modbus/modbus_rtu_driver__usart_rx.c
+    ../../../../cpu/avr/drivers/comm/modbus/modbus_rtu_driver__usart_rx.h
+    ../../../../cpu/avr/drivers/comm/modbus/modbus_rtu_driver__usart_tx.c
+    ../../../../cpu/avr/drivers/comm/modbus/modbus_rtu_driver__usart_tx.h
+    ../../../../cpu/avr/drivers/comm/modbus/modbus_server.c
+    ../../../../cpu/avr/drivers/comm/modbus/modbus_server.h
     ../../../../cpu/avr/int1.c
     ../../../../cpu/avr/timer1.h
     ../../../../cpu/avr/timer1__2oc.h
@@ -74,6 +74,7 @@ add_definitions(-DMODBUS_RTU_DRIVER__DELAY_TIMER__T35_VALUE="\(\(F_CPU/USART0__B
 
 # Modbus server
 # ==============================================================================
+add_definitions(-DMODBUS_SERVER__ADDRESS=1)
 
 add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_START=0)
 add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_COUNT=5)
