@@ -349,7 +349,6 @@ void onewire__thread__run(void) {
 // 1-wire client
 // -----------------------------------------------------------------------------
 
-
 /**
  * Perform 1-wire transaction.
  */
