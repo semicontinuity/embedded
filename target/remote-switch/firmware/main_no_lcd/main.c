@@ -10,9 +10,9 @@
 #include "drivers/comm/onewire__bus.h"
 #include "drivers/comm/onewire.h"
 
-#include "buffer.h"
-#include "modbus_rtu_driver.h"
-#include "modbus_server.h"
+#include "cpu/avr/drivers/comm/modbus/buffer.h"
+#include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver.h"
+#include "cpu/avr/drivers/comm/modbus/modbus_server.h"
 
 #include "services/temperature_reader.h"
 #include "services/buttons_handler.h"
