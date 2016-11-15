@@ -6,11 +6,9 @@
 #include "drivers/out/led2.h"
 #include "drivers/out/led3.h"
 
-#include "cpu/avr/gpio.h"
-#include "LCD.h"         
-#include "prototip_fun.h"
+#include "cpu/avr/drivers/display/hd44780/hd44780.h"
 
-#include "drivers/comm/onewire__bus.h"
+//#include "drivers/comm/onewire__bus.h"
 #include "services/temperature_reader.h"
 
 #include "cpu/avr/drivers/comm/modbus/buffer.h"
@@ -31,21 +29,21 @@ uint16_t as_two_hex_chars(const uint8_t value) {
 
 
 void display__print_frame(void) {
-    LCDGotoXY(0, 0);
+    hd44780_lcd__goto(0, 0);
 
     uint8_t l = buffer__limit__get();
     uint8_t* p = buffer__data;
     for (;;) {
-       if (l == 0) break;
+        if (l == 0) break;
 
-       uint8_t value = *p++;
-       uint16_t l_chars = as_two_hex_chars(value);
-       LCDdata(l_chars >> 8);
-       LCDdata(l_chars & 0xFF);
+        uint8_t value = *p++;
+        uint16_t l_chars = as_two_hex_chars(value);
+        hd44780_lcd__send_data(l_chars >> 8);
+        hd44780_lcd__send_data(l_chars & 0xFF);
 
-       --l;
+        --l;
     }
-    LCDdata('=');
+    hd44780_lcd__send_data('=');
 }
 
 
@@ -88,8 +86,8 @@ int main(void) {
     led2__init();
     led3__init();
 
-    init();
-    LCDstring_of_flash(PSTR("MODBUS test"), 0, 0);
+    hd44780_lcd__init();
+    hd44780_lcd__write_string_xy_P(PSTR("MODBUS tester"), 0, 0);
 
 //    onewire__bus__init();
     modbus_rtu_driver__init();

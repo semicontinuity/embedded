@@ -3,6 +3,8 @@
 
 #include "cpu/avr/util/bcd.c"
 
+#include "cpu/avr/drivers/display/hd44780/hd44780.c"
+
 #include "cpu/avr/drivers/comm/modbus/buffer.c"
 #include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver.c"
 #include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver__delay_timer.c"
@@ -17,6 +19,3 @@
 #include "drivers/comm/onewire__t0t2.c"
 #include "drivers/comm/onewire__bus__direct.c"
 #include "util/crc8_ow_unrolled.c"
-
-#include "LCD.c"
-#include "init.c"
