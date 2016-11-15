@@ -170,8 +170,8 @@ void hd44780_lcd__wait_until_not_busy(void) {
 }
 
 
-void hd44780_lcd__send_byte(uint8_t i) {
-    hd44780_lcd__data_port__mode_write();
+void hd44780_lcd__send_byte(const  uint8_t i) {
+    hd44780_lcd__data_port__mode_write();   // output 0 at data port, some 0s excessive, can be optimized
 
 #ifdef HD44780_LCD__8_BIT_MODE
     if ((i & 1) == 1) {
@@ -234,7 +234,7 @@ void hd44780_lcd__send_byte(uint8_t i) {
     }
 
     hd44780_lcd__latch_data();
-    hd44780_lcd__data_port__mode_write();
+    hd44780_lcd__data_port__mode_write();   // output 0 at data port, some 0s excessive, can be optimized
 
     if ((l & 1) == 1) {
         OUT_1(LCD__D4);
@@ -301,8 +301,9 @@ void hd44780_lcd__init(void) {
     uint8_t i = 0;
     while (i != 3) {
 #if defined(HD44780_LCD__8_BIT_MODE)
-        hd44780_lcd__data_port__write(0x30);
+        hd44780_lcd__data_port__write(HD44780_LCD__COMMAND__CONFIGURE | HD44780_LCD__COMMAND__CONFIGURE_BUS_8_BIT);
 #else
+        // high(HD44780_LCD__COMMAND__CONFIGURE | HD44780_LCD__COMMAND__CONFIGURE_BUS_8_BIT) = high (0x30) = 0x3 at D7:D4
         OUT_1(LCD__D5);
         OUT_1(LCD__D4);
 #endif
@@ -313,46 +314,59 @@ void hd44780_lcd__init(void) {
     }
 
 #if defined(HD44780_LCD__8_BIT_MODE)
-    hd44780_lcd__send_command(0b00111000);//8ми битный интерфейс, две строки, 5x8 точек.
-#else   //Первый раз отправляем только пол старшей тетрады
+    hd44780_lcd__send_command(
+        HD44780_LCD__COMMAND__CONFIGURE |
+        HD44780_LCD__COMMAND__CONFIGURE_BUS_8_BIT |
+        HD44780_LCD__COMMAND__CONFIGURE_LINES_2 |
+        HD44780_LCD__COMMAND__CONFIGURE_CHAR_5X8
+    );
+#else
+    // send high 4 buts first
     hd44780_lcd__wait_until_not_busy();
     hd44780_lcd__data_port__mode_write();
 
-    //4х битный интерфейс
+    // 4-bit interface
+    // high(HD44780_LCD__COMMAND__CONFIGURE | HD44780_LCD__COMMAND__CONFIGURE_BUS_4_BIT) = high (0x30) = 0x3 at D7:D4
     OUT_0(LCD__D7);
     OUT_0(LCD__D6);
     OUT_1(LCD__D5);
     OUT_0(LCD__D4);
 
     hd44780_lcd__latch_data();
-    hd44780_lcd__send_command(0b00101000);//Две строки, 5x8 точек.
+
+    hd44780_lcd__send_command(
+        HD44780_LCD__COMMAND__CONFIGURE |
+        HD44780_LCD__COMMAND__CONFIGURE_BUS_4_BIT |
+        HD44780_LCD__COMMAND__CONFIGURE_LINES_2 |
+        HD44780_LCD__COMMAND__CONFIGURE_CHAR_5X8
+    );
 #endif
 
-    hd44780_lcd__send_command(0b1100);  //Включаем дисплей + без отображения курсоров.
-    hd44780_lcd__send_command(0b110);   //Счетчик адреса всегда будет смещаться на n+1
-    hd44780_lcd__send_command(0b10);    //курсор в позицию 0,0 + сброс всех сдвигов
-    hd44780_lcd__send_command(0b1);     //очистка дисплея
+    hd44780_lcd__send_command(HD44780_LCD__COMMAND__DISPLAY | HD44780_LCD__COMMAND__DISPLAY_ON | HD44780_LCD__COMMAND__DISPLAY_CURSOR_ON | HD44780_LCD__COMMAND__DISPLAY_CURSOR_BLINK);
+    hd44780_lcd__send_command(HD44780_LCD__COMMAND__SCREEN | HD44780_LCD__COMMAND__SCREEN_ADDRESS_INC);
+    hd44780_lcd__send_command(HD44780_LCD__COMMAND__USE_DDRAM);
+    hd44780_lcd__send_command(HD44780_LCD__COMMAND__CLEAR);
 }
 
 
 void hd44780_lcd__goto(const uint8_t x, const uint8_t y) {
-    uint8_t address;
+    uint8_t command;
     switch (y) {
-    case 0: address = HD44780_LCD__LINE0 + x;
+    case 0: command = (HD44780_LCD__COMMAND__SET_DDRAM_ADDRESS | HD44780_LCD__LINE0_ADDRESS) + x;
         break;
-    case 1: address = HD44780_LCD__LINE1 + x;
+    case 1: command = (HD44780_LCD__COMMAND__SET_DDRAM_ADDRESS | HD44780_LCD__LINE1_ADDRESS) + x;
         break;
-    case 2: address = HD44780_LCD__LINE2 + x;
+    case 2: command = (HD44780_LCD__COMMAND__SET_DDRAM_ADDRESS | HD44780_LCD__LINE2_ADDRESS) + x;
         break;
-    case 3: address = HD44780_LCD__LINE3 + x;
+    case 3: command = (HD44780_LCD__COMMAND__SET_DDRAM_ADDRESS | HD44780_LCD__LINE3_ADDRESS) + x;
         break;
-    default: address = HD44780_LCD__LINE0 + x;
+    default: command = (HD44780_LCD__COMMAND__SET_DDRAM_ADDRESS | HD44780_LCD__LINE0_ADDRESS) + x;
     }
 
-    hd44780_lcd__send_command(address);
+    hd44780_lcd__send_command(command);
 }
 
-void hd44780_lcd__write_string_xy_P(const char* p, uint8_t x, uint8_t y) {
+void hd44780_lcd__write_string_xy_P(const char* p, const uint8_t x, const uint8_t y) {
     hd44780_lcd__goto(x, y);
     for (uint8_t i = 0; ; i++) {
         uint8_t b = (uint8_t) pgm_read_byte(&p[i]);
