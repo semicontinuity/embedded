@@ -29,46 +29,19 @@ int main(void) {
     ENABLE_PULLUP(UNUSED_D7);
 
     init();
+    LCDstring_of_flash(PSTR("Buttons test"), 0, 0);
+    LCDstring_of_flash(PSTR("--------------------"), 0, 1);
+    LCDstring_of_flash(PSTR("Pressed:"), 0, B_Y);
 
     while(1) {
         uint8_t state = IN(IN__BUTTONS) & (_BV(IN__BUTTON1__PIN) | _BV(IN__BUTTON2__PIN) | _BV(IN__BUTTON3__PIN) | _BV(IN__BUTTON4__PIN) | _BV(IN__BUTTON5__PIN) | _BV(IN__BUTTON6__PIN));
 
-        if (state & _BV(IN__BUTTON1__PIN)) {
-            LCDstring_of_flash(PSTR("1"), 0, 0);
-        } else {
-            LCDstring_of_flash(PSTR("_"), 0, 0);
-        }
-
-        if (state & _BV(IN__BUTTON2__PIN)) {
-            LCDstring_of_flash(PSTR("2"), 1, 0);
-        } else {
-            LCDstring_of_flash(PSTR("_"), 1, 0);
-        }
-
-        if (state & _BV(IN__BUTTON3__PIN)) {
-            LCDstring_of_flash(PSTR("3"), 2, 0);
-        } else {
-            LCDstring_of_flash(PSTR("_"), 2, 0);
-        }
-
-        if (state & _BV(IN__BUTTON4__PIN)) {
-            LCDstring_of_flash(PSTR("4"), 3, 0);
-        } else {
-            LCDstring_of_flash(PSTR("_"), 3, 0);
-        }
-
-        if (state & _BV(IN__BUTTON5__PIN)) {
-            LCDstring_of_flash(PSTR("5"), 4, 0);
-        } else {
-            LCDstring_of_flash(PSTR("_"), 4, 0);
-        }
-
-        if (state & _BV(IN__BUTTON6__PIN)) {
-            LCDstring_of_flash(PSTR("6"), 5, 0);
-        } else {
-            LCDstring_of_flash(PSTR("_"), 5, 0);
-        }
-
+        LCDstring_of_flash(state & _BV(IN__BUTTON1__PIN) ? PSTR("_") : PSTR("1"), B1_X, B_Y);
+        LCDstring_of_flash(state & _BV(IN__BUTTON2__PIN) ? PSTR("_") : PSTR("2"), B2_X, B_Y);
+        LCDstring_of_flash(state & _BV(IN__BUTTON3__PIN) ? PSTR("_") : PSTR("3"), B3_X, B_Y);
+        LCDstring_of_flash(state & _BV(IN__BUTTON4__PIN) ? PSTR("_") : PSTR("4"), B4_X, B_Y);
+        LCDstring_of_flash(state & _BV(IN__BUTTON5__PIN) ? PSTR("_") : PSTR("5"), B5_X, B_Y);
+        LCDstring_of_flash(state & _BV(IN__BUTTON6__PIN) ? PSTR("_") : PSTR("6"), B6_X, B_Y);
         _delay_ms(50);
     }
 }
