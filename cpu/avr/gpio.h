@@ -41,10 +41,12 @@
 #define IN(port)                     (PIN_REG(CONCAT(port,__PORT)))
 #define USE_PORT_AS_INPUT(port)      do {DATA_DIR_REG(CONCAT(port,__PORT)) = 0x00;} while(0)
 #define USE_PORT_AS_OUTPUT(port)     do {DATA_DIR_REG(CONCAT(port,__PORT)) = 0xFF;} while(0)
+#define DISABLE_PULLUPS(port)        do {PORT_REG(CONCAT(port,__PORT)) = 0x00;} while(0)
 #define ENABLE_PULLUPS(port)         do {PORT_REG(CONCAT(port,__PORT)) = 0xFF;} while(0)
 
 #define USE_AS_INPUT(signal)         do {clear_bit_in_reg (DATA_DIR_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
 #define USE_AS_OUTPUT(signal)        do {set_bit_in_reg (DATA_DIR_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
+#define DISABLE_PULLUP(signal)       do {clear_bit_in_reg (PORT_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
 #define ENABLE_PULLUP(signal)        do {set_bit_in_reg (PORT_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
 #define TOGGLE(signal)               do {set_bit_in_reg (PIN_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
 
