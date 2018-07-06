@@ -1,6 +1,5 @@
-#include "LCD.c"
-#include "init.c"
 #include "main.c"
+#include "cpu/avr/drivers/display/hd44780/hd44780.c"
 
 #include "cpu/avr/util/bcd.c"
 #include "util/hex.c"

@@ -3,8 +3,7 @@
 #include "drivers/out/led3.h"
 
 #include "cpu/avr/gpio.h"
-#include "LCD.h"
-#include "prototip_fun.h"
+#include "cpu/avr/drivers/display/hd44780/hd44780.h"
 
 #include "util/hex.h"
 #include "temperature.h"
@@ -21,12 +20,12 @@
 
 
 void display__print_byte_as_hex(const int16_t value) {
-    LCDdata(value >> 8);
-    LCDdata(value & 0xFF);
+    hd44780_lcd__send_data(value >> 8);
+    hd44780_lcd__send_data(value & 0xFF);
 }
 
 void display__print_separator(void) {
-    LCDdata(':');
+    hd44780_lcd__send_data(':');
 }
 
 uint16_t as_two_hex_chars(const uint8_t value) {
@@ -72,8 +71,8 @@ int main(void) {
     ENABLE_PULLUP(UNUSED_D0);
     ENABLE_PULLUP(UNUSED_D1);
 
-    init();
-    LCDstring_of_flash(PSTR("Search"), 0, 2);
+    hd44780_lcd__init();
+    hd44780_lcd__write_string_xy_P(PSTR("Searching devices..."), 0, 0);
 
     start_OW();
     _delay_ms(750);
@@ -82,7 +81,7 @@ int main(void) {
     temperature_init();
     led1__set(0);
 
-    LCDGotoXY(0, 3);
+    hd44780_lcd__goto(0, 3);
     display__print_temperature();
 
     while(1) {

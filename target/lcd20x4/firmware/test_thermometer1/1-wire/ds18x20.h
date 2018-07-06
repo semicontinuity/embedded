@@ -18,8 +18,6 @@
 #ifndef DS18X20_H_
 #define DS18X20_H_
 
-#include <stdint.h>
-#include <stddef.h>
 
 // enable DS18x20 EERPROM support
 #define DS18X20_EEPROMSUPPORT	1
