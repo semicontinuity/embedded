@@ -15,6 +15,7 @@ file_name = sys.argv[5]
 port = serial.Serial()
 port.port = sys.argv[1]
 port.baudrate = int(sys.argv[2])
+port.timeout = 1.0
 port.open()
 
 
@@ -23,29 +24,38 @@ class PortReader(Thread):
       Thread.__init__(self)
       self._stop = threading.Event()
       self._done = threading.Event()
+      self._go = threading.Event()
 
    def exchange(self, s):
 #      print s
       self._result = ''
       port.write(s)
       port.write(chr(10))
+      self._go.set()
       self._done.wait()
       self._done.clear()
       return self._result
 
    def run(self):
       while not self.stopped():
-        while port.inWaiting() > 0:
+        self._go.wait()
+        if self.stopped():
+           break
+        while True:
+#        while port.inWaiting() > 0:
           c = port.read(1)
 #          print ord(c)
           if c == chr(10):
             self._done.set()
+            break
           else:
 #            print c
             self._result = self._result + c
+        self._go.clear()
 
    def stop(self):
       self._stop.set()
+      self._go.set()
 
    def stopped(self):
       return self._stop.isSet()
@@ -314,22 +324,23 @@ else:
     sys.exit()
 
 
-if operation == 'read':
-    f = open(file_name, "wb")
-    for c in range(0, eprom.size() / 256):
-        chunk = eprom.in_read_mode(lambda: eprom.read_256_byte_chunk(c))
-        f.write(chunk)
-    f.close
-elif operation == 'program':
-    data = open(file_name, "rb").read()
-    for c in range(0, eprom.size() / 256):
-        chunk = data[c*256: (c+1)*256]
-        eprom.in_program_mode(lambda: eprom.write_256_byte_chunk(c, chunk))
-else:
-    print 'Unknown operation: ' + operation
+try:
+    if operation == 'read':
+        f = open(file_name, "wb")
+        for c in range(0, eprom.size() / 256):
+            chunk = eprom.in_read_mode(lambda: eprom.read_256_byte_chunk(c))
+            f.write(chunk)
+        f.close
+    elif operation == 'program':
+        data = open(file_name, "rb").read()
+        for c in range(0, eprom.size() / 256):
+            chunk = data[c*256: (c+1)*256]
+            eprom.in_program_mode(lambda: eprom.write_256_byte_chunk(c, chunk))
+    else:
+        print 'Unknown operation: ' + operation
+        portReader.stop()
+        sys.exit()
+finally:
     portReader.stop()
+    port.close()
     sys.exit()
-
-
-portReader.stop()
-sys.exit()
