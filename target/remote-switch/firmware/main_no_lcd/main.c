@@ -61,7 +61,7 @@ void modbus_rtu_driver__on_frame_timeout(void) {
 }
 
 void modbus_rtu_driver__on_frame_processing(void) {
-//    led3__set(1);
+    TOGGLE(MODBUS_RTU_DRIVER__FRAME_PROCESSING__LED);
 }
 
 void modbus_rtu_driver__on_response(void) {
@@ -93,11 +93,14 @@ void modbus_server__on_invalid_frame_received(void) {
  * Handle reading of holding registers.
  */
 modbus_exception modbus_server__read_coils(void) {
-    __asm__ __volatile__( "modbus_server__read_coils:");
-    buffer__put_u8((PORT_REG(OUT__LEDS__PORT) & (SIGNAL_MASK(OUT__LED1) | SIGNAL_MASK(OUT__LED2) | SIGNAL_MASK(OUT__LED3))) >> OUT__LED1__PIN);
+     __asm__ __volatile__( "modbus_server__read_coils:");
+    buffer__put_u8(
+        (
+            PORT_REG(OUT__LEDS__PORT) & (SIGNAL_MASK(OUT__LED1) | SIGNAL_MASK(OUT__LED2) | SIGNAL_MASK(OUT__LED3) | SIGNAL_MASK(OUT__LED4))
+        ) >> OUT__LED1__PIN
+    );
     return MODBUS_EXCEPTION__NONE;
 }
-
 
 
 
@@ -208,6 +211,10 @@ void temperature_reader__reading__on_changed(void) {
 // =============================================================================
 
 static void application__init(void) {
+    USE_AS_OUTPUT(MODBUS_RTU_DRIVER__FRAME_PROCESSING__LED);
+    USE_AS_OUTPUT(MODBUS_RTU_DRIVER__USART_RX__ENABLED__LED);
+    USE_AS_OUTPUT(MODBUS_RTU_DRIVER__FRAME_RECEIVED__LED);
+
     led1__init();
     led2__init();
     led3__init();
