@@ -137,6 +137,7 @@ bool buffer__is_full(void) {
 }
 
 bool buffer__is_empty(void) {
-    return buffer__position_ptr >= buffer__limit_ptr;
+    return buffer__limit_ptr <= buffer__position_ptr;
+//    return buffer__position_ptr >= buffer__limit_ptr;
 }
 
