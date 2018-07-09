@@ -51,6 +51,13 @@ void modbus_rtu_driver__usart_rx__enable(void) {
 
 
 ISR(usart0__rx__complete__interrupt__VECTOR) {
+    if (usart0__rx__frame_error__get()) {
+        modbus_rtu_driver__usart_rx__on_char_format_error();
+    }
+    if (usart0__rx__data_overrun__get()) {
+        modbus_rtu_driver__usart_rx__on_char_lost();
+    }
+
     const uint8_t c = usart0__getc(); // read character in any case
     modbus_rtu_driver__usart_rx__on_char_received();
     if (modbus_rtu_driver__usart_rx__enabled__get()) {

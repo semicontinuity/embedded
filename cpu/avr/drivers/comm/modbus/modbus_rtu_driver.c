@@ -99,6 +99,15 @@ void modbus_rtu_driver__usart_rx__on_char_buffered(void) {
     modbus_rtu_driver__on_char_buffered();
 }
 
+void modbus_rtu_driver__usart_rx__on_char_format_error(void) {
+
+}
+
+void modbus_rtu_driver__usart_rx__on_char_lost(void) {
+
+}
+
+
 /**
  * Called when data received would overflow the buffer.
  */

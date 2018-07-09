@@ -32,6 +32,16 @@ void modbus_rtu_driver__usart_rx__on_char_received(void);
 void modbus_rtu_driver__usart_rx__on_char_buffered(void);
 
 /**
+ * Invoked when a character format error is detected.
+ */
+void modbus_rtu_driver__usart_rx__on_char_format_error(void);
+
+/**
+ * Invoked when a character is lost.
+ */
+void modbus_rtu_driver__usart_rx__on_char_lost(void);
+
+/**
  * Called when data received would overflow the buffer.
  * To be implemented by user.
  */
