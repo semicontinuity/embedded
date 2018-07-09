@@ -7,6 +7,7 @@
 #include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver__usart_rx.h"
 
 #include "cpu/avr/usart0.h"
+#include <avr/interrupt.h>
 
 
 /** modbus_rtu_driver__usart_rx__enabled flag */

@@ -13,7 +13,7 @@
 // -----------------------------------------------------------------------------
 
 #if defined(MODBUS_SERVER__HANDLE_READ_COILS) && MODBUS_SERVER__HANDLE_READ_COILS > 0
-//modbus_exception modbus_server__read_coils(void);
+modbus_exception modbus_server__read_coils(void);
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS) && MODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS > 0
