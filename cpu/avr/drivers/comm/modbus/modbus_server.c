@@ -186,27 +186,39 @@ modbus_exception modbus_server__process_frame(void) {
  * @return true if the response must be sent (placed to the same buffer)
  */
 bool modbus_rtu_driver__on_frame_received(void) {
-    __asm__ __volatile__( "modbus_rtu_driver__on_frame_received:");
+    __asm__ __volatile__("modbus_rtu_driver__on_frame_received:");
     const uint16_t length = buffer__limit__get();
     if (length == 0) return false; // timeout expired, no data yet (ok)
 
     if (length >= MODBUS_FRAME_SIZE_MIN) {
-        __asm__ __volatile__( "modbus_rtu_driver__on_frame_received__compute_request_crc:");
-        uint16_t crc = crc16(0xFFFF, buffer__data, length);
-        if (!crc) {
-        __asm__ __volatile__( "modbus_rtu_driver__on_frame_received__handle_valid_frame:");
+        __asm__ __volatile__("modbus_rtu_driver__on_frame_received__compute_request_crc:");
+        uint16_t request_crc = crc16(0xFFFF, buffer__data, length);
+        if (!request_crc) {
+            __asm__ __volatile__("modbus_rtu_driver__on_frame_received__handle_valid_frame:");
             modbus_server__on_valid_frame_received();
             buffer__rewind(); // start parsing frame
             uint8_t address = buffer__get_u8();
             if (address == MODBUS_SERVER__ADDRESS) {
-                __asm__ __volatile__( "modbus_rtu_driver__on_frame_received__process_frame:");
+                __asm__ __volatile__("modbus_rtu_driver__on_frame_received__process_frame:");
                 // handle request; buffer__limit will point to the end of response payload
-                modbus_server__process_frame();
+                const modbus_exception exception = modbus_server__process_frame();
+                if (exception) {
+                    __asm__ __volatile__("modbus_rtu_driver__on_frame_received__render_exception_frame:");
+                    buffer__clear();
+                    buffer__get_u8();   // skip address
+                    buffer__sync();     // will write to function code field
+                    uint8_t function = (uint8_t) (buffer__get_u8() | (uint8_t) 0x80);
+                    buffer__put_u8(function);
+                    buffer__put_u8(exception);
+                }
 
                 // finish response by computing CRC; buffer__limit will point to the end of frame
+                __asm__ __volatile__("modbus_rtu_driver__on_frame_received__compute_response_crc:");
                 uint16_t crc = crc16(0xFFFF, buffer__data, buffer__limit__get());
-                buffer__put_u8((uint8_t) (crc & 0xFF)); // low byte of CRC is sent first.
-                buffer__put_u8((uint8_t) (crc >> 8));   // cannot use buffer__put_u16 that sends 16-bit values MSB first.
+
+                // cannot use buffer__put_u16 that sends 16-bit values MSB first.
+                buffer__put_u8((uint8_t) (crc & (uint8_t)0xFF)); // low byte of CRC is sent first.
+                buffer__put_u8((uint8_t) (crc >> (uint8_t)8));
 
                 buffer__rewind();
                 return true; // indicate that response must be sent

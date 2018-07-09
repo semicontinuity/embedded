@@ -46,6 +46,10 @@ void buffer__rewind(void) {
 
 /**
  * Makes the buffer ready for writing at the current read position.
+ * This can be useful in the following scenario:
+ * If response has the same header as request, then the request buffer can be used to create request:
+ * with position pointer pointing to the end of the header, call buffer__sync(),
+ * so the response buffer has header inherited from the request buffer.
  */
 void buffer__sync(void) {
     buffer__limit_ptr = buffer__position_ptr;
