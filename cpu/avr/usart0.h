@@ -90,6 +90,13 @@
 #define usart0__tx__enabled__HOST                                       (UCSR1B)
 #define usart0__tx__enabled__BIT                                        (TXEN1)
 
+#define usart0__rx__frame_error__HOST                                   (UCSR1A)
+#define usart0__rx__frame_error__BIT                                    (FE1)
+#define usart0__rx__data_overrun__HOST                                  (UCSR1A)
+#define usart0__rx__data_overrun__BIT                                   (DOR1)
+#define usart0__rx__parity_error__HOST                                  (UCSR1A)
+#define usart0__rx__parity_error__BIT                                   (UPE1)
+
 #define usart0__rx__complete__value__HOST                               (UCSR1A)
 #define usart0__rx__complete__value__BIT                                (RXC1)
 #define usart0__rx__complete__interrupt__enabled__HOST                  (UCSR1B)
@@ -138,6 +145,13 @@
 #define usart0__tx__enabled__HOST                                       (UCSR0B)
 #define usart0__tx__enabled__BIT                                        (TXEN0)
 
+#define usart0__rx__frame_error__HOST                                   (UCSR0A)
+#define usart0__rx__frame_error__BIT                                    (FE0)
+#define usart0__rx__data_overrun__HOST                                  (UCSR0A)
+#define usart0__rx__data_overrun__BIT                                   (DOR0)
+#define usart0__rx__parity_error__HOST                                  (UCSR0A)
+#define usart0__rx__parity_error__BIT                                   (UPE0)
+
 #define usart0__rx__complete__value__HOST                               (UCSR0A)
 #define usart0__rx__complete__value__BIT                                (RXC0)
 #define usart0__rx__complete__interrupt__enabled__HOST                  (UCSR0B)
@@ -179,6 +193,13 @@
 #define usart0__tx__enabled__HOST                                       (UCSRB)
 #define usart0__tx__enabled__BIT                                        (TXEN)
 
+#define usart0__rx__frame_error__HOST                                   (UCSRA)
+#define usart0__rx__frame_error__BIT                                    (FE)
+#define usart0__rx__data_overrun__HOST                                  (UCSRA)
+#define usart0__rx__data_overrun__BIT                                   (DOR)
+#define usart0__rx__parity_error__HOST                                  (UCSRA)
+#define usart0__rx__parity_error__BIT                                   (UPE)
+
 #define usart0__rx__complete__value__HOST                               (UCSRA)
 #define usart0__rx__complete__value__BIT                                (RXC)
 #define usart0__rx__complete__interrupt__enabled__HOST                  (UCSRB)
@@ -218,6 +239,11 @@
 #define usart0__rx__enabled__BIT                                        (RXEN)
 #define usart0__tx__enabled__HOST                                       (UCR)
 #define usart0__tx__enabled__BIT                                        (TXEN)
+
+#define usart0__rx__frame_error__HOST                                   (USR)
+#define usart0__rx__frame_error__BIT                                    (FE)
+#define usart0__rx__data_overrun__HOST                                  (USR)
+#define usart0__rx__data_overrun__BIT                                   (OR)
 
 #define usart0__rx__complete__value__HOST                               (USR)
 #define usart0__rx__complete__value__BIT                                (RXC)
@@ -329,6 +355,13 @@ inline void usart0__switch_conf(const uint32_t old_conf, const uint32_t new_conf
 
 
 DEFINE_BITVAR(usart0__rx__enabled, usart0__rx__enabled__HOST, usart0__rx__enabled__BIT);
+DEFINE_BITVAR(usart0__rx__frame_error, usart0__rx__frame_error__HOST, usart0__rx__frame_error__BIT);
+DEFINE_BITVAR(usart0__rx__data_overrun, usart0__rx__data_overrun__HOST, usart0__rx__data_overrun__BIT);
+
+# if defined(usart0__rx__parity_error__HOST) && defined(usart0__rx__parity_error__BIT)
+DEFINE_BITVAR(usart0__rx__parity_error, usart0__rx__parity_error__HOST, usart0__rx__parity_error__BIT);
+#endif
+
 DEFINE_BITVAR(usart0__tx__enabled, usart0__tx__enabled__HOST, usart0__tx__enabled__BIT);
 DEFINE_BITVAR(usart0__rx__complete__value, usart0__rx__complete__value__HOST, usart0__rx__complete__value__BIT);
 DEFINE_BITVAR(usart0__rx__complete__interrupt__enabled, usart0__rx__complete__interrupt__enabled__HOST, usart0__rx__complete__interrupt__enabled__BIT);
