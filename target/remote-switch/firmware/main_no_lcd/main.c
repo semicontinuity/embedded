@@ -56,6 +56,14 @@ void modbus_rtu_driver__on_char_timeout(void) {
 //    led1__set(1);
 }
 
+void modbus_rtu_driver__on_char_format_error(void) {
+
+}
+
+void modbus_rtu_driver__on_char_lost(void) {
+
+}
+
 void modbus_rtu_driver__on_frame_timeout(void) {
 //    led2__set(1);
 }

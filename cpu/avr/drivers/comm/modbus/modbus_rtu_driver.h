@@ -47,6 +47,10 @@ void modbus_rtu_driver__on_char_buffered(void);
  */
 void modbus_rtu_driver__on_char_timeout(void);
 
+void modbus_rtu_driver__on_char_format_error(void);
+
+void modbus_rtu_driver__on_char_lost(void);
+
 /**
  * Invoked by the driver, when frame timeout (normally 3.5 characters) has expired.
  */

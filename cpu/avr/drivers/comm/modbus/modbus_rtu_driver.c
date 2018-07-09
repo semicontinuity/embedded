@@ -100,11 +100,11 @@ void modbus_rtu_driver__usart_rx__on_char_buffered(void) {
 }
 
 void modbus_rtu_driver__usart_rx__on_char_format_error(void) {
-
+    modbus_rtu_driver__on_char_format_error();
 }
 
 void modbus_rtu_driver__usart_rx__on_char_lost(void) {
-
+    modbus_rtu_driver__on_char_lost();
 }
 
 
