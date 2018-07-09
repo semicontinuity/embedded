@@ -21,13 +21,18 @@ void modbus_rtu_driver__run(void);
 // -----------------------------------------------------------------------------
 
 /**
- * Invoked by the driver on every received frame
+ * Invoked by the driver on every received frame.
+ *
  * @return true if the response must be sent (placed to the same buffer)
  */
 bool modbus_rtu_driver__on_frame_received(void);
 
+
 void modbus_rtu_driver__on_frame_sent(void);
 
+/**
+ * Invoked by the driver, when data are received when they should not be.
+ */
 void modbus_rtu_driver__on_protocol_error(void);
 
 void modbus_rtu_driver__on_buffer_overflow(void);
@@ -60,6 +65,10 @@ void modbus_rtu_driver__on_frame_processing(void);
 
 void modbus_rtu_driver__on_response(void);
 
+/**
+ * Invoked by the driver, when the frame is received, but no response will be sent.
+ * (E.g., on address mismatch, CRC mismatch, incorrect size)
+ */
 void modbus_rtu_driver__on_no_response(void);
 
 

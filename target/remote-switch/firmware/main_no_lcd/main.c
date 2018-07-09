@@ -7,6 +7,11 @@
 #include "drivers/out/led3.h"
 #include "drivers/out/led4.h"
 
+#include "drivers/out/debug_led_lcd_d7.h"
+#include "drivers/out/debug_led_lcd_d6.h"
+#include "drivers/out/debug_led_lcd_d5.h"
+#include "drivers/out/debug_led_lcd_d4.h"
+
 #include "drivers/comm/onewire__bus.h"
 #include "drivers/comm/onewire.h"
 
@@ -57,11 +62,11 @@ void modbus_rtu_driver__on_char_timeout(void) {
 }
 
 void modbus_rtu_driver__on_char_format_error(void) {
-
+    debug_led_lcd_d7__set(1);
 }
 
 void modbus_rtu_driver__on_char_lost(void) {
-
+    debug_led_lcd_d6__set(1);
 }
 
 void modbus_rtu_driver__on_frame_timeout(void) {
@@ -85,6 +90,7 @@ void modbus_rtu_driver__on_frame_sent(void) {
 }
 
 void modbus_rtu_driver__on_protocol_error(void) {
+    debug_led_lcd_d5__set(1);
     ++protocol_errors;
 }
 
@@ -93,6 +99,7 @@ void modbus_server__on_valid_frame_received(void) {
 }
 
 void modbus_server__on_invalid_frame_received(void) {
+    debug_led_lcd_d4__set(1);
     ++invalid_frames_received;
 }
 
@@ -227,6 +234,11 @@ static void application__init(void) {
     led2__init();
     led3__init();
     led4__init();
+
+    debug_led_lcd_d7__init();
+    debug_led_lcd_d6__init();
+    debug_led_lcd_d5__init();
+    debug_led_lcd_d4__init();
 
     buttons_handler__init();
 
