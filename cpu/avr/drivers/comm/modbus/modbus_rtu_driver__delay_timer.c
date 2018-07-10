@@ -9,11 +9,11 @@
 #include "cpu/avr/timer1.h"
 
 
-void modbus_rtu_driver__delay_timer__init(void) {
-    timer1__compare_a__value__set(MODBUS_RTU_DRIVER__DELAY_TIMER__T15_VALUE);
+void modbus_rtu_driver__delay_timer__configure(const uint16_t t15, const uint16_t t35) {
+    timer1__compare_a__value__set(t15);
     timer1__compare_a__interrupt__enabled__set(1);
 
-    timer1__compare_b__value__set(MODBUS_RTU_DRIVER__DELAY_TIMER__T35_VALUE);
+    timer1__compare_b__value__set(t35);
     timer1__compare_b__interrupt__enabled__set(1);
 }
 

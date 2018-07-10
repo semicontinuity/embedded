@@ -15,6 +15,7 @@
 #include "drivers/comm/onewire__bus.h"
 #include "drivers/comm/onewire.h"
 
+#include "cpu/avr/eeprom.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/drivers/comm/modbus/buffer.h"
 #include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver.h"
@@ -25,6 +26,8 @@
 
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
+
+#define EEPROM_ADDRESS__BAUD_RATE (0)
 
 
 #define SERVER__REGISTER__T                         (MODBUS_SERVER__INPUT_REGISTERS_START + 0)
@@ -47,20 +50,16 @@ volatile uint16_t buffer_overflows;
 
 
 void modbus_rtu_driver__on_char_received(void) {
-//    led1__set(1);
 }
 
 void modbus_rtu_driver__on_char_buffered(void) {
-//    led2__set(1);
 }
 
 void modbus_rtu_driver__on_buffer_overflow(void) {
-//    led3__set(1);
     ++buffer_overflows;
 }
 
 void modbus_rtu_driver__on_char_timeout(void) {
-//    led1__set(1);
 }
 
 void modbus_rtu_driver__on_char_format_error(void) {
@@ -72,7 +71,6 @@ void modbus_rtu_driver__on_char_lost(void) {
 }
 
 void modbus_rtu_driver__on_frame_timeout(void) {
-//    led2__set(1);
 }
 
 void modbus_rtu_driver__on_frame_processing(void) {
@@ -80,11 +78,9 @@ void modbus_rtu_driver__on_frame_processing(void) {
 }
 
 void modbus_rtu_driver__on_response(void) {
-//    led2__set(1);
 }
 
 void modbus_rtu_driver__on_no_response(void) {
-//    led3__set(1);
 }
 
 void modbus_rtu_driver__on_frame_sent(void) {
@@ -228,7 +224,8 @@ void temperature_reader__reading__on_changed(void) {
 // =============================================================================
 
 // better to use U2X mode, it is more accurate
-const uint16_t PROGMEM USART_DIVISORS[15] = {
+#define USART_DIVISORS__COUNT (15)
+const uint16_t PROGMEM USART_DIVISORS[USART_DIVISORS__COUNT] = {
     [BUTTONS_HANDLER__STATE(1, 1, 1, 0)] = USART0_DIVISOR(1200L),
     [BUTTONS_HANDLER__STATE(1, 1, 0, 1)] = USART0_DIVISOR(2400L),
     [BUTTONS_HANDLER__STATE(1, 1, 0, 0)] = USART0_DIVISOR(4800L),
@@ -245,6 +242,26 @@ const uint16_t PROGMEM USART_DIVISORS[15] = {
     [BUTTONS_HANDLER__STATE(0, 0, 0, 1)] = USART0_DIVISOR(125000L),
     [BUTTONS_HANDLER__STATE(0, 0, 0, 0)] = USART0_DIVISOR(250000L)
 };
+
+
+// If some buttons are pressed, use buttons combination to specify baud rate, and save it to EEPROM.
+// Otherwise, use configuration, saved in EEPROM
+static const uint16_t application__determine_divisor(void) {
+    __asm__ __volatile__( "main__config:");
+
+    uint8_t buttons_state = buttons_handler__to_state(buttons_handler__read_state_raw());
+    if (buttons_state < USART_DIVISORS__COUNT) {
+        eeprom__write_byte(EEPROM_ADDRESS__BAUD_RATE, buttons_state);
+        // wait until all buttons are depressed
+        while (buttons_handler__read_state_raw() != BUTTONS_HANDLER__RAW_STATE__ALL_DEPRESSED);
+    } else {
+        buttons_state = eeprom__read_byte(EEPROM_ADDRESS__BAUD_RATE);
+        if (buttons_state >= USART_DIVISORS__COUNT) {
+            buttons_state = CONFIG__FALLBACK_BUTTONS_STATE; // if value in EEPROM was corrupted
+        }
+    }
+    return pgm_read_word(&USART_DIVISORS[buttons_state]);
+}
 
 static void application__init(void) {
     USE_AS_OUTPUT(MODBUS_RTU_DRIVER__FRAME_PROCESSING__LED);
@@ -264,17 +281,7 @@ static void application__init(void) {
 
     buttons_handler__init();
 
-
-    uint16_t divisor;
-    const uint8_t buttons_state = buttons_handler__to_state(buttons_handler__read_state_raw());
-    if (buttons_state < 15) {
-        divisor = pgm_read_word(&USART_DIVISORS[buttons_state]);
-    } else {
-        divisor = USART0_DIVISOR(CONFIG__FALLBACK_BAUD_RATE);
-    }
-    usart0__divisor__set(divisor);
-    modbus_rtu_driver__init();
-
+    modbus_rtu_driver__configure(application__determine_divisor());
 
     onewire__bus__init();
     onewire__thread__init();

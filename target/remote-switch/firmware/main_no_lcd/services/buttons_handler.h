@@ -20,6 +20,7 @@
     )\
 )
 #define BUTTONS_HANDLER__STATE__FROM_RAW(raw) ((raw) >> (IN__BUTTON1__PIN < IN__BUTTON4__PIN ? IN__BUTTON1__PIN : IN__BUTTON4__PIN))
+#define BUTTONS_HANDLER__RAW_STATE__ALL_DEPRESSED (_BV(IN__BUTTON1__PIN) | _BV(IN__BUTTON2__PIN) | _BV(IN__BUTTON3__PIN) | _BV(IN__BUTTON4__PIN))
 
 void buttons_handler__init(void) {
     ENABLE_PULLUP(IN__BUTTON1);
@@ -34,7 +35,7 @@ void buttons_handler__init(void) {
 }
 
 inline uint8_t buttons_handler__read_state_raw(void) {
-    return (uint8_t) (IN(IN__BUTTONS) & (_BV(IN__BUTTON1__PIN) | _BV(IN__BUTTON2__PIN) | _BV(IN__BUTTON3__PIN) | _BV(IN__BUTTON4__PIN)));
+    return (uint8_t) (IN(IN__BUTTONS) & BUTTONS_HANDLER__RAW_STATE__ALL_DEPRESSED);
 }
 
 inline uint8_t buttons_handler__to_state(const uint8_t raw_state) {

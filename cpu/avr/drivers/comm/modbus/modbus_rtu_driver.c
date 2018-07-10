@@ -18,9 +18,6 @@
 #include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver__usart_tx.h"
 #include "cpu/avr/usart0.h"
 
-#include "cpu/avr/gpio.h"
-#include "util/bitops.h"
-
 
 // Modbus RTU driver - frame_received flag
 // -----------------------------------------------------------------------------
@@ -149,10 +146,27 @@ void modbus_rtu_driver__delay_timer__on_t35_expired(void) {
 
 void modbus_rtu_driver__init(void) {
 #if defined(MODBUS_RTU_DRIVER__BAUD_RATE)
-    usart0__rate__set(MODBUS_RTU_DRIVER__BAUD_RATE);
+    modbus_rtu_driver__configure(USART0_DIVISOR(MODBUS_RTU_DRIVER__BAUD_RATE));
 #endif
+}
+
+void modbus_rtu_driver__configure(const uint16_t divisor) {
+    __asm__ __volatile__( "modbus_rtu_driver__configure:");
+    usart0__divisor__set(divisor);
     buffer__init();
-    modbus_rtu_driver__delay_timer__init();
+
+    // baud rate higher than 19200 => t15 = 750 us, t35 = 1.75 ms
+    uint16_t t15;
+    uint16_t t35;
+    if (divisor < USART0_DIVISOR(19200)) {
+        int cpu_periods_per_bit = CPU_PERIODS_PER_BIT_FROM_DIVISOR(divisor);
+        t15 = (uint16_t) (15 * cpu_periods_per_bit);
+        t35 = (uint16_t) (35 * cpu_periods_per_bit);
+    } else {
+        t15 = (uint16_t) (F_CPU * (750UL / 1000000UL));
+        t35 = (uint16_t) (F_CPU * (1750UL / 1000000UL));
+    }
+    modbus_rtu_driver__delay_timer__configure(t15, t35);
     modbus_rtu_driver__dir_control__init();
 }
 

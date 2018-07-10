@@ -218,6 +218,7 @@ uint8_t onewire__thread__crc__get(void) {
 
 /** Initializes the thread */
 void onewire__thread__init(void) {
+    __asm__ __volatile__( "onewire__thread__init:");
     onewire__thread__bit_count__init();    
 }
 

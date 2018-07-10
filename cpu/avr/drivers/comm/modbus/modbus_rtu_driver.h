@@ -10,6 +10,8 @@
 
 void modbus_rtu_driver__init(void);
 
+void modbus_rtu_driver__configure(const uint16_t divisor);
+
 void modbus_rtu_driver__start(void);
 
 bool modbus_rtu_driver__is_runnable(void);

@@ -12,7 +12,7 @@
 #include <stdint.h>
 
 
-void modbus_rtu_driver__delay_timer__init(void);
+void modbus_rtu_driver__delay_timer__configure(const uint16_t t15, const uint16_t t35);
 
 void modbus_rtu_driver__delay_timer__start(void);
 
