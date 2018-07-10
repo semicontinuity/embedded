@@ -374,8 +374,10 @@ DEFINE_BITVAR(usart0__tx__data_register_empty__interrupt__enabled, usart0__tx__d
 // =============================================================================
 // usart0__rate__set
 // =============================================================================
+#define USART0_DIVISOR(rate) ((F_CPU/8/(rate) - 1)/2)
+
 inline uint16_t UBRR_VALUE(const uint32_t rate) {
-    return (uint16_t)((F_CPU/8/(rate) - 1)/2);
+    return (uint16_t) USART0_DIVISOR(rate);
 }
 
 inline void usart0__divisor__set(const uint16_t divisor) {

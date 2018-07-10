@@ -17,7 +17,7 @@ uint8_t buttons_handler__state = _BV(IN__BUTTON1__PIN) | _BV(IN__BUTTON2__PIN) |
 
 
 void buttons_handler__run(void) {
-    uint8_t state = IN(IN__BUTTONS) & (_BV(IN__BUTTON1__PIN) | _BV(IN__BUTTON2__PIN) | _BV(IN__BUTTON3__PIN) | _BV(IN__BUTTON4__PIN));
+    uint8_t state = buttons_handler__read_state_raw();
     if ((state & buttons_handler__state) < buttons_handler__state) {
         // Some button was pressed
         wdt__reset();

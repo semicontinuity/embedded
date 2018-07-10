@@ -15,6 +15,7 @@
 #include "drivers/comm/onewire__bus.h"
 #include "drivers/comm/onewire.h"
 
+#include "cpu/avr/usart0.h"
 #include "cpu/avr/drivers/comm/modbus/buffer.h"
 #include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver.h"
 #include "cpu/avr/drivers/comm/modbus/modbus_server.h"
@@ -23,6 +24,7 @@
 #include "services/buttons_handler.h"
 
 #include <avr/interrupt.h>
+#include <avr/pgmspace.h>
 
 
 #define SERVER__REGISTER__T                         (MODBUS_SERVER__INPUT_REGISTERS_START + 0)
@@ -225,6 +227,25 @@ void temperature_reader__reading__on_changed(void) {
 // Application
 // =============================================================================
 
+// better to use U2X mode, it is more accurate
+const uint16_t PROGMEM USART_DIVISORS[15] = {
+    [BUTTONS_HANDLER__STATE(1, 1, 1, 0)] = USART0_DIVISOR(1200L),
+    [BUTTONS_HANDLER__STATE(1, 1, 0, 1)] = USART0_DIVISOR(2400L),
+    [BUTTONS_HANDLER__STATE(1, 1, 0, 0)] = USART0_DIVISOR(4800L),
+    [BUTTONS_HANDLER__STATE(1, 0, 1, 1)] = USART0_DIVISOR(9600L),
+    [BUTTONS_HANDLER__STATE(1, 0, 1, 0)] = USART0_DIVISOR(14400L),
+    [BUTTONS_HANDLER__STATE(1, 0, 0, 1)] = USART0_DIVISOR(19200L),
+    [BUTTONS_HANDLER__STATE(1, 0, 0, 0)] = USART0_DIVISOR(28800L),
+    [BUTTONS_HANDLER__STATE(0, 1, 1, 1)] = USART0_DIVISOR(31250L),
+    [BUTTONS_HANDLER__STATE(0, 1, 1, 0)] = USART0_DIVISOR(38400L),
+    [BUTTONS_HANDLER__STATE(0, 1, 0, 1)] = USART0_DIVISOR(57600L),
+    [BUTTONS_HANDLER__STATE(0, 1, 0, 0)] = USART0_DIVISOR(62500L),
+    [BUTTONS_HANDLER__STATE(0, 0, 1, 1)] = USART0_DIVISOR(76800L),
+    [BUTTONS_HANDLER__STATE(0, 0, 1, 0)] = USART0_DIVISOR(115200L),
+    [BUTTONS_HANDLER__STATE(0, 0, 0, 1)] = USART0_DIVISOR(125000L),
+    [BUTTONS_HANDLER__STATE(0, 0, 0, 0)] = USART0_DIVISOR(250000L)
+};
+
 static void application__init(void) {
     USE_AS_OUTPUT(MODBUS_RTU_DRIVER__FRAME_PROCESSING__LED);
     USE_AS_OUTPUT(MODBUS_RTU_DRIVER__USART_RX__ENABLED__LED);
@@ -243,7 +264,17 @@ static void application__init(void) {
 
     buttons_handler__init();
 
+
+    uint16_t divisor;
+    const uint8_t buttons_state = buttons_handler__to_state(buttons_handler__read_state_raw());
+    if (buttons_state < 15) {
+        divisor = pgm_read_word(&USART_DIVISORS[buttons_state]);
+    } else {
+        divisor = USART0_DIVISOR(CONFIG__FALLBACK_BAUD_RATE);
+    }
+    usart0__divisor__set(divisor);
     modbus_rtu_driver__init();
+
 
     onewire__bus__init();
     onewire__thread__init();

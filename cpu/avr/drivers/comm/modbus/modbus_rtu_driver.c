@@ -148,7 +148,9 @@ void modbus_rtu_driver__delay_timer__on_t35_expired(void) {
 // -----------------------------------------------------------------------------
 
 void modbus_rtu_driver__init(void) {
-    usart0__rate__set(USART0__BAUD_RATE);
+#if defined(MODBUS_RTU_DRIVER__BAUD_RATE)
+    usart0__rate__set(MODBUS_RTU_DRIVER__BAUD_RATE);
+#endif
     buffer__init();
     modbus_rtu_driver__delay_timer__init();
     modbus_rtu_driver__dir_control__init();
