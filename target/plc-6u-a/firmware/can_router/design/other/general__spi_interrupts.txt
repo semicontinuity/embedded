@@ -1,0 +1,89 @@
+Flags
+--------------------------------------------------------------------------------
+
+- spi_busy
+	type            : virtual
+        set by          :
+                - can thread when programming packet read
+                - 
+        when set        : disable interrupts for can and spi_tx
+        when cleared    : enable interrupts for can and spi_tx
+
+Queues
+--------------------------------------------------------------------------------
+
+- usart_tx_q
+	length          : 16
+	start           : 0x0100
+	end             : 0x0200
+	w_ptr           : usart_tx_q_w_ptr	asm("r14")
+	r_ptr           : usart_tx_q_r_ptr	asm("r12")
+
+- spi_tx_q
+	length          : 8
+	start           : 0x0200
+	end             : 0x0280
+	w_ptr           : spi_tx_q_w_ptr	asm("r10")
+	r_ptr           : spi_tx_q_r_ptr	asm("r8")
+
+- usart_rx_q
+	length          : 1
+	start           : 0x0280
+	end             : 0x02A0
+
+- spi_rx_q
+	length          : 1
+	start           : 0x02A0
+	end             : 0x02C0
+
+
+Threads - Transfer Engines
+--------------------------------------------------------------------------------
+
+- spi
+	triggered by    : SPI Transfer Complete interrupt
+	actions         :
+                - check the counter for the 
+	pointer         : asm("r30")
+	counter         : asm("r16")
+	status flag     : spi_busy
+	triggered by	:
+                - spi_tx to upload data from usart_tx_q to CAN controller
+                - can to download received packets into spi_rx_q
+
+- usart_tx
+	memory          : r
+	pointer         : asm("r28")
+	counter         : asm("r17")
+	status flag     : usart_tx_busy
+
+- usart_rx
+	memory          : w
+	pointer         : asm("r26")
+	counter         : asm("r18")
+
+
+Threads - Queue readers
+--------------------------------------------------------------------------------
+
+- usart_tx
+	logic           :
+		- program uart_tx thread
+		- remove the packet from the head of the queue for transmission to usart
+	interrupt       : EEPROM_READY
+	triggered by	:
+		- itself when usart_tx_q was not empty when the packet was removed from the head of the queue for transmission to usart
+		- packet handler when responding to the packet (thread usart_rx)
+		- 
+- spi_tx
+	triggered by    : signal spi_tx_q_not_empty
+	description     : 
+	interrupt       : SPM_READY
+	controlled by	: spi thread: disables interrupt if it is active, enables if finished
+
+
+Threads - CAN Controller handler
+--------------------------------------------------------------------------------
+- can
+	triggered by	: PCINT interrupts from CAN controllers
+	controlled by	: spi thread: disables interrupts if it is active, enables if finished

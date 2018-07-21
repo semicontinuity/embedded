@@ -1,0 +1,64 @@
+ytitle uart_read_thread
+
+
+note right of uart_read_thread:
+Thread state:
+[in_packet] is (chars_remaining == PACKET_SIZE)
+[writing]
+Using and updating state:
+[full] is (HEAD==TAIL)
+[rolled]=(HEAD>TAIL)
+end note
+
+
+ note over uart_read_thread: check UCSRA for errors (TODO)
+ note over uart_read_thread: read char from RXD
+
+
+note over uart_read_thread: [writing]?
+          uart_read_thread->CHECK: no
+
+#################################################
+
+note over CHECK: [in_packet]?
+          CHECK->INITIAL: no
+
+
+note over INITIAL: set [in_packet]
+ note over INITIAL: chars_remaining=PACKET_SIZE
+note over INITIAL: [full]?
+
+INITIAL->NOT_FULL: no
+note over NOT_FULL: set [writing]
+note over NOT_FULL: set uart_w_ptr=buffer_w_ptr
+note over NOT_FULL: buffer_w_tail += PACKET_SIZE
+note over NOT_FULL: roll buffer_w_tail, update [full]
+
+
+NOT_FULL->uart_read_thread:
+destroy NOT_FULL
+
+#################################################
+
+note over uart_read_thread: put character to uart_w_ptr++
+
+INITIAL->uart_read_thread:
+destroy INITIAL
+
+
+
+#################################################
+
+destroy   CHECK
+
+ note over uart_read_thread: chars_remaining--
+ note over uart_read_thread: chars_remaining == 0 ?
+
+uart_read_thread->packet_received: yes
+ note over packet_received: clear [in_packet]
+ note over packet_received: clear [writing]
+ note over packet_received: update buffer_r_tail
+ note over packet_received: signal [not empty]
+
+packet_received->uart_read_thread:
+destroy packet_received

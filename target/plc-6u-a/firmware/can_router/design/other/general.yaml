@@ -1,0 +1,179 @@
+Properties:
+#####################################################################################################
+
+
+
+- usart_tx_thread__enabled:
+        description     : When set, periodically schedules 'usart_tx_thread',
+                          that is implemented with USART UDRE interrupt
+        implementation  : Mapped to bit UDRIE0 in UCSR0B, that enables USART UDRE interrupt
+        set by:
+                - Queue reader 'usart_tx_q_thread' to spawn 'usart_tx_thread'
+        cleared by      : Thread 'usart_tx_thread', when it has finished transmitting the buffer
+
+
+
+
+Signals:
+#####################################################################################################
+
+
+
+
+- can_tx_q_thread_notify:
+        description     : Constantly triggers 'can_tx_q_thread'
+        implementation  : Enable SPM READY interrupt - set SPMIE in SPMCSR
+        sent by:
+                - Thread 'can_int_thread' to signal that packet was placed into 'can_tx_q'
+                - Thread 'usart_rx_thread' to signal that packet was placed into 'can_tx_q'
+
+
+- can_tx_q_thread_pause:
+        description     : Stop constant triggering of 'can_tx_q_thread'
+        implementation  : Disable SPM READY interrupt - clear SPMIE in SPMCR
+        sent by:
+                - Queue reader 'can_tx_q_thread' when queue becomes empty
+                - Thread 'can_int_thread' to to pause transmission while it reads received CAN packets
+
+
+
+Queues:
+################################################################################
+
+- usart_tx_q:
+        length          : 16
+        start           : 0x0100
+        end             : 0x0200
+        w_ptr           : usart_tx_q_w_ptr  asm("r16")
+        r_ptr           : usart_tx_q_r_ptr  asm("r17")
+
+
+- can_tx_q (0):
+        length          : 8
+        start           : 0x0200
+        end             : 0x0280
+        w_ptr           : can_tx_q_w_ptr[0] asm("r8") memory, 1 byte to be loaded with LD and stored with ST
+        r_ptr           : can_tx_q_r_ptr[0] asm("r9") memory, 1 byte to be loaded with LD and stored with ST
+
+
+- can_tx_q (1):
+        length          : 8
+        start           : 0x0280
+        end             : 0x0300
+        w_ptr           : can_tx_q_w_ptr[1] asm("r10") memory, 1 byte to be loaded with LD and stored with ST
+        r_ptr           : can_tx_q_r_ptr[1] asm("r11") memory, 1 byte to be loaded with LD and stored with ST
+
+
+- can_tx_q (2):
+        length          : 8
+        start           : 0x0300
+        end             : 0x0380
+        w_ptr           : can_tx_q_w_ptr[2] asm("r12") memory, 1 byte to be loaded with LD and stored with ST
+        r_ptr           : can_tx_q_r_ptr[2] asm("r13") memory, 1 byte to be loaded with LD and stored with ST
+
+
+- can_tx_q (3):
+        length          : 8
+        start           : 0x0380
+        end             : 0x0400
+        w_ptr           : can_tx_q_w_ptr[3] asm("r14") memory, 1 byte to be loaded with LD and stored with ST
+        r_ptr           : can_tx_q_r_ptr[3] asm("r15") memory, 1 byte to be loaded with LD and stored with ST
+
+
+
+Buffers:
+################################################################################
+
+- usart_rx_buffer:
+        length          : 1
+        start           : 0x0280
+        end             : 0x02A0
+
+
+- can_rx_buffer:
+        length          : 1
+        start           : 0x02A0
+        end             : 0x02C0
+
+
+
+Threads (CAN Controller handler):
+################################################################################
+- can_int_thread:
+        triggered by    : PCINT interrupts from CAN controllers
+        controlled by   : can thread: disables interrupts if it is active, enables if finished
+
+
+
+Threads (Queue readers):
+################################################################################
+
+- usart_tx_q_thread:
+        description     : sends all packets from 'usart_tx_q' to USART
+        interrupt       : EEPROM_READY
+        triggered by    : signal 'usart_tx_q_thread_notify'
+        actions:
+                - if the queue is empty, clear condition 'usart_tx_q_thread_run' and return
+                - program 'uart_tx_thread' to send the packet from the tail of the 'usart_tx_q' to USART
+                - remove the packet from the tail of the queue
+                - clear property 'usart_tx_q_thread__enabled' to wait until 'usart_tx_thread' exits just later
+                - set property 'usart_tx_thread__enabled' to spawn the thread 'usart_tx_thread'
+
+
+- can_tx_q_thread:
+        description     : sends all packets from 'can_tx_q' to CAN
+        interrupt       : SPM_READY
+        properties:
+                - usart_tx_q_thread__enabled:
+                        description     : When set, constantly schedules 'usart_tx_q_thread',
+                                  that is implemented with EEPROM_READY interrupt
+                        set when        : (usart_tx_q_free < USART_TX_Q_LENGTH), i.e. when the queue is not empty.
+                        implementation  : Mapped to bit EERIE in EECR, that enables EEPROM_READY interrupt
+                        set by:
+                                - Thread 'can_int_thread' to signal that packet was placed into 'uart_tx_q'
+                                - Thread 'usart_rx_thread' to signal that packet was placed into 'usart_tx_q'
+                                - Thread 'usart_tx_thread' to signal that packet transmission to UART has finished
+                        cleared by:
+                                - Queue reader 'usart_tx_q_thread' before spawning 'usart_tx_thread'
+                                - Queue reader 'usart_tx_q_thread' when queue becomes empty
+
+
+
+Threads (Transfer Engines):
+################################################################################
+
+- usart_tx_thread:
+        description     : Transmits 'usart_tx_thread__remaining' bytes starting from usart_tx_thread__r_ptr, to USART.
+        state:
+                usart_tx_thread__r_ptr    : asm("r26")
+                usart_tx_buf_count  : asm("r18")
+        interrupt       : USART_UDRE (USART Data Register Empty)
+        triggered by    : signal 'usart_tx_spawn', sent by 'usart_tx_q_thread'
+        actions:
+                - write byte from 'usart_tx_ptr++' to USART
+                - decrement 'usart_tx_count'
+                - if 'usart_tx_count' is not zero, return
+                - otherwise,
+                  set condition 'usart_tx_q_thread_run' to schedule tx_q_thread,
+                  clear condition 'usart_tx_thread_run' to stop scheduling itself
+
+
+- usart_rx_thread:
+        description     : Receives and buffers data from UART, then processes it.
+        state:
+                usart_rx_thread__w_ptr      : asm("r28")
+                usart_rx_thread__remaining  : asm("r19")
+        interrupt       : USART_RXC (USART RX Complete)
+        triggered by    : Received character from UART
+        actions:
+                - read a byte from UART
+                - write the byte to 'usart_rx_buffer_ptr++'
+                - decrement 'usart_rx_buffer_count'
+                - if 'usart_rx_count' does not become 0, quit
+                - otherwise,
+                reload 'usart_rx_buf_count' with PACKET_SIZE,
+                reload 'usart_rx_thread__w_ptr' with usart_rx_q,
+                handle the message and/or copy it to the respective queue, if it is not full,
+                and send either the signal 'usart_tx_q_thread_notify' or 'can_tx_q_thread_notify'
+
+

@@ -64,7 +64,7 @@ CFLAGS=-c -std=c99 -mcpu=cortex-m3 -mthumb -Wall -Werror -mapcs-frame -Os
 #CFLAGS=-c -mcpu=cortex-m3 -mthumb -Wall -Werror -mapcs-frame -D__thumb2__=1 -Os
 CFLAGS+=-msoft-float -gdwarf-2 -mno-sched-prolog -fno-hosted -mtune=cortex-m3
 CFLAGS+=-march=armv7-m -mfix-cortex-m3-ldrd -ffunction-sections -fdata-sections
-CFLAGS+=-I$(CMSIS__INC) -I$(CMSIS_NEW__PATH)/Device/ST/STM32F1xx/Include -I$(STM32_STD_PERIPH_LIB__INC) -I$(HAL__INC) -I.
+CFLAGS+=-I$(CMSIS__INC) -I$(CMSIS_NEW__PATH)/Device/ST/STM32F1xx/Include -I$(CMSIS_NEW__PATH)/Include -I$(STM32_STD_PERIPH_LIB__INC) -I$(HAL__INC) -I.
 #CFLAGS+=-DSTM32F10X_MD
 CFLAGS+=-DSTM32F103x6
 

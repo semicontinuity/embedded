@@ -1,0 +1,33 @@
+Registers:
+- r0	: __tmp_reg__
+- r1	: __zero_reg__
+- r2	: temporary 2
+- r3	: temporary 3
+- r4	: can_tx_q0__remaining
+- r5	: can_tx_q1__remaining
+- r6	: can_tx_q2__remaining
+- r7	: can_tx_q3__remaining
+- r8	: lo8(can_tx_q0__w_ptr) - just for proper placement of queue and this pointer in memory
+- r9	: lo8(can_tx_q0__r_ptr) - just for proper placement of queue and this pointer in memory
+- r10	: lo8(can_tx_q1__w_ptr) - just for proper placement of queue and this pointer in memory
+- r11	: lo8(can_tx_q1__r_ptr) - just for proper placement of queue and this pointer in memory
+- r12	: lo8(can_tx_q2__w_ptr) - just for proper placement of queue and this pointer in memory
+- r13	: lo8(can_tx_q2__r_ptr) - just for proper placement of queue and this pointer in memory
+- r14	: lo8(can_tx_q3__w_ptr) - just for proper placement of queue and this pointer in memory
+- r15	: lo8(can_tx_q4__r_ptr) - just for proper placement of queue and this pointer in memory
+- r16	: lo8(usart_tx_q__w_ptr)
+- r17	: lo8(usart_tx_q__r_ptr)
+- r18	: usart_tx_thread__remaining
+- r19	: usart_rx_thread__remaining
+- r20	: 
+- r21	: usart_tx_q__remaining
+- r22	:
+- r23	:
+- r24	:
+- r25	:
+- r26	: lo8(usart_tx_thread__r_ptr)
+- r27	: hi8(usart_tx_thread__r_ptr)
+- r28	: lo8(usart_rx_thread__w_ptr) 
+- r29	: hi8(usart_rx_thread__w_ptr)
+- r30	: used by compiler and lo8(temp_pointer)
+- r31	: used by compiler and lo8(temp_pointer)
