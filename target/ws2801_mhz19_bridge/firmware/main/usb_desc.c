@@ -27,8 +27,8 @@ const uint8_t WillBeHID_DeviceDescriptor[WILLBEHID_SIZ_DEVICE_DESC] =
     0x40,                       /*bMaxPacketSize40*/
     0x83,                       /*idVendor (0x0483)*/
     0x04,
-    0x02,                       /*idProduct = 0x0002*/
-    0x00,
+    0x50,                       /*idProduct = 0x5750*/
+    0x57,
     0x00,                       /*bcdDevice rel. 2.00*/
     0x02,
     1,                          /*Index of string descriptor describing
@@ -246,9 +246,9 @@ const uint8_t WillBeHID_StringProduct[WILLBEHID_SIZ_STRING_PRODUCT] =
   {
     WILLBEHID_SIZ_STRING_PRODUCT,          /* bLength */
     USB_STRING_DESCRIPTOR_TYPE,        /* bDescriptorType */
-    'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0, ' ', 0, 'C', 0,
-    'u', 0, 's', 0, 't', 0, 'm', 0, ' ', 0, 'H', 0, 'I', 0,
-    'D', 0
+    'S', 0, 'T', 0, 'M', 0, '3', 0, '2', 0, ' ', 0, 'U', 0,
+    'n', 0, 'i', 0, 'B', 0, 'r', 0, 'i', 0, 'd', 0, 'g', 0,
+    'e', 0
   };
 uint8_t WillBeHID_StringSerial[WILLBEHID_SIZ_STRING_SERIAL] =
   {

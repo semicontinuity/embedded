@@ -3,22 +3,54 @@
  */
 
 #include <usb_lib.h>
+#include <string.h>
+#include "hw_config.h"
+#include "usb_regs.h"
+#include "usb_lib.h"
+#include "usb_istr.h"
 
-uint8_t Receive_Buffer[64];
+#define DATA_LENGTH (3*150)
+
+uint8_t usb_endpoint_handler__buffer[64];
+uint8_t data[DATA_LENGTH];
+uint8_t *current_data = data;
+
 extern __IO uint8_t PrevXferComplete;
-uint8_t flag;
 
 
+/**
+ * EP1 OUT callback.
+ * Accumulates data from packets and sends it to SPI1.
+ * SPI data can be larger than 64 bytes, and since the maximum payload size on this endpoint is 64 bytes,
+ * data is split into multiple packets.
+ * If data is larger than 64 bytes, all packet payloads but the last one are 64 bytes large.
+ * Packet with less than 64 bytes of data is a marker for the end of SPI data.
+ */
 void EP1_OUT_Callback(void) {
-    if (flag) {
-        flag = 0;
-        GPIO_ResetBits(GPIOC, GPIO_Pin_13);
+    uint32_t count = USB_SIL_Read(EP1_OUT, usb_endpoint_handler__buffer);
+    if (count == 64) {
+        // non-final packet
+        GPIO_ResetBits(GPIOC, GPIO_Pin_13);  // blue LED on
+        memcpy(current_data, usb_endpoint_handler__buffer, count);
+        current_data += count;
     } else {
-        flag = 1;
-        GPIO_SetBits(GPIOC, GPIO_Pin_13);
+        // final packet
+        if (current_data + count <= data + DATA_LENGTH) {
+            GPIO_SetBits(GPIOC, GPIO_Pin_13);    // blue LED off
+            memcpy(current_data, usb_endpoint_handler__buffer, count);
+            current_data += count;
+
+            // send all data to SPI1
+            uint8_t *p = data;
+            while (p < current_data) {
+                // Wait for SPIy Tx buffer empty
+                while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+                SPI_I2S_SendData(SPI1, *p++);
+            }
+        }
+        current_data = data;
     }
 
-    USB_SIL_Read(EP1_OUT, Receive_Buffer);
     SetEPRxStatus(ENDP1, EP_RX_VALID);
 }
 

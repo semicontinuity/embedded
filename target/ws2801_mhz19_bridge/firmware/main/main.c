@@ -2,7 +2,7 @@
 
 static __IO uint32_t delay;
 
-
+SPI_InitTypeDef SPI_InitStructure;
 GPIO_InitTypeDef GPIO_InitStructure;
 __IO uint8_t PrevXferComplete = 1;
 
@@ -48,6 +48,37 @@ void usart1__init() {
 }
 
 
+void spi1__init() {
+    /* Configure SPI pins: SCK and MOSI with default alternate function (not re-mapped) push-pull */
+    GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_5 | GPIO_Pin_7;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+    /* Configure MISO as Input with internal pull-up */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+
+    /* SPI_MASTER configuration ------------------------------------------------*/
+    SPI_InitStructure.SPI_Direction = SPI_Direction_1Line_Tx;
+    SPI_InitStructure.SPI_Mode = SPI_Mode_Master;
+    SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;
+    SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;
+    SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;
+    SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;
+    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;
+    SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
+    SPI_InitStructure.SPI_CRCPolynomial = 7;
+    SPI_Init(SPI1, &SPI_InitStructure);
+
+    /* Enable SPI1 */
+    SPI_CalculateCRC(SPI1, DISABLE);
+    SPI_Cmd(SPI1, ENABLE);
+}
+
+
 inline void Set_System(void) {
     RCC_Config();
 
@@ -66,6 +97,7 @@ inline void Set_System(void) {
     USB_Init();
 
     usart1__init();
+    spi1__init();
 }
 
 
