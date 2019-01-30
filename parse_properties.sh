@@ -1,3 +1,4 @@
+#!/bin/bash
 # Reads properties from the file $TARGET.conf and outputs them in the format -Dname=value.
 # This is useful to pass defines to the C compiler
 
