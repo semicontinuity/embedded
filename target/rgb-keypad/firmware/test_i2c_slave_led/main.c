@@ -3,13 +3,14 @@
 // =============================================================================
 
 #include <cpu/avr/twi.h>
+#include "drivers/twi_slave.h"
 
 
 void application__init(void) {
-    twi__enable();
 }
 
 void application__start(void) {
+    twi__slave__start(false);
 }
 
 
@@ -25,6 +26,9 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
+        if (twi_slave__thread__is_runnable()) {
+            twi_slave__thread__run();
+        }
     }
 
 #if !defined(__AVR_ARCH__)

@@ -6,8 +6,8 @@ set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_FILES
         ../../../../cpu/avr/twi.h
-        ../../bsp/drivers/i2c_slave.c
-        ../../bsp/drivers/i2c_slave.h
+        ../../bsp/drivers/twi_slave.c
+        ../../bsp/drivers/twi_slave.h
         __all__.c
         main.c
         )

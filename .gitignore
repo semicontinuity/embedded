@@ -1,2 +1,11 @@
 **/.idea
+**/.dep
+*.obj
+*.bin
+*.lss
+*.sym
+*.hex
+*.eep
+*.map
+*.elf
 cmake-build-debug
