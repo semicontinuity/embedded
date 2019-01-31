@@ -138,6 +138,18 @@ mark:                                           \
 
 
 /**
+* Declare the start of a virtual thread inside the function implementing the virtual thread.
+* \param thread  A virtual thread variable
+* \param ip      An instruction pointer of the virtual thread
+*/
+#define VT_LOOP_BEGIN(thread, ip) do {          \
+  char vt_flag = 1;                             \
+  FC_RESUME(ip);                                \
+  {\
+    for (;;) {\
+        VT_MARK(thread, BEGIN)\
+
+/**
  * Declare the start of a virtual thread inside the function implementing the virtual thread.
  * \param thread  A virtual thread variable
  * \param ip      An instruction pointer of the virtual thread
@@ -160,11 +172,18 @@ mark:                                           \
 } while(0)
 
 
+#define VT_LOOP_END(thread)                     \
+    }                                           \
+  }                                             \
+} while(0)
+
+
 #define VT_UNREACHEABLE_END(thread)             \
   }                                             \
 } while(0)
 
-#define VT_BREAK(thread)             \
+
+#define VT_BREAK(thread)                        \
   goto END;
 
 /**

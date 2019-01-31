@@ -7,6 +7,7 @@
 
 
 void application__init(void) {
+    twi_slave__thread__init();
 }
 
 void application__start(void) {
