@@ -95,6 +95,11 @@ inline static void twi__slave_address__set(const uint8_t address) {
     TWI__SLAVE_ADDRESS__REGISTER = address << TWI__SLAVE_ADDRESS__BIT_OFFSET;
 }
 
+/** prescaler bits are not masked, for simplicity, because prescaler is 1 */
+inline static uint8_t twi__status__get(void) {
+    return TWI__STATUS__REGISTER;
+}
+
 
 inline static uint8_t twi__data__get(void) {
     return TWI__DATA__REGISTER;

@@ -4,14 +4,26 @@
 
 #include <cpu/avr/twi.h>
 #include "drivers/twi_slave.h"
+#include "drivers/out/led1.h"
 
 
 void application__init(void) {
-    twi_slave__thread__init();
+    led1__init();
+    twi__slave__thread__init();
 }
 
 void application__start(void) {
-    twi__slave__start(false);
+    twi__slave__thread__start();
+}
+
+void twi__slave__on_data_byte_received(const uint8_t value) {
+    led1__toggle();
+}
+
+void twi__slave__on_data_reception_finished(void) {
+}
+
+void twi__slave__on_data_reception_aborted(void) {
 }
 
 
@@ -27,8 +39,8 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
-        if (twi_slave__thread__is_runnable()) {
-            twi_slave__thread__run();
+        if (twi__slave__thread__is_runnable()) {
+            twi__slave__thread__run();
         }
     }
 

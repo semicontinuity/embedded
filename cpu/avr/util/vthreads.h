@@ -228,20 +228,55 @@ FC_CONCAT(YIELD, __LINE__):                                     \
 
 #else
 
+
+/**
+* Yield control the current virtual thread.
+* The value of instruction pointer is not changed.
+* Once the virtual thread function is called again, it will execute form the same position as last time.
+* \param thread  A virtual thread name
+* \param ip      An instruction pointer of the virtual thread
+*/
+#define VT_REWIND(thread, ip)                                                               \
+do {                                                                                        \
+  vt_flag = 0;				                                                                \
+  if(vt_flag == 0) {                                                                        \
+    FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(REWIND, __LINE__)));                            \
+    return;                                                                                 \
+  }                                                                                         \
+} while(0)
+
+
 #define VT_YIELD_WITH_MARK(thread, ip, mark)                                                \
 do {                                                                                        \
-FC_CONCAT(YIELD, __LINE__):                                                                 \
-  (void)&&FC_CONCAT(YIELD, __LINE__);                                                       \
   vt_flag = 0;				                                                                \
   mark:                                                                                     \
   if(vt_flag == 0) {                                                                        \
+    FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(YIELD_AND_RESUME_AT_, mark)));                  \
     (ip) = &&mark;	                                                                        \
     return;                                                                                 \
   }                                                                                         \
   FC_ASM_LABEL(FC_LABEL(thread, mark));                                                     \
 } while(0)
 
+
 #define VT_YIELD(thread, ip) VT_YIELD_WITH_MARK(thread, ip, FC_CONCAT(RESUME, __LINE__))
+
+
+#define VT_YIELD_WITH_MARK_IF_TRUE_ELSE_REWIND(condition, thread, ip, mark)                 \
+do {                                                                                        \
+  vt_flag = 0;				                                                                \
+  mark:                                                                                     \
+  if(vt_flag == 0) {                                                                        \
+    FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(YIELD_REWIND_OR_RESUME_AT_, mark)));            \
+    if ((condition)) {                                                                      \
+      (ip) = &&mark;                                                                        \
+    }                                                                                       \
+    return;                                                                                 \
+  }                                                                                         \
+  FC_ASM_LABEL(FC_LABEL(thread, mark));                                                     \
+} while(0)
+
+
 
 #endif
 
@@ -255,8 +290,8 @@ FC_CONCAT(YIELD, __LINE__):                                                     
  */
 #define VT_GOTO(thread, ip, mark)                                                           \
 do {                                                                                        \
-  FC_CONCAT(GOTO, __LINE__):                                                                \
-  (void)&&FC_CONCAT(GOTO, __LINE__);                                                        \
+  FC_CONCAT(FC_CONCAT(GOTO_, mark), __LINE__):                                              \
+  (void)&&FC_CONCAT(FC_CONCAT(GOTO_, mark), __LINE__);                                      \
   vt_flag = 0;				                                                                \
   if(vt_flag == 0) {                                                                        \
     (ip) = &&mark;                                                                          \
