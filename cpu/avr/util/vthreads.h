@@ -44,24 +44,33 @@ typedef void * vthread_ip_t;
 
 #define FC_ASM_LABEL(label)             do { __asm__ __volatile__( label ":"); } while(0)
 
-#define FC_ASM_LABEL_ADDRESS(label)	\
-(__extension__({                        \
-  uint16_t __result;                    \
-  __asm__ __volatile__ (		\
-    "ldi %A0, pm_lo8(" label ")\n\t"	\
-    "ldi %B0, pm_hi8(" label ")\n\t"	\
-        : "=d"(__result)		\
-  );					\
-  __result;                             \
+#define FC_ASM_LABEL_ADDRESS(label)	                                                        \
+(__extension__({                                                                            \
+  uint16_t __result;                                                                        \
+  __asm__ __volatile__ (		                                                            \
+    "ldi %A0, pm_lo8(" label ")\n\t"	                                                    \
+    "ldi %B0, pm_hi8(" label ")\n\t"	                                                    \
+        : "=d"(__result)		                                                            \
+  );					                                                                    \
+  __result;                                                                                 \
 }))
 
-#define FC_ASM_LOAD_LABEL_ADDRESS(var,label)	do {\
-  __asm__ __volatile__ (		\
-    "ldi %A0, pm_lo8(" label ")\n\t"	\
-    "ldi %B0, pm_hi8(" label ")\n\t"	\
-        : "=d"(var)                     \
-  );					\
+#define FC_ASM_LOAD_LABEL_ADDRESS(var,label)	do {                                        \
+  __asm__ __volatile__ (		                                                            \
+    "ldi %A0, pm_lo8(" label ")\n\t"	                                                    \
+    "ldi %B0, pm_hi8(" label ")\n\t"	                                                    \
+        : "=d"(var)                                                                         \
+  );					                                                                    \
 } while(0);
+
+#define FC_ASM_RESUME_Z(ip)                                                                 \
+(__extension__({                                                                            \
+    __asm__ __volatile__("ijmp"                                                             \
+        : "=z" (ip)                                                                         \
+        : "0" (ip)                                                                          \
+    );                                                                                      \
+  ip;                                                                                       \
+}))
 
 #define FC_POINTER(label) ((void*)FC_ASM_LABEL_ADDRESS(label))
 
@@ -83,9 +92,9 @@ typedef void * vthread_ip_t;
 
 #else
 
-#define FC_RESUME(s)			\
-  do {					\
-      goto *s;                          \
+#define FC_RESUME(s)			                                                            \
+  do {					                                                                    \
+      goto *s;                                                                              \
   } while(0)
 
 #endif
@@ -98,13 +107,14 @@ typedef void * vthread_ip_t;
 
 /**
  * Place a named mark (label) in the virtual thread.
- * Seek operations on the thread can be used to change the thread's instruction pointer to the position with the specified mark.
+ * Seek operations on the thread can be used to set the thread's instruction pointer
+ * to the position with the specified mark.
  * \param thread  The name of the virtual thread
  * \param mark    The name of the mark
  */
-#define VT_MARK(thread, mark)                   \
-mark:                                           \
-  (void)&&mark;                                 \
+#define VT_MARK(thread, mark)                                                               \
+mark:                                                                                       \
+  (void)&&mark;                                                                             \
   FC_ASM_LABEL(FC_LABEL(thread, mark));
 
 
@@ -114,8 +124,8 @@ mark:                                           \
  * \param ip      An instruction pointer of the virtual thread
  * \param mark    The name of the mark
  */
-#define VT_SEEK(thread, ip, mark) do {          \
-    FC_ASM_LOAD_LABEL_ADDRESS(ip, FC_LABEL(thread, mark));\
+#define VT_SEEK(thread, ip, mark) do {                                                      \
+  FC_ASM_LOAD_LABEL_ADDRESS(ip, FC_LABEL(thread, mark));                                    \
 } while(0)
 
 
@@ -126,7 +136,9 @@ mark:                                           \
  * \param thread  A name of the virtual thread
  * \param ip      An instruction pointer of the virtual thread
  */
-#define VT_INIT(thread, ip) do { FC_ASM_LOAD_LABEL_ADDRESS(ip, FC_LABEL_BEGIN(thread)); } while(0)
+#define VT_INIT(thread, ip) do {                                                            \
+  FC_ASM_LOAD_LABEL_ADDRESS(ip, FC_LABEL_BEGIN(thread));                                    \
+} while(0)
 
 
 /**
@@ -142,9 +154,9 @@ mark:                                           \
 * \param thread  A virtual thread variable
 * \param ip      An instruction pointer of the virtual thread
 */
-#define VT_LOOP_BEGIN(thread, ip) do {          \
-  char vt_flag = 1;                             \
-  FC_RESUME(ip);                                \
+#define VT_LOOP_BEGIN(thread, ip) do {                                                      \
+  char vt_flag = 1;                                                                         \
+  FC_RESUME(ip);                                                                            \
   {\
     for (;;) {\
         VT_MARK(thread, BEGIN)\
@@ -154,10 +166,10 @@ mark:                                           \
  * \param thread  A virtual thread variable
  * \param ip      An instruction pointer of the virtual thread
  */
-#define VT_BEGIN(thread, ip) do {               \
-  char vt_flag = 1;                             \
-  FC_RESUME(ip);                                \
-  {                                             \
+#define VT_BEGIN(thread, ip) do {                                                           \
+  char vt_flag = 1;                                                                         \
+  FC_RESUME(ip);                                                                            \
+  {                                                                                         \
       VT_MARK(thread, BEGIN);
 
 
@@ -165,25 +177,25 @@ mark:                                           \
  * Declare the end of a virtual thread.
  * \param thread A virtual thread name
  */
-#define VT_END(thread)                          \
-  }                                             \
-  VT_MARK(thread, END);                         \
-  (void)vt_flag;                                \
+#define VT_END(thread)                                                                      \
+  }                                                                                         \
+  VT_MARK(thread, END);                                                                     \
+  (void)vt_flag;                                                                            \
 } while(0)
 
 
-#define VT_LOOP_END(thread)                     \
-    }                                           \
-  }                                             \
+#define VT_LOOP_END(thread)                                                                 \
+    }                                                                                       \
+  }                                                                                         \
 } while(0)
 
 
-#define VT_UNREACHEABLE_END(thread)             \
-  }                                             \
+#define VT_UNREACHEABLE_END(thread)                                                         \
+  }                                                                                         \
 } while(0)
 
 
-#define VT_BREAK(thread)                        \
+#define VT_BREAK(thread)                                                                    \
   goto END;
 
 /**
@@ -216,17 +228,17 @@ FC_CONCAT(YIELD, __LINE__):                                     \
 
 #else
 
-#define VT_YIELD_WITH_MARK(thread, ip, mark)                    \
-do {                                                            \
-FC_CONCAT(YIELD, __LINE__):                                     \
-  (void)&&FC_CONCAT(YIELD, __LINE__);                           \
-  vt_flag = 0;				                                    \
-  mark:                                                         \
-  if(vt_flag == 0) {                                            \
-    (ip) = &&mark;	                                            \
-    return;                                                     \
-  }                                                             \
-  FC_ASM_LABEL(FC_LABEL(thread, mark));                         \
+#define VT_YIELD_WITH_MARK(thread, ip, mark)                                                \
+do {                                                                                        \
+FC_CONCAT(YIELD, __LINE__):                                                                 \
+  (void)&&FC_CONCAT(YIELD, __LINE__);                                                       \
+  vt_flag = 0;				                                                                \
+  mark:                                                                                     \
+  if(vt_flag == 0) {                                                                        \
+    (ip) = &&mark;	                                                                        \
+    return;                                                                                 \
+  }                                                                                         \
+  FC_ASM_LABEL(FC_LABEL(thread, mark));                                                     \
 } while(0)
 
 #define VT_YIELD(thread, ip) VT_YIELD_WITH_MARK(thread, ip, FC_CONCAT(RESUME, __LINE__))
@@ -241,15 +253,15 @@ FC_CONCAT(YIELD, __LINE__):                                     \
  * \param ip      An instruction pointer of the virtual thread
  * \param mark    The name of the mark to proceed from
  */
-#define VT_GOTO(thread, ip, mark)               \
-do {                                            \
-  FC_CONCAT(GOTO, __LINE__):                    \
-  (void)&&FC_CONCAT(GOTO, __LINE__);            \
-  vt_flag = 0;				                    \
-  if(vt_flag == 0) {                            \
-    (ip) = &&mark;                              \
-    return;                                     \
-  }                                             \
+#define VT_GOTO(thread, ip, mark)                                                           \
+do {                                                                                        \
+  FC_CONCAT(GOTO, __LINE__):                                                                \
+  (void)&&FC_CONCAT(GOTO, __LINE__);                                                        \
+  vt_flag = 0;				                                                                \
+  if(vt_flag == 0) {                                                                        \
+    (ip) = &&mark;                                                                          \
+    return;                                                                                 \
+  }                                                                                         \
 } while(0)
 
 
@@ -270,12 +282,12 @@ do {                                            \
 #endif
 
 #ifdef __cplusplus
-#  define VT_FUNC(f, ...)                                                              \
-    extern "C" void f (void) __attribute__ ((__VT_FUNC_ATTRS)) __VA_ARGS__;            \
+#  define VT_FUNC(f, ...)                                                                   \
+    extern "C" void f (void) __attribute__ ((__VT_FUNC_ATTRS)) __VA_ARGS__;                 \
     void f (void)
 #else
-#  define VT_FUNC(f, ...)                                                              \
-    void f (void) __attribute__ ((__VT_FUNC_ATTRS)) __VA_ARGS__;                       \
+#  define VT_FUNC(f, ...)                                                                   \
+    void f (void) __attribute__ ((__VT_FUNC_ATTRS)) __VA_ARGS__;                            \
     void f (void)
 #endif
 
@@ -284,13 +296,13 @@ do {                                            \
  * Declare the end of a virtual thread.
  * \param thread A virtual thread name
  */
-#define VT_END_S(thread)                                        \
-  }                                                             \
-  FC_ASM_LABEL(FC_LABEL(thread, END));                          \
-END:                                                            \
-  (void)vt_flag;                                                \
-  if (FC_CONCAT(thread, __function_naked))                      \
-    __asm__ __volatile__ ("reti"::);                            \
+#define VT_END_S(thread)                                                                    \
+  }                                                                                         \
+  FC_ASM_LABEL(FC_LABEL(thread, END));                                                      \
+END:                                                                                        \
+  (void)vt_flag;                                                                            \
+  if (FC_CONCAT(thread, __function_naked))                                                  \
+    __asm__ __volatile__ ("reti"::);                                                        \
   break;\
 } while(0)
 
