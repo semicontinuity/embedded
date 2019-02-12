@@ -10,7 +10,7 @@
 
 
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__)
+    defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__)
 
 // Currently, only prescaler 1 is supported for simplicity
 // NB: WBR should be 10 or higher if the TWI operates in master mode
@@ -62,7 +62,7 @@
 
 inline static void twi__slave__start(const bool interrupt) {
     if (interrupt) {
-        TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__ENABLED__BIT);
+        TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__ENABLED__BIT) | _BV(TWI__INTERRUPT__BIT);
     } else {
         TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT);
     }

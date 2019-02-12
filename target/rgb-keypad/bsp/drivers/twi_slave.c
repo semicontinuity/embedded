@@ -1,6 +1,6 @@
 #include "cpu/avr/twi.h"
-#include "drivers/twi_slave.h"
 #include "cpu/avr/util/vthreads.h"
+#include "drivers/twi_slave.h"
 
 
 #ifdef TWI__SLAVE__THREAD__IP__REG
@@ -16,7 +16,7 @@ void twi__slave__thread__init(void) {
 
 
 void twi__slave__thread__start(void) {
-    twi__slave__start(false);
+    twi__slave__start(/*false*/true);
 }
 
 
