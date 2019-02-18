@@ -1,0 +1,27 @@
+ATMEGA48
+========================================
+PB0		Encoders bus A
+PB1		Encoders bus B
+PB2	SS	Encoders bus switch
+PB3	MOSI	Buttons row 0
+PB4	MISO	Buttons row 1
+PB5	SCK	Buttons row 2
+PB6	XTAL1
+PB7	XTAL2
+
+PC0		Column 0
+PC1		Column 1
+PC2		Column 2
+PC3		Column 3
+PC4	SDA	I2C Comm
+PC5	SCL	I2C Comm
+PC6	RESET
+
+PD0	RXD	Serial port RX
+PD1	TXD	Serial port TX / Interrupt out
+PD2		Led anode 0
+PD3		Led anode 1
+PD4		Led anode 2
+PD5		Led anode 3
+PD6		Led anode 4
+PD7		Led anode 5
