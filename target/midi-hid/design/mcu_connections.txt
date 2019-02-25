@@ -1,5 +1,7 @@
 ATMEGA48
-========================================
+======================================================================================
+Pin	Func	Application		(I2C comms)	(USB comms)	(Serial comms)
+======================================================================================
 PB0		Encoders bus A
 PB1		Encoders bus B
 PB2	SS	Encoders bus switch
@@ -13,15 +15,15 @@ PC0		Column 0
 PC1		Column 1
 PC2		Column 2
 PC3		Column 3
-PC4	SDA	I2C Comm
-PC5	SCL	I2C Comm
+PC4	SDA				I2C Comm	Led anode 0	Button LEDs
+PC5	SCL				I2C Comm	Led anode 1	Reserved
 PC6	RESET
 
-PD0	RXD	Serial port RX
-PD1	TXD	Serial port TX / Interrupt out
-PD2		Led anode 0
-PD3		Led anode 1
-PD4		Led anode 2
-PD5		Led anode 3
-PD6		Led anode 4
-PD7		Led anode 5
+PD0	RXD				Button LEDs	Button LEDs	RX
+PD1	TXD				Interrupt out	Debug TX	TX
+PD2	INT0				Led row 0	USB DP		LEDs row 0
+PD3	INT1				Led row 1	USB DM		LEDs row 1
+PD4		LEDs row 2
+PD5		LEDs row 3
+PD6		LEDs row 4
+PD7		LEDs row 5
