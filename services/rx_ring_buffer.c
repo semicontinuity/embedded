@@ -58,6 +58,7 @@ void rx_ring_buffer__start(void) {
 
 /**
  * Tells, whether the head pointer is the same as the tail pointer.
+ * It can happen, if the buffer is either completely empty, or completely full.
  */
 bool tx_ring_buffer__is_at_limit(void) {
 #if TX_RING_BUFFER__SIZE < 256 || (TX_RING_BUFFER__SIZE == 256 && TX_RING_BUFFER__ALIGNED)
@@ -83,6 +84,7 @@ void rx_ring_buffer__wait_until_not_at_limit(void) {
 /**
  * Gets the 8-bit value from the buffer.
  * Must be called only if the buffer is not empty.
+ * get() and put() must be called mutually exclusively, e.g. both in interrupt handlers.
  */
 uint8_t rx_ring_buffer__get(void) {
     uint8_t b;
@@ -122,6 +124,7 @@ uint8_t rx_ring_buffer__get(void) {
 /**
  * Puts the 8-bit value into the buffer.
  * Must be called only if the buffer is not full.
+ * get() and put() must be called mutually exclusively, e.g. both in interrupt handlers.
  */
 void rx_ring_buffer__put(const uint8_t value) {
 #if defined(RX_RING_BUFFER__TAIL__REG) && RX_RING_BUFFER__TAIL__REG==26

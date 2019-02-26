@@ -70,12 +70,14 @@ void tx_ring_buffer__wait_until_not_at_limit(void);
 /**
  * Puts the 8-bit value into the buffer.
  * Must be called only if the buffer is not full.
+ * get() and put() must be called mutually exclusively, e.g. both in interrupt handlers.
  */
 uint8_t tx_ring_buffer__get(void);
 
 /**
  * Puts the 8-bit value into the buffer.
  * Must be called only if the buffer is not full.
+ * get() and put() must be called mutually exclusively, e.g. both in interrupt handlers.
  */
 void tx_ring_buffer__put(const uint8_t value);
 

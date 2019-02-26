@@ -47,9 +47,9 @@ int main(void) {
     application__init();
     application__start();
 
-    sei();
     for(;;) {
         _delay_ms(500);
+        cli();
         if (tx_ring_buffer__is_writable()) {
             tx_ring_buffer__put('H');
         }
@@ -74,6 +74,7 @@ int main(void) {
         if (tx_ring_buffer__is_writable()) {
             tx_ring_buffer__put('\n');
         }
+        sei();
     }
 
     return 0;
