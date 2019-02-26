@@ -28,6 +28,9 @@ set(SOURCE_FILES
         ../../bsp/drivers/in/button15.h
         ../../bsp/drivers/in/button16.h
         main.c
+        keyboard__interrupts.c
+        keyboard__interrupts.h
+        keyboard__pins.h
         __all__.c
         )
 
@@ -77,3 +80,17 @@ add_definitions(-DOUT__LED2__PORT=C)
 add_definitions(-DOUT__LED2__PIN=5)
 add_definitions(-DOUT__LED3__PORT=D)
 add_definitions(-DOUT__LED3__PIN=0)
+
+add_definitions(-DUSART0__BAUD_RATE=9600UL)
+add_definitions(-Dusart0__tx__has_next=comm__tx__has_next)
+add_definitions(-Dusart0__tx__next=comm__tx__next)
+add_definitions(-Dusart0__tx__on_done=comm__tx__on_done)
+add_definitions(-Dusart0__tx__data_register_empty__interrupt__ATTRS=)
+add_definitions(-DTX_RING_BUFFER__ALIGNED=1)
+add_definitions(-DTX_RING_BUFFER__SIZE=128)
+add_definitions(-DTX_RING_BUFFER__HEAD__REG=26)
+add_definitions(-DTX_RING_BUFFER__TAIL__REG=28)
+add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__HOST=usart0__tx__data_register_empty__interrupt__enabled__HOST)
+add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__BIT=usart0__tx__data_register_empty__interrupt__enabled__BIT)
+add_definitions(-DTX_RING_BUFFER__NOT_FULL__HOST=GPIOR0)
+add_definitions(-DTX_RING_BUFFER__NOT_FULL__BIT=0)
