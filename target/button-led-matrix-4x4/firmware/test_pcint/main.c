@@ -3,6 +3,7 @@
 // =============================================================================
 
 #include <util/delay.h>
+#include <avr/interrupt.h>
 #include "led1.h"
 #include "led2.h"
 #include "led3.h"
@@ -244,11 +245,11 @@ void pin_change_int0__run(void) {
 }
 
 void pin_change_int1__run(void) {
-    led1__toggle();
+    led2__toggle();
 }
 
 void pin_change_int2__run(void) {
-    led2__toggle();
+    led3__toggle();
 }
 
 
@@ -259,6 +260,7 @@ int main(void) {
     application__init();
     _delay_us(2);
     application__start();
+    sei();
 
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic push
