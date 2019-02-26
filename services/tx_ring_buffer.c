@@ -24,7 +24,7 @@ __attribute__((aligned(TX_RING_BUFFER__SIZE * 2)))
 #    if TX_RING_BUFFER__SIZE == 256
 __attribute__((aligned(256)))
 #    else
-#      error "If TX_RING_BUFFER__ALIGNED, TX_RING_BUFFER__SIZE must be power of 2 less than 256"
+#      error "If TX_RING_BUFFER__ALIGNED, TX_RING_BUFFER__SIZE must be a power of 2 and less than 256"
 #    endif
 #  endif
 #endif
@@ -101,7 +101,7 @@ uint8_t tx_ring_buffer__get(void) {
     LOAD_ADDRESS_HI8_OF(tx_ring_buffer__head, tx_ring_buffer__data);
 #  else
     AND_CONST_LO8(tx_ring_buffer__head, (0xFF ^ TX_RING_BUFFER__SIZE));
-#  endif    
+#  endif
 #else
     if (tx_ring_buffer__head == tx_ring_buffer__data + TX_RING_BUFFER__SIZE)
         tx_ring_buffer__head = tx_ring_buffer__data;
@@ -142,7 +142,7 @@ void tx_ring_buffer__put(const uint8_t value) {
     LOAD_ADDRESS_HI8_OF(tx_ring_buffer__tail, tx_ring_buffer__data);
 #  else
     AND_CONST_LO8(tx_ring_buffer__tail, (0xFF ^ TX_RING_BUFFER__SIZE));
-#  endif    
+#  endif
 #else
     if (tx_ring_buffer__tail == tx_ring_buffer__data + TX_RING_BUFFER__SIZE)
         tx_ring_buffer__tail = tx_ring_buffer__data;
