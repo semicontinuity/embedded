@@ -1,0 +1,29 @@
+ATMEGA48
+======================================================================================
+Pin	Func	Application		(I2C comms)	(USB comms)	(Serial comms)
+======================================================================================
+PB0		Button 8 (PCINT0)
+PB1		Button 12 (PCINT1)
+PB2	SS	Button 16 (PCINT2)
+PB3	MOSI	Button 7 (PCINT3)
+PB4	MISO	Button 15 (PCIINT4)
+PB5	SCK	Button 11 (PCINT5)
+PB6	XTAL1
+PB7	XTAL2
+
+PC0		Button 14 (PCINT8)
+PC1		Button 10 (PCINT9)
+PC2		Button 13 (PCINT10)
+PC3		Button 9 (PCINT11)
+PC4	SDA				I2C Comm
+PC5	SCL				I2C Comm
+PC6	RESET
+
+PD0	RXD	INT
+PD1	TXD	DATA
+PD2	INT0	Button 6 (PCINT18)
+PD3	INT1	Button 5 (PCINT19)
+PD4		Button 1 (PCINT20)
+PD5		Button 2 (PCINT21)
+PD6		Button 3 (PCINT22)
+PD7		Button 4 (PCINT23)
