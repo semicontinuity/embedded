@@ -1,12 +1,12 @@
 // =============================================================================
-// Generic ring buffer for data reception.
+// Generic ring buffer for data transmission.
 // Data are stored in rx_ring_buffer__data
-// from head (read position) up to tail (write position) with possible wrapping.
+// from tail (read position) up to head (write position) with possible wrapping.
 //
 // There are two flags associated with the buffer:
 // - rx_ring_buffer__not_empty (indicates that it's possible to read)
 // - rx_ring_buffer__not_full (indicates that it's possible to write)
-// These flags help to understand the state of the buffer when head==tail.
+// These flags help to understand the state of the buffer when tail==head.
 // They are updated after get and put operations,
 // and can thus be used to e.g. to trigger interupts directly,
 // if mapped to hardware interrupt enable bits.
@@ -22,14 +22,10 @@
 
 #if defined(RX_RING_BUFFER__NOT_EMPTY__HOST) && defined(RX_RING_BUFFER__NOT_EMPTY__BIT)
 DEFINE_BITVAR(rx_ring_buffer__not_empty, RX_RING_BUFFER__NOT_EMPTY__HOST, RX_RING_BUFFER__NOT_EMPTY__BIT);
-#else
-#error "Define RX_RING_BUFFER__NOT_EMPTY__HOST and RX_RING_BUFFER__NOT_EMPTY__BIT"
 #endif
 
 #if defined(RX_RING_BUFFER__NOT_FULL__HOST) && defined(RX_RING_BUFFER__NOT_FULL__BIT)
 DEFINE_BITVAR(rx_ring_buffer__not_full, RX_RING_BUFFER__NOT_FULL__HOST, RX_RING_BUFFER__NOT_FULL__BIT);
-#else
-#error "Define RX_RING_BUFFER__NOT_FULL__HOST and RX_RING_BUFFER__NOT_FULL__BIT"
 #endif
 
 inline bool rx_ring_buffer__is_writable(void) { return rx_ring_buffer__not_full__is_set(); }
@@ -42,17 +38,17 @@ inline bool rx_ring_buffer__is_readable(void) { return rx_ring_buffer__not_empty
 #endif
 
 
-#ifdef RX_RING_BUFFER__HEAD__REG
-register uint8_t* rx_ring_buffer__head asm(QUOTE(RX_RING_BUFFER__HEAD__REG));
+#ifdef RX_RING_BUFFER__TAIL__REG
+register volatile uint8_t* rx_ring_buffer__tail asm(QUOTE(RX_RING_BUFFER__TAIL__REG));
 #else
-extern volatile uint8_t* rx_ring_buffer__head;
+extern volatile uint8_t* rx_ring_buffer__tail;
 #endif
 
 
-#ifdef RX_RING_BUFFER__TAIL__REG
-register uint8_t* rx_ring_buffer__tail asm(QUOTE(RX_RING_BUFFER__TAIL__REG));
+#ifdef RX_RING_BUFFER__HEAD__REG
+register volatile uint8_t* rx_ring_buffer__head asm(QUOTE(RX_RING_BUFFER__HEAD__REG));
 #else
-extern volatile uint8_t* rx_ring_buffer__tail;
+extern volatile uint8_t* rx_ring_buffer__head;
 #endif
 
 
@@ -62,12 +58,12 @@ extern volatile uint8_t* rx_ring_buffer__tail;
 void rx_ring_buffer__start(void);
 
 /**
- * Tells, whether the head pointer is the same as the tail pointer.
+ * Tells, whether the tail pointer is the same as the head pointer.
  */
 bool rx_ring_buffer__is_at_limit(void);
 
 /**
- * Waits until the head pointer and the tail pointer are different.
+ * Waits until the tail pointer and the head pointer are different.
  */
 void rx_ring_buffer__wait_until_not_at_limit(void);
 

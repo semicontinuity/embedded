@@ -1,12 +1,12 @@
 // =============================================================================
 // Generic ring buffer for data transmission.
 // Data are stored in tx_ring_buffer__data
-// from head (read position) up to tail (write position) with possible wrapping.
+// from tail (read position) up to head (write position) with possible wrapping.
 //
 // There are two flags associated with the buffer:
 // - tx_ring_buffer__not_empty (indicates that it's possible to read)
 // - tx_ring_buffer__not_full (indicates that it's possible to write)
-// These flags help to understand the state of the buffer when head==tail.
+// These flags help to understand the state of the buffer when tail==head.
 // They are updated after get and put operations,
 // and can thus be used to e.g. to trigger interupts directly,
 // if mapped to hardware interrupt enable bits.
@@ -38,17 +38,17 @@ inline bool tx_ring_buffer__is_readable(void) { return tx_ring_buffer__not_empty
 #endif
 
 
-#ifdef TX_RING_BUFFER__HEAD__REG
-register volatile uint8_t* tx_ring_buffer__head asm(QUOTE(TX_RING_BUFFER__HEAD__REG));
-#else
-extern volatile uint8_t* tx_ring_buffer__head;
-#endif
-
-
 #ifdef TX_RING_BUFFER__TAIL__REG
 register volatile uint8_t* tx_ring_buffer__tail asm(QUOTE(TX_RING_BUFFER__TAIL__REG));
 #else
 extern volatile uint8_t* tx_ring_buffer__tail;
+#endif
+
+
+#ifdef TX_RING_BUFFER__HEAD__REG
+register volatile uint8_t* tx_ring_buffer__head asm(QUOTE(TX_RING_BUFFER__HEAD__REG));
+#else
+extern volatile uint8_t* tx_ring_buffer__head;
 #endif
 
 
@@ -58,12 +58,12 @@ extern volatile uint8_t* tx_ring_buffer__tail;
 void tx_ring_buffer__start(void);
 
 /**
- * Tells, whether the head pointer is the same as the tail pointer.
+ * Tells, whether the tail pointer is the same as the head pointer.
  */
 bool tx_ring_buffer__is_at_limit(void);
 
 /**
- * Waits until the head pointer and the tail pointer are different.
+ * Waits until the tail pointer and the head pointer are different.
  */
 void tx_ring_buffer__wait_until_not_at_limit(void);
 
