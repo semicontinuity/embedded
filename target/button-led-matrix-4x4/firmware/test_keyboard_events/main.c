@@ -54,28 +54,6 @@ void application__start(void) {
 }
 
 
-void pin_change_int0__run(void) {
-    led1__toggle();
-    if (tx_ring_buffer__is_writable()) {
-        tx_ring_buffer__put('1');
-    }
-}
-
-void pin_change_int1__run(void) {
-    led2__toggle();
-    if (tx_ring_buffer__is_writable()) {
-        tx_ring_buffer__put('2');
-    }
-}
-
-void pin_change_int2__run(void) {
-    led3__toggle();
-    if (tx_ring_buffer__is_writable()) {
-        tx_ring_buffer__put('3');
-    }
-}
-
-
 // main
 // -----------------------------------------------------------------------------
 int main(void) __attribute__ ((naked));

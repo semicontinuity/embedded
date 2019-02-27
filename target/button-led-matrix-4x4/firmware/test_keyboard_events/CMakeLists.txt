@@ -11,6 +11,8 @@ set(SOURCE_FILES
         ../../../../cpu/avr/pin_change_int1.h
         ../../../../cpu/avr/pin_change_int2.c
         ../../../../cpu/avr/pin_change_int2.h
+        ../../../../services/tx_ring_buffer.h
+        ../../../../services/tx_ring_buffer.c
         ../../bsp/drivers/in/button1.h
         ../../bsp/drivers/in/button2.h
         ../../bsp/drivers/in/button3.h
@@ -81,6 +83,10 @@ add_definitions(-DOUT__LED2__PIN=5)
 add_definitions(-DOUT__LED3__PORT=D)
 add_definitions(-DOUT__LED3__PIN=0)
 
+add_definitions(-Dpin_change_int0__run=keyboard__port_b__on_change)
+add_definitions(-Dpin_change_int1__run=keyboard__port_c__on_change)
+add_definitions(-Dpin_change_int2__run=keyboard__port_d__on_change)
+
 add_definitions(-DUSART0__BAUD_RATE=9600UL)
 add_definitions(-Dusart0__tx__has_next=comm__tx__has_next)
 add_definitions(-Dusart0__tx__next=comm__tx__next)
@@ -94,3 +100,4 @@ add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__HOST=usart0__tx__data_register_empt
 add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__BIT=usart0__tx__data_register_empty__interrupt__enabled__BIT)
 add_definitions(-DTX_RING_BUFFER__NOT_FULL__HOST=GPIOR0)
 add_definitions(-DTX_RING_BUFFER__NOT_FULL__BIT=0)
+add_definitions(-DTX_RING_BUFFER__NOT_FULL__IN_BIT_IO_MEM=1)

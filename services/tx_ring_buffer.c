@@ -13,6 +13,7 @@
 // =============================================================================
 
 #include "services/tx_ring_buffer.h"
+#include <avr/io.h>
 #include "cpu/avr/asm.h"
 
 
@@ -117,8 +118,9 @@ uint8_t tx_ring_buffer__get(void) {
     && defined(TX_RING_BUFFER__NOT_EMPTY__IN_BIT_IO_MEM)
     IF_LO8_EQUAL_CLEAR_IO_BIT(tx_ring_buffer__tail, tx_ring_buffer__head, TX_RING_BUFFER__NOT_EMPTY__HOST, TX_RING_BUFFER__NOT_EMPTY__BIT);
 #else
-    if (tx_ring_buffer__is_at_limit())
+    if (__builtin_expect(tx_ring_buffer__is_at_limit(), true)) {
         tx_ring_buffer__not_empty__set(0);
+    }
 #endif
     return b;
 }
@@ -159,7 +161,8 @@ void tx_ring_buffer__put(const uint8_t value) {
     && defined(TX_RING_BUFFER__NOT_FULL__IN_BIT_IO_MEM)
     IF_LO8_EQUAL_CLEAR_IO_BIT(tx_ring_buffer__tail, tx_ring_buffer__head, TX_RING_BUFFER__NOT_FULL__HOST, TX_RING_BUFFER__NOT_FULL__BIT);
 #else
-    if (tx_ring_buffer__is_at_limit())
+    if (__builtin_expect(tx_ring_buffer__is_at_limit(), false)) {
         tx_ring_buffer__not_full__set(0);
+    }
 #endif
 }

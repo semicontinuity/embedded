@@ -60,11 +60,11 @@ void rx_ring_buffer__start(void) {
  * Tells, whether the head pointer is the same as the tail pointer.
  * It can happen, if the buffer is either completely empty, or completely full.
  */
-bool tx_ring_buffer__is_at_limit(void) {
-#if TX_RING_BUFFER__SIZE < 256 || (TX_RING_BUFFER__SIZE == 256 && TX_RING_BUFFER__ALIGNED)
-    return (uint8_t)(uint16_t)tx_ring_buffer__tail == (uint8_t)(uint16_t)tx_ring_buffer__head;
+bool rx_ring_buffer__is_at_limit(void) {
+#if RX_RING_BUFFER__SIZE < 256 || (RX_RING_BUFFER__SIZE == 256 && RX_RING_BUFFER__ALIGNED)
+    return (uint8_t)(uint16_t)rx_ring_buffer__tail == (uint8_t)(uint16_t)rx_ring_buffer__head;
 #else
-    return (uint16_t)tx_ring_buffer__tail == (uint16_t)tx_ring_buffer__head;
+    return (uint16_t)rx_ring_buffer__tail == (uint16_t)rx_ring_buffer__head;
 #endif
 }
 
@@ -114,8 +114,9 @@ uint8_t rx_ring_buffer__get(void) {
 #ifdef RX_RING_BUFFER__ALIGNED
     IF_LO8_EQUAL(rx_ring_buffer__tail, rx_ring_buffer__head, rx_ring_buffer__not_empty__set(0));
 #else
-    if ((uint8_t)(uint16_t)rx_ring_buffer__tail == (uint8_t)(uint16_t)rx_ring_buffer__head)
+    if (__builtin_expect(rx_ring_buffer__is_at_limit(), true)) {
         rx_ring_buffer__not_empty__set(0);
+    }
 #endif
     return b;
 }
@@ -153,7 +154,8 @@ void rx_ring_buffer__put(const uint8_t value) {
 #ifdef RX_RING_BUFFER__ALIGNED
     IF_LO8_EQUAL(rx_ring_buffer__tail, rx_ring_buffer__head, rx_ring_buffer__not_full__set(0));
 #else
-    if ((uint8_t)(uint16_t)rx_ring_buffer__tail == (uint8_t)(uint16_t)rx_ring_buffer__head)
+    if (__builtin_expect(rx_ring_buffer__is_at_limit(), false)) {
         rx_ring_buffer__not_full__set(0);
+    }
 #endif
 }
