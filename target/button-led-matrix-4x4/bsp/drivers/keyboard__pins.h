@@ -210,52 +210,52 @@ uint8_t keyboard__pins__port_c__pin_for_button(const uint8_t button) {
 uint8_t keyboard__pins__port_c__button_pins_mask(void) {
     uint8_t mask = 0;
 #if CONCAT(0x, IN__BUTTON0__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON0__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON0__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON1__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON1__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON1__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON2__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON2__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON2__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON3__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON3__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON3__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON4__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON4__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON4__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON5__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON5__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON5__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON6__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON6__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON6__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON7__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON7__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON7__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON8__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON8__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON8__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON9__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON9__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON9__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON10__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON10__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON10__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON11__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON11__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON11__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON12__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON12__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON12__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON13__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON13__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON13__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON14__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON14__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON14__PIN)));
 #endif
 #if CONCAT(0x, IN__BUTTON15__PORT) == 0xC
-    mask |= (1 << (IN__BUTTON15__PIN));
+    mask |= ((uint8_t)(1 << (IN__BUTTON15__PIN)));
 #endif
     return mask;
 }
