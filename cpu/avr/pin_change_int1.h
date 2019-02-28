@@ -37,6 +37,9 @@
 #endif
 
 
+INLINE uint8_t pin_change_int1__mask__get(void) {
+    return PIN_CHANGE_INT1__MASK;
+}
 
 INLINE void pin_change_int1__mask__set(const uint8_t mask) {
     PIN_CHANGE_INT1__MASK = mask;
@@ -44,12 +47,11 @@ INLINE void pin_change_int1__mask__set(const uint8_t mask) {
 
 
 INLINE void pin_change_int1__start(void) {
-    PIN_CHANGE_INT1__ENABLED__HOST |= (1<<PCIE1);
+    PIN_CHANGE_INT1__ENABLED__HOST |= (1 << PCIE1);
 }
 
-
 INLINE void pin_change_int1__stop(void) {
-    PIN_CHANGE_INT1__ENABLED__HOST &= ~(1<<PCIE1);
+    PIN_CHANGE_INT1__ENABLED__HOST &= ~(1 << PCIE1);
 }
 
 

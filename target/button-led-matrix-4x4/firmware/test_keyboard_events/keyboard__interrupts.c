@@ -25,15 +25,12 @@ void keyboard__interrupts__start(void) {
 }
 
 
-void keyboard__interrupts__maybe_process_pin_change(uint8_t pin, uint8_t state, uint8_t changes, uint8_t button) {
+inline void keyboard__port_b__process_button(uint8_t state, uint8_t changes, uint8_t button) {
+    uint8_t pin = keyboard__port_b__pin_for_button(button);
     if (changes & ((uint8_t) (1 << pin))) {
         keyboard__interrupts__handle_button_event(button, state, pin);
+        pin_change_int0__mask__set(pin_change_int0__mask__get() & ~((uint8_t) (1 << pin)));
     }
-}
-
-
-inline void keyboard__port_b__process_button(uint8_t state, uint8_t changes, uint8_t button) {
-    keyboard__interrupts__maybe_process_pin_change(keyboard__port_b__pin_for_button(button), state, changes, button);
 }
 
 
@@ -81,7 +78,11 @@ void keyboard__port_b__on_change(void) {
 
 
 inline void keyboard__port_c__process_button(uint8_t state, uint8_t changes, uint8_t button) {
-    keyboard__interrupts__maybe_process_pin_change(keyboard__port_c__pin_for_button(button), state, changes, button);
+    uint8_t pin = keyboard__port_c__pin_for_button(button);
+    if (changes & ((uint8_t) (1 << pin))) {
+        keyboard__interrupts__handle_button_event(button, state, pin);
+        pin_change_int1__mask__set(pin_change_int1__mask__get() & ~((uint8_t) (1 << pin)));
+    }
 }
 
 
@@ -129,7 +130,11 @@ void keyboard__port_c__on_change(void) {
 
 
 inline void keyboard__port_d__process_button(uint8_t state, uint8_t changes, uint8_t button) {
-    keyboard__interrupts__maybe_process_pin_change(keyboard__port_d__pin_for_button(button), state, changes, button);
+    uint8_t pin = keyboard__port_d__pin_for_button(button);
+    if (changes & ((uint8_t) (1 << pin))) {
+        keyboard__interrupts__handle_button_event(button, state, pin);
+        pin_change_int2__mask__set(pin_change_int2__mask__get() & ~((uint8_t) (1 << pin)));
+    }
 }
 
 
