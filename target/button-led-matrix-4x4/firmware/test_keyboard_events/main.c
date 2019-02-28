@@ -14,9 +14,9 @@
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/drivers/usart0__tx.h"
 
-#include "keyboard__pins.h"
-#include "keyboard__interrupts.h"
+#include "drivers/keyboard__pins.h"
 #include "drivers/keyboard__debounce_timer.h"
+#include "keyboard__interrupts.h"
 
 
 // =============================================================================

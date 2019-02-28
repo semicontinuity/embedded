@@ -1,8 +1,8 @@
 #include <services/tx_ring_buffer.h>
 
+#include "drivers/keyboard__pins.h"
 #include "drivers/keyboard__debounce_timer.h"
 #include "keyboard__interrupts.h"
-#include "keyboard__pins.h"
 
 #include "cpu/avr/pin_change_int0.h"
 #include "cpu/avr/pin_change_int1.h"

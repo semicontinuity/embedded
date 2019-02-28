@@ -33,10 +33,10 @@ set(SOURCE_FILES
         ../../bsp/drivers/in/button15.h
         ../../bsp/drivers/keyboard__debounce_timer.c
         ../../bsp/drivers/keyboard__debounce_timer.h
+        ../../bsp/drivers/keyboard__pins.h
         main.c
         keyboard__interrupts.c
         keyboard__interrupts.h
-        keyboard__pins.h
         __all__.c
         )
 
