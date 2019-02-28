@@ -7,12 +7,6 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/timer0.h
-        ../../../../cpu/avr/pin_change_int0.c
-        ../../../../cpu/avr/pin_change_int0.h
-        ../../../../cpu/avr/pin_change_int1.c
-        ../../../../cpu/avr/pin_change_int1.h
-        ../../../../cpu/avr/pin_change_int2.c
-        ../../../../cpu/avr/pin_change_int2.h
         ../../../../services/tx_ring_buffer.h
         ../../../../services/tx_ring_buffer.c
         ../../bsp/drivers/in/button0.h
@@ -87,16 +81,13 @@ add_definitions(-DOUT__LED2__PIN=5)
 add_definitions(-DOUT__LED3__PORT=D)
 add_definitions(-DOUT__LED3__PIN=0)
 
-add_definitions(-Dpin_change_int0__run=keyboard__port_b__on_change)
-add_definitions(-Dpin_change_int1__run=keyboard__port_c__on_change)
-add_definitions(-Dpin_change_int2__run=keyboard__port_d__on_change)
 add_definitions(-Dtimer0__overflow__run=keyboard__debounce_timer__expired)
-add_definitions(-DKEYBOARD__PORT_B__CHANGES__REG=8)
-add_definitions(-DKEYBOARD__PORT_C__CHANGES__REG=9)
-add_definitions(-DKEYBOARD__PORT_D__CHANGES__REG=10)
 add_definitions(-DKEYBOARD__PORT_B__PREVIOUS_STATE__REG=11)
 add_definitions(-DKEYBOARD__PORT_C__PREVIOUS_STATE__REG=12)
 add_definitions(-DKEYBOARD__PORT_D__PREVIOUS_STATE__REG=13)
+add_definitions(-DKEYBOARD__PORT_B__MASK__REG=16)
+add_definitions(-DKEYBOARD__PORT_C__MASK__REG=17)
+add_definitions(-DKEYBOARD__PORT_D__MASK__REG=18)
 
 add_definitions(-DUSART0__BAUD_RATE=9600UL)
 add_definitions(-Dusart0__tx__has_next=comm__tx__has_next)

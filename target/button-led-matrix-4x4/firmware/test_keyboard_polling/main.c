@@ -14,8 +14,6 @@
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/drivers/usart0__tx.h"
 
-#include "drivers/keyboard__pins.h"
-#include "drivers/keyboard__debounce_timer.h"
 #include "keyboard.h"
 
 
@@ -58,15 +56,13 @@ inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
 
 
 void application__init(void) {
-    keyboard__pins__init();
-
     led1__init();
     led2__init();
     led3__init();
 
     usart0__init();
 
-    keyboard__debounce_timer__init();
+
     keyboard__init();
 }
 
@@ -74,7 +70,6 @@ void application__init(void) {
 void application__start(void) {
     tx_ring_buffer__start();
     usart0__tx__start();
-    keyboard__start();
 }
 
 
@@ -92,6 +87,7 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
+        keyboard__run();
     }
 
 #if !defined(__AVR_ARCH__)

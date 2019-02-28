@@ -36,11 +36,11 @@
 #define TIMER0_CONF_WGM_CTC_RESERVED                    (_BV(WGM01)              | _BV(8+WGM02))
 #define TIMER0_CONF_WGM_FAST_PWM_USE_OCRA               (_BV(WGM01) | _BV(WGM00) | _BV(8+WGM02))
 
-#define TIMER0_CONF_STOPPED		                (0)
-#define TIMER0_CONF_NO_PRESCALER	                ((                        _BV(CS00)) << 8)
+#define TIMER0_CONF_STOPPED		                        (0)
+#define TIMER0_CONF_NO_PRESCALER	                    ((                        _BV(CS00)) << 8)
 #define TIMER0_CONF_PRESCALER_8                         ((            _BV(CS01)            ) << 8)
-#define TIMER0_CONF_PRESCALER_64	                ((            _BV(CS01) | _BV(CS00)) << 8)
-#define TIMER0_CONF_PRESCALER_256	                ((_BV(CS02)                        ) << 8)
+#define TIMER0_CONF_PRESCALER_64	                    ((            _BV(CS01) | _BV(CS00)) << 8)
+#define TIMER0_CONF_PRESCALER_256	                    ((_BV(CS02)                        ) << 8)
 #define TIMER0_CONF_PRESCALER_1024                      ((_BV(CS02)             | _BV(CS00)) << 8)
 #define TIMER0_CONF_EXT_CLK_FALLING                     ((_BV(CS02) | _BV(CS01)            ) << 8)
 #define TIMER0_CONF_EXT_CLK_RISING                      ((_BV(CS02) | _BV(CS01) | _BV(CS00)) << 8)
@@ -86,6 +86,16 @@
 inline static void timer0__conf__set(uint16_t conf) {
     TCCR0A = conf & 0xFF;
     TCCR0B = (conf >> 8) & 0xFF;
+}
+
+inline void timer0__switch_core_conf(uint16_t old_core_conf, uint16_t new_core_conf) {
+    uint8_t old_tccra = old_core_conf & 0xFF;
+    uint8_t new_tccra = new_core_conf & 0xFF;
+    if (old_tccra != new_tccra) TCCR0A = new_tccra;
+
+    uint8_t old_tccrb = (old_core_conf >> 8) & 0xFF;
+    uint8_t new_tccrb = (new_core_conf >> 8) & 0xFF;
+    if (old_tccrb != new_tccrb) TCCR0B = new_tccrb;
 }
 
 inline void timer0__switch_conf(uint32_t old_conf, uint32_t new_conf) {

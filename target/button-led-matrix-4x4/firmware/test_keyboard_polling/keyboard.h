@@ -5,7 +5,7 @@
 
 void keyboard__init(void);
 
-void keyboard__start(void);
+void keyboard__run(void);
 
 /**
  * Callback to be implemented to handle button event.

@@ -25,10 +25,10 @@ void keyboard__debounce_timer__init(void) {
  */
 void keyboard__debounce_timer__start(void) {
     timer0__value__set(0);  // re-start if timer is running
-    timer0__switch_conf(SYSTEM_TIMER__CONF__INITIALIZED, SYSTEM_TIMER__CONF__STARTED);
+    timer0__switch_core_conf(SYSTEM_TIMER__CONF__INITIALIZED, SYSTEM_TIMER__CONF__STARTED);
 }
 
 void keyboard__debounce_timer__expired(void) {
-    timer0__switch_conf(SYSTEM_TIMER__CONF__STARTED, SYSTEM_TIMER__CONF__INITIALIZED);
+    timer0__switch_core_conf(SYSTEM_TIMER__CONF__STARTED, SYSTEM_TIMER__CONF__INITIALIZED);
     keyboard__debounce_timer__run();
 }
