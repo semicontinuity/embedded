@@ -1,7 +1,10 @@
 #include <stdbool.h>
 #include <services/tx_ring_buffer.h>
+
+#include "drivers/keyboard__debounce_timer.h"
 #include "keyboard__interrupts.h"
 #include "keyboard__pins.h"
+
 #include "cpu/avr/pin_change_int0.h"
 #include "cpu/avr/pin_change_int1.h"
 #include "cpu/avr/pin_change_int2.h"
@@ -12,24 +15,33 @@ uint8_t keyboard__port_c__previous_state = 0xFF;
 uint8_t keyboard__port_d__previous_state = 0xFF;
 
 
-void keyboard__interrupts__init(void) {
-    pin_change_int0__mask__set(keyboard__port_b__button_pins_mask());
-    pin_change_int1__mask__set(keyboard__port_c__button_pins_mask());
-    pin_change_int2__mask__set(keyboard__port_d__button_pins_mask());
+void keyboard__init(void) {
+    pin_change_int0__mask__set(keyboard__pins__port_b__button_pins_mask());
+    pin_change_int1__mask__set(keyboard__pins__port_c__button_pins_mask());
+    pin_change_int2__mask__set(keyboard__pins__port_d__button_pins_mask());
 }
 
-void keyboard__interrupts__start(void) {
+void keyboard__start(void) {
     pin_change_int0__start();
     pin_change_int1__start();
     pin_change_int2__start();
 }
 
+/**
+ * The callback called when the debounce timer has expired.
+ */
+void keyboard__debounce_timer__run(void) {
+    keyboard__init();   // just re-enable all pin change interrupts
+}
+
+
 
 inline void keyboard__port_b__process_button(uint8_t state, uint8_t changes, uint8_t button) {
-    uint8_t pin = keyboard__port_b__pin_for_button(button);
+    uint8_t pin = keyboard__pins__port_b__pin_for_button(button);
     if (changes & ((uint8_t) (1 << pin))) {
-        keyboard__interrupts__handle_button_event(button, state, pin);
+        keyboard__handle_button_event(button, state, pin);
         pin_change_int0__mask__set(pin_change_int0__mask__get() & ~((uint8_t) (1 << pin)));
+        keyboard__debounce_timer__start();
     }
 }
 
@@ -78,10 +90,11 @@ void keyboard__port_b__on_change(void) {
 
 
 inline void keyboard__port_c__process_button(uint8_t state, uint8_t changes, uint8_t button) {
-    uint8_t pin = keyboard__port_c__pin_for_button(button);
+    uint8_t pin = keyboard__pins__port_c__pin_for_button(button);
     if (changes & ((uint8_t) (1 << pin))) {
-        keyboard__interrupts__handle_button_event(button, state, pin);
+        keyboard__handle_button_event(button, state, pin);
         pin_change_int1__mask__set(pin_change_int1__mask__get() & ~((uint8_t) (1 << pin)));
+        keyboard__debounce_timer__start();
     }
 }
 
@@ -130,10 +143,11 @@ void keyboard__port_c__on_change(void) {
 
 
 inline void keyboard__port_d__process_button(uint8_t state, uint8_t changes, uint8_t button) {
-    uint8_t pin = keyboard__port_d__pin_for_button(button);
+    uint8_t pin = keyboard__pins__port_d__pin_for_button(button);
     if (changes & ((uint8_t) (1 << pin))) {
-        keyboard__interrupts__handle_button_event(button, state, pin);
         pin_change_int2__mask__set(pin_change_int2__mask__get() & ~((uint8_t) (1 << pin)));
+        keyboard__handle_button_event(button, state, pin);
+        keyboard__debounce_timer__start();
     }
 }
 

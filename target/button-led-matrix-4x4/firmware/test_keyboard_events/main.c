@@ -44,21 +44,13 @@ void comm__tx__on_done(void) {
  * @param state state of the button's port
  * @param bit index of button's pin in the port
  */
-inline void keyboard__interrupts__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
-    keyboard__debounce_timer__start();
+inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
     if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
         uint8_t code = IF_BIT_SET_CONST_A_ELSE_CONST_B(state, bit, (uint8_t) ('A' + button), (uint8_t) ('a' + button));
         tx_ring_buffer__put(code);
     }
 }
 
-/**
- * The callback called when the debounce timer has expired.
- */
-void keyboard__debounce_timer__run(void) {
-    led1__toggle();
-    keyboard__interrupts__init();
-}
 
 // =============================================================================
 // Application
@@ -75,14 +67,14 @@ void application__init(void) {
     usart0__init();
 
     keyboard__debounce_timer__init();
-    keyboard__interrupts__init();
+    keyboard__init();
 }
 
 
 void application__start(void) {
     tx_ring_buffer__start();
     usart0__tx__start();
-    keyboard__interrupts__start();
+    keyboard__start();
 }
 
 

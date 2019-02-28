@@ -1,11 +1,11 @@
-#ifndef KEYBOARD__INTERRUPTS_H
-#define KEYBOARD__INTERRUPTS_H
+#ifndef KEYBOARD_H
+#define KEYBOARD_H
 
 #include <stdint.h>
 
-void keyboard__interrupts__init(void);
+void keyboard__init(void);
 
-void keyboard__interrupts__start(void);
+void keyboard__start(void);
 
 /**
  * Callback to be implemented to handle button event.
@@ -16,6 +16,6 @@ void keyboard__interrupts__start(void);
  * @param state state of the button's port
  * @param bit index of button's pin in the port
  */
-inline void keyboard__interrupts__handle_button_event(uint8_t button, uint8_t state, uint8_t bit);
+inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit);
 
 #endif

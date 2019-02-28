@@ -43,7 +43,7 @@ void keyboard__pins__init(void) {
  * Provides pin number for the given button (if it pertains to port B)
  * @param button 0-15 for BUTTON0..BUTTON15
 */
-uint8_t keyboard__port_b__pin_for_button(const uint8_t button) {
+uint8_t keyboard__pins__port_b__pin_for_button(const uint8_t button) {
 #if CONCAT(0x, IN__BUTTON0__PORT) == 0xB
     if (button == 0) return IN__BUTTON0__PIN;
 #endif
@@ -96,7 +96,7 @@ uint8_t keyboard__port_b__pin_for_button(const uint8_t button) {
 }
 
 
-uint8_t keyboard__port_b__button_pins_mask(void) {
+uint8_t keyboard__pins__port_b__button_pins_mask(void) {
     uint8_t mask = 0;
 #if CONCAT(0x, IN__BUTTON0__PORT) == 0xB
     mask |= (1 << (IN__BUTTON0__PIN));
@@ -154,7 +154,7 @@ uint8_t keyboard__port_b__button_pins_mask(void) {
  * Provides pin number for the given button (if it pertains to port C)
  * @param button 0-15 for BUTTON0..BUTTON15
 */
-uint8_t keyboard__port_c__pin_for_button(const uint8_t button) {
+uint8_t keyboard__pins__port_c__pin_for_button(const uint8_t button) {
 #if CONCAT(0x, IN__BUTTON0__PORT) == 0xC
     if (button == 0) return IN__BUTTON0__PIN;
 #endif
@@ -207,7 +207,7 @@ uint8_t keyboard__port_c__pin_for_button(const uint8_t button) {
 }
 
 
-uint8_t keyboard__port_c__button_pins_mask(void) {
+uint8_t keyboard__pins__port_c__button_pins_mask(void) {
     uint8_t mask = 0;
 #if CONCAT(0x, IN__BUTTON0__PORT) == 0xC
     mask |= (1 << (IN__BUTTON0__PIN));
@@ -265,7 +265,7 @@ uint8_t keyboard__port_c__button_pins_mask(void) {
  * Provides pin number for the given button (if it pertains to port D)
  * @param button 0-15 for BUTTON0..BUTTON15
 */
-uint8_t keyboard__port_d__pin_for_button(const uint8_t button) {
+uint8_t keyboard__pins__port_d__pin_for_button(const uint8_t button) {
 #if CONCAT(0x, IN__BUTTON0__PORT) == 0xD
     if (button == 0) return IN__BUTTON0__PIN;
 #endif
@@ -318,7 +318,7 @@ uint8_t keyboard__port_d__pin_for_button(const uint8_t button) {
 }
 
 
-uint8_t keyboard__port_d__button_pins_mask(void) {
+uint8_t keyboard__pins__port_d__button_pins_mask(void) {
     uint8_t mask = 0;
 #if CONCAT(0x, IN__BUTTON0__PORT) == 0xD
     mask |= (1 << (IN__BUTTON0__PIN));
