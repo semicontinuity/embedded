@@ -7,6 +7,7 @@
 #include "led1.h"
 #include "led2.h"
 #include "led3.h"
+#include "drivers/in/button0.h"
 #include "drivers/in/button1.h"
 #include "drivers/in/button2.h"
 #include "drivers/in/button3.h"
@@ -22,7 +23,6 @@
 #include "drivers/in/button13.h"
 #include "drivers/in/button14.h"
 #include "drivers/in/button15.h"
-#include "drivers/in/button16.h"
 #include "cpu/avr/pin_change_int0.h"
 #include "cpu/avr/pin_change_int1.h"
 #include "cpu/avr/pin_change_int2.h"
@@ -31,6 +31,9 @@
 uint8_t pin_change_int0__mask(void) {
     // Pin Change Interrupt 0 serves PB0..PB7
     uint8_t mask = 0;
+#if CONCAT(0x, IN__BUTTON0__PORT)==0xB
+    mask |= (1 << (IN__BUTTON0__PIN));
+#endif
 #if CONCAT(0x, IN__BUTTON1__PORT)==0xB
     mask |= (1 << (IN__BUTTON1__PIN));
 #endif
@@ -76,9 +79,6 @@ uint8_t pin_change_int0__mask(void) {
 #if CONCAT(0x, IN__BUTTON15__PORT)==0xB
     mask |= (1 << (IN__BUTTON15__PIN));
 #endif
-#if CONCAT(0x, IN__BUTTON16__PORT)==0xB
-    mask |= (1 << (IN__BUTTON16__PIN));
-#endif
     return mask;
 }
 
@@ -90,6 +90,9 @@ void pin_change_int0__init(void) {
 uint8_t pin_change_int1__mask(void) {
     // Pin Change Interrupt 1 serves PC0..PC6
     uint8_t mask = 0;
+#if CONCAT(0x, IN__BUTTON0__PORT)==0xC
+    mask |= (1 << (IN__BUTTON0__PIN));
+#endif
 #if CONCAT(0x, IN__BUTTON1__PORT)==0xC
     mask |= (1 << (IN__BUTTON1__PIN));
 #endif
@@ -135,9 +138,6 @@ uint8_t pin_change_int1__mask(void) {
 #if CONCAT(0x, IN__BUTTON15__PORT)==0xC
     mask |= (1 << (IN__BUTTON15__PIN));
 #endif
-#if CONCAT(0x, IN__BUTTON16__PORT)==0xC
-    mask |= (1 << (IN__BUTTON16__PIN));
-#endif
     return mask;
 }
 
@@ -149,6 +149,9 @@ void pin_change_int1__init(void) {
 uint8_t pin_change_int2__mask(void) {
     // Pin Change Interrupt 1 serves PD0..PD7
     uint8_t mask = 0;
+#if CONCAT(0x, IN__BUTTON0__PORT)==0xD
+    mask |= (1 << (IN__BUTTON0__PIN));
+#endif
 #if CONCAT(0x, IN__BUTTON1__PORT)==0xD
     mask |= (1 << (IN__BUTTON1__PIN));
 #endif
@@ -194,9 +197,6 @@ uint8_t pin_change_int2__mask(void) {
 #if CONCAT(0x, IN__BUTTON15__PORT)==0xD
     mask |= (1 << (IN__BUTTON15__PIN));
 #endif
-#if CONCAT(0x, IN__BUTTON16__PORT)==0xD
-    mask |= (1 << (IN__BUTTON16__PIN));
-#endif
     return mask;
 }
 
@@ -206,6 +206,7 @@ void pin_change_int2__init(void) {
 
 
 void application__init(void) {
+    button0__init();
     button1__init();
     button2__init();
     button3__init();
@@ -221,7 +222,6 @@ void application__init(void) {
     button13__init();
     button14__init();
     button15__init();
-    button16__init();
 
     led1__init();
     led2__init();
