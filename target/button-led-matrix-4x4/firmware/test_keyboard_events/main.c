@@ -16,6 +16,7 @@
 
 #include "keyboard__pins.h"
 #include "keyboard__interrupts.h"
+#include "drivers/keyboard__debounce_timer.h"
 
 
 // =============================================================================
@@ -50,6 +51,12 @@ inline void keyboard__interrupts__handle_button_event(uint8_t button, uint8_t st
     }
 }
 
+/**
+ * The callback called when the debounce timer has expired.
+ */
+void keyboard__debounce_timer__run(void) {
+    led1__toggle();
+}
 
 // =============================================================================
 // Application
@@ -65,6 +72,7 @@ void application__init(void) {
 
     usart0__init();
 
+    keyboard__debounce_timer__init();
     keyboard__interrupts__init();
 }
 

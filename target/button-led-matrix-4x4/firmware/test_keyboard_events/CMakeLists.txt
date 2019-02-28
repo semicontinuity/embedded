@@ -5,6 +5,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_FILES
+        ../../../../cpu/avr/timer0.c
+        ../../../../cpu/avr/timer0.h
         ../../../../cpu/avr/pin_change_int0.c
         ../../../../cpu/avr/pin_change_int0.h
         ../../../../cpu/avr/pin_change_int1.c
@@ -29,6 +31,8 @@ set(SOURCE_FILES
         ../../bsp/drivers/in/button13.h
         ../../bsp/drivers/in/button14.h
         ../../bsp/drivers/in/button15.h
+        ../../bsp/drivers/keyboard__debounce_timer.c
+        ../../bsp/drivers/keyboard__debounce_timer.h
         main.c
         keyboard__interrupts.c
         keyboard__interrupts.h
@@ -86,6 +90,7 @@ add_definitions(-DOUT__LED3__PIN=0)
 add_definitions(-Dpin_change_int0__run=keyboard__port_b__on_change)
 add_definitions(-Dpin_change_int1__run=keyboard__port_c__on_change)
 add_definitions(-Dpin_change_int2__run=keyboard__port_d__on_change)
+add_definitions(-Dtimer0__overflow__run=keyboard__debounce_timer__expired)
 
 add_definitions(-DUSART0__BAUD_RATE=9600UL)
 add_definitions(-Dusart0__tx__has_next=comm__tx__has_next)
