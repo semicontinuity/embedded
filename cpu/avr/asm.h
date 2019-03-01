@@ -196,27 +196,39 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 } while(0)
 
 
-#define GOTO_IF_BIT_SET(r, b, l) do {	\
-  __asm__ __volatile__ (		\
-    "sbis %0, %1\n\t"			\
-    "rjmp " #l "\n\t"			\
-        :				\
-        : "I"(_SFR_IO_ADDR(r)),		\
-          "I"(b)			\
-  );					\
+#define GOTO_IF_BIT_SET(r, b, l) do {	                    \
+  __asm__ __volatile__ (		                            \
+    "sbis %0, %1\n\t"			                            \
+    "rjmp " #l "\n\t"			                            \
+        :				                                    \
+        : "I"(_SFR_IO_ADDR(r)),		                        \
+          "I"(b)			                                \
+  );					                                    \
 } while(0)
 
+#define IF_BIT_SET_LOAD_A_ELSE_B(r, v, bit, a, b) do {      \
+    __asm__ __volatile__(                                   \
+    "ldi  %0, %3\n\t"                                       \
+    "sbrs %1, %2\n\t"                                       \
+    "ldi  %0, %4\n\t"                                       \
+        : "=d"((r)),                                        \
+          "+r"((v))                                         \
+        :  "I"((bit)),                                      \
+          "M"((uint8_t)((a) & 0xFF)),                       \
+          "M"((uint8_t)((b) & 0xFF))                        \
+    );                                                      \
+} while (0)
 
 #define IF_BIT_SET_CONST_A_ELSE_CONST_B(v, bit, a, b)       \
 (__extension__({                                            \
     uint8_t __result;                                       \
-    __asm__ (                                               \
+    __asm__ __volatile__(                                   \
     "ldi  %0, %3\n\t"                                       \
     "sbrs %1, %2\n\t"                                       \
     "ldi  %0, %4\n\t"                                       \
-        : "=d"(__result)                                    \
-        : "r"((v)),                                         \
-          "I"((bit)),                                       \
+        : "=d"(__result),                                   \
+          "+r"((v))                                         \
+        : "I"((bit)),                                       \
           "M"((uint8_t)((a) & 0xFF)),                       \
           "M"((uint8_t)((b) & 0xFF))                        \
     );                                                      \

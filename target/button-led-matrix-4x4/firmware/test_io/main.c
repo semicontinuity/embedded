@@ -31,15 +31,21 @@ int main(void) {
     application__init();
     application__start();
 
+    uint8_t previous_pins = (1 << 3);
     for(;;) {
         uint8_t pins = PINC;
+        uint8_t masked_pins = pins & (1 << 3);
+        if (previous_pins == masked_pins) continue;
+
+        previous_pins = masked_pins;
+
         uint8_t c;
-        if (pins & (1 << 3))
+        if (masked_pins & (1 << 3))
             c = 'I';
         else
             c = 'i';
         usart0__out__write(c);
-        _delay_ms(200);
+//        _delay_ms(200);
     }
 
     return 0;
