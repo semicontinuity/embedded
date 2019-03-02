@@ -12,7 +12,7 @@ vpath %.c $(BSP) $(ROOT)
 # Configuration
 include $(CONFIG_FILE)
 
-CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
+CONF  = $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
 
 ifdef FIXED_REGISTERS
