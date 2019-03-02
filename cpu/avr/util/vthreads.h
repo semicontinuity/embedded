@@ -294,6 +294,7 @@ do {                                                                            
   (void)&&FC_CONCAT(FC_CONCAT(GOTO_, mark), __LINE__);                                      \
   vt_flag = 0;				                                                                \
   if(vt_flag == 0) {                                                                        \
+    FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(YIELD_AND_RESUME_AT_, mark)));                  \
     (ip) = &&mark;                                                                          \
     return;                                                                                 \
   }                                                                                         \
