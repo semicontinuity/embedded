@@ -10,10 +10,14 @@ set(SOURCE_FILES
         ../../bsp/services/scanner.c
         ../../bsp/services/scanner.h
         ../../bsp/services/scanner__rgb_leds.h
-        ../../bsp/services/scanner__rgb_leds__buffered.c
+        ../../bsp/services/scanner__rgb_leds__dynamic.c
+        ../../bsp/services/scanner__button_leds.h
+        ../../bsp/services/scanner__button_leds.c
         ../../bsp/drivers/scanner__thread__timer.c
         ../../bsp/drivers/scanner__thread__timer.h
         main.c
+        data.c
+        data.h
         __all__.c
         )
 
@@ -54,4 +58,5 @@ add_definitions(-DOUT__BUTTONS_LEDS_ROW__PIN=0)
 
 add_definitions(-Dtimer0__overflow__run=scanner__thread__run)
 add_definitions(-DSCANNER__THREAD__IP__REG=30)
+add_definitions(-DSCANNER__PHASE__REG=2)
 add_definitions(-DSCANNER__RGB_LEDS__DATA_PTR__REG=28)

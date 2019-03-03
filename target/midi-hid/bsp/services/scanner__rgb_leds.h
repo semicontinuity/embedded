@@ -1,5 +1,5 @@
-#ifndef SERVICES__SCANNER_H
-#define SERVICES__SCANNER_H
+#ifndef SERVICES__SCANNER__RGB_LEDS_H
+#define SERVICES__SCANNER__RGB_LEDS_H
 
 #include "drivers/out/leds_rows.h"
 
@@ -15,6 +15,6 @@ void scanner__rgb_leds__init(void) {
 
 void scanner__rgb_leds__rewind(void);
 
-void scanner__rgb_leds__render_column(void);
+void scanner__rgb_leds__render_column(uint8_t phase);
 
 #endif

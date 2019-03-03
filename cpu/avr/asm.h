@@ -260,11 +260,37 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 } while(0)
 
 
+#define IF_LO8_EQUAL_EXEC_1_OP(v1, v2, code) do {           \
+  __asm__ __volatile__(                                     \
+    "cpse %A0, %A1\n\t"                                     \
+    "cpse r0, r0\n\t"                                       \
+    :                                                       \
+    : "r"(v1),                                              \
+      "r"(v2)                                               \
+  );                                                        \
+  do {code;} while(0);                                      \
+} while(0)
+
+
 #define IF_LO8_EQUAL_CLEAR_IO_BIT(v1, v2, addr, bit) do {   \
   __asm__ __volatile__(                                     \
     "cpse %A0, %A1\n\t"                                     \
     "cpse r0, r0\n\t"                                       \
     "cbi  %2, %3\n\t"                                       \
+    :                                                       \
+    : "r"(v1),                                              \
+      "r"(v2),                                              \
+      "I"(_SFR_IO_ADDR(addr)),                              \
+      "I"(bit)                                              \
+  );                                                        \
+} while(0)
+
+
+#define IF_LO8_EQUAL_SET_IO_BIT(v1, v2, addr, bit) do {     \
+  __asm__ __volatile__(                                     \
+    "cpse %A0, %A1\n\t"                                     \
+    "cpse r0, r0\n\t"                                       \
+    "sbi  %2, %3\n\t"                                       \
     :                                                       \
     : "r"(v1),                                              \
       "r"(v2),                                              \

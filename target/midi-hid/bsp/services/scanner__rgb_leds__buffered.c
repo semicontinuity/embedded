@@ -21,7 +21,7 @@
 #endif
 
 
-uint8_t scanner__rgb_leds__data[1024];
+uint8_t scanner__rgb_leds__buffer[1024];
 
 #ifdef SCANNER__RGB_LEDS__DATA_PTR__REG
 register uint8_t *scanner__rgb_leds__data_ptr asm(QUOTE(SCANNER__RGB_LEDS__DATA_PTR__REG));
@@ -31,10 +31,10 @@ volatile uint8_t *scanner__rgb_leds__data_ptr;
 
 
 void scanner__rgb_leds__rewind(void) {
-    scanner__rgb_leds__data_ptr = scanner__rgb_leds__data;
+    scanner__rgb_leds__data_ptr = scanner__rgb_leds__buffer;
 }
 
 
-void scanner__rgb_leds__render_column(void) {
+void scanner__rgb_leds__render_column(uint8_t phase) {
 //    uint8_t data = *scanner__rgb_leds__data_ptr++;
 }

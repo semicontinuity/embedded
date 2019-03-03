@@ -1,11 +1,14 @@
 // =============================================================================
-// I2C test - blinking LEDs.
+// Test scanning
 // =============================================================================
 
 #include "services/scanner.h"
 #include "drivers/out/columns.h"
 #include "drivers/out/leds_rows.h"
 #include "util/delay.h"
+
+
+uint8_t data__rgb_leds[8*3];
 
 
 void application__init(void) {

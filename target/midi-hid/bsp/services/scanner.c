@@ -6,14 +6,8 @@
 #include "drivers/out/columns.h"
 #include "drivers/out/leds_rows.h"
 #include "drivers/scanner__thread__timer.h"
+#include "services/scanner__button_leds.h"
 #include "services/scanner__rgb_leds.h"
-
-
-
-void scanner__button_leds__init(void) {
-    buttons__leds_row__init();
-}
-
 
 
 #ifdef SCANNER__THREAD__IP__REG
@@ -22,17 +16,24 @@ register uint8_t *scanner__thread__ip asm(QUOTE(SCANNER__THREAD__IP__REG));
 volatile uint8_t *scanner__thread__ip;
 #endif
 
+#ifdef SCANNER__PHASE__REG
+register uint8_t scanner__phase asm(QUOTE(SCANNER__PHASE__REG));
+#else
+volatile uint8_t scanner__phase;
+#endif
+
+
 void scanner__thread__init(void) {
     VT_INIT(scanner__thread, scanner__thread__ip);
 }
 
 
-void scanner__render_column(void) {
-    scanner__rgb_leds__render_column();
+inline void scanner__render_column(void) {
+    scanner__rgb_leds__render_column(scanner__phase);
 }
 
 
-void scanner__rewind(void) {
+inline void scanner__rewind(void) {
     scanner__rgb_leds__rewind();
 }
 
@@ -40,30 +41,37 @@ void scanner__rewind(void) {
 void scanner__thread__run(void) {
     VT_BEGIN(scanner__thread, scanner__thread__ip);
 
-            column3__set(0);
-            column0__set(1);
-            scanner__render_column();
+            if (--scanner__phase) {
+                VT_MARK(scanner__thread, COLUMN0);
 
-            VT_YIELD_WITH_MARK(scanner__thread, scanner__thread__ip, column1);
+                column3__set(0);
+                column0__set(1);
+                scanner__render_column();
 
-            column0__set(0);
-            column1__set(1);
-            scanner__render_column();
+                VT_YIELD_WITH_MARK(scanner__thread, scanner__thread__ip, COLUMN1);
 
-            VT_YIELD_WITH_MARK(scanner__thread, scanner__thread__ip, column2);
+                column0__set(0);
+                column1__set(1);
+                scanner__render_column();
 
-            column1__set(0);
-            column2__set(1);
-            scanner__render_column();
+                VT_YIELD_WITH_MARK(scanner__thread, scanner__thread__ip, COLUMN2);
 
-            VT_YIELD_WITH_MARK(scanner__thread, scanner__thread__ip, column3);
+                column1__set(0);
+                column2__set(1);
+                scanner__render_column();
 
-            column2__set(0);
-            column3__set(1);
-            scanner__render_column();
+                VT_YIELD_WITH_MARK(scanner__thread, scanner__thread__ip, COLUMN3);
 
-            scanner__rewind();
-            VT_GOTO(scanner__thread, scanner__thread__ip, BEGIN);
+                column2__set(0);
+                column3__set(1);
+                scanner__render_column();
+
+                VT_GOTO(scanner__thread, scanner__thread__ip, BEGIN);
+            } else {
+                VT_MARK(scanner__thread, REWIND);
+                scanner__rewind();
+                VT_GOTO(scanner__thread, scanner__thread__ip, COLUMN0);
+            }
 
     VT_UNREACHEABLE_END(scanner__thread);
 }
@@ -80,6 +88,8 @@ void scanner__init(void) {
 
     scanner__thread__init();
     scanner__thread__timer__init();
+
+    scanner__phase = 1;
 }
 
 
