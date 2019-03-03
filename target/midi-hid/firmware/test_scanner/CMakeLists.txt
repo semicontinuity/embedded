@@ -7,10 +7,12 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         ../../bsp/drivers/out/leds_rows.h
         ../../bsp/drivers/out/columns.h
-        ../../bsp/drivers/scanner__thread__timer.h
-        ../../bsp/drivers/scanner__thread__timer.c
-        ../../bsp/services/scanner.h
         ../../bsp/services/scanner.c
+        ../../bsp/services/scanner.h
+        ../../bsp/services/scanner__rgb_leds.h
+        ../../bsp/services/scanner__rgb_leds__buffered.c
+        ../../bsp/drivers/scanner__thread__timer.c
+        ../../bsp/drivers/scanner__thread__timer.h
         main.c
         __all__.c
         )
@@ -52,3 +54,4 @@ add_definitions(-DOUT__BUTTONS_LEDS_ROW__PIN=0)
 
 add_definitions(-Dtimer0__overflow__run=scanner__thread__run)
 add_definitions(-DSCANNER__THREAD__IP__REG=30)
+add_definitions(-DSCANNER__RGB_LEDS__DATA_PTR__REG=28)

@@ -6,6 +6,14 @@
 #include "drivers/out/columns.h"
 #include "drivers/out/leds_rows.h"
 #include "drivers/scanner__thread__timer.h"
+#include "services/scanner__rgb_leds.h"
+
+
+
+void scanner__button_leds__init(void) {
+    buttons__leds_row__init();
+}
+
 
 
 #ifdef SCANNER__THREAD__IP__REG
@@ -14,28 +22,18 @@ register uint8_t *scanner__thread__ip asm(QUOTE(SCANNER__THREAD__IP__REG));
 volatile uint8_t *scanner__thread__ip;
 #endif
 
-
-void scanner__rgb_leds__init(void) {
-    led1b_row__init();
-    led1g_row__init();
-    led1r_row__init();
-
-    led2b_row__init();
-    led2g_row__init();
-    led2r_row__init();
-}
-
-void scanner__button_leds__init(void) {
-    buttons__leds_row__init();
-}
-
-
 void scanner__thread__init(void) {
     VT_INIT(scanner__thread, scanner__thread__ip);
 }
 
 
 void scanner__render_column(void) {
+    scanner__rgb_leds__render_column();
+}
+
+
+void scanner__rewind(void) {
+    scanner__rgb_leds__rewind();
 }
 
 
@@ -64,6 +62,7 @@ void scanner__thread__run(void) {
             column3__set(1);
             scanner__render_column();
 
+            scanner__rewind();
             VT_GOTO(scanner__thread, scanner__thread__ip, BEGIN);
 
     VT_UNREACHEABLE_END(scanner__thread);
