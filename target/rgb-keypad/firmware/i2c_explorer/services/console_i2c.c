@@ -67,30 +67,56 @@ uint8_t console__i2c__run(void) {
         console__println();
 
         return EXIT_SUCCESS;
-    } else if (console__input_buffer[2] == '=' && (console__input_length & 1)) {
+    } else if (console__input_buffer[2] == '=') {
+        if ((console__input_length & 1) == 0) {
+            console__print('$');
+            console__println();
+            return EXIT_FAILURE;
+        }
+
 //        uint8_t *input_ptr = console__input_buffer + 3;
         uint8_t *bytes_ptr = console__i2c__buffer;
-        uint8_t length = 0;
+        uint8_t src_index = 3;
         for (;;) {
 //            if (input_ptr >= console__input_buffer + console__input_length) break;
-            if ((uint8_t) length + 3 >= (uint8_t) console__input_length) break;
+            if ((uint8_t) src_index >= (uint8_t) console__input_length) {
+                console__print('!');
+                console__println();
+                break;
+            }
 
-            uint16_t parsed_byte = parser__parse_hex_byte(/*input_ptr*/console__input_buffer + 3 + (length << 1));
+//            uint8_t* p = &console__input_buffer[src_index];
+            uint8_t c1 = console__input_buffer[src_index++];
+            uint8_t c2 = console__input_buffer[src_index++];
+            console__print(c1);
+            console__print(c2);
+            console__println();
+
+            uint16_t parsed_byte = parser__parse_hex_chars(c1, c2);
             if ((uint8_t) (parsed_byte >> 8)) {
+                console__print('P');
+                console__println();
                 return EXIT_FAILURE;
             }
 
             *bytes_ptr++ = (uint8_t) parsed_byte;
 //            input_ptr += 2;
-            ++length;
         }
 
+        uint8_t length = (uint8_t) (src_index - 3);
+        length = length >> 1;
+        dump(length);
+
         if (i2c_start(address_byte)) {
+            console__print('S');
+            console__println();
             i2c_stop();
             return EXIT_FAILURE;
         }
 
         if (i2c_transmit(address_byte, console__i2c__buffer, length)) {
+            console__print('T');
+            console__println();
             i2c_stop();
             return EXIT_FAILURE;
         }
