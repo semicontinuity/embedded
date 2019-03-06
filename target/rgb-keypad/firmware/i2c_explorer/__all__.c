@@ -3,7 +3,7 @@
 #include "drivers/i2c_master.c"
 
 #include "services/console.c"
-#include "services/console_io.c"
+#include "services/console_i2c.c"
 
 #include "util/formatter.c"
 #include "util/parser.c"

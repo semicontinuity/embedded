@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 #include "services/console.h"
-#include "services/console_io.h"
+#include "services/console_i2c.h"
 
 
 // =============================================================================
@@ -47,7 +47,7 @@ int main(void) {
 #endif
     for(;;) {
         console__read_line();
-        if (console__io__run() == EXIT_FAILURE) {
+        if (console__i2c__run() == EXIT_FAILURE) {
             console__print_error();
             console__println();
         }
