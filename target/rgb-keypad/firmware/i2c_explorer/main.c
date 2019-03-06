@@ -8,7 +8,7 @@
 #include <avr/interrupt.h>
 
 #include "services/console.h"
-
+#include "drivers/i2c_master.h"
 
 // =============================================================================
 // Application
@@ -17,6 +17,7 @@
 void application__init(void) {
     led1__init();
     console__init();
+    i2c_init();
 }
 
 void application__start(void) {

@@ -1,3 +1,4 @@
+#include "drivers/i2c_master.h"
 #include "services/console.h"
 #include "util/parser.h"
 #include "util/formatter.h"
@@ -84,7 +85,7 @@ void console__run(void) {
 
 
     if (console__input_length == 1) {
-        // READ BYTE: 'A', 'B', 'C', 'D'
+        // READ BYTE: 'B', 'C', 'D'
         console__print_byte_as_hex(*r);
         console__println();
     } else if (console__input_length == 2) {

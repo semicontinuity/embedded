@@ -1,5 +1,7 @@
 #include <avr/io.h>
 
+#include "drivers/i2c_master.c"
+
 #include "services/console.c"
 #include "util/formatter.c"
 #include "util/parser.c"

@@ -7,6 +7,8 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         ../../../../cpu/avr/twi.h
         ../../bsp/drivers/out/led1.h
+        drivers/i2c_master.c
+        drivers/i2c_master.h
         services/console.h
         services/console.c
         util/formatter.h
