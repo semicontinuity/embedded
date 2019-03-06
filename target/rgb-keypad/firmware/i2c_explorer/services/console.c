@@ -7,7 +7,6 @@
 #include "cpu/avr/drivers/usart0__tx.h"
 #include "services/tx_ring_buffer.h"
 
-#define CONSOLE__BUFFER_LENGTH 128
 
 uint8_t console__input_buffer[CONSOLE__BUFFER_LENGTH];
 uint16_t console__input_length;

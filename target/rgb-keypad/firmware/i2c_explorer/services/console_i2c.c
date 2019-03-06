@@ -6,12 +6,18 @@
 #include <stdlib.h>
 
 
-#define CONSOLE__I2C__BUFFER_LENGTH 64
+#define CONSOLE__I2C__BUFFER_LENGTH 62
 uint8_t console__i2c__buffer[CONSOLE__I2C__BUFFER_LENGTH];
 
 
 void console__i2c__init(void) {
     i2c_init();
+}
+
+void dump(uint8_t length) {
+    for (uint8_t i = 0; i < length; i++) {
+            console__print_byte_as_hex(console__i2c__buffer[i]);
+        }
 }
 
 /**
@@ -48,33 +54,34 @@ uint8_t console__i2c__run(void) {
             return EXIT_FAILURE;
         }
 
-        if (i2c_receive(address_byte, console__i2c__buffer, length)) {
-            i2c_stop();
-            return EXIT_FAILURE;
+        if (length > 0) {
+            if (i2c_receive(address_byte, console__i2c__buffer, length)) {
+                i2c_stop();
+                return EXIT_FAILURE;
+            }
         }
 
         i2c_stop();
 
-        for (uint8_t i = 0; i < length; i++) {
-            console__print_byte_as_hex(console__i2c__buffer[i]);
-        }
+        dump(length);
         console__println();
 
         return EXIT_SUCCESS;
     } else if (console__input_buffer[2] == '=' && (console__input_length & 1)) {
-        uint8_t *input_ptr = console__input_buffer + 3;
+//        uint8_t *input_ptr = console__input_buffer + 3;
         uint8_t *bytes_ptr = console__i2c__buffer;
         uint8_t length = 0;
         for (;;) {
-            if (input_ptr >= console__input_buffer + console__input_length) break;
+//            if (input_ptr >= console__input_buffer + console__input_length) break;
+            if ((uint8_t) length + 3 >= (uint8_t) console__input_length) break;
 
-            uint16_t parsed_byte = parser__parse_hex_byte(console__input_buffer);
+            uint16_t parsed_byte = parser__parse_hex_byte(/*input_ptr*/console__input_buffer + 3 + (length << 1));
             if ((uint8_t) (parsed_byte >> 8)) {
                 return EXIT_FAILURE;
             }
 
             *bytes_ptr++ = (uint8_t) parsed_byte;
-            input_ptr += 2;
+//            input_ptr += 2;
             ++length;
         }
 
@@ -83,7 +90,7 @@ uint8_t console__i2c__run(void) {
             return EXIT_FAILURE;
         }
 
-        if (i2c_transmit(address_byte, bytes_ptr, length)) {
+        if (i2c_transmit(address_byte, console__i2c__buffer, length)) {
             i2c_stop();
             return EXIT_FAILURE;
         }

@@ -4,7 +4,7 @@
 #include "util/formatter.h"
 
 
-#define CONSOLE__BUFFER_LENGTH 128
+#define CONSOLE__BUFFER_LENGTH 127
 
 extern uint8_t console__input_buffer[CONSOLE__BUFFER_LENGTH];
 extern uint16_t console__input_length;
