@@ -9,6 +9,8 @@ set(SOURCE_FILES
         ../../bsp/drivers/out/led1.h
         drivers/i2c_master.c
         drivers/i2c_master.h
+        services/console_io.h
+        services/console_io.c
         services/console.h
         services/console.c
         util/formatter.h

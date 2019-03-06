@@ -3,12 +3,14 @@
 // =============================================================================
 
 #include "drivers/out/led1.h"
+#include "drivers/i2c_master.h"
 
-#include <util/delay.h>
 #include <avr/interrupt.h>
+#include <stdlib.h>
 
 #include "services/console.h"
-#include "drivers/i2c_master.h"
+#include "services/console_io.h"
+
 
 // =============================================================================
 // Application
@@ -44,7 +46,11 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
-        console__run();
+        console__read_line();
+        if (console__io__run() == EXIT_FAILURE) {
+            console__print_error();
+            console__println();
+        }
     }
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic pop
