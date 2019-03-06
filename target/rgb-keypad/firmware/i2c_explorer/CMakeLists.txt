@@ -7,6 +7,12 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         ../../../../cpu/avr/twi.h
         ../../bsp/drivers/out/led1.h
+        services/console.h
+        services/console.c
+        util/formatter.h
+        util/formatter.c
+        util/parser.h
+        util/parser.c
         main.c
         __all__.c
         )
