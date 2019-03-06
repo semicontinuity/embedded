@@ -6,11 +6,11 @@
 /**
  * Converts a lower nibble of a byte hex character.
  */
-uint8_t formatter__nibble_to_hex_char(const uint8_t value);
+uint8_t formatter__nibble_to_hex_char(uint8_t value);
 
 /**
  * Converts a byte to 2 hex characters.
  */
-uint16_t formatter__byte_to_hex_chars(const uint8_t value);
+uint16_t formatter__byte_to_hex_chars(uint8_t value);
 
 #endif

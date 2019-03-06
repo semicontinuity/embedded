@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-uint16_t parser__parse_hex_byte(const uint8_t* __restrict const str);
+uint16_t parser__parse_hex_byte(const uint8_t* __restrict str);
 
 #endif

@@ -3,7 +3,6 @@
 // =============================================================================
 
 #include "drivers/out/led1.h"
-#include "drivers/i2c_master.h"
 
 #include <avr/interrupt.h>
 #include <stdlib.h>
@@ -19,7 +18,7 @@
 void application__init(void) {
     led1__init();
     console__init();
-    i2c_init();
+    console__i2c__init();
 }
 
 void application__start(void) {

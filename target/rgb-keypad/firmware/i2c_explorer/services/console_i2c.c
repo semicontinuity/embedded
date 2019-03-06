@@ -1,11 +1,18 @@
 #include "services/console_i2c.h"
 #include "services/console.h"
+#include "drivers/i2c_master.h"
 
 #include <util/parser.h>
 #include <stdlib.h>
 
+
 #define CONSOLE__I2C__BUFFER_LENGTH 64
-extern uint8_t console__i2c__buffer[CONSOLE__I2C__BUFFER_LENGTH];
+uint8_t console__i2c__buffer[CONSOLE__I2C__BUFFER_LENGTH];
+
+
+void console__i2c__init(void) {
+    i2c_init();
+}
 
 /**
  * Supported commands:
@@ -35,11 +42,28 @@ uint8_t console__i2c__run(void) {
         }
 
         uint8_t length = (uint8_t) parsed_length_byte;
-        // TODO
+
+        if (i2c_start(address_byte)) {
+            i2c_stop();
+            return EXIT_FAILURE;
+        }
+
+        if (i2c_receive(address_byte, console__i2c__buffer, length)) {
+            i2c_stop();
+            return EXIT_FAILURE;
+        }
+
+        i2c_stop();
+
+        for (uint8_t i = 0; i < length; i++) {
+            console__print_byte_as_hex(console__i2c__buffer[i]);
+        }
+        console__println();
+
         return EXIT_SUCCESS;
     } else if (console__input_buffer[2] == '=' && (console__input_length & 1)) {
         uint8_t *input_ptr = console__input_buffer + 3;
-        uint8_t *bytes_ptr = console__input_buffer + 3;
+        uint8_t *bytes_ptr = console__i2c__buffer;
         uint8_t length = 0;
         for (;;) {
             if (input_ptr >= console__input_buffer + console__input_length) break;
@@ -54,7 +78,20 @@ uint8_t console__i2c__run(void) {
             ++length;
         }
 
-        // TODO
+        if (i2c_start(address_byte)) {
+            i2c_stop();
+            return EXIT_FAILURE;
+        }
+
+        if (i2c_transmit(address_byte, bytes_ptr, length)) {
+            i2c_stop();
+            return EXIT_FAILURE;
+        }
+
+        i2c_stop();
+
+        console__print_ok();
+        console__println();
         return EXIT_SUCCESS;
     }
 
