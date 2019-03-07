@@ -43,6 +43,12 @@ inline void console__print_byte_as_hex(const uint8_t value) {
     console__print((uint8_t)(hex & 0xFF));
 }
 
+inline void console__print_bytes_as_hex(uint8_t *bytes, uint8_t length) {
+    for (uint8_t i = 0; i < length; i++) {
+        console__print_byte_as_hex(bytes[i]);
+    }
+}
+
 inline void console__print_bool_as_0_or_1(const uint8_t value) {
     console__print((const uint8_t) (value == 0 ? '0' : '1'));
 }
