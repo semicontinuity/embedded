@@ -5,6 +5,10 @@
 #include <util/parser.h>
 #include <stdlib.h>
 
+#include "drivers/out/led2.h"
+#include "drivers/out/led3.h"
+#include "drivers/out/led4.h"
+
 
 #define CONSOLE__I2C__BUFFER_LENGTH 62
 uint8_t console__i2c__buffer[CONSOLE__I2C__BUFFER_LENGTH];
@@ -18,24 +22,31 @@ void console__i2c__init(void) {
 uint8_t console__i2c__read(uint8_t address_byte) {
     uint16_t parsed_length_byte = parser__parse_hex_byte(console__input_buffer + 3);
     if ((uint8_t) (parsed_length_byte >> 8)) {
-            return EXIT_FAILURE;
-        }
+        return EXIT_FAILURE;
+    }
 
     uint8_t length = (uint8_t) parsed_length_byte;
 
+    led2__set(1);
     if (i2c_start(address_byte)) {
+        i2c_stop();
+        return EXIT_FAILURE;
+    }
+
+    if (length > 0) {
+        led3__set(1);
+        if (i2c_receive(address_byte, console__i2c__buffer, length)) {
             i2c_stop();
             return EXIT_FAILURE;
         }
+    }
 
-    if (length > 0) {
-            if (i2c_receive(address_byte, console__i2c__buffer, length)) {
-                i2c_stop();
-                return EXIT_FAILURE;
-            }
-        }
-
+    led4__set(1);
     i2c_stop();
+
+    led2__set(0);
+    led3__set(0);
+    led4__set(0);
 
     console__print_bytes_as_hex(console__i2c__buffer, length);
     console__println();
@@ -48,38 +59,42 @@ uint8_t console__i2c__write(uint8_t address_byte) {
     uint8_t *bytes_ptr = console__i2c__buffer;
     uint8_t src_index = 3;
     for (;;) {
-            if ((uint8_t) src_index >= (uint8_t) console__input_length) {
-                console__print('!');
-                console__println();
-                break;
-            }
-
-            uint8_t c1 = console__input_buffer[src_index++];
-            uint8_t c2 = console__input_buffer[src_index++];
-
-            uint16_t parsed_byte = parser__parse_hex_chars(c1, c2);
-            if ((uint8_t) (parsed_byte >> 8)) {
-                return EXIT_FAILURE;
-            }
-
-            *bytes_ptr++ = (uint8_t) parsed_byte;
+        if ((uint8_t) src_index >= (uint8_t) console__input_length) {
+            break;
         }
+
+        uint8_t c1 = console__input_buffer[src_index++];
+        uint8_t c2 = console__input_buffer[src_index++];
+
+        uint16_t parsed_byte = parser__parse_hex_chars(c1, c2);
+        if ((uint8_t) (parsed_byte >> 8)) {
+            return EXIT_FAILURE;
+        }
+
+        *bytes_ptr++ = (uint8_t) parsed_byte;
+    }
 
     uint8_t length = (uint8_t) (src_index - 3);
     length = length >> 1;
-    console__print_bytes_as_hex(console__i2c__buffer, length);
 
+    led2__set(1);
     if (i2c_start(address_byte)) {
-            i2c_stop();
-            return EXIT_FAILURE;
-        }
+        i2c_stop();
+        return EXIT_FAILURE;
+    }
 
+    led2__set(2);
     if (i2c_transmit(address_byte, console__i2c__buffer, length)) {
-            i2c_stop();
-            return EXIT_FAILURE;
-        }
+        i2c_stop();
+        return EXIT_FAILURE;
+    }
 
+    led3__set(1);
     i2c_stop();
+
+    led2__set(0);
+    led3__set(0);
+    led4__set(0);
 
     console__print_ok();
     console__println();

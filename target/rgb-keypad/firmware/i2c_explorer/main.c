@@ -3,9 +3,14 @@
 // =============================================================================
 
 #include "drivers/out/led1.h"
+#include "drivers/out/led2.h"
+#include "drivers/out/led3.h"
+#include "drivers/out/led4.h"
 
 #include <avr/interrupt.h>
 #include <stdlib.h>
+
+#include "util/delay.h"
 
 #include "services/console.h"
 #include "services/console_i2c.h"
@@ -17,6 +22,21 @@
 
 void application__init(void) {
     led1__init();
+    led2__init();
+    led3__init();
+    led4__init();
+
+
+    led1__set(1);
+    led2__set(1);
+    led3__set(1);
+    led4__set(1);
+    _delay_ms(250);
+    led1__set(0);
+    led2__set(0);
+    led3__set(0);
+    led4__set(0);
+
     console__init();
     console__i2c__init();
 }
@@ -35,10 +55,6 @@ int main(void) {
     application__start();
 
     sei();
-//    _delay_ms(500);
-//    console__print('>');
-//    console__println();
-
 
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic push
@@ -46,7 +62,12 @@ int main(void) {
 #endif
     for(;;) {
         console__read_line();
-        if (console__i2c__run() == EXIT_FAILURE) {
+
+        led1__set(1);
+        uint8_t result = console__i2c__run();
+        led1__set(0);
+
+        if (result == EXIT_FAILURE) {
             console__print_error();
             console__println();
         }
