@@ -1,22 +1,23 @@
 #include "comm.h"
 
 #include <avr/interrupt.h>
-#include <cpu/avr/twi.h>
-#include "drivers/comm/twi_slave.h"
+#include "drivers/comm/twi_slave_callbacks.h"
+#include "I2CSlave.h"
+
+
+void I2C_requested(void) {
+    I2C_transmitByte(0xAA);
+}
+
 
 void comm__init(void) {
-    PORTC |= ((1<<PINC4) | (1<<PINC5));
-    TWDR = 0x00;            // Default Initial Value
+    // set received/requested callbacks
+    I2C_setCallbacks(twi__slave__on_data_byte_received, I2C_requested);
+    I2C_setMoreCallbacks(twi__slave__on_data_reception_finished, twi__slave__on_data_reception_aborted);
 
-    twi__slave_address__set(TWI__SLAVE__ADDRESS);
-    twi__slave__thread__init();
+    // init I2C
+    I2C_init(TWI__SLAVE__ADDRESS);
 }
 
 void comm__start(void) {
-    twi__slave__thread__start();
-}
-
-
-ISR(TWI_vect) {
-    twi__slave__thread__run();
 }

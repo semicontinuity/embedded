@@ -5,12 +5,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_FILES
-        ../../../../cpu/avr/twi.h
-        ../../bsp/drivers/comm/twi_slave.c
-        ../../bsp/drivers/comm/twi_slave.h
+        ../../bsp/drivers/comm/twi_slave_callbacks.h
         ../../bsp/drivers/comm/ws2812b.c
         ../../bsp/drivers/comm/ws2812b.h
         ../../bsp/drivers/out/alarm.h
+        I2CSlave.c
+        I2CSlave.h
         comm.c
         comm.h
         main.c

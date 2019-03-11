@@ -4,6 +4,7 @@
 
 
 #include "comm.h"
+#include "drivers/comm/twi_slave_callbacks.h"
 #include "drivers/comm/ws2812b.h"
 #include "drivers/out/alarm.h"
 
