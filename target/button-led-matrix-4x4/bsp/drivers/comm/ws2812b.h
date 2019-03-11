@@ -86,10 +86,12 @@ void ws2812_sendarray_mask(uint8_t *array,uint16_t length, uint8_t pinmask);
  * Internal defines
  */
 
-#define CONCAT(a, b)            a ## b
-#define CONCAT_EXP(a, b)   CONCAT(a, b)
+#ifndef CONCAT
+#define CONCAT2(s1, s2)                 s1##s2
+#define CONCAT(s1, s2)                  CONCAT2(s1, s2)
+#endif
 
-#define ws2812_PORTREG  CONCAT_EXP(PORT,ws2812_port)
-#define ws2812_DDRREG   CONCAT_EXP(DDR,ws2812_port)
+#define ws2812_PORTREG  CONCAT(PORT,ws2812_port)
+#define ws2812_DDRREG   CONCAT(DDR,ws2812_port)
 
 #endif /* LIGHT_WS2812_H_ */
