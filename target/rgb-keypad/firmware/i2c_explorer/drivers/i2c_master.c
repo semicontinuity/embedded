@@ -9,8 +9,14 @@
 
 #define F_SCL 100000UL // SCL frequency
 #define Prescaler 1
-#define TWBR_val ((((F_CPU / F_SCL) / Prescaler) - 16 ) / 2)
+#define TWBR_value(rate) ((((F_CPU / (rate)) / Prescaler) - 16 ) / 2)
+#define TWBR_val TWBR_value(F_SCL)
 
+
+void i2c_set_baud_rate(unsigned long rate) {
+	TWCR = 0;
+	TWBR = (uint8_t) TWBR_value(rate);
+}
 
 void i2c_init(void) {
 	TWCR = 0;
