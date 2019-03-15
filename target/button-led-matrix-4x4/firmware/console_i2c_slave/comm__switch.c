@@ -29,6 +29,7 @@ void twi__slave__on_data_byte_requested(void) {
 
 
 void comm__init(void) {
+    comm__rx__ptr = comm__data;
     // set received/requested callbacks
 //    I2C_setCallbacks(twi__slave__on_data_byte_received, I2C_requested);
 //    I2C_setMoreCallbacks(twi__slave__on_data_reception_finished, twi__slave__on_data_reception_aborted);

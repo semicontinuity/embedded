@@ -3,6 +3,7 @@
 // =============================================================================
 
 #include <cpu/avr/asm.h>
+#include <util/delay.h>
 #include "comm.h"
 #include "drivers/comm/twi_slave_callbacks.h"
 #include "drivers/comm/ws2812b.h"
@@ -31,29 +32,77 @@ inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
 // comm callbacks
 // -----------------------------------------------------------------------------
 
+volatile uint8_t refresh;
 uint8_t *led_ptr;
-uint8_t led[16*3];
+uint8_t leds[16*3];
 
 void twi__slave__on_data_byte_received(const uint8_t value) {
     *led_ptr++ = value;
 }
 
 void twi__slave__on_data_reception_finished(void) {
-    ws2812_sendarray_mask((uint8_t *) led, 16*3, _BV(1));
-    led_ptr = led;
+    refresh = 1;
+    //    ws2812_sendarray_mask((uint8_t *) leds, 16*3, _BV(1));
+//    led_ptr = leds;
 }
 
 void twi__slave__on_data_reception_aborted(void) {
-    led_ptr = led;
+    led_ptr = leds;
 }
 
 
 // application
 // -----------------------------------------------------------------------------
+struct cRGB led[16];
 
 void application__init(void) {
+    refresh = 0;
     comm__init();
-    led_ptr = led;
+    led_ptr = leds;
+
+        _delay_ms(500);
+
+        led[0].r=0x01; led[0].g=0x00; led[0].b=0x00;
+        led[1].r=0x00; led[1].g=0x01; led[1].b=0x00;
+        led[2].r=0x00; led[2].g=0x00; led[2].b=0x01;
+        led[3].r=0x00; led[3].g=0x00; led[3].b=0x00;
+        led[0x04].r=0x02; led[0x04].g=0x00; led[0x04].b=0x00;
+        led[0x05].r=0x00; led[0x05].g=0x02; led[0x05].b=0x00;
+        led[0x06].r=0x00; led[0x06].g=0x00; led[0x06].b=0x02;
+        led[0x07].r=0x00; led[0x07].g=0x00; led[0x07].b=0x00;
+
+        led[0x08].r=0x04; led[0x08].g=0x00; led[0x08].b=0x00;
+        led[0x09].r=0x00; led[0x09].g=0x04; led[0x09].b=0x00;
+        led[0x0a].r=0x00; led[0x0a].g=0x00; led[0x0a].b=0x04;
+        led[0x0b].r=0x00; led[0x0b].g=0x00; led[0x0b].b=0x00;
+        led[0x0c].r=0x06; led[0x0c].g=0x00; led[0x0c].b=0x00;
+        led[0x0d].r=0x00; led[0x0d].g=0x06; led[0x0d].b=0x00;
+        led[0x0e].r=0x00; led[0x0e].g=0x00; led[0x0e].b=0x06;
+        led[0x0f].r=0x00; led[0x0f].g=0x00; led[0x0f].b=0x00;
+
+        ws2812_setleds(led, 16);
+        _delay_ms(500);
+
+        led[0].r=0x01; led[0].g=0x01; led[0].b=0x00;
+        led[1].r=0x00; led[1].g=0x01; led[1].b=0x01;
+        led[2].r=0x01; led[2].g=0x00; led[2].b=0x01;
+        led[3].r=0x01; led[3].g=0x01; led[3].b=0x01;
+        led[0x04].r=0x02; led[0x04].g=0x02; led[0x04].b=0x00;
+        led[0x05].r=0x00; led[0x05].g=0x02; led[0x05].b=0x02;
+        led[0x06].r=0x02; led[0x06].g=0x00; led[0x06].b=0x02;
+        led[0x07].r=0x02; led[0x07].g=0x02; led[0x07].b=0x02;
+
+        led[0x08].r=0x04; led[0x08].g=0x04; led[0x08].b=0x00;
+        led[0x09].r=0x00; led[0x09].g=0x04; led[0x09].b=0x04;
+        led[0x0a].r=0x04; led[0x0a].g=0x00; led[0x0a].b=0x04;
+        led[0x0b].r=0x04; led[0x0b].g=0x04; led[0x0b].b=0x04;
+        led[0x0c].r=0x02; led[0x0c].g=0x00; led[0x0c].b=0x00;
+        led[0x0d].r=0x00; led[0x0d].g=0x02; led[0x0d].b=0x00;
+        led[0x0e].r=0x00; led[0x0e].g=0x00; led[0x0e].b=0x02;
+        led[0x0f].r=0x02; led[0x0f].g=0x02; led[0x0f].b=0x02;
+
+        ws2812_setleds(led, 16);
+        _delay_ms(500);
 }
 
 void application__start(void) {
@@ -75,6 +124,11 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
+        if (refresh) {
+            ws2812_sendarray_mask((uint8_t *) leds, 16*3, _BV(1));
+            led_ptr = leds;
+            refresh = 0;
+        }
     }
 
 #if !defined(__AVR_ARCH__)

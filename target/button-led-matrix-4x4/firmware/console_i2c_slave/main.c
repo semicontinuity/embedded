@@ -20,13 +20,16 @@
 void application__init(void) {
     console__init();
     console__in__init();
+    console__out__init();
     console__i2c_slave__init();
-    comm__init();
 }
 
 void application__start(void) {
     console__start();
     console__in__start();
+    console__out__start();
+
+    comm__init();
     comm__start();
 }
 

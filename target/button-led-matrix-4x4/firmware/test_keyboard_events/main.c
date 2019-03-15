@@ -60,9 +60,9 @@ inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
 void application__init(void) {
     keyboard__pins__init();
 
-    led1__init();
-    led2__init();
-    led3__init();
+//    led1__init();
+//    led2__init();
+//    led3__init();
 
     usart0__init();
 
