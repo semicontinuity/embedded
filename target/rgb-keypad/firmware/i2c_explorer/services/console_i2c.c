@@ -117,8 +117,8 @@ uint8_t console__i2c__detect(void) {
             console__print(' ');
         }
 
-        if (++address == 0x80) break;
         _delay_ms(20);
+        if (address == 0x80) break;
     }
     return EXIT_SUCCESS;
 }
