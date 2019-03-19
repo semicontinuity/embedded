@@ -99,3 +99,5 @@ add_definitions(-DTX_RING_BUFFER__NOT_FULL__IN_BIT_IO_MEM=1)
 
 add_definitions(-DTWI__SLAVE__ADDRESS=0x10)
 
+add_definitions(-DREFRESH__HOST=GPIOR0)
+add_definitions(-DREFRESH__BIT=2)

@@ -7,6 +7,8 @@
 // comm callbacks
 // -----------------------------------------------------------------------------
 
+volatile uint8_t comm__tx__data;
+
 volatile uint8_t *comm__rx__ptr;
 uint8_t comm__data[16*3];
 
@@ -24,7 +26,7 @@ void twi__slave__on_data_reception_aborted(void) {
 }
 
 void twi__slave__on_data_byte_requested(void) {
-    I2C_transmitByte(0xAA);
+    I2C_transmitByte(--comm__tx__data);
 }
 
 

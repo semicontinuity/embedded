@@ -7,8 +7,20 @@
 #include "comm.h"
 #include "drivers/comm/twi_slave_callbacks.h"
 #include "drivers/comm/ws2812b.h"
+#include "drivers/out/alarm.h"
 #include "services/tx_ring_buffer.h"
+#include "keyboard.h"
+#include "I2CSlave.h"
 
+
+
+#if defined(REFRESH__HOST) && defined(REFRESH__BIT)
+#include "util/bitops.h"
+DEFINE_BITVAR(refresh, REFRESH__HOST, REFRESH__BIT);
+#else
+volatile uint8_t refresh;
+DEFINE_BITVAR(refresh, refresh, 0);
+#endif
 
 // keyboard callbacks
 // -----------------------------------------------------------------------------
@@ -23,27 +35,42 @@
  * @param bit index of button's pin in the port
  */
 inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
+    cli();
     if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
         uint8_t code = IF_BIT_SET_CONST_A_ELSE_CONST_B(state, bit, (uint8_t) ('A' + button), (uint8_t) ('a' + button));
         tx_ring_buffer__put(code);
+        alarm__set(1);
     }
+    sei();
 }
 
 // comm callbacks
 // -----------------------------------------------------------------------------
 
-volatile uint8_t refresh;
-uint8_t *led_ptr;
+void twi__slave__on_data_byte_requested(void) {
+    uint8_t value = 0;
+    if (tx_ring_buffer__is_readable()) {
+        value = tx_ring_buffer__get();
+        alarm__set(0);
+    }
+    I2C_transmitByte(value);
+}
+
+void twi__slave__on_data_transmission_finished(void) {
+}
+
+
+volatile uint8_t *led_ptr;
 uint8_t leds[16*3];
+
 
 void twi__slave__on_data_byte_received(const uint8_t value) {
     *led_ptr++ = value;
 }
 
 void twi__slave__on_data_reception_finished(void) {
-    refresh = 1;
-    //    ws2812_sendarray_mask((uint8_t *) leds, 16*3, _BV(1));
-//    led_ptr = leds;
+    refresh__set(1);
+    led_ptr = leds;
 }
 
 void twi__slave__on_data_reception_aborted(void) {
@@ -56,56 +83,125 @@ void twi__slave__on_data_reception_aborted(void) {
 struct cRGB led[16];
 
 void application__init(void) {
-    refresh = 0;
+    alarm__init();
+    keyboard__init();
+
+    refresh__set(0);
     comm__init();
     led_ptr = leds;
+/*
+    _delay_ms(500);
 
-        _delay_ms(500);
+    led[0].r = 0x01;
+    led[0].g = 0x00;
+    led[0].b = 0x00;
+    led[1].r = 0x00;
+    led[1].g = 0x01;
+    led[1].b = 0x00;
+    led[2].r = 0x00;
+    led[2].g = 0x00;
+    led[2].b = 0x01;
+    led[3].r = 0x00;
+    led[3].g = 0x00;
+    led[3].b = 0x00;
+    led[0x04].r = 0x02;
+    led[0x04].g = 0x00;
+    led[0x04].b = 0x00;
+    led[0x05].r = 0x00;
+    led[0x05].g = 0x02;
+    led[0x05].b = 0x00;
+    led[0x06].r = 0x00;
+    led[0x06].g = 0x00;
+    led[0x06].b = 0x02;
+    led[0x07].r = 0x00;
+    led[0x07].g = 0x00;
+    led[0x07].b = 0x00;
 
-        led[0].r=0x01; led[0].g=0x00; led[0].b=0x00;
-        led[1].r=0x00; led[1].g=0x01; led[1].b=0x00;
-        led[2].r=0x00; led[2].g=0x00; led[2].b=0x01;
-        led[3].r=0x00; led[3].g=0x00; led[3].b=0x00;
-        led[0x04].r=0x02; led[0x04].g=0x00; led[0x04].b=0x00;
-        led[0x05].r=0x00; led[0x05].g=0x02; led[0x05].b=0x00;
-        led[0x06].r=0x00; led[0x06].g=0x00; led[0x06].b=0x02;
-        led[0x07].r=0x00; led[0x07].g=0x00; led[0x07].b=0x00;
+    led[0x08].r = 0x04;
+    led[0x08].g = 0x00;
+    led[0x08].b = 0x00;
+    led[0x09].r = 0x00;
+    led[0x09].g = 0x04;
+    led[0x09].b = 0x00;
+    led[0x0a].r = 0x00;
+    led[0x0a].g = 0x00;
+    led[0x0a].b = 0x04;
+    led[0x0b].r = 0x00;
+    led[0x0b].g = 0x00;
+    led[0x0b].b = 0x00;
+    led[0x0c].r = 0x06;
+    led[0x0c].g = 0x00;
+    led[0x0c].b = 0x00;
+    led[0x0d].r = 0x00;
+    led[0x0d].g = 0x06;
+    led[0x0d].b = 0x00;
+    led[0x0e].r = 0x00;
+    led[0x0e].g = 0x00;
+    led[0x0e].b = 0x06;
+    led[0x0f].r = 0x00;
+    led[0x0f].g = 0x00;
+    led[0x0f].b = 0x00;
 
-        led[0x08].r=0x04; led[0x08].g=0x00; led[0x08].b=0x00;
-        led[0x09].r=0x00; led[0x09].g=0x04; led[0x09].b=0x00;
-        led[0x0a].r=0x00; led[0x0a].g=0x00; led[0x0a].b=0x04;
-        led[0x0b].r=0x00; led[0x0b].g=0x00; led[0x0b].b=0x00;
-        led[0x0c].r=0x06; led[0x0c].g=0x00; led[0x0c].b=0x00;
-        led[0x0d].r=0x00; led[0x0d].g=0x06; led[0x0d].b=0x00;
-        led[0x0e].r=0x00; led[0x0e].g=0x00; led[0x0e].b=0x06;
-        led[0x0f].r=0x00; led[0x0f].g=0x00; led[0x0f].b=0x00;
+    ws2812_setleds(led, 16);
+    _delay_ms(500);
 
-        ws2812_setleds(led, 16);
-        _delay_ms(500);
+    led[0].r = 0x01;
+    led[0].g = 0x01;
+    led[0].b = 0x00;
+    led[1].r = 0x00;
+    led[1].g = 0x01;
+    led[1].b = 0x01;
+    led[2].r = 0x01;
+    led[2].g = 0x00;
+    led[2].b = 0x01;
+    led[3].r = 0x01;
+    led[3].g = 0x01;
+    led[3].b = 0x01;
+    led[0x04].r = 0x02;
+    led[0x04].g = 0x02;
+    led[0x04].b = 0x00;
+    led[0x05].r = 0x00;
+    led[0x05].g = 0x02;
+    led[0x05].b = 0x02;
+    led[0x06].r = 0x02;
+    led[0x06].g = 0x00;
+    led[0x06].b = 0x02;
+    led[0x07].r = 0x02;
+    led[0x07].g = 0x02;
+    led[0x07].b = 0x02;
 
-        led[0].r=0x01; led[0].g=0x01; led[0].b=0x00;
-        led[1].r=0x00; led[1].g=0x01; led[1].b=0x01;
-        led[2].r=0x01; led[2].g=0x00; led[2].b=0x01;
-        led[3].r=0x01; led[3].g=0x01; led[3].b=0x01;
-        led[0x04].r=0x02; led[0x04].g=0x02; led[0x04].b=0x00;
-        led[0x05].r=0x00; led[0x05].g=0x02; led[0x05].b=0x02;
-        led[0x06].r=0x02; led[0x06].g=0x00; led[0x06].b=0x02;
-        led[0x07].r=0x02; led[0x07].g=0x02; led[0x07].b=0x02;
+    led[0x08].r = 0x04;
+    led[0x08].g = 0x04;
+    led[0x08].b = 0x00;
+    led[0x09].r = 0x00;
+    led[0x09].g = 0x04;
+    led[0x09].b = 0x04;
+    led[0x0a].r = 0x04;
+    led[0x0a].g = 0x00;
+    led[0x0a].b = 0x04;
+    led[0x0b].r = 0x04;
+    led[0x0b].g = 0x04;
+    led[0x0b].b = 0x04;
+    led[0x0c].r = 0x02;
+    led[0x0c].g = 0x00;
+    led[0x0c].b = 0x00;
+    led[0x0d].r = 0x00;
+    led[0x0d].g = 0x02;
+    led[0x0d].b = 0x00;
+    led[0x0e].r = 0x00;
+    led[0x0e].g = 0x00;
+    led[0x0e].b = 0x02;
+    led[0x0f].r = 0x02;
+    led[0x0f].g = 0x02;
+    led[0x0f].b = 0x02;
 
-        led[0x08].r=0x04; led[0x08].g=0x04; led[0x08].b=0x00;
-        led[0x09].r=0x00; led[0x09].g=0x04; led[0x09].b=0x04;
-        led[0x0a].r=0x04; led[0x0a].g=0x00; led[0x0a].b=0x04;
-        led[0x0b].r=0x04; led[0x0b].g=0x04; led[0x0b].b=0x04;
-        led[0x0c].r=0x02; led[0x0c].g=0x00; led[0x0c].b=0x00;
-        led[0x0d].r=0x00; led[0x0d].g=0x02; led[0x0d].b=0x00;
-        led[0x0e].r=0x00; led[0x0e].g=0x00; led[0x0e].b=0x02;
-        led[0x0f].r=0x02; led[0x0f].g=0x02; led[0x0f].b=0x02;
-
-        ws2812_setleds(led, 16);
-        _delay_ms(500);
+    ws2812_setleds(led, 16);
+    _delay_ms(500);*/
 }
 
+
 void application__start(void) {
+    tx_ring_buffer__start();
     comm__start();
 }
 
@@ -116,6 +212,7 @@ void application__start(void) {
 int main(void) __attribute__ ((naked));
 int main(void) {
     application__init();
+    _delay_us(2);
     application__start();
     sei();
 
@@ -124,11 +221,11 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
-        if (refresh) {
+        if (refresh__is_set()) {
             ws2812_sendarray_mask((uint8_t *) leds, 16*3, _BV(1));
-            led_ptr = leds;
-            refresh = 0;
+            refresh__set(0);
         }
+        keyboard__run();
     }
 
 #if !defined(__AVR_ARCH__)

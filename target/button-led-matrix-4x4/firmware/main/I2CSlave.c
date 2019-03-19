@@ -41,10 +41,17 @@ void I2C_stop(void) {
 }
 
 ISR(TWI_vect) {
+    uint8_t value;
+
+//    console__print_byte_as_hex(TWSR);
     switch (TW_STATUS) {
     case TW_SR_DATA_ACK:
+
         // received data from master, call the receive callback
-        /*I2C_recv*/twi__slave__on_data_byte_received(TWDR);
+        value = TWDR;
+//        console__print(':');
+//        console__print_byte_as_hex(value);
+        twi__slave__on_data_byte_received(value);
 //      TWCR = (1<<TWIE) | (1<<TWINT) | (1<<TWEA) | (1<<TWEN);
         break;
     case TW_ST_SLA_ACK:
@@ -73,4 +80,4 @@ ISR(TWI_vect) {
 //      break;
     }
     TWCR = (1 << TWIE) | (1 << TWINT) | (1 << TWEA) | (1 << TWEN);
-} 
+}
