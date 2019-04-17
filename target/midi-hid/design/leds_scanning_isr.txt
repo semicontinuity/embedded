@@ -1,0 +1,77 @@
+Example code for LEDS scanning ISR:
+
+ijmp
+
+// Colors to be rendered are transformed into BAM program with the size of 32 bytes:
+//
+// 4 bytes: [bits 0 of values for column 0] ... [bits 0 of values for column 3]
+// 4 bytes: [bits 1 of values for column 0] ... [bits 1 of values for column 3]
+// 4 bytes: [bits 2 of values for column 0] ... [bits 2 of values for column 3]
+// 4 bytes: [bits 3 of values for column 0] ... [bits 3 of values for column 3]
+// 4 bytes: [bits 4 of values for column 0] ... [bits 4 of values for column 3]
+// 4 bytes: [bits 5 of values for column 0] ... [bits 5 of values for column 3]
+// 4 bytes: [bits 6 of values for column 0] ... [bits 6 of values for column 3]
+// 4 bytes: [bits 7 of values for column 0] ... [bits 7 of values for column 3]
+
+// Current step of BAM program is loaded to registers r4-r7, 1 byte per column
+
+RENDER_C0:
+
+cbi PORT_FOR_C3, PIN_FOR_C3
+out PORT_FOR_LEDS, r4
+sbi PORT_FOR_C0, PIN_FOR_C0
+ldi r30, lo(RENDER_C1)
+ldi r31, hi(RENDER_C1)
+reti
+
+RENDER_C1:
+
+cbi PORT_FOR_C3, PIN_FOR_C0
+out PORT_FOR_LEDS, r5
+sbi PORT_FOR_C0, PIN_FOR_C1
+ldi r30, lo(RENDER_C2)
+ldi r31, hi(RENDER_C2)
+reti
+
+RENDER_C2:
+
+cbi PORT_FOR_C3, PIN_FOR_C1
+out PORT_FOR_LEDS, r6
+sbi PORT_FOR_C0, PIN_FOR_C2
+ldi r30, lo(RENDER_C3)
+ldi r31, hi(RENDER_C3)
+reti
+
+RENDER_C3:
+
+cbi PORT_FOR_C3, PIN_FOR_C2
+out PORT_FOR_LEDS, r7
+sbi PORT_FOR_C0, PIN_FOR_C3
+ldi r30, lo(NEXT)
+ldi r31, hi(NEXT)
+reti
+
+
+// Perhaps, spend 1 of 5 invocations here, to shorten average time spent, at the expense of brightness
+NEXT:
+cbi PORT_FOR_C3, PIN_FOR_C3
+
+in  r3, SREG // SREG is clobbered, save it
+
+dec counter
+
+could check that reached 0
+compare counter with target // target is 11111110, 11111100, ... 10000000, 00000000
+
+// equals target:
+lsl target // set new target, e.g. 10000000 => 00000000
+// could check that carry flag is 0 => end
+
+// when not reached 0: load next r4..r7 from BAM program
+// when reached 0, start over: rewind BAM instruction pointer; counter = FF, target = FE (?)..
+
+out SREG, r3
+
+ldi r30, lo(RENDER_C0)
+ldi r31, hi(RENDER_C0)
+reti
