@@ -15,6 +15,6 @@ void scanner__rgb_leds__init(void) {
 
 void scanner__rgb_leds__rewind(void);
 
-void scanner__rgb_leds__render_column(uint8_t phase);
+void scanner__rgb_leds__render_column();
 
 #endif

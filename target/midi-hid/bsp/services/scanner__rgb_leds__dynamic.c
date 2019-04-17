@@ -6,6 +6,11 @@
 #include "services/scanner__rgb_leds.h"
 #include "cpu/avr/asm.h"
 
+#ifdef SCANNER__PHASE__REG
+register uint8_t scanner__phase asm(QUOTE(SCANNER__PHASE__REG));
+#else
+extern volatile uint8_t scanner__phase;
+#endif
 
 #ifdef SCANNER__RGB_LEDS__DATA_PTR__REG
 register uint8_t *scanner__rgb_leds__data_ptr asm(QUOTE(SCANNER__RGB_LEDS__DATA_PTR__REG));
@@ -34,34 +39,36 @@ uint8_t scanner__rgb_leds__next_value(void) {
     return b;
 }
 
-inline void scanner__rgb_leds__render_column(uint8_t phase) {
+inline void scanner__rgb_leds__render_column() {
+//    uint8_t phase = scanner__phase;
+
     led1r_row__set(0);
-    if (scanner__rgb_leds__next_value() <= phase) {
+    if (scanner__rgb_leds__next_value() <= scanner__phase) {
         led1r_row__set(1);
     }
 
     led1g_row__set(0);
-    if (scanner__rgb_leds__next_value() <= phase) {
+    if (scanner__rgb_leds__next_value() <= scanner__phase) {
         led1g_row__set(1);
     }
 
     led1b_row__set(0);
-    if (scanner__rgb_leds__next_value() <= phase) {
+    if (scanner__rgb_leds__next_value() <= scanner__phase) {
         led1b_row__set(1);
     }
 
     led2r_row__set(0);
-    if (scanner__rgb_leds__next_value() <= phase) {
+    if (scanner__rgb_leds__next_value() <= scanner__phase) {
         led2r_row__set(1);
     }
 
     led2g_row__set(0);
-    if (scanner__rgb_leds__next_value() <= phase) {
+    if (scanner__rgb_leds__next_value() <= scanner__phase) {
         led2g_row__set(1);
     }
 
     led2b_row__set(0);
-    if (scanner__rgb_leds__next_value() <= phase) {
+    if (scanner__rgb_leds__next_value() <= scanner__phase) {
         led2b_row__set(1);
     }
 }

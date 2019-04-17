@@ -6,10 +6,6 @@
 #include "drivers/scanner__thread__timer.h"
 #include "cpu/avr/timer0.h"
 
-#define SCANNER__THREAD__TIMER__CONF__INITIALIZED       (TIMER0_CONF_DEFAULT)
-#define SCANNER__THREAD__TIMER__TIMER__CONF__STARTED    (TIMER0_CONF_NO_PRESCALER)
-
-
 /**
  * Initialize the timer.
  */

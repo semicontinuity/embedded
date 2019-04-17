@@ -2,6 +2,8 @@
 // Scanner.
 // =============================================================================
 
+#include "services/scanner.h"
+#include <cpu/avr/asm.h>
 #include "cpu/avr/util/vthreads.h"
 #include "drivers/out/columns.h"
 #include "drivers/out/leds_rows.h"
@@ -29,7 +31,7 @@ void scanner__thread__init(void) {
 
 
 inline void scanner__render_column(void) {
-    scanner__rgb_leds__render_column(scanner__phase);
+    scanner__rgb_leds__render_column();
 }
 
 
@@ -40,8 +42,8 @@ inline void scanner__rewind(void) {
 
 void scanner__thread__run(void) {
     VT_BEGIN(scanner__thread, scanner__thread__ip);
-
-            if (--scanner__phase) {
+            uint8_t phase = __DEC(scanner__phase);
+            if (phase) {
                 VT_MARK(scanner__thread, COLUMN0);
 
                 column3__set(0);
