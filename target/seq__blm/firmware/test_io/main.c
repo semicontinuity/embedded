@@ -1,52 +1,65 @@
 // =============================================================================
-// Test I/O.
+// I/O test.
 // =============================================================================
 
-#include <util/delay.h>
-#include "cpu/avr/usart0.h"
-#include "cpu/avr/usart0__tx_polled.h"
-#include "drivers/keyboard__pins.h"
+
+#include <avr/interrupt.h>
+#include <stdlib.h>
+
+#include "util/delay.h"
+
+#include "services/console.h"
+#include "services/console_io.h"
 
 
 // =============================================================================
 // Application
 // =============================================================================
 
-static void application__init(void) {
-    keyboard__pins__init();
-    usart0__init();
-    _delay_ms(200);
+void application__init(void) {
+    console__init();
+    console__io__init();
 }
 
-static void application__start(void) {
-    usart0__tx__enabled__set(1);
+void application__start(void) {
+    console__start();
 }
 
 
-// =============================================================================
-// Entry point.
-// =============================================================================
 
+// main
+// -----------------------------------------------------------------------------
+int main(void) __attribute__ ((naked));
 int main(void) {
     application__init();
     application__start();
 
-    uint8_t previous_pins = (1 << 3);
+    sei();
+
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-noreturn"
+#endif
     for(;;) {
-        uint8_t pins = PINC;
-        uint8_t masked_pins = pins & (1 << 3);
-        if (previous_pins == masked_pins) continue;
+        console__read_line();
 
-        previous_pins = masked_pins;
+        uint8_t result = console__io__run();
 
-        uint8_t c;
-        if (masked_pins & (1 << 3))
-            c = 'I';
-        else
-            c = 'i';
-        usart0__out__write(c);
-//        _delay_ms(200);
+        if (result == EXIT_FAILURE) {
+            console__print_error();
+            console__println();
+        }
     }
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic pop
+#endif
 
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCDFAInspection"
+#endif
     return 0;
+#if !defined(__AVR_ARCH__)
+#pragma clang diagnostic pop
+#endif
 }
