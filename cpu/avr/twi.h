@@ -64,7 +64,7 @@ inline static void twi__slave__start(const bool interrupt) {
     if (interrupt) {
         TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__ENABLED__BIT) | _BV(TWI__INTERRUPT__BIT);
     } else {
-        TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT);
+        TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__BIT);
     }
 }
 
@@ -111,7 +111,7 @@ inline static void twi__data__set(const uint8_t value) {
 
 
 inline static bool twi__interrupt__get(void) {
-    return (bool)bit_is_set(TWI__DATA__REGISTER, TWI__INTERRUPT__BIT);
+    return (bool) bit_is_set(TWI__INTERRUPT__HOST, TWI__INTERRUPT__BIT);
 }
 
 inline static bool twi__is_software_action_required(void) {
@@ -125,15 +125,15 @@ inline static bool twi__is_software_action_required(void) {
 inline static void twi__continue(const bool proceed, const bool transmit_start_when_bus_free) {
     if (transmit_start_when_bus_free) {
         if (proceed) {
-            TWI__CONTROL__REGISTER = _BV(TWI__START_CONDITION__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__BIT);
+            TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__START_CONDITION__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__BIT);
         } else {
-            TWI__CONTROL__REGISTER = _BV(TWI__START_CONDITION__BIT) | _BV(TWI__INTERRUPT__BIT);
+            TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__START_CONDITION__BIT) | _BV(TWI__INTERRUPT__BIT);
         }
     } else {
         if (proceed) {
-            TWI__CONTROL__REGISTER = _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__BIT);
+            TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__BIT);
         } else {
-            TWI__CONTROL__REGISTER = _BV(TWI__INTERRUPT__BIT);
+            TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__INTERRUPT__BIT);
         }
     }
 }

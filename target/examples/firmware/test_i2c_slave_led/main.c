@@ -1,15 +1,20 @@
 // =============================================================================
-// I2C slave test - blinking LED.
+// I2C slave test - blink LED when data byte is received.
 // =============================================================================
 
 #include <cpu/avr/twi.h>
-#include "drivers/twi_slave.h"
+#include "drivers/comm/twi_slave.h"
+#include "drivers/comm/twi_slave_callbacks.h"
 #include "drivers/out/led1.h"
 
 
 void application__init(void) {
     led1__init();
-    twi__slave_address__set(1);
+    // init I2C
+    PORTC |= ((1 << PINC4) | (1 << PINC5));
+    TWDR = 0;
+
+    twi__slave_address__set(0x1F);
     twi__slave__thread__init();
 }
 
