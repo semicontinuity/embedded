@@ -352,7 +352,7 @@ END:                                                                            
 #ifdef VTHREADS__FAST_YIELD
 
 
-#define VT_YIELD_S(thread, ip)                                                              \
+#define VT_YIELD_WITH_MARK_S(thread, ip, mark)                                              \
 do {                                                                                        \
   FC_CONCAT(YIELD, __LINE__):                                                               \
   (void)&&FC_CONCAT(YIELD, __LINE__);                                                       \
@@ -362,8 +362,8 @@ do {                                                                            
     if(vt_flag == 0) {                                                                      \
       void *ip_copy;                                                                        \
       __asm__ __volatile__ (		                                                        \
-        "ldi %A0, pm_lo8(" FC_LABEL(thread, FC_CONCAT(RESUME_, __LINE__)) ")\n\t"	        \
-        "ldi %B0, pm_hi8(" FC_LABEL(thread, FC_CONCAT(RESUME_, __LINE__)) ")\n\t"	        \
+        "ldi %A0, pm_lo8(" FC_LABEL(thread, mark) ")\n\t"	                                \
+        "ldi %B0, pm_hi8(" FC_LABEL(thread, mark) ")\n\t"	                                \
         : "=z"(ip_copy)                                                                     \
       );					                                                                \
       (ip) = ip_copy;                                                                       \
@@ -375,8 +375,8 @@ do {                                                                            
     if (FC_CONCAT(thread,__yield_with_reti != 0)) {                                         \
       void *ip_copy;                                                                        \
       __asm__ __volatile__ (		                                                        \
-        "ldi %A0, pm_lo8(" FC_LABEL(thread, FC_CONCAT(RESUME__, __LINE__)) ")\n\t"	        \
-        "ldi %B0, pm_hi8(" FC_LABEL(thread, FC_CONCAT(RESUME__, __LINE__)) ")\n\t"	        \
+        "ldi %A0, pm_lo8(" FC_LABEL(thread, mark) ")\n\t"	                                \
+        "ldi %B0, pm_hi8(" FC_LABEL(thread, mark) ")\n\t"	                                \
         : "=z"(ip_copy)                                                                     \
       );					                                                                \
       (ip) = ip_copy;                                                                       \
@@ -395,6 +395,8 @@ do {                                                                            
     }                                                                                       \
   }                                                                                         \
 } while(0)
+
+#define VT_YIELD_S(thread, ip) VT_YIELD_WITH_MARK_S(thread, ip, FC_CONCAT(RESUME, __LINE__))
 
 #else
 
@@ -430,5 +432,35 @@ do {                                                                            
 } while(0)
 
 #endif
+
+
+#define VT_Z_YIELD_WITH_MARK_RETI(thread, ip, mark)                                              \
+do {                                                                                        \
+  FC_CONCAT(YIELD, mark):                                                               \
+  (void)&&FC_CONCAT(YIELD, mark);                                                       \
+      __asm__ __volatile__ (		                                                        \
+        "ldi zl, pm_lo8(" FC_LABEL(thread, mark) ")\n\t"	                                \
+        "ldi zh, pm_hi8(" FC_LABEL(thread, mark) ")\n\t"	                                \
+      );					                                                                \
+      FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(DO_YIELD__, mark)));                      \
+      __asm__ __volatile__ ("reti"::);                                                      \
+      FC_ASM_LABEL(FC_LABEL(thread, mark));                        \
+} while(0)
+
+
+#define VT_Z_GOTO_RETI(thread, ip, mark)                                              \
+do {                                                                                        \
+  FC_CONCAT(YIELD, mark):                                                               \
+  (void)&&FC_CONCAT(YIELD, mark);                                                       \
+      __asm__ __volatile__ (		                                                        \
+        "ldi zl, pm_lo8(" FC_LABEL(thread, mark) ")\n\t"	                                \
+        "ldi zh, pm_hi8(" FC_LABEL(thread, mark) ")\n\t"	                                \
+      );					                                                                \
+      FC_ASM_LABEL(FC_LABEL(thread, FC_CONCAT(DO_YIELD__, mark)));                      \
+      __asm__ __volatile__ ("reti"::);                                                      \
+} while(0)
+
+
+#define VT_FAST_YIELD_RETI(thread, ip) VT_FAST_YIELD_WITH_MARK_RETI(thread, ip, FC_CONCAT(RESUME, __LINE__))
 
 #endif
