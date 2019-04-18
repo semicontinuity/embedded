@@ -42,33 +42,72 @@ VT_FUNC(scanner__thread__function, scanner__thread__function_attrs) {
         VT_MARK(scanner__thread, BEGIN);
         VT_MARK(scanner__thread, COLUMN0);
 
+        // -------------------------------------------------------------------------------------------------------------
+
         column3__set(0);
         OUT(OUT__LED_ROWS, data__leds[0]);
         column0__set(1);
 
+        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN0_BLANK);
+        OUT(OUT__LED_ROWS, 0);
+        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN0_BLANK2);
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN1);
 
+        // -------------------------------------------------------------------------------------------------------------
 
         column0__set(0);
         OUT(OUT__LED_ROWS, data__leds[1]);
         column1__set(1);
 
+        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN1_BLANK);
+        OUT(OUT__LED_ROWS, 0);
+        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN1_BLANK2);
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN2);
 
+        // -------------------------------------------------------------------------------------------------------------
 
         column1__set(0);
         OUT(OUT__LED_ROWS, data__leds[2]);
         column2__set(1);
 
+        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN2_BLANK);
+        OUT(OUT__LED_ROWS, 0);
+        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN2_BLANK2);
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN3);
 
+        // -------------------------------------------------------------------------------------------------------------
 
         column2__set(0);
         OUT(OUT__LED_ROWS, data__leds[3]);
         column3__set(1);
 
+        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN3_BLANK);
+        OUT(OUT__LED_ROWS, 0);
+        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN3_BLANK2);
         VT_Z_GOTO_RETI(scanner__thread, scanner__thread__ip, BEGIN);
     }
+}
+
+
+// TWI Slave callbacks
+// -----------------------------------------------------------------------------
+
+uint8_t *data__leds__ptr;
+
+void data__leds__ptr__reset(void) {
+    data__leds__ptr = data__leds;
+}
+
+void twi__slave__on_data_byte_received(const uint8_t value) {
+    *data__leds__ptr++ = value;
+}
+
+void twi__slave__on_data_reception_finished(void) {
+    data__leds__ptr__reset();
+}
+
+void twi__slave__on_data_reception_aborted(void) {
+    data__leds__ptr__reset();
 }
 
 
@@ -76,16 +115,9 @@ VT_FUNC(scanner__thread__function, scanner__thread__function_attrs) {
 // -----------------------------------------------------------------------------
 
 void application__init(void) {
-    data__leds[0] = 0b10010001;
-    data__leds[1] = 0b01001001;
-    data__leds[2] = 0b00100101;
-    data__leds[3] = 0b11111101;
+    data__leds__ptr__reset();
 
-    // init I2C
-    PORTC |= ((1 << PINC4) | (1 << PINC5));
-    TWDR = 0;
-
-    twi__slave_address__set(0x1F);
+    twi__slave_address__set(TWI__SLAVE__ADDRESS);
     twi__slave__thread__init();
 
     led1b_row__init();
@@ -108,19 +140,6 @@ void application__init(void) {
 void application__start(void) {
     twi__slave__thread__start();
     scanner__thread__timer__start();
-}
-
-
-// TWI Slave callbacks
-// -----------------------------------------------------------------------------
-
-void twi__slave__on_data_byte_received(const uint8_t value) {
-}
-
-void twi__slave__on_data_reception_finished(void) {
-}
-
-void twi__slave__on_data_reception_aborted(void) {
 }
 
 
