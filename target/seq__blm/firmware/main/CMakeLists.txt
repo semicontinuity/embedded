@@ -25,7 +25,7 @@ set(SOURCE_FILES
         ../../bsp/drivers/in/button13.h
         ../../bsp/drivers/in/button14.h
         ../../bsp/drivers/in/button15.h
-        ../../bsp/drivers/keyboard__debounce_timer.c
+        ../../bsp/drivers/keyboard__debounce_timer__timer0.c
         ../../bsp/drivers/keyboard__debounce_timer.h
         ../../bsp/drivers/keyboard__pins.h
         keyboard.c
