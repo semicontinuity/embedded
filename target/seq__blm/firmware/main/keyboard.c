@@ -170,7 +170,7 @@ void keyboard__port_a__process_events(uint8_t keyboard__port_a__state, uint8_t c
 
 void keyboard__port_a__check_for_changes_and_process(void) {
     __asm__ __volatile__("keyboard__port_a__process:");
-    uint8_t keyboard__port_a__state = PINA;
+    uint8_t keyboard__port_a__state = keyboard__pins__port_a__read();
     uint8_t changes = keyboard__port_a__mask & ((uint8_t) (keyboard__port_a__previous_state ^ keyboard__port_a__state));
     if (changes) {
         keyboard__port_a__process_events(keyboard__port_a__state, changes);
@@ -230,7 +230,7 @@ void keyboard__port_b__process_events(uint8_t keyboard__port_b__state, uint8_t c
 
 void keyboard__port_b__check_for_changes_and_process(void) {
     __asm__ __volatile__("keyboard__port_b__process:");
-    uint8_t keyboard__port_b__state = PINB;
+    uint8_t keyboard__port_b__state = keyboard__pins__port_b__read();
     uint8_t changes = keyboard__port_b__mask & ((uint8_t) (keyboard__port_b__previous_state ^ keyboard__port_b__state));
     if (changes) {
         keyboard__port_b__process_events(keyboard__port_b__state, changes);
@@ -291,7 +291,7 @@ void keyboard__port_c__process_events(uint8_t keyboard__port_c__state, uint8_t c
 
 void keyboard__port_c__check_for_changes_and_process(void) {
     __asm__ __volatile__("keyboard__port_c__process:");
-    uint8_t keyboard__port_c__state = PINC;
+    uint8_t keyboard__port_c__state = keyboard__pins__port_c__read();
     uint8_t changes = keyboard__port_c__mask & ((uint8_t) (keyboard__port_c__state ^ keyboard__port_c__previous_state));
     if (changes) {
         keyboard__debounce_timer__start();
@@ -352,7 +352,7 @@ void keyboard__port_d__process_events(uint8_t keyboard__port_d__state, uint8_t c
 
 void keyboard__port_d__check_for_changes_and_process(void) {
     __asm__ __volatile__("keyboard__port_d__process:");
-    uint8_t keyboard__port_d__state = PIND;
+    uint8_t keyboard__port_d__state = keyboard__pins__port_d__read();
     uint8_t changes = keyboard__port_d__mask & ((uint8_t) (keyboard__port_d__state ^ keyboard__port_d__previous_state));
     if (changes) {
         keyboard__debounce_timer__start();
