@@ -2,6 +2,7 @@
 
 #include "cpu/avr/timer0.c"
 #include "drivers/keyboard__debounce_timer__timer0.c"
+#include "drivers/keyboard__pins__physical.c"
 #include "services/tx_ring_buffer.c"
 #include "keyboard.c"
 

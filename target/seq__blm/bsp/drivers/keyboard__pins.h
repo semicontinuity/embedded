@@ -19,24 +19,7 @@
 #include "drivers/in/button15.h"
 
 
-void keyboard__pins__init(void) {
-    button0__init();
-    button1__init();
-    button2__init();
-    button3__init();
-    button4__init();
-    button5__init();
-    button6__init();
-    button7__init();
-    button8__init();
-    button9__init();
-    button10__init();
-    button11__init();
-    button12__init();
-    button13__init();
-    button14__init();
-    button15__init();
-}
+void keyboard__pins__init(void);
 
 
 /**

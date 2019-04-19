@@ -25,9 +25,10 @@ set(SOURCE_FILES
         ../../bsp/drivers/in/button13.h
         ../../bsp/drivers/in/button14.h
         ../../bsp/drivers/in/button15.h
-        ../../bsp/drivers/keyboard__debounce_timer__timer0.c
         ../../bsp/drivers/keyboard__debounce_timer.h
+        ../../bsp/drivers/keyboard__debounce_timer__timer0.c
         ../../bsp/drivers/keyboard__pins.h
+        ../../bsp/drivers/keyboard__pins__physical.c
         keyboard.c
         keyboard.h
         I2CSlave.c
@@ -79,6 +80,9 @@ add_definitions(-DIN__BUTTON15__PORT=B)
 add_definitions(-DIN__BUTTON15__PIN=2)
 
 add_definitions(-Dtimer0__overflow__run=keyboard__debounce_timer__expired)
+add_definitions(-DKEYBOARD__PORT_B__USED=1)
+add_definitions(-DKEYBOARD__PORT_C__USED=1)
+add_definitions(-DKEYBOARD__PORT_D__USED=1)
 add_definitions(-DKEYBOARD__PORT_B__PREVIOUS_STATE__REG=11)
 add_definitions(-DKEYBOARD__PORT_C__PREVIOUS_STATE__REG=12)
 add_definitions(-DKEYBOARD__PORT_D__PREVIOUS_STATE__REG=13)
