@@ -1,5 +1,5 @@
-#ifndef KEYBOARD__PINS__STATE__SETTERS_H
-#define KEYBOARD__PINS__STATE__SETTERS_H
+#ifndef KEYBOARD__PINS__LOGICAL_H
+#define KEYBOARD__PINS__LOGICAL_H
 
 #include <stdint.h>
 

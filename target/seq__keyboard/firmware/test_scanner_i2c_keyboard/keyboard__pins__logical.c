@@ -1,5 +1,5 @@
 #include "drivers/keyboard__pins.h"
-#include "keyboard__pins__state__setters.h"
+#include "keyboard__pins__logical.h"
 
 
 void keyboard__pins__init(void) {
