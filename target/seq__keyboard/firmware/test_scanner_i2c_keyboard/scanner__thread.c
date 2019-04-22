@@ -6,6 +6,7 @@
 #include <drivers/out/columns.h>
 #include "scanner__thread.h"
 #include "data.h"
+#include "keyboard__pins__logical.h"
 
 
 #ifdef SCANNER__THREAD__IP__REG
@@ -35,7 +36,7 @@ VT_FUNC(scanner__thread__function, scanner__thread__function_attrs) {
         OUT(OUT__LED_ROWS, data__leds[0]);
 
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN0_READ);
-        data__leds[0] = IN(IN__BUTTONS);
+        keyboard__pins__port_a__state__set(IN(IN__BUTTONS));
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN1);
 
 
@@ -44,7 +45,7 @@ VT_FUNC(scanner__thread__function, scanner__thread__function_attrs) {
         OUT(OUT__LED_ROWS, data__leds[1]);
 
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN1_READ);
-        data__leds[1] = IN(IN__BUTTONS);
+        keyboard__pins__port_b__state__set(IN(IN__BUTTONS));
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN2);
 
 
@@ -53,7 +54,7 @@ VT_FUNC(scanner__thread__function, scanner__thread__function_attrs) {
         OUT(OUT__LED_ROWS, data__leds[2]);
 
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN2_READ);
-        data__leds[2] = IN(IN__BUTTONS);
+        keyboard__pins__port_c__state__set(IN(IN__BUTTONS));
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN3);
 
 
@@ -62,7 +63,7 @@ VT_FUNC(scanner__thread__function, scanner__thread__function_attrs) {
         OUT(OUT__LED_ROWS, data__leds[3]);
 
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN3_READ);
-        data__leds[3] = IN(IN__BUTTONS);
+        keyboard__pins__port_d__state__set(IN(IN__BUTTONS));
         VT_Z_GOTO_RETI(scanner__thread, scanner__thread__ip, BEGIN);
     }
 }

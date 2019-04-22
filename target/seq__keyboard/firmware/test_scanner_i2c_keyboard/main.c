@@ -68,6 +68,9 @@ void twi__slave__on_data_reception_aborted(void) {
 }
 
 
+// application
+// -----------------------------------------------------------------------------
+
 void application__init(void) {
     keyboard__init();
     comm__init();
@@ -93,12 +96,14 @@ void application__init(void) {
 
 void application__start(void) {
     tx_ring_buffer__start();
+    comm__start();
     scanner__thread__timer__start();
 }
 
 
 // main
 // -----------------------------------------------------------------------------
+
 int main(void) __attribute__ ((naked));
 int main(void) {
     application__init();
@@ -110,6 +115,7 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
+        keyboard__run();
     }
 
 #if !defined(__AVR_ARCH__)

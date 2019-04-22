@@ -29,6 +29,8 @@ set(SOURCE_FILES
         ../../bsp/drivers/keyboard__debounce_timer__timer0.c
         ../../bsp/drivers/keyboard__pins.h
         ../../bsp/drivers/keyboard__pins__physical.c
+        ../../bsp/drivers/keyboard__pins__mapping.h
+        ../../bsp/drivers/keyboard__pins__mapping.c
         keyboard.c
         keyboard.h
         I2CSlave.c

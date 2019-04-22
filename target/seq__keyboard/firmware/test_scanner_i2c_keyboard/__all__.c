@@ -6,6 +6,7 @@
 #include "drivers/keyboard__debounce_timer__timer2.c"
 #include "keyboard.c"
 #include "keyboard__pins__logical.c"
+#include "keyboard__pins__mapping.c"
 
 #include "data.c"
 
