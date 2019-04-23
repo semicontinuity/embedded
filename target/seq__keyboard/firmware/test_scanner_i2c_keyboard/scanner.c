@@ -1,10 +1,13 @@
 // Scanner: handles rendering of LED colors and reading of buttons in the I/O matrix
 // ---------------------------------------------------------------------------------------------------------------------
+#include "scanner.h"
 
 #include <stdint.h>
 #include <cpu/avr/util/vthreads.h>
+#include <cpu/avr/asm.h>
+#include <cpu/avr/gpio.h>
 #include <drivers/out/columns.h>
-#include "scanner.h"
+
 #include "data.h"
 
 
@@ -16,12 +19,15 @@
 #ifdef KEYBOARD__PORT_A__STATE__REG
 register volatile uint8_t keyboard__port_a__state asm(QUOTE(KEYBOARD__PORT_A__STATE__REG));
 #else
+
 volatile uint8_t keyboard__port_a__state;
-#endif
 
 void keyboard__pins__port_a__state__set(const uint8_t state) {
     keyboard__port_a__state = state;
 }
+
+#endif
+
 
 uint8_t keyboard__pins__port_a__read(void) {
     return keyboard__port_a__state;
@@ -35,12 +41,15 @@ uint8_t keyboard__pins__port_a__read(void) {
 #ifdef KEYBOARD__PORT_B__STATE__REG
 register volatile uint8_t keyboard__port_b__state asm(QUOTE(KEYBOARD__PORT_B__STATE__REG));
 #else
+
 volatile uint8_t keyboard__port_b__state;
-#endif
 
 void keyboard__pins__port_b__state__set(const uint8_t state) {
     keyboard__port_b__state = state;
 }
+
+#endif
+
 
 uint8_t keyboard__pins__port_b__read(void) {
     return keyboard__port_b__state;
@@ -54,12 +63,15 @@ uint8_t keyboard__pins__port_b__read(void) {
 #ifdef KEYBOARD__PORT_C__STATE__REG
 register volatile uint8_t keyboard__port_c__state asm(QUOTE(KEYBOARD__PORT_C__STATE__REG));
 #else
+
 volatile uint8_t keyboard__port_c__state;
-#endif
 
 void keyboard__pins__port_c__state__set(const uint8_t state) {
     keyboard__port_c__state = state;
 }
+
+#endif
+
 
 uint8_t keyboard__pins__port_c__read(void) {
     return keyboard__port_c__state;
@@ -73,12 +85,15 @@ uint8_t keyboard__pins__port_c__read(void) {
 #ifdef KEYBOARD__PORT_D__STATE__REG
 register volatile uint8_t keyboard__port_d__state asm(QUOTE(KEYBOARD__PORT_D__STATE__REG));
 #else
+
 volatile uint8_t keyboard__port_d__state;
-#endif
 
 void keyboard__pins__port_d__state__set(const uint8_t state) {
     keyboard__port_d__state = state;
 }
+
+#endif
+
 
 uint8_t keyboard__pins__port_d__read(void) {
     return keyboard__port_d__state;
@@ -89,10 +104,10 @@ uint8_t keyboard__pins__port_d__read(void) {
 
 
 void keyboard__pins__init(void) {
-    keyboard__pins__port_a__state__set(0xFF);
-    keyboard__pins__port_b__state__set(0xFF);
-    keyboard__pins__port_c__state__set(0xFF);
-    keyboard__pins__port_d__state__set(0xFF);
+    keyboard__port_a__state = 0xFF;
+    keyboard__port_b__state = 0xFF;
+    keyboard__port_c__state = 0xFF;
+    keyboard__port_d__state = 0xFF;
 }
 
 
@@ -123,7 +138,11 @@ VT_FUNC(scanner__thread__function, scanner__thread__function_attrs) {
         OUT(OUT__LED_ROWS, data__leds[0]);
 
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN0_READ);
-        keyboard__pins__port_a__state__set(IN(IN__BUTTONS));
+#ifdef KEYBOARD__PORT_A__STATE__REG
+        __IN(keyboard__port_a__state, PIN_REG(SIGNAL_PORT(IN__BUTTONS)))
+#else
+        keyboard__port_a__state = IN(IN__BUTTONS);
+#endif
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN1);
 
 
@@ -132,7 +151,11 @@ VT_FUNC(scanner__thread__function, scanner__thread__function_attrs) {
         OUT(OUT__LED_ROWS, data__leds[1]);
 
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN1_READ);
-        keyboard__pins__port_b__state__set(IN(IN__BUTTONS));
+#ifdef KEYBOARD__PORT_B__STATE__REG
+        __IN(keyboard__port_b__state, PIN_REG(SIGNAL_PORT(IN__BUTTONS)))
+#else
+        keyboard__port_b__state = IN(IN__BUTTONS);
+#endif
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN2);
 
 
@@ -141,7 +164,11 @@ VT_FUNC(scanner__thread__function, scanner__thread__function_attrs) {
         OUT(OUT__LED_ROWS, data__leds[2]);
 
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN2_READ);
-        keyboard__pins__port_c__state__set(IN(IN__BUTTONS));
+#ifdef KEYBOARD__PORT_C__STATE__REG
+        __IN(keyboard__port_c__state, PIN_REG(SIGNAL_PORT(IN__BUTTONS)))
+#else
+        keyboard__port_c__state = IN(IN__BUTTONS);
+#endif
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN3);
 
 
@@ -150,7 +177,11 @@ VT_FUNC(scanner__thread__function, scanner__thread__function_attrs) {
         OUT(OUT__LED_ROWS, data__leds[3]);
 
         VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN3_READ);
-        keyboard__pins__port_d__state__set(IN(IN__BUTTONS));
+#ifdef KEYBOARD__PORT_D__STATE__REG
+        __IN(keyboard__port_d__state, PIN_REG(SIGNAL_PORT(IN__BUTTONS)))
+#else
+        keyboard__port_d__state = IN(IN__BUTTONS);
+#endif
         VT_Z_GOTO_RETI(scanner__thread, scanner__thread__ip, BEGIN);
     }
 }
