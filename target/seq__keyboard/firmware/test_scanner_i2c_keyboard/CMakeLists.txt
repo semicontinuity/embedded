@@ -25,7 +25,6 @@ set(SOURCE_FILES
 
         keyboard.h
         keyboard.c
-        keyboard__pins__logical.c
 
         scanner.h
         scanner.c
