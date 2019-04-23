@@ -6,11 +6,11 @@
 // LED data
 #include "data.c"
 
-// Scanner
+// I/O matrix
 #include "cpu/avr/timer0.c"
 #include "drivers/io_matrix__in.c"
-#include "drivers/scanner__thread__timer.c"
-#include "scanner.c"
+#include "drivers/io_matrix__scanner__thread__timer.c"
+#include "io_matrix__scanner__thread.c"
 
 // Keyboard
 #include "cpu/avr/timer2.c"

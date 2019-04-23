@@ -6,31 +6,37 @@ set(CMAKE_C_STANDARD 11)
 
 
 set(SOURCE_FILES
+        ../../../../services/tx_ring_buffer.h
+        ../../../../services/tx_ring_buffer.c
+
         ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/timer0.h
         ../../../../cpu/avr/timer2.c
         ../../../../cpu/avr/timer2.h
-        ../../../../services/tx_ring_buffer.h
-        ../../../../services/tx_ring_buffer.c
+
+        data.h
+        data.c
+
+        ../../bsp/drivers/io_matrix__scanner__thread__timer.h
+        ../../bsp/drivers/io_matrix__scanner__thread__timer.c
         ../../bsp/drivers/io_matrix__in.c
         ../../bsp/drivers/io_matrix__in.h
         ../../bsp/drivers/io_matrix__out_rows.h
         ../../bsp/drivers/io_matrix__out_columns.h
+        io_matrix__scanner__thread.h
+        io_matrix__scanner__thread.c
+
         ../../bsp/drivers/keyboard__debounce_timer.h
         ../../bsp/drivers/keyboard__debounce_timer__timer2.c
         ../../bsp/drivers/keyboard__pins.h
         ../../bsp/drivers/keyboard__pins__matrix.c
         ../../bsp/services/keyboard.h
         ../../bsp/services/keyboard.c
-        I2CSlave.h
-        I2CSlave.c
-        data.h
-        data.c
-        scanner.h
-        scanner.c
 
         comm.h
         comm__switch.c
+        I2CSlave.h
+        I2CSlave.c
         main.c
         __all__.c
         )
@@ -42,15 +48,13 @@ add_definitions(-D__AVR_ATmega48__)
 add_definitions(-DF_CPU=8000000UL)
 
 # I/O matrix scanner
-add_definitions(-DSCANNER__THREAD__IP__REG=30)
-add_definitions(-DSCANNER__PHASE__REG=16)
-add_definitions(-DSCANNER__RGB_LEDS__DATA_PTR__REG=28)
-add_definitions(-Dscanner__thread__function=timer0__overflow__interrupt__VECTOR)
-add_definitions(-Dscanner__thread__function_attrs="\\"__attribute__\(\(signal\)\)ISR_NAKED\\"")
-add_definitions(-Dscanner__thread__function_naked=1)
-add_definitions(-Dscanner__thread__yield_with_reti=1)
-add_definitions(-DSCANNER__THREAD__TIMER__CONF__INITIALIZED=TIMER0_CONF_DEFAULT)
-add_definitions(-DSCANNER__THREAD__TIMER__TIMER__CONF__STARTED=TIMER0_CONF_NO_PRESCALER)
+add_definitions(-DIO_MATRIX__SCANNER__THREAD__IP__REG=30)
+add_definitions(-Dio_matrix__scanner__thread__function=timer0__overflow__interrupt__VECTOR)
+add_definitions(-Dio_matrix__scanner__thread__function_attrs="\\"__attribute__\(\(signal\)\)ISR_NAKED\\"")
+add_definitions(-Dio_matrix__scanner__thread__function_naked=1)
+add_definitions(-Dio_matrix__scanner__thread__yield_with_reti=1)
+add_definitions(-DIO_MATRIX__SCANNER__THREAD__TIMER__CONF__INITIALIZED=TIMER0_CONF_DEFAULT)
+add_definitions(-DIO_MATRIX__SCANNER__THREAD__TIMER__CONF__STARTED=TIMER0_CONF_NO_PRESCALER)
 
 # I/O matrix
 add_definitions(-DIO_MATRIX__IN__PORT=B)

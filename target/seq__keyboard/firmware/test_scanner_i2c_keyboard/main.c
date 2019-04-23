@@ -2,19 +2,21 @@
 // Test I/O matrix scanning, reading keyboard events, and transmitting them via TWI
 // =====================================================================================================================
 #include <cpu/avr/asm.h>
-#include "drivers/io_matrix__in.h"
-#include "drivers/io_matrix__out_rows.h"
-#include "drivers/io_matrix__out_columns.h"
-
-#include "drivers/scanner__thread__timer.h"
 
 #include "data.h"
 
-#include "services/tx_ring_buffer.h"
-#include "I2CSlave.h"
+#include "drivers/io_matrix__scanner__thread__timer.h"
+#include "drivers/io_matrix__in.h"
+#include "drivers/io_matrix__out_rows.h"
+#include "drivers/io_matrix__out_columns.h"
+#include "io_matrix__scanner__thread.h"
+
 #include "services/keyboard.h"
+
+#include "services/tx_ring_buffer.h"
+
+#include "I2CSlave.h"
 #include "comm.h"
-#include "scanner.h"
 
 #include "util/delay.h"
 
@@ -76,14 +78,14 @@ void application__init(void) {
     keyboard__init();
     comm__init();
 
-    scanner__thread__init();
-    scanner__thread__timer__init();
+    io_matrix__scanner__thread__init();
+    io_matrix__scanner__thread__timer__init();
 }
 
 void application__start(void) {
     tx_ring_buffer__start();
     comm__start();
-    scanner__thread__timer__start();
+    io_matrix__scanner__thread__timer__start();
 }
 
 
