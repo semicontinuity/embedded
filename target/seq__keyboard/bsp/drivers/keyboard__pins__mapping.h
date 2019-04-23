@@ -1,8 +1,6 @@
 #ifndef KEYBOARD__PINS__MAPPING_H
 #define KEYBOARD__PINS__MAPPING_H
 
-#include "cpu/avr/gpio.h" //CONCAT
-
 
 /**
  * Provides pin number for the given button (if it pertains to port A)

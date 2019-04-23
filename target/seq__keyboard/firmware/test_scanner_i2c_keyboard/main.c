@@ -12,7 +12,7 @@
 
 #include "services/tx_ring_buffer.h"
 #include "I2CSlave.h"
-#include "drivers/keyboard.h"
+#include "services/keyboard.h"
 #include "comm.h"
 #include "scanner.h"
 

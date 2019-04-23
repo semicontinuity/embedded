@@ -1,9 +1,8 @@
-#include <services/tx_ring_buffer.h>
 #include <cpu/avr/asm.h>
 
 #include "drivers/keyboard__pins.h"
 #include "drivers/keyboard__debounce_timer.h"
-#include "keyboard__pins__mapping.h"
+#include "drivers/keyboard__pins__mapping.h"
 #include "keyboard.h"
 
 
@@ -365,8 +364,6 @@ void keyboard__debounce_timer__run(void) {
 
 
 void keyboard__run(void) {
-    keyboard__pins__init();
-
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
     keyboard__port_a__check_for_changes_and_process();
 #endif

@@ -13,56 +13,11 @@
 #include "drivers/io_matrix__in.h"
 #include "drivers/io_matrix__out_columns.h"
 #include "drivers/io_matrix__out_rows.h"
-#include "drivers/keyboard__pins.h"
 
 #include "data.h"
 
 
-// Logical keyboard ports
-// ---------------------------------------------------------------------------------------------------------------------
-
-#if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
-
-uint8_t keyboard__pins__port_a__read(void) {
-    return io_matrix__in__column0__state__get();
-}
-
-#endif
-
-
-#if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
-
-uint8_t keyboard__pins__port_b__read(void) {
-    return io_matrix__in__column1__state__get();
-}
-
-#endif
-
-
-#if defined(KEYBOARD__PORT_C__USED) && KEYBOARD__PORT_C__USED == 1
-
-uint8_t keyboard__pins__port_c__read(void) {
-    return io_matrix__in__column2__state__get();
-}
-
-#endif
-
-
-#if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
-
-uint8_t keyboard__pins__port_d__read(void) {
-    return io_matrix__in__column3__state__get();
-}
-
-#endif
-
-
-
-void keyboard__pins__init(void) {
-}
-
-
-// Scanner thread
+// I/O matrix scanner thread
 // ---------------------------------------------------------------------------------------------------------------------
 
 

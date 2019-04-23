@@ -3,20 +3,21 @@
 // TX ring buffer first for 256-byte alignment
 #include "services/tx_ring_buffer.c"
 
-// Keyboard
-#include "cpu/avr/timer2.c"
-#include "drivers/keyboard__debounce_timer__timer2.c"
-#include "drivers/keyboard.c"
-#include "drivers/keyboard__pins__mapping.c"
-
 // LED data
 #include "data.c"
 
 // Scanner
+#include "cpu/avr/timer0.c"
 #include "drivers/io_matrix__in.c"
 #include "drivers/scanner__thread__timer.c"
-#include "cpu/avr/timer0.c"
 #include "scanner.c"
+
+// Keyboard
+#include "cpu/avr/timer2.c"
+#include "drivers/keyboard__debounce_timer__timer2.c"
+#include "drivers/keyboard__pins__mapping.c"
+#include "drivers/keyboard__pins__matrix.c"
+#include "services/keyboard.c"
 
 // I2C Comm
 #include "I2CSlave.c"
