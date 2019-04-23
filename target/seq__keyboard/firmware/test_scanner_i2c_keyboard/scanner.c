@@ -1,4 +1,8 @@
-// Scanner: handles rendering of LED colors and reading of buttons in the I/O matrix
+// Scanner: handles rendering of LED colors and reading of buttons in the I/O matrix.
+//
+// Column selection lines can be on any port pin.
+// Input data rows (switches, encoders) must be on the same port.
+// Output data rows (LEDs) must be on the same port (OUT__LED_ROWS).
 // ---------------------------------------------------------------------------------------------------------------------
 #include "scanner.h"
 
@@ -6,7 +10,9 @@
 #include <cpu/avr/util/vthreads.h>
 #include <cpu/avr/asm.h>
 #include <cpu/avr/gpio.h>
-#include <drivers/out/columns.h>
+
+#include "drivers/out/columns.h"
+#include "drivers/keyboard__pins.h"
 
 #include "data.h"
 
@@ -41,13 +47,7 @@ uint8_t keyboard__pins__port_a__read(void) {
 #ifdef KEYBOARD__PORT_B__STATE__REG
 register volatile uint8_t keyboard__port_b__state asm(QUOTE(KEYBOARD__PORT_B__STATE__REG));
 #else
-
 volatile uint8_t keyboard__port_b__state;
-
-void keyboard__pins__port_b__state__set(const uint8_t state) {
-    keyboard__port_b__state = state;
-}
-
 #endif
 
 
@@ -63,13 +63,7 @@ uint8_t keyboard__pins__port_b__read(void) {
 #ifdef KEYBOARD__PORT_C__STATE__REG
 register volatile uint8_t keyboard__port_c__state asm(QUOTE(KEYBOARD__PORT_C__STATE__REG));
 #else
-
 volatile uint8_t keyboard__port_c__state;
-
-void keyboard__pins__port_c__state__set(const uint8_t state) {
-    keyboard__port_c__state = state;
-}
-
 #endif
 
 
@@ -85,13 +79,7 @@ uint8_t keyboard__pins__port_c__read(void) {
 #ifdef KEYBOARD__PORT_D__STATE__REG
 register volatile uint8_t keyboard__port_d__state asm(QUOTE(KEYBOARD__PORT_D__STATE__REG));
 #else
-
 volatile uint8_t keyboard__port_d__state;
-
-void keyboard__pins__port_d__state__set(const uint8_t state) {
-    keyboard__port_d__state = state;
-}
-
 #endif
 
 

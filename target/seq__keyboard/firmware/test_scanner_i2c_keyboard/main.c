@@ -17,7 +17,7 @@
 
 #include "services/tx_ring_buffer.h"
 #include "I2CSlave.h"
-#include "keyboard.h"
+#include "drivers/keyboard.h"
 #include "comm.h"
 #include "scanner.h"
 
