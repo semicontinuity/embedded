@@ -1,9 +1,9 @@
 // =============================================================================
-// Driver for rows with LEDs.
+// Driver for I/O matrix row driver pins.
 // =============================================================================
 
-#ifndef __DRIVERS__OUT__LEDS_ROWS_H
-#define __DRIVERS__OUT__LEDS_ROWS_H
+#ifndef __DRIVERS__IO_MATRIX__OUT_ROWS_H
+#define __DRIVERS__IO_MATRIX__OUT_ROWS_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -91,6 +91,23 @@ inline void buttons__leds_row__set(const uint8_t value) {
         OUT_1(OUT__BUTTONS_LEDS_ROW);
     else
         OUT_0(OUT__BUTTONS_LEDS_ROW);
+}
+
+
+inline void io_matrix__out_rows__set(const uint8_t value) {
+    OUT(IO_MATRIX__OUT__ROWS, value);
+}
+
+inline void io_matrix__out_rows__init(void) {
+    led1b_row__init();
+    led1g_row__init();
+    led1r_row__init();
+
+    led2b_row__init();
+    led2g_row__init();
+    led2r_row__init();
+
+    buttons__leds_row__init();
 }
 
 #endif
