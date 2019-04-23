@@ -106,21 +106,6 @@ inline void keyboard__init_previous_states(void) {
 #endif
 }
 
-void keyboard__init(void) {
-    keyboard__pins__init();
-    keyboard__debounce_timer__init();
-    keyboard__init_previous_states();
-    keyboard__init_masks();
-}
-
-
-/**
- * The callback called when the debounce timer has expired.
- */
-void keyboard__debounce_timer__run(void) {
-    keyboard__init_masks();
-}
-
 
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
 
@@ -361,6 +346,22 @@ void keyboard__port_d__check_for_changes_and_process(void) {
     }
 }
 #endif
+
+
+void keyboard__init(void) {
+    keyboard__pins__init();
+    keyboard__debounce_timer__init();
+    keyboard__init_previous_states();
+    keyboard__init_masks();
+}
+
+
+/**
+ * The callback called when the debounce timer has expired.
+ */
+void keyboard__debounce_timer__run(void) {
+    keyboard__init_masks();
+}
 
 
 void keyboard__run(void) {

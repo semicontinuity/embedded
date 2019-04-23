@@ -13,6 +13,7 @@
 #include "data.c"
 
 // Scanner
+#include "drivers/io_matrix__in.c"
 #include "drivers/scanner__thread__timer.c"
 #include "cpu/avr/timer0.c"
 #include "scanner.c"

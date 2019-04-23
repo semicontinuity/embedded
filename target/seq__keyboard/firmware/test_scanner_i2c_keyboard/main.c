@@ -1,17 +1,12 @@
-// =============================================================================
-// Test scanning
-// =============================================================================
-#include <cpu/avr/gpio.h>
-
-#include <cpu/avr/util/vthreads.h>
+// =====================================================================================================================
+// Test I/O matrix scanning, reading keyboard events, and transmitting them via TWI
+// =====================================================================================================================
 #include <cpu/avr/asm.h>
+#include "drivers/io_matrix__in.h"
+#include "drivers/io_matrix__out_rows.h"
+#include "drivers/io_matrix__out_columns.h"
+
 #include "drivers/scanner__thread__timer.h"
-
-#include "cpu/avr/util/vthreads.h"
-
-#include "drivers/out/columns.h"
-#include "drivers/out/leds_rows.h"
-#include "util/delay.h"
 
 #include "data.h"
 
@@ -20,6 +15,8 @@
 #include "drivers/keyboard.h"
 #include "comm.h"
 #include "scanner.h"
+
+#include "util/delay.h"
 
 
 // keyboard callbacks
@@ -72,23 +69,12 @@ void twi__slave__on_data_reception_aborted(void) {
 // -----------------------------------------------------------------------------
 
 void application__init(void) {
+    io_matrix__out_columns__init();
+    io_matrix__out_rows__init();
+    io_matrix__in__init();
+
     keyboard__init();
     comm__init();
-    OUT(IN__BUTTONS, 0xFF);
-
-
-    led1b_row__init();
-    led1g_row__init();
-    led1r_row__init();
-
-    led2b_row__init();
-    led2g_row__init();
-    led2r_row__init();
-
-    column0__init();
-    column1__init();
-    column2__init();
-    column3__init();
 
     scanner__thread__init();
     scanner__thread__timer__init();
