@@ -3,6 +3,7 @@
 
 #include "drivers/keyboard__pins.h"
 #include "drivers/keyboard__debounce_timer.h"
+#include "keyboard__pins__mapping.h"
 #include "keyboard.h"
 
 
@@ -363,6 +364,8 @@ void keyboard__port_d__check_for_changes_and_process(void) {
 
 
 void keyboard__run(void) {
+    keyboard__pins__init();
+
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
     keyboard__port_a__check_for_changes_and_process();
 #endif

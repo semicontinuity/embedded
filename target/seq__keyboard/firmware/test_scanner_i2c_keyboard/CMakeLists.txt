@@ -14,6 +14,10 @@ set(SOURCE_FILES
         ../../../../services/tx_ring_buffer.c
         ../../bsp/drivers/out/leds_rows.h
         ../../bsp/drivers/out/columns.h
+        ../../bsp/drivers/keyboard__debounce_timer.h
+        ../../bsp/drivers/keyboard__debounce_timer__timer2.c
+        ../../bsp/drivers/keyboard__pins.h
+        ../../bsp/drivers/keyboard__pins.h
         I2CSlave.h
         I2CSlave.c
         data.h

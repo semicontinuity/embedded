@@ -3,6 +3,10 @@
 
 #include <stdint.h>
 
+
+void keyboard__pins__init(void);
+
+
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
 void keyboard__pins__port_a__state__set(uint8_t state);
 #endif

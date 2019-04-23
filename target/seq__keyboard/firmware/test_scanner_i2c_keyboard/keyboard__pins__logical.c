@@ -1,5 +1,6 @@
 #include "drivers/keyboard__pins.h"
 #include "keyboard__pins__logical.h"
+#include "cpu/avr/gpio.h"
 
 
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
