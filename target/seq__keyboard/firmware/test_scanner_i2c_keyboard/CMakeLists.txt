@@ -23,8 +23,8 @@ set(SOURCE_FILES
         keyboard.c
         keyboard__pins__logical.c
 
-        scanner__thread.h
-        scanner__thread.c
+        scanner.h
+        scanner.c
 
         comm.h
         comm__switch.c

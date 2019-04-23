@@ -12,7 +12,7 @@
 
 #include "drivers/scanner__thread__timer.c"
 #include "cpu/avr/timer0.c"
-#include "scanner__thread.c"
+#include "scanner.c"
 
 #include "I2CSlave.c"
 #include "comm__switch.c"

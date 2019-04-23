@@ -1,10 +1,10 @@
-// scanner thread
-// -----------------------------------------------------------------------------
+// Scanner: handles rendering of LED colors and reading of buttons in the I/O matrix
+// ---------------------------------------------------------------------------------------------------------------------
 
 #include <stdint.h>
 #include <cpu/avr/util/vthreads.h>
 #include <drivers/out/columns.h>
-#include "scanner__thread.h"
+#include "scanner.h"
 #include "data.h"
 #include "keyboard__pins__logical.h"
 
@@ -22,10 +22,6 @@ void scanner__thread__init(void) {
 
 
 VT_FUNC(scanner__thread__function, scanner__thread__function_attrs) {
-//void scanner__thread__run(void) {
-
-//    VT_BEGIN(scanner__thread, scanner__thread__ip);
-
     FC_RESUME(scanner__thread__ip);
     {
         VT_MARK(scanner__thread, BEGIN);

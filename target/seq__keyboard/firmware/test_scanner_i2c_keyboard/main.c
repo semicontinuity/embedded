@@ -19,7 +19,7 @@
 #include "I2CSlave.h"
 #include "keyboard.h"
 #include "comm.h"
-#include "scanner__thread.h"
+#include "scanner.h"
 
 
 // keyboard callbacks
