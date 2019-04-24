@@ -6,17 +6,11 @@ set(CMAKE_C_STANDARD 11)
 
 
 set(SOURCE_FILES
-        ../../../../services/tx_ring_buffer.h
-        ../../../../services/tx_ring_buffer.c
-
-        ../../../../cpu/avr/timer0.c
-        ../../../../cpu/avr/timer0.h
-        ../../../../cpu/avr/timer2.c
-        ../../../../cpu/avr/timer2.h
-
         data.h
         data.c
 
+        ../../../../cpu/avr/timer0.c
+        ../../../../cpu/avr/timer0.h
         ../../bsp/drivers/io_matrix__scanner__thread__timer.h
         ../../bsp/drivers/io_matrix__scanner__thread__timer.c
         ../../bsp/drivers/io_matrix__in.c
@@ -26,6 +20,8 @@ set(SOURCE_FILES
         io_matrix__scanner__thread.h
         io_matrix__scanner__thread.c
 
+        ../../../../cpu/avr/timer2.c
+        ../../../../cpu/avr/timer2.h
         ../../bsp/drivers/keyboard__debounce_timer.h
         ../../bsp/drivers/keyboard__debounce_timer__timer2.c
         ../../bsp/drivers/keyboard__pins.h
@@ -74,63 +70,36 @@ add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW2__PIN=4)
 add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW3__PORT=IO_MATRIX__IN__PORT)
 add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW3__PIN=5)
 
-add_definitions(-DIO_MATRIX__OUT__ROWS__PORT=B)
+add_definitions(-DIO_MATRIX__OUT__ROWS__PORT=D)
+add_definitions(-DIO_MATRIX__OUT__LED1R_ROW__PORT=IO_MATRIX__OUT__ROWS__PORT)
+add_definitions(-DIO_MATRIX__OUT__LED1R_ROW__PIN=2)
+add_definitions(-DIO_MATRIX__OUT__LED1G_ROW__PORT=IO_MATRIX__OUT__ROWS__PORT)
+add_definitions(-DIO_MATRIX__OUT__LED1G_ROW__PIN=3)
+add_definitions(-DIO_MATRIX__OUT__LED1B_ROW__PORT=IO_MATRIX__OUT__ROWS__PORT)
+add_definitions(-DIO_MATRIX__OUT__LED1B_ROW__PIN=4)
+add_definitions(-DIO_MATRIX__OUT__LED2R_ROW__PORT=IO_MATRIX__OUT__ROWS__PORT)
+add_definitions(-DIO_MATRIX__OUT__LED2R_ROW__PIN=5)
+add_definitions(-DIO_MATRIX__OUT__LED2G_ROW__PORT=IO_MATRIX__OUT__ROWS__PORT)
+add_definitions(-DIO_MATRIX__OUT__LED2G_ROW__PIN=6)
+add_definitions(-DIO_MATRIX__OUT__LED2B_ROW__PORT=IO_MATRIX__OUT__ROWS__PORT)
+add_definitions(-DIO_MATRIX__OUT__LED2B_ROW__PIN=7)
+add_definitions(-DIO_MATRIX__OUT__BUTTONS_LEDS_ROW__PORT=IO_MATRIX__OUT__ROWS__PORT)
+add_definitions(-DIO_MATRIX__OUT__BUTTONS_LEDS_ROW__PIN=0)
+
 add_definitions(-DIO_MATRIX__OUT__COLUMNS__PORT=C)
+add_definitions(-DIO_MATRIX__OUT__COLUMN0__PORT=IO_MATRIX__OUT__COLUMNS__PORT)
+add_definitions(-DIO_MATRIX__OUT__COLUMN0__PIN=0)
+add_definitions(-DIO_MATRIX__OUT__COLUMN1__PORT=IO_MATRIX__OUT__COLUMNS__PORT)
+add_definitions(-DIO_MATRIX__OUT__COLUMN1__PIN=1)
+add_definitions(-DIO_MATRIX__OUT__COLUMN2__PORT=IO_MATRIX__OUT__COLUMNS__PORT)
+add_definitions(-DIO_MATRIX__OUT__COLUMN2__PIN=2)
+add_definitions(-DIO_MATRIX__OUT__COLUMN3__PORT=IO_MATRIX__OUT__COLUMNS__PORT)
+add_definitions(-DIO_MATRIX__OUT__COLUMN3__PIN=3)
 
 add_definitions(-DIO_MATRIX__IN__COLUMN0__STATE__REG=4)
 add_definitions(-DIO_MATRIX__IN__COLUMN1__STATE__REG=5)
 add_definitions(-DIO_MATRIX__IN__COLUMN2__STATE__REG=6)
 add_definitions(-DIO_MATRIX__IN__COLUMN3__STATE__REG=7)
-
-# I/O matrix
-add_definitions(-DIO_MATRIX__IN__PORT=B)
-add_definitions(-DIO_MATRIX__IN__BUTTONS_ENCODERS_A__PORT=IO_MATRIX__IN__PORT)
-add_definitions(-DIO_MATRIX__IN__BUTTONS_ENCODERS_A__PIN=0)
-add_definitions(-DIO_MATRIX__IN__BUTTONS_ENCODERS_B__PORT=IO_MATRIX__IN__PORT)
-add_definitions(-DIO_MATRIX__IN__BUTTONS_ENCODERS_B__PIN=1)
-add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW0__PORT=IO_MATRIX__IN__PORT)
-add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW0__PIN=2)
-add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW1__PORT=IO_MATRIX__IN__PORT)
-add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW1__PIN=3)
-add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW2__PORT=IO_MATRIX__IN__PORT)
-add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW2__PIN=4)
-add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW3__PORT=IO_MATRIX__IN__PORT)
-add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW3__PIN=5)
-
-add_definitions(-DIO_MATRIX__OUT__ROWS__PORT=B)
-add_definitions(-DIO_MATRIX__OUT__COLUMNS__PORT=C)
-
-# I/O
-add_definitions(-DIN__BUTTONS__PORT=B)
-add_definitions(-DOUT__COLUMNS__PORT=C)
-
-add_definitions(-DOUT__COLUMN0__PORT=OUT__COLUMNS__PORT)
-add_definitions(-DOUT__COLUMN0__PIN=0)
-add_definitions(-DOUT__COLUMN1__PORT=OUT__COLUMNS__PORT)
-add_definitions(-DOUT__COLUMN1__PIN=1)
-add_definitions(-DOUT__COLUMN2__PORT=OUT__COLUMNS__PORT)
-add_definitions(-DOUT__COLUMN2__PIN=2)
-add_definitions(-DOUT__COLUMN3__PORT=OUT__COLUMNS__PORT)
-add_definitions(-DOUT__COLUMN3__PIN=3)
-
-add_definitions(-DOUT__LED_ROWS__PORT=D)
-
-add_definitions(-DOUT__LED1R_ROW__PORT=OUT__LED_ROWS__PORT)
-add_definitions(-DOUT__LED1R_ROW__PIN=2)
-add_definitions(-DOUT__LED1G_ROW__PORT=OUT__LED_ROWS__PORT)
-add_definitions(-DOUT__LED1G_ROW__PIN=3)
-add_definitions(-DOUT__LED1B_ROW__PORT=OUT__LED_ROWS__PORT)
-add_definitions(-DOUT__LED1B_ROW__PIN=4)
-
-add_definitions(-DOUT__LED2R_ROW__PORT=OUT__LED_ROWS__PORT)
-add_definitions(-DOUT__LED2R_ROW__PIN=5)
-add_definitions(-DOUT__LED2G_ROW__PORT=OUT__LED_ROWS__PORT)
-add_definitions(-DOUT__LED2G_ROW__PIN=6)
-add_definitions(-DOUT__LED2B_ROW__PORT=OUT__LED_ROWS__PORT)
-add_definitions(-DOUT__LED2B_ROW__PIN=7)
-
-add_definitions(-DOUT__BUTTONS_LEDS_ROW__PORT=D)
-add_definitions(-DOUT__BUTTONS_LEDS_ROW__PIN=0)
 
 # Keyboard handler
 add_definitions(-Dtimer2__overflow__run=keyboard__debounce_timer__expired)

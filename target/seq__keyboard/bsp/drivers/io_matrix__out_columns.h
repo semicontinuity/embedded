@@ -11,50 +11,50 @@
 
 
 inline void io_matrix__out__column0__init(void) {
-    USE_AS_OUTPUT(OUT__COLUMN0);
+    USE_AS_OUTPUT(IO_MATRIX__OUT__COLUMN0);
 }
 
 inline void io_matrix__out__column0__set(const uint8_t value) {
     if (value)
-        OUT_1(OUT__COLUMN0);
+        OUT_1(IO_MATRIX__OUT__COLUMN0);
     else
-        OUT_0(OUT__COLUMN0);
+        OUT_0(IO_MATRIX__OUT__COLUMN0);
 }
 
 
 inline void io_matrix__out__column1__init(void) {
-    USE_AS_OUTPUT(OUT__COLUMN1);
+    USE_AS_OUTPUT(IO_MATRIX__OUT__COLUMN1);
 }
 
 inline void io_matrix__out__column1__set(const uint8_t value) {
     if (value)
-        OUT_1(OUT__COLUMN1);
+        OUT_1(IO_MATRIX__OUT__COLUMN1);
     else
-        OUT_0(OUT__COLUMN1);
+        OUT_0(IO_MATRIX__OUT__COLUMN1);
 }
 
 
 inline void io_matrix__out__column2__init(void) {
-    USE_AS_OUTPUT(OUT__COLUMN2);
+    USE_AS_OUTPUT(IO_MATRIX__OUT__COLUMN2);
 }
 
 inline void io_matrix__out__column2__set(const uint8_t value) {
     if (value)
-        OUT_1(OUT__COLUMN2);
+        OUT_1(IO_MATRIX__OUT__COLUMN2);
     else
-        OUT_0(OUT__COLUMN2);
+        OUT_0(IO_MATRIX__OUT__COLUMN2);
 }
 
 
 inline void io_matrix__out__column3__init(void) {
-    USE_AS_OUTPUT(OUT__COLUMN3);
+    USE_AS_OUTPUT(IO_MATRIX__OUT__COLUMN3);
 }
 
 inline void io_matrix__out__column3__set(const uint8_t value) {
     if (value)
-        OUT_1(OUT__COLUMN3);
+        OUT_1(IO_MATRIX__OUT__COLUMN3);
     else
-        OUT_0(OUT__COLUMN3);
+        OUT_0(IO_MATRIX__OUT__COLUMN3);
 }
 
 
