@@ -18,8 +18,6 @@
 #include "I2CSlave.h"
 #include "comm.h"
 
-#include "util/delay.h"
-
 
 // keyboard callbacks
 // -----------------------------------------------------------------------------

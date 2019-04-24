@@ -33,6 +33,9 @@ set(SOURCE_FILES
         ../../bsp/services/keyboard.h
         ../../bsp/services/keyboard.c
 
+        ../../../../services/tx_ring_buffer.h
+        ../../../../services/tx_ring_buffer.c
+
         comm.h
         comm__switch.c
         I2CSlave.h
@@ -78,6 +81,24 @@ add_definitions(-DIO_MATRIX__IN__COLUMN0__STATE__REG=4)
 add_definitions(-DIO_MATRIX__IN__COLUMN1__STATE__REG=5)
 add_definitions(-DIO_MATRIX__IN__COLUMN2__STATE__REG=6)
 add_definitions(-DIO_MATRIX__IN__COLUMN3__STATE__REG=7)
+
+# I/O matrix
+add_definitions(-DIO_MATRIX__IN__PORT=B)
+add_definitions(-DIO_MATRIX__IN__BUTTONS_ENCODERS_A__PORT=IO_MATRIX__IN__PORT)
+add_definitions(-DIO_MATRIX__IN__BUTTONS_ENCODERS_A__PIN=0)
+add_definitions(-DIO_MATRIX__IN__BUTTONS_ENCODERS_B__PORT=IO_MATRIX__IN__PORT)
+add_definitions(-DIO_MATRIX__IN__BUTTONS_ENCODERS_B__PIN=1)
+add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW0__PORT=IO_MATRIX__IN__PORT)
+add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW0__PIN=2)
+add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW1__PORT=IO_MATRIX__IN__PORT)
+add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW1__PIN=3)
+add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW2__PORT=IO_MATRIX__IN__PORT)
+add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW2__PIN=4)
+add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW3__PORT=IO_MATRIX__IN__PORT)
+add_definitions(-DIO_MATRIX__IN__BUTTONS_ROW3__PIN=5)
+
+add_definitions(-DIO_MATRIX__OUT__ROWS__PORT=B)
+add_definitions(-DIO_MATRIX__OUT__COLUMNS__PORT=C)
 
 # I/O
 add_definitions(-DIN__BUTTONS__PORT=B)
