@@ -8,8 +8,8 @@
 
 // I/O matrix
 #include "cpu/avr/timer0.c"
+#include "drivers/io_matrix__scanner__thread__timer__timer0.c"
 #include "drivers/io_matrix__in.c"
-#include "drivers/io_matrix__scanner__thread__timer.c"
 #include "io_matrix__scanner__thread.c"
 
 // Keyboard
