@@ -1,18 +1,24 @@
 // =====================================================================================================================
-// Test: continuosly write to USART the value read from I/O matrix input rows, when column 0 is selected
+// Test I/O matrix scanning, transmitting via USART the state of scanned I/O matrix columns
 // =====================================================================================================================
 #include <cpu/avr/asm.h>
 
+#include "data.h"
+
+#include "drivers/io_matrix__scanner__thread__timer.h"
 #include "drivers/io_matrix__in.h"
+#include "drivers/io_matrix__out_rows.h"
 #include "drivers/io_matrix__out_columns.h"
+#include "io_matrix__scanner__thread.h"
 
 #include "util/formatter.h"
-
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/usart0__tx_polled.h"
 #include <util/delay.h>
 
 
+// console
+// -----------------------------------------------------------------------------
 
 void console__print(uint8_t c) {
     usart0__out__write(c);
@@ -29,18 +35,22 @@ inline void console__print_byte_as_hex(const uint8_t value) {
     console__print((uint8_t)(hex & 0xFF));
 }
 
-
 // application
 // -----------------------------------------------------------------------------
 
 void application__init(void) {
     io_matrix__out_columns__init();
+    io_matrix__out_rows__init();
     io_matrix__in__init();
+
+    io_matrix__scanner__thread__init();
+    io_matrix__scanner__thread__timer__init();
 
     usart0__init();
 }
 
 void application__start(void) {
+    io_matrix__scanner__thread__timer__start();
     usart0__tx__enabled__set(1);
 }
 
@@ -53,19 +63,19 @@ int main(void) {
     application__init();
     application__start();
 
-    io_matrix__out__column0__set(1);
-
+    sei();
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
-        io_matrix__in__column0__state__update();
-
         console__print_byte_as_hex(io_matrix__in__column0__state__get());
+        console__print_byte_as_hex(io_matrix__in__column1__state__get());
+        console__print_byte_as_hex(io_matrix__in__column2__state__get());
+        console__print_byte_as_hex(io_matrix__in__column3__state__get());
         console__println();
 
-        _delay_ms(100);
+        _delay_ms(50);
     }
 
 #if !defined(__AVR_ARCH__)
