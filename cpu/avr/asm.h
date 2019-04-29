@@ -20,6 +20,8 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 )
 
 
+#define FIX_REGISTER(r)                 __asm__ __volatile__("" : "=r" (r) : "0" (r));
+
 #define FIX_POINTER(_ptr)               __asm__ __volatile__("" : "=b" (_ptr) : "0" (_ptr))
 #define FIX_POINTER_XYZ(_ptr)           __asm__ __volatile__("" : "=e" (_ptr) : "0" (_ptr))
 #define FIX_POINTER_X(_ptr)             __asm__ __volatile__("" : "=x" (_ptr) : "0" (_ptr))

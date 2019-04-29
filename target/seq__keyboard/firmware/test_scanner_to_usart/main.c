@@ -15,6 +15,7 @@
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/usart0__tx_polled.h"
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
 
 // console
@@ -69,12 +70,16 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
+        __asm__ __volatile__("main__loop__c0:");
         console__print_byte_as_hex(io_matrix__in__column0__state__get());
+        __asm__ __volatile__("main__loop__c1:");
         console__print_byte_as_hex(io_matrix__in__column1__state__get());
+        __asm__ __volatile__("main__loop__c2:");
         console__print_byte_as_hex(io_matrix__in__column2__state__get());
+        __asm__ __volatile__("main__loop__c3:");
         console__print_byte_as_hex(io_matrix__in__column3__state__get());
+        __asm__ __volatile__("main__loop__rest:");
         console__println();
-
         _delay_ms(50);
     }
 
