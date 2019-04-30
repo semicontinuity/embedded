@@ -32,6 +32,8 @@ set(SOURCE_FILES
         ../../../../services/tx_ring_buffer.h
         ../../../../services/tx_ring_buffer.c
 
+        ../../bsp/drivers/out/alarm.h
+
         comm.h
         comm__switch.c
         I2CSlave.h
@@ -155,12 +157,16 @@ add_definitions(-DTX_RING_BUFFER__ALIGNED=1)
 add_definitions(-DTX_RING_BUFFER__SIZE=128)
 add_definitions(-DTX_RING_BUFFER__HEAD__REG=26)
 add_definitions(-DTX_RING_BUFFER__TAIL__REG=28)
-add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__HOST=GPIOR0)
+add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__HOST=PORTD)
 add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__BIT=1)
 add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__IN_BIT_IO_MEM=1)
 add_definitions(-DTX_RING_BUFFER__NOT_FULL__HOST=GPIOR0)
 add_definitions(-DTX_RING_BUFFER__NOT_FULL__BIT=0)
 add_definitions(-DTX_RING_BUFFER__NOT_FULL__IN_BIT_IO_MEM=1)
+
+# I/O
+add_definitions(-DOUT__ALARM__PORT=D)
+add_definitions(-DOUT__ALARM__PIN=1)
 
 # TWI
 add_definitions(-DTWI__SLAVE__ADDRESS=0x20)

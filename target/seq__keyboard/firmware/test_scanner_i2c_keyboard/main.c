@@ -15,6 +15,8 @@
 
 #include "services/tx_ring_buffer.h"
 
+#include "drivers/out/alarm.h"
+
 #include "I2CSlave.h"
 #include "comm.h"
 
@@ -69,6 +71,8 @@ void twi__slave__on_data_reception_aborted(void) {
 // -----------------------------------------------------------------------------
 
 void application__init(void) {
+    alarm__init();
+
     io_matrix__out_columns__init();
     io_matrix__out_rows__init();
     io_matrix__in__init();
