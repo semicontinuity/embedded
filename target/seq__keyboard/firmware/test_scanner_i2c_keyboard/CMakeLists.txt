@@ -12,7 +12,7 @@ set(SOURCE_FILES
         ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/timer0.h
         ../../bsp/drivers/io_matrix__scanner__thread__timer.h
-        ../../bsp/drivers/io_matrix__scanner__thread__timer.c
+        ../../bsp/drivers/io_matrix__scanner__thread__timer__timer0.c
         ../../bsp/drivers/io_matrix__in.c
         ../../bsp/drivers/io_matrix__in.h
         ../../bsp/drivers/io_matrix__out_rows.h
