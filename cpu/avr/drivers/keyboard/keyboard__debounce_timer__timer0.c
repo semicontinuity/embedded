@@ -6,7 +6,7 @@
 // =============================================================================
 
 
-#include "drivers/keyboard__debounce_timer.h"
+#include "cpu/avr/drivers/keyboard/keyboard__debounce_timer.h"
 #include "cpu/avr/timer0.h"
 
 #define SYSTEM_TIMER__CONF__INITIALIZED (TIMER0_CONF_DEFAULT)

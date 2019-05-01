@@ -1,7 +1,7 @@
 // I/O-matrix based keyboard pins
 // ---------------------------------------------------------------------------------------------------------------------
 
-#include "drivers/keyboard__pins.h"
+#include "cpu/avr/drivers/keyboard/keyboard__pins.h"
 #include "drivers/io_matrix__in.h"
 #include <stdint.h>
 

@@ -1,5 +1,4 @@
-#include "keyboard__pins__mapping.h"
-#include "cpu/avr/gpio.h" //CONCAT
+#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.h"
 
 
 /**

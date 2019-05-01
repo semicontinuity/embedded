@@ -22,12 +22,12 @@ set(SOURCE_FILES
 
         ../../../../cpu/avr/timer2.c
         ../../../../cpu/avr/timer2.h
-        ../../bsp/drivers/keyboard__debounce_timer.h
-        ../../bsp/drivers/keyboard__debounce_timer__timer2.c
-        ../../bsp/drivers/keyboard__pins.h
-        ../../bsp/drivers/keyboard__pins__matrix.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer2.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
         ../../../../cpu/avr/services/keyboard/keyboard.h
         ../../../../cpu/avr/services/keyboard/keyboard.c
+        ../../bsp/drivers/keyboard__pins__matrix.c
 
         ../../../../services/tx_ring_buffer.h
         ../../../../services/tx_ring_buffer.c

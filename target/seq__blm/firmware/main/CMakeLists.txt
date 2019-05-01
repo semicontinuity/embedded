@@ -23,12 +23,12 @@ set(SOURCE_FILES
         ../../bsp/drivers/in/button13.h
         ../../bsp/drivers/in/button14.h
         ../../bsp/drivers/in/button15.h
-        ../../bsp/drivers/keyboard__debounce_timer.h
-        ../../bsp/drivers/keyboard__debounce_timer__timer0.c
-        ../../bsp/drivers/keyboard__pins.h
         ../../bsp/drivers/keyboard__pins__physical.c
-        ../../bsp/drivers/keyboard__pins__mapping.h
-        ../../bsp/drivers/keyboard__pins__mapping.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer0.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.c
         ../../../../cpu/avr/services/keyboard/keyboard.c
         ../../../../cpu/avr/services/keyboard/keyboard.h
 

@@ -1,4 +1,4 @@
-#include "drivers/keyboard__pins.h"
+#include "cpu/avr/drivers/keyboard/keyboard__pins.h"
 
 #include "drivers/in/button0.h"
 #include "drivers/in/button1.h"

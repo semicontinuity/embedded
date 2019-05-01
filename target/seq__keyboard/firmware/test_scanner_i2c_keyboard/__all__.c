@@ -14,9 +14,9 @@
 
 // Keyboard
 #include "cpu/avr/timer2.c"
-#include "drivers/keyboard__debounce_timer__timer2.c"
-#include "drivers/keyboard__pins__mapping.c"
 #include "drivers/keyboard__pins__matrix.c"
+#include "cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer2.c"
+#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.c"
 #include "cpu/avr/services/keyboard/keyboard.c"
 
 // I2C Comm
