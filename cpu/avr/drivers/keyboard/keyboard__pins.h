@@ -1,7 +1,7 @@
 #ifndef KEYBOARD__PINS_H
 #define KEYBOARD__PINS_H
 
-#include "cpu/avr/gpio.h" //CONCAT
+#include "cpu/avr/macros.h"
 
 
 void keyboard__pins__init(void);
