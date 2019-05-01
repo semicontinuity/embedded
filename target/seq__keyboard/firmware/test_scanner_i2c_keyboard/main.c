@@ -11,7 +11,7 @@
 #include "drivers/io_matrix__out_columns.h"
 #include "io_matrix__scanner__thread.h"
 
-#include "services/keyboard.h"
+#include "cpu/avr/services/keyboard/keyboard.h"
 
 #include "services/tx_ring_buffer.h"
 

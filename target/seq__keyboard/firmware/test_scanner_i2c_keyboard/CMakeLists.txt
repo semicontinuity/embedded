@@ -26,8 +26,8 @@ set(SOURCE_FILES
         ../../bsp/drivers/keyboard__debounce_timer__timer2.c
         ../../bsp/drivers/keyboard__pins.h
         ../../bsp/drivers/keyboard__pins__matrix.c
-        ../../bsp/services/keyboard.h
-        ../../bsp/services/keyboard.c
+        ../../../../cpu/avr/services/keyboard/keyboard.h
+        ../../../../cpu/avr/services/keyboard/keyboard.c
 
         ../../../../services/tx_ring_buffer.h
         ../../../../services/tx_ring_buffer.c

@@ -3,15 +3,17 @@
 // =============================================================================
 
 #include <cpu/avr/asm.h>
-#include <util/delay.h>
+#include "cpu/avr/services/keyboard/keyboard.h"
+#include "services/tx_ring_buffer.h"
+
 #include "comm.h"
+#include "I2CSlave.h"
 #include "drivers/comm/twi_slave_callbacks.h"
+
 #include "drivers/comm/ws2812b.h"
 #include "drivers/out/alarm.h"
-#include "services/tx_ring_buffer.h"
-#include "keyboard.h"
-#include "I2CSlave.h"
 
+#include <util/delay.h>
 
 
 #if defined(REFRESH__HOST) && defined(REFRESH__BIT)

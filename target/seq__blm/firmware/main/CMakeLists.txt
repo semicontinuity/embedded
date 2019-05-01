@@ -7,8 +7,6 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/timer0.h
-        ../../../../services/tx_ring_buffer.h
-        ../../../../services/tx_ring_buffer.c
         ../../bsp/drivers/in/button0.h
         ../../bsp/drivers/in/button1.h
         ../../bsp/drivers/in/button2.h
@@ -31,12 +29,17 @@ set(SOURCE_FILES
         ../../bsp/drivers/keyboard__pins__physical.c
         ../../bsp/drivers/keyboard__pins__mapping.h
         ../../bsp/drivers/keyboard__pins__mapping.c
-        keyboard.c
-        keyboard.h
+        ../../../../cpu/avr/services/keyboard/keyboard.c
+        ../../../../cpu/avr/services/keyboard/keyboard.h
+
+        ../../../../services/tx_ring_buffer.h
+        ../../../../services/tx_ring_buffer.c
+
         I2CSlave.c
         I2CSlave.h
         comm__switch.c
         comm.h
+
         main.c
         __all__.c
         )
