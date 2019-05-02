@@ -75,7 +75,7 @@ volatile uint8_t keyboard__port_d__mask;
 #endif
 
 
-inline void keyboard__init_masks(void) {
+inline void keyboard__reset_masks(void) {
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
     keyboard__port_a__mask = keyboard__pins__port_a__button_pins_mask();
 #endif
@@ -88,6 +88,10 @@ inline void keyboard__init_masks(void) {
 #if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
     keyboard__port_d__mask = keyboard__pins__port_d__button_pins_mask();
 #endif
+}
+
+inline void keyboard__init_masks(void) {
+    keyboard__reset_masks();
 }
 
 
@@ -392,7 +396,7 @@ void keyboard__init(void) {
  * The callback called when the debounce timer has expired.
  */
 void keyboard__debounce_timer__run(void) {
-    keyboard__init_masks();
+    keyboard__reset_masks();
 }
 
 

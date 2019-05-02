@@ -20,6 +20,13 @@
 
 
 
+// Generic "Overflow" callback.
+#ifdef timer2__overflow__run
+INLINE void timer2__overflow__run(void);
+#endif
+
+
+
 #ifdef timer2__comp_a__run
 
 #ifndef timer2__comp_a__run__attrs

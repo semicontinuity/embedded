@@ -47,6 +47,7 @@ add_executable(test_scanner_i2c_keyboard ${SOURCE_FILES})
 
 add_definitions(-D__AVR_ATmega48__)
 add_definitions(-DF_CPU=8000000UL)
+add_definitions(-DINLINE=)
 
 # I/O matrix scanner
 add_definitions(-DIO_MATRIX__SCANNER__THREAD__IP__REG=30)
