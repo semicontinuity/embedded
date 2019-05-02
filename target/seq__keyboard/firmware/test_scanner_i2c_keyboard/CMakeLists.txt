@@ -106,6 +106,7 @@ add_definitions(-DIO_MATRIX__IN__COLUMN3__STATE__REG=7)
 
 # Keyboard handler
 add_definitions(-Dtimer2__overflow__run=keyboard__debounce_timer__expired)
+add_definitions(-DTIMER2_OVERFLOW_vect_naked)
 add_definitions(-DKEYBOARD__PORT_A__USED=1)
 add_definitions(-DKEYBOARD__PORT_B__USED=1)
 add_definitions(-DKEYBOARD__PORT_C__USED=1)
@@ -118,6 +119,7 @@ add_definitions(-DKEYBOARD__PORT_A__MASK__REG=12)
 add_definitions(-DKEYBOARD__PORT_B__MASK__REG=13)
 add_definitions(-DKEYBOARD__PORT_C__MASK__REG=14)
 add_definitions(-DKEYBOARD__PORT_D__MASK__REG=15)
+add_definitions(-DKEYBOARD__COMMON_MASK__REG=3)
 
 # Keyboard pins (on logical ports)
 add_definitions(-DIN__BUTTON0__PORT=A)

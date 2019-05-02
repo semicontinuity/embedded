@@ -75,7 +75,29 @@ volatile uint8_t keyboard__port_d__mask;
 #endif
 
 
+#ifdef KEYBOARD__COMMON_MASK__REG
+register volatile uint8_t keyboard__common_mask asm(QUOTE(KEYBOARD__COMMON_MASK__REG));
+#endif
+
+
 inline void keyboard__reset_masks(void) {
+#ifdef KEYBOARD__COMMON_MASK__REG
+
+#if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
+    keyboard__port_a__mask = keyboard__common_mask;
+#endif
+#if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
+    keyboard__port_b__mask = keyboard__common_mask;
+#endif
+#if defined(KEYBOARD__PORT_C__USED) && KEYBOARD__PORT_C__USED == 1
+    keyboard__port_c__mask = keyboard__common_mask;
+#endif
+#if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
+    keyboard__port_d__mask = keyboard__common_mask;
+#endif
+
+#else
+
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
     keyboard__port_a__mask = keyboard__pins__port_a__button_pins_mask();
 #endif
@@ -88,9 +110,30 @@ inline void keyboard__reset_masks(void) {
 #if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
     keyboard__port_d__mask = keyboard__pins__port_d__button_pins_mask();
 #endif
+
+#endif
 }
 
 inline void keyboard__init_masks(void) {
+#ifdef KEYBOARD__COMMON_MASK__REG
+    uint8_t common_mask = 0;
+
+#if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
+    common_mask |= keyboard__pins__port_a__button_pins_mask();
+#endif
+#if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
+    common_mask |= keyboard__pins__port_b__button_pins_mask();
+#endif
+#if defined(KEYBOARD__PORT_C__USED) && KEYBOARD__PORT_C__USED == 1
+    common_mask |= keyboard__pins__port_c__button_pins_mask();
+#endif
+#if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
+    common_mask |= keyboard__pins__port_d__button_pins_mask();
+#endif
+
+    keyboard__common_mask = common_mask;
+#endif
+
     keyboard__reset_masks();
 }
 
