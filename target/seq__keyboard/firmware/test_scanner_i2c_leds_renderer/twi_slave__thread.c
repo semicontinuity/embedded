@@ -1,6 +1,6 @@
 #include "cpu/avr/twi.h"
 #include "cpu/avr/util/vthreads.h"
-#include "twi_slave.h"
+#include "twi_slave__thread.h"
 #include "twi_slave_callbacks.h"
 
 

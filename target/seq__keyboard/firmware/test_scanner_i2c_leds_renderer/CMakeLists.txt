@@ -15,7 +15,8 @@ set(SOURCE_FILES
         io_matrix__scanner__thread.h
         io_matrix__scanner__thread.c
 
-        twi_slave__polled.c
+        twi_slave__thread.h
+        twi_slave__thread.c
         data.c
         main.c
         __all__.c

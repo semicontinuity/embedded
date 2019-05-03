@@ -14,8 +14,8 @@
 #include <drivers/io_matrix__out_rows.h>
 #include <drivers/io_matrix__in.h>
 #include <drivers/io_matrix__scanner__thread__timer.h>
-#include "twi_slave.h"
 #include "twi_slave_callbacks.h"
+#include "twi_slave__thread.h"
 #include "io_matrix__scanner__thread.h"
 
 // TWI Slave callbacks
