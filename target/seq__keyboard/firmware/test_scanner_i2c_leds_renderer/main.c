@@ -14,9 +14,10 @@
 #include <drivers/io_matrix__out_rows.h>
 #include <drivers/io_matrix__in.h>
 #include <drivers/io_matrix__scanner__thread__timer.h>
-#include "twi_slave_callbacks.h"
-#include "twi_slave__thread.h"
 #include "io_matrix__scanner__thread.h"
+
+#include "twi_slave_callbacks.h"
+#include "twi_slave__handler.h"
 
 // TWI Slave callbacks
 // -----------------------------------------------------------------------------
@@ -27,16 +28,17 @@ void data__leds__ptr__reset(void) {
     data__leds__ptr = data__leds;
 }
 
+void twi__slave__on_data_reception_started(void) {
+    data__leds__ptr__reset();
+}
+
 void twi__slave__on_data_byte_received(const uint8_t value) {
     *data__leds__ptr++ = value;
 }
 
-void twi__slave__on_data_reception_finished(void) {
-    data__leds__ptr__reset();
-}
-
-void twi__slave__on_data_reception_aborted(void) {
-    data__leds__ptr__reset();
+void twi__slave__on_data_byte_requested(void) {
+    twi__data__set(0x55);
+    twi__continue(false, false);
 }
 
 
@@ -47,18 +49,15 @@ void application__init(void) {
     data__leds__ptr__reset();
 
     twi__slave_address__set(TWI__SLAVE__ADDRESS);
-    twi__slave__thread__init();
 
     io_matrix__out_columns__init();
     io_matrix__out_rows__init();
 
     io_matrix__scanner__thread__init();
     io_matrix__scanner__thread__timer__init();
-
 }
 
 void application__start(void) {
-    twi__slave__thread__start();
     io_matrix__scanner__thread__timer__start();
 }
 
@@ -77,8 +76,8 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
-        if (twi__slave__thread__is_runnable()) {
-            twi__slave__thread__run();
+        if (twi__slave__handler__is_runnable()) {
+            twi__slave__handler__run();
         }
     }
 

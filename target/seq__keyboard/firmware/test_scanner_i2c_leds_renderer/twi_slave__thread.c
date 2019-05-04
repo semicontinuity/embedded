@@ -45,11 +45,11 @@ void twi__slave__thread__run(void) {
                 VT_REWIND(twi__slave__thread, twi__slave__thread__ip);  // repeat: perhaps, receive more bytes
             }
 
-            if (status2 == TWI__STATUS__SLAVE_STOP_OR_REPEATED_START) {
-                twi__slave__on_data_reception_finished();
-            } else {
-                twi__slave__on_data_reception_aborted();
-            }
+//            if (status2 == TWI__STATUS__SLAVE_STOP_OR_REPEATED_START) {
+//                twi__slave__on_data_reception_finished();
+//            } else {
+//                twi__slave__on_data_reception_aborted();
+//            }
 
             VT_GOTO(twi__slave__thread, twi__slave__thread__ip, BEGIN);
 

@@ -38,36 +38,36 @@ VT_FUNC(io_matrix__scanner__thread__function, io_matrix__scanner__thread__functi
         io_matrix__out__column3__set(0);
         io_matrix__out__column0__set(1);
         io_matrix__out_rows__set(data__leds[0]);
-        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN0_BLANK);
+        VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, COLUMN0_BLANK);
         io_matrix__out_rows__set(0);
-        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN0_BLANK2);
+        VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, COLUMN0_BLANK2);
         VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, COLUMN1);
 
 
         io_matrix__out__column0__set(0);
         io_matrix__out__column1__set(1);
         io_matrix__out_rows__set(data__leds[1]);
-        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN1_BLANK);
+        VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, COLUMN1_BLANK);
         io_matrix__out_rows__set(0);
-        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN1_BLANK2);
+        VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, COLUMN1_BLANK2);
         VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, COLUMN2);
 
 
         io_matrix__out__column1__set(0);
         io_matrix__out__column2__set(1);
         io_matrix__out_rows__set(data__leds[2]);
-        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN2_BLANK);
+        VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, COLUMN2_BLANK);
         io_matrix__out_rows__set(0);
-        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN2_BLANK2);
+        VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, COLUMN2_BLANK2);
         VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, COLUMN3);
 
 
         io_matrix__out__column2__set(0);
         io_matrix__out__column3__set(1);
         io_matrix__out_rows__set(data__leds[3]);
-        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN3_BLANK);
+        VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, COLUMN3_BLANK);
         io_matrix__out_rows__set(0);
-        VT_Z_YIELD_WITH_MARK_RETI(scanner__thread, scanner__thread__ip, COLUMN3_BLANK2);
+        VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, COLUMN3_BLANK2);
         VT_Z_GOTO_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, BEGIN);
     }
 }

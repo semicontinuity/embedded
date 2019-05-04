@@ -119,7 +119,7 @@ inline static bool twi__is_software_action_required(void) {
 }
 
 /**
- * Instructs TWI unit to continue (by writing 1 to TWI__INTERRUPT__BIT)
+ * Instructs TWI unit to continue (by writing 1 to TWI__INTERRUPT__BIT).
  * @param proceed acknowledge (or expect acknowledgement) of the next data byte; respond to slave address
  */
 inline static void twi__continue(const bool proceed, const bool transmit_start_when_bus_free) {
@@ -135,6 +135,19 @@ inline static void twi__continue(const bool proceed, const bool transmit_start_w
         } else {
             TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__INTERRUPT__BIT);
         }
+    }
+}
+
+
+/**
+ * Instructs TWI unit to recover form bus error, as described in data sheet.
+ * @param acknowledge described as "does not matter", but can be specified.
+ */
+inline static void twi__recover_from_bus_error(const bool acknowledge) {
+    if (acknowledge) {
+        TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__STOP_CONDITION__BIT) | _BV(TWI__INTERRUPT__BIT);
+    } else {
+        TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__STOP_CONDITION__BIT) | _BV(TWI__INTERRUPT__BIT);
     }
 }
 

@@ -15,8 +15,10 @@ set(SOURCE_FILES
         io_matrix__scanner__thread.h
         io_matrix__scanner__thread.c
 
-        twi_slave__thread.h
-        twi_slave__thread.c
+        ../../../../cpu/avr/twi.h
+        twi_slave__handler.h
+        twi_slave__handler.c
+        
         data.c
         main.c
         __all__.c
