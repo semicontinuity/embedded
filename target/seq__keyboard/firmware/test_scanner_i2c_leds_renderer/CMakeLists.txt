@@ -30,6 +30,9 @@ add_executable(test_scanner_i2c_leds_renderer ${SOURCE_FILES})
 add_definitions(-D__AVR_ATmega48__)
 add_definitions(-DF_CPU=8000000UL)
 
+# Data
+add_definitions(-DDATA__LEDS__INDEX__REG=2)
+
 # I/O matrix scanner
 add_definitions(-DIO_MATRIX__SCANNER__THREAD__IP__REG=30)
 add_definitions(-Dio_matrix__scanner__thread__function=timer0__overflow__interrupt__VECTOR)
@@ -66,5 +69,4 @@ add_definitions(-DIO_MATRIX__OUT__COLUMN2__PIN=2)
 add_definitions(-DIO_MATRIX__OUT__COLUMN3__PORT=IO_MATRIX__OUT__COLUMNS__PORT)
 add_definitions(-DIO_MATRIX__OUT__COLUMN3__PIN=3)
 
-add_definitions(-DTWI__SLAVE__THREAD__IP__REG=28)
 add_definitions(-DTWI__SLAVE__ADDRESS=0x20)

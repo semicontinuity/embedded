@@ -5,7 +5,6 @@
 // =============================================================================
 
 #include <avr/interrupt.h>
-#include "cpu/avr/util/vthreads.h"
 #include "util/delay.h"
 #include "data.h"
 
@@ -22,21 +21,19 @@
 // TWI Slave callbacks
 // -----------------------------------------------------------------------------
 
-uint8_t *data__leds__ptr;
-
-void data__leds__ptr__reset(void) {
-    data__leds__ptr = data__leds;
-}
 
 void twi__slave__on_data_reception_started(void) {
-    data__leds__ptr__reset();
+    __asm__ __volatile__("twi__slave__on_data_reception_started:");
+    data__leds__put_position_reset();
 }
 
 void twi__slave__on_data_byte_received(const uint8_t value) {
-    *data__leds__ptr++ = value;
+    __asm__ __volatile__("twi__slave__on_data_byte_received:");
+    data__leds__put(value);
 }
 
 void twi__slave__on_data_byte_requested(void) {
+    __asm__ __volatile__("twi__slave__on_data_byte_requested:");
     twi__data__set(0x55);
     twi__continue(false, false);
 }
@@ -46,8 +43,6 @@ void twi__slave__on_data_byte_requested(void) {
 // -----------------------------------------------------------------------------
 
 void application__init(void) {
-    data__leds__ptr__reset();
-
     twi__slave_address__set(TWI__SLAVE__ADDRESS);
 
     io_matrix__out_columns__init();
