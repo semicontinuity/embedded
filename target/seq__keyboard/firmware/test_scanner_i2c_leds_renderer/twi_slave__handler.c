@@ -29,11 +29,15 @@ void twi__slave__handler__run(void) {
             // Slave receiver states
             __asm__ __volatile__("twi__slave__handler__slave_receiver:");
             uint8_t value = twi__data__get();
-            twi__continue(true, false);
             if (status == TWI__STATUS__SLAVE_RECEIVED_DATA_BYTE_ACKNOWLEDGED) {
                 twi__slave__on_data_byte_received(value);
+                // handler must call twi__continue(true, false) if more than 1 data byte remains to be received
+                // handler must call twi__continue(false, false) if the last data byte should be received
             } else {
+                // assume that state was TWI__STATUS__SLAVE_WRITE_ACKNOWLEDGED
                 twi__slave__on_data_reception_started();
+                // handler must call twi__continue(true, false); if more than 1 data byte should be received
+                // handler must call twi__continue(false, false); if the only data byte should be received
             }
         } else {
             // Slave transmitter
@@ -43,6 +47,7 @@ void twi__slave__handler__run(void) {
                 // handler must set data byte to be transmitted with twi__data__set(),
                 // and then call twi__continue(true, false); if non-last data byte has to be transmitted
                 // or twi__continue(false, false); if last data byte has to be transmitted
+                // (this code assumes 1-byte reads, so twi__continue(false, false) must be called)
             }
         }
     } else {
