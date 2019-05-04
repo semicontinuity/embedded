@@ -28,26 +28,29 @@
 
 inline static void eeprom__write(void) {
     /* Master write enable */
-    EECR |= (1<<EEPROM__MASTER_WRITE_ENABLE_BIT);
+    EECR |= (1 << EEPROM__MASTER_WRITE_ENABLE_BIT);
     /* Start eeprom write by setting write enable */
-    EECR |= (1<<EEPROM__WRITE_ENABLE_BIT);
+    EECR |= (1 << EEPROM__WRITE_ENABLE_BIT);
 }
 
 inline static bool eeprom__is_writing(void) {
-    return EECR & (1<<EEPROM__WRITE_ENABLE_BIT);
+    return EECR & (1 << EEPROM__WRITE_ENABLE_BIT);
 }
 
-
-inline static unsigned char eeprom__read_byte(unsigned char *address) {
-    /* Wait for completion of previous write */
-    while(eeprom__is_writing());
+inline static unsigned char eeprom__read_byte_unchecked(unsigned char *address) {
     /* Set up address register */
     EEARH = ((int)address >> 8);
     EEARL = ((int)address & 0xFF);
     /* Start eeprom read*/
-    EECR |= (1<<EERE);
+    EECR |= (1 << EERE);
     /* Return data from Data Register */
     return EEDR;
+}
+
+inline static unsigned char eeprom__read_byte(unsigned char *address) {
+    /* Wait for completion of previous write */
+    while (eeprom__is_writing());
+    return eeprom__read_byte_unchecked(address);
 }
 
 

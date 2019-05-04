@@ -8,6 +8,7 @@
 #include "util/delay.h"
 #include "data.h"
 
+#include <cpu/avr/eeprom.h>
 #include <cpu/avr/twi.h>
 #include <drivers/io_matrix__out_columns.h>
 #include <drivers/io_matrix__out_rows.h>
@@ -17,6 +18,9 @@
 
 #include "twi_slave_callbacks.h"
 #include "twi_slave__handler.h"
+
+
+uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
 
 
 // TWI Slave callbacks
@@ -46,7 +50,7 @@ void twi__slave__on_data_byte_requested(void) {
 // -----------------------------------------------------------------------------
 
 void application__init(void) {
-    twi__slave_address__set(TWI__SLAVE__ADDRESS);
+    twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
 
     io_matrix__out_columns__init();
     io_matrix__out_rows__init();
