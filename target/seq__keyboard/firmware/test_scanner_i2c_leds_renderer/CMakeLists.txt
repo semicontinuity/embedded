@@ -18,7 +18,10 @@ set(SOURCE_FILES
         ../../../../cpu/avr/twi.h
         twi_slave__handler.h
         twi_slave__handler.c
-        
+
+        ../../bsp/drivers/out/led_a.h
+        ../../bsp/drivers/out/led_b.h
+
         data.c
         main.c
         __all__.c
@@ -68,5 +71,10 @@ add_definitions(-DIO_MATRIX__OUT__COLUMN2__PORT=IO_MATRIX__OUT__COLUMNS__PORT)
 add_definitions(-DIO_MATRIX__OUT__COLUMN2__PIN=2)
 add_definitions(-DIO_MATRIX__OUT__COLUMN3__PORT=IO_MATRIX__OUT__COLUMNS__PORT)
 add_definitions(-DIO_MATRIX__OUT__COLUMN3__PIN=3)
+
+add_definitions(-DOUT__LED_A__PORT=B)
+add_definitions(-DOUT__LED_A__PIN=6)
+add_definitions(-DOUT__LED_B__PORT=B)
+add_definitions(-DOUT__LED_B__PIN=7)
 
 add_definitions(-DTWI__SLAVE__ADDRESS=0x20)

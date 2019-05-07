@@ -19,6 +19,9 @@
 #include "twi_slave_callbacks.h"
 #include "twi_slave__handler.h"
 
+#include <drivers/out/led_a.h>
+#include <drivers/out/led_b.h>
+
 
 uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
 
@@ -50,6 +53,7 @@ void twi__slave__on_data_byte_requested(void) {
 // -----------------------------------------------------------------------------
 
 void application__init(void) {
+//    twi__slave_address__set(TWI__SLAVE__ADDRESS);
     twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
 
     io_matrix__out_columns__init();
@@ -61,6 +65,7 @@ void application__init(void) {
 
 void application__start(void) {
     io_matrix__scanner__thread__timer__start();
+    twi__slave__start(false);
 }
 
 
@@ -71,6 +76,9 @@ int main(void) {
     application__init();
     application__start();
 
+    led_a__init();
+    led_b__init();
+
     sei();
 
 #if !defined(__AVR_ARCH__)
@@ -79,7 +87,9 @@ int main(void) {
 #endif
     for(;;) {
         if (twi__slave__handler__is_runnable()) {
+            led_a__set(1);
             twi__slave__handler__run();
+            led_a__set(0);
         }
     }
 
