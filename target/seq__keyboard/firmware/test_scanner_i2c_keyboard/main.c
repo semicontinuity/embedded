@@ -16,6 +16,8 @@
 #include "services/tx_ring_buffer.h"
 
 #include "drivers/out/alarm.h"
+#include "drivers/out/led_a.h"
+#include "drivers/out/led_b.h"
 
 #include "I2CSlave.h"
 #include "comm.h"
@@ -36,6 +38,7 @@
 inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
     cli();
     if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
+        led_a__toggle();
         uint8_t code = IF_BIT_SET_CONST_A_ELSE_CONST_B(state, bit, (uint8_t) ('A' + button), (uint8_t) ('a' + button));
         tx_ring_buffer__put(code);
     }
@@ -49,6 +52,7 @@ inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
 void twi__slave__on_data_byte_requested(void) {
     uint8_t value = 0;
     if (tx_ring_buffer__is_readable()) {
+        led_b__toggle();
         value = tx_ring_buffer__get();
     }
     I2C_transmitByte(value);
@@ -72,6 +76,8 @@ void twi__slave__on_data_reception_aborted(void) {
 
 void application__init(void) {
     alarm__init();
+    led_a__init();
+    led_b__init();
 
     io_matrix__out_columns__init();
     io_matrix__out_rows__init();

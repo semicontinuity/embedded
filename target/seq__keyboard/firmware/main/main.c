@@ -5,19 +5,23 @@
 // =============================================================================
 
 #include <avr/interrupt.h>
-#include "util/delay.h"
-#include "data.h"
-
+#include <cpu/avr/asm.h>
 #include <cpu/avr/eeprom.h>
-#include <cpu/avr/twi.h>
+
 #include <drivers/io_matrix__out_columns.h>
 #include <drivers/io_matrix__out_rows.h>
 #include <drivers/io_matrix__in.h>
 #include <drivers/io_matrix__scanner__thread__timer.h>
 #include "io_matrix__scanner__thread.h"
 
+#include "cpu/avr/services/keyboard/keyboard.h"
+#include "services/tx_ring_buffer.h"
+
+#include <cpu/avr/twi.h>
 #include "twi_slave_callbacks.h"
 #include "twi_slave__handler.h"
+
+#include "data.h"
 
 #include <drivers/out/alarm.h>
 #include <drivers/out/led_a.h>
@@ -25,6 +29,29 @@
 
 
 uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
+
+
+// keyboard callbacks
+// -----------------------------------------------------------------------------
+
+/**
+ * Callback to be implemented to handle button event.
+ * The type of event can be determined by checking the corresponding bit in the button's port:
+ * if (state & (uint8_t)(1 << bit)) != 0, then button is released;
+ * if (state & (uint8_t)(1 << bit)) == 0, then button is pressed.
+ * @param button index of button (0-15)
+ * @param state state of the button's port
+ * @param bit index of button's pin in the port
+ */
+inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
+    cli();
+    if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
+        led_a__toggle();
+        uint8_t code = IF_BIT_SET_CONST_A_ELSE_CONST_B(state, bit, (uint8_t) ('A' + button), (uint8_t) ('a' + button));
+        tx_ring_buffer__put(code);
+    }
+    sei();
+}
 
 
 // TWI Slave callbacks
@@ -38,14 +65,18 @@ void twi__slave__on_data_reception_started(void) {
 
 void twi__slave__on_data_byte_received(const uint8_t value) {
     __asm__ __volatile__("twi__slave__on_data_byte_received:");
-    twi__continue(true, false);
-    data__leds__put(value);
+    twi__continue(data__leds__put(value), false);
     // TODO: check that space remains for just 1 byte and invoke twi__continue(false, false);
 }
 
 void twi__slave__on_data_byte_requested(void) {
     __asm__ __volatile__("twi__slave__on_data_byte_requested:");
-    twi__data__set(0x55);
+    uint8_t value = 0;
+    if (tx_ring_buffer__is_readable()) {
+        led_b__toggle();
+        value = tx_ring_buffer__get();
+    }
+    twi__data__set(value);
     twi__continue(false, false);
 }
 
@@ -56,9 +87,12 @@ void twi__slave__on_data_byte_requested(void) {
 void application__init(void) {
     io_matrix__out_columns__init();
     io_matrix__out_rows__init();
+    io_matrix__in__init();
 
     io_matrix__scanner__thread__init();
     io_matrix__scanner__thread__timer__init();
+
+    keyboard__init();
 
     alarm__init();
     led_a__init();
@@ -68,6 +102,8 @@ void application__init(void) {
 }
 
 void application__start(void) {
+    tx_ring_buffer__start();
+
     io_matrix__scanner__thread__timer__start();
     twi__slave__start(false);
 }
@@ -87,6 +123,7 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
+        keyboard__run();
         if (twi__slave__handler__is_runnable()) {
             twi__slave__handler__run();
         }

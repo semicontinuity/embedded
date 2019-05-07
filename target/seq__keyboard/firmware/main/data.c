@@ -14,6 +14,22 @@ void data__leds__put_position_reset(void) {
     data__leds__index = 0;
 }
 
-void data__leds__put(const uint8_t value) {
-    data__leds[data__leds__index++] = value;
+bool data__leds__put(const uint8_t value) {
+    if (data__leds__index < 2) {
+        if (data__leds__index++ == 0) {
+            data__leds[0] = value;
+            return true;
+        } else {
+            data__leds[1] = value;
+            return true;
+        }
+    } else {
+        if (data__leds__index++ == 2) {
+            data__leds[2] = value;
+            return true;
+        } else {
+            data__leds[3] = value;
+            return false;
+        }
+    }
 }

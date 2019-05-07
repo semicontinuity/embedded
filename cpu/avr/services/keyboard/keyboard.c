@@ -1,4 +1,5 @@
 #include <cpu/avr/asm.h>
+#include <drivers/out/led_a.h>
 
 #include "cpu/avr/services/keyboard/keyboard.h"
 
