@@ -120,6 +120,7 @@ inline static bool twi__is_software_action_required(void) {
 
 /**
  * Instructs TWI unit to continue (by writing 1 to TWI__INTERRUPT__BIT).
+ * TODO: set TWI__INTERRUPT__ENABLED__BIT if used in interrupts mode.
  * @param proceed acknowledge (or expect acknowledgement) of the next data byte; respond to slave address
  */
 inline static void twi__continue(const bool proceed, const bool transmit_start_when_bus_free) {

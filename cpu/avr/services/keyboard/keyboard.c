@@ -1,5 +1,6 @@
 #include <cpu/avr/asm.h>
 #include <drivers/out/led_a.h>
+#include <drivers/out/led_b.h>
 
 #include "cpu/avr/services/keyboard/keyboard.h"
 
@@ -440,6 +441,7 @@ void keyboard__init(void) {
  * The callback called when the debounce timer has expired.
  */
 void keyboard__debounce_timer__run(void) {
+//    led_b__toggle();
     keyboard__reset_masks();
 }
 

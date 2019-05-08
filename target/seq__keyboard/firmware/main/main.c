@@ -44,11 +44,12 @@ uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE
  * @param bit index of button's pin in the port
  */
 inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
+    led_a__toggle();
     cli();
     if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
-        led_a__toggle();
         uint8_t code = IF_BIT_SET_CONST_A_ELSE_CONST_B(state, bit, (uint8_t) ('A' + button), (uint8_t) ('a' + button));
         tx_ring_buffer__put(code);
+        led_b__toggle();
     }
     sei();
 }
@@ -65,7 +66,10 @@ void twi__slave__on_data_reception_started(void) {
 
 void twi__slave__on_data_byte_received(const uint8_t value) {
     __asm__ __volatile__("twi__slave__on_data_byte_received:");
-    twi__continue(data__leds__put(value), false);
+//    twi__continue(data__leds__put(value), false);
+
+    data__leds__put(value);
+    twi__continue(/*false*/true, false);
     // TODO: check that space remains for just 1 byte and invoke twi__continue(false, false);
 }
 
@@ -73,11 +77,12 @@ void twi__slave__on_data_byte_requested(void) {
     __asm__ __volatile__("twi__slave__on_data_byte_requested:");
     uint8_t value = 0;
     if (tx_ring_buffer__is_readable()) {
-        led_b__toggle();
+        cli();
         value = tx_ring_buffer__get();
+        sei();
     }
     twi__data__set(value);
-    twi__continue(false, false);
+    twi__continue(/*false*/true, false);
 }
 
 

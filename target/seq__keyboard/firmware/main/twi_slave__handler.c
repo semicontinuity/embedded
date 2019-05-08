@@ -5,15 +5,12 @@
 // Only 1-byte reads are supported.
 // =============================================================================
 
+#include <drivers/out/led_b.h>
+#include <drivers/out/led_a.h>
 #include "cpu/avr/twi.h"
 #include "twi_slave_callbacks.h"
 #include "twi_slave__handler.h"
 #include "util/twi.h"
-
-
-void twi__slave__handler__start(void) {
-    twi__slave__start(false);
-}
 
 
 bool twi__slave__handler__is_runnable(void) {
@@ -48,6 +45,10 @@ void twi__slave__handler__run(void) {
                 // and then call twi__continue(true, false); if non-last data byte has to be transmitted
                 // or twi__continue(false, false); if last data byte has to be transmitted
                 // (this code assumes 1-byte reads, so twi__continue(false, false) must be called)
+            } else {
+                // TWI__STATUS__SLAVE_TRANSMITTED_DATA_BYTE_ACKNOWLEDGED
+                // TWI__STATUS__SLAVE_TRANSMITTED_LAST_DATA_BYTE_ACKNOWLEDGED
+                twi__continue(/*false*/true, false);
             }
         }
     } else {

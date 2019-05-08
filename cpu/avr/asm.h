@@ -22,6 +22,14 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 
 #define FIX_REGISTER(r)                 __asm__ __volatile__("" : "=r" (r) : "0" (r));
 
+#define FIX_TEMP_REGISTER(r)            (__extension__({        \
+    register uint8_t __result asm("r0");                        \
+    __result = r;                                               \
+    __asm__ __volatile__("" : "=t" (__result) : "0" (__result));\
+    __result;                                                   \
+}))
+
+
 #define FIX_POINTER(_ptr)               __asm__ __volatile__("" : "=b" (_ptr) : "0" (_ptr))
 #define FIX_POINTER_XYZ(_ptr)           __asm__ __volatile__("" : "=e" (_ptr) : "0" (_ptr))
 #define FIX_POINTER_X(_ptr)             __asm__ __volatile__("" : "=x" (_ptr) : "0" (_ptr))
@@ -47,7 +55,7 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 #define MARKED_LABEL(prefix, mark)      #prefix "__" mark
 #define TMP_LABEL(p)	                MARKED_LABEL(p, QUOTE(__LINE__))
 #define MARK(label)		                do { __asm__ __volatile__( #label ":"); } while(0)
-#define MARK0(label)                            do { __asm__ __volatile__( label ":"); } while(0)
+#define MARK0(label)                    do { __asm__ __volatile__( label ":"); } while(0)
 
 #define __CLT() do {                                    \
   asm volatile (                                        \
