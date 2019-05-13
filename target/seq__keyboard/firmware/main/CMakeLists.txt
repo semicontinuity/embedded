@@ -19,6 +19,8 @@ set(SOURCE_FILES
         twi_slave__handler.h
         twi_slave__handler.c
         comm_leds.c
+        comm_keyboard.h
+        comm_keyboard.c
 
         ../../bsp/drivers/out/led_a.h
         ../../bsp/drivers/out/led_b.h
