@@ -161,9 +161,10 @@ inline void keyboard__init_previous_states(void) {
 inline void keyboard__port_a__process_button(uint8_t state, uint8_t changes, uint8_t button) {
     uint8_t pin = keyboard__pins__port_a__pin_for_button(button);
     if (changes & ((uint8_t) (1U << pin))) {
-        keyboard__port_a__mask &= (uint8_t) ~((uint8_t) (1U << pin));
-        COPY_BIT(state, pin, keyboard__port_a__previous_state, pin);
-        keyboard__handle_button_event(button, state, pin);
+        if (keyboard__handle_button_event(button, state, pin)) {
+            keyboard__port_a__mask &= (uint8_t) ~((uint8_t) (1U << pin));
+            COPY_BIT(state, pin, keyboard__port_a__previous_state, pin);
+        }
     }
 }
 
@@ -229,9 +230,10 @@ void keyboard__port_a__check_for_changes_and_process(void) {
 inline void keyboard__port_b__process_button(uint8_t state, uint8_t changes, uint8_t button) {
     uint8_t pin = keyboard__pins__port_b__pin_for_button(button);
     if (changes & ((uint8_t) (1U << pin))) {
-        keyboard__port_b__mask &= (uint8_t) ~((uint8_t) (1U << pin));
-        COPY_BIT(state, pin, keyboard__port_b__previous_state, pin);
-        keyboard__handle_button_event(button, state, pin);
+        if (keyboard__handle_button_event(button, state, pin)) {
+            keyboard__port_b__mask &= (uint8_t) ~((uint8_t) (1U << pin));
+            COPY_BIT(state, pin, keyboard__port_b__previous_state, pin);
+        }
     }
 }
 
@@ -297,9 +299,10 @@ void keyboard__port_b__check_for_changes_and_process(void) {
 inline void keyboard__port_c__process_button(uint8_t state, uint8_t changes, uint8_t button) {
     uint8_t pin = keyboard__pins__port_c__pin_for_button(button);
     if (changes & ((uint8_t) (1U << pin))) {
-        keyboard__port_c__mask &= (uint8_t) ~((uint8_t) (1U << pin));
-        COPY_BIT(state, pin, keyboard__port_c__previous_state, pin);
-        keyboard__handle_button_event(button, state, pin);
+        if (keyboard__handle_button_event(button, state, pin)) {
+            keyboard__port_c__mask &= (uint8_t) ~((uint8_t) (1U << pin));
+            COPY_BIT(state, pin, keyboard__port_c__previous_state, pin);
+        }
     }
 }
 
@@ -366,9 +369,10 @@ void keyboard__port_c__check_for_changes_and_process(void) {
 inline void keyboard__port_d__process_button(uint8_t state, uint8_t changes, uint8_t button) {
     uint8_t pin = keyboard__pins__port_d__pin_for_button(button);
     if (changes & ((uint8_t) (1U << pin))) {
-        keyboard__port_d__mask &= (uint8_t) ~((uint8_t) (1U << pin));
-        COPY_BIT(state, pin, keyboard__port_d__previous_state, pin);
-        keyboard__handle_button_event(button, state, pin);
+        if (keyboard__handle_button_event(button, state, pin)) {
+            keyboard__port_d__mask &= (uint8_t) ~((uint8_t) (1U << pin));
+            COPY_BIT(state, pin, keyboard__port_d__previous_state, pin);
+        }
     }
 }
 

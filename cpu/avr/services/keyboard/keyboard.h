@@ -16,6 +16,6 @@ void keyboard__run(void);
  * @param state state of the button's port
  * @param bit index of button's pin in the port
  */
-inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit);
+inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit);
 
 #endif

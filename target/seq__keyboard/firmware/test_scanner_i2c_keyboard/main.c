@@ -35,7 +35,7 @@
  * @param state state of the button's port
  * @param bit index of button's pin in the port
  */
-inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
+inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
     cli();
     if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
         led_a__toggle();
@@ -43,6 +43,7 @@ inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
         tx_ring_buffer__put(code);
     }
     sei();
+    return true;
 }
 
 

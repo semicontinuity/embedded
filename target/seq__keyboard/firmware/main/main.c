@@ -43,7 +43,7 @@ uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE
  * @param state state of the button's port
  * @param bit index of button's pin in the port
  */
-inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
+inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
     led_a__toggle();
     cli();
     if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
@@ -52,6 +52,7 @@ inline void keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
         led_b__toggle();
     }
     sei();
+    return true;
 }
 
 
