@@ -59,21 +59,6 @@ inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
 // TWI Slave callbacks
 // -----------------------------------------------------------------------------
 
-void twi__slave__on_data_reception_started(void) {
-    __asm__ __volatile__("twi__slave__on_data_reception_started:");
-    twi__continue(true, false);
-    data__leds__put_position_reset();
-}
-
-void twi__slave__on_data_byte_received(const uint8_t value) {
-    __asm__ __volatile__("twi__slave__on_data_byte_received:");
-//    twi__continue(data__leds__put(value), false);
-
-    data__leds__put(value);
-    twi__continue(/*false*/true, false);
-    // TODO: check that space remains for just 1 byte and invoke twi__continue(false, false);
-}
-
 void twi__slave__on_data_byte_requested(void) {
     __asm__ __volatile__("twi__slave__on_data_byte_requested:");
     uint8_t value = 0;

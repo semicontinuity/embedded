@@ -18,6 +18,7 @@ set(SOURCE_FILES
         ../../../../cpu/avr/twi.h
         twi_slave__handler.h
         twi_slave__handler.c
+        comm_leds.c
 
         ../../bsp/drivers/out/led_a.h
         ../../bsp/drivers/out/led_b.h
