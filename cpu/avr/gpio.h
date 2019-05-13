@@ -47,7 +47,9 @@
 
 #define PORT_VALUE(port)             IN(port)
 #define IS_0(signal)                 (bit_is_clear (PIN_REG(CONCAT(signal,__PORT)), signal##__PIN))
+#define IS_OUT_0(signal)             (bit_is_clear (PORT_REG(CONCAT(signal,__PORT)), signal##__PIN))
 #define IS_1(signal)                 (bit_is_set (PIN_REG(CONCAT(signal,__PORT)), signal##__PIN))
+#define IS_OUT_1(signal)             (bit_is_set (PORT_REG(CONCAT(signal,__PORT)), signal##__PIN))
 
 #define DECLARE_OUT_SIGNAL(name) \
 	void name##__set(char v);\

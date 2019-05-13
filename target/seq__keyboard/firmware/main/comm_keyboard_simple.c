@@ -7,8 +7,6 @@
 #include <avr/interrupt.h>
 #include <cpu/avr/asm.h>
 
-#include "services/tx_ring_buffer.h"
-
 #include <cpu/avr/twi.h>
 #include "twi_slave_callbacks.h"
 
@@ -16,6 +14,7 @@
 #include <drivers/out/led_a.h>
 #include <drivers/out/led_b.h>
 
+register volatile uint8_t keyboard_event asm("r16");
 
 // keyboard callbacks
 // -----------------------------------------------------------------------------
@@ -31,14 +30,13 @@
  */
 inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
     led_a__toggle();
-    cli();
-    if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
-        uint8_t code = IF_BIT_SET_CONST_A_ELSE_CONST_B(state, bit, (uint8_t) ('A' + button), (uint8_t) ('a' + button));
-        tx_ring_buffer__put(code);
+    if (!alarm__get()) {
+        keyboard_event = IF_BIT_SET_CONST_A_ELSE_CONST_B(state, bit, (uint8_t) ('A' + button), (uint8_t) ('a' + button));
         led_b__toggle();
+        alarm__set(1);
+        return true;
     }
-    sei();
-    return true;
+    return false;
 }
 
 
@@ -47,17 +45,13 @@ inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
 
 void twi__slave__on_data_byte_requested(void) {
     __asm__ __volatile__("twi__slave__on_data_byte_requested:");
-    uint8_t value = 0;
-    if (tx_ring_buffer__is_readable()) {
-        cli();
-        value = tx_ring_buffer__get();
-        sei();
-    }
-    twi__data__set(value);
+    twi__data__set(keyboard_event);
     twi__continue(/*false*/true, false);
+    keyboard_event = 0;
+    alarm__set(0);
 }
 
 
 void comm_keyboard__start(void) {
-    tx_ring_buffer__start();
+    keyboard_event = 0;
 }
