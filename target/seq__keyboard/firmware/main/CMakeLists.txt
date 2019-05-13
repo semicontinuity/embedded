@@ -152,7 +152,7 @@ add_definitions(-DTX_RING_BUFFER__TAIL__REG=28)
 #add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__BIT=1)
 #add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__IN_BIT_IO_MEM=1)
 
-add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__HOST=PORTD)
+add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__HOST=GPIOR0)
 add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__BIT=0)
 add_definitions(-DTX_RING_BUFFER__NOT_EMPTY__IN_BIT_IO_MEM=1)
 
