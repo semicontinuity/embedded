@@ -5,6 +5,7 @@
 #include "comm_keyboard.h"
 
 #include <avr/interrupt.h>
+#include <cpu/avr/macros.h>
 #include <cpu/avr/asm.h>
 
 #include <cpu/avr/twi.h>
@@ -14,7 +15,8 @@
 #include <drivers/out/led_a.h>
 #include <drivers/out/led_b.h>
 
-register volatile uint8_t keyboard_event asm("r16");
+register volatile uint8_t keyboard_event asm(QUOTE(KEYBOARD_EVENT__REG));
+
 
 // keyboard callbacks
 // -----------------------------------------------------------------------------
