@@ -1,7 +1,12 @@
 #include <avr/io.h>
 
+#if defined(TX_RING_BUFFER__SIZE)
 // TX ring buffer first for 256-byte alignment
-#include "services/tx_ring_buffer.c"
+#  include "services/tx_ring_buffer.c"
+#  include "comm_keyboard.c"
+#else
+#  include "comm_keyboard_simple.c"
+#endif
 
 // LED data
 #include "data.c"
@@ -22,7 +27,6 @@
 // I2C Comm
 #include "twi_slave__handler.c"
 #include "comm_leds.c"
-#include "comm_keyboard_simple.c"
 
 // Entry point
 #include "main.c"
