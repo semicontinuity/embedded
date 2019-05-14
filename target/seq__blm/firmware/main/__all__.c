@@ -17,4 +17,10 @@
 #include "cpu/avr/services/keyboard/keyboard.c"
 #include "drivers/keyboard__pins__physical.c"
 
+// I2C Comm
+#include "twi_slave__handler.c"
+//#include "comm_leds.c"
+
+#include "leds.c"
+
 #include "main.c"

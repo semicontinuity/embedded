@@ -40,6 +40,7 @@ set(SOURCE_FILES
         comm__switch.c
         comm.h
 
+        leds.c
         main.c
         __all__.c
         )
