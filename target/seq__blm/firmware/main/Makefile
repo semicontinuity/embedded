@@ -26,6 +26,10 @@ include config.twi_slave__handler.properties
 
 CDEFS += -fwhole-program -Wl,--relax
 
+ifdef BOARD_ADDRESS
+CDEFS += -DTWI__SLAVE__ADDRESS=$(BOARD_ADDRESS)
+endif
+
 # Firmware
 SRC += __all__.c
 

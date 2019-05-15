@@ -2,6 +2,7 @@
 // Firmware for Button LED Matrix board.
 // =============================================================================
 
+#include <cpu/avr/eeprom.h>
 #include <cpu/avr/asm.h>
 #include "cpu/avr/services/keyboard/keyboard.h"
 #include "services/tx_ring_buffer.h"
@@ -19,7 +20,9 @@
 #include "leds.h"
 
 #include <util/delay.h>
+#include <cpu/avr/twi.h>
 
+uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
 
 // keyboard callbacks
 // -----------------------------------------------------------------------------
@@ -74,6 +77,8 @@ void application__init(void) {
 
     leds__init();
     comm__init();
+
+    twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
 }
 
 
