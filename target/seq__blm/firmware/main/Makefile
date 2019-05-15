@@ -34,6 +34,10 @@ ifdef BOARD_ADDRESS
 CDEFS += -DTWI__SLAVE__ADDRESS=$(BOARD_ADDRESS)
 endif
 
+ifdef LEDS
+CDEFS += -DLEDS__COUNT=$(LEDS)
+endif
+
 # Firmware
 SRC += __all__.c
 

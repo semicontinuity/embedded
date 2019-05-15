@@ -2,3 +2,5 @@ add_definitions(-DLEDS__DATA__PTR__REG=30)
 
 add_definitions(-DLEDS__REFRESH__HOST=GPIOR0)
 add_definitions(-DLEDS__REFRESH__BIT=2)
+
+add_definitions(-DLEDS__COUNT=16)

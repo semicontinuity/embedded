@@ -8,7 +8,7 @@
 #include "util/bitops.h"
 
 
-uint8_t leds__data[16*3];
+uint8_t leds__data[LEDS__COUNT * 3];
 
 
 #ifdef LEDS__DATA__PTR__REG
@@ -39,7 +39,7 @@ void leds__refresh(void) {
 
 void leds__run(void) {
     if (leds__refresh__is_set()) {
-        ws2812_sendarray_mask((uint8_t *) leds__data, 16*3, _BV(1));
+        ws2812_sendarray_mask((uint8_t *) leds__data, LEDS__COUNT * 3, _BV(1));
         leds__refresh__set(0);
     }
 }
