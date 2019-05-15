@@ -55,10 +55,9 @@ add_definitions(-D__AVR_ATmega48__)
 add_definitions(-DF_CPU=8000000UL)
 add_definitions(-DINLINE=)
 
-add_definitions(-DREFRESH__HOST=GPIOR0)
-add_definitions(-DREFRESH__BIT=2)
-
 include(CMakeLists.io.txt)
 include(CMakeLists.keyboard.txt)
 include(CMakeLists.comm_keyboard_simple.txt)
+include(CMakeLists.comm_leds.txt)
+include(CMakeLists.leds.txt)
 include(CMakeLists.twi.txt)

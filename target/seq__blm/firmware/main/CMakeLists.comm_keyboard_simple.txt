@@ -1,1 +1,1 @@
-add_definitions(-DKEYBOARD_EVENT__REG=16)
+add_definitions(-DKEYBOARD_EVENT__REG=19)

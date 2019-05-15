@@ -1,0 +1,2 @@
+add_definitions(-DCOMM_LEDS__ID_RECEIVED__HOST=GPIOR0)
+add_definitions(-DCOMM_LEDS__ID_RECEIVED__BIT=3)
