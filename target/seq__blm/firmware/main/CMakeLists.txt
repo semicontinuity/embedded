@@ -40,6 +40,9 @@ set(SOURCE_FILES
         comm__switch.c
         comm.h
 
+        comm_keyboard.h
+        comm_keyboard.c
+
         leds.c
         main.c
         __all__.c

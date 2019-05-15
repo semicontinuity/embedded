@@ -21,6 +21,8 @@
 #include "twi_slave__handler.c"
 //#include "comm_leds.c"
 
+#include "comm_keyboard.c"
+
 #include "leds.c"
 
 #include "main.c"
