@@ -25,6 +25,7 @@
 | 17 | allocated by compiler                                           |
 | 18 | allocated by compiler                                           |
 | 19 | KEYBOARD_EVENT__REG                                             |
+| 20 | COMM_LEDS__DATA__INDEX__REG                                     |
 | 21 | allocated by compiler                                           |
 | 22 | allocated by compiler                                           |
 | 23 | allocated by compiler                                           |
@@ -34,8 +35,8 @@
 | 27 | allocated by compiler                                           |
 | 28 | allocated by compiler                                           |
 | 29 | allocated by compiler                                           |
-| 30 | IO_MATRIX__SCANNER__THREAD__IP__REG (L)                         |
-| 31 | IO_MATRIX__SCANNER__THREAD__IP__REG (H)                         |
+| 30 | LEDS__DATA__PTR__REG (L)                                        |
+| 31 | LEDS__DATA__PTR__REG (H)                                        |
 
 
 ## Flag allocations
@@ -43,4 +44,3 @@
 |        |   |                                                         |
 |--------|---|---------------------------------------------------------|
 | GPIOR0 | 2 | COMM_LEDS__REFRESH                                      |
-| GPIOR0 | 3 | COMM_LEDS__ID_RECEIVED                                  |

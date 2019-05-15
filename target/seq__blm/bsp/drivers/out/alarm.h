@@ -30,6 +30,14 @@ inline void alarm__set(const uint8_t value) {
 
 
 /**
+ * Get ALARM value.
+ */
+inline bool alarm__get(void) {
+    return (bool) IS_OUT_1(OUT__ALARM);
+}
+
+
+/**
  * Initialize ALARM line driver.
  */
 inline void alarm__init(void) {

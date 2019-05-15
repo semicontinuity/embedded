@@ -3,22 +3,20 @@
 // =============================================================================
 
 #include <cpu/avr/eeprom.h>
-#include <cpu/avr/asm.h>
-#include "cpu/avr/services/keyboard/keyboard.h"
-
-#include "comm.h"
-#include "I2CSlave.h"
-#include "drivers/comm/twi_slave_callbacks.h"
 
 #include <drivers/out/alarm.h>
 #include <drivers/out/led_a.h>
 #include <drivers/out/led_b.h>
 
 #include "leds.h"
+#include "cpu/avr/services/keyboard/keyboard.h"
+
 #include "comm_keyboard.h"
+#include "twi_slave__handler.h"
 
 #include <util/delay.h>
 #include <cpu/avr/twi.h>
+#include <avr/interrupt.h>
 
 uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
 
@@ -31,10 +29,8 @@ void application__init(void) {
     led_a__init();
     led_b__init();
 
-    keyboard__init();
-
     leds__init();
-    comm__init();
+    keyboard__init();
 
     twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
 }
@@ -42,7 +38,7 @@ void application__init(void) {
 
 void application__start(void) {
     comm_keyboard__start();
-    comm__start();
+    twi__slave__start(false);
 }
 
 
@@ -54,6 +50,7 @@ int main(void) {
     application__init();
     _delay_us(2);
     application__start();
+
     sei();
 
 #if !defined(__AVR_ARCH__)
@@ -63,6 +60,11 @@ int main(void) {
     for(;;) {
         leds__run();
         keyboard__run();
+
+        // must be in interrupt to reduce latency
+        if (twi__slave__handler__is_runnable()) {
+            twi__slave__handler__run();
+        }
     }
 
 #if !defined(__AVR_ARCH__)

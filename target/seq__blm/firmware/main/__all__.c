@@ -1,13 +1,13 @@
 #include <avr/io.h>
 
-#include "services/tx_ring_buffer.c"
+//#include "services/tx_ring_buffer.c"
 
 
-#include "I2CSlave.c"
-#include "comm__switch.c"
+//#include "I2CSlave.c"
+//#include "comm__switch.c"
 
-//#include "comm_keyboard_simple.c"
-
+// LEDs
+#include "leds.c"
 #include "drivers/comm/ws2812b.c"
 
 // Keyboard
@@ -19,10 +19,10 @@
 
 // I2C Comm
 #include "twi_slave__handler.c"
-//#include "comm_leds.c"
+#include "comm_leds.c"
+#include "comm_keyboard_simple.c"
 
-#include "comm_keyboard.c"
+//#include "comm_keyboard.c"
 
-#include "leds.c"
 
 #include "main.c"

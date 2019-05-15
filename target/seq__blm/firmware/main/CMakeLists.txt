@@ -32,16 +32,17 @@ set(SOURCE_FILES
         ../../../../cpu/avr/services/keyboard/keyboard.c
         ../../../../cpu/avr/services/keyboard/keyboard.h
 
-        ../../../../services/tx_ring_buffer.h
-        ../../../../services/tx_ring_buffer.c
+#        ../../../../services/tx_ring_buffer.h
+#        ../../../../services/tx_ring_buffer.c
 
-        I2CSlave.c
-        I2CSlave.h
-        comm__switch.c
-        comm.h
+#        I2CSlave.c
+#        I2CSlave.h
+#        comm__switch.c
+#        comm.h
 
         comm_keyboard.h
-        comm_keyboard.c
+#        comm_keyboard.c
+        comm_keyboard_simple.c
 
         leds.c
         main.c
