@@ -43,3 +43,8 @@ add_definitions(-DIN__BUTTON14__PORT=B)
 add_definitions(-DIN__BUTTON14__PIN=4)
 add_definitions(-DIN__BUTTON15__PORT=B)
 add_definitions(-DIN__BUTTON15__PIN=2)
+
+add_definitions(-DIN__BUTTON16__PORT=B)
+add_definitions(-DIN__BUTTON16__PIN=6)
+add_definitions(-DIN__BUTTON17__PORT=B)
+add_definitions(-DIN__BUTTON17__PIN=7)

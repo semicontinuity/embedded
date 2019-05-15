@@ -35,6 +35,15 @@ void keyboard__pins__init(void) {
     button13__init();
     button14__init();
     button15__init();
+
+#if defined(IN__BUTTON16__PORT) && defined(IN__BUTTON16__PIN)
+    USE_AS_INPUT(IN__BUTTON16);
+    ENABLE_PULLUP(IN__BUTTON16);
+#endif
+#if defined(IN__BUTTON17__PORT) && defined(IN__BUTTON17__PIN)
+    USE_AS_INPUT(IN__BUTTON17);
+    ENABLE_PULLUP(IN__BUTTON17);
+#endif
 }
 
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1

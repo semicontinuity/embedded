@@ -3,7 +3,7 @@
 
 /**
  * Provides pin number for the given button (if it pertains to port A)
- * @param button 0-15 for BUTTON0..BUTTON15
+ * @param button 0-31 for BUTTON0..BUTTON31
 */
 uint8_t keyboard__pins__port_a__pin_for_button(const uint8_t button) {
 #if CONCAT(0x, IN__BUTTON0__PORT) == 0xA
@@ -54,6 +54,31 @@ uint8_t keyboard__pins__port_a__pin_for_button(const uint8_t button) {
 #if CONCAT(0x, IN__BUTTON15__PORT) == 0xA
     if (button == 15) return IN__BUTTON15__PIN;
 #endif
+
+#if defined(IN__BUTTON16__PORT) && defined(IN__BUTTON16__PIN)
+#if CONCAT(0x, IN__BUTTON16__PORT) == 0xA
+    if (button == 16) return IN__BUTTON16__PIN;
+#endif
+#endif
+
+#if defined(IN__BUTTON17__PORT) && defined(IN__BUTTON17__PIN)
+#if CONCAT(0x, IN__BUTTON17__PORT) == 0xA
+    if (button == 17) return IN__BUTTON17__PIN;
+#endif
+#endif
+
+#if defined(IN__BUTTON18__PORT) && defined(IN__BUTTON18__PIN)
+#if CONCAT(0x, IN__BUTTON18__PORT) == 0xA
+    if (button == 18) return IN__BUTTON18__PIN;
+#endif
+#endif
+
+#if defined(IN__BUTTON19__PORT) && defined(IN__BUTTON19__PIN)
+#if CONCAT(0x, IN__BUTTON19__PORT) == 0xA
+    if (button == 19) return IN__BUTTON19__PIN;
+#endif
+#endif
+
     return 0xFF;
 }
 
@@ -108,13 +133,38 @@ uint8_t keyboard__pins__port_a__button_pins_mask(void) {
 #if CONCAT(0x, IN__BUTTON15__PORT) == 0xA
     mask |= (1 << (IN__BUTTON15__PIN));
 #endif
+
+#if defined(IN__BUTTON16__PORT) && defined(IN__BUTTON16__PIN)
+#if CONCAT(0x, IN__BUTTON16__PORT) == 0xA
+    mask |= (1 << (IN__BUTTON16__PIN));
+#endif
+#endif
+
+#if defined(IN__BUTTON17__PORT) && defined(IN__BUTTON17__PIN)
+#if CONCAT(0x, IN__BUTTON17__PORT) == 0xA
+    mask |= (1 << (IN__BUTTON17__PIN));
+#endif
+#endif
+
+#if defined(IN__BUTTON18__PORT) && defined(IN__BUTTON18__PIN)
+#if CONCAT(0x, IN__BUTTON18__PORT) == 0xA
+    mask |= (1 << (IN__BUTTON18__PIN));
+#endif
+#endif
+
+#if defined(IN__BUTTON19__PORT) && defined(IN__BUTTON19__PIN)
+#if CONCAT(0x, IN__BUTTON19__PORT) == 0xA
+    mask |= (1 << (IN__BUTTON19__PIN));
+#endif
+#endif
+
     return mask;
 }
 
 
 /**
  * Provides pin number for the given button (if it pertains to port B)
- * @param button 0-15 for BUTTON0..BUTTON15
+ * @param button 0-31 for BUTTON0..BUTTON31
 */
 uint8_t keyboard__pins__port_b__pin_for_button(const uint8_t button) {
 #if CONCAT(0x, IN__BUTTON0__PORT) == 0xB
@@ -165,6 +215,31 @@ uint8_t keyboard__pins__port_b__pin_for_button(const uint8_t button) {
 #if CONCAT(0x, IN__BUTTON15__PORT) == 0xB
     if (button == 15) return IN__BUTTON15__PIN;
 #endif
+
+#if defined(IN__BUTTON16__PORT) && defined(IN__BUTTON16__PIN)
+#if CONCAT(0x, IN__BUTTON16__PORT) == 0xB
+    if (button == 16) return IN__BUTTON16__PIN;
+#endif
+#endif
+
+#if defined(IN__BUTTON17__PORT) && defined(IN__BUTTON17__PIN)
+#if CONCAT(0x, IN__BUTTON17__PORT) == 0xB
+    if (button == 17) return IN__BUTTON17__PIN;
+#endif
+#endif
+
+#if defined(IN__BUTTON18__PORT) && defined(IN__BUTTON18__PIN)
+#if CONCAT(0x, IN__BUTTON18__PORT) == 0xB
+    if (button == 18) return IN__BUTTON18__PIN;
+#endif
+#endif
+
+#if defined(IN__BUTTON19__PORT) && defined(IN__BUTTON19__PIN)
+#if CONCAT(0x, IN__BUTTON19__PORT) == 0xB
+    if (button == 19) return IN__BUTTON19__PIN;
+#endif
+#endif
+
     return 0xFF;
 }
 
@@ -219,13 +294,38 @@ uint8_t keyboard__pins__port_b__button_pins_mask(void) {
 #if CONCAT(0x, IN__BUTTON15__PORT) == 0xB
     mask |= (1 << (IN__BUTTON15__PIN));
 #endif
+
+#if defined(IN__BUTTON16__PORT) && defined(IN__BUTTON16__PIN)
+#if CONCAT(0x, IN__BUTTON16__PORT) == 0xB
+    mask |= (1 << (IN__BUTTON16__PIN));
+#endif
+#endif
+
+#if defined(IN__BUTTON17__PORT) && defined(IN__BUTTON17__PIN)
+#if CONCAT(0x, IN__BUTTON17__PORT) == 0xB
+    mask |= (1 << (IN__BUTTON17__PIN));
+#endif
+#endif
+
+#if defined(IN__BUTTON18__PORT) && defined(IN__BUTTON18__PIN)
+    #if CONCAT(0x, IN__BUTTON18__PORT) == 0xB
+    mask |= (1 << (IN__BUTTON18__PIN));
+#endif
+#endif
+
+#if defined(IN__BUTTON19__PORT) && defined(IN__BUTTON19__PIN)
+    #if CONCAT(0x, IN__BUTTON19__PORT) == 0xB
+    mask |= (1 << (IN__BUTTON19__PIN));
+#endif
+#endif
+
     return mask;
 }
 
 
 /**
  * Provides pin number for the given button (if it pertains to port C)
- * @param button 0-15 for BUTTON0..BUTTON15
+ * @param button 0-31 for BUTTON0..BUTTON31
 */
 uint8_t keyboard__pins__port_c__pin_for_button(const uint8_t button) {
 #if CONCAT(0x, IN__BUTTON0__PORT) == 0xC
@@ -276,6 +376,31 @@ uint8_t keyboard__pins__port_c__pin_for_button(const uint8_t button) {
 #if CONCAT(0x, IN__BUTTON15__PORT) == 0xC
     if (button == 15) return IN__BUTTON15__PIN;
 #endif
+
+#if defined(IN__BUTTON16__PORT) && defined(IN__BUTTON16__PIN)
+#if CONCAT(0x, IN__BUTTON16__PORT) == 0xC
+    if (button == 16) return IN__BUTTON16__PIN;
+#endif
+#endif
+
+#if defined(IN__BUTTON17__PORT) && defined(IN__BUTTON17__PIN)
+#if CONCAT(0x, IN__BUTTON17__PORT) == 0xC
+    if (button == 17) return IN__BUTTON17__PIN;
+#endif
+#endif
+
+#if defined(IN__BUTTON18__PORT) && defined(IN__BUTTON18__PIN)
+#if CONCAT(0x, IN__BUTTON18__PORT) == 0xC
+    if (button == 18) return IN__BUTTON18__PIN;
+#endif
+#endif
+
+#if defined(IN__BUTTON19__PORT) && defined(IN__BUTTON19__PIN)
+#if CONCAT(0x, IN__BUTTON19__PORT) == 0xC
+    if (button == 19) return IN__BUTTON19__PIN;
+#endif
+#endif
+
     return 0xFF;
 }
 
@@ -330,13 +455,38 @@ uint8_t keyboard__pins__port_c__button_pins_mask(void) {
 #if CONCAT(0x, IN__BUTTON15__PORT) == 0xC
     mask |= ((uint8_t)(1 << (IN__BUTTON15__PIN)));
 #endif
+
+#if defined(IN__BUTTON16__PORT) && defined(IN__BUTTON16__PIN)
+#if CONCAT(0x, IN__BUTTON16__PORT) == 0xC
+    mask |= (1 << (IN__BUTTON16__PIN));
+#endif
+#endif
+
+#if defined(IN__BUTTON17__PORT) && defined(IN__BUTTON17__PIN)
+#if CONCAT(0x, IN__BUTTON17__PORT) == 0xC
+    mask |= (1 << (IN__BUTTON17__PIN));
+#endif
+#endif
+
+#if defined(IN__BUTTON18__PORT) && defined(IN__BUTTON18__PIN)
+#if CONCAT(0x, IN__BUTTON18__PORT) == 0xC
+    mask |= (1 << (IN__BUTTON18__PIN));
+#endif
+#endif
+
+#if defined(IN__BUTTON19__PORT) && defined(IN__BUTTON19__PIN)
+#if CONCAT(0x, IN__BUTTON19__PORT) == 0xC
+    mask |= (1 << (IN__BUTTON19__PIN));
+#endif
+#endif
+
     return mask;
 }
 
 
 /**
  * Provides pin number for the given button (if it pertains to port D)
- * @param button 0-15 for BUTTON0..BUTTON15
+ * @param button 0-31 for BUTTON0..BUTTON31
 */
 uint8_t keyboard__pins__port_d__pin_for_button(const uint8_t button) {
 #if CONCAT(0x, IN__BUTTON0__PORT) == 0xD
@@ -387,6 +537,31 @@ uint8_t keyboard__pins__port_d__pin_for_button(const uint8_t button) {
 #if CONCAT(0x, IN__BUTTON15__PORT) == 0xD
     if (button == 15) return IN__BUTTON15__PIN;
 #endif
+
+#if defined(IN__BUTTON16__PORT) && defined(IN__BUTTON16__PIN)
+#if CONCAT(0x, IN__BUTTON16__PORT) == 0xD
+    if (button == 16) return IN__BUTTON16__PIN;
+#endif
+#endif
+
+#if defined(IN__BUTTON17__PORT) && defined(IN__BUTTON17__PIN)
+#if CONCAT(0x, IN__BUTTON17__PORT) == 0xD
+    if (button == 17) return IN__BUTTON17__PIN;
+#endif
+#endif
+
+#if defined(IN__BUTTON18__PORT) && defined(IN__BUTTON18__PIN)
+#if CONCAT(0x, IN__BUTTON18__PORT) == 0xD
+    if (button == 18) return IN__BUTTON18__PIN;
+#endif
+#endif
+
+#if defined(IN__BUTTON19__PORT) && defined(IN__BUTTON19__PIN)
+#if CONCAT(0x, IN__BUTTON19__PORT) == 0xD
+    if (button == 19) return IN__BUTTON19__PIN;
+#endif
+#endif
+
     return 0xFF;
 }
 
@@ -441,5 +616,30 @@ uint8_t keyboard__pins__port_d__button_pins_mask(void) {
 #if CONCAT(0x, IN__BUTTON15__PORT) == 0xD
     mask |= (1 << (IN__BUTTON15__PIN));
 #endif
+
+#if defined(IN__BUTTON16__PORT) && defined(IN__BUTTON16__PIN)
+#if CONCAT(0x, IN__BUTTON16__PORT) == 0xD
+    mask |= (1 << (IN__BUTTON16__PIN));
+#endif
+#endif
+
+#if defined(IN__BUTTON17__PORT) && defined(IN__BUTTON17__PIN)
+#if CONCAT(0x, IN__BUTTON17__PORT) == 0xD
+    mask |= (1 << (IN__BUTTON17__PIN));
+#endif
+#endif
+
+#if defined(IN__BUTTON18__PORT) && defined(IN__BUTTON18__PIN)
+    #if CONCAT(0x, IN__BUTTON18__PORT) == 0xD
+    mask |= (1 << (IN__BUTTON18__PIN));
+#endif
+#endif
+
+#if defined(IN__BUTTON19__PORT) && defined(IN__BUTTON19__PIN)
+    #if CONCAT(0x, IN__BUTTON19__PORT) == 0xD
+    mask |= (1 << (IN__BUTTON19__PIN));
+#endif
+#endif
+
     return mask;
 }
