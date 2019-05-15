@@ -21,10 +21,7 @@
 | 16 | KEYBOARD__PORT_B__MASK__REG                                     |
 | 17 | KEYBOARD__PORT_C__MASK__REG                                     |
 | 18 | KEYBOARD__PORT_D__MASK__REG                                     |
-| 16 | allocated by compiler                                           |
-| 17 | allocated by compiler                                           |
-| 18 | allocated by compiler                                           |
-| 19 | KEYBOARD_EVENT__REG                                             |
+| 19 | COMM_KEYBOARD__EVENT__REG                                       |
 | 20 | COMM_LEDS__DATA__INDEX__REG                                     |
 | 21 | allocated by compiler                                           |
 | 22 | allocated by compiler                                           |

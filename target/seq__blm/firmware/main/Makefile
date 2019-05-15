@@ -21,8 +21,8 @@ CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.keyboa
 include config.keyboard.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_leds.properties)
 include config.comm_leds.properties
-CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_keyboard.properties)
-include config.comm_keyboard.properties
+#CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_keyboard.properties)
+#include config.comm_keyboard.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_keyboard_simple.properties)
 include config.comm_keyboard_simple.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.twi_slave__handler.properties)
@@ -41,4 +41,5 @@ endif
 # Firmware
 SRC += __all__.c
 
+include $(ROOT)/cpu/avr/Makefile.fixed_registers.mk
 include $(ROOT)/cpu/avr/Makefile

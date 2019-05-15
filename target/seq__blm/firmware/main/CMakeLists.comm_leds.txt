@@ -1,1 +1,1 @@
-add_definitions(-DCOMM_LEDS__DATA__INDEX__REG=20)
+add_definitions(-DCOMM_LEDS__DATA__INDEX__REG=7)

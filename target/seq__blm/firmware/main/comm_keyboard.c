@@ -1,4 +1,5 @@
 // =============================================================================
+// This file is unused - buffered implementation was buggy (over-optimization?)
 // =============================================================================
 
 #include "comm_keyboard.h"

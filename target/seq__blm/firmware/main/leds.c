@@ -2,6 +2,7 @@
 // Support for WS2812 LEDs.
 // =============================================================================
 
+#include <cpu/avr/asm.h>
 #include "leds.h"
 #include "drivers/comm/ws2812b.h"
 
@@ -30,6 +31,7 @@ void leds__data__position__set(const uint8_t position) {
 }
 
 void leds__data__put(const uint8_t value) {
+    // optimize it
     *leds__data__ptr++ = value;
 }
 
