@@ -1,17 +1,37 @@
 #include "hid_board.h"
 
+#define NOTE_OFFSET (60)
+
+void receive(int board);
+
 // invoked by APP_MIDI_NotifyPackage
 void APP_HIDBoard_Process_Event(mios32_midi_package_t midi_package)  {
     s32 status;
     if(midi_package.type == NoteOn && midi_package.velocity > 0)  {
-        MIOS32_MIDI_SendDebugMessage("switch on all LEDs");
-        u8 payload[4] = { 0xFF, 0xFF, 0xFF, 0xFF };
-        status = i2c_send(IIC_PORT, MATRIX_MCU_IIC_ADDR, &payload[0], sizeof(payload));
+//        MIOS32_MIDI_SendDebugMessage("switch on all LEDs");
+        u8 button = midi_package.note - NOTE_OFFSET;
+        u8 board = button / 16;
+        u8 button_index = button % 16;
+        u8 payload[4] = {
+            button_index,
+            (midi_package.velocity & 3) << 6,
+            ((midi_package.velocity >> 2) & 3) << 6,
+            ((midi_package.velocity >> 4) & 3) << 6,
+        };
+        status = i2c_send(IIC_PORT, (HID_BOARD_IIC_BASE_ADDR + board) << 1, payload, sizeof(payload));
     }
     else if((midi_package.type == NoteOff) || (midi_package.type == NoteOn && midi_package.velocity == 0))  {
-        MIOS32_MIDI_SendDebugMessage("switch off all LEDs");
-        u8 payload[4] = { 0x00, 0x00, 0x00, 0x00 };
-        status = i2c_send(IIC_PORT, MATRIX_MCU_IIC_ADDR, &payload[0], sizeof(payload));
+//        MIOS32_MIDI_SendDebugMessage("switch off all LEDs");
+        u8 button = midi_package.note - NOTE_OFFSET;
+        u8 board = button / 16;
+        u8 button_index = button % 16;
+        u8 payload[4] = {
+            button_index,
+            (midi_package.velocity & 3) << 6,
+            ((midi_package.velocity >> 2) & 3) << 6,
+            ((midi_package.velocity >> 4) & 3) << 6,
+        };
+        status = i2c_send(IIC_PORT, (HID_BOARD_IIC_BASE_ADDR + board) << 1, payload, sizeof(payload));
     }
     else {
         MIOS32_MIDI_SendDebugMessage("other midi package");
@@ -29,27 +49,36 @@ static void TASK_HIDBoard_Scan(void *pvParameters)  {
     // Initialise the xLastExecutionTime variable on task entry
     xLastExecutionTime = xTaskGetTickCount();
 
-    uint8_t buttonEvent;
+    
     while(1)  {
-        vTaskDelayUntil(&xLastExecutionTime, 50 / portTICK_RATE_MS);
+        vTaskDelayUntil(&xLastExecutionTime, 10 / portTICK_RATE_MS);
 
-        s32 status;
-        if((status = i2c_receive(IIC_PORT, MATRIX_MCU_IIC_ADDR, (u8 *) &buttonEvent, sizeof(buttonEvent))) >= 0)  {
+        receive(0);
+        receive(1);
+        receive(2);
+        receive(3);
+    }
+}
+
+void receive(int board) {
+    uint8_t buttonEvent;
+    s32 status = -1;
+    while (status < 0) {
+        if ((status = i2c_receive(IIC_PORT, (HID_BOARD_IIC_BASE_ADDR + board) << 1, (u8 *) &buttonEvent, sizeof(buttonEvent))) >= 0) {
             // event is 0 when nothing has happened
             if (buttonEvent != 0) {
                 uint8_t pressed = buttonEvent >= 'a';
                 uint8_t button = pressed ? buttonEvent - 'a' : buttonEvent - 'A';
-                APP_HIDBoard_NotifyToggle(button, pressed);
+                APP_HIDBoard_NotifyToggle(16 * board + button, pressed);
             }
+        } else {
+            MIOS32_MIDI_SendDebugMessage("WARNING: Could not receive via I2C.\n");
         }
-//        else {
-//            MIOS32_MIDI_SendDebugMessage("WARNING: Could not receive via I2C.\n");
-//        }
     }
 }
 
 void APP_HIDBoard_NotifyToggle(uint8_t button, uint8_t pressed) {
-    int note_number = 60 + button;
+    int note_number = NOTE_OFFSET + button;
 
     int velocity;
     if (pressed)

@@ -9,8 +9,8 @@
 #include "midi_output_config.h"
 #include "i2c.h"
 
-//0x20 shifted by one to the left (mios specific)
-#define MATRIX_MCU_IIC_ADDR 0x40
+// shifted by one to the left (mios specific)
+#define HID_BOARD_IIC_BASE_ADDR 0x30
 
 #define PRIORITY_TASK_BUTTON_MATRIX_SCAN (tskIDLE_PRIORITY + 3)
 
