@@ -3,9 +3,6 @@
 #if defined(TX_RING_BUFFER__SIZE)
 // TX ring buffer first for 256-byte alignment
 #  include "services/tx_ring_buffer.c"
-#  include "comm_keyboard.c"
-#else
-#  include "comm_keyboard_simple.c"
 #endif
 
 // LED data
@@ -24,9 +21,20 @@
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.c"
 #include "cpu/avr/services/keyboard/keyboard.c"
 
+// Encoder
+#include "drivers/in/encoder__step.c"
+#include "drivers/in/encoder0.c"
+
 // I2C Comm
 #include "twi_slave__handler.c"
+#include "comm_events_simple.c"
 #include "comm_leds.c"
+#if defined(TX_RING_BUFFER__SIZE)
+#  include "comm_keyboard.c"
+#else
+#  include "comm_keyboard_simple.c"
+#endif
+#include "comm_encoder.c"
 
 // Entry point
 #include "main.c"

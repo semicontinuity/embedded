@@ -1,0 +1,29 @@
+ATMEGA48
+======================================================================================
+Pin	Func	Application
+======================================================================================
+PB0		LEDs row 4
+PB1		LEDs row 3
+PB2	SS	LEDs row 2
+PB3	MOSI	LEDs row 1
+PB4	MISO	LEDs row 0
+PB5	SCK	Interrupt out
+PB6	XTAL1	Debug LED A
+PB7	XTAL2	Debug LED B
+
+PC0		Column 1
+PC1		Column 2
+PC2		Column 3
+PC3		Column 0
+PC4	SDA	I2C Comm
+PC5	SCL	I2C Comm
+PC6	RESET
+
+PD0	RXD	Buttons row 4
+PD1	TXD	Buttons row 3
+PD2	INT0	Buttons row 2
+PD3	INT1	Buttons row 1
+PD4		Buttons row 0
+PD5		Encoder contact B
+PD6		Encoder contact A
+PD7		Encoder switch

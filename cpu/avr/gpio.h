@@ -5,8 +5,8 @@
 #include <avr/io.h>
 #include "cpu/avr/macros.h"
 
-#define set_bit_in_reg(reg,bit)      do {(reg) |= _BV(bit);} while(0)
-#define clear_bit_in_reg(reg,bit)    do {(reg) &= ~_BV(bit);} while(0)
+#define set_bit_in_reg(reg,bit)      do { (reg) |= (1U << ((uint8_t) bit));} while (0)
+#define clear_bit_in_reg(reg,bit)    do { (reg) &= ~(1U << ((uint8_t) bit));} while (0)
 
 #define DECLARE_CLEAR_ONLY_BITVAR(name)         \
 	inline void name##__clear(void);        \

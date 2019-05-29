@@ -15,12 +15,25 @@ set(SOURCE_FILES
         io_matrix__scanner__thread.h
         io_matrix__scanner__thread.c
 
+        ../../../../cpu/avr/timer2.c
+        ../../bsp/drivers/keyboard__pins__matrix.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer2.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.c
+        ../../../../cpu/avr/services/keyboard/keyboard.c
+
+        ../../bsp/drivers/in/encoder__step.h
+        ../../bsp/drivers/in/encoder__step.c
+        ../../bsp/drivers/in/encoder0.h
+        ../../bsp/drivers/in/encoder0.c
+
         ../../../../cpu/avr/twi.h
         twi_slave__handler.h
         twi_slave__handler.c
+        comm_events_simple.c
         comm_leds.c
         comm_keyboard.h
         comm_keyboard_simple.c
+        comm_encoder.c
 
         ../../bsp/drivers/out/led_a.h
         ../../bsp/drivers/out/led_b.h
@@ -44,5 +57,5 @@ include(CMakeLists.io_matrix.txt)
 include(CMakeLists.io.txt)
 include(CMakeLists.encoder.txt)
 include(CMakeLists.keyboard.txt)
-include(CMakeLists.comm_keyboard_simple.txt)
+include(CMakeLists.comm_events_simple.txt)
 include(CMakeLists.twi.txt)

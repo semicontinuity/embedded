@@ -2,20 +2,13 @@
 // On I2C Read request, responds with the 1-byte keyboard event, or 0 if none
 // =============================================================================
 
-#include "comm_keyboard.h"
+#include "comm_events.h"
 
 #include <avr/interrupt.h>
 #include <cpu/avr/macros.h>
 #include <cpu/avr/asm.h>
 
-#include <cpu/avr/twi.h>
-#include "twi_slave_callbacks.h"
-
-#include <drivers/out/alarm.h>
 #include <drivers/out/led_a.h>
-#include <drivers/out/led_b.h>
-
-register volatile uint8_t keyboard_event asm(QUOTE(KEYBOARD_EVENT__REG));
 
 
 // keyboard callbacks
@@ -32,28 +25,11 @@ register volatile uint8_t keyboard_event asm(QUOTE(KEYBOARD_EVENT__REG));
  */
 inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
     led_a__toggle();
-    if (!alarm__get()) {
-        keyboard_event = IF_BIT_SET_CONST_A_ELSE_CONST_B(state, bit, (uint8_t) ('A' + button), (uint8_t) ('a' + button));
-        led_b__toggle();
-        alarm__set(1);
+    if (!comm_events__queue__is_full()) {
+        comm_events__queue__put(
+            IF_BIT_SET_CONST_A_ELSE_CONST_B(state, bit, (uint8_t) ('A' + button), (uint8_t) ('a' + button))
+        );
         return true;
     }
     return false;
-}
-
-
-// TWI Slave callbacks
-// -----------------------------------------------------------------------------
-
-void twi__slave__on_data_byte_requested(void) {
-    __asm__ __volatile__("twi__slave__on_data_byte_requested:");
-    twi__data__set(keyboard_event);
-    twi__continue(/*false*/true, false);
-    keyboard_event = 0;
-    alarm__set(0);
-}
-
-
-void comm_keyboard__start(void) {
-    keyboard_event = 0;
 }

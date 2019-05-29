@@ -30,8 +30,8 @@ CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.keyboa
 include config.keyboard.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.encoder.properties)
 include config.encoder.properties
-CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_keyboard_simple.properties)
-include config.comm_keyboard_simple.properties
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_events_simple.properties)
+include config.comm_events_simple.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.twi_slave__handler.properties)
 include config.twi_slave__handler.properties
 

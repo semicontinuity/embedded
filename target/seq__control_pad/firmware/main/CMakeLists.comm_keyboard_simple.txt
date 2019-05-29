@@ -1,1 +1,0 @@
-add_definitions(-DKEYBOARD_EVENT__REG=16)
