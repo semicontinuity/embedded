@@ -28,6 +28,8 @@ CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.io_mat
 include config.io_matrix.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.keyboard.properties)
 include config.keyboard.properties
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.encoder.properties)
+include config.encoder.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_keyboard_simple.properties)
 include config.comm_keyboard_simple.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.twi_slave__handler.properties)
