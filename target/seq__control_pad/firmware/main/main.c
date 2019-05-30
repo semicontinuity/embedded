@@ -26,8 +26,7 @@
 #include <drivers/out/led_b.h>
 
 
-uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
-
+//uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
 
 // application
 // -----------------------------------------------------------------------------
@@ -44,10 +43,10 @@ void application__init(void) {
 //    keyboard__init();
 
     alarm__init();
-    led_a__init();
-    led_b__init();
+//    led_a__init();
+//    led_b__init();
 
-    twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
+    twi__slave_address__set(0x08);
 }
 
 void application__start(void) {
@@ -64,7 +63,7 @@ int main(void) {
     application__init();
     application__start();
 
-    sei();
+//    sei();
 
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic push
@@ -73,11 +72,12 @@ int main(void) {
     for(;;) {
 /*
         keyboard__run();
+*/
+        encoder0__run();
+
         if (twi__slave__handler__is_runnable()) {
             twi__slave__handler__run();
         }
-*/
-        encoder0__run();
     }
 
 #if !defined(__AVR_ARCH__)

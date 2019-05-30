@@ -4,18 +4,15 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+// macros, not functions, because these values used to pass value to inline asm macro
+#define COMM_EVENTS__ENCODER__ROTATION_EVENT_CLOCKWISE(encoder) (((encoder) << 2) | 0x01U)
+#define COMM_EVENTS__ENCODER__ROTATION_EVENT_COUNTERCLOCKWISE(encoder) (((encoder) << 2) | 0x03U)
+
+
 bool comm_events__queue__is_full(void);
 
 void comm_events__queue__put(uint8_t event);
 
 void comm_events__start(void);
-
-inline bool comm_events__encoder_rotation_event_clockwise(const uint8_t encoder) {
-    return ((uint8_t)(encoder << 2U) | 0x01U);
-}
-
-inline bool comm_events__encoder_rotation_event_counterclockwise(const uint8_t encoder) {
-    return ((uint8_t)(encoder << 2U) | 0x03U);
-}
 
 #endif

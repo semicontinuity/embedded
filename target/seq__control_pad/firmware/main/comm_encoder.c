@@ -25,8 +25,8 @@ bool encoder0__handle_rotation_event(uint8_t encoder, uint8_t delta) {
         comm_events__queue__put(
             IF_BIT_SET_CONST_A_ELSE_CONST_B(
                 delta, 7,
-                comm_events__encoder_rotation_event_counterclockwise(encoder),
-                comm_events__encoder_rotation_event_clockwise(encoder)
+                COMM_EVENTS__ENCODER__ROTATION_EVENT_CLOCKWISE(encoder),
+                COMM_EVENTS__ENCODER__ROTATION_EVENT_COUNTERCLOCKWISE(encoder)
             )
         );
         return true;

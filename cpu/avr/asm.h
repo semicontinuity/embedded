@@ -261,8 +261,8 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
         : "=d"(__result),                                   \
           "+r"((v))                                         \
         : "I"((bit)),                                       \
-          "M"((uint8_t)((a) & 0xFF)),                       \
-          "M"((uint8_t)((b) & 0xFF))                        \
+          "M"((a)),                                         \
+          "M"((b))                                          \
     );                                                      \
     __result;                                               \
 }))
