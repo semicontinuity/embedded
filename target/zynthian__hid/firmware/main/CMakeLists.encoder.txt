@@ -1,0 +1,9 @@
+add_definitions(-DIN__ENCODER0__A__PORT=B)
+add_definitions(-DIN__ENCODER0__A__PIN=0)
+add_definitions(-DIN__ENCODER0__B__PORT=B)
+add_definitions(-DIN__ENCODER0__B__PIN=1)
+add_definitions(-DIN__ENCODER0__SWITCH__PORT=B)
+add_definitions(-DIN__ENCODER0__SWITCH__PIN=2)
+
+add_definitions(-DENCODER0__STATE__REG=8)
+add_definitions(-DENCODER0__SWITCH__STATE__REG=9)
