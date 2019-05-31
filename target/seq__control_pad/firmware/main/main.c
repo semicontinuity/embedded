@@ -16,6 +16,7 @@
 
 #include "cpu/avr/services/keyboard/keyboard.h"
 #include <drivers/in/encoder0.h>
+#include <drivers/in/encoder0__switch.h>
 
 #include <cpu/avr/twi.h>
 #include "twi_slave__handler.h"
@@ -40,6 +41,7 @@ void application__init(void) {
 //    io_matrix__scanner__thread__timer__init();
 
     encoder0__init();
+    encoder0__switch__init();
 //    keyboard__init();
 
     alarm__init();
@@ -74,6 +76,7 @@ int main(void) {
         keyboard__run();
 */
         encoder0__run();
+        encoder0__switch__run();
 
         if (twi__slave__handler__is_runnable()) {
             twi__slave__handler__run();

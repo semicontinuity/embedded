@@ -20,7 +20,7 @@
 | 15 | KEYBOARD__PORT_D__MASK__REG                                     |
 | 16 | COMM_EVENTS__EVENT__REG                                         |
 | 17 | ENCODER0__STATE__REG                                            |
-| 18 | allocated by compiler                                           |
+| 18 | ENCODER0__SWITCH__STATE__REG                                    |
 | 19 | allocated by compiler                                           |
 | 21 | allocated by compiler                                           |
 | 22 | allocated by compiler                                           |

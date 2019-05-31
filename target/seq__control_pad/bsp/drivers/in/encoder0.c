@@ -37,8 +37,8 @@ void encoder0__run(void) {
             0xF, // unaltered bit 4 from the last argument (0)
             0xF, // unaltered bit 3 from the last argument (0)
             0xF, // unaltered bit 2 from the last argument (0)
-            IN__ENCODER0__B__PIN,
-            IN__ENCODER0__A__PIN),
+            IN__ENCODER0__A__PIN,
+            IN__ENCODER0__B__PIN),
         raw_port_value,
         0
     );

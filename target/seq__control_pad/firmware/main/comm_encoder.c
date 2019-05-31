@@ -25,8 +25,27 @@ bool encoder0__handle_rotation_event(uint8_t encoder, uint8_t delta) {
         comm_events__queue__put(
             IF_BIT_SET_CONST_A_ELSE_CONST_B(
                 delta, 7,
-                COMM_EVENTS__ENCODER__ROTATION_EVENT_CLOCKWISE(encoder),
-                COMM_EVENTS__ENCODER__ROTATION_EVENT_COUNTERCLOCKWISE(encoder)
+                COMM_EVENTS__ENCODER__ROTATION_EVENT_COUNTERCLOCKWISE(encoder),
+                COMM_EVENTS__ENCODER__ROTATION_EVENT_CLOCKWISE(encoder)
+            )
+        );
+        return true;
+    }
+    return false;
+}
+
+/**
+ * Callback to be implemented to handle encoder switch events.
+ * @param new_state determines the action: 0x00 if pressed, (1 << bit) if released
+ */
+bool encoder0__handle_switch_event(uint8_t encoder, uint8_t new_state, uint8_t bit) {
+    led_a__toggle();
+    if (!comm_events__queue__is_full()) {
+        comm_events__queue__put(
+            IF_BIT_SET_CONST_A_ELSE_CONST_B(
+                new_state, bit,
+                COMM_EVENTS__ENCODER__SWITCH_EVENT_DEPRESSED(encoder),
+                COMM_EVENTS__ENCODER__SWITCH_EVENT_PRESSED(encoder)
             )
         );
         return true;

@@ -6,3 +6,4 @@ add_definitions(-DIN__ENCODER0__SWITCH__PORT=D)
 add_definitions(-DIN__ENCODER0__SWITCH__PIN=7)
 
 add_definitions(-DENCODER0__STATE__REG=17)
+add_definitions(-DENCODER0__SWITCH__STATE__REG=18)
