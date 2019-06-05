@@ -1,6 +1,11 @@
 # Keyboard handler
 add_definitions(-Dtimer2__overflow__run=keyboard__debounce_timer__expired)
 add_definitions(-DTIMER2_OVERFLOW_vect_naked)
+add_definitions(-Dkeyboard__port_a__debounce_timer__start=keyboard__debounce_timer__start)
+add_definitions(-Dkeyboard__port_b__debounce_timer__start=keyboard__debounce_timer__start)
+add_definitions(-Dkeyboard__port_c__debounce_timer__start=keyboard__debounce_timer__start)
+add_definitions(-Dkeyboard__port_d__debounce_timer__start=keyboard__debounce_timer__start)
+
 add_definitions(-DKEYBOARD__PORT_A__USED=1)
 add_definitions(-DKEYBOARD__PORT_B__USED=1)
 add_definitions(-DKEYBOARD__PORT_C__USED=1)
