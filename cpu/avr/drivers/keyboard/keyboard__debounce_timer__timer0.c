@@ -1,5 +1,5 @@
 // =============================================================================
-// Debounce timer for the keyboard.
+// Debounce timer for the keyboard, implemented with Timer 0 Overflow interrupt.
 // Invoke keyboard__debounce_timer__start() after any button event.
 // When the timer expires, keyboard__debounce_timer__run() callback
 // will be invoked and the timer stops until next call to start().

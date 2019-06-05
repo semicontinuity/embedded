@@ -1,5 +1,5 @@
 // =============================================================================
-// Debounce timer for the keyboard, implemented with Timer 2.
+// Debounce timer for the keyboard, implemented with Timer 2 Overflow interrupt.
 // Add the following define:
 // timer2__overflow__run=keyboard__debounce_timer__expired
 //

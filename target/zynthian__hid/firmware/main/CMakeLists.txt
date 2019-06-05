@@ -11,6 +11,8 @@ set(SOURCE_FILES
         ../../bsp/drivers/in/encoder0.h
         ../../bsp/drivers/in/encoder0.c
 
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer__timer0a.c
+
         ../../../../cpu/avr/twi.h
         twi_slave__handler.h
         twi_slave__handler.c

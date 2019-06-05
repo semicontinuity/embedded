@@ -9,6 +9,7 @@
 
 #include <drivers/in/encoder0.h>
 #include <drivers/in/encoder0__switch.h>
+#include <cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer.h>
 
 #include <cpu/avr/twi.h>
 #include "twi_slave__handler.h"
@@ -40,6 +41,7 @@ void twi__slave__on_data_byte_received(const uint8_t value) {
 void application__init(void) {
     encoder0__init();
     encoder0__switch__init();
+    keyboard__port_a__debounce_timer__init();
 
     alarm__init();
 //    led_a__init();

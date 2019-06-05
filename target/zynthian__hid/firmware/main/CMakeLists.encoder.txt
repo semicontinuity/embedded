@@ -7,3 +7,9 @@ add_definitions(-DIN__ENCODER0__SWITCH__PIN=2)
 
 add_definitions(-DENCODER0__STATE__REG=8)
 add_definitions(-DENCODER0__SWITCH__STATE__REG=9)
+
+add_definitions(-Dtimer0__comp_a__run=keyboard__port_a__debounce_timer__expired)
+add_definitions(-Dkeyboard__port_a__debounce_timer__run=encoder0__debounce_timer__run)
+add_definitions(-DKEYBOARD__PORT_A__DEBOUNCE_TIMER__CONF__INITIALIZED=TIMER0_CONF_DEFAULT)
+add_definitions(-DKEYBOARD__PORT_A__DEBOUNCE_TIMER__CONF__STARTED=TIMER0_CONF_PRESCALER_1024)
+add_definitions(-DKEYBOARD__PORT_A__DEBOUNCE_TIMER__DELAY=4)
