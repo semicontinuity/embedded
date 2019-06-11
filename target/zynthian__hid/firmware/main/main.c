@@ -1,7 +1,6 @@
 // =============================================================================
-// Receives 4-byte messages via I2C with raw color data (1 byte per column)
-// and renders 1-bit colors on LEDS (3 bits RGB + 3 bits RGB + 1 bit button LED)
-// Column is selected for 1/4 ms = 256*8 clocks; thus timer0_ovf prescaler 8.
+// Device, that scans 4 rotary encodes.
+// Can be asked via I2C to report latest event (with 1-byte I2C read).
 // =============================================================================
 
 #include <avr/interrupt.h>
@@ -41,7 +40,6 @@ void twi__slave__on_data_byte_received(const uint8_t value) {
 void application__init(void) {
     encoder0__init();
     encoder0__switch__init();
-    keyboard__port_a__debounce_timer__init();
 
     alarm__init();
 //    led_a__init();

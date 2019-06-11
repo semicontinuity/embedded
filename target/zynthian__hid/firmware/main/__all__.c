@@ -5,7 +5,7 @@
 #include "drivers/in/encoder0.c"
 #include "drivers/in/encoder0__switch.c"
 
-#include "cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer__timer0a.c"
+#include "cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer__timer0a__flag.c"
 
 // I2C Comm
 #include "twi_slave__handler.c"
