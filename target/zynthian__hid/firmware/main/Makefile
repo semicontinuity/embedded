@@ -22,6 +22,8 @@ CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.io.pro
 include config.io.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.encoder.properties)
 include config.encoder.properties
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_buttons_queues.properties)
+include config.comm_buttons_queues.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_encoder_queues.properties)
 include config.comm_encoder_queues.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_events_simple.properties)

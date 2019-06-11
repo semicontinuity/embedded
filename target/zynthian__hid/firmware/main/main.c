@@ -14,6 +14,7 @@
 #include "twi_slave__handler.h"
 #include "comm_encoder.h"
 #include "comm_events.h"
+#include "comm_buttons.h"
 
 #include <drivers/out/alarm.h>
 #include <drivers/out/led_a.h>
@@ -73,6 +74,7 @@ int main(void) {
         encoder0__switch__run();
 
         comm_encoder__run();
+        comm_buttons__run();
 
         if (twi__slave__handler__is_runnable()) {
             twi__slave__handler__run();

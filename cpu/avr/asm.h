@@ -268,6 +268,23 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 }))
 
 
+#define IF_IO_BIT_SET_CONST_A_ELSE_CONST_B(ioreg, bit, a, b)\
+(__extension__({                                            \
+    uint8_t __result;                                       \
+    __asm__ __volatile__(                                   \
+    "ldi  %0, %3\n\t"                                       \
+    "sbis %1, %2\n\t"                                       \
+    "ldi  %0, %4\n\t"                                       \
+        : "=d"(__result)                                    \
+        : "I"(_SFR_IO_ADDR(ioreg)),                         \
+          "I"((bit)),                                       \
+          "M"((a)),                                         \
+          "M"((b))                                          \
+    );                                                      \
+    __result;                                               \
+}))
+
+
 #define COMPARE_LO8_SKIP_IF_EQUAL(v1, v2, code) do {\
   __asm__ __volatile__(                         \
     "cpse %A0, %A1\n\t"                         \

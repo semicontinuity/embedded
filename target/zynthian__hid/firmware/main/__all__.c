@@ -11,6 +11,7 @@
 #include "twi_slave__handler.c"
 #include "comm_events_simple.c"
 #include "comm_encoder_queues.c"
+#include "comm_buttons_queues.c"
 
 // Entry point
 #include "main.c"

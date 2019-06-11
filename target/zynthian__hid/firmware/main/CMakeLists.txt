@@ -19,6 +19,9 @@ set(SOURCE_FILES
         twi_slave__handler.h
         twi_slave__handler.c
         comm_events_simple.c
+        comm_buttons.h
+        comm_buttons_queues.c
+        comm_encoder.h
         comm_encoder_queues.c
 
         ../../bsp/drivers/out/led_a.h
@@ -38,6 +41,7 @@ add_definitions(-DF_CPU=8000000UL)
 
 include(CMakeLists.io.txt)
 include(CMakeLists.encoder.txt)
+include(CMakeLists.comm_buttons_queues.txt)
 include(CMakeLists.comm_encoder_queues.txt)
 include(CMakeLists.comm_events_simple.txt)
 include(CMakeLists.twi.txt)

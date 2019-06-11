@@ -35,21 +35,11 @@ bool encoder0__handle_rotation_event(uint8_t delta) {
     return true;
 }
 
-/**
- * Callback to be implemented to handle encoder switch events.
- * @param new_state determines the action: 0x00 if pressed, (1 << bit) if released
- */
-bool encoder0__handle_switch_event(uint8_t encoder, uint8_t new_state, uint8_t bit) {
-    return false;
-}
-
-
 // event pumping
 // ---------------------------------------------------------------------------------------------------------------------
 
 /**
- * If there are pending events, pick the event, and put it to the comm events queue
- * @return pending event code, or 0 if none.
+ * If there are pending events, pick the event, and put it to the comm events queue.
  */
 void comm_encoder__run(void) {
     if (!comm_events__queue__is_full()) {
