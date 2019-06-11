@@ -10,6 +10,8 @@ set(SOURCE_FILES
         ../../bsp/drivers/in/encoder__step.c
         ../../bsp/drivers/in/encoder0.h
         ../../bsp/drivers/in/encoder0.c
+        ../../bsp/drivers/in/encoder0__switch.h
+        ../../bsp/drivers/in/encoder0__switch.c
 
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer__timer0a__flag.c
 
@@ -17,7 +19,7 @@ set(SOURCE_FILES
         twi_slave__handler.h
         twi_slave__handler.c
         comm_events_simple.c
-        comm_encoder.c
+        comm_encoder_queues.c
 
         ../../bsp/drivers/out/led_a.h
         ../../bsp/drivers/out/led_b.h
@@ -36,5 +38,6 @@ add_definitions(-DF_CPU=8000000UL)
 
 include(CMakeLists.io.txt)
 include(CMakeLists.encoder.txt)
+include(CMakeLists.comm_encoder_queues.txt)
 include(CMakeLists.comm_events_simple.txt)
 include(CMakeLists.twi.txt)

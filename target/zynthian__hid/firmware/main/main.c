@@ -12,6 +12,7 @@
 
 #include <cpu/avr/twi.h>
 #include "twi_slave__handler.h"
+#include "comm_encoder.h"
 #include "comm_events.h"
 
 #include <drivers/out/alarm.h>
@@ -70,6 +71,8 @@ int main(void) {
     for(;;) {
         encoder0__run();
         encoder0__switch__run();
+
+        comm_encoder__run();
 
         if (twi__slave__handler__is_runnable()) {
             twi__slave__handler__run();

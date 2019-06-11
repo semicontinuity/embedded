@@ -5,6 +5,9 @@
 #include <stdbool.h>
 
 // macros, not functions, because these values used to pass value to inline asm macro
+#define COMM_EVENTS__ENCODER__ROTATION_EVENT(encoder, delta) (((encoder) << 5) | ((delta) & 0x1F))
+
+// macros, not functions, because these values used to pass value to inline asm macro
 #define COMM_EVENTS__ENCODER__ROTATION_EVENT_CLOCKWISE(encoder) (((encoder) << 2) | 0x01U)
 #define COMM_EVENTS__ENCODER__ROTATION_EVENT_COUNTERCLOCKWISE(encoder) (((encoder) << 2) | 0x03U)
 

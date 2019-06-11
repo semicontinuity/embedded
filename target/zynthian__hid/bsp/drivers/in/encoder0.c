@@ -45,7 +45,7 @@ void encoder0__run(void) {
         encoder0__state = current_state;
         uint8_t delta = encoder__step[index];
         if (delta) {
-            encoder0__handle_rotation_event(0, delta);
+            encoder0__handle_rotation_event(delta);
             keyboard__port_a__debounce_timer__start();
         }
     }
