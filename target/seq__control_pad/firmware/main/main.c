@@ -54,7 +54,7 @@ void application__init(void) {
 void application__start(void) {
 //    io_matrix__scanner__thread__timer__start();
     comm_events__start();
-    twi__slave__start(false);
+    twi__slave__start();
 }
 
 

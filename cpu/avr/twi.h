@@ -1,5 +1,7 @@
 // =============================================================================
 // Two-wire interface driver
+//
+// Define TWI__SLAVE__INTERRUPT=1 to indicate that driver is used in ISR
 // =============================================================================
 
 #ifndef __CPU_AVR_TWI_H
@@ -8,6 +10,9 @@
 #include <stdbool.h>
 #include <avr/io.h>
 
+#if !defined(TWI__SLAVE__INTERRUPT)
+#define TWI__SLAVE__INTERRUPT (0)
+#endif
 
 #if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
     defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__)
@@ -60,12 +65,10 @@
 #define TWI__STATUS__SLAVE_TRANSMITTED_LAST_DATA_BYTE_ACKNOWLEDGED              (0xC8)
 
 
-inline static void twi__slave__start(const bool interrupt) {
-    if (interrupt) {
-        TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__ENABLED__BIT) | _BV(TWI__INTERRUPT__BIT);
-    } else {
-        TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__BIT);
-    }
+inline static void twi__slave__start(void) {
+    uint8_t value = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__BIT);
+    value |= (TWI__SLAVE__INTERRUPT != 0) ? _BV(TWI__INTERRUPT__ENABLED__BIT) : 0;
+    TWI__CONTROL__REGISTER = value;
 }
 
 inline static void twi__enable(void) {
@@ -124,19 +127,11 @@ inline static bool twi__is_software_action_required(void) {
  * @param proceed acknowledge (or expect acknowledgement) of the next data byte; respond to slave address
  */
 inline static void twi__continue(const bool proceed, const bool transmit_start_when_bus_free) {
-    if (transmit_start_when_bus_free) {
-        if (proceed) {
-            TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__START_CONDITION__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__BIT);
-        } else {
-            TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__START_CONDITION__BIT) | _BV(TWI__INTERRUPT__BIT);
-        }
-    } else {
-        if (proceed) {
-            TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__INTERRUPT__BIT);
-        } else {
-            TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__INTERRUPT__BIT);
-        }
-    }
+    uint8_t value = _BV(TWI__ENABLED__BIT) | _BV(TWI__INTERRUPT__BIT);
+    value |= transmit_start_when_bus_free ? _BV(TWI__START_CONDITION__BIT) : 0;
+    value |= proceed ? _BV(TWI__ACKNOWLEDGE__BIT) : 0;
+    value |= (TWI__SLAVE__INTERRUPT != 0) ? _BV(TWI__INTERRUPT__ENABLED__BIT) : 0;
+    TWI__CONTROL__REGISTER = value;
 }
 
 
@@ -145,11 +140,10 @@ inline static void twi__continue(const bool proceed, const bool transmit_start_w
  * @param acknowledge described as "does not matter", but can be specified.
  */
 inline static void twi__recover_from_bus_error(const bool acknowledge) {
-    if (acknowledge) {
-        TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__ACKNOWLEDGE__BIT) | _BV(TWI__STOP_CONDITION__BIT) | _BV(TWI__INTERRUPT__BIT);
-    } else {
-        TWI__CONTROL__REGISTER = _BV(TWI__ENABLED__BIT) | _BV(TWI__STOP_CONDITION__BIT) | _BV(TWI__INTERRUPT__BIT);
-    }
+    uint8_t value = _BV(TWI__ENABLED__BIT) | _BV(TWI__INTERRUPT__BIT) | _BV(TWI__STOP_CONDITION__BIT);
+    value |= acknowledge ? _BV(TWI__ACKNOWLEDGE__BIT) : 0;
+    value |= (TWI__SLAVE__INTERRUPT != 0) ? _BV(TWI__INTERRUPT__ENABLED__BIT) : 0;
+    TWI__CONTROL__REGISTER = value;
 }
 
 
