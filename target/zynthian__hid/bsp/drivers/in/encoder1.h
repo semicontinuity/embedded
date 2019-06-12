@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+
 void encoder1__init(void);
 
 void encoder1__debounce_timer__run(void);
@@ -15,5 +16,22 @@ void encoder1__run(void);
  * @param delta determines the direction of rotation: 0x01 or 0xFF
  */
 bool encoder1__handle_rotation_event(uint8_t delta);
+
+
+/**
+ * Initialize debounce timer.
+ */
+void encoder1__debounce_timer__init(void);
+
+/**
+ * Start (or re-start) debounce timer.
+ */
+void encoder1__debounce_timer__start(void);
+
+/**
+ * @return true if debounce timer has started and timeout not yet elapsed (debouncing in progress)
+ */
+bool encoder1__debounce_timer__is_started(void) __attribute__((weak));
+
 
 #endif

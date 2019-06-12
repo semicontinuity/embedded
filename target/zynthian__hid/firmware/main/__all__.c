@@ -1,9 +1,13 @@
 #include <avr/io.h>
 
-// Encoder
+// Encoders
 #include "drivers/in/encoder__step.c"
+
 #include "drivers/in/encoder0.c"
 #include "drivers/in/encoder0__switch.c"
+#include "drivers/in/encoder1.c"
+#include "drivers/in/encoder2.c"
+#include "drivers/in/encoder3.c"
 
 #include "cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer__timer0a__flag.c"
 #include "cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b__flag.c"

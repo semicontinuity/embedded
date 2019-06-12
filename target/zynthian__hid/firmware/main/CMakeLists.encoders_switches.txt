@@ -11,3 +11,7 @@ add_definitions(-DENCODER0__SWITCH__STATE__REG=9)
 add_definitions(-DENCODER1__SWITCH__STATE__REG=11)
 add_definitions(-DENCODER2__SWITCH__STATE__REG=13)
 add_definitions(-DENCODER3__SWITCH__STATE__REG=15)
+
+add_definitions(-Dencoder0__switch__debounce_timer__init=keyboard__port_a__debounce_timer__init)
+add_definitions(-Dencoder0__switch__debounce_timer__start=keyboard__port_a__debounce_timer__start)
+add_definitions(-Dencoder0__switch__debounce_timer__is_started=keyboard__port_a__debounce_timer__is_started)

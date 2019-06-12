@@ -1,11 +1,10 @@
 // =============================================================================
-// Driver for encoder 0 (associated with debounce timer on port A)
+// Driver for encoder 0
 // =============================================================================
 #include "drivers/in/encoder0.h"
 #include "drivers/in/encoder__step.h"
 #include <cpu/avr/asm.h>
 #include <cpu/avr/gpio.h>
-#include <cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer.h>
 
 
 #if CONCAT(0x, IN__ENCODER0__A__PORT) != CONCAT(0x, IN__ENCODER0__B__PORT)
@@ -24,11 +23,11 @@ void encoder0__init(void) {
     USE_AS_INPUT(IN__ENCODER0__B);
     ENABLE_PULLUP(IN__ENCODER0__B);
 
-    keyboard__port_a__debounce_timer__init();
+    encoder0__debounce_timer__init();
 }
 
 void encoder0__run(void) {
-    if (!keyboard__port_a__debounce_timer__is_started()) {
+    if (!encoder0__debounce_timer__is_started()) {
         uint8_t raw_port_value = IN(IN__ENCODER0__A);
         uint8_t current_state = __builtin_avr_insert_bits(
             avr_insert_bits_map(
@@ -48,7 +47,7 @@ void encoder0__run(void) {
         uint8_t delta = encoder__step[index];
         if (delta) {
             encoder0__handle_rotation_event(delta);
-            keyboard__port_a__debounce_timer__start();
+            encoder0__debounce_timer__start();
         }
     }
 }
