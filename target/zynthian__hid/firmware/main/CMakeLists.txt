@@ -13,7 +13,14 @@ set(SOURCE_FILES
         ../../bsp/drivers/in/encoder0__switch.h
         ../../bsp/drivers/in/encoder0__switch.c
 
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer__timer0a__flag.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b__flag.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer__timer2a__flag.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b__flag.c
 
         ../../../../cpu/avr/twi.h
         twi_slave__handler.h

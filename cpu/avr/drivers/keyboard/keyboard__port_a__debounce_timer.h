@@ -1,5 +1,5 @@
 // =============================================================================
-// Debounce timer for the keyboard's port A
+// Debounce timer for the keyboard's port A (physical or logical)
 // =============================================================================
 
 #ifndef __KEYBOARD__PORT_A__DEBOUNCE_TIMER_H

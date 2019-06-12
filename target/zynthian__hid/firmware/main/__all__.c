@@ -6,6 +6,9 @@
 #include "drivers/in/encoder0__switch.c"
 
 #include "cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer__timer0a__flag.c"
+#include "cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b__flag.c"
+#include "cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer__timer2a__flag.c"
+#include "cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b__flag.c"
 
 // I2C Comm
 #include "twi_slave__handler.c"
