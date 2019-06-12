@@ -1,4 +1,6 @@
-#include "encoder0.h"
+// =============================================================================
+// Driver for encoder 0 (associated with debounce timer on port A)
+// =============================================================================
 #include "drivers/in/encoder0.h"
 #include "drivers/in/encoder__step.h"
 #include <cpu/avr/asm.h>

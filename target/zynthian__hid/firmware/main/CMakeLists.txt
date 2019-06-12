@@ -8,10 +8,17 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         ../../bsp/drivers/in/encoder__step.h
         ../../bsp/drivers/in/encoder__step.c
+
         ../../bsp/drivers/in/encoder0.h
         ../../bsp/drivers/in/encoder0.c
         ../../bsp/drivers/in/encoder0__switch.h
         ../../bsp/drivers/in/encoder0__switch.c
+        ../../bsp/drivers/in/encoder1.h
+        ../../bsp/drivers/in/encoder1.c
+        ../../bsp/drivers/in/encoder2.h
+        ../../bsp/drivers/in/encoder2.c
+        ../../bsp/drivers/in/encoder3.h
+        ../../bsp/drivers/in/encoder3.c
 
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer__timer0a__flag.c
