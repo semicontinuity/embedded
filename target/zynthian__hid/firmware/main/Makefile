@@ -20,8 +20,10 @@ CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh)
 
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.io.properties)
 include config.io.properties
-CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.encoder.properties)
-include config.encoder.properties
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.encoders.properties)
+include config.encoders.properties
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.encoders_switches.properties)
+include config.encoders_switches.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_buttons_queues.properties)
 include config.comm_buttons_queues.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_encoder_queues.properties)

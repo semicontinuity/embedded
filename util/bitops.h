@@ -35,10 +35,10 @@ typedef union {
 	inline bool name##__is_set(void);       \
 	inline char name##__get(void);
 
-#define DEFINE_BITVAR(name, host, bit) \
-	inline void name##__set(char v)	{ if ((v)) (host) |= (1 << (bit)); else (host) &= ~(1 << (bit));}	\
-	inline bool name##__is_set(void)	{ return (host) & (1 << (bit)); }                               \
-	inline char name##__get(void)	{ return (host) & (1 << (bit)); }
+#define DEFINE_BITVAR(name, host, bit)                                                                  \
+	inline void name##__set(char v)	{ if ((v)) (host) |= (1U << (bit)); else (host) &= ~(1U << (bit));} \
+	inline bool name##__is_set(void)	{ return (host) & (1U << (bit)); }                              \
+	inline char name##__get(void)	{ return (host) & (1U << (bit)); }
 
 #define DECLARE_FAKE_BITVAR(name) \
 	inline void name##__set(char v)	{}	\

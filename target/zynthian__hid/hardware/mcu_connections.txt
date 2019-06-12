@@ -5,7 +5,7 @@ Pin	Func	Application
 PB0		Encoder 0 A
 PB1		Encoder 0 B
 PB2	SS	Encoder 0 Switch
-PB3	MOSI	Encoder 1 Common
+PB3	MOSI	Encoder 0 Common
 PB4	MISO	Debug LED C
 PB5	SCK	Interrupt out
 PB6	XTAL1	Debug LED A

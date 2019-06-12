@@ -1,1 +1,4 @@
 add_definitions(-DCOMM_ENCODER__ENCODER0__DELTA__REG=4)
+add_definitions(-DCOMM_ENCODER__ENCODER1__DELTA__REG=5)
+add_definitions(-DCOMM_ENCODER__ENCODER2__DELTA__REG=6)
+add_definitions(-DCOMM_ENCODER__ENCODER3__DELTA__REG=7)
