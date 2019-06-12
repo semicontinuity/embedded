@@ -15,10 +15,16 @@ set(SOURCE_FILES
         ../../bsp/drivers/in/encoder0__switch.c
         ../../bsp/drivers/in/encoder1.h
         ../../bsp/drivers/in/encoder1.c
+        ../../bsp/drivers/in/encoder1__switch.h
+        ../../bsp/drivers/in/encoder1__switch.c
         ../../bsp/drivers/in/encoder2.h
         ../../bsp/drivers/in/encoder2.c
+        ../../bsp/drivers/in/encoder2__switch.h
+        ../../bsp/drivers/in/encoder2__switch.c
         ../../bsp/drivers/in/encoder3.h
         ../../bsp/drivers/in/encoder3.c
+        ../../bsp/drivers/in/encoder3__switch.h
+        ../../bsp/drivers/in/encoder3__switch.c
 
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer__timer0a__flag.c

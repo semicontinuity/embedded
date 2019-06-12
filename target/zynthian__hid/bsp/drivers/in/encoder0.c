@@ -18,6 +18,7 @@ volatile uint8_t encoder0__state;
 #endif
 
 void encoder0__init(void) {
+    __asm__ __volatile__("encoder0__init:");
     USE_AS_INPUT(IN__ENCODER0__A);
     ENABLE_PULLUP(IN__ENCODER0__A);
     USE_AS_INPUT(IN__ENCODER0__B);
@@ -27,6 +28,7 @@ void encoder0__init(void) {
 }
 
 void encoder0__run(void) {
+    __asm__ __volatile__("encoder0__run:");
     if (!encoder0__debounce_timer__is_started()) {
         uint8_t raw_port_value = IN(IN__ENCODER0__A);
         uint8_t current_state = __builtin_avr_insert_bits(
@@ -46,7 +48,7 @@ void encoder0__run(void) {
         encoder0__state = current_state;
         uint8_t delta = encoder__step[index];
         if (delta) {
-            encoder0__handle_rotation_event(delta);
+            encoder0__handle_event(delta);
             encoder0__debounce_timer__start();
         }
     }

@@ -19,7 +19,7 @@
  * Callback to be implemented to handle encoder rotation events.
  * @param delta determines the direction of rotation: 0x01 or 0xFF
  */
-bool encoder0__handle_rotation_event(uint8_t delta) {
+bool encoder0__handle_event(uint8_t delta) {
     led_a__toggle();
     if (!comm_events__queue__is_full()) {
         comm_events__queue__put(

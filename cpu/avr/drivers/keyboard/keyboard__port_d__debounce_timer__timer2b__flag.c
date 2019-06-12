@@ -22,7 +22,7 @@
 /**
  * Initializes the debounce timer.
  */
-void keyboard__port_D__debounce_timer__init(void) {
+void keyboard__port_d__debounce_timer__init(void) {
     // NB: changes the state of the timer
     // It is assumed, that both channels are used for the same purpose (debouncing),
     // so it does not matter, that timer is started two times

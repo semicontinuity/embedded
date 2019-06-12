@@ -19,6 +19,14 @@
 #include <drivers/out/alarm.h>
 #include <drivers/out/led_a.h>
 #include <drivers/out/led_b.h>
+#include <drivers/in/encoder0.h>
+#include <drivers/in/encoder1.h>
+#include <drivers/in/encoder2.h>
+#include <drivers/in/encoder3.h>
+#include <drivers/in/encoder0__switch.h>
+#include <drivers/in/encoder1__switch.h>
+#include <drivers/in/encoder2__switch.h>
+#include <drivers/in/encoder3__switch.h>
 
 
 // Unused TWI Slave callbacks
@@ -42,6 +50,12 @@ void twi__slave__on_data_byte_received(const uint8_t value) {
 void application__init(void) {
     encoder0__init();
     encoder0__switch__init();
+    encoder1__init();
+    encoder1__switch__init();
+    encoder2__init();
+    encoder2__switch__init();
+    encoder3__init();
+    encoder3__switch__init();
 
     alarm__init();
 //    led_a__init();
@@ -71,7 +85,13 @@ int main(void) {
 #endif
     for(;;) {
         encoder0__run();
+        encoder1__run();
+        encoder2__run();
+        encoder3__run();
         encoder0__switch__run();
+        encoder1__switch__run();
+        encoder2__switch__run();
+        encoder3__switch__run();
 
         comm_encoder__run();
         comm_buttons__run();
