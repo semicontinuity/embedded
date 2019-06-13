@@ -80,7 +80,7 @@ class I2CBridge:
         self.command('I1')
 
     def read_event(self):
-        event_str = self.command('%02X?01' % ((0x08) * 2))
+        event_str = self.command('%02X?01' % ((0x10) * 2))
         if event_str:
             event = int(event_str, 16)
             return event if event !=0 else None

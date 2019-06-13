@@ -88,7 +88,7 @@ int main(void) {
     application__init();
     application__start();
 
-//    sei();
+    sei();
 
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic push
@@ -107,9 +107,9 @@ int main(void) {
         comm_encoder__run();
         comm_buttons__run();
 
-        if (twi__slave__handler__is_runnable()) {
-            twi__slave__handler__run();
-        }
+//        if (twi__slave__handler__is_runnable()) {
+//            twi__slave__handler__run();
+//        }
     }
 
 #if !defined(__AVR_ARCH__)
@@ -124,4 +124,8 @@ int main(void) {
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic pop
 #endif
+}
+
+ISR(TWI_vect) {
+    twi__slave__handler__run();
 }

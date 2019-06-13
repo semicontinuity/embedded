@@ -13,9 +13,8 @@
 #include "services/tx_ring_buffer.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/drivers/usart0__tx.h"
-
-#include "drivers/keyboard__pins.h"
-#include "drivers/keyboard__debounce_timer.h"
+#include "cpu/avr/drivers/keyboard/keyboard__pins.h"
+#include "cpu/avr/drivers/keyboard/keyboard__debounce_timer.h"
 #include "keyboard__interrupts.h"
 
 
