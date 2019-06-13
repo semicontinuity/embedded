@@ -11,7 +11,7 @@
 #include <cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer.h>
 
 #include <cpu/avr/twi.h>
-#include "twi_slave__handler.h"
+//#include "twi_slave__handler.h"
 #include "comm_encoder.h"
 #include "comm_events.h"
 #include "comm_buttons.h"
@@ -124,8 +124,4 @@ int main(void) {
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic pop
 #endif
-}
-
-ISR(TWI_vect) {
-    twi__slave__handler__run();
 }

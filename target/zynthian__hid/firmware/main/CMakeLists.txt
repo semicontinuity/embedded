@@ -36,6 +36,7 @@ set(SOURCE_FILES
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b__flag.c
 
         ../../../../cpu/avr/twi.h
+        ../../../../cpu/avr/twi.c
         twi_slave__handler.h
         twi_slave__handler.c
         comm_events_simple.c

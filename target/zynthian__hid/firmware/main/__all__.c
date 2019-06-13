@@ -18,6 +18,7 @@
 #include "cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b__flag.c"
 
 // I2C Comm
+#include "cpu/avr/twi.c"
 #include "twi_slave__handler.c"
 #include "comm_events_simple.c"
 #include "comm_encoder_queues.c"
