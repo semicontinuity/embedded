@@ -1,5 +1,5 @@
 // =============================================================================
-// Device, that scans 4 rotary encodes.
+// Device, that scans 4 rotary encodes with switches.
 // Can be asked via I2C to report latest event (with 1-byte I2C read).
 // =============================================================================
 
@@ -19,6 +19,12 @@
 #include <drivers/out/alarm.h>
 #include <drivers/out/led_a.h>
 #include <drivers/out/led_b.h>
+#include <drivers/out/led_c.h>
+#include <drivers/out/unused0.h>
+#include <drivers/out/unused1.h>
+#include <drivers/out/unused2.h>
+#include <drivers/out/unused3.h>
+
 #include <drivers/in/encoder0.h>
 #include <drivers/in/encoder1.h>
 #include <drivers/in/encoder2.h>
@@ -58,15 +64,20 @@ void application__init(void) {
     encoder3__switch__init();
 
     alarm__init();
-//    led_a__init();
-//    led_b__init();
+    led_a__init();
+    led_b__init();
+    led_c__init();
+    unused0__init();
+    unused1__init();
+    unused2__init();
+    unused3__init();
 
-    twi__slave_address__set(0x08);
+    twi__slave_address__set(TWI__SLAVE__ADDRESS);
 }
 
 void application__start(void) {
     comm_events__start();
-    twi__slave__start(false);
+    twi__slave__start();
 }
 
 

@@ -46,7 +46,13 @@ set(SOURCE_FILES
 
         ../../bsp/drivers/out/led_a.h
         ../../bsp/drivers/out/led_b.h
+        ../../bsp/drivers/out/led_c.h
         ../../bsp/drivers/out/alarm.h
+
+        ../../bsp/drivers/out/unused0.h
+        ../../bsp/drivers/out/unused1.h
+        ../../bsp/drivers/out/unused2.h
+        ../../bsp/drivers/out/unused3.h
 
         main.c
         __all__.c
