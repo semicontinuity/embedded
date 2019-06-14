@@ -7,6 +7,8 @@
 
 void encoder2__init(void);
 
+void encoder2__start(void);
+
 void encoder2__run(void);
 
 

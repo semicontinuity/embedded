@@ -34,6 +34,8 @@
 #include <drivers/in/encoder2__switch.h>
 #include <drivers/in/encoder3__switch.h>
 
+#include <util/delay.h>
+
 
 // Unused TWI Slave callbacks
 // -----------------------------------------------------------------------------
@@ -76,6 +78,12 @@ void application__init(void) {
 }
 
 void application__start(void) {
+    encoder0__start();
+    encoder1__start();
+    encoder2__start();
+    encoder3__start();
+
+    comm_encoder__start();
     comm_events__start();
     twi__slave__start();
 }
@@ -86,6 +94,7 @@ void application__start(void) {
 int main(void) __attribute__ ((naked));
 int main(void) {
     application__init();
+//    _delay_ms(300);
     application__start();
 
     sei();

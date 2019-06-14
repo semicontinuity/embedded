@@ -14,8 +14,17 @@
 #define TWI__SLAVE__INTERRUPT (0)
 #endif
 
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__) || defined(__AVR_ATmega328P__)
+#if defined(__AVR_ATmega48__)\
+ || defined(__AVR_ATmega48A__)\
+ || defined(__AVR_ATmega48P__)\
+ || defined(__AVR_ATmega88__)\
+ || defined(__AVR_ATmega88A__)\
+ || defined(__AVR_ATmega88P__)\
+ || defined(__AVR_ATmega88PA__)\
+ || defined(__AVR_ATmega168__)\
+ || defined(__AVR_ATmega168A__)\
+ || defined(__AVR_ATmega168P__)\
+ || defined(__AVR_ATmega328P__)\
 
 // Currently, only prescaler 1 is supported for simplicity
 // NB: WBR should be 10 or higher if the TWI operates in master mode

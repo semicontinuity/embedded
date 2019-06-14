@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+void comm_encoder__start(void);
+
 void comm_encoder__run(void) __attribute__((weak));
 
 #endif

@@ -17,6 +17,24 @@ register volatile uint8_t encoder1__state asm(QUOTE(ENCODER1__STATE__REG));
 volatile uint8_t encoder1__state;
 #endif
 
+
+uint8_t encoder1__current_state() {
+    uint8_t raw_port_value = IN(IN__ENCODER1__A);
+    return __builtin_avr_insert_bits(
+        avr_insert_bits_map(
+            0xF, // unaltered bit 7 from the last argument (0)
+            0xF, // unaltered bit 6 from the last argument (0)
+            0xF, // unaltered bit 5 from the last argument (0)
+            0xF, // unaltered bit 4 from the last argument (0)
+            0xF, // unaltered bit 3 from the last argument (0)
+            0xF, // unaltered bit 2 from the last argument (0)
+            IN__ENCODER1__B__PIN,
+            IN__ENCODER1__A__PIN),
+        raw_port_value,
+        0
+    );
+}
+
 void encoder1__init(void) {
     __asm__ __volatile__("encoder1__init:");
     USE_AS_INPUT(IN__ENCODER1__A);
@@ -27,23 +45,15 @@ void encoder1__init(void) {
     encoder1__debounce_timer__init();
 }
 
+void encoder1__start(void) {
+    __asm__ __volatile__("encoder1__start:");
+    encoder1__state = encoder1__current_state();
+}
+
 void encoder1__run(void) {
     __asm__ __volatile__("encoder1__run:");
     if (!encoder1__debounce_timer__is_started()) {
-        uint8_t raw_port_value = IN(IN__ENCODER1__A);
-        uint8_t current_state = __builtin_avr_insert_bits(
-            avr_insert_bits_map(
-                0xF, // unaltered bit 7 from the last argument (0)
-                0xF, // unaltered bit 6 from the last argument (0)
-                0xF, // unaltered bit 5 from the last argument (0)
-                0xF, // unaltered bit 4 from the last argument (0)
-                0xF, // unaltered bit 3 from the last argument (0)
-                0xF, // unaltered bit 2 from the last argument (0)
-                IN__ENCODER1__A__PIN,
-                IN__ENCODER1__B__PIN),
-            raw_port_value,
-            0
-        );
+        uint8_t current_state = encoder1__current_state();
         uint8_t index = (uint8_t) (encoder1__state << 2U) | current_state;
         encoder1__state = current_state;
         uint8_t delta = encoder__step[index];
