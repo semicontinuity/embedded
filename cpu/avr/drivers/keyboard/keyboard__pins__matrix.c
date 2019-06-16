@@ -1,8 +1,8 @@
 // I/O-matrix based keyboard pins
 // ---------------------------------------------------------------------------------------------------------------------
 
-#include "cpu/avr/drivers/keyboard/keyboard__pins.h"
-#include "drivers/io_matrix__in.h"
+#include <cpu/avr/drivers/keyboard/keyboard__pins.h>
+#include <cpu/avr/drivers/io_matrix/io_matrix__in.h>
 #include <stdint.h>
 
 // Logical keyboard ports
