@@ -8,9 +8,10 @@
 #include <cpu/avr/asm.h>
 #include <cpu/avr/eeprom.h>
 
+#include <cpu/avr/drivers/io_matrix/io_matrix__in.h>
+#include <drivers/io_matrix__in.h>
 #include <drivers/io_matrix__out_columns.h>
 #include <drivers/io_matrix__out_rows.h>
-#include <drivers/io_matrix__in.h>
 #include <drivers/io_matrix__scanner__thread__timer.h>
 #include "io_matrix__scanner__thread.h"
 
@@ -49,6 +50,7 @@ void application__init(void) {
 }
 
 void application__start(void) {
+    io_matrix__in__start();
     io_matrix__scanner__thread__timer__start();
     comm_keyboard__start();
     twi__slave__start();
