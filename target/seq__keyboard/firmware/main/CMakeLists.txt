@@ -6,8 +6,8 @@ set(CMAKE_C_STANDARD 11)
 
 
 set(SOURCE_FILES
-        ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/timer0.h
+        ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/drivers/io_matrix/io_matrix__in.h
         ../../../../cpu/avr/drivers/io_matrix/io_matrix__in.c
         ../../bsp/drivers/io_matrix__scanner__thread__timer.h
@@ -18,6 +18,17 @@ set(SOURCE_FILES
         ../../bsp/drivers/io_matrix__out_columns.h
         io_matrix__scanner__thread.h
         io_matrix__scanner__thread.c
+
+        ../../../../cpu/avr/timer2.h
+        ../../../../cpu/avr/timer2.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__matrix.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer2.c
+        ../../../../cpu/avr/services/keyboard/keyboard.h
+        ../../../../cpu/avr/services/keyboard/keyboard.c
 
         ../../../../cpu/avr/twi.h
         twi_slave__handler.h
