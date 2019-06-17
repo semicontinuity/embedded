@@ -1,12 +1,12 @@
-#include <cpu/avr/asm.h>
-#include <drivers/out/led_a.h>
-#include <drivers/out/led_b.h>
-
 #include "cpu/avr/services/keyboard/keyboard.h"
-
+#include "cpu/avr/services/keyboard/keyboard__port_a__buttons.h"
+#include "cpu/avr/services/keyboard/keyboard__port_b__buttons.h"
+#include "cpu/avr/services/keyboard/keyboard__port_c__buttons.h"
+#include "cpu/avr/services/keyboard/keyboard__port_d__buttons.h"
 #include "cpu/avr/drivers/keyboard/keyboard__pins.h"
 #include "cpu/avr/drivers/keyboard/keyboard__debounce_timer.h"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.h"
+#include <cpu/avr/asm.h>
 
 
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
@@ -17,11 +17,19 @@ register volatile uint8_t keyboard__port_a__previous_state asm(QUOTE(KEYBOARD__P
 volatile uint8_t keyboard__port_a__previous_state;
 #endif
 
+void keyboard__port_a__previous_state__copy_bit(const uint8_t state, const uint8_t bit) {
+    COPY_BIT(state, bit, keyboard__port_a__previous_state, bit);
+}
+
 #ifdef KEYBOARD__PORT_A__MASK__REG
 register volatile uint8_t keyboard__port_a__mask asm(QUOTE(KEYBOARD__PORT_A__MASK__REG));
 #else
 volatile uint8_t keyboard__port_a__mask;
 #endif
+
+void keyboard__port_a__mask__clear_bit(const uint8_t bit) {
+    keyboard__port_a__mask &= (uint8_t) ~((uint8_t) (1U << bit));
+}
 
 #endif
 
@@ -34,11 +42,19 @@ register volatile uint8_t keyboard__port_b__previous_state asm(QUOTE(KEYBOARD__P
 volatile uint8_t keyboard__port_b__previous_state;
 #endif
 
+void keyboard__port_b__previous_state__copy_bit(const uint8_t state, const uint8_t bit) {
+    COPY_BIT(state, bit, keyboard__port_b__previous_state, bit);
+}
+
 #ifdef KEYBOARD__PORT_B__MASK__REG
 register volatile uint8_t keyboard__port_b__mask asm(QUOTE(KEYBOARD__PORT_B__MASK__REG));
 #else
 volatile uint8_t keyboard__port_b__mask;
 #endif
+
+void keyboard__port_b__mask__clear_bit(const uint8_t bit) {
+    keyboard__port_b__mask &= (uint8_t) ~((uint8_t) (1U << bit));
+}
 
 #endif
 
@@ -51,11 +67,19 @@ register volatile uint8_t keyboard__port_c__previous_state asm(QUOTE(KEYBOARD__P
 volatile uint8_t keyboard__port_c__previous_state;
 #endif
 
+void keyboard__port_c__previous_state__copy_bit(const uint8_t state, const uint8_t bit) {
+    COPY_BIT(state, bit, keyboard__port_c__previous_state, bit);
+}
+
 #ifdef KEYBOARD__PORT_C__MASK__REG
 register volatile uint8_t keyboard__port_c__mask asm(QUOTE(KEYBOARD__PORT_C__MASK__REG));
 #else
 volatile uint8_t keyboard__port_c__mask;
 #endif
+
+void keyboard__port_c__mask__clear_bit(const uint8_t bit) {
+    keyboard__port_c__mask &= (uint8_t) ~((uint8_t) (1U << bit));
+}
 
 #endif
 
@@ -68,11 +92,19 @@ register volatile uint8_t keyboard__port_d__previous_state asm(QUOTE(KEYBOARD__P
 volatile uint8_t keyboard__port_d__previous_state;
 #endif
 
+void keyboard__port_d__previous_state__copy_bit(const uint8_t state, const uint8_t bit) {
+    COPY_BIT(state, bit, keyboard__port_d__previous_state, bit);
+}
+
 #ifdef KEYBOARD__PORT_D__MASK__REG
 register volatile uint8_t keyboard__port_d__mask asm(QUOTE(KEYBOARD__PORT_D__MASK__REG));
 #else
 volatile uint8_t keyboard__port_d__mask;
 #endif
+
+void keyboard__port_d__mask__clear_bit(const uint8_t bit) {
+    keyboard__port_d__mask &= (uint8_t) ~((uint8_t) (1U << bit));
+}
 
 #endif
 
@@ -158,67 +190,13 @@ inline void keyboard__init_previous_states(void) {
 
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
 
-inline void keyboard__port_a__process_button(uint8_t state, uint8_t changes, uint8_t button) {
-    uint8_t pin = keyboard__pins__port_a__pin_for_button(button);
-    if (changes & ((uint8_t) (1U << pin))) {
-        if (keyboard__handle_button_event(button, state, pin)) {
-            keyboard__port_a__mask &= (uint8_t) ~((uint8_t) (1U << pin));
-            COPY_BIT(state, pin, keyboard__port_a__previous_state, pin);
-        }
-    }
-}
-
-
-void keyboard__port_a__process_events(uint8_t keyboard__port_a__state, uint8_t changes) {
-    __asm__ __volatile__("keyboard__port_a__process_button__19:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 19);
-    __asm__ __volatile__("keyboard__port_a__process_button__18:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 18);
-    __asm__ __volatile__("keyboard__port_a__process_button__17:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 17);
-    __asm__ __volatile__("keyboard__port_a__process_button__16:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 16);
-    __asm__ __volatile__("keyboard__port_a__process_button__15:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 15);
-    __asm__ __volatile__("keyboard__port_a__process_button__14:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 14);
-    __asm__ __volatile__("keyboard__port_a__process_button__13:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 13);
-    __asm__ __volatile__("keyboard__port_a__process_button__12:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 12);
-    __asm__ __volatile__("keyboard__port_a__process_button__11:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 11);
-    __asm__ __volatile__("keyboard__port_a__process_button__10:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 10);
-    __asm__ __volatile__("keyboard__port_a__process_button__9:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 9);
-    __asm__ __volatile__("keyboard__port_a__process_button__8:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 8);
-    __asm__ __volatile__("keyboard__port_a__process_button__7:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 7);
-    __asm__ __volatile__("keyboard__port_a__process_button__6:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 6);
-    __asm__ __volatile__("keyboard__port_a__process_button__5:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 5);
-    __asm__ __volatile__("keyboard__port_a__process_button__4:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 4);
-    __asm__ __volatile__("keyboard__port_a__process_button__3:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 3);
-    __asm__ __volatile__("keyboard__port_a__process_button__2:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 2);
-    __asm__ __volatile__("keyboard__port_a__process_button__1:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 1);
-    __asm__ __volatile__("keyboard__port_a__process_button__0:");
-    keyboard__port_a__process_button(keyboard__port_a__state, changes, 0);
-}
-
 void keyboard__port_a__run(void) {
     __asm__ __volatile__("keyboard__port_a__run:");
     uint8_t keyboard__port_a__state = keyboard__pins__port_a__read();
     uint8_t changes = keyboard__port_a__mask & ((uint8_t) (keyboard__port_a__previous_state ^ keyboard__port_a__state));
     if (changes) {
         keyboard__port_a__debounce_timer__start();
-        keyboard__port_a__process_events(keyboard__port_a__state, changes);
+        keyboard__port_a__buttons__process(keyboard__port_a__state, changes);
     }
 }
 
@@ -227,67 +205,13 @@ void keyboard__port_a__run(void) {
 
 #if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
 
-inline void keyboard__port_b__process_button(uint8_t state, uint8_t changes, uint8_t button) {
-    uint8_t pin = keyboard__pins__port_b__pin_for_button(button);
-    if (changes & ((uint8_t) (1U << pin))) {
-        if (keyboard__handle_button_event(button, state, pin)) {
-            keyboard__port_b__mask &= (uint8_t) ~((uint8_t) (1U << pin));
-            COPY_BIT(state, pin, keyboard__port_b__previous_state, pin);
-        }
-    }
-}
-
-
-void keyboard__port_b__process_events(uint8_t keyboard__port_b__state, uint8_t changes) {
-    __asm__ __volatile__("keyboard__port_b__process_button__19:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 19);
-    __asm__ __volatile__("keyboard__port_b__process_button__18:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 18);
-    __asm__ __volatile__("keyboard__port_b__process_button__17:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 17);
-    __asm__ __volatile__("keyboard__port_b__process_button__16:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 16);
-    __asm__ __volatile__("keyboard__port_b__process_button__15:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 15);
-    __asm__ __volatile__("keyboard__port_b__process_button__14:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 14);
-    __asm__ __volatile__("keyboard__port_b__process_button__13:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 13);
-    __asm__ __volatile__("keyboard__port_b__process_button__12:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 12);
-    __asm__ __volatile__("keyboard__port_b__process_button__11:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 11);
-    __asm__ __volatile__("keyboard__port_b__process_button__10:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 10);
-    __asm__ __volatile__("keyboard__port_b__process_button__9:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 9);
-    __asm__ __volatile__("keyboard__port_b__process_button__8:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 8);
-    __asm__ __volatile__("keyboard__port_b__process_button__7:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 7);
-    __asm__ __volatile__("keyboard__port_b__process_button__6:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 6);
-    __asm__ __volatile__("keyboard__port_b__process_button__5:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 5);
-    __asm__ __volatile__("keyboard__port_b__process_button__4:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 4);
-    __asm__ __volatile__("keyboard__port_b__process_button__3:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 3);
-    __asm__ __volatile__("keyboard__port_b__process_button__2:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 2);
-    __asm__ __volatile__("keyboard__port_b__process_button__1:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 1);
-    __asm__ __volatile__("keyboard__port_b__process_button__0:");
-    keyboard__port_b__process_button(keyboard__port_b__state, changes, 0);
-}
-
 void keyboard__port_b__run(void) {
     __asm__ __volatile__("keyboard__port_b__run:");
     uint8_t keyboard__port_b__state = keyboard__pins__port_b__read();
     uint8_t changes = keyboard__port_b__mask & ((uint8_t) (keyboard__port_b__previous_state ^ keyboard__port_b__state));
     if (changes) {
         keyboard__port_b__debounce_timer__start();
-        keyboard__port_b__process_events(keyboard__port_b__state, changes);
+        keyboard__port_b__buttons__process(keyboard__port_b__state, changes);
     }
 }
 
@@ -296,68 +220,13 @@ void keyboard__port_b__run(void) {
 
 #if defined(KEYBOARD__PORT_C__USED) && KEYBOARD__PORT_C__USED == 1
 
-inline void keyboard__port_c__process_button(uint8_t state, uint8_t changes, uint8_t button) {
-    uint8_t pin = keyboard__pins__port_c__pin_for_button(button);
-    if (changes & ((uint8_t) (1U << pin))) {
-        if (keyboard__handle_button_event(button, state, pin)) {
-            keyboard__port_c__mask &= (uint8_t) ~((uint8_t) (1U << pin));
-            COPY_BIT(state, pin, keyboard__port_c__previous_state, pin);
-        }
-    }
-}
-
-
-void keyboard__port_c__process_events(uint8_t keyboard__port_c__state, uint8_t changes) {
-    __asm__ __volatile__("keyboard__port_c__process_button__19:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 19);
-    __asm__ __volatile__("keyboard__port_c__process_button__18:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 18);
-    __asm__ __volatile__("keyboard__port_c__process_button__17:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 17);
-    __asm__ __volatile__("keyboard__port_c__process_button__16:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 16);
-    __asm__ __volatile__("keyboard__port_c__process_button__15:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 15);
-    __asm__ __volatile__("keyboard__port_c__process_button__14:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 14);
-    __asm__ __volatile__("keyboard__port_c__process_button__13:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 13);
-    __asm__ __volatile__("keyboard__port_c__process_button__12:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 12);
-    __asm__ __volatile__("keyboard__port_c__process_button__11:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 11);
-    __asm__ __volatile__("keyboard__port_c__process_button__10:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 10);
-    __asm__ __volatile__("keyboard__port_c__process_button__9:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 9);
-    __asm__ __volatile__("keyboard__port_c__process_button__8:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 8);
-    __asm__ __volatile__("keyboard__port_c__process_button__7:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 7);
-    __asm__ __volatile__("keyboard__port_c__process_button__6:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 6);
-    __asm__ __volatile__("keyboard__port_c__process_button__5:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 5);
-    __asm__ __volatile__("keyboard__port_c__process_button__4:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 4);
-    __asm__ __volatile__("keyboard__port_c__process_button__3:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 3);
-    __asm__ __volatile__("keyboard__port_c__process_button__2:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 2);
-    __asm__ __volatile__("keyboard__port_c__process_button__1:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 1);
-    __asm__ __volatile__("keyboard__port_c__process_button__0:");
-    keyboard__port_c__process_button(keyboard__port_c__state, changes, 0);
-}
-
-
 void keyboard__port_c__run(void) {
     __asm__ __volatile__("keyboard__port_c__run:");
     uint8_t keyboard__port_c__state = keyboard__pins__port_c__read();
     uint8_t changes = keyboard__port_c__mask & ((uint8_t) (keyboard__port_c__state ^ keyboard__port_c__previous_state));
     if (changes) {
         keyboard__port_c__debounce_timer__start();
-        keyboard__port_c__process_events(keyboard__port_c__state, changes);
+        keyboard__port_c__buttons__process(keyboard__port_c__state, changes);
     }
 }
 
@@ -366,68 +235,13 @@ void keyboard__port_c__run(void) {
 
 #if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
 
-inline void keyboard__port_d__process_button(uint8_t state, uint8_t changes, uint8_t button) {
-    uint8_t pin = keyboard__pins__port_d__pin_for_button(button);
-    if (changes & ((uint8_t) (1U << pin))) {
-        if (keyboard__handle_button_event(button, state, pin)) {
-            keyboard__port_d__mask &= (uint8_t) ~((uint8_t) (1U << pin));
-            COPY_BIT(state, pin, keyboard__port_d__previous_state, pin);
-        }
-    }
-}
-
-
-void keyboard__port_d__process_button_events(uint8_t keyboard__port_d__state, uint8_t changes) {
-    __asm__ __volatile__("keyboard__port_d__process_button__19:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 19);
-    __asm__ __volatile__("keyboard__port_d__process_button__18:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 18);
-    __asm__ __volatile__("keyboard__port_d__process_button__17:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 17);
-    __asm__ __volatile__("keyboard__port_d__process_button__16:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 16);
-    __asm__ __volatile__("keyboard__port_d__process_button__15:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 15);
-    __asm__ __volatile__("keyboard__port_d__process_button__14:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 14);
-    __asm__ __volatile__("keyboard__port_d__process_button__13:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 13);
-    __asm__ __volatile__("keyboard__port_d__process_button__12:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 12);
-    __asm__ __volatile__("keyboard__port_d__process_button__11:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 11);
-    __asm__ __volatile__("keyboard__port_d__process_button__10:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 10);
-    __asm__ __volatile__("keyboard__port_d__process_button__9:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 9);
-    __asm__ __volatile__("keyboard__port_d__process_button__8:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 8);
-    __asm__ __volatile__("keyboard__port_d__process_button__7:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 7);
-    __asm__ __volatile__("keyboard__port_d__process_button__6:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 6);
-    __asm__ __volatile__("keyboard__port_d__process_button__5:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 5);
-    __asm__ __volatile__("keyboard__port_d__process_button__4:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 4);
-    __asm__ __volatile__("keyboard__port_d__process_button__3:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 3);
-    __asm__ __volatile__("keyboard__port_d__process_button__2:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 2);
-    __asm__ __volatile__("keyboard__port_d__process_button__1:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 1);
-    __asm__ __volatile__("keyboard__port_d__process_button__0:");
-    keyboard__port_d__process_button(keyboard__port_d__state, changes, 0);
-}
-
-
 void keyboard__port_d__run(void) {
     __asm__ __volatile__("keyboard__port_d__run:");
     uint8_t keyboard__port_d__state = keyboard__pins__port_d__read();
     uint8_t changes = keyboard__port_d__mask & ((uint8_t) (keyboard__port_d__state ^ keyboard__port_d__previous_state));
     if (changes) {
         keyboard__port_d__debounce_timer__start();
-        keyboard__port_d__process_button_events(keyboard__port_d__state, changes);
+        keyboard__port_d__buttons__process(keyboard__port_d__state, changes);
     }
 }
 #endif

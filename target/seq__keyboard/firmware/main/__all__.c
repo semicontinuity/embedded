@@ -21,6 +21,10 @@
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.c"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__matrix.c"
 #include "cpu/avr/services/keyboard/keyboard.c"
+#include "cpu/avr/services/keyboard/keyboard__port_a__buttons.c"
+#include "cpu/avr/services/keyboard/keyboard__port_b__buttons.c"
+#include "cpu/avr/services/keyboard/keyboard__port_c__buttons.c"
+#include "cpu/avr/services/keyboard/keyboard__port_d__buttons.c"
 
 // I2C Comm
 #include "twi_slave__handler.c"

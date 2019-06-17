@@ -29,6 +29,14 @@ set(SOURCE_FILES
         ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer2.c
         ../../../../cpu/avr/services/keyboard/keyboard.h
         ../../../../cpu/avr/services/keyboard/keyboard.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_a__buttons.h
+        ../../../../cpu/avr/services/keyboard/keyboard__port_a__buttons.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_b__buttons.h
+        ../../../../cpu/avr/services/keyboard/keyboard__port_b__buttons.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_c__buttons.h
+        ../../../../cpu/avr/services/keyboard/keyboard__port_c__buttons.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.h
+        ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.c
 
         ../../../../cpu/avr/twi.h
         twi_slave__handler.h
