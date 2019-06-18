@@ -3,6 +3,9 @@
 #include "cpu/avr/services/keyboard/keyboard__port_b__buttons.h"
 #include "cpu/avr/services/keyboard/keyboard__port_c__buttons.h"
 #include "cpu/avr/services/keyboard/keyboard__port_d__buttons.h"
+
+#include "cpu/avr/services/keyboard/keyboard__port_d__encoders.h"
+
 #include "cpu/avr/drivers/keyboard/keyboard__pins.h"
 #include "cpu/avr/drivers/keyboard/keyboard__debounce_timer.h"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.h"
@@ -242,6 +245,7 @@ void keyboard__port_d__run(void) {
     if (changes) {
         keyboard__port_d__debounce_timer__start();
         keyboard__port_d__buttons__process(keyboard__port_d__state, changes);
+        keyboard__port_d__encoders__process(keyboard__port_d__state, changes);
     }
 }
 #endif

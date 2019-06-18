@@ -1,7 +1,5 @@
 #include "cpu/avr/services/keyboard/keyboard.h"
 #include "cpu/avr/services/keyboard/keyboard__port_d__buttons.h"
-#include "cpu/avr/drivers/keyboard/keyboard__pins.h"
-#include "cpu/avr/drivers/keyboard/keyboard__debounce_timer.h"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.h"
 #include <cpu/avr/asm.h>
 

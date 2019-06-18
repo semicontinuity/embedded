@@ -1,7 +1,8 @@
 #ifndef KEYBOARD__PINS__MAPPING_H
 #define KEYBOARD__PINS__MAPPING_H
 
-#include "cpu/avr/gpio.h" //CONCAT
+#include <stdint.h>
+//#include "cpu/avr/gpio.h" //CONCAT
 
 
 /**

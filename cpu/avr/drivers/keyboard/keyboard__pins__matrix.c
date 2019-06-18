@@ -5,8 +5,9 @@
 #include <cpu/avr/drivers/io_matrix/io_matrix__in.h>
 #include <stdint.h>
 
-// Logical keyboard ports
-// ----------------------
+
+// Logical keyboard ports A..D, corresponding to matrix columns 0..3
+// ---------------------------------------------------------------------------------------------------------------------
 
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
 

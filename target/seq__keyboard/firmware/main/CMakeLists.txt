@@ -38,6 +38,9 @@ set(SOURCE_FILES
         ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.h
         ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.c
 
+        ../../../../cpu/avr/services/keyboard/keyboard__port_d__encoders.h
+        ../../../../cpu/avr/services/keyboard/keyboard__port_d__encoders.c
+
         ../../../../cpu/avr/twi.h
         twi_slave__handler.h
         twi_slave__handler.c

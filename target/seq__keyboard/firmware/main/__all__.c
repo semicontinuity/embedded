@@ -26,6 +26,8 @@
 #include "cpu/avr/services/keyboard/keyboard__port_c__buttons.c"
 #include "cpu/avr/services/keyboard/keyboard__port_d__buttons.c"
 
+#include "cpu/avr/services/keyboard/keyboard__port_d__encoders.c"
+
 // I2C Comm
 #include "twi_slave__handler.c"
 #include "comm_leds.c"
