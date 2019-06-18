@@ -56,6 +56,8 @@ uint8_t io_matrix__in__column3__state__get(void) {
 }
 
 
+void io_matrix__in__init(void);
+
 void io_matrix__in__start(void);
 
 

@@ -9,15 +9,25 @@
 // I/O matrix
 #include "cpu/avr/timer0.c"
 #include "drivers/io_matrix__scanner__thread__timer__timer0.c"
-#include "drivers/io_matrix__in.c"
+#include "cpu/avr/drivers/io_matrix/io_matrix__in.c"
 #include "io_matrix__scanner__thread.c"
 
 // Keyboard
 #include "cpu/avr/timer2.c"
-#include "drivers/keyboard__pins__matrix.c"
+#include "cpu/avr/drivers/keyboard/keyboard__pins__matrix.c"
 #include "cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer2.c"
-#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.c"
+#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_a.c"
+#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_b.c"
+#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_c.c"
+#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_d.c"
 #include "cpu/avr/services/keyboard/keyboard.c"
+#include "cpu/avr/services/keyboard/keyboard__port_a__buttons.c"
+#include "cpu/avr/services/keyboard/keyboard__port_b__buttons.c"
+#include "cpu/avr/services/keyboard/keyboard__port_c__buttons.c"
+#include "cpu/avr/services/keyboard/keyboard__port_d__buttons.c"
+
+#include "cpu/avr/services/keyboard/keyboard__port_d__encoders.c"
+
 
 // I2C Comm
 #include "I2CSlave.c"

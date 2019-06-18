@@ -12,7 +12,7 @@
 
 
 void twi__slave__handler__start(void) {
-    twi__slave__start(false);
+    twi__slave__start();
 }
 
 

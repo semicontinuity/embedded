@@ -3,7 +3,7 @@
 // =====================================================================================================================
 #include <cpu/avr/asm.h>
 
-#include "drivers/io_matrix__in.h"
+#include <cpu/avr/drivers/io_matrix/io_matrix__in.h>
 #include "drivers/io_matrix__out_columns.h"
 
 #include "util/formatter.h"

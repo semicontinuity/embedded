@@ -9,7 +9,6 @@
 #include <cpu/avr/eeprom.h>
 
 #include <cpu/avr/drivers/io_matrix/io_matrix__in.h>
-#include <drivers/io_matrix__in.h>
 #include <drivers/io_matrix__out_columns.h>
 #include <drivers/io_matrix__out_rows.h>
 #include <drivers/io_matrix__scanner__thread__timer.h>

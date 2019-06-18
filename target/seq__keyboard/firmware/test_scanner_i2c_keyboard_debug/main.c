@@ -6,7 +6,7 @@
 #include "data.h"
 
 #include "drivers/io_matrix__scanner__thread__timer.h"
-#include "drivers/io_matrix__in.h"
+#include "cpu/avr/drivers/io_matrix/io_matrix__in.h"
 #include "drivers/io_matrix__out_rows.h"
 #include "drivers/io_matrix__out_columns.h"
 #include "io_matrix__scanner__thread.h"

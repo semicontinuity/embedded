@@ -255,3 +255,36 @@ uint8_t keyboard__pins__port_d__button_pins_mask(void) {
 
     return mask;
 }
+
+
+/**
+ * Provides pin number for the given button (if it pertains to port D)
+ * @param encoder 0-3 for ENCODER0..ENCODER3
+*/
+uint8_t keyboard__pins__port_d__pin_a_for_encoder(const uint8_t encoder) {
+#if defined(IN__ENCODER0__PORT) && defined(IN__ENCODER0__PIN)
+#if CONCAT(0x, IN__ENCODER0__PORT) == 0xD
+    if (encoder == 0) return IN__ENCODER0__PIN;
+#endif
+#endif
+
+#if defined(IN__ENCODER1__PORT) && defined(IN__ENCODER1__PIN)
+#if CONCAT(0x, IN__ENCODER1__PORT) == 0xD
+    if (encoder == 1) return IN__ENCODER1__PIN;
+#endif
+#endif
+
+#if defined(IN__ENCODER2__PORT) && defined(IN__ENCODER2__PIN)
+#if CONCAT(0x, IN__ENCODER2__PORT) == 0xD
+    if (encoder == 2) return IN__ENCODER2__PIN;
+#endif
+#endif
+
+#if defined(IN__ENCODER3__PORT) && defined(IN__ENCODER3__PIN)
+#if CONCAT(0x, IN__ENCODER3__PORT) == 0xD
+    if (encoder == 3) return IN__ENCODER3__PIN;
+#endif
+#endif
+
+    return 0xFF;
+}

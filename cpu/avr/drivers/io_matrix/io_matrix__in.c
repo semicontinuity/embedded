@@ -62,6 +62,41 @@ void io_matrix__in__column3__state__update(void) {
 }
 
 
+void io_matrix__in__init(void) {
+#if defined(IO_MATRIX__IN__PORT) && defined(IO_MATRIX__IN__ROW0__PIN)
+    USE_PIN_AS_INPUT(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW0__PIN);
+    ENABLE_PIN_PULLUP(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW0__PIN);
+#endif
+#if defined(IO_MATRIX__IN__PORT) && defined(IO_MATRIX__IN__ROW1__PIN)
+    USE_PIN_AS_INPUT(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW1__PIN);
+    ENABLE_PIN_PULLUP(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW1__PIN);
+#endif
+#if defined(IO_MATRIX__IN__PORT) && defined(IO_MATRIX__IN__ROW2__PIN)
+    USE_PIN_AS_INPUT(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW2__PIN);
+    ENABLE_PIN_PULLUP(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW2__PIN);
+#endif
+#if defined(IO_MATRIX__IN__PORT) && defined(IO_MATRIX__IN__ROW3__PIN)
+    USE_PIN_AS_INPUT(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW3__PIN);
+    ENABLE_PIN_PULLUP(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW3__PIN);
+#endif
+#if defined(IO_MATRIX__IN__PORT) && defined(IO_MATRIX__IN__ROW4__PIN)
+    USE_PIN_AS_INPUT(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW4__PIN);
+    ENABLE_PIN_PULLUP(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW4__PIN);
+#endif
+#if defined(IO_MATRIX__IN__PORT) && defined(IO_MATRIX__IN__ROW5__PIN)
+    USE_PIN_AS_INPUT(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW5__PIN);
+    ENABLE_PIN_PULLUP(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW5__PIN);
+#endif
+#if defined(IO_MATRIX__IN__PORT) && defined(IO_MATRIX__IN__ROW6__PIN)
+    USE_PIN_AS_INPUT(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW6__PIN);
+    ENABLE_PIN_PULLUP(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW6__PIN);
+#endif
+#if defined(IO_MATRIX__IN__PORT) && defined(IO_MATRIX__IN__ROW7__PIN)
+    USE_PIN_AS_INPUT(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW__PIN);
+    ENABLE_PIN_PULLUP(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW7__PIN);
+#endif
+}
+
 
 inline void io_matrix__in__start(void) {
     io_matrix__in__column0__state = 0xFF;

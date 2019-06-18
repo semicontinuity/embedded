@@ -33,6 +33,9 @@
 #define DISABLE_PULLUPS(port)        do {PORT_REG(CONCAT(port,__PORT)) = 0x00;} while(0)
 #define ENABLE_PULLUPS(port)         do {PORT_REG(CONCAT(port,__PORT)) = 0xFF;} while(0)
 
+#define USE_PIN_AS_INPUT(port, pin)  do {clear_bit_in_reg (DATA_DIR_REG(port), pin);} while(0)
+#define ENABLE_PIN_PULLUP(port, pin) do {set_bit_in_reg (PORT_REG(port), pin);} while(0)
+
 #define USE_AS_INPUT(signal)         do {clear_bit_in_reg (DATA_DIR_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
 #define USE_AS_OUTPUT(signal)        do {set_bit_in_reg (DATA_DIR_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
 #define DISABLE_PULLUP(signal)       do {clear_bit_in_reg (PORT_REG(CONCAT(signal,__PORT)), signal##__PIN);} while(0)
