@@ -3,6 +3,8 @@
 // Encoders
 #include "drivers/in/encoder__step.c"
 
+#include "drivers/in/encoders__port_a.c"
+
 #include "drivers/in/encoder0.c"
 #include "drivers/in/encoder0__switch.c"
 #include "drivers/in/encoder1.c"
