@@ -1,16 +1,16 @@
 #include "cpu/avr/services/keyboard/keyboard.h"
-#include "cpu/avr/services/keyboard/keyboard__port_d__encoders.h"
+#include "cpu/avr/services/keyboard/keyboard__port_b__encoders.h"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.h"
 #include <cpu/avr/asm.h>
 #include <avr/interrupt.h>
 
 
-#if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
+#if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
 
 
-void keyboard__port_d__encoders__process_encoder(uint8_t state, uint8_t changes, uint8_t encoder) {
-    uint8_t pin_a = keyboard__pins__port_d__pin_a_for_encoder(encoder);
-    uint8_t pin_b = keyboard__pins__port_d__pin_b_for_encoder(encoder);
+void keyboard__port_b__encoders__process_encoder(uint8_t state, uint8_t changes, uint8_t encoder) {
+    uint8_t pin_a = keyboard__pins__port_b__pin_a_for_encoder(encoder);
+    uint8_t pin_b = keyboard__pins__port_b__pin_b_for_encoder(encoder);
 
     if (changes & ((uint8_t) (1U << pin_a))) {
         // Changed value of pin A: 00->10, 10->00, 11->01, 01->11
@@ -38,15 +38,15 @@ void keyboard__port_d__encoders__process_encoder(uint8_t state, uint8_t changes,
 }
 
 
-void keyboard__port_d__encoders__process(uint8_t state, uint8_t changes) {
-    __asm__ __volatile__("keyboard__port_d__encoders__process_encoder__3:");
-    keyboard__port_d__encoders__process_encoder(state, changes, 3);
-    __asm__ __volatile__("keyboard__port_d__encoders__process_encoder__2:");
-    keyboard__port_d__encoders__process_encoder(state, changes, 2);
-    __asm__ __volatile__("keyboard__port_d__encoders__process_encoder__1:");
-    keyboard__port_d__encoders__process_encoder(state, changes, 1);
-    __asm__ __volatile__("keyboard__port_d__encoders__process_encoder__0:");
-    keyboard__port_d__encoders__process_encoder(state, changes, 0);
+void keyboard__port_b__encoders__process(uint8_t state, uint8_t changes) {
+    __asm__ __volatile__("keyboard__port_b__encoders__process_encoder__3:");
+    keyboard__port_b__encoders__process_encoder(state, changes, 3);
+    __asm__ __volatile__("keyboard__port_b__encoders__process_encoder__2:");
+    keyboard__port_b__encoders__process_encoder(state, changes, 2);
+    __asm__ __volatile__("keyboard__port_b__encoders__process_encoder__1:");
+    keyboard__port_b__encoders__process_encoder(state, changes, 1);
+    __asm__ __volatile__("keyboard__port_b__encoders__process_encoder__0:");
+    keyboard__port_b__encoders__process_encoder(state, changes, 0);
 }
 
 #endif

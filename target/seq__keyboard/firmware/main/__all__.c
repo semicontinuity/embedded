@@ -28,6 +28,9 @@
 #include "cpu/avr/services/keyboard/keyboard__port_c__buttons.c"
 #include "cpu/avr/services/keyboard/keyboard__port_d__buttons.c"
 
+#include "cpu/avr/services/keyboard/keyboard__port_a__encoders.c"
+#include "cpu/avr/services/keyboard/keyboard__port_b__encoders.c"
+#include "cpu/avr/services/keyboard/keyboard__port_c__encoders.c"
 #include "cpu/avr/services/keyboard/keyboard__port_d__encoders.c"
 
 // I2C Comm

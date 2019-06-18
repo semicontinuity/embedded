@@ -1,4 +1,5 @@
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.h"
+#include "cpu/avr/macros.h"
 
 
 /**
@@ -253,5 +254,85 @@ uint8_t keyboard__pins__port_c__button_pins_mask(void) {
 #endif
 #endif
 
+    return mask;
+}
+
+
+/**
+ * Provides pin number for the given encoder A pin (if it pertains to port C)
+ * @param encoder 0-3 for ENCODER0..ENCODER3
+*/
+uint8_t keyboard__pins__port_c__pin_a_for_encoder(const uint8_t encoder) {
+#if defined(IN__ENCODER0__A__PORT) && defined(IN__ENCODER0__A__PIN)
+#if CONCAT(0x, IN__ENCODER0__A__PORT) == 0xC
+    if (encoder == 0) return IN__ENCODER0__A__PIN;
+#endif
+#endif
+
+#if defined(IN__ENCODER1__A__PORT) && defined(IN__ENCODER1__A__PIN)
+#if CONCAT(0x, IN__ENCODER1__A__PORT) == 0xC
+    if (encoder == 1) return IN__ENCODER1__A__PIN;
+#endif
+#endif
+
+#if defined(IN__ENCODER2__A__PORT) && defined(IN__ENCODER2__A__PIN)
+#if CONCAT(0x, IN__ENCODER2__A__PORT) == 0xC
+    if (encoder == 2) return IN__ENCODER2__A__PIN;
+#endif
+#endif
+
+#if defined(IN__ENCODER3__A__PORT) && defined(IN__ENCODER3__A__PIN)
+#if CONCAT(0x, IN__ENCODER3__A__PORT) == 0xC
+    if (encoder == 3) return IN__ENCODER3__A__PIN;
+#endif
+#endif
+
+    return 0xFF;
+}
+
+
+/**
+ * Provides pin number for the given encoder B pin (if it pertains to port C)
+ * @param encoder 0-3 for ENCODER0..ENCODER3
+*/
+uint8_t keyboard__pins__port_c__pin_b_for_encoder(const uint8_t encoder) {
+#if defined(IN__ENCODER0__B__PORT) && defined(IN__ENCODER0__B__PIN)
+#if CONCAT(0x, IN__ENCODER0__B__PORT) == 0xC
+    if (encoder == 0) return IN__ENCODER0__B__PIN;
+#endif
+#endif
+
+#if defined(IN__ENCODER1__B__PORT) && defined(IN__ENCODER1__B__PIN)
+#if CONCAT(0x, IN__ENCODER1__B__PORT) == 0xC
+    if (encoder == 1) return IN__ENCODER1__B__PIN;
+#endif
+#endif
+
+#if defined(IN__ENCODER2__B__PORT) && defined(IN__ENCODER2__B__PIN)
+#if CONCAT(0x, IN__ENCODER2__B__PORT) == 0xC
+    if (encoder == 2) return IN__ENCODER2__B__PIN;
+#endif
+#endif
+
+#if defined(IN__ENCODER3__B__PORT) && defined(IN__ENCODER3__B__PIN)
+#if CONCAT(0x, IN__ENCODER3__B__PORT) == 0xC
+    if (encoder == 3) return IN__ENCODER3__B__PIN;
+#endif
+#endif
+
+    return 0xFF;
+}
+
+
+uint8_t keyboard__pins__port_c__encoders_pins_mask(void) {
+    uint8_t mask = 0;
+    mask |= (1U << keyboard__pins__port_c__pin_a_for_encoder(0));
+    mask |= (1U << keyboard__pins__port_c__pin_b_for_encoder(0));
+    mask |= (1U << keyboard__pins__port_c__pin_a_for_encoder(1));
+    mask |= (1U << keyboard__pins__port_c__pin_b_for_encoder(1));
+    mask |= (1U << keyboard__pins__port_c__pin_a_for_encoder(2));
+    mask |= (1U << keyboard__pins__port_c__pin_b_for_encoder(2));
+    mask |= (1U << keyboard__pins__port_c__pin_a_for_encoder(3));
+    mask |= (1U << keyboard__pins__port_c__pin_b_for_encoder(3));
     return mask;
 }

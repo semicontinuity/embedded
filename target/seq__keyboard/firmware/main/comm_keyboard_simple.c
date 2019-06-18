@@ -42,6 +42,34 @@ inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
 }
 
 
+// Handling events form encoders
+// ---------------------------------------------------------------------------------------------------------------------
+
+/**
+ * Callback to be implemented to handle events from encoders.
+ * The type of event can be determined by checking the corresponding bit in provided state variable:
+ * if (state & (uint8_t)(1 << bit)) != 0 (bit is set), then increment encoder's value;
+ * if (state & (uint8_t)(1 << bit)) == 0 (bit is clear), then decrement encoder's value;
+ * @param encoder index of encoder (0-3)
+ */
+inline void keyboard__encoders__increment_if_bit_set(uint8_t encoder, uint8_t state, uint8_t bit) {
+//    uint8_t z;
+//    IF_BIT_SET_INC_ELSE_DEC(z, state, bit);
+}
+
+/**
+ * Callback to be implemented to handle events from encoders.
+ * The type of event can be determined by checking the corresponding bit in provided state variable:
+ * if (state & (uint8_t)(1 << bit)) != 0 (bit is set), then decrement encoder's value;
+ * if (state & (uint8_t)(1 << bit)) == 0 (bit is clear), then increment encoder's value;
+ * @param encoder index of encoder (0-3)
+ */
+inline void keyboard__encoders__decrement_if_bit_set(uint8_t encoder, uint8_t state, uint8_t bit) {
+//    uint8_t z;
+//    IF_BIT_CLEAR_INC_ELSE_DEC(z, state, bit);
+}
+
+
 // TWI Slave callbacks
 // -----------------------------------------------------------------------------
 

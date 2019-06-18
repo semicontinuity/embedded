@@ -46,6 +46,26 @@ void keyboard__run(void);
  * @param state state of the button's port
  * @param bit index of button's pin in the port
  */
-inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit);
+bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit);
+
+
+/**
+ * Callback to be implemented to handle events from encoders.
+ * The type of event can be determined by checking the corresponding bit in provided state variable:
+ * if (state & (uint8_t)(1 << bit)) != 0 (bit is set), then increment encoder's value;
+ * if (state & (uint8_t)(1 << bit)) == 0 (bit is clear), then decrement encoder's value;
+ * @param encoder index of encoder (0-3)
+ */
+void keyboard__encoders__increment_if_bit_set(uint8_t encoder, uint8_t state, uint8_t bit);
+
+/**
+ * Callback to be implemented to handle events from encoders.
+ * The type of event can be determined by checking the corresponding bit in provided state variable:
+ * if (state & (uint8_t)(1 << bit)) != 0 (bit is set), then decrement encoder's value;
+ * if (state & (uint8_t)(1 << bit)) == 0 (bit is clear), then increment encoder's value;
+ * @param encoder index of encoder (0-3)
+ */
+void keyboard__encoders__decrement_if_bit_set(uint8_t encoder, uint8_t state, uint8_t bit);
+
 
 #endif

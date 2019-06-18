@@ -20,7 +20,7 @@ add_definitions(-DKEYBOARD__PORT_C__MASK__REG=14)
 add_definitions(-DKEYBOARD__PORT_D__MASK__REG=15)
 add_definitions(-DKEYBOARD__COMMON_MASK__REG=3)
 
-# Buttons placement on I/O matrix
+# Placement of buttons on I/O matrix
 # (logical ports: column 0 = port A, .. column 3 = port D)
 
 add_definitions(-DIN__BUTTON0__PORT=A)
@@ -58,3 +58,22 @@ add_definitions(-DIN__BUTTON14__PORT=D)
 add_definitions(-DIN__BUTTON14__PIN=IO_MATRIX__IN__ROW4__PIN)
 add_definitions(-DIN__BUTTON15__PORT=D)
 add_definitions(-DIN__BUTTON15__PIN=IO_MATRIX__IN__ROW5__PIN)
+
+# Placement of encoders on I/O matrix
+# (logical ports: column 0 = port A, .. column 3 = port D)
+add_definitions(-DIN__ENCODER0__A__PORT=A)
+add_definitions(-DIN__ENCODER0__A__PIN=IO_MATRIX__IN__ROW0__PIN)
+add_definitions(-DIN__ENCODER0__B__PORT=A)
+add_definitions(-DIN__ENCODER0__B__PIN=IO_MATRIX__IN__ROW1__PIN)
+add_definitions(-DIN__ENCODER1__A__PORT=B)
+add_definitions(-DIN__ENCODER1__A__PIN=IO_MATRIX__IN__ROW0__PIN)
+add_definitions(-DIN__ENCODER1__B__PORT=B)
+add_definitions(-DIN__ENCODER1__B__PIN=IO_MATRIX__IN__ROW1__PIN)
+add_definitions(-DIN__ENCODER2__A__PORT=C)
+add_definitions(-DIN__ENCODER2__A__PIN=IO_MATRIX__IN__ROW0__PIN)
+add_definitions(-DIN__ENCODER2__B__PORT=C)
+add_definitions(-DIN__ENCODER2__B__PIN=IO_MATRIX__IN__ROW1__PIN)
+add_definitions(-DIN__ENCODER3__A__PORT=D)
+add_definitions(-DIN__ENCODER3__A__PIN=IO_MATRIX__IN__ROW0__PIN)
+add_definitions(-DIN__ENCODER3__B__PORT=D)
+add_definitions(-DIN__ENCODER3__B__PIN=IO_MATRIX__IN__ROW1__PIN)
