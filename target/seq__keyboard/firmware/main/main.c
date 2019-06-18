@@ -8,10 +8,10 @@
 #include <cpu/avr/asm.h>
 #include <cpu/avr/eeprom.h>
 
+#include <cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer.h>
 #include <cpu/avr/drivers/io_matrix/io_matrix__in.h>
 #include <drivers/io_matrix__out_columns.h>
 #include <drivers/io_matrix__out_rows.h>
-#include <drivers/io_matrix__scanner__thread__timer.h>
 #include "io_matrix__scanner__thread.h"
 
 #include "cpu/avr/services/keyboard/keyboard.h"

@@ -6,8 +6,8 @@ set(CMAKE_C_STANDARD 11)
 
 
 set(SOURCE_FILES
-        ../../bsp/drivers/io_matrix__scanner__thread__timer.h
-        ../../bsp/drivers/io_matrix__scanner__thread__timer__timer0.c
+        ../../../../cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer.h
+        ../../../../cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer__timer0.c
         ../../bsp/drivers/io_matrix__in.c
         ../../bsp/drivers/io_matrix__in.c
         ../../bsp/drivers/io_matrix__out_columns.h

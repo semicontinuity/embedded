@@ -11,7 +11,7 @@
 // IO_MATRIX__SCANNER__THREAD__TIMER__CONF__STARTED        = (TIMER0_CONF_PRESCALER_8)
 // =====================================================================================================================
 
-#include "drivers/io_matrix__scanner__thread__timer.h"
+#include "cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer.h"
 #include "cpu/avr/timer0.h"
 
 /**

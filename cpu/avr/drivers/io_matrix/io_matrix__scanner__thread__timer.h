@@ -2,8 +2,8 @@
 // I/O matrix scanner thread timer
 // =============================================================================
 
-#ifndef __SCANNER__THREAD__TIMER_H
-#define __SCANNER__THREAD__TIMER_H
+#ifndef __CPU__AVR__DRIVERS__IO_MATRIX__IO_MATRIX__SCANNER__THREAD__TIMER_H
+#define __CPU__AVR__DRIVERS__IO_MATRIX__IO_MATRIX__SCANNER__THREAD__TIMER_H
 
 /**
  * Initialize the timer.

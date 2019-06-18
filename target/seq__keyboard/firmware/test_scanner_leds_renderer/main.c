@@ -5,7 +5,7 @@
 
 #include <avr/interrupt.h>
 #include "cpu/avr/util/vthreads.h"
-#include "drivers/io_matrix__scanner__thread__timer.h"
+#include "cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer.h"
 #include "drivers/io_matrix__out_columns.h"
 #include "drivers/io_matrix__out_rows.h"
 #include "util/delay.h"

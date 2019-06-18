@@ -216,6 +216,30 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
   );					                                    \
 } while(0)
 
+
+#define IF_BIT_SET_INC_ELSE_DEC(r, v, bit) do {             \
+    __asm__ __volatile__(                                   \
+    "inc  %0\n\t"                                           \
+    "sbrs %1, %2\n\t"                                       \
+    "subi %0, 2\n\t"                                        \
+        : "=d"((r)),                                        \
+          "+r"((v))                                         \
+        : "I"((bit))                                        \
+    );                                                      \
+} while (0)
+
+#define IF_BIT_CLEAR_INC_ELSE_DEC(r, v, bit) do {           \
+    __asm__ __volatile__(                                   \
+    "inc  %0\n\t"                                           \
+    "sbrc %1, %2\n\t"                                       \
+    "subi %0, 2\n\t"                                        \
+        : "=d"((r)),                                        \
+          "+r"((v))                                         \
+        :  "I"((bit))                                       \
+    );                                                      \
+} while (0)
+
+
 #define IF_IO_BIT_SET_INC_ELSE_DEC(r, ioreg, bit) do {      \
     __asm__ __volatile__(                                   \
     "inc  %0\n\t"                                           \
