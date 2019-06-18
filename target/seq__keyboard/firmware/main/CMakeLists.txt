@@ -24,7 +24,10 @@ set(SOURCE_FILES
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__matrix.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_a.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_b.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_c.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_d.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer2.c
         ../../../../cpu/avr/services/keyboard/keyboard.h

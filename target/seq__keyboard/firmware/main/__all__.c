@@ -18,7 +18,10 @@
 // Keyboard
 #include "cpu/avr/timer2.c"
 #include "cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer2.c"
-#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.c"
+#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_a.c"
+#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_b.c"
+#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_c.c"
+#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_d.c"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__matrix.c"
 #include "cpu/avr/services/keyboard/keyboard.c"
 #include "cpu/avr/services/keyboard/keyboard__port_a__buttons.c"
