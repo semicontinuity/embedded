@@ -5,8 +5,8 @@
 // TCCR1B
 // TCCR1C
 // OCR1AH, OCR1AH
-// OCR1BL, OCR1BH, (only most devices)
-// OCR1CL, OCR1CH, (only on AT90USB82/162)
+// OCR1BL, OCR1BH (most devices)
+// OCR1CL, OCR1CH (only on AT90USB82/162)
 // ICR1H, ICR1L
 //
 // The 32-bit value, created by concatenation of the values of registers
@@ -34,7 +34,7 @@
 #else
 #    define timer1__compare_a__interrupt__VECTOR          TIMER1_COMPA_vect
 #    define timer1__compare_b__interrupt__VECTOR          TIMER1_COMPB_vect
-#  if defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB1622__)
+#  if defined(__AVR_AT90USB82__) || defined(__AVR_AT90USB162__)
 #    define timer1__compare_c__interrupt__VECTOR          TIMER1_COMPC_vect
 #  endif
 #endif
@@ -90,16 +90,27 @@
 #endif
 
 
-#define TIMER1_CONF_STOPPED		                (0)
-#define TIMER1_CONF_NO_PRESCALER	                ((                        _BV(CS10)) << 8)
+#define TIMER1_CONF_STOPPED		                        (0)
+#define TIMER1_CONF_NO_PRESCALER	                    ((                        _BV(CS10)) << 8)
 #define TIMER1_CONF_PRESCALER_8                         ((            _BV(CS11)            ) << 8)
 #define TIMER1_CONF_PRESCALER_64                        ((            _BV(CS11) | _BV(CS10)) << 8)
-#define TIMER1_CONF_PRESCALER_256	                ((_BV(CS12)                        ) << 8)
-#define TIMER1_CONF_PRESCALER_1024	                ((_BV(CS12)             | _BV(CS10)) << 8)
-#define TIMER1_CONF_EXT_CLK_FALLING	                ((_BV(CS12) | _BV(CS11)            ) << 8)
-#define TIMER1_CONF_EXT_CLK_RISING	                ((_BV(CS12) | _BV(CS11) | _BV(CS10)) << 8)
+#define TIMER1_CONF_PRESCALER_256	                    ((_BV(CS12)                        ) << 8)
+#define TIMER1_CONF_PRESCALER_1024	                    ((_BV(CS12)             | _BV(CS10)) << 8)
+#define TIMER1_CONF_EXT_CLK_FALLING	                    ((_BV(CS12) | _BV(CS11)            ) << 8)
+#define TIMER1_CONF_EXT_CLK_RISING	                    ((_BV(CS12) | _BV(CS11) | _BV(CS10)) << 8)
 
 #define TIMER1_CONF_DEFAULT                             (0)
+
+
+inline static void timer1__switch_core_conf(const uint16_t old_conf, const uint16_t new_conf) {
+    const uint8_t old_tccra = old_conf & 0xFF;
+    const uint8_t new_tccra = new_conf & 0xFF;
+    if (old_tccra != new_tccra) TCCR1A = new_tccra;
+
+    const uint8_t old_tccrb = (old_conf >> 8) & 0xFF;
+    const uint8_t new_tccrb = (new_conf >> 8) & 0xFF;
+    if (old_tccrb != new_tccrb) TCCR1B = new_tccrb;
+}
 
 
 inline static void timer1__switch_conf(const uint32_t old_conf, const uint32_t new_conf) {
