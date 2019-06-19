@@ -1,5 +1,10 @@
+// =============================================================================
+// Timer 0 driver for parts with 1 Output Compare module
+// =============================================================================
 #ifndef __CPU_AVR_TIMER0_1OC_H
 #define __CPU_AVR_TIMER0_1OC_H
+
+#if TIMER0__COMPARE_UNITS==1
 
 #include <avr/io.h>
 
@@ -147,5 +152,6 @@ inline static void timer0__stop(void) {
 }
 #endif
 
+#endif
 
 #endif

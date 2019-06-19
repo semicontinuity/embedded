@@ -1,5 +1,5 @@
 // =============================================================================
-// Timer 0 driver for parts with 2 Output Compare modules
+// Timer 0 driver for parts with 0 Output Compare modules
 // and the following configuration registers:
 //
 // TCCR0
@@ -15,10 +15,12 @@
 #ifndef __CPU_AVR_TIMER0_0OC_H
 #define __CPU_AVR_TIMER0_0OC_H
 
+#if defined(TIMER0__COMPARE_UNITS) && TIMER0__COMPARE_UNITS==0
+
 #include <avr/io.h>
 
-#define TIMER0_CONF_STOPPED		                (0)
-#define TIMER0_CONF_NO_PRESCALER	                (                        _BV(CS00))
+#define TIMER0_CONF_STOPPED                             (0)
+#define TIMER0_CONF_NO_PRESCALER                        (                        _BV(CS00))
 #define TIMER0_CONF_PRESCALER_8                         (            _BV(CS01)            )
 #define TIMER0_CONF_PRESCALER_64                        (            _BV(CS01) | _BV(CS00))
 #define TIMER0_CONF_PRESCALER_256                       (_BV(CS02)                        )
@@ -35,5 +37,6 @@ inline void timer0__switch_conf(const uint16_t old_conf, const uint16_t new_conf
     if (old_tccr != new_tccr) TCCR0 = new_tccr;
 }
 
+#endif
 
 #endif

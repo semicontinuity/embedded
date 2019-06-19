@@ -7,15 +7,11 @@ set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_FILES
         ../../../../cpu/avr/timer1.h
-        ../../../../cpu/avr/timer1.c
         ../../../../cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer__timer1.c
 
-        ../../../../cpu/avr/timer0.h
-        ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/drivers/io_matrix/io_matrix__in.h
         ../../../../cpu/avr/drivers/io_matrix/io_matrix__in.c
         ../../../../cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer.h
-        ../../../../cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer__timer0.c
         ../../bsp/drivers/io_matrix__out_rows.h
         ../../bsp/drivers/io_matrix__out_columns.h
         io_matrix__scanner__thread.h

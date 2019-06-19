@@ -21,8 +21,8 @@ Pins than can only sink 3mA max:
 | SPI1_SCK        | PA5  |                  |
 | SPI1_MISO       | PA6  |                  |
 | SPI1_MOSI       | PA7  | ETH_RMII_CRS_DV  |
-| SPI1_NSS        | PA15 | DIS0_D7          |
-| SPI3_NSS        | PA15 | DIS0_D7          |
+| SPI1_NSS        | PA15 |                  |
+| SPI3_NSS        | PA15 |                  |
 | SPI1_SCK        | PB3  | DIS1_D3          |
 | SPI3_SCK        | PB3  | DIS1_D3          |
 | SPI1_MISO       | PB4  | DIS1_D4          |
@@ -125,7 +125,34 @@ Pins than can only sink 3mA max:
 |ETH_RST_PIN (OPT)| PE2  |
 
 
-## DIY More board pin-out (bottom view)
+## USB OTG FS connections
+
+|                 |      |
+|-----------------|------|
+|OTG_FS_SOF       | PA8  |
+|OTG_FS_VBUS      | PA9  |
+|OTG_FS_ID        | PA10 |
+|OTG_FS_DM        | PA11 |
+|OTG_FS_DP        | PA12 |
+
+
+## CAN connections
+
+|                 |      |
+|-----------------|------|
+|CAN1_RX          | PA11 |
+|CAN1_TX          | PA12 |
+|CAN2_RX          | PB5  |
+|CAN2_TX          | PB6  |
+|CAN1_RX          | PB8  |
+|CAN1_TX          | PB9  |
+|CAN2_RX          | PB12 |
+|CAN2_TX          | PB13 |
+|CAN1_RX          | PD0  |
+|CAN1_TX          | PD1  |
+
+
+## DIY More board pin-out (bottom view, outdated)
 
 |            |    |    |            |    |    |    |    |    |    |    |    |    |    |    |    |            |    |    |            |
 |------------|----|----|------------|----|----|----|----|----|----|----|----|----|----|----|----|------------|----|----|------------|
@@ -133,8 +160,8 @@ Pins than can only sink 3mA max:
 |            |    |    |            |    |D5  |D7  |RMII|RMII|    |    |    |    |    |    |D0  |            |    |    |            |
 |            |    |    |            |    |    |    |TXEN|TXD0|    |    |    |    |    |    |    |            |    |    |            |
 |------------|----|----|------------|----|----|----|----|----|----|----|----|----|----|----|----|------------|----|----|------------|
-|            |    |    |            |PE11|PE13|PE15|PB11|PB12|PB14|PB8 |PD10|PD12|PD14|PC6 |PC8 |            |    |    |            |
-|            |    |    |            |PE12|PE14|PB10|GND |3.3V|PB13|PB15|PF9 |PD11|PD13|PD15|PC7 |            |    |    |            |
+|            |    |    |            |PE11|PE13|PE15|PB11|PB12|PB14|PD8 |PD10|PD12|PD14|PC6 |PC8 |            |    |    |            |
+|            |    |    |            |PE12|PE14|PB10|GND |3.3V|PB13|PB15|PD9 |PD11|PD13|PD15|PC7 |            |    |    |            |
 |------------|----|----|------------|----|----|----|----|----|----|----|----|----|----|----|----|------------|----|----|------------|
 |            |    |    |            |DIS3|DIS3|    |    |    |ETH |    |    |    |    |    |    |            |    |    |            |
 |            |    |    |            |D4  |D6  |    |    |    |RMII|    |    |    |    |    |    |            |    |    |            |
@@ -164,32 +191,32 @@ Pins than can only sink 3mA max:
 
 |            |    |    |            |    |    |    |    |    |    |    |    |    |    |    |    |            |    |    |            |
 |------------|----|----|------------|----|----|----|----|----|----|----|----|----|----|----|----|------------|----|----|------------|
-|            |    |    |            |SDIO|    |    |    |    |    |    |ETH |ETH |DIS3|DIS3|DIS3|            |    |    |            |
-|            |    |    |            |D0  |    |    |    |    |    |    |TXD0|TX  |D7  |D5  |D3  |            |    |    |            |
-|            |    |    |            |    |    |    |    |    |    |    |    |EN  |    |    |    |            |    |    |            |
+|            |    |    |            |SDIO|    |DIS0|DIS0|DIS0|DIS0|    |ETH |ETH |DIS3|DIS3|DIS3|            |    |    |            |
+|            |    |    |            |D0  |    |D6  |D4  |D2  |D0  |    |TXD0|TX  |D7  |D5  |D3  |            |    |    |            |
+|            |    |    |            |    |    |    |    |    |    |    |&   |EN  |    |    |    |            |    |    |            |
 |------------|----|----|------------|----|----|----|----|----|----|----|----|----|----|----|----|------------|----|----|------------|
-|            |    |    |            |PC8 |PC6 |PD14|PD12|PD10|PB8 |PB14|PB12|PB11|PE15|PE13|PE11|            |    |    |            |
-|            |    |    |            |PC7 |PD15|PD13|PD11|PF9 |PB15|PB13|3.3V|GND |PB10|PE14|PE12|            |    |    |            |
+|            |    |    |            |PC8 |PC6 |PD14|PD12|PD10|PD8 |PB14|PB12|PB11|PE15|PE13|PE11|            |    |    |            |
+|            |    |    |            |PC7 |PD15|PD13|PD11|PD9 |PB15|PB13|3.3V|GND |PB10|PE14|PE12|            |    |    |            |
 |------------|----|----|------------|----|----|----|----|----|----|----|----|----|----|----|----|------------|----|----|------------|
-|            |    |    |            |?   |    |    |    |    |    |ETH |    |    |    |DIS3|DIS3|            |    |    |            |
-|            |    |    |            |?   |    |    |    |    |    |TXD1|    |    |    |D6  |D4  |            |    |    |            |
-|            |    |    |            |?   |    |    |    |    |    |    |    |    |    |    |    |            |    |    |            |
+|            |    |    |            |    |DIS0|DIS0|DIS0|DIS0|    |ETH |    |    |    |DIS3|DIS3|            |    |    |            |
+|            |    |    |            |    |D7  |D5  |D3  |D1  |    |TXD1|    |    |    |D6  |D4  |            |    |    |            |
+|            |    |    |            |    |    |    |    |    |    |&   |    |    |    |    |    |            |    |    |            |
 |------------|----|----|------------|----|----|----|----|----|----|----|----|----|----|----|----|------------|----|----|------------|
 |            |    |    |            |    |    |    |    |    |    |    |    |    |    |    |    |            |BT1 |GND |            |
 |            |    |    |            |    |    |    |    |    |    |    |    |    |    |    |    |            |BT0 |GND |            |
 |            |GND |VCC |            |    |    |    |    |    |    |    |    |    |    |    |    |DIS3_D2     |PE10|PB2 |DIS1_D2     |
-|DIS0_D0     |PA8 |PC9 |SDIO_D1     |    |    |    |    |    |    |    |    |    |    |    |    |DIS3_D0     |PE8 |PE9 |DIS3_D1     |
-|DIS0_D2     |PA10|PA9 |DIS0_D1     |    |    |    |    |    |    |    |    |    |    |    |    |DIS2_D1     |PE1 |PE7 |DIS2_D7     |
-|DIS0_D4     |PA12|PA11|DIS0_D3     |    |    |    |    |    |    |    |    |    |    |    |    |I2C1_SCL    |PB8 |PB9 |I2C1_SDA    |
-|DIS0_D6     |PA14|PA13|DIS0_D5     |    |    |    |    |    |    |    |    |    |    |    |    |DIS1_D0     |PB0 |PB1 |DIS1_D1     |
-|SDIO_D2     |PC10|PA15|DIS0_D7     |    |    |    |    |    |    |    |    |    |    |    |    |ETH_RXD0    |PC4 |PC5 |ETH_RXD1    |
-|SDIO_CK     |PC12|PC11|SDIO_D3     |    |    |    |    |    |    |    |    |    |    |    |    |            |PA6 |PA7 |ETH_CRS_DV  |
-|?           |PD1 |PD0 |?           |    |    |    |    |    |    |    |    |    |    | -- | -- |            |PA4 |PA5 |            |
-|?           |PD3 |PD2 |SDIO_CMD    |    |    |    |    |    |    |    |    |    |    |    |    |            |PC3 |PA3 |            |
-|USART2_TX   |PD5 |PD4 |            |    |    |    |    |    |    |    |    |    |    |    |    |ETH_REF_CLK |PA1 |PA2 |ETH_MDIO    |
-|            |PD7 |PD6 |USART2_RX   |    |    |    |    |    |    |    |    |    |    |    |    |            |PC2 |PA0 |            |
-|DIS1_D4     |PB4 |PB3 |DIS1_D3     |    |    |    |    |    |    |    |    |    |    |    |    |            |PC0 |PC1 |ETH_MDC     |
-|DIS1_D6     |PB6 |PB5 |DIS1_D5     |    |    |    |    |    |    |    |    |    |    |    |    |            |3.3V|GND |            |
+|OTG_FS_SOF  |PA8 |PC9 |SDIO_D1     |    |    |    |    |    |    |    |    |    |    |    |    |DIS3_D0     |PE8 |PE9 |DIS3_D1     |
+|OTG_FS_ID   |PA10|PA9 |OTG_FS_VBUS |    |    |    |    |    |    |    |    |    |    |    |    |DIS2_D1     |PE1 |PE7 |DIS2_D7     |
+|OTF_FS_DP   |PA12|PA11|OTG_FS_DM   |    |    |    |    |    |    |    |    |    |    |    |    |I2C1_SCL  & |PB8 |PB9 |I2C1_SDA  & |
+|DIS1_RW     |PA14|PA13|DIS1_RS     |    |    |    |    |    |    |    |    |    |    |    |    |DIS1_D0     |PB0 |PB1 |DIS1_D1     |
+|SDIO_D2     |PC10|PA15|DIS1_E      |    |    |    |    |    |    |    |    |    |    |    |    |ETH_RXD0    |PC4 |PC5 |ETH_RXD1    |
+|SDIO_CK     |PC12|PC11|SDIO_D3     |    |    |    |    |    |    |    |    |    |    |    |    |DIS3_E      |PA6 |PA7 |ETH_CRS_DV  |
+|          & |PD1 |PD0 |          & |    |    |    |    |    |    |    |    |    |    | -- | -- |            |PA4 |PA5 |            |
+|DIS0_E      |PD3 |PD2 |SDIO_CMD    |    |    |    |    |    |    |    |    |    |    |    |    |DIS2_E      |PC3 |PA3 |DIS3_RW     |
+|USART2_TX   |PD5 |PD4 |DIS0_RS     |    |    |    |    |    |    |    |    |    |    |    |    |ETH_REF_CLK |PA1 |PA2 |ETH_MDIO    |
+|DIS0_RW     |PD7 |PD6 |USART2_RX   |    |    |    |    |    |    |    |    |    |    |    |    |DIS2_RW     |PC2 |PA0 |DIS3_RS     |
+|DIS1_D4     |PB4 |PB3 |DIS1_D3     |    |    |    |    |    |    |    |    |    |    |    |    |DIS2_RS     |PC0 |PC1 |ETH_MDC     |
+|DIS1_D6   & |PB6 |PB5 |DIS1_D5   & |    |    |    |    |    |    |    |    |    |    |    |    |            |3.3V|GND |            |
 |DIS2_D0     |PE0 |PB7 |DIS1_D7     |    |    |    |    |    |    |    |    |    |    |    | -- |DIS2_D6     |PE6 |PC13|            |
 |            |GND |3.3V|            |    |    |    |    |    |    |    |    |    |    |    |    |DIS2_D4     |PE4 |PE5 |DIS2_D5     |
 |            |GND |VCC |            |    |    |    |    |    |    |    |    |    |    |    |    |DIS2_D2     |PE2 |PE3 |DIS2_D3     |
@@ -198,22 +225,21 @@ Pins than can only sink 3mA max:
 
 |    |                             |
 |----|-----------------------------|
-|PA0 | -                           |
+|PA0 | DIS3_RS                     |
 |PA1 | ETH_REF_CLK                 |
-|PA2 | ETH_MDIO                    |
-|PA3 | ?                           |
-|PA4 | ?                           |
-|PA5 | ?                           |
-|PA6 | ?                           |
+|PA2 | ETH_MDI                     |
+|PA4 | (not 5V tolerant)           |
+|PA5 | (not 5V tolerant)           |
+|PA6 | DIS3_E                      |
 |PA7 | ETH_RMII_CRS_DV             |
-|PA8 | DIS0_D0                     |
-|PA9 | DIS0_D1                     |
-|PA10| DIS0_D2                     |
-|PA11| DIS0_D3                     |
-|PA12| DIS0_D4                     |
-|PA13| DIS0_D5                     |
-|PA14| DIS0_D6                     |
-|PA15| DIS0_D7                     |
+|PA8 | OTG_FS_SOF                  |
+|PA9 | OTG_FS_VBUS                 |
+|PA10| OTG_FS_ID                   |
+|PA11| OTF_FS_DM                   |
+|PA12| OTG_FS_DP                   |
+|PA13| DIS1_RS                     |
+|PA14| DIS1_RW                     |
+|PA15| DIS1_E                      |
 |PB0 | DIS1_D0                     |
 |PB1 | DIS1_D1                     |
 |PB2 | DIS1_D2                     |
@@ -230,10 +256,10 @@ Pins than can only sink 3mA max:
 |PB13| ETH_RMII_TXD1               |
 |PB14| ?                           |
 |PB15| ?                           |
-|PC0 | ?                           |
+|PC0 | DIS2_RS                     |
 |PC1 | ETH_MDC                     |
-|PC2 | ?                           |
-|PC3 | ?                           |
+|PC2 | DIS2_RW                     |
+|PC3 | DIS2_E                      |
 |PC4 | ETH_RMII_RXD0               |
 |PC5 | ETH_RMII_RXD1               |
 |PC6 | ?                           |
@@ -243,25 +269,25 @@ Pins than can only sink 3mA max:
 |PC10| SDIO_D2                     |
 |PC11| SDIO_D3                     |
 |PC12| SDIO_CK                     |
-|PC13| ?                           |
-|PC14| ?                           |
-|PC15| ?                           |
-|PD0 | ?                           |
-|PD1 | ?                           |
+|PC13| (sink 3mA max)              |
+|PC14| (sink 3mA max)              |
+|PC15| (sink 3mA max)              |
+|PD0 | CAN1_RX                     |
+|PD1 | CAN1_TX                     |
 |PD2 | SDIO_CMD                    |
-|PD3 | ?                           |
-|PD4 | ?                           |
+|PD3 | DIS0_E                      |
+|PD4 | DIS0_RS                     |
 |PD5 | USART2_TX                   |
 |PD6 | USART2_RX                   |
-|PD7 | ?                           |
-|PD8 | N/A                         |
-|PD9 | N/A                         |
-|PD10| ?                           |
-|PD11| ?                           |
-|PD12| ?                           |
-|PD13| ?                           |
-|PD14| ?                           |
-|PD15| ?                           |
+|PD7 | DIS0_RW                     |
+|PD8 | DIS0_D0                     |
+|PD9 | DIS0_D1                     |
+|PD10| DIS0_D2                     |
+|PD11| DIS0_D3                     |
+|PD12| DIS0_D4                     |
+|PD13| DIS0_D5                     |
+|PD14| DIS0_D6                     |
+|PD15| DIS0_D7                     |
 |PE0 | DIS2_D0                     |
 |PE1 | DIS2_D1                     |
 |PE2 | DIS2_D2                     |
@@ -278,4 +304,3 @@ Pins than can only sink 3mA max:
 |PE13| DIS3_D5                     |
 |PE14| DIS3_D6                     |
 |PE15| DIS3_D7                     |
-|PF9 | ?                           |

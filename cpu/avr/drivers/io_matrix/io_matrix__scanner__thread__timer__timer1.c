@@ -25,7 +25,8 @@ void io_matrix__scanner__thread__timer__init(void) {
  * Start the I/O matrix scanner thread timer.
  */
 void io_matrix__scanner__thread__timer__start(void) {
-//    timer1__switch_core_conf(
-//        IO_MATRIX__SCANNER__THREAD__TIMER__CONF__INITIALIZED, IO_MATRIX__SCANNER__THREAD__TIMER__CONF__STARTED
-//    );
+    timer1__compare_a__value__set(IO_MATRIX__SCANNER__THREAD__TIMER__CONF__TOP);
+    timer1__switch_core_conf(
+        IO_MATRIX__SCANNER__THREAD__TIMER__CONF__INITIALIZED, IO_MATRIX__SCANNER__THREAD__TIMER__CONF__STARTED
+    );
 }
