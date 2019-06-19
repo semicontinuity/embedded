@@ -13,6 +13,12 @@
 #include "cpu/avr/drivers/keyboard/keyboard__pins.h"
 #include "cpu/avr/drivers/keyboard/keyboard__debounce_timer.h"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.h"
+
+#include "cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer.h"
+#include "cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer.h"
+#include "cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer.h"
+#include "cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer.h"
+
 #include <cpu/avr/asm.h>
 
 
@@ -121,39 +127,54 @@ register volatile uint8_t keyboard__common_mask asm(QUOTE(KEYBOARD__COMMON_MASK_
 #endif
 
 
-inline void keyboard__reset_masks(void) {
+void keyboard__port_a__mask__reset() {
+#if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
 #ifdef KEYBOARD__COMMON_MASK__REG
-
-#if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
     keyboard__port_a__mask = keyboard__common_mask;
-#endif
-#if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
-    keyboard__port_b__mask = keyboard__common_mask;
-#endif
-#if defined(KEYBOARD__PORT_C__USED) && KEYBOARD__PORT_C__USED == 1
-    keyboard__port_c__mask = keyboard__common_mask;
-#endif
-#if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
-    keyboard__port_d__mask = keyboard__common_mask;
-#endif
-
 #else
-
-#if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
     keyboard__port_a__mask = keyboard__pins__port_a__button_pins_mask();
 #endif
-#if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
-    keyboard__port_b__mask = keyboard__pins__port_b__button_pins_mask();
-#endif
-#if defined(KEYBOARD__PORT_C__USED) && KEYBOARD__PORT_C__USED == 1
-    keyboard__port_c__mask = keyboard__pins__port_c__button_pins_mask();
-#endif
-#if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
-    keyboard__port_d__mask = keyboard__pins__port_d__button_pins_mask();
-#endif
-
 #endif
 }
+
+void keyboard__port_b__mask__reset() {
+#if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
+#ifdef KEYBOARD__COMMON_MASK__REG
+    keyboard__port_b__mask = keyboard__common_mask;
+#else
+    keyboard__port_b__mask = keyboard__pins__port_b__button_pins_mask();
+#endif
+#endif
+}
+
+void keyboard__port_c__mask__reset() {
+#if defined(KEYBOARD__PORT_C__USED) && KEYBOARD__PORT_C__USED == 1
+#ifdef KEYBOARD__COMMON_MASK__REG
+    keyboard__port_c__mask = keyboard__common_mask;
+#else
+    keyboard__port_c__mask = keyboard__pins__port_c__button_pins_mask();
+#endif
+#endif
+}
+
+void keyboard__port_d__mask__reset() {
+#if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
+#ifdef KEYBOARD__COMMON_MASK__REG
+    keyboard__port_d__mask = keyboard__common_mask;
+#else
+    keyboard__port_d__mask = keyboard__pins__port_d__button_pins_mask();
+#endif
+#endif
+}
+
+
+inline void keyboard__reset_masks(void) {
+    keyboard__port_a__mask__reset();
+    keyboard__port_b__mask__reset();
+    keyboard__port_c__mask__reset();
+    keyboard__port_d__mask__reset();
+}
+
 
 inline void keyboard__init_masks(void) {
 #ifdef KEYBOARD__COMMON_MASK__REG
@@ -260,12 +281,33 @@ void keyboard__port_d__run(void) {
         keyboard__port_d__encoders__process(state, changes);
     }
 }
+
 #endif
+
+
+void keyboard__init_debounce_timers(void) {
+#if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
+    __asm__ __volatile__("keyboard__port_a__debounce_timer__init:");
+    keyboard__port_a__debounce_timer__init();
+#endif
+#if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
+    __asm__ __volatile__("keyboard__port_b__debounce_timer__init:");
+    keyboard__port_b__debounce_timer__init();
+#endif
+#if defined(KEYBOARD__PORT_C__USED) && KEYBOARD__PORT_C__USED == 1
+    __asm__ __volatile__("keyboard__port_c__debounce_timer__init:");
+    keyboard__port_c__debounce_timer__init();
+#endif
+#if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
+    __asm__ __volatile__("keyboard__port_d__debounce_timer__init:");
+    keyboard__port_d__debounce_timer__init();
+#endif
+}
 
 
 void keyboard__init(void) {
     keyboard__pins__init();
-    keyboard__debounce_timer__init();
+    keyboard__init_debounce_timers();
     keyboard__init_previous_states();
     keyboard__init_masks();
 }

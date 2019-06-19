@@ -19,7 +19,7 @@
  */
 void keyboard__port_d__debounce_timer__init(void) {
     // NB: manages the whole timer
-    timer2__switch_core_conf(
+    timer2__switch_basic_conf(
         KEYBOARD__PORT_D__DEBOUNCE_TIMER__CONF__INITIALIZED, KEYBOARD__PORT_D__DEBOUNCE_TIMER__CONF__STARTED
     );
 }
@@ -28,14 +28,14 @@ void keyboard__port_d__debounce_timer__init(void) {
  * Start (or re-start) debounce timer.
  */
 void keyboard__port_d__debounce_timer__start(void) {
-    timer0__compare_d__value__set(timer2__value__get() + KEYBOARD__PORT_D__DEBOUNCE_TIMER__DELAY);
-    timer0__compare_d__interrupt__enable();
+    timer2__compare_b__value__set(timer2__value__get() + KEYBOARD__PORT_D__DEBOUNCE_TIMER__DELAY);
+    timer2__compare_b__interrupt__enable();
 }
 
 /**
  * Invoked, when the programmed debounce delay has elapsed.
  */
 void keyboard__port_d__debounce_timer__expired(void) {
-    timer2__compare_d__interrupt__disable();
+    timer2__compare_b__interrupt__disable();
     keyboard__port_d__debounce_timer__run();
 }

@@ -2,15 +2,15 @@
 // Debounce timer for the keyboard's port C (physical or logical)
 // =============================================================================
 
-#ifndef __KEYBOARD__PORT_A__DEBOUNCE_TIMER_H
-#define __KEYBOARD__PORT_A__DEBOUNCE_TIMER_H
+#ifndef __KEYBOARD__PORT_C__DEBOUNCE_TIMER_H
+#define __KEYBOARD__PORT_C__DEBOUNCE_TIMER_H
 
 #include <stdbool.h>
 
 /**
  * Initialize debounce timer.
  */
-void keyboard__port_c__debounce_timer__init(void);
+void keyboard__port_c__debounce_timer__init(void) __attribute__((weak));
 
 /**
  * Start (or re-start) debounce timer.

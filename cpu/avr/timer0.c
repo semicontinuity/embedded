@@ -50,6 +50,8 @@ ISR(TIMER0_COMP_vect, TIMER0_COMP_vect_attrs) {
 
 #ifdef timer0__comp_a__run
 
+extern void timer0__comp_a__run(void);
+
 #ifndef TIMER0_COMPA_vect_attrs
 #define TIMER0_COMPA_vect_attrs
 #endif
@@ -72,6 +74,8 @@ ISR(timer0__compare_a__interrupt__VECTOR, TIMER0_COMPA_vect_attrs) {
 
 
 #ifdef timer0__comp_b__run
+
+extern void timer0__comp_b__run(void);
 
 #ifndef TIMER0_COMPB_vect_attrs
 #define TIMER0_COMPB_vect_attrs

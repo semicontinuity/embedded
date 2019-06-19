@@ -26,6 +26,8 @@ ISR(timer2__overflow__interrupt__VECTOR, TIMER2_OVERFLOW_vect_attrs) {
 
 #ifdef timer2__comp_a__run
 
+extern void timer2__comp_a__run(void);
+
 #ifndef TIMER2_COMPA_vect_attrs
 #define TIMER2_COMPA_vect_attrs
 #endif
@@ -48,6 +50,8 @@ ISR(timer2__compare_a__interrupt__VECTOR, TIMER2_COMPA_vect_attrs) {
 
 
 #ifdef timer2__comp_b__run
+
+extern void timer2__comp_b__run(void);
 
 #ifndef TIMER2_COMPB_vect_attrs
 #define TIMER2_COMPB_vect_attrs

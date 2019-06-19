@@ -17,7 +17,7 @@
 /**
  * Initialize debounce timer.
  */
-void keyboard__port_a__debounce_timer__init(void) {
+void keyboard__port_b__debounce_timer__init(void) {
     // NB: manages the whole timer
     timer0__switch_core_conf(
         KEYBOARD__PORT_B__DEBOUNCE_TIMER__CONF__INITIALIZED, KEYBOARD__PORT_B__DEBOUNCE_TIMER__CONF__STARTED

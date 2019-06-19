@@ -10,7 +10,7 @@
 /**
  * Initialize debounce timer.
  */
-void keyboard__port_d__debounce_timer__init(void);
+void keyboard__port_d__debounce_timer__init(void) __attribute__((weak));
 
 /**
  * Start (or re-start) debounce timer.
