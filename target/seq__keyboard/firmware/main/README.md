@@ -110,3 +110,17 @@
 | 29 | allocated by compiler                                           |
 | 30 | IO_MATRIX__SCANNER__THREAD__IP__REG (L)                         |
 | 31 | IO_MATRIX__SCANNER__THREAD__IP__REG (H)                         |
+
+## General-purpose I/O register allocations
+
+### GPIOR0
+|    |                                                                 |
+|----|-----------------------------------------------------------------|
+|  0 | COMM_BUTTONS__BUTTON0__EVENT_PENDING                            |
+|  1 | COMM_BUTTONS__BUTTON0__EVENT_VALUE                              |
+|  2 | COMM_BUTTONS__BUTTON1__EVENT_PENDING                            |
+|  3 | COMM_BUTTONS__BUTTON1__EVENT_VALUE                              |
+|  4 | COMM_BUTTONS__BUTTON2__EVENT_PENDING                            |
+|  5 | COMM_BUTTONS__BUTTON2__EVENT_VALUE                              |
+|  6 | COMM_BUTTONS__BUTTON3__EVENT_PENDING                            |
+|  7 | COMM_BUTTONS__BUTTON3__EVENT_VALUE                              |

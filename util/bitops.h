@@ -36,6 +36,10 @@ typedef union {
 	inline char name##__get(void);
 
 #define DEFINE_BITVAR(name, host, bit)                                                                  \
+	inline void name##__set_from_bit_opt(const unsigned char v, const unsigned char v_bit)	{           \
+	  (host) &= ~(1U << (bit));                                                                         \
+	  if ((v & (1U << v_bit))) (host) |= (1U << (bit));                                                 \
+	}                                                                                                   \
 	inline void name##__set(char v)	{ if ((v)) (host) |= (1U << (bit)); else (host) &= ~(1U << (bit));} \
 	inline bool name##__is_set(void)	{ return (host) & (1U << (bit)); }                              \
 	inline char name##__get(void)	{ return (host) & (1U << (bit)); }

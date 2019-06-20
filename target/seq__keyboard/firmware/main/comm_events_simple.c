@@ -45,15 +45,3 @@ void twi__slave__on_data_byte_requested(void) {
 void comm_events__start(void) {
     comm_events__event = 0;
 }
-
-// Temp
-// ---------------------------------------------------------------------------------------------------------------------
-
-// Handling events form encoders
-// ---------------------------------------------------------------------------------------------------------------------
-
-
-inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
-    return false;
-}
-
