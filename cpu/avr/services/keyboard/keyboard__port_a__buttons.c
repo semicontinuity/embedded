@@ -11,13 +11,13 @@ inline void keyboard__port_a__buttons__process_button(uint8_t state, uint8_t cha
     if (changes & ((uint8_t) (1U << pin))) {
         if (keyboard__handle_button_event(button, state, pin)) {
             keyboard__port_a__mask__clear_bit(pin);
-            keyboard__port_a__previous_state__copy_bit(state, pin);
+//            keyboard__port_a__previous_state__copy_bit(state, pin);
         }
     }
 }
 
 
-void keyboard__port_a__buttons__process(uint8_t state, uint8_t changes) {
+inline void keyboard__port_a__buttons__process(uint8_t state, uint8_t changes) {
     __asm__ __volatile__("keyboard__port_a__buttons__process_button__19:");
     keyboard__port_a__buttons__process_button(state, changes, 19);
     __asm__ __volatile__("keyboard__port_a__buttons__process_button__18:");

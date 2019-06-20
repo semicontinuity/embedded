@@ -48,8 +48,11 @@
 #if defined(TX_RING_BUFFER__SIZE)
 #  include "comm_keyboard.c"
 #else
-#  include "comm_keyboard_simple.c"
+#  include "comm_events_simple.c"
+//#  include "comm_keyboard_simple.c"
 #endif
+
+#include "comm_encoder_queues.c"
 
 
 // Entry point

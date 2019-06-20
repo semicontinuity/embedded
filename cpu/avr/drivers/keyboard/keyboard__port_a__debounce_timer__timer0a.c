@@ -22,6 +22,7 @@ void keyboard__port_a__debounce_timer__init(void) {
     timer0__switch_core_conf(
         KEYBOARD__PORT_A__DEBOUNCE_TIMER__CONF__INITIALIZED, KEYBOARD__PORT_A__DEBOUNCE_TIMER__CONF__STARTED
     );
+    timer0__compare_a__interrupt__enable(); // interrupt will fire regularly
 }
 
 /**
@@ -29,13 +30,13 @@ void keyboard__port_a__debounce_timer__init(void) {
  */
 void keyboard__port_a__debounce_timer__start(void) {
     timer0__compare_a__value__set(timer0__value__get() + KEYBOARD__PORT_A__DEBOUNCE_TIMER__DELAY);
-    timer0__compare_a__interrupt__enable();
+//    timer0__compare_a__interrupt__enable();
 }
 
 /**
  * Invoked, when the programmed debounce delay has elapsed.
  */
 void keyboard__port_a__debounce_timer__expired(void) {
-    timer0__compare_a__interrupt__disable();
+//    timer0__compare_a__interrupt__disable();
     keyboard__port_a__debounce_timer__run();
 }

@@ -11,7 +11,7 @@ inline void keyboard__port_b__buttons__process_button(uint8_t state, uint8_t cha
     if (changes & ((uint8_t) (1U << pin))) {
         if (keyboard__handle_button_event(button, state, pin)) {
             keyboard__port_b__mask__clear_bit(pin);
-            keyboard__port_b__previous_state__copy_bit(state, pin);
+//            keyboard__port_b__previous_state__copy_bit(state, pin);
         }
     }
 }

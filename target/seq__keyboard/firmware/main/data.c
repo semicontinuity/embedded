@@ -15,6 +15,7 @@ void data__leds__put_position_reset(void) {
 }
 
 bool data__leds__put(const uint8_t value) {
+    __asm__ __volatile__("data__leds__put:");
     if (data__leds__index < 2) {
         if (data__leds__index++ == 0) {
             data__leds[0] = value;

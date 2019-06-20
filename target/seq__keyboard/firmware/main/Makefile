@@ -20,16 +20,25 @@ CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh)
 
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.io.properties)
 include config.io.properties
+
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.data.properties)
 include config.data.properties
+
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.io_matrix__scanner.properties)
 include config.io_matrix__scanner.properties
+
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.io_matrix.properties)
 include config.io_matrix.properties
+
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.keyboard.properties)
 include config.keyboard.properties
-CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_keyboard_simple.properties)
-include config.comm_keyboard_simple.properties
+
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_events_simple.properties)
+include config.comm_events_simple.properties
+
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_encoder_queues.properties)
+include config.comm_encoder_queues.properties
+
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.twi_slave__handler.properties)
 include config.twi_slave__handler.properties
 

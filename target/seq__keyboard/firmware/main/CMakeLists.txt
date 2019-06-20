@@ -62,8 +62,12 @@ set(SOURCE_FILES
         twi_slave__handler.h
         twi_slave__handler.c
         comm_leds.c
-        comm_keyboard.h
-        comm_keyboard_simple.c
+#        comm_keyboard.h
+#        comm_keyboard_simple.c
+        comm_events.h
+        comm_events_simple.c
+        comm_encoder.h
+        comm_encoder_queues.c
 
         ../../bsp/drivers/out/led_a.h
         ../../bsp/drivers/out/led_b.h
@@ -85,5 +89,6 @@ include(CMakeLists.io_matrix__scanner.txt)
 include(CMakeLists.io_matrix.txt)
 include(CMakeLists.io.txt)
 include(CMakeLists.keyboard.txt)
-include(CMakeLists.comm_keyboard_simple.txt)
+include(CMakeLists.comm_events_simple.txt)
+include(CMakeLists.comm_encoder_queues.txt)
 include(CMakeLists.twi.txt)

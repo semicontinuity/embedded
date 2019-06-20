@@ -32,8 +32,8 @@ extern volatile uint8_t io_matrix__in__column3__state;
 
 
 void io_matrix__in__column0__state__update(void);
-uint8_t io_matrix__in__column0__state__get(void) {
-    FIX_REGISTER(io_matrix__in__column0__state);
+uint8_t io_matrix__in__column0__state__get(void)  {
+    FIX_LOWER_REGISTER(io_matrix__in__column0__state);
     return io_matrix__in__column0__state;
 }
 

@@ -9,6 +9,7 @@
 void keyboard__port_a__debounce_timer__start(void) __attribute__((weak));
 void keyboard__port_a__previous_state__copy_bit(uint8_t state, uint8_t bit);
 void keyboard__port_a__mask__clear_bit(uint8_t bit);
+void keyboard__port_a__mask__and_with(uint8_t mask);
 #endif
 
 
@@ -16,6 +17,7 @@ void keyboard__port_a__mask__clear_bit(uint8_t bit);
 void keyboard__port_b__debounce_timer__start(void) __attribute__((weak));
 void keyboard__port_b__previous_state__copy_bit(uint8_t state, uint8_t bit);
 void keyboard__port_b__mask__clear_bit(uint8_t bit);
+void keyboard__port_b__mask__and_with(uint8_t mask);
 #endif
 
 
@@ -23,6 +25,7 @@ void keyboard__port_b__mask__clear_bit(uint8_t bit);
 void keyboard__port_c__debounce_timer__start(void) __attribute__((weak));
 void keyboard__port_c__previous_state__copy_bit(uint8_t state, uint8_t bit);
 void keyboard__port_c__mask__clear_bit(uint8_t bit);
+void keyboard__port_c__mask__and_with(uint8_t mask);
 #endif
 
 
@@ -30,6 +33,7 @@ void keyboard__port_c__mask__clear_bit(uint8_t bit);
 void keyboard__port_d__debounce_timer__start(void) __attribute__((weak));
 void keyboard__port_d__previous_state__copy_bit(uint8_t state, uint8_t bit);
 void keyboard__port_d__mask__clear_bit(uint8_t bit);
+void keyboard__port_d__mask__and_with(uint8_t mask);
 #endif
 
 

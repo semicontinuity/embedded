@@ -18,7 +18,9 @@
 
 #include <cpu/avr/twi.h>
 #include "twi_slave__handler.h"
-#include "comm_keyboard.h"
+//#include "comm_keyboard.h"
+#include "comm_encoder.h"
+#include "comm_events.h"
 
 #include <drivers/out/alarm.h>
 #include <drivers/out/led_a.h>
@@ -51,7 +53,8 @@ void application__init(void) {
 void application__start(void) {
     io_matrix__in__start();
     io_matrix__scanner__thread__timer__start();
-    comm_keyboard__start();
+    comm_encoder__start();
+    comm_events__start();
     twi__slave__start();
 }
 
@@ -69,8 +72,11 @@ int main(void) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
+    __asm__ __volatile__("main__loop:");
     for(;;) {
         keyboard__run();
+        comm_encoder__run();
+        __asm__ __volatile__("main__loop__twi:");
         if (twi__slave__handler__is_runnable()) {
             twi__slave__handler__run();
         }

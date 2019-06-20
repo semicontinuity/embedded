@@ -20,7 +20,9 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 )
 
 
-#define FIX_REGISTER(r)                 __asm__ __volatile__("" : "=r" (r) : "0" (r));
+#define FIX_REGISTER(r)                 __asm__ __volatile__("" : "=r" (r) : "r" (r));
+
+#define FIX_LOWER_REGISTER(r)           __asm__ __volatile__("" : "=l" (r) : "l" (r));
 
 #define FIX_TEMP_REGISTER(r)            (__extension__({        \
     register uint8_t __result asm("r0");                        \
@@ -215,6 +217,49 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
           "I"(b)			                                \
   );					                                    \
 } while(0)
+
+
+#define IF_BIT_SET_INC(r, v, bit) do {                      \
+    __asm__ __volatile__(                                   \
+    "sbrc %1, %2\n\t"                                       \
+    "inc %0\n\t"                                            \
+        : "=r"((r))                                         \
+        : "r"((v)),                                         \
+          "I"((bit))                                        \
+    );                                                      \
+} while (0)
+
+#define IF_BIT_SET_DEC(r, v, bit) do {                      \
+    __asm__ __volatile__(                                   \
+    "sbrc %1, %2\n\t"                                       \
+    "dec %0\n\t"                                            \
+        : "=r"((r))                                         \
+        : "r"((v)),                                         \
+          "I"((bit))                                        \
+    );                                                      \
+} while (0)
+
+#define IF_BIT_CLEAR_INC(r, v, bit) do {                    \
+    __asm__ __volatile__(                                   \
+    "sbrs %1, %2\n\t"                                       \
+    "inc %0\n\t"                                            \
+        : "=r"((r))                                         \
+        : "r"((v)),                                         \
+          "I"((bit))                                        \
+    );                                                      \
+} while (0)
+
+#define IF_BIT_CLEAR_DEC(r, v, bit) do {                    \
+    __asm__ __volatile__(                                   \
+    "sbrs %1, %2\n\t"                                       \
+    "dec %0\n\t"                                            \
+        : "=r"((r))                                         \
+        : "r"((v)),                                         \
+          "I"((bit))                                        \
+    );                                                      \
+} while (0)
+
+
 
 
 #define IF_BIT_SET_INC_ELSE_DEC(r, v, bit) do {             \
@@ -645,7 +690,8 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 #define MOVW(to,from)		do { __asm__ __volatile__ ("movw %0, %1" : "=r"(to) : "r"(from)); } while(0)
 
 #define LDI(k)			    do { __asm__ __volatile__ ("ldi r24, %1" :: "r"(k)) : "r24"; } while(0)
-#define ORI(reg,k)			do { __asm__ __volatile__ ("ori  %0, %1" : "+d"(reg) : "M"((k))) ; } while(0)
+#define ANDI(reg, k)		do { __asm__ __volatile__ ("andi %0, %1" : "+d"(reg) : "M"((k))) ; } while(0)
+#define ORI(reg, k)			do { __asm__ __volatile__ ("ori  %0, %1" : "+d"(reg) : "M"((k))) ; } while(0)
 #define MOV(to,from)		do { __asm__ __volatile__ ("mov  %0, %1" : "=r"(to) : "r"(from)); } while(0)
 #define CLR(reg)		    do { __asm__ __volatile__ ("clr  %0" : "+r"(reg)); } while(0)
 #define LSR(reg)		    do { __asm__ __volatile__ ("lsr  %0" : "+r"(reg)); } while(0)

@@ -40,9 +40,16 @@ register volatile uint8_t keyboard__port_a__mask asm(QUOTE(KEYBOARD__PORT_A__MAS
 volatile uint8_t keyboard__port_a__mask;
 #endif
 
-void keyboard__port_a__mask__clear_bit(const uint8_t bit) {
-    keyboard__port_a__mask &= (uint8_t) ~((uint8_t) (1U << bit));
+void keyboard__port_a__mask__and_with(const uint8_t mask) {
+    if (mask != 0xFF) {
+        ANDI(keyboard__port_a__mask, mask & 0xFF);
+    }
 }
+
+void keyboard__port_a__mask__clear_bit(const uint8_t bit) {
+    keyboard__port_a__mask__and_with(~((uint8_t) (1U << bit)));
+}
+
 
 #endif
 
@@ -65,8 +72,14 @@ register volatile uint8_t keyboard__port_b__mask asm(QUOTE(KEYBOARD__PORT_B__MAS
 volatile uint8_t keyboard__port_b__mask;
 #endif
 
+void keyboard__port_b__mask__and_with(const uint8_t mask) {
+    if (mask != 0xFF) {
+        ANDI(keyboard__port_b__mask, mask & 0xFF);
+    }
+}
+
 void keyboard__port_b__mask__clear_bit(const uint8_t bit) {
-    keyboard__port_b__mask &= (uint8_t) ~((uint8_t) (1U << bit));
+    keyboard__port_b__mask__and_with(~((uint8_t) (1U << bit)));
 }
 
 #endif
@@ -90,8 +103,14 @@ register volatile uint8_t keyboard__port_c__mask asm(QUOTE(KEYBOARD__PORT_C__MAS
 volatile uint8_t keyboard__port_c__mask;
 #endif
 
+void keyboard__port_c__mask__and_with(const uint8_t mask) {
+    if (mask != 0xFF) {
+        ANDI(keyboard__port_c__mask, mask & 0xFF);
+    }
+}
+
 void keyboard__port_c__mask__clear_bit(const uint8_t bit) {
-    keyboard__port_c__mask &= (uint8_t) ~((uint8_t) (1U << bit));
+    keyboard__port_c__mask__and_with(~((uint8_t) (1U << bit)));
 }
 
 #endif
@@ -115,8 +134,14 @@ register volatile uint8_t keyboard__port_d__mask asm(QUOTE(KEYBOARD__PORT_D__MAS
 volatile uint8_t keyboard__port_d__mask;
 #endif
 
+void keyboard__port_d__mask__and_with(const uint8_t mask) {
+    if (mask != 0xFF) {
+        ANDI(keyboard__port_d__mask, mask & 0xFF);
+    }
+}
+
 void keyboard__port_d__mask__clear_bit(const uint8_t bit) {
-    keyboard__port_d__mask &= (uint8_t) ~((uint8_t) (1U << bit));
+    keyboard__port_d__mask__and_with(~((uint8_t) (1U << bit)));
 }
 
 #endif
@@ -130,7 +155,7 @@ register volatile uint8_t keyboard__common_mask asm(QUOTE(KEYBOARD__COMMON_MASK_
 void keyboard__port_a__mask__reset() {
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
 #ifdef KEYBOARD__COMMON_MASK__REG
-    keyboard__port_a__mask = keyboard__common_mask;
+    MOV(keyboard__port_a__mask, keyboard__common_mask);
 #else
     keyboard__port_a__mask = keyboard__pins__port_a__button_pins_mask();
 #endif
@@ -140,7 +165,7 @@ void keyboard__port_a__mask__reset() {
 void keyboard__port_b__mask__reset() {
 #if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
 #ifdef KEYBOARD__COMMON_MASK__REG
-    keyboard__port_b__mask = keyboard__common_mask;
+    MOV(keyboard__port_b__mask, keyboard__common_mask);
 #else
     keyboard__port_b__mask = keyboard__pins__port_b__button_pins_mask();
 #endif
@@ -150,7 +175,7 @@ void keyboard__port_b__mask__reset() {
 void keyboard__port_c__mask__reset() {
 #if defined(KEYBOARD__PORT_C__USED) && KEYBOARD__PORT_C__USED == 1
 #ifdef KEYBOARD__COMMON_MASK__REG
-    keyboard__port_c__mask = keyboard__common_mask;
+    MOV(keyboard__port_c__mask, keyboard__common_mask);
 #else
     keyboard__port_c__mask = keyboard__pins__port_c__button_pins_mask();
 #endif
@@ -160,7 +185,7 @@ void keyboard__port_c__mask__reset() {
 void keyboard__port_d__mask__reset() {
 #if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
 #ifdef KEYBOARD__COMMON_MASK__REG
-    keyboard__port_d__mask = keyboard__common_mask;
+    MOV(keyboard__port_d__mask, keyboard__common_mask);
 #else
     keyboard__port_d__mask = keyboard__pins__port_d__button_pins_mask();
 #endif
@@ -169,6 +194,7 @@ void keyboard__port_d__mask__reset() {
 
 
 inline void keyboard__reset_masks(void) {
+    __asm__ __volatile__("keyboard__reset_masks:");
     keyboard__port_a__mask__reset();
     keyboard__port_b__mask__reset();
     keyboard__port_c__mask__reset();
@@ -177,6 +203,7 @@ inline void keyboard__reset_masks(void) {
 
 
 inline void keyboard__init_masks(void) {
+    __asm__ __volatile__("keyboard__init_masks:");
 #ifdef KEYBOARD__COMMON_MASK__REG
     uint8_t common_mask = 0;
 
@@ -206,6 +233,7 @@ inline void keyboard__init_masks(void) {
 
 
 inline void keyboard__init_previous_states(void) {
+    __asm__ __volatile__("keyboard__init_previous_states:");
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
     keyboard__port_a__previous_state = 0xFF;
 #endif
@@ -225,12 +253,13 @@ inline void keyboard__init_previous_states(void) {
 
 void keyboard__port_a__run(void) {
     __asm__ __volatile__("keyboard__port_a__run:");
-    uint8_t state = keyboard__pins__port_a__read();
-    uint8_t changes = keyboard__port_a__mask & ((uint8_t) (keyboard__port_a__previous_state ^ state));
+//    uint8_t state = keyboard__pins__port_a__read();
+    uint8_t changes = keyboard__port_a__mask & ((uint8_t) (keyboard__port_a__previous_state ^ keyboard__pins__port_a__read()));
     if (changes) {
         keyboard__port_a__debounce_timer__start();
-        keyboard__port_a__buttons__process(state, changes);
-        keyboard__port_a__encoders__process(state, changes);
+        keyboard__port_a__previous_state = keyboard__pins__port_a__read();
+        keyboard__port_a__buttons__process(keyboard__pins__port_a__read(), changes);
+        keyboard__port_a__encoders__process(keyboard__pins__port_a__read(), changes);
     }
 }
 
@@ -245,6 +274,7 @@ void keyboard__port_b__run(void) {
     uint8_t changes = keyboard__port_b__mask & ((uint8_t) (keyboard__port_b__previous_state ^ state));
     if (changes) {
         keyboard__port_b__debounce_timer__start();
+        keyboard__port_b__previous_state = state;
         keyboard__port_b__buttons__process(state, changes);
         keyboard__port_b__encoders__process(state, changes);
     }
@@ -261,6 +291,7 @@ void keyboard__port_c__run(void) {
     uint8_t changes = keyboard__port_c__mask & ((uint8_t) (state ^ keyboard__port_c__previous_state));
     if (changes) {
         keyboard__port_c__debounce_timer__start();
+        keyboard__port_c__previous_state = state;
         keyboard__port_c__buttons__process(state, changes);
         keyboard__port_c__encoders__process(state, changes);
     }
@@ -277,6 +308,7 @@ void keyboard__port_d__run(void) {
     uint8_t changes = keyboard__port_d__mask & ((uint8_t) (state ^ keyboard__port_d__previous_state));
     if (changes) {
         keyboard__port_d__debounce_timer__start();
+        keyboard__port_d__previous_state = state;
         keyboard__port_d__buttons__process(state, changes);
         keyboard__port_d__encoders__process(state, changes);
     }
@@ -313,16 +345,8 @@ void keyboard__init(void) {
 }
 
 
-/**
- * The callback called when the debounce timer has expired.
- */
-void keyboard__debounce_timer__run(void) {
-//    led_b__toggle();
-    keyboard__reset_masks();
-}
-
-
 void keyboard__run(void) {
+    __asm__ __volatile__("keyboard__run:");
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
     keyboard__port_a__run();
 #endif
