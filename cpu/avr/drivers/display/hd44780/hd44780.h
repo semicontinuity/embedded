@@ -1,5 +1,5 @@
 // =============================================================================
-// The driver for HD44780-based display.
+// Driver for HD44780-based display.
 // =============================================================================
 #ifndef __CPU__AVR__DRIVERS__DISPLAY__HD44780__HD44780_H
 #define __CPU__AVR__DRIVERS__DISPLAY__HD44780__HD44780_H
@@ -16,6 +16,7 @@ void hd44780_lcd__send_data(const uint8_t i);
 
 /** Write string from given flash address to display at given coordinates */
 void hd44780_lcd__write_string_xy_P(const char* p, uint8_t x, uint8_t y);
+
 
 #define HD44780_LCD__COMMAND__CLEAR                 0x01
 #define HD44780_LCD__COMMAND__USE_DDRAM             0x02
@@ -41,5 +42,6 @@ void hd44780_lcd__write_string_xy_P(const char* p, uint8_t x, uint8_t y);
 #define HD44780_LCD__LINE1_ADDRESS 0x40
 #define HD44780_LCD__LINE2_ADDRESS 0x14
 #define HD44780_LCD__LINE3_ADDRESS 0x54
+
 
 #endif

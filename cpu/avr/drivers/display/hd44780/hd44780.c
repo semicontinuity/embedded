@@ -1,5 +1,5 @@
 // =============================================================================
-// The driver for HD44780-based display.
+// Driver for HD44780-based display.
 // =============================================================================
 
 #include "cpu/avr/drivers/display/hd44780/hd44780.h"
@@ -307,7 +307,7 @@ void hd44780_lcd__init(void) {
         OUT_1(LCD__D5);
         OUT_1(LCD__D4);
 #endif
-		
+
         hd44780_lcd__latch_data();
         _delay_ms(5);
         i++;
