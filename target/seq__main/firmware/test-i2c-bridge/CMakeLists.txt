@@ -7,7 +7,6 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         src/app.c
         src/app.h
-        src/button_event.h
         src/i2c.c
         src/i2c.h
         src/i2c_config.h

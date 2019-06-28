@@ -31,10 +31,12 @@ set(SOURCE_FILES
         ../../../../../../../github.com/semicontinuity/mios32/mios32/common/mios32_uart_midi.c
         ../../../../../../../github.com/semicontinuity/mios32/mios32/common/printf-stdarg.c
 
-        ../../../../../../../github.com/semicontinuity/mios32/modules/app_lcd/universal/app_lcd.h
-#        ../../../../../../../github.com/semicontinuity/mios32/modules/app_lcd/clcd_parallel/app_lcd.h
-        ../../../../../../../github.com/semicontinuity/mios32/modules/app_lcd/universal/app_lcd.c
-#        ../../../../../../../github.com/semicontinuity/mios32/modules/app_lcd/clcd_parallel/app_lcd.c
+#        ../../../../../../../github.com/semicontinuity/mios32/modules/app_lcd/universal/app_lcd.h
+#        ../../../../../../../github.com/semicontinuity/mios32/modules/app_lcd/universal/app_lcd.c
+
+        ../../../../../../../github.com/semicontinuity/mios32/modules/app_lcd/clcd_parallel/app_lcd.h
+        ../../../../../../../github.com/semicontinuity/mios32/modules/app_lcd/clcd_parallel/app_lcd.c
+
         ../../../../../../../github.com/semicontinuity/mios32/modules/glcd_font/glcd_font.h
 
 
@@ -141,25 +143,33 @@ include_directories(
         ../../../../../../../github.com/semicontinuity/mios32/FreeRTOS/Source/include
         ../../../../../../../github.com/semicontinuity/mios32/FreeRTOS/Source/portable/GCC/ARM_CM3
         ../../../../../../../github.com/semicontinuity/mios32/FreeRTOS/Source/portable/MemMang
-        ../../../../../../../github.com/semicontinuity/mios32/modules/ainser
         ../../../../../../../github.com/semicontinuity/mios32/drivers/STM32F4xx/v1.1.0/STM32F4xx_StdPeriph_Driver/inc
         ../../../../../../../github.com/semicontinuity/mios32/drivers/STM32F4xx/v1.1.0/CMSIS/ST/STM32F4xx/Include
         ../../../../../../../github.com/semicontinuity/mios32/drivers/STM32F4xx/v1.1.0/CMSIS/Include
-
+        ../../../../../../../github.com/semicontinuity/mios32/modules/ainser
+        ../../../../../../../github.com/semicontinuity/mios32/modules/app_lcd/clcd_parallel
         ../../../../../../../github.com/semicontinuity/mios32/modules/glcd_font
 )
 
 add_executable(test-i2c-bridge ${SOURCE_FILES})
 
 add_definitions(-DMIOS32_BOARD=MBHP_CORE_STM32F4)
+#add_definitions(-DMIOS32_BOARD=DIYMORE)
+
 add_definitions(-DMIOS32_FAMILY=STM32F4xx)
-add_definitions(-DMIOS32_LCD=clcd_parallel)
 add_definitions(-DMIOS32_PROCESSOR=STM32F407VG)
 
 add_definitions(-DMIOS32_BOARD_MBHP_CORE_STM32F4)
 add_definitions(-DMIOS32_BOARD_STR=\"MBHP_CORE_STM32F4\")
-add_definitions(-DMIOS32_LCD_universal)
-add_definitions(-DMIOS32_LCD_STR=\"universal\")
+
+add_definitions(-DMIOS32_LCD=clcd_parallel)
+add_definitions(-DMIOS32_LCD_clcd_parallel)
+add_definitions(-DMIOS32_LCD_STR=\"clcd_parallel\")
+
+#add_definitions(-DMIOS32_LCD=universal)
+#add_definitions(-DMIOS32_LCD_universal)
+#add_definitions(-DMIOS32_LCD_STR=\"universal\")
+
 add_definitions(-DMIOS32_FAMILY_STM32F4xx)
 add_definitions(-DMIOS32_FAMILY_STR=\"STM32F4xx\")
 add_definitions(-DMIOS32_PROCESSOR_STM32F407VG)

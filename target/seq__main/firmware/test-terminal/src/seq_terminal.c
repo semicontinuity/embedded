@@ -115,8 +115,8 @@ s32 SEQ_TERMINAL_ParseLine(char *input, void *_output_function) {
 //  MUTEX_MIDIOUT_TAKE;
 
 
-//    if (APP_LCD_TerminalParseLine(input, _output_function) >= 1)
-//        return 0; // command parsed
+    if (APP_LCD_TerminalParseLine(input, _output_function) >= 1)
+        return 0; // command parsed
 
 
 //  MUTEX_MIDIOUT_GIVE;

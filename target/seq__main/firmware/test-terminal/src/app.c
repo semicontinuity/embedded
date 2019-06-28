@@ -20,6 +20,7 @@
 #include "app.h"
 #include <string.h>
 #include <stdarg.h>
+#include <app_lcd.h>
 
 //#include <seq_midi_out.h>
 
@@ -33,6 +34,17 @@ void APP_Init(void) {
     // initialize all LEDs
     MIOS32_BOARD_LED_Init(0xffffffff);
     SEQ_TERMINAL_Init(0);
+    APP_LCD_Init(0);
+    
+    APP_LCD_Data('H');
+    APP_LCD_Data('e');
+    /*
+    APP_LCD_CursorSet(1, 1);
+    APP_LCD_Data('H');
+    APP_LCD_Data('e');
+    APP_LCD_Data('l');
+    APP_LCD_Data('l');
+    APP_LCD_Data('o');*/
 }
 
 
@@ -41,7 +53,6 @@ void APP_Init(void) {
 /////////////////////////////////////////////////////////////////////////////
 void APP_Background(void)
 {
-    MIOS32_MIDI_SendDebugMessage("STARTED");
     while (1) {}
 }
 

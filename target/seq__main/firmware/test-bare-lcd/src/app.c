@@ -17,16 +17,23 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <mios32.h>
+#include <app_lcd.h>
 #include "app.h"
 
 
 /////////////////////////////////////////////////////////////////////////////
 // This hook is called after startup to initialize the application
 /////////////////////////////////////////////////////////////////////////////
-void APP_Init(void)
-{
-  // initialize all LEDs
-  MIOS32_BOARD_LED_Init(0xffffffff);
+void APP_Init(void) {
+    // initialize all LEDs
+    MIOS32_BOARD_LED_Init(0xffffffff);
+
+    APP_LCD_Init(0);
+    APP_LCD_Data('H');
+    APP_LCD_Data('e');
+    APP_LCD_Data('l');
+    APP_LCD_Data('l');
+    APP_LCD_Data('o');
 }
 
 
@@ -35,6 +42,7 @@ void APP_Init(void)
 /////////////////////////////////////////////////////////////////////////////
 void APP_Background(void)
 {
+/*
   // clear LCD
   MIOS32_LCD_Clear();
 
@@ -52,6 +60,8 @@ void APP_Background(void)
     int milliseconds = t.fraction_ms;
     MIOS32_LCD_PrintFormattedString("%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
   }
+*/
+    while (1) {}
 }
 
 
