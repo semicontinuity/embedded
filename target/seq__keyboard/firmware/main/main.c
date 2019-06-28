@@ -48,6 +48,7 @@ void application__init(void) {
     led_a__init();
     led_b__init();
 
+    __asm__ __volatile__("application__init__twi:");
     twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
 }
 
@@ -56,6 +57,8 @@ void application__start(void) {
     io_matrix__scanner__thread__timer__start();
     comm_encoder__start();
     comm_events__start();
+
+    __asm__ __volatile__("application__start__twi:");
     twi__slave__start();
 }
 
@@ -77,7 +80,7 @@ int main(void) {
     for(;;) {
         keyboard__run();
         comm_encoder__run();
-        comm_buttons__run();
+//        comm_buttons__run();
         __asm__ __volatile__("main__loop__twi:");
         if (twi__slave__handler__is_runnable()) {
             twi__slave__handler__run();

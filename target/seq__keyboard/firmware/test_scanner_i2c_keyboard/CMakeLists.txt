@@ -13,8 +13,8 @@ set(SOURCE_FILES
         ../../../../cpu/avr/timer0.h
         ../../../../cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer.h
         ../../../../cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer__timer0.c
-        ../../bsp/drivers/io_matrix__in.c
-        ../../bsp/drivers/io_matrix__in.h
+        ../../../../cpu/avr/drivers/io_matrix/io_matrix__in.c
+        ../../../../cpu/avr/drivers/io_matrix/io_matrix__in.h
         ../../bsp/drivers/io_matrix__out_rows.h
         ../../bsp/drivers/io_matrix__out_columns.h
         io_matrix__scanner__thread.h
@@ -25,9 +25,9 @@ set(SOURCE_FILES
         ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer2.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__matrix.c
         ../../../../cpu/avr/services/keyboard/keyboard.h
         ../../../../cpu/avr/services/keyboard/keyboard.c
-        ../../bsp/drivers/keyboard__pins__matrix.c
 
         ../../../../services/tx_ring_buffer.h
         ../../../../services/tx_ring_buffer.c

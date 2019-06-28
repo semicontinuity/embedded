@@ -41,6 +41,7 @@ inline bool alarm__get(void) {
  * Initialize ALARM line driver.
  */
 inline void alarm__init(void) {
+    __asm__ __volatile__("alarm__init:");
     USE_AS_OUTPUT(OUT__ALARM);
 }
 

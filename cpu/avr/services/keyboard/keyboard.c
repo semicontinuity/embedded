@@ -47,7 +47,7 @@ void keyboard__port_a__mask__and_with(const uint8_t mask) {
 }
 
 void keyboard__port_a__mask__clear_bit(const uint8_t bit) {
-    keyboard__port_a__mask__and_with(~((uint8_t) (1U << bit)));
+//    keyboard__port_a__mask__and_with(~((uint8_t) (1U << bit)));
 }
 
 
@@ -253,7 +253,6 @@ inline void keyboard__init_previous_states(void) {
 
 void keyboard__port_a__run(void) {
     __asm__ __volatile__("keyboard__port_a__run:");
-//    uint8_t state = keyboard__pins__port_a__read();
     uint8_t changes = keyboard__port_a__mask & ((uint8_t) (keyboard__port_a__previous_state ^ keyboard__pins__port_a__read()));
     if (changes) {
         keyboard__port_a__debounce_timer__start();

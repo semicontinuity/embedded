@@ -33,6 +33,7 @@ inline void led_b__set(const uint8_t value) {
  * Initialize LED B line driver.
  */
 inline void led_b__init(void) {
+    __asm__ __volatile__("led_b__init:");
     USE_AS_OUTPUT(OUT__LED_B);
 }
 

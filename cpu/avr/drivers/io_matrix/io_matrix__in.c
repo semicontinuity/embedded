@@ -99,6 +99,7 @@ void io_matrix__in__init(void) {
 
 
 inline void io_matrix__in__start(void) {
+    __asm__ __volatile__("io_matrix__in__start:");
     io_matrix__in__column0__state = 0xFF;
     io_matrix__in__column1__state = 0xFF;
     io_matrix__in__column2__state = 0xFF;

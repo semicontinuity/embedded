@@ -198,6 +198,7 @@ void comm_encoder__run(void) {
 }
 
 void comm_encoder__start(void) {
+    __asm__ __volatile__("comm_encoder__start:");
     comm_encoder__encoder0__delta = 0;
     comm_encoder__encoder1__delta = 0;
     comm_encoder__encoder2__delta = 0;

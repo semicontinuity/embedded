@@ -43,5 +43,6 @@ void twi__slave__on_data_byte_requested(void) {
 }
 
 void comm_events__start(void) {
+    __asm__ __volatile__("comm_events__start:");
     comm_events__event = 0;
 }
