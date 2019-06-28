@@ -170,48 +170,68 @@ void hd44780_lcd__wait_until_not_busy(void) {
 }
 
 
-void hd44780_lcd__send_byte(const  uint8_t i) {
+void hd44780_lcd__send_byte(const uint8_t i) {
     hd44780_lcd__data_port__mode_write();   // output 0 at data port, some 0s excessive, can be optimized
 
 #ifdef HD44780_LCD__8_BIT_MODE
-    if ((i & 1) == 1) {
+/*
+    if (i & (1 << 0)) {
         OUT_1(LCD__D0);
     }
-    i = i >> 1;
+    else {
+        OUT_0(LCD__D0);
+    }
 
-    if ((i & 1) == 1) {
+    if (i & (1 << 1)) {
         OUT_1(LCD__D1);
     }
-    i = i >> 1;
+    if (!(i & (1 << 1))) {
+        OUT_0(LCD__D1);
+    }
 
-    if ((i & 1) == 1) {
+    if (i & (1 << 2)) {
         OUT_1(LCD__D2);
     }
-    i = i >> 1;
+    if (!(i & (1 << 2))) {
+        OUT_0(LCD__D2);
+    }
 
-    if ((i & 1) == 1) {
+    if (i & (1 << 3)) {
         OUT_1(LCD__D3);
     }
-    i = i >> 1;
+    if (!(i & (1 << 3))) {
+        OUT_0(LCD__D3);
+    }
 
-    if ((i & 1) == 1) {
+    if (i & (1 << 4)) {
         OUT_1(LCD__D4);
     }
-    i = i >> 1;
+    if (!(i & (1 << 4))) {
+        OUT_0(LCD__D4);
+    }
 
-    if ((i & 1) == 1) {
+    if (i & (1 << 5)) {
         OUT_1(LCD__D5);
     }
-    i = i >> 1;
+    if (!(i & (1 << 5))) {
+        OUT_0(LCD__D5);
+    }
 
-    if ((i & 1) == 1) {
+    if (i & (1 << 6)) {
         OUT_1(LCD__D6);
     }
-    i = i >> 1;
+    if (!(i & (1 << 6))) {
+        OUT_0(LCD__D6);
+    }
 
-    if ((i & 1) == 1) {
+    if (i & (1 << 7)) {
         OUT_1(LCD__D7);
     }
+    if (!(i & (1 << 7))) {
+        OUT_0(LCD__D7);
+    }
+*/
+    OUT(LCD__DATA, i);
 #else
 
     uint8_t h = ((i & 0b11110000) >> 4);
