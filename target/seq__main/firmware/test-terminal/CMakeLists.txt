@@ -155,14 +155,17 @@ include_directories(
 
 add_executable(test-i2c-bridge ${SOURCE_FILES})
 
-add_definitions(-DMIOS32_BOARD=MBHP_CORE_STM32F4)
-#add_definitions(-DMIOS32_BOARD=DIYMORE)
 
 add_definitions(-DMIOS32_FAMILY=STM32F4xx)
 add_definitions(-DMIOS32_PROCESSOR=STM32F407VG)
 
-add_definitions(-DMIOS32_BOARD_MBHP_CORE_STM32F4)
-add_definitions(-DMIOS32_BOARD_STR=\"MBHP_CORE_STM32F4\")
+#add_definitions(-DMIOS32_BOARD=MBHP_CORE_STM32F4)
+#add_definitions(-DMIOS32_BOARD_MBHP_CORE_STM32F4)
+#add_definitions(-DMIOS32_BOARD_STR=\"MBHP_CORE_STM32F4\")
+
+add_definitions(-DMIOS32_BOARD=STM32F407VG_DIYMORE)
+add_definitions(-DMIOS32_BOARD_STM32F407VG_DIYMORE)
+add_definitions(-DMIOS32_BOARD_STR=\"STM32F407VG_DIYMORE\")
 
 add_definitions(-DMIOS32_LCD=clcd_parallel)
 add_definitions(-DMIOS32_LCD_clcd_parallel)

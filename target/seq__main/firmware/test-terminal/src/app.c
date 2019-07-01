@@ -27,6 +27,18 @@
 #include "seq_terminal.h"
 
 
+static u8 charset_hbars[64] = {
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // empty bar
+    0x00, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x00, // "|  "
+    0x00, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x00, // "|| "
+    0x00, 0x15, 0x15, 0x15, 0x15, 0x15, 0x15, 0x00, // "|||"
+    0x00, 0x00, 0x00, 0x10, 0x10, 0x00, 0x00, 0x00, // " o "
+    0x00, 0x10, 0x14, 0x15, 0x15, 0x14, 0x10, 0x00, // " > "
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // not used
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  // not used
+};
+
+
 /////////////////////////////////////////////////////////////////////////////
 // This hook is called after startup to initialize the application
 /////////////////////////////////////////////////////////////////////////////
@@ -34,17 +46,39 @@ void APP_Init(void) {
     // initialize all LEDs
     MIOS32_BOARD_LED_Init(0xffffffff);
     SEQ_TERMINAL_Init(0);
+
+    MIOS32_LCD_DeviceSet(0);
     APP_LCD_Init(0);
-    
-    APP_LCD_Data('H');
-    APP_LCD_Data('e');
-    /*
-    APP_LCD_CursorSet(1, 1);
-    APP_LCD_Data('H');
-    APP_LCD_Data('e');
-    APP_LCD_Data('l');
-    APP_LCD_Data('l');
-    APP_LCD_Data('o');*/
+    MIOS32_LCD_DeviceSet(1);
+    APP_LCD_Init(0);
+    MIOS32_LCD_DeviceSet(2);
+    APP_LCD_Init(0);
+    MIOS32_LCD_DeviceSet(3);
+    APP_LCD_Init(0);
+
+    MIOS32_LCD_DeviceSet(0);
+    MIOS32_LCD_CursorSet(0, 0);
+    MIOS32_LCD_PrintString(/*"Hello, display 0"*/"Development");
+    MIOS32_LCD_CursorSet(0, 1);
+    MIOS32_LCD_PrintString("OK");
+
+    MIOS32_LCD_DeviceSet(1);
+    MIOS32_LCD_CursorSet(0, 0);
+    MIOS32_LCD_PrintString(/*"Hello, display 1"*/"Testing");
+    MIOS32_LCD_CursorSet(0, 1);
+    MIOS32_LCD_PrintString("OK");
+
+    MIOS32_LCD_DeviceSet(2);
+    MIOS32_LCD_CursorSet(0, 0);
+    MIOS32_LCD_PrintString(/*"Hello, display 2"*/"QA");
+    MIOS32_LCD_CursorSet(0, 1);
+    MIOS32_LCD_PrintString("OK");
+
+    MIOS32_LCD_DeviceSet(3);
+    MIOS32_LCD_CursorSet(0, 0);
+    MIOS32_LCD_PrintString(/*"Hello, display 3"*/"Production");
+    MIOS32_LCD_CursorSet(0, 1);
+    MIOS32_LCD_PrintString("OK");
 }
 
 
@@ -66,9 +100,11 @@ void APP_Background(void)
 /////////////////////////////////////////////////////////////////////////////
 void APP_Tick(void)
 {
+/*
   // PWM modulate the status LED (this is a sign of life)
   u32 timestamp = MIOS32_TIMESTAMP_Get();
   MIOS32_BOARD_LED_Set(1, (timestamp % 20) <= ((timestamp / 100) % 10));
+*/
 }
 
 

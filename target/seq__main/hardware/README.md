@@ -228,6 +228,7 @@ Pins than can only sink 3mA max:
 |PA0 | PWM?                        |
 |PA1 | ETH_REF_CLK                 |
 |PA2 | ETH_MDI                     |
+|PA3 | DIS3_RW                     |
 |PA4 | (not 5V tolerant)           |
 |PA5 | (not 5V tolerant)           |
 |PA6 | DIS3_E                      |
