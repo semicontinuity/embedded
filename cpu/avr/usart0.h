@@ -167,7 +167,9 @@
 #define usart0__tx__data_register_empty__interrupt__enabled__HOST       (UCSR0B)
 #define usart0__tx__data_register_empty__interrupt__enabled__BIT        (UDRIE0)
 
+#define usart0__double_speed__HOST                                      (UCSR0A)
 #define usart0__double_speed__BIT                                       (U2X0)
+
 #define usart0__multiprocessor__BIT                                     (MPCM0)
 #define usart0__polarity__BIT                                           (UCPOL0)
 #define usart0__char_size0__BIT                                         (UCSZ00)
@@ -354,6 +356,10 @@ inline void usart0__switch_conf(const uint32_t old_conf, const uint32_t new_conf
 #endif
 
 
+# if defined(usart0__double_speed__HOST) && defined(usart0__double_speed__BIT)
+DEFINE_BITVAR(usart0__double_speed, usart0__double_speed__HOST, usart0__double_speed__BIT);
+#endif
+
 DEFINE_BITVAR(usart0__rx__enabled, usart0__rx__enabled__HOST, usart0__rx__enabled__BIT);
 DEFINE_BITVAR(usart0__rx__frame_error, usart0__rx__frame_error__HOST, usart0__rx__frame_error__BIT);
 DEFINE_BITVAR(usart0__rx__data_overrun, usart0__rx__data_overrun__HOST, usart0__rx__data_overrun__BIT);
@@ -418,11 +424,22 @@ inline void usart0__putc(const uint8_t c) {
 
 // =============================================================================
 // usart0__init
+//
+// Intitialises usart0: sets baud rate, specified in USART0__BAUD_RATE.
+// 2X USART mode is used, only if 1X cannot be used.
 // =============================================================================
 
 #ifdef USART0__BAUD_RATE
 inline void usart0__init(void) {
+    __asm__ __volatile__("usart0__init:");
+#if USART0_DIVISOR(USART0__BAUD_RATE) > 0
     usart0__rate__set(USART0__BAUD_RATE);
+#elif USART0_DIVISOR(USART0__BAUD_RATE / 2) == 0
+    usart0__rate__set(USART0__BAUD_RATE);
+    usart0__double_speed__set(1);
+#else
+#error "Invalid baud rate"
+#endif
 }
 #endif
 

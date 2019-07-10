@@ -26,7 +26,7 @@
 #include <drivers/out/alarm.h>
 #include <drivers/out/led_a.h>
 #include <drivers/out/led_b.h>
-
+#include <services/tracer.h>
 
 uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
 
@@ -50,6 +50,8 @@ void application__init(void) {
 
     __asm__ __volatile__("application__init__twi:");
     twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
+
+    tracer__init();
 }
 
 void application__start(void) {
@@ -60,6 +62,8 @@ void application__start(void) {
 
     __asm__ __volatile__("application__start__twi:");
     twi__slave__start();
+
+    tracer__start();
 }
 
 

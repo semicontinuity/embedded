@@ -54,6 +54,7 @@
 #include "comm_encoder_queues.c"
 #include "comm_buttons_queues.c"
 
+#include "services/tracer__usart0.c"
 
 // Entry point
 #include "main.c"

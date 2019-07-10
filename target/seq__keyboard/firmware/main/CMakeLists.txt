@@ -73,6 +73,10 @@ set(SOURCE_FILES
         ../../bsp/drivers/out/led_b.h
 
         data.c
+
+        ../../bsp/services/tracer.h
+        ../../bsp/services/tracer__usart0.c
+
         main.c
         __all__.c
         )
@@ -83,6 +87,7 @@ add_executable(main ${SOURCE_FILES})
 add_definitions(-D__AVR_ATmega48__)
 add_definitions(-DF_CPU=8000000UL)
 add_definitions(-DINLINE=)
+add_definitions(-DUSART0__BAUD_RATE=1000000)
 
 include(CMakeLists.data.txt)
 include(CMakeLists.io_matrix__scanner.txt)
