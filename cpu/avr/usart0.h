@@ -28,6 +28,7 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 #include "cpu/avr/gpio.h"
+#include "cpu/avr/asm.h"
 #include "util/bitops.h"
 
 
