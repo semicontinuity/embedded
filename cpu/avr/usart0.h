@@ -418,7 +418,16 @@ inline uint8_t usart0__getc(void) {
 #define USART0__PUTC(c) __OUT(USART0_DATA_REGISTER, c)
 
 inline void usart0__putc(const uint8_t c) {
-    USART0_DATA_REGISTER = c;
+    // If using plain USART0_DATA_REGISTER=c, gcc inlines poorly,
+    // places value to call parameter register anyway,
+    // even if the value is in other fixed register
+    // Most of the time, write is done with simple OUT/STS instruction
+    // (may also base register pair + offset, although it is rare case)
+    if (_SFR_MEM_ADDR(USART0_DATA_REGISTER) < 0x40) {
+        __OUT(USART0_DATA_REGISTER, c);
+    } else {
+        __STS(USART0_DATA_REGISTER, c);
+    }
 }
 
 
@@ -428,15 +437,14 @@ inline void usart0__putc(const uint8_t c) {
 // Intitialises usart0: sets baud rate, specified in USART0__BAUD_RATE.
 // 2X USART mode is used, only if 1X cannot be used.
 // =============================================================================
-
 #ifdef USART0__BAUD_RATE
 inline void usart0__init(void) {
     __asm__ __volatile__("usart0__init:");
-#if USART0_DIVISOR(USART0__BAUD_RATE) > 0
-    usart0__rate__set(USART0__BAUD_RATE);
-#elif USART0_DIVISOR(USART0__BAUD_RATE / 2) == 0
-    usart0__rate__set(USART0__BAUD_RATE);
+#if (F_CPU/8/USART0__BAUD_RATE) == 1
+    usart0__rate__set(USART0__BAUD_RATE / 2);
     usart0__double_speed__set(1);
+#elif (F_CPU/8/USART0__BAUD_RATE) > 1
+    usart0__rate__set(USART0__BAUD_RATE);
 #else
 #error "Invalid baud rate"
 #endif

@@ -5,7 +5,7 @@
 
 #if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
 
-void keyboard__port_d__encoders__process(uint8_t state, uint8_t changes);
+void __attribute__((weak)) keyboard__port_d__encoders__process(uint8_t state, uint8_t changes) {}
 
 #endif
 

@@ -4,5 +4,5 @@ add_definitions(-Dio_matrix__scanner__thread__function_attrs="\\"__attribute__\(
 add_definitions(-Dio_matrix__scanner__thread__function_naked=1)
 add_definitions(-Dio_matrix__scanner__thread__yield_with_reti=1)
 add_definitions(-DIO_MATRIX__SCANNER__THREAD__TIMER__CONF__INITIALIZED=TIMER1_CONF_DEFAULT)
-add_definitions(-DIO_MATRIX__SCANNER__THREAD__TIMER__CONF__STARTED=\(TIMER1_CONF_WGM_CTC_USE_OCRA\|TIMER1_CONF_PRESCALER_8\))
-add_definitions(-DIO_MATRIX__SCANNER__THREAD__TIMER__CONF__TOP=\(256\))
+add_definitions(-DIO_MATRIX__SCANNER__THREAD__TIMER__CONF__STARTED=\(TIMER1_CONF_WGM_CTC_USE_OCRA\|TIMER1_CONF_PRESCALER_256\))
+add_definitions(-DIO_MATRIX__SCANNER__THREAD__TIMER__CONF__TOP=\(2\))

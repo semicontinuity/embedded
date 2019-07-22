@@ -11,7 +11,8 @@
 #include <cpu/avr/macros.h>
 #include <cpu/avr/asm.h>
 
-#include <drivers/out/led_a.h>                  
+#include <drivers/out/led_a.h>
+#include <services/tracer.h>
 
 
 #ifdef COMM_ENCODER__ENCODER0__DELTA__REG
@@ -164,6 +165,7 @@ void comm_encoder__run(void) {
     if (!comm_events__queue__is_full()) {
         __asm__ __volatile__("comm_encoder__run__0:");
         if (comm_encoder__encoder0__delta != 0) {
+            tracer__comm_encoder__delta(0, comm_encoder__encoder0__delta);
             comm_events__queue__put(
                 COMM_EVENTS__ENCODER__ROTATION_EVENT(0, comm_encoder__encoder0__delta)
             );

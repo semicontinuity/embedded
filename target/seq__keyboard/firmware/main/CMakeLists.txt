@@ -23,10 +23,13 @@ set(SOURCE_FILES
         ../../../../cpu/avr/timer2.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__matrix.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__pins__mapping.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_a.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__pins__mapping.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_b.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__pins__mapping.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_c.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__pins__mapping.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_d.c
 
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer.h
@@ -87,7 +90,7 @@ add_executable(main ${SOURCE_FILES})
 add_definitions(-D__AVR_ATmega48__)
 add_definitions(-DF_CPU=8000000UL)
 add_definitions(-DINLINE=)
-add_definitions(-DUSART0__BAUD_RATE=1000000)
+add_definitions(-DUSART0__BAUD_RATE=38400)
 
 include(CMakeLists.data.txt)
 include(CMakeLists.io_matrix__scanner.txt)

@@ -25,10 +25,19 @@ bool comm_events__queue__is_full(void) {
     return alarm__get();
 }
 
+void comm_events__queue__set_full(uint8_t value) {
+    alarm__set(value);
+}
+
 void comm_events__queue__put(uint8_t event) {
     comm_events__event = event;
-    led_b__toggle();
-    alarm__set(1);
+//    led_b__toggle();
+    comm_events__queue__set_full(1);
+}
+
+void comm_events__queue__clear(void) {
+    comm_events__event = 0;
+    comm_events__queue__set_full(0);
 }
 
 // TWI Slave callbacks
@@ -38,11 +47,10 @@ void twi__slave__on_data_byte_requested(void) {
     __asm__ __volatile__("twi__slave__on_data_byte_requested:");
     twi__data__set(comm_events__event);
     twi__continue(/*false*/true, false);
-    comm_events__event = 0;
-    alarm__set(0);
+    comm_events__queue__clear();
 }
 
 void comm_events__start(void) {
     __asm__ __volatile__("comm_events__start:");
-    comm_events__event = 0;
+    comm_events__queue__clear();
 }

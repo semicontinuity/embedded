@@ -11,12 +11,13 @@
 volatile uint8_t io_matrix__in__column0__state;
 #endif
 
-void io_matrix__in__column0__state__update(void) {
+uint8_t io_matrix__in__column0__state__update(void) {
 #ifdef IO_MATRIX__IN__COLUMN0__STATE__REG
     __IN(io_matrix__in__column0__state, PIN_REG(SIGNAL_PORT(IO_MATRIX__IN)))
 #else
     io_matrix__in__column0__state = IN(IO_MATRIX__IN);
 #endif
+    return io_matrix__in__column0__state;
 }
 
 
@@ -63,6 +64,7 @@ void io_matrix__in__column3__state__update(void) {
 
 
 void io_matrix__in__init(void) {
+    __asm__ __volatile__("io_matrix__in__init:");
 #if defined(IO_MATRIX__IN__PORT) && defined(IO_MATRIX__IN__ROW0__PIN)
     USE_PIN_AS_INPUT(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW0__PIN);
     ENABLE_PIN_PULLUP(IO_MATRIX__IN__PORT, IO_MATRIX__IN__ROW0__PIN);

@@ -1,4 +1,4 @@
-#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.h"
+#include "cpu/avr/drivers/keyboard/keyboard__port_a__pins__mapping.h"
 #include "cpu/avr/macros.h"
 
 
@@ -335,4 +335,9 @@ uint8_t keyboard__pins__port_a__encoders_pins_mask(void) {
     mask |= (1U << keyboard__pins__port_a__pin_a_for_encoder(3));
     mask |= (1U << keyboard__pins__port_a__pin_b_for_encoder(3));
     return mask;
+}
+
+
+uint8_t keyboard__pins__port_a__pins_mask(void) {
+    return keyboard__pins__port_a__button_pins_mask() | keyboard__pins__port_a__encoders_pins_mask();
 }

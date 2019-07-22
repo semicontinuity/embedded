@@ -2,6 +2,10 @@
 #define KEYBOARD__PINS__MAPPING_H
 
 #include <stdint.h>
+#include "cpu/avr/drivers/keyboard/keyboard__port_a__pins__mapping.h"
+#include "cpu/avr/drivers/keyboard/keyboard__port_b__pins__mapping.h"
+#include "cpu/avr/drivers/keyboard/keyboard__port_c__pins__mapping.h"
+#include "cpu/avr/drivers/keyboard/keyboard__port_d__pins__mapping.h"
 
 
 /**

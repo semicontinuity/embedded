@@ -12,10 +12,20 @@ set(SOURCE_FILES
         ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer0.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_a.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_b.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_c.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_d.c
         ../../../../cpu/avr/services/keyboard/keyboard.c
         ../../../../cpu/avr/services/keyboard/keyboard.h
-
+        ../../../../cpu/avr/services/keyboard/keyboard__port_a__buttons.h
+        ../../../../cpu/avr/services/keyboard/keyboard__port_a__buttons.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_b__buttons.h
+        ../../../../cpu/avr/services/keyboard/keyboard__port_b__buttons.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_c__buttons.h
+        ../../../../cpu/avr/services/keyboard/keyboard__port_c__buttons.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.h
+        ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.c
         leds.h
         leds.c
 
@@ -24,13 +34,14 @@ set(SOURCE_FILES
         comm_leds.c
 
         main.c
+        services/tracer.h
         __all__.c
         )
 
 include_directories(. ../../bsp ../../../.. /usr/lib/gcc/avr/5.4.0/include /usr/lib/avr/include)
 add_executable(main ${SOURCE_FILES})
 
-add_definitions(-D__AVR_ATmega48__)
+add_definitions(-D__AVR_ATmega88P__)
 add_definitions(-DF_CPU=8000000UL)
 add_definitions(-DINLINE=)
 

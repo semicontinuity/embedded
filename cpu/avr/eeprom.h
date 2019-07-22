@@ -11,18 +11,31 @@
 #include <avr/io.h>
 
 
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__) || defined(__AVR_ATmega168P__) || defined(__AVR_ATmega328P__) ||\
-    defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
+#if defined(__AVR_ATmega48__) ||\
+    defined(__AVR_ATmega88__) ||\
+    defined(__AVR_ATmega88P__) ||\
+    defined(__AVR_ATmega168__) ||\
+    defined(__AVR_ATmega168P__) ||\
+    defined(__AVR_ATmega328P__) ||\
+    defined(__AVR_ATmega8__) ||\
+    defined(__AVR_ATmega16__)
 
 
-#if defined(__AVR_ATmega48__) || defined(__AVR_ATmega88__) ||\
-    defined(__AVR_ATmega168__) || defined(__AVR_ATmega168P__) || defined(__AVR_ATmega328P__)
+#if defined(__AVR_ATmega48__) ||\
+    defined(__AVR_ATmega88__) ||\
+    defined(__AVR_ATmega88P__) ||\
+    defined(__AVR_ATmega168__) ||\
+    defined(__AVR_ATmega168P__) ||\
+    defined(__AVR_ATmega328P__)
+
 # define EEPROM__MASTER_WRITE_ENABLE_BIT EEMPE
 # define EEPROM__WRITE_ENABLE_BIT EEPE
+
 #elif defined(__AVR_ATmega8__) || defined(__AVR_ATmega16__)
+
 # define EEPROM__MASTER_WRITE_ENABLE_BIT EEMWE
 # define EEPROM__WRITE_ENABLE_BIT EEWE
+
 #endif
 
 
