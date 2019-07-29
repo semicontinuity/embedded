@@ -1,5 +1,3 @@
-#include <avr/io.h>
-
 #if defined(TX_RING_BUFFER__SIZE)
 // TX ring buffer first for 256-byte alignment
 #  include "services/tx_ring_buffer.c"

@@ -8,4 +8,5 @@
 *.eep
 *.map
 *.elf
+*.report
 cmake-build-debug

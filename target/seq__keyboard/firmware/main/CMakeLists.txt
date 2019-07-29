@@ -6,6 +6,8 @@ set(CMAKE_C_STANDARD 11)
 
 
 set(SOURCE_FILES
+        ../../../../cpu/avr/asm_bit_var.h
+
         ../../../../cpu/avr/timer1.h
         ../../../../cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer__timer1.c
 
@@ -87,7 +89,7 @@ set(SOURCE_FILES
 
         main.c
         __all__.c
-        )
+        ../../../../cpu/avr/asm_bit_var.h)
 
 include_directories(. ../../bsp ../../../../ /usr/lib/gcc/avr/5.4.0/include /usr/lib/avr/include)
 add_executable(main ${SOURCE_FILES})

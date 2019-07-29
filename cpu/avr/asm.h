@@ -330,8 +330,8 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
         : "=d"(__result),                                   \
           "+r"((v))                                         \
         : "I"((bit)),                                       \
-          "M"((a)),                                         \
-          "M"((b))                                          \
+          "M"((a) & 0xFF),                                  \
+          "M"((b) & 0xFF)                                   \
     );                                                      \
     __result;                                               \
 }))
