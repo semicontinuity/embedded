@@ -5,9 +5,9 @@
 #include "cpu/avr/services/keyboard/keyboard__port_c__buttons.h"
 #include "cpu/avr/services/keyboard/keyboard__port_d__buttons.h"
 
-#include "cpu/avr/services/keyboard/keyboard__port_c__encoders.h"
-#include "cpu/avr/services/keyboard/keyboard__port_b__encoders.h"
 #include "cpu/avr/services/keyboard/keyboard__port_a__encoders.h"
+#include "cpu/avr/services/keyboard/keyboard__port_b__encoders.h"
+#include "cpu/avr/services/keyboard/keyboard__port_c__encoders.h"
 #include "cpu/avr/services/keyboard/keyboard__port_d__encoders.h"
 
 #include "cpu/avr/drivers/keyboard/keyboard__pins.h"

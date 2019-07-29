@@ -1,0 +1,49 @@
+#ifndef COMM_BUTTONS_QUEUES__0C_0F__VARS__MEM_H
+#define COMM_BUTTONS_QUEUES__0C_0F__VARS__MEM_H
+
+#include <util/bitops.h>
+#include <cpu/avr/asm.h>
+#include <avr/io.h>
+
+#define PINA    _SFR_IO8 (0x00)
+#define DDRA    _SFR_IO8 (0x01)
+#define PORTA   _SFR_IO8 (0x02)
+
+
+DEFINE_BITVAR(
+    comm_buttons__button12__event_pending,
+    COMM_BUTTONS__BUTTON12__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON12__EVENT_PENDING__BIT
+);
+DEFINE_BITVAR(
+    comm_buttons__button12__event_value,
+    COMM_BUTTONS__BUTTON12__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON12__EVENT_VALUE__BIT
+);
+
+DEFINE_BITVAR(
+    comm_buttons__button13__event_pending,
+    COMM_BUTTONS__BUTTON13__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON13__EVENT_PENDING__BIT
+);
+DEFINE_BITVAR(
+    comm_buttons__button13__event_value,
+    COMM_BUTTONS__BUTTON13__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON13__EVENT_VALUE__BIT
+);
+
+DEFINE_BITVAR(
+    comm_buttons__button14__event_pending,
+    COMM_BUTTONS__BUTTON14__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON14__EVENT_PENDING__BIT
+);
+DEFINE_BITVAR(
+    comm_buttons__button14__event_value,
+    COMM_BUTTONS__BUTTON14__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON14__EVENT_VALUE__BIT
+);
+
+DEFINE_BITVAR(
+    comm_buttons__button15__event_pending,
+    COMM_BUTTONS__BUTTON15__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON15__EVENT_PENDING__BIT
+);
+DEFINE_BITVAR(
+    comm_buttons__button15__event_value,
+    COMM_BUTTONS__BUTTON15__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON15__EVENT_VALUE__BIT
+);
+
+#endif

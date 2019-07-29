@@ -49,7 +49,7 @@ void keyboard__port_a__encoders__process_encoder(const uint8_t state, const uint
 }
 
 
-inline void keyboard__port_a__encoders__process(uint8_t state, uint8_t changes) {
+void keyboard__port_a__encoders__process(uint8_t state, uint8_t changes) {
     __asm__ __volatile__("keyboard__port_a__encoders__process:");
     keyboard__port_a__encoders__process_encoder(state, changes, 3);
     keyboard__port_a__encoders__process_encoder(state, changes, 2);

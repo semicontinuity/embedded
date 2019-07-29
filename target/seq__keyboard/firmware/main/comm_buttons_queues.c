@@ -6,14 +6,14 @@
 
 #include "comm_buttons.h"
 #include "comm_events.h"
+#include "comm_buttons_queues__00_03__vars__mem.h"
+#include "comm_buttons_queues__04_07__vars__mem.h"
+#include "comm_buttons_queues__08_0B__vars__mem.h"
+#include "comm_buttons_queues__0C_0F__vars__mem.h"
 #include <util/bitops.h>
 #include <cpu/avr/asm.h>
 #include <avr/io.h>
-//#include <drivers/out/led_a.h>
 
-#define PINA    _SFR_IO8 (0x00)
-#define DDRA    _SFR_IO8 (0x01)
-#define PORTA   _SFR_IO8 (0x02)
 
 #define comm_buttons__event(button) IF_IO_BIT_SET_CONST_A_ELSE_CONST_B(\
   COMM_BUTTONS__BUTTON0__EVENT_VALUE__HOST,\
@@ -21,151 +21,6 @@
   COMM_EVENTS__BUTTONS__EVENT_DEPRESSED((button)),\
   COMM_EVENTS__BUTTONS__EVENT_PRESSED((button))\
 )
-
-DEFINE_BITVAR(
-    comm_buttons__button0__event_pending,
-    COMM_BUTTONS__BUTTON0__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON0__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button0__event_value,
-    COMM_BUTTONS__BUTTON0__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON0__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button1__event_pending,
-    COMM_BUTTONS__BUTTON1__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON1__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button1__event_value,
-    COMM_BUTTONS__BUTTON1__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON1__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button2__event_pending,
-    COMM_BUTTONS__BUTTON2__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON2__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button2__event_value,
-    COMM_BUTTONS__BUTTON2__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON2__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button3__event_pending,
-    COMM_BUTTONS__BUTTON3__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON3__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button3__event_value,
-    COMM_BUTTONS__BUTTON3__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON3__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button4__event_pending,
-    COMM_BUTTONS__BUTTON4__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON4__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button4__event_value,
-    COMM_BUTTONS__BUTTON4__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON4__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button5__event_pending,
-    COMM_BUTTONS__BUTTON5__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON5__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button5__event_value,
-    COMM_BUTTONS__BUTTON5__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON5__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button6__event_pending,
-    COMM_BUTTONS__BUTTON6__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON6__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button6__event_value,
-    COMM_BUTTONS__BUTTON6__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON6__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button7__event_pending,
-    COMM_BUTTONS__BUTTON7__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON7__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button7__event_value,
-    COMM_BUTTONS__BUTTON7__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON7__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button8__event_pending,
-    COMM_BUTTONS__BUTTON8__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON8__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button8__event_value,
-    COMM_BUTTONS__BUTTON8__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON8__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button9__event_pending,
-    COMM_BUTTONS__BUTTON9__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON9__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button9__event_value,
-    COMM_BUTTONS__BUTTON9__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON9__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button10__event_pending,
-    COMM_BUTTONS__BUTTON10__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON10__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button10__event_value,
-    COMM_BUTTONS__BUTTON10__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON10__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button11__event_pending,
-    COMM_BUTTONS__BUTTON11__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON11__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button11__event_value,
-    COMM_BUTTONS__BUTTON11__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON11__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button12__event_pending,
-    COMM_BUTTONS__BUTTON12__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON12__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button12__event_value,
-    COMM_BUTTONS__BUTTON12__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON12__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button13__event_pending,
-    COMM_BUTTONS__BUTTON13__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON13__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button13__event_value,
-    COMM_BUTTONS__BUTTON13__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON13__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button14__event_pending,
-    COMM_BUTTONS__BUTTON14__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON14__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button14__event_value,
-    COMM_BUTTONS__BUTTON14__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON14__EVENT_VALUE__BIT
-);
-
-DEFINE_BITVAR(
-    comm_buttons__button15__event_pending,
-    COMM_BUTTONS__BUTTON15__EVENT_PENDING__HOST, COMM_BUTTONS__BUTTON15__EVENT_PENDING__BIT
-);
-DEFINE_BITVAR(
-    comm_buttons__button15__event_value,
-    COMM_BUTTONS__BUTTON15__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON15__EVENT_VALUE__BIT
-);
-
 
 
 // buttons callbacks

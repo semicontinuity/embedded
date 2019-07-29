@@ -72,6 +72,11 @@ set(SOURCE_FILES
         comm_buttons.h
         comm_buttons_queues.c
 
+        comm_buttons_queues__00_03__vars__mem.h
+        comm_buttons_queues__04_07__vars__mem.h
+        comm_buttons_queues__08_0B__vars__mem.h
+        comm_buttons_queues__0C_0F__vars__mem.h
+
         ../../bsp/drivers/out/led_a.h
         ../../bsp/drivers/out/led_b.h
 
