@@ -1,0 +1,2 @@
+Own code for HD44780 (with MIOS function signatures), uses TM library.
+Works on STM32F4Disco with 20x4 display.
