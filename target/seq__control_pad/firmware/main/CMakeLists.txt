@@ -6,20 +6,41 @@ set(CMAKE_C_STANDARD 11)
 
 
 set(SOURCE_FILES
-        ../../../../cpu/avr/timer0.c
-        ../../../../cpu/avr/timer0.h
-        ../../bsp/drivers/io_matrix__scanner__thread__timer.h
-        ../../bsp/drivers/io_matrix__scanner__thread__timer__timer0.c
-        ../../bsp/drivers/io_matrix__out_rows.h
-        ../../bsp/drivers/io_matrix__out_columns.h
-        io_matrix__scanner__thread.h
+        ../../../../cpu/avr/timer1.c
+        ../../../../cpu/avr/timer1.h
+        ../../../../cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer__timer1.c
+        ../../../../cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer.h
+        ../../../../cpu/avr/drivers/io_matrix/io_matrix__in.c
+        ../../../../cpu/avr/drivers/io_matrix/io_matrix__in.h
         io_matrix__scanner__thread.c
+        io_matrix__scanner__thread.h
 
+#        ../../../../cpu/avr/timer0.c
+#        ../../../../cpu/avr/timer0.h
+#        ../../bsp/drivers/io_matrix__scanner__thread__timer.h
+#        ../../bsp/drivers/io_matrix__scanner__thread__timer__timer0.c
+#        ../../bsp/drivers/io_matrix__out_rows.h
+#        ../../bsp/drivers/io_matrix__out_columns.h
+#        io_matrix__scanner__thread.h
+#        io_matrix__scanner__thread.c
+
+        ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/timer2.c
-        ../../bsp/drivers/keyboard__pins__matrix.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer2.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__matrix.c
+#        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer2.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_a.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_b.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_c.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_d.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer__timer0a.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer__timer2a.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b.c
         ../../../../cpu/avr/services/keyboard/keyboard.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_a__buttons.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_b__buttons.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_c__buttons.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.c
 
         ../../bsp/drivers/in/encoder__step.h
         ../../bsp/drivers/in/encoder__step.c
@@ -40,6 +61,8 @@ set(SOURCE_FILES
         ../../bsp/drivers/out/alarm.h
 
         data.c
+        ../../bsp/services/tracer__nop.c
+        ../../bsp/services/tracer.h
         main.c
         __all__.c
         )
@@ -48,7 +71,7 @@ set(SOURCE_FILES
 include_directories(. ../../bsp ../../../../ /usr/lib/gcc/avr/5.4.0/include /usr/lib/avr/include)
 add_executable(main ${SOURCE_FILES})
 
-add_definitions(-D__AVR_ATmega48__)
+add_definitions(-D__AVR_ATmega88P__)
 add_definitions(-DF_CPU=8000000UL)
 
 include(CMakeLists.data.txt)

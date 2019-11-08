@@ -1,7 +1,6 @@
 // =============================================================================
 // Receives 4-byte messages via I2C with raw color data (1 byte per column)
-// and renders 1-bit colors on LEDS (3 bits RGB + 3 bits RGB + 1 bit button LED)
-// Column is selected for 1/4 ms = 256*8 clocks; thus timer0_ovf prescaler 8.
+// Column is selected for .... (TODO)
 // =============================================================================
 
 #include <cpu/avr/twi.h>

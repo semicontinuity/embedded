@@ -10,8 +10,8 @@
 
 #include <drivers/io_matrix__out_columns.h>
 #include <drivers/io_matrix__out_rows.h>
-#include <drivers/io_matrix__in.h>
-#include <drivers/io_matrix__scanner__thread__timer.h>
+#include <cpu/avr/drivers/io_matrix/io_matrix__in.h>
+#include <cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer.h>
 #include "io_matrix__scanner__thread.h"
 
 #include "cpu/avr/services/keyboard/keyboard.h"
@@ -26,6 +26,7 @@
 #include <drivers/out/led_a.h>
 #include <drivers/out/led_b.h>
 
+#include <services/tracer.h>
 
 //uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
 
@@ -33,12 +34,14 @@
 // -----------------------------------------------------------------------------
 
 void application__init(void) {
-//    io_matrix__out_columns__init();
-//    io_matrix__out_rows__init();
-//    io_matrix__in__init();
+    tracer__init();
 
-//    io_matrix__scanner__thread__init();
-//    io_matrix__scanner__thread__timer__init();
+    io_matrix__out_columns__init();
+    io_matrix__out_rows__init();
+    io_matrix__in__init();
+
+    io_matrix__scanner__thread__init();
+    io_matrix__scanner__thread__timer__init();
 
     encoder0__init();
     encoder0__switch__init();
@@ -52,7 +55,9 @@ void application__init(void) {
 }
 
 void application__start(void) {
-//    io_matrix__scanner__thread__timer__start();
+    tracer__start();
+    io_matrix__in__start();
+    io_matrix__scanner__thread__timer__start();
     comm_events__start();
     twi__slave__start();
 }
@@ -65,7 +70,7 @@ int main(void) {
     application__init();
     application__start();
 
-//    sei();
+    sei();
 
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic push
