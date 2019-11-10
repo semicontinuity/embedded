@@ -58,25 +58,25 @@ void APP_Init(void) {
 
     MIOS32_LCD_DeviceSet(0);
     MIOS32_LCD_CursorSet(0, 0);
-    MIOS32_LCD_PrintString(/*"Hello, display 0"*/"Development");
+    MIOS32_LCD_PrintString("Hello, display 0");
     MIOS32_LCD_CursorSet(0, 1);
     MIOS32_LCD_PrintString("OK");
 
     MIOS32_LCD_DeviceSet(1);
     MIOS32_LCD_CursorSet(0, 0);
-    MIOS32_LCD_PrintString(/*"Hello, display 1"*/"Testing");
+    MIOS32_LCD_PrintString("Hello, display 1");
     MIOS32_LCD_CursorSet(0, 1);
     MIOS32_LCD_PrintString("OK");
 
     MIOS32_LCD_DeviceSet(2);
     MIOS32_LCD_CursorSet(0, 0);
-    MIOS32_LCD_PrintString(/*"Hello, display 2"*/"QA");
+    MIOS32_LCD_PrintString("Hello, display 2");
     MIOS32_LCD_CursorSet(0, 1);
     MIOS32_LCD_PrintString("OK");
 
     MIOS32_LCD_DeviceSet(3);
     MIOS32_LCD_CursorSet(0, 0);
-    MIOS32_LCD_PrintString(/*"Hello, display 3"*/"Production");
+    MIOS32_LCD_PrintString("Hello, display 3");
     MIOS32_LCD_CursorSet(0, 1);
     MIOS32_LCD_PrintString("OK");
 }

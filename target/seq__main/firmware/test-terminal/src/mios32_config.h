@@ -32,7 +32,7 @@
 #define MIOS32_DONT_USE_UART_MIDI
 
 
-#define MIOS32_USB_PRODUCT_STR  "test-bare-lcd"
+#define MIOS32_USB_PRODUCT_STR  "test-terminal"
 
 #define MIOS32_IIC0_BUS_FREQUENCY 100000
 
