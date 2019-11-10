@@ -10,6 +10,8 @@ typedef uint32_t u32;
 typedef uint16_t u16;
 typedef uint8_t u8;
 
+void select_lcd(uint32_t device);
+
 extern s32 APP_LCD_Init(u32 mode);
 extern s32 APP_LCD_Data(u8 data);
 extern s32 APP_LCD_Cmd(u8 cmd);
