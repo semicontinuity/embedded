@@ -1,8 +1,6 @@
 #include "cpu/avr/services/keyboard/keyboard.h"
 #include "cpu/avr/services/keyboard/keyboard__port_d__encoders.h"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.h"
-#include <cpu/avr/asm.h>
-#include <avr/interrupt.h>
 
 
 #if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
