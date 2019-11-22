@@ -2,28 +2,28 @@ ATMEGA328P (Arduino ProMini board)
 ======================================================================================
 Pin	Func	Application
 ======================================================================================
-PB0		Interrupt out
-PB1		Debug LED C
-PB2	SS	Encoder 0 A
-PB3	MOSI	Encoder 0 B
-PB4	MISO	Encoder 0 Switch
-PB5	SCK	Unused 0 (Encoder 0 Common)
-PB6	XTAL1	Debug LED A (N/A because XTAL connected)
-PB7	XTAL2	Debug LED B (N/A because XTAL connected)
+8	PB0		Interrupt out
+9	PB1		Debug LED C
+10	PB2	SS	Encoder 0 A
+11	PB3	MOSI	Encoder 0 B
+12	PB4	MISO	Encoder 0 Switch
+13	PB5	SCK	Unused 0 (Encoder 0 Common)
+	PB6	XTAL1	Debug LED A (N/A because XTAL connected)
+	PB7	XTAL2	Debug LED B (N/A because XTAL connected)
 
-PC0		Encoder 1 A
-PC1		Encoder 1 B
-PC2		Encoder 1 Switch
-PC3		Unused 1 (Encoder 1 Common)
-PC4	SDA	I2C Comm
-PC5	SCL	I2C Comm
-PC6	RESET
+A0	PC0		Encoder 1 A
+A1	PC1		Encoder 1 B
+A2	PC2		Encoder 1 Switch
+A3	PC3		Unused 1 (Encoder 1 Common)
+A4	PC4	SDA	I2C Comm
+A5	PC5	SCL	I2C Comm
+	PC6	RESET
 
-PD0	RXD	Unused 2 (Debug USART RX)
-PD1	TXD	Unused 3 (Debug USART TX)
-PD2	INT0	Encoder 2 A
-PD3	INT1	Encoder 2 B
-PD4		Encoder 2 Switch
-PD5		Encoder 3 A
-PD6		Encoder 3 B
-PD7		Encoder 3 Switch
+0	PD0	RXD	Unused 2 (Debug USART RX)
+1	PD1	TXD	Unused 3 (Debug USART TX)
+2	PD2	INT0	Encoder 2 A
+3	PD3	INT1	Encoder 2 B
+4	PD4		Encoder 2 Switch
+5	PD5		Encoder 3 A
+6	PD6		Encoder 3 B
+7	PD7		Encoder 3 Switch
