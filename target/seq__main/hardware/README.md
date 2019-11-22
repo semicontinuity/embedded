@@ -62,15 +62,15 @@ Pins than can only sink 3mA max:
 
 |                 |      | Conflict         |
 |-----------------|------|------------------|
-| UART4_TX        | PA0  |                  |
+| UART4_TX        | PA0  | TX ONLY?         |
 | UART4_RX        | PA1  | ETH_RMII_REF_CLK |
 | USART2_TX       | PA2  | ETH_MDIO         |
-| USART2_RX       | PA3  |                  |
-| USART1_TX       | PA9  | DIS0_D1          |
-| USART1_RX       | PA10 | DIS0_D2          |
+| USART2_RX       | PA3  | DIS3_RW          |
+| USART1_TX       | PA9  | OTG_FS_VBUS?     |
+| USART1_RX       | PA10 | OTG_FS_ID?       |
 | USART1_TX       | PB6  | DIS1_D6          |
 | USART1_RX       | PB7  | DIS1_D7          |
-| USART3_TX       | PB10 |                  |
+| USART3_TX       | PB10 | SPI2_SCK?        |
 | USART3_RX       | PB11 | ETH_RMII_TX_EN   |
 | USART3_TX       | PC10 | SDIO_D2          |
 | USART3_RX       | PC11 | SDIO_D3          |
@@ -80,8 +80,8 @@ Pins than can only sink 3mA max:
 | UART5_RX        | PD2  | SDIO_CMD         |
 | USART2_TX       | PD5  | +                |
 | USART2_RX       | PD6  | +                |
-| USART3_TX       | PD8  | N/A              |
-| USART3_RX       | PD9  | N/A              |
+| USART3_TX       | PD8  | DIS0_D0          |
+| USART3_RX       | PD9  | DIS0_D1          |
 
 ## SD Card slot pin-out (9; 1-8)
 
