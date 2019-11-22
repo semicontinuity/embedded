@@ -5,10 +5,31 @@ BIN=test_hd44780_8wire_sdcard_tm
 INDEPENDENT_HEADERS=defines.h
 
 
+FF=
+FF+=diskio
+FF+=ff
+
+FF_DRV=
+FF_DRV+=fatfs_sd_sdio
+
+FF_OPT=
+FF_OPT+=ccsbcs
+FF_OPT+=syscall
+
+FF_DIR?=/opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/fatfs
+FF_SRC?=$(FF_DIR)
+FF_INC?=$(FF_DIR)
+FF_LIBOBJ=$(addprefix $(OBJDIR)/, $(addsuffix .o, $(FF)))
+FF_OPTOBJ=$(addprefix $(OBJDIR)/, $(addsuffix .o, $(FF_OPT)))
+FF_DRVOBJ=$(addprefix $(OBJDIR)/, $(addsuffix .o, $(FF_DRV)))
+
+
 TM=
 TM+=tm_stm32_delay
+TM+=tm_stm32_disco
 TM+=tm_stm32_gpio
 TM+=tm_stm32_rcc
+TM+=tm_stm32_fatfs
 
 
 TM_DIR?=/opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES
@@ -20,8 +41,11 @@ TM_LIBOBJ=$(addprefix $(OBJDIR)/, $(addsuffix .o, $(TM)))
 HAL=
 HAL+=stm32f4xx_hal
 HAL+=stm32f4xx_hal_cortex
+HAL+=stm32f4xx_hal_dma
 HAL+=stm32f4xx_hal_gpio
+HAL+=stm32f4xx_hal_sd
 HAL+=stm32f4xx_hal_rcc
+HAL+=stm32f4xx_ll_sdmmc
 
 HAL_DIR?=/opt/stm32fxxx_hal_libraries/00-HAL_DRIVERS/STM32F4xx_HAL_Driver
 HAL_SRC?=$(HAL_DIR)/Src
@@ -47,6 +71,7 @@ CFLAGS += -I.
 CFLAGS += -I$(TM_INC)
 CFLAGS += -I$(CMSIS__INC) -I$(CMSIS)/Include
 CFLAGS += -I$(HAL_INC)
+CFLAGS += -I$(FF_INC) -I$(FF_INC)/drivers
 CFLAGS += -DSTM32F407xx -DSTM32F4xx -DSTM32F4_DISCOVERY
 
 
@@ -72,7 +97,9 @@ MAIN_OBJ=$(addprefix $(OBJDIR)/, $(SRC:%.c=%.o))
 
 OBJ=
 OBJ+=$(OBJDIR)/startup.o
-ALL_OBJ=$(OBJ) $(MAIN_OBJ) $(TM_LIBOBJ) $(HAL_LIBOBJ)
+
+ALL_OBJ=$(OBJ) $(MAIN_OBJ) $(TM_LIBOBJ) $(HAL_LIBOBJ) $(FF_LIBOBJ) $(FF_OPTOBJ) $(FF_DRVOBJ)
+
 
 all: $(BIN)
 
@@ -89,6 +116,15 @@ $(OBJDIR)/%.o: $(TM_SRC)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: $(HAL_SRC)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(FF_SRC)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(FF_SRC)/option/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(FF_SRC)/drivers/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(SRC) : %.c : %.h $(INDEPENDENT_HEADERS)
