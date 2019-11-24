@@ -1,0 +1,1 @@
+add_definitions(-DCOMM_EVENTS__EVENT__REG=20)
