@@ -1,0 +1,2 @@
+SD Card test.
+Based on corresponding example from MIOS32, adopted to custom LCD (that does not work as expected, however).

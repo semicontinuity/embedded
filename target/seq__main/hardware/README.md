@@ -30,13 +30,13 @@ Pins than can only sink 3mA max:
 | SPI1_MOSI       | PB5  | DIS1_D5          |
 | SPI3_MOSI       | PB5  | DIS1_D5          |
 | SPI2_NSS        | PB9  | I2C1_SDA         |
-| SPI2_SCK        | PB10 |                  |
+| SPI2_SCK        | PB10 |                 +|
 | SPI2_NSS        | PB12 | ETH_RMII_TXD0    |
 | SPI2_SCK        | PB13 | ETH_RMII_TXD1    |
 | SPI2_MISO       | PB14 |                  |
 | SPI2_MOSI       | PB15 |                  |
-| SPI2_MISO       | PC2  |                  |
-| SPI2_MOSI       | PC3  |                  |
+| SPI2_MISO       | PC2  |                 +|
+| SPI2_MOSI       | PC3  |                 +|
 | SPI3_SCK        | PC10 | SDIO_D2          |
 | SPI3_MISO       | PC11 | SDIO_D3          |
 | SPI3_MOSI       | PC12 | SDIO_CK          |
@@ -62,12 +62,12 @@ Pins than can only sink 3mA max:
 
 |                 |      | Conflict         |
 |-----------------|------|------------------|
-| UART4_TX        | PA0  | TX ONLY?         |
+| UART4_TX        | PA0  | TX ONLY        ? |
 | UART4_RX        | PA1  | ETH_RMII_REF_CLK |
 | USART2_TX       | PA2  | ETH_MDIO         |
-| USART2_RX       | PA3  | DIS3_RW          |
-| USART1_TX       | PA9  | OTG_FS_VBUS?     |
-| USART1_RX       | PA10 | OTG_FS_ID?       |
+| USART2_RX       | PA3  | DIS3_RW?         |
+| USART1_TX       | PA9  | OTG_FS_VBUS    ? |
+| USART1_RX       | PA10 | OTG_FS_ID      ? |
 | USART1_TX       | PB6  | DIS1_D6          |
 | USART1_RX       | PB7  | DIS1_D7          |
 | USART3_TX       | PB10 | SPI2_SCK?        |
@@ -251,7 +251,7 @@ Pins than can only sink 3mA max:
 |PB7 | DIS1_D7                     |
 |PB8 | I2C1_SCL                    |
 |PB9 | I2C1_SDA                    |
-|PB10| SPI2_SCK (no NSS)?          |
+|PB10| SPI2_SCK (no NSS)?      SPI |
 |PB11| ETH_RMII_TX_EN              |
 |PB12| ETH_RMII_TXD0               |
 |PB13| ETH_RMII_TXD1               |
@@ -259,8 +259,8 @@ Pins than can only sink 3mA max:
 |PB15| SPI2_MOSI (no NSS)?         |
 |PC0 | DIS2_RS                     |
 |PC1 | ETH_MDC                     |
-|PC2 | DIS2_RW                     |
-|PC3 | DIS2_E                      |
+|PC2 | DIS2_RW                 SPI |
+|PC3 | DIS2_E                  SPI |
 |PC4 | ETH_RMII_RXD0               |
 |PC5 | ETH_RMII_RXD1               |
 |PC6 | SPI CS1?                    |
