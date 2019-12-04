@@ -1,0 +1,1 @@
+add_definitions(-DDATA__LEDS__INDEX__REG=2)

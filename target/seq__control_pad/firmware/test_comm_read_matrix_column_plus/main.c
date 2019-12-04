@@ -15,8 +15,8 @@
 #include "io_matrix__scanner__thread.h"
 
 #include "cpu/avr/services/keyboard/keyboard.h"
-#include <drivers/in/encoder0.h>
-#include <drivers/in/encoder0__switch.h>
+//#include <drivers/in/encoder0.h>
+//#include <drivers/in/encoder0__switch.h>
 
 #include <cpu/avr/twi.h>
 #include "twi_slave__handler.h"
@@ -51,8 +51,6 @@ void application__init(void) {
     io_matrix__scanner__thread__init();
     io_matrix__scanner__thread__timer__init();
 
-    encoder0__init();
-    encoder0__switch__init();
     keyboard__init();
 
     alarm__init();
@@ -86,8 +84,8 @@ int main(void) {
 #endif
     for(;;) {
         keyboard__run();
-//        encoder0__run();
-//        encoder0__switch__run();
+//        comm_events__queue__put(io_matrix__in__column0__state__get());
+//        comm_events__queue__put(io_matrix__in__column3__state__get());
 
         if (twi__slave__handler__is_runnable()) {
             twi__slave__handler__run();
