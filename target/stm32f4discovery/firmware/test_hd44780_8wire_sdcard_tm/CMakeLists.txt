@@ -17,15 +17,38 @@ set(SOURCE_FILES
         ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/stm32fxxx_hal.h
         ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-HAL_DRIVERS/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
         ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-HAL_DRIVERS/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h
+
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/tm_stm32_delay.h
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/tm_stm32_delay.c
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/tm_stm32_disco.h
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/tm_stm32_disco.c
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/tm_stm32_gpio.h
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/tm_stm32_gpio.c
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/tm_stm32_rcc.h
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/tm_stm32_rcc.c
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/tm_stm32_fatfs.h
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/tm_stm32_fatfs.c
+
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/fatfs/ff.h
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/fatfs/ff.c
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/fatfs/diskio.h
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/fatfs/diskio.c
+#        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/fatfs/drivers/fatfs_sd_sdio.h
+#        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/fatfs/drivers/fatfs_sd_sdio.c
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/fatfs/drivers/fatfs_sd.h
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/fatfs/drivers/fatfs_sd.c
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/fatfs/option/ccsbcs.c
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/fatfs/option/syscall.c
         )
 
 include_directories(
         .
-        /opt/gcc-arm-none-eabi-8-2019-q3-update/arm-none-eabi/include
-        /opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES
-        /opt/stm32fxxx_hal_libraries/00-HAL_DRIVERS/CMSIS/Device/ST/STM32F4xx/Include
-        /opt/stm32fxxx_hal_libraries/00-HAL_DRIVERS/STM32F4xx_HAL_Driver/Inc
-        /opt/stm32fxxx_hal_libraries/00-HAL_DRIVERS/CMSIS/Include
+        ../../../../../../../../../../opt/gcc-arm-none-eabi-8-2019-q3-update/arm-none-eabi/include
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-HAL_DRIVERS/CMSIS/Device/ST/STM32F4xx/Include
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-HAL_DRIVERS/STM32F4xx_HAL_Driver/Inc
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-HAL_DRIVERS/CMSIS/Include
+        ../../../../../../../../../../opt/stm32fxxx_hal_libraries/00-STM32_LIBRARIES/fatfs/
 )
 
 add_executable( ${SOURCE_FILES})

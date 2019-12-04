@@ -47,7 +47,10 @@
 
 /* Disable handler function inside TM DMA library */
 /* DMA2 Stream3 is used for SDCARD */
-#define DMA2_STREAM6_DISABLE_IRQHANDLER
-#define DMA2_STREAM3_DISABLE_IRQHANDLER
+//#define DMA2_STREAM6_DISABLE_IRQHANDLER
+//#define DMA2_STREAM3_DISABLE_IRQHANDLER
+
+#define FATFS_USE_SDIO   0
+//#define FATFS_SDIO_4BIT 0
 
 #endif
