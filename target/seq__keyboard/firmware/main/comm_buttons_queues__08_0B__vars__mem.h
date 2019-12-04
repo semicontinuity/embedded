@@ -4,7 +4,9 @@
 #include <cpu/avr/asm_bit_var.h>
 #include <avr/io.h>
 
+#if defined(COMM_BUTTONS__08_0B__EVENT_DATA__REG)
 register volatile uint8_t comm_buttons__08_0b__event_data asm(QUOTE(COMM_BUTTONS__08_0B__EVENT_DATA__REG));
+#endif
 
 
 DEFINE_REG_BITVAR(
@@ -42,5 +44,10 @@ DEFINE_REG_BITVAR(
     comm_buttons__button11__event_value,
     COMM_BUTTONS__BUTTON11__EVENT_VALUE__HOST, COMM_BUTTONS__BUTTON11__EVENT_VALUE__BIT
 );
+
+
+void comm_buttons__08_0b__event_data__start(void) {
+    comm_buttons__08_0b__event_data = 0;
+}
 
 #endif

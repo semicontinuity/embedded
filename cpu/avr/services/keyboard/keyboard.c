@@ -355,7 +355,7 @@ void keyboard__init(void) {
     keyboard__pins__init();
     keyboard__init_previous_states();
     keyboard__init_masks();
-//    keyboard__init_debounce_timers();
+    keyboard__init_debounce_timers();
 }
 
 

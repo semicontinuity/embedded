@@ -57,6 +57,7 @@ void application__init(void) {
 void application__start(void) {
     io_matrix__in__start();
     io_matrix__scanner__thread__timer__start();
+    comm_buttons__start();
     comm_encoder__start();
     comm_events__start();
 

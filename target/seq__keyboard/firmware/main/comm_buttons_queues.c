@@ -246,3 +246,11 @@ void comm_buttons__run(void) {
         }
     }
 }
+
+
+void comm_buttons__start(void) {
+    comm_buttons__00_03__event_data__start();
+    comm_buttons__04_07__event_data__start();
+    comm_buttons__08_0b__event_data__start();
+    comm_buttons__0c_0f__event_data__start();
+}

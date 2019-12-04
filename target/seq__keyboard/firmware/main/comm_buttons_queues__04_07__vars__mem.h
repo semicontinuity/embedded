@@ -45,4 +45,8 @@ DEFINE_REG_BITVAR(
 );
 
 
+void comm_buttons__04_07__event_data__start(void) {
+    comm_buttons__04_07__event_data = 0;
+}
+
 #endif
