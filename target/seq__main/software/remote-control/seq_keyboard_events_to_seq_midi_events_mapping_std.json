@@ -1,0 +1,245 @@
+{
+  "press        ENC_DATAWHEEL": "note_on 127 127",
+  "release      ENC_DATAWHEEL": "note_on 127 0",
+  "rotate-left  ENC_DATAWHEEL": "cc      15  63",
+  "rotate-right ENC_DATAWHEEL": "cc      15  65",
+
+  "press        ENC1":          "note_on 32  127",
+  "release      ENC1":          "note_on 32  0",
+  "rotate-left  ENC1":          "cc      16  63",
+  "rotate-right ENC1":          "cc      16  65",
+
+  "press        ENC2":          "note_on 34  127",
+  "release      ENC2":          "note_on 34  0",
+  "rotate-left  ENC2":          "cc      17  63",
+  "rotate-right ENC2":          "cc      17  65",
+
+  "press        ENC3":          "note_on 36  127",
+  "release      ENC3":          "note_on 36  0",
+  "rotate-left  ENC3":          "cc      18  63",
+  "rotate-right ENC3":          "cc      18  65",
+
+  "press        ENC4":          "note_on 38  127",
+  "release      ENC4":          "note_on 38  0",
+  "rotate-left  ENC4":          "cc      19  63",
+  "rotate-right ENC4":          "cc      19  65",
+
+  "press        ENC5":          "note_on 40  127",
+  "release      ENC5":          "note_on 40  0",
+  "rotate-left  ENC5":          "cc      20  63",
+  "rotate-right ENC5":          "cc      20  65",
+
+  "press        ENC6":          "note_on 42  127",
+  "release      ENC6":          "note_on 42  0",
+  "rotate-left  ENC6":          "cc      21  63",
+  "rotate-right ENC6":          "cc      21  65",
+
+  "press        ENC7":          "note_on 44  127",
+  "release      ENC7":          "note_on 44  0",
+  "rotate-left  ENC7":          "cc      22  63",
+  "rotate-right ENC7":          "cc      22  65",
+
+  "press        ENC8":          "note_on 46  127",
+  "release      ENC8":          "note_on 46  0",
+  "rotate-left  ENC8":          "cc      23  63",
+  "rotate-right ENC8":          "cc      23  65",
+
+  "press        ENC9":          "note_on 56  127",
+  "release      ENC9":          "note_on 56  0",
+  "rotate-left  ENC9":          "cc      24  63",
+  "rotate-right ENC9":          "cc      24  65",
+
+  "press        ENC10":         "note_on 58  127",
+  "release      ENC10":         "note_on 58  0",
+  "rotate-left  ENC10":         "cc      25  63",
+  "rotate-right ENC10":         "cc      25  65",
+
+  "press        ENC11":         "note_on 60  127",
+  "release      ENC11":         "note_on 60  0",
+  "rotate-left  ENC11":         "cc      26  63",
+  "rotate-right ENC11":         "cc      26  65",
+
+  "press        ENC12":         "note_on 62  127",
+  "release      ENC12":         "note_on 62  0",
+  "rotate-left  ENC12":         "cc      27  63",
+  "rotate-right ENC12":         "cc      27  65",
+
+  "press        ENC13":         "note_on 64  127",
+  "release      ENC13":         "note_on 64  0",
+  "rotate-left  ENC13":         "cc      28  63",
+  "rotate-right ENC13":         "cc      28  65",
+
+  "press        ENC14":         "note_on 66  127",
+  "release      ENC14":         "note_on 66  0",
+  "rotate-left  ENC14":         "cc      29  63",
+  "rotate-right ENC14":         "cc      29  65",
+
+  "press        ENC15":         "note_on 68  127",
+  "release      ENC15":         "note_on 68  0",
+  "rotate-left  ENC15":         "cc      30  63",
+  "rotate-right ENC15":         "cc      30  65",
+
+  "press        ENC16":         "note_on 70  127",
+  "release      ENC16":         "note_on 70  0",
+  "rotate-left  ENC16":         "cc      31  63",
+  "rotate-right ENC16":         "cc      31  65",
+
+  "press        DOWN":          "note_on 0   127",
+  "release      DOWN":          "note_on 0   0",
+
+  "press        UP":            "note_on 1   127",
+  "release      UP":            "note_on 1   0",
+
+  "press        SCRUB":         "note_on 2   127",
+  "release      SCRUB":         "note_on 2   0",
+
+  "press        METRONOME":     "note_on 3   127",
+  "release      METRONOME":     "note_on 3   0",
+
+  "press        STOP":          "note_on 4   127",
+  "release      STOP":          "note_on 4   0",
+
+  "press        PAUSE":         "note_on 5   127",
+  "release      PAUSE":         "note_on 5   0",
+
+  "press        PLAY":          "note_on 6   127",
+  "release      PLAY":          "note_on 6   0",
+
+  "press        REV":           "note_on 7   127",
+  "release      REV":           "note_on 7   0",
+
+  "press        FWD":           "note_on 8   127",
+  "release      FWD":           "note_on 8   0",
+
+  "press        UTILITY":       "note_on 9   127",
+  "release      UTILITY":       "note_on 9   0",
+
+  "press        STEP_VIEW":     "note_on 10  127",
+  "release      STEP_VIEW":     "note_on 10  0",
+
+  "press        TRG_LAYER_SEL": "note_on 11  127",
+  "release      TRG_LAYER_SEL": "note_on 11  0",
+
+  "press        TRACK_SEL":     "note_on 12  127",
+  "release      TRACK_SEL":     "note_on 12  0",
+
+  "press        MENU":          "note_on 13  127",
+  "release      MENU":          "note_on 13  0",
+
+  "press        SELECT":        "note_on 14  127",
+  "release      SELECT":        "note_on 14  0",
+
+  "press        EXIT":          "note_on 15  127",
+  "release      EXIT":          "note_on 15  0",
+
+  "press        TRACK1":        "note_on 16  127",
+  "release      TRACK1":        "note_on 16  0",
+
+  "press        TRACK2":        "note_on 17  127",
+  "release      TRACK2":        "note_on 17  0",
+
+  "press        TRACK3":        "note_on 18  127",
+  "release      TRACK3":        "note_on 18  0",
+
+  "press        TRACK4":        "note_on 19  127",
+  "release      TRACK4":        "note_on 19  0",
+
+  "press        PAR_LAYER_A":   "note_on 20  127",
+  "release      PAR_LAYER_A":   "note_on 20  0",
+
+  "press        PAR_LAYER_B":   "note_on 21  127",
+  "release      PAR_LAYER_B":   "note_on 21  0",
+
+  "press        PAR_LAYER_C":   "note_on 22  127",
+  "release      PAR_LAYER_C":   "note_on 22  0",
+
+  "press        EDIT":          "note_on 24  127",
+  "release      EDIT":          "note_on 24  0",
+
+  "press        MUTE":          "note_on 25  127",
+  "release      MUTE":          "note_on 25  0",
+
+  "press        PATTERN":       "note_on 26  127",
+  "release      PATTERN":       "note_on 26  0",
+
+  "press        SONG":          "note_on 27  127",
+  "release      SONG":          "note_on 27  0",
+
+  "press        SOLO":          "note_on 28  127",
+  "release      SOLO":          "note_on 28  0",
+
+  "press        FAST":          "note_on 29  127",
+  "release      FAST":          "note_on 29  0",
+
+  "press        ALL":           "note_on 30  127",
+  "release      ALL":           "note_on 30  0",
+
+  "press        GP1":           "note_on 48  127",
+  "release      GP1":           "note_on 48  0",
+
+  "press        GP2":           "note_on 49  127",
+  "release      GP2":           "note_on 49  0",
+
+  "press        GP3":           "note_on 50  127",
+  "release      GP3":           "note_on 50  0",
+
+  "press        GP4":           "note_on 51  127",
+  "release      GP4":           "note_on 51  0",
+
+  "press        GP5":           "note_on 52  127",
+  "release      GP5":           "note_on 52  0",
+
+  "press        GP6":           "note_on 53  127",
+  "release      GP6":           "note_on 53  0",
+
+  "press        GP7":           "note_on 54  127",
+  "release      GP7":           "note_on 54  0",
+
+  "press        GP8":           "note_on 55  127",
+  "release      GP8":           "note_on 55  0",
+
+  "press        GP9":           "note_on 72  127",
+  "release      GP9":           "note_on 72  0",
+
+  "press        GP10":          "note_on 73  127",
+  "release      GP10":          "note_on 73  0",
+
+  "press        GP11":          "note_on 74  127",
+  "release      GP11":          "note_on 74  0",
+
+  "press        GP12":          "note_on 75  127",
+  "release      GP12":          "note_on 75  0",
+
+  "press        GP13":          "note_on 76  127",
+  "release      GP13":          "note_on 76  0",
+
+  "press        GP14":          "note_on 77  127",
+  "release      GP14":          "note_on 77  0",
+
+  "press        GP15":          "note_on 78  127",
+  "release      GP15":          "note_on 78  0",
+
+  "press        GP16":          "note_on 79  127",
+  "release      GP16":          "note_on 79  0",
+
+  "press        GROUP1":        "note_on 96  127",
+  "release      GROUP1":        "note_on 96  0",
+
+  "press        GROUP2":        "note_on 97  127",
+  "release      GROUP2":        "note_on 97  0",
+
+  "press        GROUP3":        "note_on 98  127",
+  "release      GROUP3":        "note_on 98  0",
+
+  "press        GROUP4":        "note_on 99  127",
+  "release      GROUP4":        "note_on 99  0",
+
+  "press        TRG_LAYER_A":   "note_on 100 127",
+  "release      TRG_LAYER_A":   "note_on 100 0",
+
+  "press        TRG_LAYER_B":   "note_on 101 127",
+  "release      TRG_LAYER_B":   "note_on 101 0",
+
+  "press        TRG_LAYER_C":   "note_on 102 127",
+  "release      TRG_LAYER_C":   "note_on 102 0"
+}

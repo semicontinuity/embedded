@@ -1,0 +1,220 @@
+{
+  "press   False False False f12":       "press        ENC_DATAWHEEL",
+  "release False False False f12":       "release      ENC_DATAWHEEL",
+  "press   True  False False f12":       "rotate-left  ENC_DATAWHEEL",
+  "press   False True  False f12":       "rotate-right ENC_DATAWHEEL",
+
+  "press   False False False f1":        "press        ENC1",
+  "release False False False f1":        "release      ENC1",
+  "press   True  False False f1":        "rotate-left  ENC1",
+  "press   False True  False f1":        "rotate-right ENC1",
+
+  "press   False False False f2":        "press        ENC2",
+  "release False False False f2":        "release      ENC2",
+  "press   True  False False f2":        "rotate-left  ENC2",
+  "press   False True  False f2":        "rotate-right ENC2",
+
+  "press   False False False f3":        "press        ENC3",
+  "release False False False f3":        "release      ENC3",
+  "press   True  False False f3":        "rotate-left  ENC3",
+  "press   False True  False f3":        "rotate-right ENC3",
+
+  "press   False False False f4":        "press        ENC4",
+  "release False False False f4":        "release      ENC4",
+  "press   True  False False f4":        "rotate-left  ENC4",
+  "press   False True  False f4":        "rotate-right ENC4",
+
+  "press   False False False f5":        "press        ENC5",
+  "release False False False f5":        "release      ENC5",
+  "press   True  False False f5":        "rotate-left  ENC5",
+  "press   False True  False f5":        "rotate-right ENC5",
+
+  "press   False False False f6":        "press        ENC6",
+  "release False False False f6":        "release      ENC6",
+  "press   True  False False f6":        "rotate-left  ENC6",
+  "press   False True  False f6":        "rotate-right ENC6",
+
+  "press   False False False f7":        "press        ENC7",
+  "release False False False f7":        "release      ENC7",
+  "press   True  False False f7":        "rotate-left  ENC7",
+  "press   False True  False f7":        "rotate-right ENC7",
+
+  "press   False False False f8":        "press        ENC8",
+  "release False False False f8":        "release      ENC8",
+  "press   True  False False f8":        "rotate-left  ENC8",
+  "press   False True  False f8":        "rotate-right ENC8",
+
+  "press   False False True  f1":        "press        ENC9",
+  "release False False True  f1":        "release      ENC9",
+  "press   True  False True  f1":        "rotate-left  ENC9",
+  "press   False True  True  f1":        "rotate-right ENC9",
+
+  "press   False False True  f2":        "press        ENC10",
+  "release False False True  f2":        "release      ENC10",
+  "press   True  False True  f2":        "rotate-left  ENC10",
+  "press   False True  True  f2":        "rotate-right ENC10",
+
+  "press   False False True  f3":        "press        ENC11",
+  "release False False True  f3":        "release      ENC11",
+  "press   True  False True  f3":        "rotate-left  ENC11",
+  "press   False True  True  f3":        "rotate-right ENC11",
+
+  "press   False False True  f4":        "press        ENC12",
+  "release False False True  f4":        "release      ENC12",
+  "press   True  False True  f4":        "rotate-left  ENC12",
+  "press   False True  True  f4":        "rotate-right ENC12",
+
+  "press   False False True  f5":        "press        ENC13",
+  "release False False True  f5":        "release      ENC13",
+  "press   True  False True  f5":        "rotate-left  ENC13",
+  "press   False True  True  f5":        "rotate-right ENC13",
+
+  "press   False False True  f6":        "press        ENC14",
+  "release False False True  f6":        "release      ENC14",
+  "press   True  False True  f6":        "rotate-left  ENC14",
+  "press   False True  True  f6":        "rotate-right ENC14",
+
+  "press   False False True  f7":        "press        ENC15",
+  "release False False True  f7":        "release      ENC15",
+  "press   True  False True  f7":        "rotate-left  ENC15",
+  "press   False True  True  f7":        "rotate-right ENC15",
+
+  "press   False False True  f8":        "press        ENC16",
+  "release False False True  f8":        "release      ENC16",
+  "press   True  False True  f8":        "rotate-left  ENC16",
+  "press   False True  True  f8":        "rotate-right ENC16",
+
+  "press   False False False up":        "press        UP",
+  "release False False False up":        "release      UP",
+
+  "press   False False False down":      "press        DOWN",
+  "release False False False down":      "release      DOWN",
+
+  "press   False False False esc":       "press        EXIT",
+  "release False False False esc":       "release      EXIT",
+
+  "press   False False True ~":          "press        METRONOME",
+  "release False False True ~":          "release      METRONOME",
+
+  "press   True  False False pause":     "press        STOP",
+  "release True  False False pause":     "release      STOP",
+
+  "press   False False False pause":     "press        PAUSE",
+  "release False False False pause":     "release      PAUSE",
+
+  "press   False False False enter":     "press        PLAY",
+  "release False False False enter":     "release      PLAY",
+
+  "press   False False False left":      "press        REV",
+  "release False False False left":      "release      REV",
+
+  "press   False False False right":     "press        FWD",
+  "release False False False right":     "release      FWD",
+
+  "press   False False False end":       "press        UTILITY",
+  "release False False False end":       "release      UTILITY",
+
+  "press   False False False `":         "press        STEP_VIEW",
+  "release False False False `":         "release      STEP_VIEW",
+
+  "press   False False False page_up":   "press        TRG_LAYER_SEL",
+  "release False False False page_up":   "release      TRG_LAYER_SEL",
+  "press   False False False page_down": "press        TRACK_SEL",
+  "release False False False page_down": "release      TRACK_SEL",
+
+  "press   False False False home":      "press        MENU",
+  "release False False False home":      "release      MENU",
+
+  "press   False False False space":     "press        SELECT",
+  "release False False False space":     "release      SELECT",
+
+  "press   False False False backspace": "press        SCRUB",
+  "release False False False backspace": "release      SCRUB",
+
+  "press   False False False 9":         "press        TRACK1",
+  "release False False False 9":         "release      TRACK1",
+  "press   False False False 0":         "press        TRACK2",
+  "release False False False 0":         "release      TRACK2",
+  "press   False False False -":         "press        TRACK3",
+  "release False False False -":         "release      TRACK3",
+  "press   False False False =":         "press        TRACK4",
+  "release False False False =":         "release      TRACK4",
+
+  "press   True  False False f9":        "press        PAR_LAYER_A",
+  "release True  False False f9":        "release      PAR_LAYER_A",
+  "press   True  False False f10":       "press        PAR_LAYER_B",
+  "release True  False False f10":       "release      PAR_LAYER_B",
+  "press   True  False False f11":       "press        PAR_LAYER_C",
+  "release True  False False f11":       "release      PAR_LAYER_C",
+
+  "press   False False False insert":    "press        EDIT",
+  "release False False False insert":    "release      EDIT",
+
+  "press   False False False delete":    "press        MUTE",
+  "release False False False delete":    "release      MUTE",
+
+  "press   False False False p":         "press        PATTERN",
+  "release False False False p":         "release      PATTERN",
+
+  "press   False False False o":         "press        SONG",
+  "release False False False o":         "release      SONG",
+
+  "press   False False False l":         "press        SOLO",
+  "release False False False l":         "release      SOLO",
+
+  "press   False False False tab":       "press        FAST",
+  "release False False False tab":       "release      FAST",
+
+  "press   False False False a":         "press        ALL",
+  "release False False False a":         "release      ALL",
+
+  "press   False False False 1":         "press        GP1",
+  "release False False False 1":         "release      GP1",
+  "press   False False False 2":         "press        GP2",
+  "release False False False 2":         "release      GP2",
+  "press   False False False 3":         "press        GP3",
+  "release False False False 3":         "release      GP3",
+  "press   False False False 4":         "press        GP4",
+  "release False False False 4":         "release      GP4",
+  "press   False False False 5":         "press        GP5",
+  "release False False False 5":         "release      GP5",
+  "press   False False False 6":         "press        GP6",
+  "release False False False 6":         "release      GP6",
+  "press   False False False 7":         "press        GP7",
+  "release False False False 7":         "release      GP7",
+  "press   False False False 8":         "press        GP8",
+  "release False False False 8":         "release      GP8",
+
+  "press   False False True  !":         "press        GP9",
+  "release False False True  !":         "release      GP9",
+  "press   False False True  @":         "press        GP10",
+  "release False False True  @":         "release      GP10",
+  "press   False False True  #":         "press        GP11",
+  "release False False True  #":         "release      GP11",
+  "press   False False True  $":         "press        GP12",
+  "release False False True  $":         "release      GP12",
+  "press   False False True  %":         "press        GP13",
+  "release False False True  %":         "release      GP13",
+  "press   False False True  ^":         "press        GP14",
+  "release False False True  ^":         "release      GP14",
+  "press   False False True  &":         "press        GP15",
+  "release False False True  &":         "release      GP15",
+  "press   False False True  *":         "press        GP16",
+  "release False False True  *":         "release      GP16",
+
+  "press   False False True  (":         "press        GROUP1",
+  "release False False True  (":         "release      GROUP1",
+  "press   False False True  )":         "press        GROUP2",
+  "release False False True  )":         "release      GROUP2",
+  "press   False False True  _":         "press        GROUP3",
+  "release False False True  _":         "release      GROUP3",
+  "press   False False True  +":         "press        GROUP4",
+  "release False False True  +":         "release      GROUP4",
+
+  "press   False True  False f9":        "press        TRG_LAYER_A",
+  "release False True  False f9":        "release      TRG_LAYER_A",
+  "press   False True  False f10":       "press        TRG_LAYER_B",
+  "release False True  False f10":       "release      TRG_LAYER_B",
+  "press   False True  False f11":       "press        TRG_LAYER_C",
+  "release False True  False f11":       "release      TRG_LAYER_C"
+}
