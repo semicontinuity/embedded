@@ -29,7 +29,7 @@ B10 IIC0_SC                         Microphone SCK
 B11 IIC0_SD                         -
 B12 J8/9/19                         -
 B13 J8/9/19                         -
-B14 J8/9/19                         -                                -
+B14 J8/9/19                         -
 B15 J8/9/19                         -
 
 C0  X               LCD2 RS         USB Power On
@@ -59,11 +59,11 @@ D6  J15_SCLK                        -
 D7  J15_D7          LCD0 RW         -
 D8  J11E_MO2        LCD0 D0         -
 D9  J11E_MI2        LCD0 D1         -
-D10 J8/9/19         LCD0 D2         -                       
+D10 J8/9/19         LCD0 D2         -
 D11 J16_SPI_RC2     LCD0 D3         -
-D12 LED_GREEN       LCD0 D4         Green LED               P             
+D12 LED_GREEN       LCD0 D4         Green LED               P
 D13 LED_ORANGE      LCD0 D5         Orange LED              P
-D14 LED_RED         LCD0 D6         Red LED                 P    
+D14 LED_RED         LCD0 D6         Red LED                 P
 D15 LED_BLUE        LCD0 D7         Blue LED                P
 
 E0  X               LCD2 D0         MEM INT1
