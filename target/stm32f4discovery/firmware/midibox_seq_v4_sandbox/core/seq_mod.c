@@ -1,3 +1,12 @@
+// Mapping of HID boards to SRIO lines:
+//
+// SRIO 0-3:    Board @I2C 0x23 (rightmost)
+// SRIO 4-7:    Board @I2C 0x22
+// SRIO 8-11:   Board @I2C 0x21
+// SRIO 12-15:  Board @I2C 0x20 (leftmost)
+// SRIO 16-19:  Board @I2C 0x30 (keypad)
+// SRIO 20-23:  Virtual SRIO for GP keys (R Color 1, L Color 1, R Color 2, L Color 2)
+// SRIO 24-27:  Virtual SRIO for TRACK keys (R Color 1, L Color 1, R Color 2, L Color 2)
 #include <mios32.h>
 
 // this module can be optionally disabled in a local mios32_config.h file (included from mios32.h)
@@ -37,7 +46,7 @@ void handleEvent(u8 board, u8 event) {
         u8 button = (event & 0x7FU) >> 1U;
         u8 column = button >> 2U;
         u8 row = button & 3U;
-        u32 sr = MIOS32_SRIO_NUM_SR - 1 - ((board << 2U) + column);
+        u32 sr = 16 - 1 - ((board << 2U) + column);
         u32 pin = (sr << 3U) | row;
         APP_DIN_NotifyToggle(pin,pressed ? 0 : 1);
     } else {
@@ -45,7 +54,7 @@ void handleEvent(u8 board, u8 event) {
         u8 delta_bits = (event & 0x1FU);
         u8 encoder = event >> 5U;
         s8 delta = delta_bits < 16 ? delta_bits : delta_bits - 32;
-        APP_ENC_NotifyChange(encoder, delta);
+        APP_ENC_NotifyChange((board << 2U) + encoder + 1, delta);   // GP encoders are 1..16
     }
 }
 
@@ -88,15 +97,19 @@ void receive(int board) {
                     u8 button = (event & 0x7FU) >> 1U;
                     u8 column = button >> 2U;
                     u8 row = button & 3U;
-                    u32 sr = MIOS32_SRIO_NUM_SR - 1 - ((board << 2U) + column);
+                    u32 sr = 16 - 1 - ((board << 2U) + column);
                     u32 pin = (sr << 3U) | row;
                     APP_DIN_NotifyToggle(pin,pressed ? 0 : 1);
                 } else {
-
+                    // encoder event
+                    u8 delta_bits = (event & 0x1FU);
+                    u8 encoder = event >> 5U;
+                    s8 delta = delta_bits < 16 ? delta_bits : delta_bits - 32;
+                    APP_ENC_NotifyChange((board << 2U) + encoder + 1, delta);   // GP encoders are 1..16
                 }
             }
         } else {
-//            MIOS32_MIDI_SendDebugMessage("WARNING: Could not receive via I2C.\n");
+            MIOS32_MIDI_SendDebugMessage("WARNING: Could not receive via I2C.\n");
         }
     }
 }
@@ -111,6 +124,44 @@ void send(u8 board) {
             MIOS32_IIC_IO_ROWS_PER_BOARD,
             IIC_Write);
 }
+
+void transpose(u8 src_srio, u8 dst_srio, u8 bit) {
+    u8 value = mios32_srio_dout[0][src_srio];
+    u8 *dst = &mios32_srio_dout[0][dst_srio];
+    u8 set_mask = 1U << bit;
+    u8 clear_mask = ~set_mask;
+
+    if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
+    ++dst;
+    value >>= 1U;
+
+    if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
+    ++dst;
+    value >>= 1U;
+
+    if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
+    ++dst;
+    value >>= 1U;
+
+    if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
+    ++dst;
+    value >>= 1U;
+
+    if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
+    ++dst;
+    value >>= 1U;
+
+    if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
+    ++dst;
+    value >>= 1U;
+
+    if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
+    ++dst;
+    value >>= 1U;
+
+    if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
+}
+
 
 
 static void TASK_CommunicateWithHIDBoards(void *pvParameters)  {
@@ -127,6 +178,15 @@ static void TASK_CommunicateWithHIDBoards(void *pvParameters)  {
         receive(1);
         receive(2);
         receive(3);
+
+        transpose(20, 0, 1);
+        transpose(21, 8, 1);
+        transpose(22, 0, 2);
+        transpose(23, 8, 2);
+        transpose(24, 0, 4);
+        transpose(25, 8, 4);
+        transpose(26, 0, 5);
+        transpose(27, 8, 5);
 
         send(0);
         send(1);
