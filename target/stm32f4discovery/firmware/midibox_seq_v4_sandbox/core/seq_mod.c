@@ -42,7 +42,10 @@ void handleEvent(u8 board, u8 event) {
         APP_DIN_NotifyToggle(pin,pressed ? 0 : 1);
     } else {
         // encoder event
-//                    APP_ENC_NotifyChange(1, 1);
+        u8 delta_bits = (event & 0x1FU);
+        u8 encoder = event >> 5U;
+        s8 delta = delta_bits < 16 ? delta_bits : delta_bits - 32;
+        APP_ENC_NotifyChange(encoder, delta);
     }
 }
 
