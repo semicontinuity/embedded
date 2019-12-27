@@ -24,6 +24,7 @@
 
 #include <string.h>
 
+static volatile u32 transpose_enabled = 0;
 static volatile u32 i2c_reading_enabled = 0;
 static volatile u8 i2c_event = 0;
 
@@ -135,7 +136,7 @@ void receive(int board) {
 
 
 void send(u8 board) {
-    volatile u8 *buffer = (volatile u8 *) &mios32_srio_dout[0][0];
+    volatile u8 *buffer = (volatile u8 *) &mios32_srio_dout[0][0] + MIOS32_SRIO_NUM_SR - 16;
     i2c_transfer(
             MIOS32_IIC_IO_PORT,
             (MIOS32_IIC_IO_BASE_ADDRESS + board) << 1,
@@ -145,37 +146,37 @@ void send(u8 board) {
 }
 
 void transpose(u8 src_srio, u8 dst_srio, u8 bit) {
-    u8 value = mios32_srio_dout[0][src_srio];
-    u8 *dst = &mios32_srio_dout[0][dst_srio];
+    u8 value = mios32_srio_dout[0][MIOS32_SRIO_NUM_SR - src_srio - 1];
+    u8 *dst = &mios32_srio_dout[0][MIOS32_SRIO_NUM_SR - dst_srio - 1];
     u8 set_mask = 1U << bit;
     u8 clear_mask = ~set_mask;
 
     if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
-    ++dst;
+    --dst;
     value >>= 1U;
 
     if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
-    ++dst;
+    --dst;
     value >>= 1U;
 
     if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
-    ++dst;
+    --dst;
     value >>= 1U;
 
     if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
-    ++dst;
+    --dst;
     value >>= 1U;
 
     if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
-    ++dst;
+    --dst;
     value >>= 1U;
 
     if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
-    ++dst;
+    --dst;
     value >>= 1U;
 
     if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
-    ++dst;
+    --dst;
     value >>= 1U;
 
     if (value & 1U) *dst |= set_mask; else *dst &= clear_mask;
@@ -198,14 +199,17 @@ static void TASK_CommunicateWithHIDBoards(void *pvParameters)  {
         receive(2);
         receive(3);
 
-        transpose(20, 0, 1);
-        transpose(21, 8, 1);
-        transpose(22, 0, 2);
-        transpose(23, 8, 2);
-        transpose(24, 0, 4);
-        transpose(25, 8, 4);
-        transpose(26, 0, 5);
-        transpose(27, 8, 5);
+        if (transpose_enabled) {
+            // Bits: 0=round buttons; 2,3,4=Tracks B,G,R; 5,6,7=GP B,G,R
+            transpose(20, 0, 6);
+            transpose(21, 8, 6);
+            transpose(22, 0, 5);
+            transpose(23, 8, 5);
+            transpose(24, 0, 3);
+            transpose(25, 8, 3);
+            transpose(26, 0, 2);
+            transpose(27, 8, 2);
+        }
 
         send(0);
         send(1);
@@ -326,8 +330,17 @@ s32 SEQ_Mod_TerminalParseLine(char *input, void *_output_function)
         }
         else if (strcasecmp(parameter, "mod_read_i2c_off") == 0) {
             out("Switching off reading from I2C\n");
-            DEBUG_MSG("[DEBUG] Switching off reading from I2C\n");
             i2c_reading_enabled = 0;
+            return 1; // command taken
+        }
+        else if (strcasecmp(parameter, "mod_tran_on") == 0) {
+            out("Switching on transposing\n");
+            transpose_enabled = 1;
+            return 1; // command taken
+        }
+        else if (strcasecmp(parameter, "mod_tran_on") == 0) {
+            out("Switching off transposing\n");
+            transpose_enabled = 0;
             return 1; // command taken
         }
     }
