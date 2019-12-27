@@ -1,5 +1,5 @@
 set -o pipefail
-MIDI_OUT_PORT="${1:-MIOS32 MIDI 1}"
+MIDI_OUT_PORT="${1:-MIDIbox SEQ V4+ MIDI 1}"
 
 #
 # Possible to use
@@ -15,4 +15,4 @@ MIDI_OUT_PORT="${1:-MIOS32 MIDI 1}"
 | ./pc_keyboard_events_to_seq_keyboard_events.py "$(<pc_keyboard_events_to_seq_keyboard_events_mapping.json)" \
 | tee /dev/fd/2 \
 | ./seq_keyboard_events_to_seq_midi_events.py "$(<seq_keyboard_events_to_seq_midi_events_mapping_std.json)" \
-| ./write_midi.py "${MIDI_OUT_PORT}"
+| ./midi_write.py "${MIDI_OUT_PORT}"

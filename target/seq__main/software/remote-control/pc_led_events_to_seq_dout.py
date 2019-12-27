@@ -2,6 +2,9 @@
 import sys
 import json
 
+dout = [0] * 16
+
+
 def stdout_print(*args, **kwargs):
     print(*args, file=sys.stdout, **kwargs)
 
@@ -20,13 +23,25 @@ def run(mapping):
         line = sys.stdin.readline()
         if not line: break
 
-        event = line.strip();
-        action = mapping.get(event)
+        event = line.strip()
+        event_parts = event.split()
+        on_off = event_parts[0] == 'ON'
+        led = event_parts[1]
 
-        if action is None:
+        dout_pos = mapping.get(led)
+        if dout_pos is None:
             continue
 
-        stdout_print(action)
+        sr = dout_pos[0]
+        bit = dout_pos[1]
+        mask = 1 << bit
+
+        if on_off:
+            dout[sr] |= mask
+        else:
+            dout[sr] &= ~mask
+
+        stdout_print(sr, dout[sr])
         stdout_flush()
 
 
@@ -35,7 +50,6 @@ def main():
         sys.exit("Argument: 'json-with-mapping'")
 
     mapping = json.loads(sys.argv[1])
-    mapping = {with_tabs(k): with_tabs(v) for k, v in mapping.items()}
     run(mapping)
 
 
