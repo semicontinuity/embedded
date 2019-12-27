@@ -18,6 +18,7 @@
 
 #include "seq_mod.h"
 #include "app.h"
+#include "seq_hwcfg.h"
 
 #define PRIORITY_TASK_SCAN_HID_BOARDS (tskIDLE_PRIORITY + 3)
 
@@ -39,6 +40,24 @@ void SEQ_Mod_SendLedValues() {
     }
 }
 
+
+int encoder_value[SEQ_HWCFG_NUM_ENCODERS];
+int encoder_reported_value[SEQ_HWCFG_NUM_ENCODERS];
+
+// Because of detented encoders, normally, packs of 4 events are received.
+// Convert these "low-level" events to "high-level" delta events: 1 event per pack.
+void handleEncoderEvent(u8 encoder_index, s8 delta) {
+    int new_value = encoder_value[encoder_index] + delta;
+    int new_reported_value = new_value / 4;
+    int prev_reported_value = encoder_reported_value[encoder_index];
+    if (new_reported_value != prev_reported_value) {
+        // GP encoders are 1..16
+        APP_ENC_NotifyChange(encoder_index + 1, new_reported_value - prev_reported_value);
+        encoder_reported_value[encoder_index] = new_reported_value;
+    }
+    encoder_value[encoder_index] = new_value;
+}
+
 void handleEvent(u8 board, u8 event) {
     if (event & 0x80U) {
         // button event
@@ -54,7 +73,7 @@ void handleEvent(u8 board, u8 event) {
         u8 delta_bits = (event & 0x1FU);
         u8 encoder = event >> 5U;
         s8 delta = delta_bits < 16 ? delta_bits : delta_bits - 32;
-        APP_ENC_NotifyChange((board << 2U) + encoder + 1, delta);   // GP encoders are 1..16
+        handleEncoderEvent((board << 2U) + encoder, delta);
     }
 }
 
@@ -105,7 +124,7 @@ void receive(int board) {
                     u8 delta_bits = (event & 0x1FU);
                     u8 encoder = event >> 5U;
                     s8 delta = delta_bits < 16 ? delta_bits : delta_bits - 32;
-                    APP_ENC_NotifyChange((board << 2U) + encoder + 1, delta);   // GP encoders are 1..16
+                    handleEncoderEvent((board << 2U) + encoder, delta);
                 }
             }
         } else {
@@ -116,7 +135,7 @@ void receive(int board) {
 
 
 void send(u8 board) {
-    u8 *buffer = (u8 *) &mios32_srio_dout[0][0];
+    volatile u8 *buffer = (volatile u8 *) &mios32_srio_dout[0][0];
     i2c_transfer(
             MIOS32_IIC_IO_PORT,
             (MIOS32_IIC_IO_BASE_ADDRESS + board) << 1,
@@ -329,6 +348,11 @@ s32 SEQ_Mod_TerminalParseLine(char *input, void *_output_function)
 /////////////////////////////////////////////////////////////////////////////
 s32 SEQ_Mod_Init(u32 mode)
 {
+    for (int i = 0; i < SEQ_HWCFG_NUM_ENCODERS; i++) {
+        encoder_value[i] = 0;
+        encoder_reported_value[i] = 0;
+    }
+    
     MIOS32_IIC_Init(0);
 
     xTaskCreate(
