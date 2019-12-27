@@ -17,7 +17,7 @@ void initOutputPins0_7(GPIO_TypeDef *port);
 void initInputPins8_15(GPIO_TypeDef *port);
 
 
-inline void Set_System(void) {
+void Set_System(void) {
     RCC_Config();
 
     /* Enable GPIOC clock */
