@@ -44,7 +44,7 @@ static u8 charset_hbars[64] = {
 /////////////////////////////////////////////////////////////////////////////
 void APP_Init(void) {
     // initialize all LEDs
-    MIOS32_BOARD_LED_Init(0xffffffff);
+//    MIOS32_BOARD_LED_Init(0xffffffff);
     SEQ_TERMINAL_Init(0);
 
     MIOS32_LCD_DeviceSet(0);
