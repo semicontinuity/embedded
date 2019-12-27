@@ -5,12 +5,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_FILES
+        core/seq_mod.c
+        core/seq_mod.h
         mios32/tasks.c
         mios32/mios32_config.h
-
-        mod/seq_mod.h
-        mod/seq_mod.c
-
         core/app.c
         core/seq_hwcfg.c
         core/seq_ui.c
