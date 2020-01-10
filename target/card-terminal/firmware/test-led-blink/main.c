@@ -3,18 +3,17 @@
 #include <util/delay.h>
 
 int main(int argc, char **argv) {
+    MCUSR &= ~_BV(WDRF);
+    wdt_disable();
 
-	MCUSR &= ~_BV(WDRF);
-	wdt_disable();
+    DDRD |= _BV(DDD0);
 
-	DDRD |= _BV(DDD6);
+    while(1) {
+        PORTD |= _BV(PD0);
+        _delay_ms(1000);
+        PORTD &= ~_BV(PD0);
+        _delay_ms(1000);
+    }
 
-	while(1) {
-	    PORTD |= _BV(PD6);
-            _delay_ms(1000);
-	    PORTD &= ~_BV(PD6);
-            _delay_ms(1000);
-        }
-
-	return 0;
+    return 0;
 }
