@@ -11,6 +11,16 @@
 void mt12232_hal__init(void);
 
 /** Copy a part of page (8-pixel-high strip) from RAM to LCD memory */
-void mt12232_hal__send_strip(const uint8_t* data, const uint8_t page, const uint8_t x_from, const uint8_t x_to);
+void mt12232_hal__copy(const uint8_t page, const uint8_t x_from, const uint8_t x_to, const uint8_t* data);
+
+/** Fill with mask a part of page (8-pixel-high strip) */
+void mt12232_hal__fill_with(const uint8_t page, const uint8_t x_from, const uint8_t x_to, const uint8_t mask);
+
+/** AND with mask a part of page (8-pixel-high strip) */
+void mt12232_hal__and_with(const uint8_t page, const uint8_t x_from, const uint8_t x_to, const uint8_t mask);
+
+/** OR with mask a part of page (8-pixel-high strip) */
+void mt12232_hal__or_with(const uint8_t page, const uint8_t x_from, const uint8_t x_to, const uint8_t mask);
+
 
 #endif

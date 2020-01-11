@@ -8,6 +8,9 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         main.c
         __all__.c
+        ../../../../cpu/avr/drivers/display/mt12232_hal/lcd_graphics.c
+        ../../../../cpu/avr/drivers/display/mt12232_hal/lcd_graphics.h
+        ../../../../cpu/avr/drivers/display/mt12232_hal/mt12232_hal.h
         ../../../../cpu/avr/drivers/display/mt12232_hal/mt12232_hal.c
         ../../../../cpu/avr/drivers/display/mt12232_hal/mt12232_hal.h
         ../../../../cpu/avr/drivers/display/mt12232/lcd_graph_lib.c
