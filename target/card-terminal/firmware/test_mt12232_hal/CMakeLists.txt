@@ -8,6 +8,7 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         main.c
         __all__.c
+        ../../bsp/drivers/out/lcd_backlight.h
         ../../../../cpu/avr/drivers/display/mt12232_hal/lcd_graphics.c
         ../../../../cpu/avr/drivers/display/mt12232_hal/lcd_graphics.h
         ../../../../cpu/avr/drivers/display/mt12232_hal/mt12232_hal.h
@@ -26,3 +27,6 @@ add_definitions(-DF_CPU=16000000UL)
 
 add_definitions(-DMT12232__CS__PORT=D)
 add_definitions(-DMT12232__CS__PIN=1)
+
+add_definitions(-DOUT__LCD_BACKLIGHT__PORT=D)
+add_definitions(-DOUT__LCD_BACKLIGHT__PIN=0)

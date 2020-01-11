@@ -2,11 +2,11 @@
 //
 //  Author(s)...: Pashgan    http://ChipEnable.Ru   
 //
-//  Target(s)...: любая мега
+//  Target(s)...: пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 //
 //  Compiler....: IAR EWA 5.11A
 //
-//  Description.: драйвер графического индикатора МТ12232
+//  Description.: пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ12232
 //
 //  Data........: 16.01.10 
 //
@@ -26,7 +26,7 @@
 volatile unsigned char method = 1;
 volatile unsigned char flag = 0;
 
-//инициализация портов ввода/вывода
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅ
 void LCDG_InitPort(void)
 {
  DDRX_LCD_BUS = 0xff;
@@ -40,13 +40,13 @@ void LCDG_InitPort(void)
  SetBit(PORT_LCD_RES, RES);
 }
 
-//функция чтения флага занятости
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void LCDG_WaitFLAG_BUSY(void)
 {
   unsigned char stat;
-  DDRX_LCD_BUS = 0;                    //конфигурируем порт на вход
+  DDRX_LCD_BUS = 0;                    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
   PORT_LCD_BUS = 0xff;  
-  SetBit(PORT_LCD_CON, RD_WR);         //выставляем управляющие сигналы
+  SetBit(PORT_LCD_CON, RD_WR);         //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   ClearBit(PORT_LCD_CON, AO); 
   asm("nop");
   asm("nop");
@@ -57,7 +57,7 @@ void LCDG_WaitFLAG_BUSY(void)
   asm("nop");
   asm("nop");  
   asm("nop");  
-  stat = PIN_LCD_BUS;                 //считываем статусный байт
+  stat = PIN_LCD_BUS;                 //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
   asm("nop");
   asm("nop");
   asm("nop");
@@ -65,16 +65,16 @@ void LCDG_WaitFLAG_BUSY(void)
   asm("nop"); 
   SetBit(PORT_LCD_EN, EN);
   }
-  while((stat & (1<<FLAG_BUSY)) != 0); //сидим в цикле пока не сбросится флаг
-  DDRX_LCD_BUS = 0xff;                 //делаем порт снова выходом
+  while((stat & (1<<FLAG_BUSY)) != 0); //пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+  DDRX_LCD_BUS = 0xff;                 //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   PORT_LCD_BUS = 0;  
 }
 
-//функция чтения байта данных из lcd
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ lcd
 unsigned char LCDG_ReadData(void)
 {
   unsigned char data;
-  DDRX_LCD_BUS = 0;                   //конфигурируем порт на вход 
+  DDRX_LCD_BUS = 0;                   //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ 
   PORT_LCD_BUS = 0xff;
   SetBit(PORT_LCD_CON, RD_WR);
   SetBit(PORT_LCD_CON, AO);  
@@ -88,13 +88,13 @@ unsigned char LCDG_ReadData(void)
   asm("nop"); 
   data = PIN_LCD_BUS;
   SetBit(PORT_LCD_EN, EN);
-  //делаем порт снова выходом
+  //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   DDRX_LCD_BUS = 0xff;
   PORT_LCD_BUS = 0;    
   return data;
 }
 
-//общая функция
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 inline void LCDG_CommonFunc(unsigned char data)
 {
   ClearBit(PORT_LCD_CON, RD_WR);
@@ -110,7 +110,7 @@ inline void LCDG_CommonFunc(unsigned char data)
   SetBit(PORT_LCD_EN, EN);
 }
 
-//запись команды на lcd
+//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ lcd
 void LCDG_SendCom(unsigned char data)
 {
   LCDG_WaitFLAG_BUSY();                   
@@ -118,7 +118,7 @@ void LCDG_SendCom(unsigned char data)
   LCDG_CommonFunc(data);
 }
 
-//вывод данных на lcd
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ lcd
 void LCDG_SendData(unsigned char data)
 {
   LCDG_WaitFLAG_BUSY();
@@ -126,17 +126,17 @@ void LCDG_SendData(unsigned char data)
   LCDG_CommonFunc(data);
 }
 
-//функция инициализации lcd
-//подает сигнал сброса
-//настраивает правый и левый контроллеры
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ lcd
+//пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void LCDG_InitLcd(void)
 {
-/*
+  // not sure this is really needed, there is hardware reset circuit
   ClearBit(PORT_LCD_RES, RES);
-  _delay_ms(400);
+  _delay_us(11);
   SetBit(PORT_LCD_RES, RES);
-  _delay_ms(400);
-*/  
+  _delay_us(11);
+
   SelectLeftChip();
   LCDG_SendCom(COM_CLEAR_RMW);
   LCDG_SendCom(COM_STATIC_DRIVE_OFF);
@@ -156,7 +156,7 @@ void LCDG_InitLcd(void)
   LCDG_SendCom(COM_START_LINE(0));  
 }
 
-//функция очистки lcd
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ lcd
 void LCDG_ClrDisp(unsigned char x1, unsigned char x2)
 {
 unsigned char xPos = x1;
@@ -190,13 +190,13 @@ while(xPos < x2){
 } 
 }
 
-//установка метода вывода 
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ 
 inline void LCDG_SetMethod(unsigned char met)
 {
   method = met;  
 }
 
-//отображает один пиксел на экране
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 void LCDG_PutPixel(unsigned char xPos, unsigned char yPos)
 {
 unsigned char realAdr;
@@ -233,15 +233,15 @@ unsigned char currentData;
 }
 
 
-//Знакогенератор____________________________________________________________________________
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ____________________________________________________________________________
 
-//устанавливает флаг инверсии
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 inline void LCDG_SetInv(unsigned char f)
 {
   flag = f; 
 }
 
-//отображает один символ на жкд
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ
 //unsigned char PlaceArray[] = {0,8,16,24,32,40,48,56,64,72,80,88,96,104,112};
 //unsigned char PlaceArray[] = {0,7,14,21,28,35,42,49,56,63,70,77,84,91,98,105,112};
 unsigned char PlaceArray[] = {0,6,12,18,24,30,36,42,48,54,60,66,72,78,84,90,96,102,108,114};
@@ -276,7 +276,7 @@ xPos = realAdr;
   }
 }
 
-//отображает на жкд строку из ОЗУ
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ
 void LCDG_SendString(unsigned char xPos, unsigned char yPos, char * string)
 {
   char data = 0;
@@ -288,7 +288,7 @@ void LCDG_SendString(unsigned char xPos, unsigned char yPos, char * string)
 }
 
 
-//отображает на жкд строку из флэш памяти
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 void LCDG_SendStringFl(unsigned char xPos, unsigned char yPos, char *string /*PROGMEM*/)
 {
   unsigned char data = pgm_read_byte(string);
@@ -301,7 +301,7 @@ void LCDG_SendStringFl(unsigned char xPos, unsigned char yPos, char *string /*PR
 }
 
 /****************************************************************************/
-/*  Функция вывода прямой по алгоритму Брезенхема                           */
+/*  пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ                           */
 /****************************************************************************/
 void LCDG_DrawLine(unsigned char x1, unsigned char y1, unsigned char x2, unsigned char y2)
 {
@@ -349,7 +349,7 @@ void LCDG_DrawLine(unsigned char x1, unsigned char y1, unsigned char x2, unsigne
 
 
 /****************************************************************************/
-/*  Функция вывода круга                                                    */
+/*  пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ                                                    */
 /****************************************************************************/
 void LCDG_DrawCircle(unsigned char xc,unsigned char yc,unsigned char r)
 {
@@ -380,7 +380,7 @@ void LCDG_DrawCircle(unsigned char xc,unsigned char yc,unsigned char r)
 }
 
 /****************************************************************************/
-/*  Функция рисования прямоугольника                                        */
+/*  пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ                                        */
 /****************************************************************************/
 void LCDG_DrawRect(unsigned char x1, unsigned char y1, unsigned char x2, unsigned char y2, unsigned char fill)
 {

@@ -1,11 +1,20 @@
 #include <util/delay.h>
+#include "drivers/out/lcd_backlight.h"
 #include "cpu/avr/drivers/display/mt12232_hal/mt12232_hal.h"
 #include "cpu/avr/drivers/display/mt12232_hal/lcd_graphics.h"
 
 uint8_t buffer[122];
 
-int main(int argc, char **argv) {
+
+void application__init(void) {
+    lcd_backlight__init();
     mt12232_hal__init();
+}
+
+
+int main(void) __attribute__ ((naked));
+int main(void) {
+    lcd_backlight__set(1);
 
 /*
     for (uint8_t i = 0; i < 122; i++) {
