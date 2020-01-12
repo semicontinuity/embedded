@@ -76,3 +76,47 @@ void lcd_graphics__fill_rect(
         }
     }
 }
+
+
+static uint8_t lcd_graphics__bit_blt_mask(uint8_t topBit, uint8_t bottomBit)
+{
+    return (0xFFU >> (8U - bottomBit)) & (0xFFU << topBit);
+}
+
+void lcd_graphics__bit_blt(
+        uint8_t *src,
+        const uint8_t srcStride,
+        const uint8_t dstX,
+        const uint8_t dstY,
+        const uint8_t width,
+        const uint8_t height)
+{
+    uint8_t page = dstY >> 3U;
+    uint8_t toY = dstY + height;
+    uint8_t finalPage = ((uint8_t)(toY - 1U)) >> 3U;
+
+    // TODO optimize and make clear (e.g. with (x & 0xF8))
+    uint8_t pivotBit = dstY - (page << 3U);
+    uint8_t topShift = 8 - pivotBit;
+    uint8_t bottomShift = pivotBit;
+
+    while (page <= finalPage) {
+        const int topBit = pivotBit;
+        const int bottomBit = toY - (finalPage << 3U);
+
+        if ((pivotBit == 0 || topBit < pivotBit) && topShift < 8) {
+            mt12232_hal__blt_with_right_shift(
+                    page, dstX, dstX + width, topShift,
+                    lcd_graphics__bit_blt_mask(topBit, bottomBit > pivotBit ? pivotBit : bottomBit), 1U, src
+            );
+            src += srcStride;
+        }
+        if (bottomBit > pivotBit && pivotBit != 0) {
+            mt12232_hal__blt_with_left_shift(
+                    page, dstX, dstX + width, bottomShift,
+                    lcd_graphics__bit_blt_mask(topBit, pivotBit < bottomBit ? pivotBit : bottomBit), 1U, src
+            );
+        }
+        ++page;
+    }
+}

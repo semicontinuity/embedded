@@ -15,3 +15,11 @@ void lcd_graphics__color__set(const uint8_t color);
  * @param height    height of rectangle
  */
 void lcd_graphics__fill_rect(const uint8_t x, const uint8_t y, const uint8_t width, const uint8_t height);
+
+void lcd_graphics__bit_blt(
+        uint8_t *src,
+        const uint8_t srcStride,
+        const uint8_t dstX,
+        const uint8_t dstY,
+        const uint8_t width,
+        const uint8_t height);

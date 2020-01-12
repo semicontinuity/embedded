@@ -23,4 +23,22 @@ void mt12232_hal__and_with(const uint8_t page, const uint8_t x_from, const uint8
 void mt12232_hal__or_with(const uint8_t page, const uint8_t x_from, const uint8_t x_to, const uint8_t mask);
 
 
+void mt12232_hal__blt_with_right_shift(
+        const uint8_t page,
+        const uint8_t x_from,
+        const uint8_t x_to,
+        const uint8_t shift,
+        const uint8_t mask,
+        const uint8_t set_bits_flag,
+        volatile uint8_t *src);
+
+void mt12232_hal__blt_with_left_shift(
+        const uint8_t page,
+        const uint8_t x_from,
+        const uint8_t x_to,
+        const uint8_t shift,
+        const uint8_t mask,
+        const uint8_t set_bits_flag,
+        uint8_t *src);
+
 #endif
