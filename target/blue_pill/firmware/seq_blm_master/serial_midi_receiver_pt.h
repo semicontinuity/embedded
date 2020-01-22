@@ -2,13 +2,14 @@
 #include <Arduino.h>
 #include <stdbool.h>
 #include <pt.h>
-#include "sysex_handler.h"
 #include "midi_package.h"
-#include "midi_parser_channel_msg_callbacks.h"
+#include "midi_parser_callbacks__channel_msg.h"
+#include "midi_parser_callbacks__sysex_msg.h"
 
 
 static struct pt serial_midi_receiver__thread;
 static uint8_t serial_midi_receiver__running_status;
+static uint8_t serial_midi_receiver__byte;
 
 void serial_midi_receiver__init() {
     Serial2.begin(31250);
@@ -39,7 +40,7 @@ int serial_midi_receiver__run() {
                 b = Serial2.read();
                 if (b >= 0x80) break;   // scrap current payload and re-parse as with this byte as beginning of the message
 
-                uint8_t p0 = b;
+                serial_midi_receiver__byte = b;
                 uint8_t p1 = 0;
 
                 // messages 0xCx and 0xDx have highest 3 bits = 110; they have 1-byte payloads..
@@ -54,9 +55,9 @@ int serial_midi_receiver__run() {
                 midi_package_t midi_package;
                 midi_package.cin_cable = 0;
                 midi_package.evnt0 = serial_midi_receiver__running_status;
-                midi_package.evnt1 = p0;
+                midi_package.evnt1 = serial_midi_receiver__byte;
                 midi_package.evnt2 = p1;
-                midi_channel_msg(midi_package);
+                midi_parser__on_channel_msg(midi_package);
             }
         } else {
             // system common, system exclusive, or real-time messages
@@ -66,12 +67,12 @@ int serial_midi_receiver__run() {
                     PT_YIELD(pt);
                     b = Serial2.read();
                     if (b < 0x80) {
-                        sysex__data(b);
+                        midi_parser__on_sysex_data(b);
                     } else {
                         if (b == 0xF7) {
-                            sysex__finish();
+                            midi_parser__on_sysex_finish();
                         } else {
-                            sysex__error();
+                            midi_parser__on_sysex_error();
                         }
                         break;
                     }

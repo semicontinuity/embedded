@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "sysex_handler.h"
+#include "midi_parser_callbacks__sysex_msg.h"
 #include "sysex_handler_blm_callbacks.h"
 
 static uint8_t sysex_blm__command;
@@ -7,7 +7,7 @@ static uint8_t sysex_blm__command_length;
 
 
 
-void sysex__data(uint8_t data) {
+void midi_parser__on_sysex_data(uint8_t data) {
     if (!sysex_blm__command_length) {
         sysex_blm__command = data;
     }
@@ -15,7 +15,7 @@ void sysex__data(uint8_t data) {
 }
 
 
-void sysex__finish() {
+void midi_parser__on_sysex_finish() {
     if (sysex_blm__command_length == 1) {
         switch (sysex_blm__command) {
             case 0x00:
@@ -38,7 +38,7 @@ void sysex__finish() {
 }
 
 
-void sysex__error() {
+void midi_parser__on_sysex_error() {
     sysex_blm__handle_invalid_command();
     sysex_blm__command_length = 0;
 }
