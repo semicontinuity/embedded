@@ -6,9 +6,6 @@ set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_FILES
         seq_blm_master.ino
-#        seq_blm_master.h
-#        midiXparser.cpp
-#        midiXparser.h
         midi_package.h
         midi_handler_blm.h
         serial_midi_receiver_pt.h
@@ -27,7 +24,7 @@ include_directories(
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/usb/usb_lib
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/usb/stm32f1
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/EEPROM
-        /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/WireSlave/src
+        /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire
 )
 
 add_executable(${SOURCE_FILES})

@@ -16,7 +16,7 @@
 void setup() {
     pinMode(PA5, OUTPUT);
     pinMode(PA1, OUTPUT);
-
+    blm_boards_comm__init();
     serial_midi_receiver__init();
 }
 
