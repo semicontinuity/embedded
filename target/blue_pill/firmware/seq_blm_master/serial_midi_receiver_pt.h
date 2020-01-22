@@ -1,73 +1,44 @@
-#include "midiXparser.h"
-#include "midi_package.h"
+#define LC_INCLUDE "lc-addrlabels.h"
+#include <Arduino.h>
+#include <stdbool.h>
+#include <pt.h>
 #include "sysex_handler.h"
 
-midiXparser midiSerial[SERIAL_INTERFACE_MAX];
+static struct pt task_midi_receiver__thread;
+
+void serial_midi_receiver__init() {
+    Serial2.begin(31250);
+    PT_INIT(&task_midi_receiver__thread);
+}
+
+bool serial_midi_receiver__is_runnable() {
+    return Serial2.available();
+}
 
 
-void serial_midi_receiver__handle_non_sysex_message(midi_package_t p);
+int serial_midi_receiver__run() {
+    struct pt *pt = &task_midi_receiver__thread;
+    PT_BEGIN(pt);
+    for (;;) {
+        uint8_t first = Serial2.read();
+        if (first != 0xF0) PT_RESTART(pt);
 
+        uint8_t b;
+        while (true) {
+            PT_YIELD(pt);
+            b = Serial2.read();
 
-void serial_midi_receiver__process_sysex_message(uint8_t cable, midiXparser *xpMidi) {
-    if (xpMidi->wasSysExMode()) {
-        if (xpMidi->isSysExError()) {
-            sysex__error();
-        } else {
-            sysex__finish();
-        }
-    } else {
-        uint8_t b = xpMidi->getByte();
-        if (b != 0xf0) {
+            if (b >= 0x80) break;
             sysex__data(b);
         }
-    }
-}
 
-void serial_midi_receiver__process_non_sysex_message(uint8_t cable, midiXparser *xpMidi) {
-    midi_package_t p {.ALL = 0};
-    p.cin_cable = cable << 4;
-
-    uint8_t msgLen = xpMidi->getMidiMsgLen();
-    uint8_t msgType = xpMidi->getMidiMsgType();
-
-    p.cin_cable = cable << 4;
-    memcpy(&p.evnt0, &(xpMidi->getMidiMsg()[0]), msgLen);
-
-    // Real time single byte message CIN F->
-    if (msgType == midiXparser::realTimeMsgTypeMsk) p.cin_cable += 0xF;
-    else
-
-        // Channel voice message => CIN A-E
-    if (msgType == midiXparser::channelVoiceMsgTypeMsk)
-        p.cin_cable += ((xpMidi->getMidiMsg()[0]) >> 4);
-    else
-
-        // System common message CIN 2, 3 or 5
-    if (msgType == midiXparser::systemCommonMsgTypeMsk) {
-        // 5 -  single-byte system common message (Tune request is the only case)
-        if (msgLen == 1) p.cin_cable += 5;
-
-            // 2/3 - two/three bytes system common message
-        else p.cin_cable += msgLen;
-    } else return; // We should never be here !
-
-    serial_midi_receiver__handle_non_sysex_message(p);
-}
-
-
-void serial_midi_receiver__init(void) {
-    Serial2.begin(31250);
-    midiSerial[1].setMidiMsgFilter(midiXparser::allMsgTypeMsk);
-}
-
-void serial_midi_receiver__run() {
-    if (Serial2.available()) {
-        midiSerial[1].parse(Serial2.read());
-        if (midiSerial[1].getMidiMsgType() == midiXparser::sysExMsgTypeMsk) {
-            serial_midi_receiver__process_sysex_message(1, &midiSerial[1]);
+        if (b == 0xF7) {
+            sysex__finish();
         } else {
-            // Not a sysex. The message is complete.
-            serial_midi_receiver__process_non_sysex_message(1, &midiSerial[1]);
+            sysex__error();
         }
+
+        PT_RESTART(pt);
     }
+    PT_END(pt);
 }

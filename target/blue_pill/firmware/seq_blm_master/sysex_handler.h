@@ -1,2 +1,3 @@
-void SerialMidi_ProcessSysEx(uint8_t cable, midiXparser *xpMidi) {
-}
+void sysex__data(uint8_t data);
+void sysex__finish();
+void sysex__error();

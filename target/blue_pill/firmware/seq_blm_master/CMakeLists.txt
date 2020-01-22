@@ -11,8 +11,8 @@ set(SOURCE_FILES
 #        midiXparser.h
         midi_package.h
         serial_midi_receiver_pt.h
-        serial_midi_sender_pt.h
         sysex_handler_blm.h
+        sysex_handler_blm_arduino.h
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/variants/maple/board.cpp
         )
 
