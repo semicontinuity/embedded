@@ -10,6 +10,7 @@ set(SOURCE_FILES
 #        midiXparser.cpp
 #        midiXparser.h
         midi_package.h
+        midi_handler_blm.h
         serial_midi_receiver_pt.h
         sysex_handler_blm.h
         sysex_handler_blm_arduino.h
