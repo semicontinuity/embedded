@@ -7,6 +7,8 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         seq_blm_master.ino
         midi_package.h
+        midi_parser.h
+        midi_parser__pt.h
         midi_handler_blm.h
         serial_midi_receiver_pt.h
         sysex_handler_blm.h
