@@ -3,14 +3,9 @@
 #include "midi_parser_callbacks__channel_msg.h"
 #include "blm_boards_leds.h"
 
-uint8_t led_state2 = 0;
-uint8_t led_state = 0;
-
 
 // 9<row> <column> <colour>
 static void handle_single_led_change_event(midi_package_t midi_package) {
-    digitalWrite(PA1, led_state = ~led_state);
-
     uint8_t row = midi_package.chn;
     uint8_t column = midi_package.note;
     uint8_t local_x = column & 0x03U;
@@ -21,7 +16,7 @@ static void handle_single_led_change_event(midi_package_t midi_package) {
     uint8_t green = (colour & 0x20U) ? 0xFF : 0x00;
     uint8_t red = (colour & 0x40U) ? 0xFF : 0x00;
 
-    uint8_t matrix_x = column >> 2U;
+    uint8_t matrix_x = ((uint8)(column >> 2U)) & 0x03U;
     uint8_t matrix_y = row >> 2U;
 
     blm_boards_leds__update_one(matrix_x, matrix_y, local_x, local_y, red, green, 0);
@@ -33,7 +28,7 @@ static void update_leds_in_column(uint8_t column, uint8_t is_second_half, uint8_
 
 
 static void update_leds_in_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
-    digitalWrite(PA5, led_state2 = ~led_state2);
+
 }
 
 

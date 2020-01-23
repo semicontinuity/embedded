@@ -5,9 +5,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_FILES
-        blm_boards_leds__state.h
         blm_boards_leds.h
 #        blm_boards_leds__i2c_arduino.h
+        blm_boards_leds__state.h
         blm_boards_leds__state_updater.h
         blm_boards_leds__state_scanner.h
         blm_boards_leds__comm_debug_arduino_serial_midi.h

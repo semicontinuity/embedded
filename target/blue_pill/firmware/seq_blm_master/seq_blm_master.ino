@@ -5,10 +5,10 @@
 // GLOBALS
 ///////////////////////////////////////////////////////////////////////////////
 
-//#include "blm_boards_leds__state.h"
-//#include "blm_boards_leds__state_updater.h"
-//#include "blm_boards_leds__state_scanner.h"
-#include "blm_boards_leds__i2c_arduino.h"
+#include "blm_boards_leds__state.h"
+#include "blm_boards_leds__state_updater.h"
+#include "blm_boards_leds__state_scanner.h"
+//#include "blm_boards_leds__i2c_arduino.h"
 #include "blm_boards_leds__comm_debug_arduino_serial_midi.h"
 #include "midi_package.h"
 #include "midi_parser__pt.h"
@@ -22,7 +22,7 @@
 void setup() {
     pinMode(PA5, OUTPUT);
     pinMode(PA1, OUTPUT);
-//    blm_boards_leds__init();
+    blm_boards_leds__init();
     midi_parser__init();
     serial_midi_receiver__init();
 }
@@ -30,5 +30,5 @@ void setup() {
 
 void loop() {
     serial_midi_receiver__run();
-//    blm_boards_leds__state_scanner__run();
+    blm_boards_leds__state_scanner__run();
 }
