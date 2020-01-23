@@ -51,22 +51,23 @@ void debug_updater32(uint8_t param, uint32_t v) {
 }
 
 
-void blm_boards_leds__update_one(
-    uint8_t matrix_x,
-    uint8_t matrix_y,
-    uint8_t local_x,
-    uint8_t local_y,
-    uint8_t r,
-    uint8_t g,
-    uint8_t b)
-{
+void blm_boards_leds__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
+    uint8_t local_x = column & 0x03U;
+    uint8_t local_y = row & 0x03U;
+
+    uint8_t green = (color_code & 0x20U) ? 0xFF : 0x00;
+    uint8_t red = (color_code & 0x40U) ? 0xFF : 0x00;
+
+    uint8_t matrix_x = ((uint8)(column >> 2U)) & 0x03U;
+    uint8_t matrix_y = row >> 2U;
+
     uint8_t matrix = (matrix_y << 2U) + matrix_x;
     debug_updater8(1, matrix);
     uint8_t led = (local_y << 2U) + local_x;
     debug_updater8(2, led);
     uint32_t requested = blm_boards_leds__state__requested[matrix];
-    if (g) { requested |= (1U << led); } else { requested &= ~(1U << led);}
-    if (r) { requested |= (1U << (led + 16U)); } else { requested &= ~(1U << (led + 16U));}
+    if (green) { requested |= (1U << led); } else { requested &= ~(1U << led); }
+    if (red) { requested |= (1U << (led + 16U)); } else { requested &= ~(1U << (led + 16U)); }
 
     debug_updater32(0x10, blm_boards_leds__state__current[matrix]);
     debug_updater32(0x11, requested);

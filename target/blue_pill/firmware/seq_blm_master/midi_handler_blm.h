@@ -8,17 +8,8 @@
 static void handle_single_led_change_event(midi_package_t midi_package) {
     uint8_t row = midi_package.chn;
     uint8_t column = midi_package.note;
-    uint8_t local_x = column & 0x03U;
-    uint8_t local_y = row & 0x03U;
-
     uint8_t colour = midi_package.velocity;
-    uint8_t green = (colour & 0x20U) ? 0xFF : 0x00;
-    uint8_t red = (colour & 0x40U) ? 0xFF : 0x00;
-
-    uint8_t matrix_x = ((uint8)(column >> 2U)) & 0x03U;
-    uint8_t matrix_y = row >> 2U;
-
-    blm_boards_leds__update_one(matrix_x, matrix_y, local_x, local_y, red, green, 0);
+    blm_boards_leds__update_one(row, column, colour);
 }
 
 
