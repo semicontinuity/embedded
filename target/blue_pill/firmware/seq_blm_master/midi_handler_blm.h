@@ -54,7 +54,8 @@ static void handle_packed_leds_change_event(midi_package_t midi_package) {
             if (chn == 0) {
                 blm_boards_leds__update_extra_row(is_second_half, pattern, cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
             } else if (chn == 15) {
-                update_extra_leds(is_second_half, pattern, cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
+                blm_boards_leds__update_extra(is_second_half, pattern,
+                                              cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
             }
             break;
     }

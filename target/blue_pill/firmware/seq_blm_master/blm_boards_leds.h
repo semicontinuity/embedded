@@ -9,4 +9,4 @@ void blm_boards_leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pa
 void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color);
 void blm_boards_leds__update_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color);
 void blm_boards_leds__update_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color);
-void update_extra_leds(uint8_t is_second_half, uint8_t pattern, uint8_t color);
+void blm_boards_leds__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color);

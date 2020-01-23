@@ -105,5 +105,5 @@ void blm_boards_leds__update_extra_row(uint8_t is_second_half, uint8_t pattern, 
 }
 
 
-void update_extra_leds(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void blm_boards_leds__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
 }
