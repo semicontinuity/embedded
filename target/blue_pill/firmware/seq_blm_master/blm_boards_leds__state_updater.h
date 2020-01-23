@@ -78,6 +78,18 @@ void blm_boards_leds__update_one(uint8_t row, uint8_t column, uint8_t color_code
 
 
 void blm_boards_leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+    uint8_t matrix = ((row >> 2U) << 2U) + (is_second_half ? 2 : 0);
+    uint8_t shift = (color ? 16 : 0) + ((row & 0x03U) << 2U);
+    uint32_t mask = ~(0x000FU << shift);
+    uint32_t requested;
+
+    requested = blm_boards_leds__state__requested[matrix];
+    blm_boards_leds__state__requested[matrix] = (requested & mask) | ((pattern & 0x0FU) << shift);
+
+    ++matrix;
+
+    requested = blm_boards_leds__state__requested[matrix];
+    blm_boards_leds__state__requested[matrix] = (requested & mask) | (((pattern >> 4U) & 0x0FU) << shift);
 }
 
 
