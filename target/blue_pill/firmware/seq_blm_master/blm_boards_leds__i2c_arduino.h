@@ -1,16 +1,16 @@
 #include <Wire.h>
 #include <stdint.h>
-#include "blm_boards_comm.h"
+#include "blm_boards_leds.h"
 
 TwoWire Wire2(2);
 
 
-void blm_boards_comm__init() {
+void blm_boards_leds__init() {
     Wire2.begin();
 }
 
 
-void blm_boards_comm__set_led(
+void blm_boards_leds__set_one(
         uint8_t matrix_x,
         uint8_t matrix_y,
         uint8_t local_x,

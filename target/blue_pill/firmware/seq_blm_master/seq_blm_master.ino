@@ -12,13 +12,13 @@
 #include "serial_midi_receiver_pt.h"
 #include "sysex_handler_blm.h"
 #include "sysex_handler_blm_arduino.h"
-#include "blm_boards_comm_i2c_arduino.h"
+#include "blm_boards_leds__i2c_arduino.h"
 
 
 void setup() {
     pinMode(PA5, OUTPUT);
     pinMode(PA1, OUTPUT);
-    blm_boards_comm__init();
+    blm_boards_leds__init();
     midi_parser__init();
     serial_midi_receiver__init();
 }
