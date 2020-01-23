@@ -11,7 +11,6 @@ static void handle_single_led_change_event(midi_package_t midi_package) {
     uint8_t local_x = column & 0x03U;
     uint8_t local_y = row & 0x03U;
 
-
     uint8_t colour = midi_package.velocity;
     uint8_t green = (colour & 0x20U) ? 0xFF : 0x00;
     uint8_t red = (colour & 0x40U) ? 0xFF : 0x00;
@@ -20,26 +19,6 @@ static void handle_single_led_change_event(midi_package_t midi_package) {
     uint8_t matrix_y = row >> 2U;
 
     blm_boards_leds__update_one(matrix_x, matrix_y, local_x, local_y, red, green, 0);
-}
-
-
-static void update_leds_in_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
-}
-
-
-static void update_leds_in_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
-
-}
-
-
-static void update_leds_in_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
-}
-
-
-static void update_leds_in_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
-}
-
-static void update_extra_leds(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
 }
 
 
@@ -58,14 +37,14 @@ static void handle_packed_leds_change_event(midi_package_t midi_package) {
 #if BLM_SCALAR_NUM_COLOURS >= 2
             case 0x20:
 #endif
-            update_leds_in_row(chn, is_second_half, pattern, cc_number_masked == 0x10 ? 0 : 1 /* green or red */);  // or just shift to get color
+            blm_boards_leds__update_row(chn, is_second_half, pattern, cc_number_masked == 0x10 ? 0 : 1 /* green or red */);  // or just shift to get color
             break;
 
         case 0x18:
 #if BLM_SCALAR_NUM_COLOURS >= 2
             case 0x28:
 #endif
-            update_leds_in_column(chn, is_second_half, pattern, cc_number_masked == 0x18 ? 0 : 1 /* green or red */);   // or just shift to get color
+            blm_boards_leds__update_column(chn, is_second_half, pattern, cc_number_masked == 0x18 ? 0 : 1 /* green or red */);   // or just shift to get color
             break;
 
         case 0x40:
@@ -73,7 +52,7 @@ static void handle_packed_leds_change_event(midi_package_t midi_package) {
             case 0x48:
 #endif
             if (chn == 0) {
-                update_leds_in_extra_column(is_second_half, pattern, cc_number_masked == 0x40 ? 0 : 1 /* green or red */);
+                blm_boards_leds__update_extra_column(is_second_half, pattern, cc_number_masked == 0x40 ? 0 : 1 /* green or red */);
             }
             break;
 
@@ -82,7 +61,7 @@ static void handle_packed_leds_change_event(midi_package_t midi_package) {
             case 0x68:
 #endif
             if (chn == 0) {
-                update_leds_in_extra_row(is_second_half, pattern, cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
+                blm_boards_leds__update_extra_row(is_second_half, pattern, cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
             } else if (chn == 15) {
                 update_extra_leds(is_second_half, pattern, cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
             }
