@@ -1,9 +1,8 @@
 #include <Arduino.h>
-#include <Wire.h>
 
 #include "midi_parser_callbacks__channel_msg.h"
+#include "blm_boards_comm.h"
 
-TwoWire Wire2(2);
 uint8_t led_state2 = 0;
 uint8_t led_state = 0;
 
@@ -14,20 +13,18 @@ static void handle_single_led_change_event(midi_package_t midi_package) {
 
     uint8_t row = midi_package.chn;
     uint8_t column = midi_package.note;
-    uint8_t matrix = column >> 2U;
-    uint8_t x = column & 0x03U;
-    uint8_t n = (row << 2U) + x;
+    uint8_t local_x = column & 0x03U;
+    uint8_t local_y = row & 0x03U;
+
 
     uint8_t colour = midi_package.velocity;
     uint8_t green = (colour & 0x20U) ? 0xFF : 0x00;
     uint8_t red = (colour & 0x40U) ? 0xFF : 0x00;
 
-    Wire2.beginTransmission(0x20 + matrix);
-    Wire2.write(n);
-    Wire2.write(red);
-    Wire2.write(green);
-    Wire2.write(0);
-    Wire2.endTransmission();
+    uint8_t matrix_x = column >> 2U;
+    uint8_t matrix_y = row >> 2U;
+
+    blm_boards_comm__set_led(matrix_x, matrix_y, local_x, local_y, red, green, 0);
 }
 
 
@@ -102,6 +99,9 @@ static void handle_packed_leds_change_event(midi_package_t midi_package) {
 }
 
 
+// Implementation of callbacks from midi_parser_callbacks__channel_msg
+// -----------------------------------------------------------------------------
+
 void midi_parser__on_channel_msg(midi_package_t midi_package) {
     if (midi_package.event == NoteOff || midi_package.event == NoteOn) {
         // control the Duo-LEDs via Note On/Off Events
@@ -116,8 +116,4 @@ void midi_parser__on_channel_msg(midi_package_t midi_package) {
         // "check for packed format" which is transfered via CCs
         handle_packed_leds_change_event(midi_package);
     }
-}
-
-void blm_boards_comm__init() {
-    Wire2.begin();
 }
