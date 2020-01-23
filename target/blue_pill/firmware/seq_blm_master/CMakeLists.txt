@@ -11,7 +11,12 @@ set(SOURCE_FILES
         serial_midi_receiver_pt.h
         sysex_handler_blm.h
         sysex_handler_blm_arduino.h
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c.c
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c_f1.c
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/variants/maple/board.cpp
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/utility/WireBase.cpp
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/utility/WireBase.h
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/Wire.cpp
         )
 
 include_directories(

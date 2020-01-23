@@ -23,6 +23,6 @@ void setup() {
 
 void loop() {
     if (serial_midi_receiver__is_runnable()) {
-        serial_midi_receiver__run();
+        serial_midi_receiver__run(Serial2.read());
     }
 }

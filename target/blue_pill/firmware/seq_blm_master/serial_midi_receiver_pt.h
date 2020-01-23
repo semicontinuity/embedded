@@ -21,13 +21,12 @@ bool serial_midi_receiver__is_runnable() {
 }
 
 // no REALTIME support
-int serial_midi_receiver__run() {
+int serial_midi_receiver__run(uint8_t b) {
     struct pt *pt = &serial_midi_receiver__thread;
     PT_BEGIN(pt);
 
-    int b = Serial2.read();
     if (b < 0x80) {
-        PT_RESTART(pt);           // discard bytes 00..7F, because running status byte is not defined
+        PT_RESTART(pt); // discard bytes 00..7F, because running status byte is not defined yet
     }
 
     while (true) {
@@ -37,7 +36,6 @@ int serial_midi_receiver__run() {
 
             while (true) {
                 PT_YIELD(pt);
-                b = Serial2.read();
                 if (b >= 0x80) break;   // scrap current payload and re-parse as with this byte as beginning of the message
 
                 serial_midi_receiver__byte = b;
@@ -47,7 +45,6 @@ int serial_midi_receiver__run() {
                 if ((serial_midi_receiver__running_status & 0xE0U) != 0xC0U) {
                     // for other messages, read extra byte
                     PT_YIELD(pt);
-                    b = Serial2.read();
                     if (b >= 0x80) break;   // scrap current payload and re-parse as with this byte as beginning of the message
                     p1 = b;
                 }
@@ -65,7 +62,6 @@ int serial_midi_receiver__run() {
             if (b == 0xF0) {    // sysex start
                 while (true) {
                     PT_YIELD(pt);
-                    b = Serial2.read();
                     if (b < 0x80) {
                         midi_parser__on_sysex_data(b);
                     } else {
