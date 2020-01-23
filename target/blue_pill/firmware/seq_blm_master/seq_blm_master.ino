@@ -5,6 +5,8 @@
 // GLOBALS
 ///////////////////////////////////////////////////////////////////////////////
 
+#include "blm_boards_leds__state.h"
+#include "blm_boards_leds__state_updater.h"
 #include "midi_package.h"
 #include "midi_parser__pt.h"
 #include "midi_sender_arduino.h"
@@ -12,7 +14,6 @@
 #include "serial_midi_receiver_pt.h"
 #include "sysex_handler_blm.h"
 #include "sysex_handler_blm_arduino.h"
-#include "blm_boards_leds__i2c_arduino.h"
 
 
 void setup() {

@@ -24,7 +24,7 @@ static void handle_single_led_change_event(midi_package_t midi_package) {
     uint8_t matrix_x = column >> 2U;
     uint8_t matrix_y = row >> 2U;
 
-    blm_boards_leds__set_one(matrix_x, matrix_y, local_x, local_y, red, green, 0);
+    blm_boards_leds__update_one(matrix_x, matrix_y, local_x, local_y, red, green, 0);
 }
 
 
