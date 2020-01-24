@@ -5,6 +5,7 @@
 // r: red (0-1)
 // g: green (0-1)
 // -----------------------------------------------------------------------------
+#ifdef DEBUG
 
 #include <Arduino.h>
 #include <stdint.h>
@@ -19,6 +20,8 @@ void blm_boards_leds__comm__init(HardwareSerial *serial) {
 // Implementation of state scanner callbacks
 // -----------------------------------------------------------------------------
 
+
+
 void blm_boards_leds__state_scanner__scan__update_one(
         uint8_t matrix,
         uint8_t led,
@@ -32,3 +35,5 @@ void blm_boards_leds__state_scanner__scan__update_one(
     blm_boards_leds__comm__serial->write(led);
     blm_boards_leds__comm__serial->write((r << 4U) + g);
 }
+
+#endif

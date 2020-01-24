@@ -9,6 +9,7 @@ set(SOURCE_FILES
         blm_boards_leds__state.h
         blm_boards_leds__state_updater.h
         blm_boards_leds__state_scanner.h
+        blm_boards_leds__comm__arduino_i2c.h
         blm_boards_leds__comm__debug_arduino_serial_midi.h
 
         debug__arduino_serial_midi.h

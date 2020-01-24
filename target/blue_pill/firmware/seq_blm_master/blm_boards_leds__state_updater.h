@@ -40,6 +40,7 @@ void blm_boards_leds__update_one(uint8_t row, uint8_t column, uint8_t color_code
 
 void blm_boards_leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     debug_p0(D_UPDATE_ROW);
+    debug_p8(D_ROW, row);
     debug_p8(D_PATTERN, pattern);
     uint8_t matrix = ((row >> 2U) << 2U) + (is_second_half ? 2 : 0);
     debug_p8(D_BOARD, matrix);
@@ -84,6 +85,7 @@ void blm_boards_leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pa
 
 void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     debug_p0(D_UPDATE_COLUMN);
+    debug_p8(D_COLUMN, column);
     debug_p8(D_PATTERN, pattern);
     uint8_t matrix = (column >> 2U) + (is_second_half ? 8 : 0);
     debug_p8(D_BOARD, matrix);
@@ -92,6 +94,7 @@ void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint
 
     uint32_t requested;
     uint32_t current;
+    uint32_t set_mask;
     uint32_t shift;
 
     requested = blm_boards_leds__state__requested[matrix];
@@ -99,29 +102,48 @@ void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint
     shift = initial_shift;
 
     // bit 0 of pattern
-    requested = (requested & ~(0x0001U << shift)) | ((pattern & 0x01U) << shift);
+    debug_p8(D_SHIFT, shift);
+    debug_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
     pattern >>= 1;
     shift += 4;
 
     // bit 1 of pattern
-    requested = (requested & ~(0x0001U << shift)) | ((pattern & 0x01U) << shift);
+    debug_p8(D_SHIFT, shift);
+    debug_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
     pattern >>= 1;
     shift += 4;
 
     // bit 2 of pattern
-    requested = (requested & ~(0x0001U << shift)) | ((pattern & 0x01U) << shift);
+    debug_p8(D_SHIFT, shift);
+    debug_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
     pattern >>= 1;
     shift += 4;
 
     // bit 3 of pattern
-    requested = (requested & ~(0x0001U << shift)) | ((pattern & 0x01U) << shift);
+    debug_p8(D_SHIFT, shift);
+    debug_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
+
+    pattern >>= 1;
+    shift = initial_shift;
 
     blm_boards_leds__state__requested[matrix] = requested;
     current = blm_boards_leds__state__current[matrix];
@@ -136,31 +158,46 @@ void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint
 
     requested = blm_boards_leds__state__requested[matrix];
     debug_p32(D_REQUESTED, requested);
-    shift = initial_shift;
 
     // bit 4 of pattern
-    requested = (requested & ~(0x0001U << shift)) | ((pattern & 0x01U) << shift);
+    debug_p8(D_SHIFT, shift);
+    debug_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
     pattern >>= 1;
     shift += 4;
 
     // bit 5 of pattern
-    requested = (requested & ~(0x0001U << shift)) | ((pattern & 0x01U) << shift);
+    debug_p8(D_SHIFT, shift);
+    debug_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
     pattern >>= 1;
     shift += 4;
 
     // bit 6 of pattern
-    requested = (requested & ~(0x0001U << shift)) | ((pattern & 0x01U) << shift);
+    debug_p8(D_SHIFT, shift);
+    debug_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
     pattern >>= 1;
     shift += 4;
 
     // bit 7 of pattern
-    requested = (requested & ~(0x0001U << shift)) | ((pattern & 0x01U) << shift);
+    debug_p8(D_SHIFT, shift);
+    debug_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
     blm_boards_leds__state__requested[matrix] = requested;

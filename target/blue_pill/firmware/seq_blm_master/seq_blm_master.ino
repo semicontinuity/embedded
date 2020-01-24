@@ -9,8 +9,12 @@
 #include "blm_boards_leds__state.h"
 #include "blm_boards_leds__state_updater.h"
 #include "blm_boards_leds__state_scanner.h"
-//#include "blm_boards_leds__i2c_arduino.h"
-#include "blm_boards_leds__comm__debug_arduino_serial_midi.h"
+
+#ifdef DEBUG
+#  include "blm_boards_leds__comm__debug_arduino_serial_midi.h"
+#else
+#  include "blm_boards_leds__comm__arduino_i2c.h"
+#endif
 #include "midi_package.h"
 #include "midi_parser__pt.h"
 #include "midi_sender_arduino.h"
@@ -28,7 +32,9 @@ void setup() {
 
     debug__serial__init(&Serial2);
     serial_midi_receiver__init(&Serial2);
+#ifdef DEBUG
     blm_boards_leds__comm__init(&Serial2);
+#endif
     blm_master__sysex_handler__init(&Serial2);
     midi_parser__init();
 

@@ -17,6 +17,9 @@
 #define D_SHIFT             0x03
 #define D_MASK              0x04
 #define D_PATTERN           0x05
+#define D_ROW               0x06
+#define D_COLUMN            0x07
+
 #define D_CURRENT           0x10
 #define D_REQUESTED         0x11
 #define D_RAW_DIFF          0x14
@@ -41,21 +44,25 @@ void debug__serial__init(HardwareSerial *serial) {
 }
 
 void debug_p0(uint8_t param) {
+#ifdef DEBUG
     debug__serial->write(0xf0);
     debug__serial->write(param);
     debug__serial->write(0xf7);
+#endif
 }
 
 void debug_p8(uint8_t param, uint8_t v) {
+#ifdef DEBUG
     debug__serial->write(0xf0);
     debug__serial->write(param);
     debug__serial->write((v >> 4) & 0x0F);
     debug__serial->write(v & 0x0F);
     debug__serial->write(0xf7);
+#endif
 }
 
-
 void debug_p16(uint8_t param, uint16_t v) {
+#ifdef DEBUG
     debug__serial->write(0xf0);
     debug__serial->write(param);
     debug__serial->write((v >> 12) & 0x0F);
@@ -63,9 +70,11 @@ void debug_p16(uint8_t param, uint16_t v) {
     debug__serial->write((v >> 4) & 0x0F);
     debug__serial->write(v & 0x0F);
     debug__serial->write(0xf7);
+#endif
 }
 
 void debug_p32(uint8_t param, uint32_t v) {
+#ifdef DEBUG
     debug__serial->write(0xf0);
     debug__serial->write(param);
     debug__serial->write((v >> 28) & 0x0F);
@@ -77,6 +86,7 @@ void debug_p32(uint8_t param, uint32_t v) {
     debug__serial->write((v >> 4) & 0x0F);
     debug__serial->write(v & 0x0F);
     debug__serial->write(0xf7);
+#endif
 }
 
 #endif
