@@ -1,10 +1,18 @@
+// Handles MIDI BLM LEDs control protocol:
+//
+// Update one: 9<row> <column> <colour>
+//
+// Update row: B<row> [00cc00hl] [pattern]
+//   cc=color, 10=red, 01=green
+//   h=1 for second half, 0 for first half
+//   l=value for last led (8th or 16th)
+
 #include <Arduino.h>
 
 #include "midi_parser_callbacks__channel_msg.h"
 #include "blm_boards_leds.h"
 
 
-// 9<row> <column> <colour>
 static void handle_single_led_change_event(midi_package_t midi_package) {
     uint8_t row = midi_package.chn;
     uint8_t column = midi_package.note;

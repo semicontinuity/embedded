@@ -6,16 +6,18 @@ set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_FILES
         blm_boards_leds.h
-#        blm_boards_leds__i2c_arduino.h
         blm_boards_leds__state.h
         blm_boards_leds__state_updater.h
         blm_boards_leds__state_scanner.h
-        blm_boards_leds__comm_debug_arduino_serial_midi.h
+        blm_boards_leds__comm__debug_arduino_serial_midi.h
 
+        debug__arduino_serial_midi.h
+
+        midi_handler_blm.h
         midi_package.h
         midi_parser.h
         midi_parser__pt.h
-        midi_handler_blm.h
+
         serial_midi_receiver_pt.h
         sysex_handler_blm.h
         sysex_handler_blm_arduino.h

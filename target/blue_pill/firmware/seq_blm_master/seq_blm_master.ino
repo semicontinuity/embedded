@@ -9,7 +9,7 @@
 #include "blm_boards_leds__state_updater.h"
 #include "blm_boards_leds__state_scanner.h"
 //#include "blm_boards_leds__i2c_arduino.h"
-#include "blm_boards_leds__comm_debug_arduino_serial_midi.h"
+#include "blm_boards_leds__comm__debug_arduino_serial_midi.h"
 #include "midi_package.h"
 #include "midi_parser__pt.h"
 #include "midi_sender_arduino.h"
