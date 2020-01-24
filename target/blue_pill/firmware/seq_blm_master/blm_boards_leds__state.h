@@ -19,4 +19,14 @@ uint32_t blm_boards_leds__state__current[16];
 uint32_t blm_boards_leds__state__requested[16];
 uint16_t blm_boards_leds__state__dirty;
 
+void blm_boards_leds__state__init() {
+    for (int i = 0; i < 16; i++) {
+        blm_boards_leds__state__current[i] = 0U;
+    }
+    for (int i = 0; i < 16; i++) {
+        blm_boards_leds__state__requested[i] = 0U;
+    }
+    blm_boards_leds__state__dirty = 0U;
+}
+
 #endif

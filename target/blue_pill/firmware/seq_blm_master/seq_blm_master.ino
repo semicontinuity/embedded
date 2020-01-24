@@ -31,7 +31,8 @@ void setup() {
     blm_boards_leds__comm__init(&Serial2);
     blm_master__sysex_handler__init(&Serial2);
     midi_parser__init();
-    blm_boards_leds__init();
+
+    blm_boards_leds__state__init();
 }
 
 

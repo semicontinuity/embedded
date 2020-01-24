@@ -6,6 +6,11 @@
 //   cc=color, 10=red, 01=green
 //   h=1 for second half, 0 for first half
 //   l=value for last led (8th or 16th)
+//
+// Update column: B<col> [00cc10hl] [pattern]
+//   cc=color, 10=red, 01=green
+//   h=1 for second half, 0 for first half
+//   l=value for last led (8th or 16th)
 
 #include <Arduino.h>
 
