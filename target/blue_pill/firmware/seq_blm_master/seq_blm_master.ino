@@ -23,10 +23,15 @@
 void setup() {
     pinMode(PA5, OUTPUT);
     pinMode(PA1, OUTPUT);
+
+    Serial2.begin(31250);
+
+    debug__serial__init(&Serial2);
+    serial_midi_receiver__init(&Serial2);
     blm_boards_leds__comm__init(&Serial2);
-    blm_boards_leds__init();
+    blm_master__sysex_handler__init(&Serial2);
     midi_parser__init();
-    serial_midi_receiver__init();
+    blm_boards_leds__init();
 }
 
 

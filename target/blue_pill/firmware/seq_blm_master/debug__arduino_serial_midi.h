@@ -29,43 +29,49 @@
 #define D_SCAN          0x7F
 
 
+static HardwareSerial *debug__serial;
+
+void debug__serial__init(HardwareSerial *serial) {
+    debug__serial = serial;
+}
+
 void debug_p0(uint8_t param) {
-    Serial2.write(0xf0);
-    Serial2.write(param);
-    Serial2.write(0xf7);
+    debug__serial->write(0xf0);
+    debug__serial->write(param);
+    debug__serial->write(0xf7);
 }
 
 void debug_p8(uint8_t param, uint8_t v) {
-    Serial2.write(0xf0);
-    Serial2.write(param);
-    Serial2.write((v >> 4) & 0x0F);
-    Serial2.write(v & 0x0F);
-    Serial2.write(0xf7);
+    debug__serial->write(0xf0);
+    debug__serial->write(param);
+    debug__serial->write((v >> 4) & 0x0F);
+    debug__serial->write(v & 0x0F);
+    debug__serial->write(0xf7);
 }
 
 
 void debug_p16(uint8_t param, uint16_t v) {
-    Serial2.write(0xf0);
-    Serial2.write(param);
-    Serial2.write((v >> 12) & 0x0F);
-    Serial2.write((v >> 8) & 0x0F);
-    Serial2.write((v >> 4) & 0x0F);
-    Serial2.write(v & 0x0F);
-    Serial2.write(0xf7);
+    debug__serial->write(0xf0);
+    debug__serial->write(param);
+    debug__serial->write((v >> 12) & 0x0F);
+    debug__serial->write((v >> 8) & 0x0F);
+    debug__serial->write((v >> 4) & 0x0F);
+    debug__serial->write(v & 0x0F);
+    debug__serial->write(0xf7);
 }
 
 void debug_p32(uint8_t param, uint32_t v) {
-    Serial2.write(0xf0);
-    Serial2.write(param);
-    Serial2.write((v >> 28) & 0x0F);
-    Serial2.write((v >> 24) & 0x0F);
-    Serial2.write((v >> 20) & 0x0F);
-    Serial2.write((v >> 16) & 0x0F);
-    Serial2.write((v >> 12) & 0x0F);
-    Serial2.write((v >> 8) & 0x0F);
-    Serial2.write((v >> 4) & 0x0F);
-    Serial2.write(v & 0x0F);
-    Serial2.write(0xf7);
+    debug__serial->write(0xf0);
+    debug__serial->write(param);
+    debug__serial->write((v >> 28) & 0x0F);
+    debug__serial->write((v >> 24) & 0x0F);
+    debug__serial->write((v >> 20) & 0x0F);
+    debug__serial->write((v >> 16) & 0x0F);
+    debug__serial->write((v >> 12) & 0x0F);
+    debug__serial->write((v >> 8) & 0x0F);
+    debug__serial->write((v >> 4) & 0x0F);
+    debug__serial->write(v & 0x0F);
+    debug__serial->write(0xf7);
 }
 
 #endif
