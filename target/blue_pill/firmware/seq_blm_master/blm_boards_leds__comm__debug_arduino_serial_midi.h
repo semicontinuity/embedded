@@ -10,6 +10,14 @@
 #include <stdint.h>
 #include "blm_boards_leds__state_scanner_callbacks.h"
 
+static HardwareSerial *blm_boards_leds__comm__serial;
+
+void blm_boards_leds__comm__init(HardwareSerial *serial) {
+    blm_boards_leds__comm__serial = serial;
+}
+
+// Implementation of state scanner callbacks
+// -----------------------------------------------------------------------------
 
 void blm_boards_leds__state_scanner__scan__update_one(
         uint8_t matrix,
@@ -20,7 +28,7 @@ void blm_boards_leds__state_scanner__scan__update_one(
 {
     r = r ? 1 : 0;
     g = g ? 1 : 0;
-    Serial2.write(0x80 + matrix);
-    Serial2.write(led);
-    Serial2.write((r << 4U) + g);
+    blm_boards_leds__comm__serial->write(0x80 + matrix);
+    blm_boards_leds__comm__serial->write(led);
+    blm_boards_leds__comm__serial->write((r << 4U) + g);
 }

@@ -1,0 +1,3 @@
+void blm_master__sysex_handler__handle_invalid_command();
+void blm_master__sysex_handler__handle_ping();
+void blm_master__sysex_handler__handle_request_layout_info();

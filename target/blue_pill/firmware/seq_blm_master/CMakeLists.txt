@@ -19,8 +19,8 @@ set(SOURCE_FILES
         midi_parser__pt.h
 
         serial_midi_receiver_pt.h
-        sysex_handler_blm.h
-        sysex_handler_blm_arduino.h
+        blm_master__sysex_handler.h
+        blm_master__sysex_handler__arduino_serial_midi.h
 
         seq_blm_master.ino
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c.c
