@@ -36,12 +36,15 @@ void blm_boards_leds__update_one(uint8_t row, uint8_t column, uint8_t color_code
     uint32_t requested = blm_boards_leds__state__requested[matrix];
     if (green) { requested |= (1U << led); } else { requested &= ~(1U << led); }
     if (red) { requested |= (1U << (led + 16U)); } else { requested &= ~(1U << (led + 16U)); }
-
-    debug_p32(D_CURRENT, blm_boards_leds__state__current[matrix]);
     debug_p32(D_REQUESTED, requested);
     blm_boards_leds__state__requested[matrix] = requested;
-    blm_boards_leds__state__dirty |= (1U << matrix);
-    debug_p16(D_DIRTY, blm_boards_leds__state__dirty);
+
+    uint32_t current = blm_boards_leds__state__current[matrix];
+    debug_p32(D_CURRENT, current);
+    if (current != requested) {
+        blm_boards_leds__state__dirty |= (1U << matrix);
+        debug_p16(D_DIRTY, blm_boards_leds__state__dirty);
+    }
 }
 
 
