@@ -1,3 +1,4 @@
+#define BLM_SCALAR_NUM_COLOURS 2
 #include <Arduino.h>
 #include <string.h>
 
