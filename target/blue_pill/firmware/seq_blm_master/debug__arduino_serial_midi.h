@@ -1,7 +1,7 @@
 // Scans LED state data structures
 // and produces on BLM board LED update commands.
 // May generate up to 1 LED update command on every invocation
-// of blm_boards_leds__state_scanner__run().
+// of multi_blm_leds_buffer__scanner__run().
 // -----------------------------------------------------------------------------
 
 #ifndef __DEBUG__ARDUINO_SERIAL_MIDI

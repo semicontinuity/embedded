@@ -1,7 +1,7 @@
 #include <stdint.h>
 
 
-void blm_boards_leds__state_scanner__scan__update_one(
+void multi_blm_leds_buffer__scanner__update_one(
     uint8_t matrix,
     uint8_t led,
     uint8_t r,

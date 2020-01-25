@@ -35,34 +35,34 @@ void midi_parser__on_channel_msg(midi_package_t midi_package) {
 // Implements blm_boards_leds__state_scanner_callbacks.h
 // -----------------------------------------------------------------------------
 
-void blm_boards_leds__state_scanner__scan__update_one(uint8_t board, uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
-    blm_boards__comm__leds__update_one(board, led, r, g, b);
+void multi_blm_leds_buffer__scanner__update_one(uint8_t matrix, uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
+    blm_boards__comm__leds__update_one(matrix, led, r, g, b);
 }
 
 // Implements blm_master__leds.h
 // -----------------------------------------------------------------------------
 
-void leds__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
+void blm_master__leds__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
     multi_blm_leds_buffer__blm_master__update_one(row, column, color_code);
 }
 
-void leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void blm_master__leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     multi_blm_leds_buffer__blm_master__update_row(row, is_second_half, pattern, color);
 }
 
-void leds__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void blm_master__leds__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     multi_blm_leds_buffer__blm_master__update_column(column, is_second_half, pattern, color);
 }
 
-void leds__update_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void blm_master__leds__update_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     multi_blm_leds_buffer__blm_master__update_extra_row(is_second_half, pattern, color);
 }
 
-void leds__update_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void blm_master__leds__update_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     multi_blm_leds_buffer__blm_master__update_extra_column(is_second_half, pattern, color);
 }
 
-void leds__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void blm_master__leds__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     multi_blm_leds_buffer__blm_master__update_extra(is_second_half, pattern, color);
 }
 
@@ -71,21 +71,21 @@ void setup() {
     pinMode(PA5, OUTPUT);
     pinMode(PA1, OUTPUT);
 
-    Serial2.begin(31250);
-
-    debug__serial__init(&Serial2);
-    serial_midi_receiver__init(&Serial2);
+    HardwareSerial *serial = &Serial2;
+    serial->begin(31250);
+    debug__serial__init(serial);
+    serial_midi_receiver__init(serial);
 #ifdef DEBUG
-    blm_boards_leds__comm__init(&Serial2);
+    blm_boards_leds__comm__init(serial);
 #endif
-    blm_master__sysex_handler__init(&Serial2);
+    blm_master__sysex_handler__init(serial);
     midi_parser__init();
 
-    blm_boards_leds__state__init();
+    multi_blm_leds_buffer__init();
 }
 
 
 void loop() {
     serial_midi_receiver__run();
-    blm_boards_leds__state_scanner__run();
+    multi_blm_leds_buffer__scanner__run();
 }

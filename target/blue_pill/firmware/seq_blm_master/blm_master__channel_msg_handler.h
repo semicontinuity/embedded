@@ -22,7 +22,7 @@ static void blm_master__channel_msg_handler__process_single_led_change_event(mid
     uint8_t row = midi_package.chn;
     uint8_t column = midi_package.note;
     uint8_t colour = midi_package.velocity;
-    leds__update_one(row, column, colour);
+    blm_master__leds__update_one(row, column, colour);
 }
 
 
@@ -41,14 +41,16 @@ static void blm_master__channel_msg_handler__process_packed_leds_change_event(mi
 #if BLM_SCALAR_NUM_COLOURS >= 2
             case 0x20:
 #endif
-            leds__update_row(chn, is_second_half, pattern, cc_number_masked == 0x10 ? 0 : 1 /* green or red */);  // or just shift to get color
+            blm_master__leds__update_row(chn, is_second_half, pattern,
+                                         cc_number_masked == 0x10 ? 0 : 1 /* green or red */);  // or just shift to get color
             break;
 
         case 0x18:
 #if BLM_SCALAR_NUM_COLOURS >= 2
             case 0x28:
 #endif
-            leds__update_column(chn, is_second_half, pattern, cc_number_masked == 0x18 ? 0 : 1 /* green or red */);   // or just shift to get color
+            blm_master__leds__update_column(chn, is_second_half, pattern,
+                                            cc_number_masked == 0x18 ? 0 : 1 /* green or red */);   // or just shift to get color
             break;
 
         case 0x40:
@@ -56,7 +58,8 @@ static void blm_master__channel_msg_handler__process_packed_leds_change_event(mi
             case 0x48:
 #endif
             if (chn == 0) {
-                leds__update_extra_column(is_second_half, pattern, cc_number_masked == 0x40 ? 0 : 1 /* green or red */);
+                blm_master__leds__update_extra_column(is_second_half, pattern,
+                                                      cc_number_masked == 0x40 ? 0 : 1 /* green or red */);
             }
             break;
 
@@ -65,10 +68,11 @@ static void blm_master__channel_msg_handler__process_packed_leds_change_event(mi
             case 0x68:
 #endif
             if (chn == 0) {
-                leds__update_extra_row(is_second_half, pattern, cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
+                blm_master__leds__update_extra_row(is_second_half, pattern,
+                                                   cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
             } else if (chn == 15) {
-                leds__update_extra(is_second_half, pattern,
-                                   cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
+                blm_master__leds__update_extra(is_second_half, pattern,
+                                               cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
             }
             break;
     }

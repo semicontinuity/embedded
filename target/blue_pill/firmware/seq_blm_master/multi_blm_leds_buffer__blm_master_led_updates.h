@@ -24,17 +24,17 @@ void multi_blm_leds_buffer__blm_master__update_one(uint8_t row, uint8_t column, 
     debug_p8(D_BOARD, matrix);
     uint8_t led = (local_y << 2U) + local_x;
     debug_p8(D_LED, led);
-    uint32_t requested = blm_boards_leds__state__requested[matrix];
+    uint32_t requested = multi_blm_leds_buffer__requested[matrix];
     if (green) { requested |= (1U << led); } else { requested &= ~(1U << led); }
     if (red) { requested |= (1U << (led + 16U)); } else { requested &= ~(1U << (led + 16U)); }
     debug_p32(D_REQUESTED, requested);
-    blm_boards_leds__state__requested[matrix] = requested;
+    multi_blm_leds_buffer__requested[matrix] = requested;
 
-    uint32_t current = blm_boards_leds__state__current[matrix];
+    uint32_t current = multi_blm_leds_buffer__current[matrix];
     debug_p32(D_CURRENT, current);
     if (current != requested) {
-        blm_boards_leds__state__dirty |= (1U << matrix);
-        debug_p16(D_DIRTY, blm_boards_leds__state__dirty);
+        multi_blm_leds_buffer__dirty |= (1U << matrix);
+        debug_p16(D_DIRTY, multi_blm_leds_buffer__dirty);
     }
 }
 
@@ -53,33 +53,33 @@ void multi_blm_leds_buffer__blm_master__update_row(uint8_t row, uint8_t is_secon
     uint32_t requested;
     uint32_t current;
 
-    requested = blm_boards_leds__state__requested[matrix];
+    requested = multi_blm_leds_buffer__requested[matrix];
     debug_p32(D_REQUESTED, requested);
     requested = (requested & mask) | ((pattern & 0x0FU) << shift);
     debug_p32(D_REQUESTED, requested);
-    blm_boards_leds__state__requested[matrix] = requested;
+    multi_blm_leds_buffer__requested[matrix] = requested;
 
-    current = blm_boards_leds__state__current[matrix];
+    current = multi_blm_leds_buffer__current[matrix];
     debug_p32(D_CURRENT, current);
     if (requested != current) {
-        blm_boards_leds__state__dirty |= (1U << matrix);
-        debug_p16(D_DIRTY, blm_boards_leds__state__dirty);
+        multi_blm_leds_buffer__dirty |= (1U << matrix);
+        debug_p16(D_DIRTY, multi_blm_leds_buffer__dirty);
     }
 
     ++matrix;
     debug_p8(D_BOARD, matrix);
 
-    requested = blm_boards_leds__state__requested[matrix];
+    requested = multi_blm_leds_buffer__requested[matrix];
     debug_p32(D_REQUESTED, requested);
     requested = (requested & mask) | (((pattern >> 4U) & 0x0FU) << shift);
     debug_p32(D_REQUESTED, requested);
-    blm_boards_leds__state__requested[matrix] = requested;
+    multi_blm_leds_buffer__requested[matrix] = requested;
 
-    current = blm_boards_leds__state__current[matrix];
+    current = multi_blm_leds_buffer__current[matrix];
     debug_p32(D_CURRENT, current);
     if (requested != current) {
-        blm_boards_leds__state__dirty |= (1U << matrix);
-        debug_p16(D_DIRTY, blm_boards_leds__state__dirty);
+        multi_blm_leds_buffer__dirty |= (1U << matrix);
+        debug_p16(D_DIRTY, multi_blm_leds_buffer__dirty);
     }
 }
 
@@ -98,7 +98,7 @@ void multi_blm_leds_buffer__blm_master__update_column(uint8_t column, uint8_t is
     uint32_t set_mask;
     uint32_t shift;
 
-    requested = blm_boards_leds__state__requested[matrix];
+    requested = multi_blm_leds_buffer__requested[matrix];
     debug_p32(D_REQUESTED, requested);
     shift = initial_shift;
 
@@ -146,18 +146,18 @@ void multi_blm_leds_buffer__blm_master__update_column(uint8_t column, uint8_t is
     pattern >>= 1U;
     shift = initial_shift;
 
-    blm_boards_leds__state__requested[matrix] = requested;
-    current = blm_boards_leds__state__current[matrix];
+    multi_blm_leds_buffer__requested[matrix] = requested;
+    current = multi_blm_leds_buffer__current[matrix];
     debug_p32(D_CURRENT, current);
     if (current != requested) {
-        blm_boards_leds__state__dirty |= (1U << matrix);
-        debug_p16(D_DIRTY, blm_boards_leds__state__dirty);
+        multi_blm_leds_buffer__dirty |= (1U << matrix);
+        debug_p16(D_DIRTY, multi_blm_leds_buffer__dirty);
     }
 
     matrix += 4;
     debug_p8(D_BOARD, matrix);
 
-    requested = blm_boards_leds__state__requested[matrix];
+    requested = multi_blm_leds_buffer__requested[matrix];
     debug_p32(D_REQUESTED, requested);
 
     // bit 4 of pattern
@@ -201,12 +201,12 @@ void multi_blm_leds_buffer__blm_master__update_column(uint8_t column, uint8_t is
     requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
-    blm_boards_leds__state__requested[matrix] = requested;
-    current = blm_boards_leds__state__current[matrix];
+    multi_blm_leds_buffer__requested[matrix] = requested;
+    current = multi_blm_leds_buffer__current[matrix];
     debug_p32(D_CURRENT, current);
     if (current != requested) {
-        blm_boards_leds__state__dirty |= (1U << matrix);
-        debug_p16(D_DIRTY, blm_boards_leds__state__dirty);
+        multi_blm_leds_buffer__dirty |= (1U << matrix);
+        debug_p16(D_DIRTY, multi_blm_leds_buffer__dirty);
     }
 }
 
