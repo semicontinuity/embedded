@@ -1,14 +1,14 @@
-// Updates LED state data structures on LED update commands.
+// Updates LED data buffer on LED update commands.
 // -----------------------------------------------------------------------------
 
 #include <Arduino.h>
 #include <stdint.h>
-#include "blm_boards_leds.h"
-#include "blm_boards_leds__state.h"
+#include "leds__updater.h"
+#include "leds__buffer.h"
 #include "debug__arduino_serial_midi.h"
 
 
-void blm_boards_leds__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
+void leds__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
     debug_p0(D_UPDATE_ONE);
     uint8_t local_x = column & 0x03U;
     uint8_t local_y = row & 0x03U;
@@ -38,7 +38,7 @@ void blm_boards_leds__update_one(uint8_t row, uint8_t column, uint8_t color_code
 }
 
 
-void blm_boards_leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     debug_p0(D_UPDATE_ROW);
     debug_p8(D_ROW, row);
     debug_p8(D_PATTERN, pattern);
@@ -83,7 +83,7 @@ void blm_boards_leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pa
 }
 
 
-void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void leds__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     debug_p0(D_UPDATE_COLUMN);
     debug_p8(D_COLUMN, column);
     debug_p8(D_PATTERN, pattern);
@@ -210,16 +210,16 @@ void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint
 }
 
 
-void blm_boards_leds__update_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void leds__update_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     debug_p0(D_UPDATE_EX_ROW);
 }
 
 
-void blm_boards_leds__update_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void leds__update_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     debug_p0(D_UPDATE_EX_COLUMN);
 }
 
 
-void blm_boards_leds__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void leds__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     debug_p0(D_UPDATE_EX);
 }

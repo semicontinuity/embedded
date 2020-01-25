@@ -5,12 +5,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_FILES
-        blm_boards_leds.h
-        blm_boards_leds__state.h
-        blm_boards_leds__state_updater.h
-        blm_boards_leds__state_scanner.h
-        blm_boards_leds__comm__arduino_i2c.h
-        blm_boards_leds__comm__debug_arduino_serial_midi.h
+        blm_boards__comm.h
+        blm_boards__comm__arduino_i2c.h
+        leds__updater.h
+        leds__buffer.h
+        leds__updater__buffer.h
+        leds__buffer__scanner.h
+        leds__buffer__scanner__callbacks.h
+        blm_boards__comm__debug_arduino_serial_midi.h
 
         debug__arduino_serial_midi.h
 
@@ -18,13 +20,15 @@ set(SOURCE_FILES
         midi_package.h
         midi_parser.h
         midi_parser__pt.h
+        midi_parser__callbacks__sysex_msg.h
+        midi_parser__callbacks__channel_msg.h
 
         midi_receiver__serial_arduino_pt.h
         midi_sender.h
         midi_sender__serial_arduino.h
 
-        blm_master__sysex_handler.h
-        blm_master__sysex_handler__arduino_serial_midi.h
+        blm_master__sysex_msg_handler.h
+        blm_master__sysex_msg_handler__arduino_serial_midi.h
 
         seq_blm_master.ino
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c.c

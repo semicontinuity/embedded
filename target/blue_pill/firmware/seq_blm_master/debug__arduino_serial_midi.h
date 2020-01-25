@@ -9,8 +9,8 @@
 
 #include <Arduino.h>
 #include <stdbool.h>
-#include "blm_boards_leds__state.h"
-#include "blm_boards_leds__state_scanner_callbacks.h"
+#include "leds__buffer.h"
+#include "leds__buffer__scanner__callbacks.h"
 
 #define D_BOARD             0x01
 #define D_LED               0x02

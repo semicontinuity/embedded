@@ -5,18 +5,21 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <stdint.h>
-#include "blm_boards_leds__state_scanner_callbacks.h"
+#include "leds__buffer__scanner__callbacks.h"
 
 
 TwoWire Wire2(2);
 
 
-void blm_boards_leds__comm__init() {
+void blm_boards__comm__init() {
     Wire2.begin();
 }
 
+uint8_t blm_boards__comm__events__read() {
+    return 0;
+}
 
-void blm_boards_leds__state_scanner__scan__update_one(
+void blm_boards__comm__leds__update_one(
     uint8_t board,
     uint8_t led,
     uint8_t r,

@@ -4,7 +4,7 @@
 
 static HardwareSerial *midi_sender__serial;
 
-void debug__serial__init(HardwareSerial *serial) {
+void midi_sender__serial__init(HardwareSerial *serial) {
     midi_sender__serial = serial;
 }
 

@@ -20,8 +20,6 @@ void blm_boards_leds__comm__init(HardwareSerial *serial) {
 // Implementation of state scanner callbacks
 // -----------------------------------------------------------------------------
 
-
-
 void blm_boards_leds__state_scanner__scan__update_one(
         uint8_t matrix,
         uint8_t led,

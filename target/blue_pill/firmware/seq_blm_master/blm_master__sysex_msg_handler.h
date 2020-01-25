@@ -1,12 +1,12 @@
 #include <stdint.h>
-#include "midi_parser_callbacks__sysex_msg.h"
-#include "blm_master__sysex_handler__callbacks.h"
+#include "midi_parser__callbacks__sysex_msg.h"
+#include "blm_master__sysex_msg_handler__callbacks.h"
 
 static uint8_t blm_master__sysex_handler__command;
 static uint8_t blm_master__sysex_handler__command_length;
 
 
-// Implementation of midi_parser callbacks
+// Implementation of midi_parser_callbacks__sysex_msg.h
 // -----------------------------------------------------------------------------
 
 void midi_parser__on_sysex_data(uint8_t data) {

@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <stdint.h>
-#include "blm_master__sysex_handler__callbacks.h"
+#include "blm_master__sysex_msg_handler__callbacks.h"
 
 // Implementations of callbacks, defined in sysex_handler_blm_callbacks.h
 // -----------------------------------------------------------------------------

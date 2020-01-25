@@ -4,8 +4,8 @@
 #include <pt.h>
 #include "midi_parser.h"
 #include "midi_package.h"
-#include "midi_parser_callbacks__channel_msg.h"
-#include "midi_parser_callbacks__sysex_msg.h"
+#include "midi_parser__callbacks__channel_msg.h"
+#include "midi_parser__callbacks__sysex_msg.h"
 
 
 static struct pt midi_parser__thread;

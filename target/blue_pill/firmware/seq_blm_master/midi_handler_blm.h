@@ -14,15 +14,15 @@
 
 #include <Arduino.h>
 
-#include "midi_parser_callbacks__channel_msg.h"
-#include "blm_boards_leds.h"
+#include "midi_parser__callbacks__channel_msg.h"
+#include "leds__updater.h"
 
 
 static void handle_single_led_change_event(midi_package_t midi_package) {
     uint8_t row = midi_package.chn;
     uint8_t column = midi_package.note;
     uint8_t colour = midi_package.velocity;
-    blm_boards_leds__update_one(row, column, colour);
+    leds__update_one(row, column, colour);
 }
 
 
@@ -41,14 +41,14 @@ static void handle_packed_leds_change_event(midi_package_t midi_package) {
 #if BLM_SCALAR_NUM_COLOURS >= 2
             case 0x20:
 #endif
-            blm_boards_leds__update_row(chn, is_second_half, pattern, cc_number_masked == 0x10 ? 0 : 1 /* green or red */);  // or just shift to get color
+            leds__update_row(chn, is_second_half, pattern, cc_number_masked == 0x10 ? 0 : 1 /* green or red */);  // or just shift to get color
             break;
 
         case 0x18:
 #if BLM_SCALAR_NUM_COLOURS >= 2
             case 0x28:
 #endif
-            blm_boards_leds__update_column(chn, is_second_half, pattern, cc_number_masked == 0x18 ? 0 : 1 /* green or red */);   // or just shift to get color
+            leds__update_column(chn, is_second_half, pattern, cc_number_masked == 0x18 ? 0 : 1 /* green or red */);   // or just shift to get color
             break;
 
         case 0x40:
@@ -56,7 +56,7 @@ static void handle_packed_leds_change_event(midi_package_t midi_package) {
             case 0x48:
 #endif
             if (chn == 0) {
-                blm_boards_leds__update_extra_column(is_second_half, pattern, cc_number_masked == 0x40 ? 0 : 1 /* green or red */);
+                leds__update_extra_column(is_second_half, pattern, cc_number_masked == 0x40 ? 0 : 1 /* green or red */);
             }
             break;
 
@@ -65,10 +65,10 @@ static void handle_packed_leds_change_event(midi_package_t midi_package) {
             case 0x68:
 #endif
             if (chn == 0) {
-                blm_boards_leds__update_extra_row(is_second_half, pattern, cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
+                leds__update_extra_row(is_second_half, pattern, cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
             } else if (chn == 15) {
-                blm_boards_leds__update_extra(is_second_half, pattern,
-                                              cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
+                leds__update_extra(is_second_half, pattern,
+                                   cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
             }
             break;
     }

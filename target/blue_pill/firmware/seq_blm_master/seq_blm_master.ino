@@ -6,22 +6,30 @@
 // GLOBALS
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "blm_boards_leds__state.h"
-#include "blm_boards_leds__state_updater.h"
-#include "blm_boards_leds__state_scanner.h"
+#include "leds__buffer.h"
+#include "leds__updater__buffer.h"
+#include "leds__buffer__scanner.h"
 
 #ifdef DEBUG
 #  include "blm_boards_leds__comm__debug_arduino_serial_midi.h"
 #else
-#  include "blm_boards_leds__comm__arduino_i2c.h"
+#  include "blm_boards__comm__arduino_i2c.h"
 #endif
 #include "midi_package.h"
 #include "midi_parser__pt.h"
 #include "midi_sender__serial_arduino.h"
 #include "midi_handler_blm.h"
 #include "midi_receiver__serial_arduino_pt.h"
-#include "blm_master__sysex_handler.h"
-#include "blm_master__sysex_handler__arduino_serial_midi.h"
+#include "blm_master__sysex_msg_handler.h"
+#include "blm_master__sysex_msg_handler__arduino_serial_midi.h"
+
+
+// Implements blm_boards_leds__state_scanner_callbacks.h
+// -----------------------------------------------------------------------------
+
+void blm_boards_leds__state_scanner__scan__update_one(uint8_t board, uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
+    blm_boards__comm__leds__update_one(board, led, r, g, b);
+}
 
 
 void setup() {
