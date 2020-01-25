@@ -109,7 +109,7 @@ void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint
     requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
-    pattern >>= 1;
+    pattern >>= 1U;
     shift += 4;
 
     // bit 1 of pattern
@@ -120,7 +120,7 @@ void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint
     requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
-    pattern >>= 1;
+    pattern >>= 1U;
     shift += 4;
 
     // bit 2 of pattern
@@ -131,7 +131,7 @@ void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint
     requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
-    pattern >>= 1;
+    pattern >>= 1U;
     shift += 4;
 
     // bit 3 of pattern
@@ -142,7 +142,7 @@ void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint
     requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
-    pattern >>= 1;
+    pattern >>= 1U;
     shift = initial_shift;
 
     blm_boards_leds__state__requested[matrix] = requested;
@@ -167,7 +167,7 @@ void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint
     requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
-    pattern >>= 1;
+    pattern >>= 1U;
     shift += 4;
 
     // bit 5 of pattern
@@ -178,7 +178,7 @@ void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint
     requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
-    pattern >>= 1;
+    pattern >>= 1U;
     shift += 4;
 
     // bit 6 of pattern
@@ -189,7 +189,7 @@ void blm_boards_leds__update_column(uint8_t column, uint8_t is_second_half, uint
     requested = (requested & ~(0x0001U << shift)) | set_mask;
     debug_p32(D_REQUESTED, requested);
 
-    pattern >>= 1;
+    pattern >>= 1U;
     shift += 4;
 
     // bit 7 of pattern

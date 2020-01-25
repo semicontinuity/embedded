@@ -19,7 +19,10 @@ set(SOURCE_FILES
         midi_parser.h
         midi_parser__pt.h
 
-        serial_midi_receiver_pt.h
+        midi_receiver__serial_arduino_pt.h
+        midi_sender.h
+        midi_sender__serial_arduino.h
+
         blm_master__sysex_handler.h
         blm_master__sysex_handler__arduino_serial_midi.h
 

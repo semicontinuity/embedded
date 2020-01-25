@@ -17,9 +17,9 @@
 #endif
 #include "midi_package.h"
 #include "midi_parser__pt.h"
-#include "midi_sender_arduino.h"
+#include "midi_sender__serial_arduino.h"
 #include "midi_handler_blm.h"
-#include "serial_midi_receiver_pt.h"
+#include "midi_receiver__serial_arduino_pt.h"
 #include "blm_master__sysex_handler.h"
 #include "blm_master__sysex_handler__arduino_serial_midi.h"
 
