@@ -57,6 +57,9 @@ static bool multi_blm_leds_buffer__scanner__scan(unsigned int board) {
     return current == requested;
 }
 
+bool multi_blm_leds_buffer__scanner__is_runnable() {
+    return multi_blm_leds_buffer__dirty;
+}
 
 void multi_blm_leds_buffer__scanner__run() {
     int board = __builtin_ffs(multi_blm_leds_buffer__dirty) - 1;

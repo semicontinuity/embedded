@@ -6,6 +6,7 @@ set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_FILES
         blm_boards__comm__events__arduino_i2c.h
+        blm_boards__comm__events__reader_pt.h
         blm_boards__comm__leds__arduino_i2c.h
         blm_boards__comm__leds__debug_arduino_serial_midi.h
 

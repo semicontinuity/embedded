@@ -16,9 +16,6 @@ void blm_boards__comm__leds__arduino_i2c__init(TwoWire *wire, uint8_t base_addre
     blm_boards__comm__arduino_i2c__base_address = base_address;
 }
 
-uint8_t blm_boards__comm__arduino_i2c__events__read() {
-    return 0;
-}
 
 void blm_boards__comm__leds__arduino_i2c__update_one(
     uint8_t board,
