@@ -18,7 +18,7 @@
 #include "leds__updater.h"
 
 
-static void handle_single_led_change_event(midi_package_t midi_package) {
+static void blm_master__channel_msg_handler__process_single_led_change_event(midi_package_t midi_package) {
     uint8_t row = midi_package.chn;
     uint8_t column = midi_package.note;
     uint8_t colour = midi_package.velocity;
@@ -26,7 +26,7 @@ static void handle_single_led_change_event(midi_package_t midi_package) {
 }
 
 
-static void handle_packed_leds_change_event(midi_package_t midi_package) {
+static void blm_master__channel_msg_handler__process_packed_leds_change_event(midi_package_t midi_package) {
     const uint8_t chn = midi_package.chn;
     const uint8_t cc_number = midi_package.cc_number;
 
@@ -78,10 +78,7 @@ static void handle_packed_leds_change_event(midi_package_t midi_package) {
 }
 
 
-// Implementation of callbacks from midi_parser_callbacks__channel_msg
-// -----------------------------------------------------------------------------
-
-void midi_parser__on_channel_msg(midi_package_t midi_package) {
+void blm_master__channel_msg_handler__process(const midi_package_t &midi_package) {
     if (midi_package.event == NoteOff || midi_package.event == NoteOn) {
         // control the Duo-LEDs via Note On/Off Events
         // The colour is controlled with velocity value:
@@ -89,10 +86,10 @@ void midi_parser__on_channel_msg(midi_package_t midi_package) {
         // 0x01..0x3f: green LED on
         // 0x40..0x5f: red LED on
         // 0x60..0x7f: both LEDs on
-        handle_single_led_change_event(midi_package);
+        blm_master__channel_msg_handler__process_single_led_change_event(midi_package);
     }
     else if (midi_package.event == CC) {
         // "check for packed format" which is transfered via CCs
-        handle_packed_leds_change_event(midi_package);
+        blm_master__channel_msg_handler__process_packed_leds_change_event(midi_package);
     }
 }

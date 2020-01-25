@@ -16,7 +16,7 @@ set(SOURCE_FILES
 
         debug__arduino_serial_midi.h
 
-        midi_handler_blm.h
+        blm_master__channel_msg_handler.h
         midi_package.h
         midi_parser.h
         midi_parser__pt.h

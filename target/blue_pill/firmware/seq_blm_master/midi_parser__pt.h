@@ -19,7 +19,7 @@ void midi_parser__init() {
 
 
 // no REALTIME support
-int midi_parser__run(uint8_t b) {
+int midi_parser__process(uint8_t b) {
     struct pt *pt = &midi_parser__thread;
     PT_BEGIN(pt);
 

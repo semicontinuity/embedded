@@ -18,10 +18,18 @@
 #include "midi_package.h"
 #include "midi_parser__pt.h"
 #include "midi_sender__serial_arduino.h"
-#include "midi_handler_blm.h"
+#include "blm_master__channel_msg_handler.h"
 #include "midi_receiver__serial_arduino_pt.h"
 #include "blm_master__sysex_msg_handler.h"
 #include "blm_master__sysex_msg_handler__arduino_serial_midi.h"
+
+
+// Implementation of callbacks from midi_parser_callbacks__channel_msg
+// -----------------------------------------------------------------------------
+
+void midi_parser__on_channel_msg(midi_package_t midi_package) {
+    blm_master__channel_msg_handler__process(midi_package);
+}
 
 
 // Implements blm_boards_leds__state_scanner_callbacks.h
