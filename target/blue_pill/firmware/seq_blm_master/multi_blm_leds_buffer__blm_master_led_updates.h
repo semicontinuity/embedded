@@ -1,14 +1,15 @@
-// Updates LED data buffer on LED update commands.
+// Implements updating of multi-BLM LED data buffer
+// for blm_master-style commands.
 // -----------------------------------------------------------------------------
 
 #include <Arduino.h>
 #include <stdint.h>
-#include "leds__updater.h"
-#include "leds__buffer.h"
+#include "blm_master__leds.h"
+#include "multi_blm_leds_buffer.h"
 #include "debug__arduino_serial_midi.h"
 
 
-void leds__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
+void multi_blm_leds_buffer__blm_master__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
     debug_p0(D_UPDATE_ONE);
     uint8_t local_x = column & 0x03U;
     uint8_t local_y = row & 0x03U;
@@ -38,7 +39,7 @@ void leds__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
 }
 
 
-void leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void multi_blm_leds_buffer__blm_master__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     debug_p0(D_UPDATE_ROW);
     debug_p8(D_ROW, row);
     debug_p8(D_PATTERN, pattern);
@@ -83,7 +84,7 @@ void leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint
 }
 
 
-void leds__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void multi_blm_leds_buffer__blm_master__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     debug_p0(D_UPDATE_COLUMN);
     debug_p8(D_COLUMN, column);
     debug_p8(D_PATTERN, pattern);
@@ -210,16 +211,16 @@ void leds__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern
 }
 
 
-void leds__update_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void multi_blm_leds_buffer__blm_master__update_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     debug_p0(D_UPDATE_EX_ROW);
 }
 
 
-void leds__update_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void multi_blm_leds_buffer__blm_master__update_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     debug_p0(D_UPDATE_EX_COLUMN);
 }
 
 
-void leds__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
+void multi_blm_leds_buffer__blm_master__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color) {
     debug_p0(D_UPDATE_EX);
 }

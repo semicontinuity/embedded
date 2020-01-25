@@ -7,11 +7,11 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         blm_boards__comm.h
         blm_boards__comm__arduino_i2c.h
-        leds__updater.h
-        leds__buffer.h
-        leds__updater__buffer.h
-        leds__buffer__scanner.h
-        leds__buffer__scanner__callbacks.h
+        blm_master__leds.h
+        multi_blm_leds_buffer.h
+        multi_blm_leds_buffer__blm_master_led_updates.h
+        multi_blm_leds_buffer__scanner.h
+        multi_blm_leds_buffer__scanner__callbacks.h
         blm_boards__comm__debug_arduino_serial_midi.h
 
         debug__arduino_serial_midi.h

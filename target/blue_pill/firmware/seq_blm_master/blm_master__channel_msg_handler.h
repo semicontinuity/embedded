@@ -15,7 +15,7 @@
 #include <Arduino.h>
 
 #include "midi_parser__callbacks__channel_msg.h"
-#include "leds__updater.h"
+#include "blm_master__leds.h"
 
 
 static void blm_master__channel_msg_handler__process_single_led_change_event(midi_package_t midi_package) {

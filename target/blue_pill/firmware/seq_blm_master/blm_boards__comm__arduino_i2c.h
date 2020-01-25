@@ -5,7 +5,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <stdint.h>
-#include "leds__buffer__scanner__callbacks.h"
+#include "multi_blm_leds_buffer__scanner__callbacks.h"
 
 
 TwoWire Wire2(2);

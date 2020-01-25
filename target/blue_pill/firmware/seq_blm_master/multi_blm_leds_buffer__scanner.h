@@ -5,9 +5,8 @@
 // -----------------------------------------------------------------------------
 
 #include <Arduino.h>
-#include <stdbool.h>
-#include "leds__buffer.h"
-#include "leds__buffer__scanner__callbacks.h"
+#include "multi_blm_leds_buffer.h"
+#include "multi_blm_leds_buffer__scanner__callbacks.h"
 #include "debug__arduino_serial_midi.h"
 
 
