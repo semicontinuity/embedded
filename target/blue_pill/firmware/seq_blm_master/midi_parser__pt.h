@@ -8,6 +8,8 @@
 #include "midi_parser__callbacks__sysex_msg.h"
 
 
+// Implementation of midi_parser.h
+
 static struct pt midi_parser__thread;
 static uint8_t midi_parser__running_status;
 static uint8_t midi_parser__byte;

@@ -6,7 +6,7 @@ static uint8_t blm_master__sysex_handler__command;
 static uint8_t blm_master__sysex_handler__command_length;
 
 
-// Implementation of midi_parser_callbacks__sysex_msg.h
+// Implementation of midi_parser__callbacks__sysex_msg.h
 // -----------------------------------------------------------------------------
 
 void midi_parser__on_sysex_data(uint8_t data) {

@@ -5,18 +5,20 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_FILES
-        blm_boards__comm.h
-        blm_boards__comm__arduino_i2c.h
+        blm_boards__comm__events__arduino_i2c.h
+        blm_boards__comm__leds__arduino_i2c.h
+        blm_boards__comm__leds__debug_arduino_serial_midi.h
+
         blm_master__leds.h
+        blm_master__channel_msg_handler.h
+
         multi_blm_leds_buffer.h
         multi_blm_leds_buffer__blm_master_led_updates.h
         multi_blm_leds_buffer__scanner.h
         multi_blm_leds_buffer__scanner__callbacks.h
-        blm_boards__comm__debug_arduino_serial_midi.h
 
         debug__arduino_serial_midi.h
 
-        blm_master__channel_msg_handler.h
         midi_package.h
         midi_parser.h
         midi_parser__pt.h

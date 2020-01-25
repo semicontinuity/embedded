@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "blm_master__sysex_msg_handler__callbacks.h"
 
-// Implementations of callbacks, defined in sysex_handler_blm_callbacks.h
+// Implementations of blm_master__sysex_msg_handler__callbacks.h
 // -----------------------------------------------------------------------------
 
 static const unsigned char blm_master__sysex_handler__header[5] = {0xf0, 0x00, 0x00, 0x7e, 0x4e };
