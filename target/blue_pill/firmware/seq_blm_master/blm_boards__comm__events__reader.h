@@ -1,8 +1,10 @@
 // Reads button and encoder events from BLM boards.
 // -----------------------------------------------------------------------------
 #define LC_INCLUDE "lc-addrlabels.h"
+#include "blm_boards__comm__events__reader__callbacks.h"
 #include <Arduino.h>
 #include <pt.h>
+
 
 uint8_t blm_boards__comm_events__reader__read(uint8_t board);
 

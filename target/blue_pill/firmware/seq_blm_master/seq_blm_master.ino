@@ -13,7 +13,7 @@
 #include "multi_blm_leds_buffer__scanner.h"
 
 #include "blm_boards__comm__events__arduino_i2c.h"
-#include "blm_boards__comm__events__reader_pt.h"
+#include "blm_boards__comm__events__reader.h"
 #include "blm_boards__comm__leds__debug_arduino_serial_midi.h"
 #include "blm_boards__comm__leds__arduino_i2c.h"
 

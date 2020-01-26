@@ -16,7 +16,7 @@ void blm_boards__comm__events__arduino_i2c__init(TwoWire *wire, uint8_t base_add
     blm_boards__comm__events__arduino_i2c__base_address = base_address;
 }
 
-uint8_t blm_boards__comm__events__arduino_i2c__events__read(uint8_t board) {
+uint8_t blm_boards__comm__events__arduino_i2c__read(uint8_t board) {
     blm_boards__comm__events__arduino_i2c__wire->requestFrom(blm_boards__comm__events__arduino_i2c__base_address + board, 1);
     return blm_boards__comm__events__arduino_i2c__wire->read();
 }

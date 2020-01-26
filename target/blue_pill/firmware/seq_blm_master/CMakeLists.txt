@@ -4,9 +4,13 @@ project(seq_blm_master)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_STANDARD 11)
 
-set(SOURCE_FILES
+set(SOURCE_FILES seq_blm_master.ino
+
+        midi_package.h
+
+        blm_boards__comm__events__reader.h
+        blm_boards__comm__events__reader__callbacks.h
         blm_boards__comm__events__arduino_i2c.h
-        blm_boards__comm__events__reader_pt.h
         blm_boards__comm__leds__arduino_i2c.h
         blm_boards__comm__leds__debug_arduino_serial_midi.h
 
@@ -20,7 +24,6 @@ set(SOURCE_FILES
 
         debug__arduino_serial_midi.h
 
-        midi_package.h
         midi_parser.h
         midi_parser__pt.h
         midi_parser__callbacks__sysex_msg.h
@@ -33,7 +36,6 @@ set(SOURCE_FILES
         blm_master__sysex_msg_handler.h
         blm_master__sysex_msg_handler__arduino_serial_midi.h
 
-        seq_blm_master.ino
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c.c
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c_f1.c
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/variants/maple/board.cpp
@@ -61,3 +63,4 @@ add_definitions(-DDSTM32F10X_MD)
 add_definitions(-DMCU_STM32F103CB)
 add_definitions(-DLC_INCLUDE="lc-addrlabels.h")
 add_definitions(-DBLM_SCALAR_NUM_COLOURS=2)
+add_definitions(-DBLM_SCALAR_NUM_BOARDS=4)
