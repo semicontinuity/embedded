@@ -24,10 +24,12 @@ void blm_boards__comm__leds__arduino_i2c__update_one(
     uint8_t g,
     uint8_t b)
 {
-    blm_boards__comm__arduino_i2c__wire->beginTransmission(blm_boards__comm__arduino_i2c__base_address + board);
-    blm_boards__comm__arduino_i2c__wire->write(led);
-    blm_boards__comm__arduino_i2c__wire->write(r);
-    blm_boards__comm__arduino_i2c__wire->write(g);
-    blm_boards__comm__arduino_i2c__wire->write(b);
-    blm_boards__comm__arduino_i2c__wire->endTransmission();
+    if (board < BLM_SCALAR_NUM_BOARDS) {
+        blm_boards__comm__arduino_i2c__wire->beginTransmission(blm_boards__comm__arduino_i2c__base_address + board);
+        blm_boards__comm__arduino_i2c__wire->write(led);
+        blm_boards__comm__arduino_i2c__wire->write(r);
+        blm_boards__comm__arduino_i2c__wire->write(g);
+        blm_boards__comm__arduino_i2c__wire->write(b);
+        blm_boards__comm__arduino_i2c__wire->endTransmission();
+    }
 }
