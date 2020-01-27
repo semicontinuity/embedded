@@ -1,0 +1,42 @@
+Protocol suggestions
+====================
+
+0-byte message:
+RESET
+
+
+1-byte messages are for high speed transfers.
+Type of 1-byte messages should be configurable with separate command.
+
+
+1-byte message, type PAINT16
+Set color for LED N (0-15) from the current 16-item palette.
+--------------------------------------------------------------
+[ LED : 4 ][ COLOR : 4]
+
+1-byte message, type PACKED4
+Adjust color for "bi-color" 4 LEDs, for MIDIBox compatibility
+--------------------------------------------------------------
+[ DIR: 1 ] [ POS : 2] [ CHANNEL: 1] [ PATTERN : 4]
+* DIR: direction; 0 = horizontal, 1 = vertical
+* POS: number of row or column
+* CHANNEL: color channel to adjust with PATTERN.
+Effectively, 2 channels encode 4 colors for each LED.
+Every LED can have associated 4-color palette.
+
+
+2 byte message: PAINT4K
+-------------------------------------------------------------
+Direct pixel painting, 4096 color mode
+[ LED: 4 ] [ R : 4 ] [ G: 4 ] [ B: 4 ]
+
+3 byte message: SETUP
+-------------------------------------------------------------
+[ Mode : 8 ][ Palette offset: 8 ][ VRAM offset: 8]
+
+
+4+ byte messages: PAINT and WRITE
+------------------------------------------------------------
+[ Mode + coords : 8 ][ data bytes ... ]
+* paint, depending on mode + mode bits in message
+* transfer data to palette or video memory
