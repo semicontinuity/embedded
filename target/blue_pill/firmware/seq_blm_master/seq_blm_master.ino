@@ -27,6 +27,7 @@
 #include "midi_package.h"
 #include "midi_parser__pt.h"
 #include "midi_sender__serial_arduino.h"
+#include "blm_master__alive_handler.h"
 
 
 const bool debug = DEBUG;
@@ -50,6 +51,7 @@ uint8_t blm_boards__comm_events__reader__read(uint8_t board) {
 
 void midi_parser__on_channel_msg(midi_package_t midi_package) {
     blm_master__channel_msg_handler__process(midi_package);
+    blm_master__alive_handler__midi_channel_msg_received();
 }
 
 
@@ -122,7 +124,13 @@ void setup() {
 
 
 void loop() {
-    serial_midi_receiver__run();
+    if (serial_midi_receiver__is_runnable()) {
+        serial_midi_receiver__run();
+    } else {
+        // prefer handling of incoming MIDI messages
+        blm_master__alive_handler__run();
+    }
+
 
     if (multi_blm_leds_buffer__scanner__is_runnable()) {
         multi_blm_leds_buffer__scanner__run();

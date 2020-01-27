@@ -14,7 +14,5 @@ bool serial_midi_receiver__is_runnable() {
 }
 
 void serial_midi_receiver__run() {
-    if (serial_midi_receiver__is_runnable()) {
-        midi_parser__process(serial_midi_receiver__serial->read());
-    }
+    midi_parser__process(serial_midi_receiver__serial->read());
 }

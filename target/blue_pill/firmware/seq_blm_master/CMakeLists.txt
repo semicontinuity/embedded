@@ -23,9 +23,6 @@ add_executable(seq_blm_master
         blm_boards__comm__leds__arduino_i2c.h
         blm_boards__comm__leds__debug_arduino_serial_midi.h
 
-        blm_master__leds.h
-        blm_master__channel_msg_handler.h
-
         multi_blm_leds_buffer.h
         multi_blm_leds_buffer__blm_master_led_updates.h
         multi_blm_leds_buffer__scanner.h
@@ -42,7 +39,11 @@ add_executable(seq_blm_master
         midi_sender.h
         midi_sender__serial_arduino.h
 
+        blm_master__leds.h
+        blm_master__channel_msg_handler.h
+        blm_master__alive_handler.h
         blm_master__sysex_msg_handler.h
+        blm_master__sysex_msg_handler__callbacks.h
         blm_master__sysex_msg_handler__arduino_serial_midi.h
         )
 
