@@ -44,7 +44,7 @@ void debug__serial__init(HardwareSerial *serial) {
 }
 
 void debug_p0(uint8_t param) {
-#ifdef DEBUG
+#if DEBUG
     debug__serial->write(0xf0);
     debug__serial->write(param);
     debug__serial->write(0xf7);
@@ -52,7 +52,7 @@ void debug_p0(uint8_t param) {
 }
 
 void debug_p8(uint8_t param, uint8_t v) {
-#ifdef DEBUG
+#if DEBUG
     debug__serial->write(0xf0);
     debug__serial->write(param);
     debug__serial->write((v >> 4) & 0x0F);
@@ -62,7 +62,7 @@ void debug_p8(uint8_t param, uint8_t v) {
 }
 
 void debug_p16(uint8_t param, uint16_t v) {
-#ifdef DEBUG
+#if DEBUG
     debug__serial->write(0xf0);
     debug__serial->write(param);
     debug__serial->write((v >> 12) & 0x0F);
@@ -74,7 +74,7 @@ void debug_p16(uint8_t param, uint16_t v) {
 }
 
 void debug_p32(uint8_t param, uint32_t v) {
-#ifdef DEBUG
+#if DEBUG
     debug__serial->write(0xf0);
     debug__serial->write(param);
     debug__serial->write((v >> 28) & 0x0F);

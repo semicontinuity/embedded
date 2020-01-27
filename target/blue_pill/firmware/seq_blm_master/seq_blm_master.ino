@@ -1,5 +1,6 @@
 #define BLM_SCALAR_NUM_COLOURS 2
 #define BLM_SCALAR_NUM_BOARDS 4
+#define DEBUG 0
 
 #include <Arduino.h>
 #include <string.h>
@@ -28,7 +29,7 @@
 #include "midi_sender__serial_arduino.h"
 
 
-const bool debug = false;
+const bool debug = DEBUG;
 
 // Implementation of callbacks for blm_boards__comm__events__handler.h
 // -----------------------------------------------------------------------------

@@ -44,7 +44,6 @@ add_executable(seq_blm_master
 
         blm_master__sysex_msg_handler.h
         blm_master__sysex_msg_handler__arduino_serial_midi.h
-
         )
 
 include_directories(
@@ -66,3 +65,4 @@ add_definitions(-DMCU_STM32F103CB)
 add_definitions(-DLC_INCLUDE="lc-addrlabels.h")
 add_definitions(-DBLM_SCALAR_NUM_COLOURS=2)
 add_definitions(-DBLM_SCALAR_NUM_BOARDS=4)
+add_definitions(-DDEBUG=0)
