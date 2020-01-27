@@ -4,13 +4,22 @@ project(seq_blm_master)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_STANDARD 11)
 
-set(SOURCE_FILES seq_blm_master.ino
+add_executable(seq_blm_master
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/variants/maple/board.cpp
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c.c
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c_f1.c
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/utility/WireBase.cpp
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/utility/WireBase.h
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/Wire.cpp
+
+        seq_blm_master.ino
 
         midi_package.h
 
         blm_boards__comm__events__reader.h
-        blm_boards__comm__events__reader__callbacks.h
-        blm_boards__comm__events__arduino_i2c.h
+        blm_boards__comm__events__handler.h
+        blm_boards__comm__events__handler__midi.h
+        blm_boards__comm__events__reader__arduino_i2c.h
         blm_boards__comm__leds__arduino_i2c.h
         blm_boards__comm__leds__debug_arduino_serial_midi.h
 
@@ -36,12 +45,6 @@ set(SOURCE_FILES seq_blm_master.ino
         blm_master__sysex_msg_handler.h
         blm_master__sysex_msg_handler__arduino_serial_midi.h
 
-        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c.c
-        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c_f1.c
-        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/variants/maple/board.cpp
-        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/utility/WireBase.cpp
-        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/utility/WireBase.h
-        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/Wire.cpp
         )
 
 include_directories(
@@ -57,7 +60,6 @@ include_directories(
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire
 )
 
-add_executable(${SOURCE_FILES})
 
 add_definitions(-DDSTM32F10X_MD)
 add_definitions(-DMCU_STM32F103CB)
