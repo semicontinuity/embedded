@@ -1,42 +1,70 @@
-Protocol suggestions
+BLM memories
+====================
+* 128 3-byte entries for palette memory
+* 16 3-byte entries for video memory (1 page), with the possibility to extend to 8 pages
+* 3 2-byte entries for palette selector memory, with 3-bit selector for every LED
+
+Color modes
+====================
+* 16M colors: data written to video memory page
+* 128 indexed colors: every entry of palette memory encodes a color
+* 16 indexed colors: 4 bits select a color from a palette for a given LED.
+  Palette is chosen from a set of 8 palettes with a pallette selector memory.
+* 8 indexed colors for every LED:
+  Color is chosen from a 8-color palette, associated with every LED.
+
+Protocol
 ====================
 
 0-byte message:
 RESET
 
-
 1-byte messages are for high speed transfers.
 Type of 1-byte messages should be configurable with separate command.
 
-
 1-byte message, type PAINT16
-Set color for LED N (0-15) from the current 16-item palette.
+Set color for LED N (0-15) from the current palette.
 --------------------------------------------------------------
 [ LED : 4 ][ COLOR : 4]
 
 1-byte message, type PACKED4
-Adjust color for "bi-color" 4 LEDs, for MIDIBox compatibility
+Adjust color for 4 LEDs, for MIDIBox compatibility
 --------------------------------------------------------------
 [ DIR: 1 ] [ POS : 2] [ CHANNEL: 1] [ PATTERN : 4]
 * DIR: direction; 0 = horizontal, 1 = vertical
-* POS: number of row or column
-* CHANNEL: color channel to adjust with PATTERN.
-Effectively, 2 channels encode 4 colors for each LED.
-Every LED can have associated 4-color palette.
+* POS: row or column
+* CHANNEL: color channel to adjust with PATTERN (0 or 1).
+
+Modifies palette selector memory (channel 0 or 1),
+updates contents of video memory appropriately,
+and transfers video memory to LEDs.
+Channel 2 can only be modified with CONFIGURE command.
 
 
-2 byte message: PAINT4K
--------------------------------------------------------------
-Direct pixel painting, 4096 color mode
-[ LED: 4 ] [ R : 4 ] [ G: 4 ] [ B: 4 ]
+2+ byte messages:
 
-3 byte message: SETUP
--------------------------------------------------------------
-[ Mode : 8 ][ Palette offset: 8 ][ VRAM offset: 8]
-
-
-4+ byte messages: PAINT and WRITE
+WRITE_PALETTE
 ------------------------------------------------------------
-[ Mode + coords : 8 ][ data bytes ... ]
-* paint, depending on mode + mode bits in message
-* transfer data to palette or video memory
+[ 1 ] [ start entry : 7 bits ] [ 3-byte color values ]
+
+WRITE_VMEM
+------------------------------------------------------------
+[ 000 ] [ DIR: 1] [ START_LED : 4] [ 3-byte color values ]
+automatic refresh, if writing to active video page
+
+WRITE_VMEM_2
+------------------------------------------------------------
+[ 000 ] [ DIR: 1] [ TODO : 4] [ 1-byte position + 3-byte color values ]*
+automatic refresh, if writing to active video page
+
+UNPACK16
+------------------------------------------------------------
+[ 001 ] [ DIR: 1] [ REFRESH : 1] [ POS + HALF : 3] [ nibbles...]
+
+UNPACK16-2
+------------------------------------------------------------
+[ 001 ] [ DIR: 1] [ REFRESH : 1] [ POS + HALF : 3] [ LED:4 + color:4 ]*
+
+CONFIGURE
+------------------------------------------------------------
+[ 010 ] [ TODO: 5] [ 1-6 bytes of palette selector memory ]
