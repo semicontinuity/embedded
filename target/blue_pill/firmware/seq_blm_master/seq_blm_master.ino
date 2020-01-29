@@ -1,6 +1,8 @@
 #define BLM_SCALAR_NUM_COLOURS 2
 #define BLM_SCALAR_NUM_BOARDS 4
 #define DEBUG 0
+#define DEBUG_COMM_LEDS 0
+#define DEBUG_COMM_EVENTS 1
 
 #include <Arduino.h>
 #include <string.h>
@@ -30,8 +32,6 @@
 #include "blm_master__alive_handler.h"
 
 
-const bool debug = DEBUG;
-
 // Implementation of callbacks for blm_boards__comm__events__handler.h
 // -----------------------------------------------------------------------------
 
@@ -59,10 +59,11 @@ void midi_parser__on_channel_msg(midi_package_t midi_package) {
 // -----------------------------------------------------------------------------
 
 void multi_blm_leds_buffer__scanner__update_one(uint8_t matrix, uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
-    if (debug) {
+    if (DEBUG_COMM_LEDS) {
         blm_boards__comm__leds__debug_arduino_serial_midi__update_one(matrix, led, r, g);
     } else {
         blm_boards__comm__leds__arduino_i2c__update_one(matrix, led, r, g, b);
+        delayMicroseconds(3000);
     }
 }
 
@@ -101,6 +102,7 @@ void setup() {
     pinMode(PA1, OUTPUT);
 
     TwoWire *wire = &Wire2;
+    wire->begin();
 
     HardwareSerial *serial = &Serial2;
     serial->begin(31250);
@@ -108,11 +110,14 @@ void setup() {
     serial_midi_receiver__init(serial);
     midi_sender__serial__init(serial);
 
-    if (debug) {
+    if (DEBUG_COMM_LEDS) {
         blm_boards__comm__leds__debug_arduino_serial_midi__init(serial);
     } else {
-        blm_boards__comm__events__arduino_i2c__init(wire, 0x30);
         blm_boards__comm__leds__arduino_i2c__init(wire, 0x30);
+    }
+
+    if (!DEBUG_COMM_EVENTS) {
+        blm_boards__comm__events__arduino_i2c__init(wire, 0x30);
     }
 
     blm_master__sysex_handler__init(serial);
@@ -137,6 +142,9 @@ void loop() {
     } else {
         // if there are events to be sent to BLM boards, prefer to send them first
         // to avoid any visual lags
-        blm_boards__comm_events__reader__run();
+
+        if (!DEBUG_COMM_EVENTS) {
+            blm_boards__comm_events__reader__run();
+        }
     }
 }
