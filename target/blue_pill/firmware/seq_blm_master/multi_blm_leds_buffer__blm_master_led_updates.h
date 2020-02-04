@@ -17,7 +17,7 @@ void multi_blm_leds_buffer__blm_master__update_one(uint8_t row, uint8_t column, 
     uint8_t green = (color_code & 0x20U) ? 0xFF : 0x00;
     uint8_t red = (color_code & 0x40U) ? 0xFF : 0x00;
 
-    uint8_t matrix_x = ((uint8)(column >> 2U)) & 0x03U;
+    uint8_t matrix_x = ((uint8_t)(column >> 2U)) & 0x03U;
     uint8_t matrix_y = row >> 2U;
 
     uint8_t matrix = (matrix_y << 2U) + matrix_x;

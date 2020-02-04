@@ -2,15 +2,22 @@
 #include "midi_parser__callbacks__sysex_msg.h"
 #include "blm_master__sysex_msg_handler__callbacks.h"
 
+static const uint8_t blm_master__sysex_handler__command_header[5 + 1] = { 0xf0, 0x00, 0x00, 0x7e, 0x4e, 0x00 }; // SYSEX Header + device ID 0
 static uint8_t blm_master__sysex_handler__command;
-static uint8_t blm_master__sysex_handler__command_length;
+static uint8_t blm_master__sysex_handler__command_length = 0;
+static uint8_t blm_master__sysex_handler__command_header_matched = 0;
 
 
 // Implementation of midi_parser__callbacks__sysex_msg.h
 // -----------------------------------------------------------------------------
 
 void midi_parser__on_sysex_data(uint8_t data) {
-    if (!blm_master__sysex_handler__command_length) {
+    if (blm_master__sysex_handler__command_length < sizeof(blm_master__sysex_handler__command_header)) {
+        if (data != blm_master__sysex_handler__command_header[blm_master__sysex_handler__command_length]) {
+            blm_master__sysex_handler__command_header_matched = 0;
+        }
+    } else {
+        blm_master__sysex_handler__command_header_matched = 1;
         blm_master__sysex_handler__command = data;
     }
     ++blm_master__sysex_handler__command_length;
@@ -18,7 +25,7 @@ void midi_parser__on_sysex_data(uint8_t data) {
 
 
 void midi_parser__on_sysex_finish() {
-    if (blm_master__sysex_handler__command_length == 1) {
+    if (blm_master__sysex_handler__command_header_matched && blm_master__sysex_handler__command_length == sizeof(blm_master__sysex_handler__command_header) + 1) {
         switch (blm_master__sysex_handler__command) {
             case 0x00:
                 blm_master__sysex_handler__handle_request_layout_info();
@@ -37,10 +44,12 @@ void midi_parser__on_sysex_finish() {
         blm_master__sysex_handler__handle_invalid_command();
     }
     blm_master__sysex_handler__command_length = 0;
+    blm_master__sysex_handler__command_header_matched = 0;
 }
 
 
 void midi_parser__on_sysex_error() {
     blm_master__sysex_handler__handle_invalid_command();
     blm_master__sysex_handler__command_length = 0;
+    blm_master__sysex_handler__command_header_matched = 0;
 }
