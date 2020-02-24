@@ -304,97 +304,97 @@ uint8_t keyboard__pins__port_c__button_pins_mask(void) {
 
 #if defined(IN__BUTTON16__PORT) && defined(IN__BUTTON16__PIN)
 #if CONCAT(0x, IN__BUTTON16__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON16__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON16__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON17__PORT) && defined(IN__BUTTON17__PIN)
 #if CONCAT(0x, IN__BUTTON17__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON17__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON17__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON18__PORT) && defined(IN__BUTTON18__PIN)
 #if CONCAT(0x, IN__BUTTON18__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON18__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON18__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON19__PORT) && defined(IN__BUTTON19__PIN)
 #if CONCAT(0x, IN__BUTTON19__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON19__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON19__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON20__PORT) && defined(IN__BUTTON20__PIN)
 #if CONCAT(0x, IN__BUTTON20__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON20__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON20__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON21__PORT) && defined(IN__BUTTON21__PIN)
 #if CONCAT(0x, IN__BUTTON21__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON21__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON21__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON22__PORT) && defined(IN__BUTTON22__PIN)
 #if CONCAT(0x, IN__BUTTON22__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON22__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON22__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON23__PORT) && defined(IN__BUTTON23__PIN)
 #if CONCAT(0x, IN__BUTTON23__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON23__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON23__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON24__PORT) && defined(IN__BUTTON24__PIN)
 #if CONCAT(0x, IN__BUTTON24__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON24__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON24__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON25__PORT) && defined(IN__BUTTON25__PIN)
 #if CONCAT(0x, IN__BUTTON25__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON25__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON25__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON26__PORT) && defined(IN__BUTTON26__PIN)
 #if CONCAT(0x, IN__BUTTON26__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON26__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON26__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON27__PORT) && defined(IN__BUTTON27__PIN)
 #if CONCAT(0x, IN__BUTTON27__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON27__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON27__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON28__PORT) && defined(IN__BUTTON28__PIN)
 #if CONCAT(0x, IN__BUTTON28__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON28__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON28__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON29__PORT) && defined(IN__BUTTON29__PIN)
 #if CONCAT(0x, IN__BUTTON29__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON29__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON29__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON30__PORT) && defined(IN__BUTTON30__PIN)
 #if CONCAT(0x, IN__BUTTON30__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON30__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON30__PIN)));
 #endif
 #endif
 
 #if defined(IN__BUTTON31__PORT) && defined(IN__BUTTON31__PIN)
 #if CONCAT(0x, IN__BUTTON31__PORT) == 0xC
-    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON31__PIN));
+    mask |= ((uint8_t)(1U << (uint8_t)(IN__BUTTON31__PIN)));
 #endif
 #endif
 
