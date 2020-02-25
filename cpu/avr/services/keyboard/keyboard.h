@@ -46,7 +46,7 @@ void keyboard__run(void);
  * The type of event can be determined by checking the corresponding bit in the button's port:
  * if (state & (uint8_t)(1 << bit)) != 0, then button is released;
  * if (state & (uint8_t)(1 << bit)) == 0, then button is pressed.
- * @param button index of button (0-15)
+ * @param button index of button (0-31)
  * @param state state of the button's port
  * @param bit index of button's pin in the port
  */

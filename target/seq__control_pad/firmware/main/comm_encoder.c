@@ -23,11 +23,7 @@ bool encoder0__handle_rotation_event(uint8_t encoder, uint8_t delta) {
     led_a__toggle();
     if (!comm_events__queue__is_full()) {
         comm_events__queue__put(
-            IF_BIT_SET_CONST_A_ELSE_CONST_B(
-                delta, 7,
-                COMM_EVENTS__ENCODER__ROTATION_EVENT_COUNTERCLOCKWISE(encoder),
-                COMM_EVENTS__ENCODER__ROTATION_EVENT_CLOCKWISE(encoder)
-            )
+            COMM_EVENTS__ENCODER__ROTATION_EVENT(encoder, delta)
         );
         return true;
     }

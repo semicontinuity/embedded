@@ -19,7 +19,7 @@
  * The type of event can be determined by checking the corresponding bit in the button's port:
  * if (state & (uint8_t)(1 << bit)) != 0, then button is released;
  * if (state & (uint8_t)(1 << bit)) == 0, then button is pressed.
- * @param button index of button (0-15)
+ * @param button index of button (0-19)
  * @param state state of the button's port
  * @param bit index of button's pin in the port
  */
@@ -27,7 +27,12 @@ inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
     led_a__toggle();
     if (!comm_events__queue__is_full()) {
         comm_events__queue__put(
-            IF_BIT_SET_CONST_A_ELSE_CONST_B(state, bit, (uint8_t) ('A' + button), (uint8_t) ('a' + button))
+            IF_BIT_SET_CONST_A_ELSE_CONST_B(
+                    state,
+                    bit,
+                    (uint8_t) COMM_EVENTS__BUTTONS__EVENT_DEPRESSED(button),
+                    (uint8_t) COMM_EVENTS__BUTTONS__EVENT_PRESSED(button)
+            )
         );
         return true;
     }
