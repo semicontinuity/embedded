@@ -73,7 +73,7 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     for(;;) {
-        comm_events__queue__put(io_matrix__in__column0__state__get());
+        comm_events__queue__put(io_matrix__in__column2__state__get());
 
         if (twi__slave__handler__is_runnable()) {
             twi__slave__handler__run();
