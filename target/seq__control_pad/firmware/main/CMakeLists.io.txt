@@ -1,5 +1,5 @@
 add_definitions(-DOUT__ALARM__PORT=B)
-add_definitions(-DOUT__ALARM__PIN=5)
+add_definitions(-DOUT__ALARM__PIN=0)
 add_definitions(-DOUT__LED_A__PORT=B)
 add_definitions(-DOUT__LED_A__PIN=6)
 add_definitions(-DOUT__LED_B__PORT=B)
