@@ -19,6 +19,30 @@ inline void keyboard__port_d__buttons__process_button(uint8_t state, uint8_t cha
 
 
 void keyboard__port_d__buttons__process(uint8_t state, uint8_t changes) {
+    __asm__ __volatile__("keyboard__port_d__buttons__process_button__31:");
+    keyboard__port_d__buttons__process_button(state, changes, 31);
+    __asm__ __volatile__("keyboard__port_d__buttons__process_button__30:");
+    keyboard__port_d__buttons__process_button(state, changes, 30);
+    __asm__ __volatile__("keyboard__port_d__buttons__process_button__29:");
+    keyboard__port_d__buttons__process_button(state, changes, 29);
+    __asm__ __volatile__("keyboard__port_d__buttons__process_button__28:");
+    keyboard__port_d__buttons__process_button(state, changes, 28);
+    __asm__ __volatile__("keyboard__port_d__buttons__process_button__27:");
+    keyboard__port_d__buttons__process_button(state, changes, 27);
+    __asm__ __volatile__("keyboard__port_d__buttons__process_button__26:");
+    keyboard__port_d__buttons__process_button(state, changes, 26);
+    __asm__ __volatile__("keyboard__port_d__buttons__process_button__25:");
+    keyboard__port_d__buttons__process_button(state, changes, 25);
+    __asm__ __volatile__("keyboard__port_d__buttons__process_button__24:");
+    keyboard__port_d__buttons__process_button(state, changes, 24);
+    __asm__ __volatile__("keyboard__port_d__buttons__process_button__23:");
+    keyboard__port_d__buttons__process_button(state, changes, 23);
+    __asm__ __volatile__("keyboard__port_d__buttons__process_button__22:");
+    keyboard__port_d__buttons__process_button(state, changes, 22);
+    __asm__ __volatile__("keyboard__port_d__buttons__process_button__21:");
+    keyboard__port_d__buttons__process_button(state, changes, 21);
+    __asm__ __volatile__("keyboard__port_d__buttons__process_button__20:");
+    keyboard__port_d__buttons__process_button(state, changes, 20);
     __asm__ __volatile__("keyboard__port_d__buttons__process_button__19:");
     keyboard__port_d__buttons__process_button(state, changes, 19);
     __asm__ __volatile__("keyboard__port_d__buttons__process_button__18:");
