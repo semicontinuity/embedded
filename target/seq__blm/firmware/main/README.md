@@ -32,12 +32,14 @@
 | 27 | allocated by compiler                                           |
 | 28 | allocated by compiler                                           |
 | 29 | allocated by compiler                                           |
-| 30 | LEDS__DATA__PTR__REG (L)                                        |
-| 31 | LEDS__DATA__PTR__REG (H)                                        |
+| 30 | COMM_LEDS__MEMORY__PTR__REG (L)                                 |
+| 31 | COMM_LEDS__MEMORY__PTR__REG (H)                                 |
 
 
 ## Flag allocations
 
 |        |   |                                                         |
 |--------|---|---------------------------------------------------------|
-| GPIOR0 | 2 | COMM_LEDS__REFRESH                                      |
+| GPIOR0 | 0 | COMM_LEDS__HEADER_RECEIVED                              |
+| GPIOR0 | 1 | COMM_LEDS__HEADER_PARSED                                |
+| GPIOR0 | 2 | LEDS__REFRESH                                           |

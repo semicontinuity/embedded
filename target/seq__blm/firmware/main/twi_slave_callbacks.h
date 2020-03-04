@@ -22,4 +22,9 @@ void twi__slave__on_data_reception_started(void);
  */
 void twi__slave__on_data_byte_received(uint8_t value);
 
+/**
+ * handler must call twi__continue(true, false)
+ */
+void twi__slave__on_data_reception_finished(void);
+
 #endif

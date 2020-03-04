@@ -1,1 +1,6 @@
-add_definitions(-DCOMM_LEDS__DATA__INDEX__REG=7)
+add_definitions(-DCOMM_LEDS__MEMORY__PTR__REG=30)
+add_definitions(-DCOMM_LEDS__HEADER__REG=7)
+add_definitions(-DCOMM_LEDS__HEADER_RECEIVED__HOST=GPIOR0)
+add_definitions(-DCOMM_LEDS__HEADER_RECEIVED__BIT=0)
+add_definitions(-DCOMM_LEDS__HEADER_PARSED__HOST=GPIOR0)
+add_definitions(-DCOMM_LEDS__HEADER_PARSED__BIT=1)

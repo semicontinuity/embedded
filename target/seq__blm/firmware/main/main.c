@@ -25,6 +25,11 @@
 uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
 
 
+void keyboard__port_b__encoders__process(uint8_t state, uint8_t changes) {}
+void keyboard__port_c__encoders__process(uint8_t state, uint8_t changes) {}
+void keyboard__port_d__encoders__process(uint8_t state, uint8_t changes) {}
+
+
 // application
 // ---------------------------------------------------------------------------------------------------------------------
 

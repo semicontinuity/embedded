@@ -30,10 +30,11 @@ void twi__slave__handler__run(void) {
                 twi__slave__on_data_byte_received(value);
                 // handler must call twi__continue(true, false) if more than 1 data byte remains to be received
                 // handler must call twi__continue(false, false) if the last data byte should be received
+            } else if (status == TWI__STATUS__SLAVE_STOP_OR_REPEATED_START) {
+                // handler must call twi__continue(true, false)
+                twi__slave__on_data_reception_finished();
             } else {
                 // assume that state was TWI__STATUS__SLAVE_WRITE_ACKNOWLEDGED
-                // NB: status can be TWI__STATUS__SLAVE_STOP_OR_REPEATED_START at the end of packet,
-                // can be useful to delect transfers without payload
                 twi__slave__on_data_reception_started();
                 // handler must call twi__continue(true, false); if more than 1 data byte should be received
                 // handler must call twi__continue(false, false); if the only data byte should be received

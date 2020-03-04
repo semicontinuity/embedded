@@ -3,11 +3,11 @@
 
 #include <stdint.h>
 
+extern uint8_t leds__palette[128 * 3];
+extern uint8_t leds__selectors[2 * 3];
+extern uint8_t leds__data[LEDS__COUNT * 3];
+
 void leds__init(void);
-
-void leds__data__position__set(uint8_t position);
-
-void leds__data__put(uint8_t value);
 
 void leds__refresh(void);
 
