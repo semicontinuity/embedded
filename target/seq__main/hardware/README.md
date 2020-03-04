@@ -72,6 +72,8 @@ Pins than can only sink 3mA max:
 | USART1_RX       | PB7  | DIS1_D7          |
 | USART3_TX       | PB10 | SPI2_SCK?        |
 | USART3_RX       | PB11 | ETH_RMII_TX_EN   |
+| USART6_TX       | PC6  | SPI CS? (OK?)    |
+| USART6_RX       | PC7  | SPI CS? (OK?)    |
 | USART3_TX       | PC10 | SDIO_D2          |
 | USART3_RX       | PC11 | SDIO_D3          |
 | UART4_TX        | PC10 | SDIO_D2          |
