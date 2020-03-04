@@ -31,16 +31,21 @@ int main(void) {
 	TM_I2C_Init(I2C1, TM_I2C_PinsPack_2, 100000);
 	
 
-	data_array[0] = 0x00; /* Data 0 */
-	data_array[1] = 0xFF; /* Data 1 */
+	data_array[0] = 0xFF; /* Data 0 */
+	data_array[1] = 0x00; /* Data 1 */
 	data_array[2] = 0x00; /* Data 2 */	
+	TM_I2C_WriteMulti(I2C1, ADDRESS, 0x00, data_array, 3);
+/*
+	data_array[0] = 0x00;
+	data_array[1] = 0xFF;
+	data_array[2] = 0x00;
 	TM_I2C_WriteMulti(I2C1, ADDRESS, 0x01, data_array, 3);
 
-	data_array[0] = 0x00; /* Data 0 */
-	data_array[1] = 0x00; /* Data 1 */
-	data_array[2] = 0xFF; /* Data 2 */	
+	data_array[0] = 0x00;
+	data_array[1] = 0x00;
+	data_array[2] = 0xFF;
 	TM_I2C_WriteMulti(I2C1, ADDRESS, 0x02, data_array, 3);
-	
+*/	
 	while (1) {
 	}
 }

@@ -12,6 +12,7 @@
 
 #define SEQ_USE_MOD
 
+#define MIOS32_DONT_USE_BLM
 #define SEQ_DONT_USE_BLM8X8
 
 // V4+ switch depends on used processor
@@ -252,6 +253,7 @@ extern void APP_SendDebugMessage(char *format, ...);
 #define MIOS32_IIC_MIDI7_ENABLED    1
 
 
+/*
 // configure BLM driver
 #define BLM_DOUT_L1_SR	255 // dummy, will be changed in seq_file_hw.c
 #define BLM_DOUT_R1_SR	255 // dummy, will be changed in seq_file_hw.c
@@ -267,6 +269,7 @@ extern void APP_SendDebugMessage(char *format, ...);
 #define BLM_NUM_COLOURS 2
 #define BLM_NUM_ROWS    8
 #define BLM_DEBOUNCE_MODE 1
+*/
 
 
 // configure BLM_X driver
