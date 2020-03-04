@@ -10,7 +10,7 @@
 #include "i2c.h"
 
 // shifted by one to the left (mios specific)
-#define HID_BOARD_IIC_BASE_ADDR 0x20
+#define HID_BOARD_IIC_BASE_ADDR 0x60
 
 #define PRIORITY_TASK_BUTTON_MATRIX_SCAN (tskIDLE_PRIORITY + 3)
 

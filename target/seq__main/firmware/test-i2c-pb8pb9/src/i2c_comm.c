@@ -8,6 +8,37 @@
 #include <string.h>
 
 
+volatile u8 stall;
+volatile u8 go1;
+volatile u8 go2;
+
+t_c_buf i2c_ev_buf = {
+    .w_offset = 0,
+    .r_offset = 0
+};
+
+t_c_buf i2c_er_buf = {
+        .w_offset = 0,
+        .r_offset = 0
+};
+
+void c_buf_put(t_c_buf *c_buf, u32 value) {
+    u32 w_offset = c_buf->w_offset;
+    c_buf->buffer[w_offset] = value;
+    c_buf->w_offset = (w_offset + 1U) & 0x0FU;
+}
+
+u32 c_buf_get(t_c_buf *c_buf) {
+    u32 r_offset = c_buf->r_offset;
+    u32 value = c_buf->buffer[r_offset];
+    if (value) {
+        c_buf->buffer[r_offset] = 0;
+        c_buf->r_offset = (r_offset + 1U) & 0x0FU;
+    }
+    return value;
+}
+
+
 s32 i2c_transfer(u8 port, u8 iic_addr, u8 *buffer, size_t size, mios32_iic_transfer_t transfer_type) {
     s32 status;
 
@@ -62,6 +93,30 @@ static void TASK_CommunicateWithHIDBoards(void *pvParameters)  {
 
 s32 I2C_Comm_Idle(void)
 {
+    while(1) {
+        u32 ev = c_buf_get(&i2c_ev_buf);
+        if (ev) {
+            MIOS32_MIDI_SendDebugMessage("IIC EV %08x\n", ev);
+        }
+
+        u32 er = c_buf_get(&i2c_er_buf);
+        if (er) {
+            MIOS32_MIDI_SendDebugMessage("IIC ER %08x\n", er);
+        }
+
+        if (stall) {
+            stall = 0;
+            MIOS32_MIDI_SendDebugMessage("IIC STALL\n", er);
+        }
+        if (go1) {
+            go1 = 0;
+            MIOS32_MIDI_SendDebugMessage("IIC GO1\n", er);
+        }
+        if (go2) {
+            go2 = 0;
+            MIOS32_MIDI_SendDebugMessage("IIC GO2\n", er);
+        }
+    }
     return 0;
 }
 

@@ -137,6 +137,20 @@ s32 TERMINAL_ParseLine(char *input, void *_output_function) {
         if (strcmp(parameter, "help") == 0) {
             out("Following commands are available:");
             out("  send");
+        } else if (strcmp(parameter, "sr1") == 0) {
+            uint16_t sr1 = I2C_ReadRegister(I2C1, I2C_Register_SR1);
+            MIOS32_MIDI_SendDebugMessage("SR1: %04x!\n", sr1);
+        } else if (strcmp(parameter, "sr2") == 0) {
+            uint16_t sr2 = I2C_ReadRegister(I2C1, I2C_Register_SR2);
+            MIOS32_MIDI_SendDebugMessage("SR2: %04x!\n", sr2);
+        } else if (strcmp(parameter, "check") == 0) {
+            u32 status;
+            if((status=MIOS32_IIC_TransferCheck(1)) < 0)
+                MIOS32_MIDI_SendDebugMessage("MIOS32_IIC_TransferCheck failed with %d!\n", status);
+        } else if (strcmp(parameter, "wait") == 0) {
+            u32 status;
+            if((status=MIOS32_IIC_TransferWait(1)) < 0)
+                MIOS32_MIDI_SendDebugMessage("MIOS32_IIC_TransferWait failed with %d!\n", status);
         } else if (strcmp(parameter, "send") == 0) {
             I2C_Comm_Send(0);
         } else {

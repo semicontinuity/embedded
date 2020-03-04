@@ -9,6 +9,25 @@
 #ifndef _MIOS32_CONFIG_H
 #define _MIOS32_CONFIG_H
 
+extern volatile u8 stall;
+extern volatile u8 go1;
+extern volatile u8 go2;
+
+typedef struct {
+    volatile u32 buffer[16];
+    volatile u32 w_offset;
+    volatile u32 r_offset;
+} t_c_buf;
+
+extern t_c_buf i2c_ev_buf;
+extern t_c_buf i2c_er_buf;
+
+extern void c_buf_put(t_c_buf *c_buf, u32 value);
+extern u32 c_buf_get(t_c_buf *c_buf);
+
+
+#define MIOS32_IIC_TIMEOUT_VALUE 50000
+
 #define MIOS32_IIC_NUM 2
 #define MIOS32_IIC0_ENABLED 0
 #define MIOS32_IIC1_ENABLED 1
