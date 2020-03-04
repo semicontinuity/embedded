@@ -104,7 +104,76 @@ void twi__slave__on_data_reception_finished(void) {
                 }
             }
         } else {
-            // 1-byte message, stored in comm_leds__header => type PACKED4, format [ DIR: 1 ] [ POS : 2] [ CHANNEL: 1] [ PATTERN : 4]
+            // 1-byte message, stored in comm_leds__header => type PACKED4, format [ CHANNEL: 1 ] [ POS : 2] [ DIR: 1 ] [ PATTERN : 4]
+            // first, updates contents of selector memory, then fetches palette entry using selector memory entry
+            uint8_t *selector_ptr = leds__selectors;
+            comm_leds__memory__ptr = leds__data;
+            
+            if (comm_leds__header & 0x10U) {        // vertical
+                
+            } else {                                // horizontal
+                uint8_t mask = 0x01U;               // mask for CHANNEL 0
+                if (comm_leds__header & 0x80U)      // CHANNEL 1?
+                    mask = 0x02U;                   // mask for CHANNEL 1
+
+                if (comm_leds__header & 0x40U)      // lower 2 rows?
+                    selector_ptr += 8;              // offset by 8 LEDs
+                if (comm_leds__header & 0x40U)      // lower 2 rows?
+                    comm_leds__memory__ptr += 3*8;  // offset by 8 LEDs
+                if (comm_leds__header & 0x20U)      // odd rows?
+                    selector_ptr += 4;              // offset by 4 LEDs
+                if (comm_leds__header & 0x20U)      // odd rows
+                    comm_leds__memory__ptr += 3*4;  // offset by 4 LEDs
+
+
+                uint8_t color0_index = *selector_ptr;
+                color0_index &= (uint8_t) ~mask;    // clear bit of selected CHANNEL
+                if (comm_leds__header & 0x01U)      // bit 0 of PATTERN set?
+                    color0_index |= mask;           // set bit of selected CHANNEL
+                *selector_ptr++ = color0_index;
+
+                uint8_t *color0_ptr = leds__palette + (color0_index + color0_index + color0_index);
+                *comm_leds__memory__ptr++ = *color0_ptr++;
+                *comm_leds__memory__ptr++ = *color0_ptr++;
+                *comm_leds__memory__ptr++ = *color0_ptr;
+                
+                
+                uint8_t color1_index = *selector_ptr;
+                color1_index &= (uint8_t) ~mask;    // clear bit of selected CHANNEL
+                if (comm_leds__header & 0x02U)      // bit 1 of PATTERN set?
+                    color1_index |= mask;           // set bit of selected CHANNEL
+                *selector_ptr++ = color1_index;
+
+                uint8_t *color1_ptr = leds__palette + (color1_index + color1_index + color1_index);
+                *comm_leds__memory__ptr++ = *color1_ptr++;
+                *comm_leds__memory__ptr++ = *color1_ptr++;
+                *comm_leds__memory__ptr++ = *color1_ptr;
+
+
+                uint8_t color2_index = *selector_ptr;
+                color2_index &= (uint8_t) ~mask;    // clear bit of selected CHANNEL
+                if (comm_leds__header & 0x04U)      // bit 2 of PATTERN set?
+                    color2_index |= mask;           // set bit of selected CHANNEL
+                *selector_ptr++ = color2_index;
+
+                uint8_t *color2_ptr = leds__palette + (color2_index + color2_index + color2_index);
+                *comm_leds__memory__ptr++ = *color2_ptr++;
+                *comm_leds__memory__ptr++ = *color2_ptr++;
+                *comm_leds__memory__ptr++ = *color2_ptr;
+
+
+                uint8_t color3_index = *selector_ptr;
+                color3_index &= (uint8_t) ~mask;    // clear bit of selected CHANNEL
+                if (comm_leds__header & 0x08U)      // bit 3 of PATTERN set?
+                    color3_index |= mask;           // set bit of selected CHANNEL
+                *selector_ptr = color3_index;
+
+                uint8_t *color3_ptr = leds__palette + (color3_index + color3_index + color3_index);
+                *comm_leds__memory__ptr++ = *color3_ptr++;
+                *comm_leds__memory__ptr++ = *color3_ptr++;
+                *comm_leds__memory__ptr++ = *color3_ptr;
+            }
+            
             leds__refresh();
         }
     } else {

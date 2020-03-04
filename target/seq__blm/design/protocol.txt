@@ -13,7 +13,7 @@ Color modes
 * 8 indexed colors for every LED:
   Color is chosen from a 8-color palette, associated with every LED.
 
-Protocol
+Protocol v0.1
 ====================
 
 0-byte message:
@@ -79,9 +79,9 @@ Can be used to change 1 LED (with index ENTRY) in 8-color mode.
 Re-paint LEDs if REFRESH bit is set.
 
 
-
-
-
+Protocol v0.2
+====================
+* Palette selector memory: 16 bytes, every byte corresponds to a LED and contains indexed color value (0-127) for that LED.
 
 WRITE_PALETTE
 ------------------------------------------------------------
@@ -102,22 +102,20 @@ UNPACK128
 Select 1 of 128 colors for a given LED from palette and write the resulting RGB value to video memory
 [ 01 ] [RESERVED1: 1] [ REFRESH : 1] [ LED : 4]
 [ RESERVED2: 1] [ INDEX : 7 ]
-Palette memory layout:
-[palette 0][palette 1]..[palette 7]
-Every palette contains 16 entries, 1 for every LED.
-INDEX is interpreted as [PALETTE: 3][OFFSET: 4]
 RESERVED1 may be used as DIR, if decided to implement multi-UNPACK128
-Palette selector memory is updated: for a LED, 3 selector bits are set from PALETTE.
+Palette selector memory for a LED is updated with the INDEX value.
+Then, color value for INDEX is fetched from the palette and written to the video memory.
+Display is optionally refreshed.
 
-1-byte message, type PACKED4
-Adjust color for 4 LEDs, for MIDIBox compatibility
+UNPACK4
 --------------------------------------------------------------
+Adjust color for 4 LEDs, for MIDIBox compatibility
 [ CHANNEL: 1 ] [ POS : 2] [ DIR: 1 ] [ PATTERN : 4]
 * DIR: direction; 0 = horizontal, 1 = vertical
 * POS: row or column
 * CHANNEL: color channel to adjust with PATTERN (0 or 1).
 
-Modifies palette selector memory (channel 0 or 1),
-updates contents of video memory appropriately,
+Modifies palette selector memory (bit 0 or 1),
+updates contents of video memory correspondingly,
 and transfers video memory to LEDs.
-All channels can be modified with UNPACK128 command (but only for 1 LED).
+All channels can be modified with UNPACK128 command (but only for 1 LED (?)).

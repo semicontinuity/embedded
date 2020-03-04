@@ -9,8 +9,8 @@
 #include "util/bitops.h"
 
 uint8_t leds__palette[128 * 3];
-uint8_t leds__selectors[2 * 3];
-uint8_t leds__data[LEDS__COUNT * 3];
+uint8_t leds__data[16 * 3];
+uint8_t leds__selectors[16];
 
 
 #if defined(LEDS__REFRESH__HOST) && defined(LEDS__REFRESH__BIT)
