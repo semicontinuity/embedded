@@ -49,22 +49,66 @@ WRITE_PALETTE
 
 WRITE_VMEM
 ------------------------------------------------------------
-[ 000 ] [ DIR: 1] [ START_LED : 4] [ 3-byte color values ]
+[ 000 ] [ DIR: 1] [ START_LED : 4]
+[ 3-byte color value ]+
 automatic refresh, if writing to active video page
 
-WRITE_VMEM_2
+WRITE_VMEM_2?
 ------------------------------------------------------------
-[ 000 ] [ DIR: 1] [ TODO : 4] [ 1-byte position + 3-byte color values ]*
+[ 000 ] [ DIR: 1] [ TODO : 4]
+[ 1-byte position + 3-byte color values ]+
 automatic refresh, if writing to active video page
 
 UNPACK16
 ------------------------------------------------------------
 [ 001 ] [ DIR: 1] [ REFRESH : 1] [ POS + HALF : 3] [ nibbles...]
 
-UNPACK16-2
+UNPACK16_2?
 ------------------------------------------------------------
 [ 001 ] [ DIR: 1] [ REFRESH : 1] [ POS + HALF : 3] [ LED:4 + color:4 ]*
 
 CONFIGURE
 ------------------------------------------------------------
 [ 010 ] [ TODO: 5] [ 1-6 bytes of palette selector memory ]
+
+WRITE_PALETTE_SELECTOR_ENTRY
+------------------------------------------------------------
+[ 011 ] [ REFRESH: 1] [ ENTRY: 4]   [ TODO: 5 ] [ SELECTOR: 3 ]
+Copy 3 bits to paletter selector memory and update video memory correspondingly.
+Can be used to change 1 LED (with index ENTRY) in 8-color mode.
+Re-paint LEDs if REFRESH bit is set.
+
+
+
+
+
+
+WRITE_PALETTE
+------------------------------------------------------------
+[ 1 ] [ start entry : 7 bits ]
+[ 3-byte color value ]+
+
+WRITE_VMEM
+------------------------------------------------------------
+[ 000 ] [ DIR: 1] [ START_LED : 4]
+[ 3-byte color value ]+
+refresh after command reception
+
+UNPACK128
+------------------------------------------------------------
+[ 001 ] [ REFRESH : 1] [ LED : 4] [ TODO: 1] [ INDEX : 7 ]
+also updates palette selector memory
+
+
+1-byte message, type PACKED4
+Adjust color for 4 LEDs, for MIDIBox compatibility
+--------------------------------------------------------------
+[ DIR: 1 ] [ POS : 2] [ CHANNEL: 1] [ PATTERN : 4]
+* DIR: direction; 0 = horizontal, 1 = vertical
+* POS: row or column
+* CHANNEL: color channel to adjust with PATTERN (0 or 1).
+
+Modifies palette selector memory (channel 0 or 1),
+updates contents of video memory appropriately,
+and transfers video memory to LEDs.
+All channels can be modified with UNPACK128 command.
