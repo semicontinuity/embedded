@@ -8,7 +8,7 @@ uint32_t blm_master__alive_handler__last_tx_millis = 0;
 
 void blm_master__alive_handler__midi_channel_msg_received() {
     blm_master__alive_handler__midi_data_received = true;
-    digitalWrite(PA1, HIGH);
+    digitalWrite(PA1, HIGH);    // debug LED
 }
 
 
@@ -24,6 +24,6 @@ void blm_master__alive_handler__run() {
         }
         blm_master__alive_handler__last_tx_millis = ms;
         blm_master__alive_handler__midi_data_received = false;
-        digitalWrite(PA1, LOW);
+        digitalWrite(PA1, LOW); // debug LED
     }
 }

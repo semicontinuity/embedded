@@ -39,46 +39,40 @@ static void blm_master__channel_msg_handler__process_packed_leds_change_event(mi
     switch (cc_number_masked) {
         case 0x10:
 #if BLM_SCALAR_NUM_COLOURS >= 2
-            case 0x20:
+        case 0x20:
 #endif
-            blm_master__leds__update_row(chn, is_second_half, pattern,
-                                         cc_number_masked == 0x10 ? 0 : 1 /* green or red */);  // or just shift to get color
+            blm_master__leds__update_row(chn, is_second_half, pattern, cc_number_masked == 0x10 ? 0 : 1 /* green or red */);
             break;
 
         case 0x18:
 #if BLM_SCALAR_NUM_COLOURS >= 2
-            case 0x28:
+        case 0x28:
 #endif
-            blm_master__leds__update_column(chn, is_second_half, pattern,
-                                            cc_number_masked == 0x18 ? 0 : 1 /* green or red */);   // or just shift to get color
+            blm_master__leds__update_column(chn, is_second_half, pattern, cc_number_masked == 0x18 ? 0 : 1 /* green or red */);
             break;
 
         case 0x40:
 #if BLM_SCALAR_NUM_COLOURS >= 2
-            case 0x48:
+        case 0x48:
 #endif
             if (chn == 0) {
-                blm_master__leds__update_extra_column(is_second_half, pattern,
-                                                      cc_number_masked == 0x40 ? 0 : 1 /* green or red */);
+                blm_master__leds__update_extra_column(is_second_half, pattern, cc_number_masked == 0x40 ? 0 : 1 /* green or red */);
             }
             break;
 
         case 0x60:
 #if BLM_SCALAR_NUM_COLOURS >= 2
-            case 0x68:
+        case 0x68:
 #endif
             if (chn == 0) {
-                blm_master__leds__update_extra_row(is_second_half, pattern,
-                                                   cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
+                blm_master__leds__update_extra_row(is_second_half, pattern, cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
             } else if (chn == 15) {
-                blm_master__leds__update_extra(is_second_half, pattern,
-                                               cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
+                blm_master__leds__update_extra(is_second_half, pattern, cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
             }
             break;
+        default:
+            break;
     }
-    
-    // to generate pings:
-    // notifyDataReceived();
 }
 
 
@@ -93,7 +87,7 @@ void blm_master__channel_msg_handler__process(const midi_package_t &midi_package
         blm_master__channel_msg_handler__process_single_led_change_event(midi_package);
     }
     else if (midi_package.event == CC) {
-        // "check for packed format" which is transfered via CCs
+        // "check for packed format" which is transferred via CCs
         blm_master__channel_msg_handler__process_packed_leds_change_event(midi_package);
     }
 }
