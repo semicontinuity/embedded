@@ -85,24 +85,35 @@ Protocol v0.2
 
 WRITE_PALETTE
 ------------------------------------------------------------
-Update 1 or more entries of palette memory
-[ 1 ] [ start entry : 7 bits ]
-[ 3-byte color value ]+
+Update 1 or more entries of palette memory.
+[ 1 ] [ START_ENTRY : 7 bits ]
+[ 3-byte color value ]+ (1 or more 3-byte entries)
+* START_ENTRY: number of entry to start writing to
 no refresh after command reception
 
 WRITE_VMEM
 ------------------------------------------------------------
+Paint with RGB colors.
 Update 1 or more entries of video memory
 [ 00 ] [ DIR: 1] [ REFRESH: 1] [ START_LED : 4]
-[ 3-byte color value ]+
-refresh after command reception
+[ 3-byte color value ]+ (1 or more 3-byte entries)
+* DIR: direction; 0 = horizontal, 1 = vertical
+* START_LED: number of LED to start painting at
+* REFRESH: refresh LEDs after when command is handled
 
 UNPACK128
 ------------------------------------------------------------
-Select 1 of 128 colors for a given LED from palette and write the resulting RGB value to video memory
-[ 01 ] [RESERVED1: 1] [ REFRESH : 1] [ LED : 4]
-[ RESERVED2: 1] [ INDEX : 7 ]
-RESERVED1 may be used as DIR, if decided to implement multi-UNPACK128
+Paint with indexed colors.
+Select 1 of 128 colors for a given LED from palette and write the resulting RGB value to video memory.
+[ 01 ] [ DIR: 1] [ REFRESH : 1] [ LED : 4]
+[ 1-byte color value =[ RESERVED: 1][ INDEX : 7 ] ]+ (1 or more bytes)
+
+* DIR: direction; 0 = horizontal, 1 = vertical
+* REFRESH: refresh LEDs after when command is handled
+* START_LED: number of LED to start painting at
+* INDEX: indexed color value, 0-127 (because WRITE_PALETTE can address ofly 128 entries, and memory limitations of low-end MCU)
+
+For every payload byte:
 Palette selector memory for a LED is updated with the INDEX value.
 Then, color value for INDEX is fetched from the palette and written to the video memory.
 Display is optionally refreshed.

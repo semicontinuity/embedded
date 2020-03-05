@@ -70,10 +70,20 @@ void twi__slave__on_data_byte_received(const uint8_t value) {
             // optimize it
             *comm_leds__memory__ptr++ = value;
         } else {
-            if (comm_leds__header & 0x40U) {    // bit 6 is 1 for UNPACK128 message, 0 for WRITE_VMEM
-                // UNPACK128 message, format [ 01 ] [RESERVED1: 1] [ REFRESH : 1] [ LED : 4] + [ RESERVED2: 1] [ INDEX : 7 ]
+            // bit 6 is 1 for UNPACK128 message, 0 for WRITE_VMEM
+            if (comm_leds__header & 0x40U) {        // is UNPACK128?
+                // UNPACK128 message, format [ 01 ] [DIR : 1] [ REFRESH : 1] [ LED : 4] + [ RESERVED: 1] [ INDEX : 7 ]
                 if (!comm_leds__header_parsed__get()) {
                     comm_leds__header_parsed__set(1);
+                    uint8_t led_index = comm_leds__header & 0x0FU;  // extract LED field
+                    comm_leds__memory__ptr = leds__data + (led_index + led_index + led_index);
+                }
+                uint8_t *color_ptr = leds__palette + (value + value + value);   // value is INDEX field, assume RESERVED is 0
+                *comm_leds__memory__ptr++ = *color_ptr++;
+                *comm_leds__memory__ptr++ = *color_ptr++;
+                *comm_leds__memory__ptr++ = *color_ptr;
+                if (comm_leds__header & 0x20U) {    // DIR bit set?
+                    comm_leds__memory__ptr += 9;    // point to the memory of LED below
                 }
             } else {
                 // WRITE_VMEM message, format [ 00 ] [ DIR: 1] [ REFRESH: 1] [ START_LED : 4] + [ 3-byte color value ]+
@@ -105,9 +115,9 @@ void twi__slave__on_data_reception_finished(void) {
         if (comm_leds__header_parsed__get()) {
             // Multi-byte messages
 
-            if (!(comm_leds__header & 0x80U)) {
+            if (!(comm_leds__header & 0x80U)) {     // not WRITE_PALETTE?
                 // WRITE_VMEM or UNPACK128
-                if (comm_leds__header & 0x10U) {    // bit 4 is REFRESH
+                if (comm_leds__header & 0x10U) {    // bit 4 is REFRESH, is it set?
                     leds__refresh();
                 }
             }
