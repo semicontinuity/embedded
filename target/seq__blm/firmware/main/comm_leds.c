@@ -48,7 +48,7 @@ DEFINE_BITVAR(comm_leds__header_parsed, comm_leds__header_parsed, 0);
 void twi__slave__on_data_reception_started(void) {
     __asm__ __volatile__("twi__slave__on_data_reception_started:");
     twi__continue(true, false);
-    comm_leds__header = 0;
+    comm_leds__header_received__set(0);
     comm_leds__header_parsed__set(0);
 }
 
@@ -59,26 +59,36 @@ void twi__slave__on_data_byte_received(const uint8_t value) {
     if (comm_leds__header_received__get()) {
         // Received payload byte of multi-byte message.
         // comm_leds__header contains first byte of multi-byte message.
-        if (!comm_leds__header_parsed__get()) {
-            comm_leds__header_parsed__set(1);
-            if (comm_leds__header & 0x80U) {
-                // WRITE_PALETTE message, format [1][palette index]
+
+        if (comm_leds__header & 0x80U) {
+            // WRITE_PALETTE message, format [1][palette index]
+            if (!comm_leds__header_parsed__get()) {
+                comm_leds__header_parsed__set(1);
                 uint8_t palette_index = comm_leds__header & 0x7FU;
                 comm_leds__memory__ptr = leds__palette + (palette_index + palette_index + palette_index);
+            }
+            // optimize it
+            *comm_leds__memory__ptr++ = value;
+        } else {
+            if (comm_leds__header & 0x40U) {    // bit 6 is 1 for UNPACK128 message, 0 for WRITE_VMEM
+                // UNPACK128 message, format [ 01 ] [RESERVED1: 1] [ REFRESH : 1] [ LED : 4] + [ RESERVED2: 1] [ INDEX : 7 ]
+                if (!comm_leds__header_parsed__get()) {
+                    comm_leds__header_parsed__set(1);
+                }
             } else {
-                if (comm_leds__header & 0x40U) {
-                    // UNPACK128 message, format [ 01 ] [RESERVED1: 1] [ REFRESH : 1] [ LED : 4] + [ RESERVED2: 1] [ INDEX : 7 ]
-                    return;
-                } else {
-                    // WRITE_VMEM message, format [ 00 ] [ DIR: 1] [ REFRESH: 1] [ START_LED : 4] + [ 3-byte color value ]+
-                    uint8_t led_index = comm_leds__header & 0x0FU;
-                    comm_leds__memory__ptr = leds__palette + (led_index + led_index + led_index);
+                // WRITE_VMEM message, format [ 00 ] [ DIR: 1] [ REFRESH: 1] [ START_LED : 4] + [ 3-byte color value ]+
+                if (!comm_leds__header_parsed__get()) {
+                    comm_leds__header_parsed__set(1);
+                    uint8_t led_index = comm_leds__header & 0x0FU;  // extract START_LED field
+                    comm_leds__memory__ptr = leds__data + (led_index + led_index + led_index);
+                }
+                // optimize it
+                *comm_leds__memory__ptr++ = value;
+                if (comm_leds__header & 0x20U) {    // DIR bit set?
+                    comm_leds__memory__ptr += 9;    // point to the memory of LED below
                 }
             }
         }
-
-        // optimize it
-        *comm_leds__memory__ptr++ = value;
     } else {
         comm_leds__header_received__set(1);
         comm_leds__header = value;
@@ -91,15 +101,13 @@ void twi__slave__on_data_reception_finished(void) {
     twi__continue(true, false);
 
     if (comm_leds__header_received__get()) {
-        comm_leds__header_received__set(0);
 
         if (comm_leds__header_parsed__get()) {
             // Multi-byte messages
-            comm_leds__header_parsed__set(0);
 
             if (!(comm_leds__header & 0x80U)) {
                 // WRITE_VMEM or UNPACK128
-                if (comm_leds__header & 0x10U) {
+                if (comm_leds__header & 0x10U) {    // bit 4 is REFRESH
                     leds__refresh();
                 }
             }
