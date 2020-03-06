@@ -13,19 +13,19 @@
 
 void blm_boards__comm_p1__leds__buffer__blm_master__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
     debug_midi__sysex_p0(D_UPDATE_ONE);
+    uint8_t matrix_x = ((uint8_t)(column >> 2U)) & 0x03U;
+    uint8_t matrix_y = row >> 2U;
+    uint8_t matrix = (matrix_y << 2U) + matrix_x;
+    debug_midi__sysex_p8(D_BOARD, matrix);
+
     uint8_t local_x = column & 0x03U;
     uint8_t local_y = row & 0x03U;
+    uint8_t led = (local_y << 2U) + local_x;
+    debug_midi__sysex_p8(D_LED, led);
 
     uint8_t green = (color_code & 0x20U) ? 0xFF : 0x00;
     uint8_t red = (color_code & 0x40U) ? 0xFF : 0x00;
 
-    uint8_t matrix_x = ((uint8_t)(column >> 2U)) & 0x03U;
-    uint8_t matrix_y = row >> 2U;
-
-    uint8_t matrix = (matrix_y << 2U) + matrix_x;
-    debug_midi__sysex_p8(D_BOARD, matrix);
-    uint8_t led = (local_y << 2U) + local_x;
-    debug_midi__sysex_p8(D_LED, led);
     uint32_t requested = blm_boards__comm_p1__leds__buffer__requested[matrix];
     if (green) { requested |= (1U << led); } else { requested &= ~(1U << led); }
     if (red) { requested |= (1U << (led + 16U)); } else { requested &= ~(1U << (led + 16U)); }
@@ -45,9 +45,13 @@ void blm_boards__comm_p1__leds__buffer__blm_master__update_row(uint8_t row, uint
     debug_midi__sysex_p0(D_UPDATE_ROW);
     debug_midi__sysex_p8(D_ROW, row);
     debug_midi__sysex_p8(D_PATTERN, pattern);
-    uint8_t matrix = ((row >> 2U) << 2U) + (is_second_half ? 2 : 0);
+    
+    uint8_t matrix_y = row >> 2U;
+    uint8_t matrix = (matrix_y << 2U) + (is_second_half ? 2 : 0);
     debug_midi__sysex_p8(D_BOARD, matrix);
-    uint8_t shift = (color_code ? 16 : 0) + ((row & 0x03U) << 2U);
+
+    uint8_t local_y = row & 0x03U;
+    uint8_t shift = (color_code ? 16 : 0) + (local_y << 2U);
     debug_midi__sysex_p8(D_SHIFT, shift);
     uint32_t mask = ~(0x000FU << shift);
     debug_midi__sysex_p32(D_MASK, mask);
@@ -90,9 +94,13 @@ void blm_boards__comm_p1__leds__buffer__blm_master__update_column(uint8_t column
     debug_midi__sysex_p0(D_UPDATE_COLUMN);
     debug_midi__sysex_p8(D_COLUMN, column);
     debug_midi__sysex_p8(D_PATTERN, pattern);
-    uint8_t matrix = (column >> 2U) + (is_second_half ? 8 : 0);
+
+    uint8_t matrix_y = column >> 2U;
+    uint8_t matrix = matrix_y + (is_second_half ? 8 : 0);
     debug_midi__sysex_p8(D_BOARD, matrix);
-    uint8_t initial_shift = (color_code ? 16 : 0) + (column & 0x03U);
+
+    uint8_t local_x = column & 0x03U;
+    uint8_t initial_shift = (color_code ? 16 : 0) + local_x;
     debug_midi__sysex_p8(D_SHIFT, initial_shift);
 
     uint32_t requested;
