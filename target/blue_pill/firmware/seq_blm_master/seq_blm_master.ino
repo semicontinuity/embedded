@@ -160,7 +160,8 @@ void setup() {
     midi_parser__init();
     blm_boards__comm_events__reader__init();
 
-    blm_boards__comm_p1__leds__buffer__init();
+//    blm_boards__comm_p1__leds__buffer__init();
+    blm_boards__comm_p2__leds__buffer__init();
 }
 
 
@@ -173,8 +174,8 @@ void loop() {
     }
 
 
-    if (blm_boards__comm_p1__leds__buffer__scanner__is_runnable()) {
-        blm_boards__comm_p1__leds__buffer__scanner__run();
+    if (blm_boards__comm_p2__leds__buffer__scanner__is_runnable()) {
+        blm_boards__comm_p2__leds__buffer__scanner__run();
     } else {
         // if there are events to be sent to BLM boards, prefer to send them first
         // to avoid any visual lags
