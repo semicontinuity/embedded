@@ -77,29 +77,14 @@ void blm_boards__comm_p1__leds__buffer__scanner__update_one(uint8_t matrix, uint
 // Implements blm_boards__comm_p2__leds__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
 
-void blm_boards__comm_p2__leds__buffer__scanner__update_row(
+void blm_boards__comm_p2__leds__buffer__scanner__emit_command(
         uint8_t matrix,
-        uint8_t row,
-        uint8_t color_code,
-        uint8_t pattern)
+        uint8_t command)
 {
     if (DEBUG_COMM_LEDS) {
-        blm_boards__comm_p2__leds__debug_arduino_serial_midi__update_row(matrix, row, color_code, pattern);
+        blm_boards__comm_p2__leds__debug_arduino_serial_midi__emit_command(matrix, command);
     } else {
-        blm_boards__comm_p2__leds__arduino_i2c__update_row(matrix, row, color_code, pattern);
-    }
-}
-
-void blm_boards__comm_p2__leds__buffer__scanner__update_column(
-        uint8_t matrix,
-        uint8_t column,
-        uint8_t color_code,
-        uint8_t pattern)
-{
-    if (DEBUG_COMM_LEDS) {
-        blm_boards__comm_p2__leds__debug_arduino_serial_midi__update_column(matrix, column, color_code, pattern);
-    } else {
-        blm_boards__comm_p2__leds__arduino_i2c__update_column(matrix, column, color_code, pattern);
+        blm_boards__comm_p2__leds__arduino_i2c__emit_command(matrix, command);
     }
 }
 

@@ -8,20 +8,13 @@
 // Implements blm_boards__comm_p2__leds__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
 
-void blm_boards__comm_p2__leds__debug_arduino_serial_midi__update_row(
+void blm_boards__comm_p2__leds__debug_arduino_serial_midi__emit_command(
         uint8_t matrix,
-        uint8_t row,
-        uint8_t color_code,
-        uint8_t pattern)
+        uint8_t command)
 {
-    debug_midi__program_change(matrix, (color_code << 6U) + (row << 4U) + pattern);
-}
-
-void blm_boards__comm_p2__leds__debug_arduino_serial_midi__update_column(
-        uint8_t matrix,
-        uint8_t column,
-        uint8_t color_code,
-        uint8_t pattern)
-{
-    debug_midi__channel_pressure(matrix, (color_code << 6U) + (column << 4U) + pattern);
+    if (command & 0x80U) {
+        debug_midi__channel_pressure(matrix, command & 0x7FU);
+    } else {
+        debug_midi__program_change(matrix, command);
+    }
 }

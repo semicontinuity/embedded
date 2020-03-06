@@ -19,26 +19,10 @@ void blm_boards__comm_p2__leds__arduino_i2c__init(TwoWire *wire, uint8_t base_ad
 // Implements blm_boards__comm_p2__leds__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
 
-void blm_boards__comm_p2__leds__arduino_i2c__update_row(
-        uint8_t board,
-        uint8_t row,
-        uint8_t color_code,
-        uint8_t pattern)
-{
+void blm_boards__comm_p2__leds__arduino_i2c__emit_command(uint8_t board, uint8_t command) {
     if (board < BLM_SCALAR_NUM_BOARDS) {
         blm_boards__comm_p2__leds__arduino_i2c__wire->beginTransmission(blm_boards__comm_p2__leds__arduino_i2c__base_address + board);
-        blm_boards__comm_p2__leds__arduino_i2c__wire->write((uint8_t)((color_code << 7U) + (row << 5U) + (0U << 4U) + pattern));
+        blm_boards__comm_p2__leds__arduino_i2c__wire->write(command);
         blm_boards__comm_p2__leds__arduino_i2c__wire->endTransmission();
     }
-}
-
-void blm_boards__comm_p2__leds__arduino_i2c__update_column(
-        uint8_t board,
-        uint8_t column,
-        uint8_t color_code,
-        uint8_t pattern)
-{
-    blm_boards__comm_p2__leds__arduino_i2c__wire->beginTransmission(blm_boards__comm_p2__leds__arduino_i2c__base_address + board);
-    blm_boards__comm_p2__leds__arduino_i2c__wire->write((uint8_t)((color_code << 7U) + (column << 5U) + (1U << 4U) + pattern));
-    blm_boards__comm_p2__leds__arduino_i2c__wire->endTransmission();
 }
