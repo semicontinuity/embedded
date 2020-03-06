@@ -8,6 +8,7 @@
 #include "blm_master__leds.h"
 #include "blm_boards__comm_p1__leds__buffer.h"
 #include "debug_midi__arduino_serial.h"
+#include "debug_midi__sysex_parameters.h"
 
 
 void blm_boards__comm_p1__leds__buffer__blm_master__update_one(uint8_t row, uint8_t column, uint8_t color_code) {

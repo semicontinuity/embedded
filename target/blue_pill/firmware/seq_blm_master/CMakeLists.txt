@@ -40,6 +40,7 @@ add_executable(seq_blm_master
         blm_boards__comm_p2__leds__debug_arduino_serial_midi.h
 
         debug_midi__arduino_serial.h
+        debug_midi__sysex_parameters.h
 
         midi_parser.h
         midi_parser__pt.h

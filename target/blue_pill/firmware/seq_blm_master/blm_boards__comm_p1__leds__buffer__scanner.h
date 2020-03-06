@@ -9,7 +9,7 @@
 #include "blm_boards__comm_p1__leds__buffer.h"
 #include "blm_boards__comm_p1__leds__buffer__scanner__callbacks.h"
 #include "debug_midi__arduino_serial.h"
-
+#include "debug_midi__sysex_parameters.h"
 
 /** @return true if the board became synchronized (clean), false otherwise */
 static bool blm_boards__comm_p1__leds__buffer__scanner__scan(unsigned int board) {
