@@ -24,13 +24,18 @@ add_executable(seq_blm_master
         blm_boards__comm__events__handler.h
         blm_boards__comm__events__handler__midi.h
         blm_boards__comm__events__reader__arduino_i2c.h
-        blm_boards__comm__leds__arduino_i2c.h
-        blm_boards__comm__leds__debug_arduino_serial_midi.h
+        blm_boards__comm_p1__leds__arduino_i2c.h
+        blm_boards__comm_p1__leds__debug_arduino_serial_midi.h
 
-        multi_blm_p1_leds_buffer.h
-        multi_blm_p1_leds_buffer__blm_master_led_updates.h
-        multi_blm_p1_leds_buffer__scanner.h
-        multi_blm_p1_leds_buffer__scanner__callbacks.h
+        blm_boards__comm_p1__leds__buffer.h
+        blm_boards__comm_p1__leds__buffer__blm_master_updates.h
+        blm_boards__comm_p1__leds__buffer__scanner.h
+        blm_boards__comm_p1__leds__buffer__scanner__callbacks.h
+
+        blm_boards__comm_p2__leds__buffer.h
+        blm_boards__comm_p2__leds__buffer__blm_master_updates.h
+        multi_blm_p2_leds_buffer__scanner.h
+        multi_blm_p2_leds_buffer__scanner__callbacks.h
 
         debug__arduino_serial_midi.h
 

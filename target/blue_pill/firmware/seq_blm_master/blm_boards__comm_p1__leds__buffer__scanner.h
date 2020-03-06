@@ -1,23 +1,24 @@
 // Scans LED state data structures
 // and produces on BLM board LED update commands.
 // May generate up to 1 LED update command on every invocation
-// of multi_blm_p1_leds_buffer__scanner__run().
+// of blm_boards__comm_p1__leds__buffer__scanner__run().
+// (Protocol 1)
 // -----------------------------------------------------------------------------
 
 #include <Arduino.h>
-#include "multi_blm_p1_leds_buffer.h"
-#include "multi_blm_p1_leds_buffer__scanner__callbacks.h"
+#include "blm_boards__comm_p1__leds__buffer.h"
+#include "blm_boards__comm_p1__leds__buffer__scanner__callbacks.h"
 #include "debug__arduino_serial_midi.h"
 
 
 /** @return true if the board became synchronized (clean), false otherwise */
-static bool multi_blm_p1_leds_buffer__scanner__scan(unsigned int board) {
+static bool blm_boards__comm_p1__leds__buffer__scanner__scan(unsigned int board) {
     debug_p0(D_SCAN);
     debug_p8(D_BOARD, board);
 
-    uint32_t current = multi_blm_p1_leds_buffer__current[board];
+    uint32_t current = blm_boards__comm_p1__leds__buffer__current[board];
     debug_p32(D_CURRENT, current);
-    uint32_t requested = multi_blm_p1_leds_buffer__requested[board];
+    uint32_t requested = blm_boards__comm_p1__leds__buffer__requested[board];
     debug_p32(D_REQUESTED, requested);
 
     uint32_t raw_diff = current ^ requested;
@@ -49,23 +50,23 @@ static bool multi_blm_p1_leds_buffer__scanner__scan(unsigned int board) {
             current &= ~red_mask;
         }
 
-        multi_blm_p1_leds_buffer__current[board] = current;
-        debug_p32(D_CURRENT, multi_blm_p1_leds_buffer__current[board]);
+        blm_boards__comm_p1__leds__buffer__current[board] = current;
+        debug_p32(D_CURRENT, blm_boards__comm_p1__leds__buffer__current[board]);
 
-        multi_blm_p1_leds_buffer__scanner__update_one(board, led, red, green, 0);
+        blm_boards__comm_p1__leds__buffer__scanner__update_one(board, led, red, green, 0);
     }
     return current == requested;
 }
 
-bool multi_blm_p1_leds_buffer__scanner__is_runnable() {
-    return multi_blm_p1_leds_buffer__dirty;
+bool blm_boards__comm_p1__leds__buffer__scanner__is_runnable() {
+    return blm_boards__comm_p1__leds__buffer__dirty;
 }
 
-void multi_blm_p1_leds_buffer__scanner__run() {
-    int board = __builtin_ffs(multi_blm_p1_leds_buffer__dirty) - 1;
+void blm_boards__comm_p1__leds__buffer__scanner__run() {
+    int board = __builtin_ffs(blm_boards__comm_p1__leds__buffer__dirty) - 1;
     if (board >= 0) {
-        if (multi_blm_p1_leds_buffer__scanner__scan(board)) {
-            multi_blm_p1_leds_buffer__dirty &= ~(1U << (uint32_t) board);
+        if (blm_boards__comm_p1__leds__buffer__scanner__scan(board)) {
+            blm_boards__comm_p1__leds__buffer__dirty &= ~(1U << (uint32_t) board);
         }
     }
     // as optimisation, if all boards are clean, "suspend" the thread, and wake it up when LED updates are received.

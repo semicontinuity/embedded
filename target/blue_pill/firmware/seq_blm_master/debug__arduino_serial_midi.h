@@ -1,7 +1,7 @@
 // Scans LED state data structures
 // and produces on BLM board LED update commands.
 // May generate up to 1 LED update command on every invocation
-// of multi_blm_p1_leds_buffer__scanner__run().
+// of blm_boards__comm_p1__leds__buffer__scanner__run().
 // -----------------------------------------------------------------------------
 
 #ifndef __DEBUG__ARDUINO_SERIAL_MIDI
@@ -9,8 +9,6 @@
 
 #include <Arduino.h>
 #include <stdbool.h>
-#include "multi_blm_p1_leds_buffer.h"
-#include "multi_blm_p1_leds_buffer__scanner__callbacks.h"
 
 #define D_BOARD             0x01
 #define D_LED               0x02

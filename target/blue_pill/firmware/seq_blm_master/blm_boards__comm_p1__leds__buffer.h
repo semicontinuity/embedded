@@ -10,23 +10,24 @@
 // to the corresponding board.
 // -----------------------------------------------------------------------------
 
-#ifndef __BLM_BOARDS_LEDS__STATE
-#define __BLM_BOARDS_LEDS__STATE
+#ifndef __BLM_BOARDS__COMM_P1__LEDS__BUFFER
+#define __BLM_BOARDS__COMM_P1__LEDS__BUFFER
 
 #include <stdint.h>
 
-uint32_t multi_blm_p1_leds_buffer__current[16];
-uint32_t multi_blm_p1_leds_buffer__requested[16];
-uint16_t multi_blm_p1_leds_buffer__dirty;
+uint32_t blm_boards__comm_p1__leds__buffer__current[16];
+uint32_t blm_boards__comm_p1__leds__buffer__requested[16];
+uint16_t blm_boards__comm_p1__leds__buffer__dirty;
 
-void multi_blm_p1_leds_buffer__init() {
+
+void blm_boards__comm_p1__leds__buffer__init() {
     for (int i = 0; i < 16; i++) {
-        multi_blm_p1_leds_buffer__current[i] = 0U;
+        blm_boards__comm_p1__leds__buffer__current[i] = 0U;
     }
     for (int i = 0; i < 16; i++) {
-        multi_blm_p1_leds_buffer__requested[i] = 0U;
+        blm_boards__comm_p1__leds__buffer__requested[i] = 0U;
     }
-    multi_blm_p1_leds_buffer__dirty = 0U;
+    blm_boards__comm_p1__leds__buffer__dirty = 0U;
 }
 
 #endif
