@@ -14,6 +14,7 @@ void blm_boards__comm_p2__leds__debug_arduino_serial_midi__update_row(
         uint8_t color_code,
         uint8_t pattern)
 {
+    debug_midi__program_change(matrix, (color_code << 6U) + (row << 4U) + pattern);
 }
 
 void blm_boards__comm_p2__leds__debug_arduino_serial_midi__update_column(
@@ -22,4 +23,5 @@ void blm_boards__comm_p2__leds__debug_arduino_serial_midi__update_column(
         uint8_t color_code,
         uint8_t pattern)
 {
+    debug_midi__channel_pressure(matrix, (color_code << 6U) + (column << 4U) + pattern);
 }
