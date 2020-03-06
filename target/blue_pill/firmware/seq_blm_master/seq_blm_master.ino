@@ -1,5 +1,6 @@
 #define BLM_SCALAR_NUM_COLOURS 2
 #define BLM_SCALAR_NUM_BOARDS 4
+#define BLM_BOARDS_BASE_ADDRESS 0x30
 #define DEBUG_MIDI_NOTE_OFF 0
 #define DEBUG_MIDI_SYSEX 0
 #define DEBUG_COMM_LEDS 0
@@ -147,12 +148,12 @@ void setup() {
     midi_sender__serial__init(serial);
 
     if (!DEBUG_COMM_LEDS) {
-        blm_boards__comm_p1__leds__arduino_i2c__init(wire, 0x30);
-        blm_boards__comm_p2__leds__arduino_i2c__init(wire, 0x30);
+        blm_boards__comm_p1__leds__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
+        blm_boards__comm_p2__leds__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
     }
 
     if (!DEBUG_COMM_EVENTS) {
-        blm_boards__comm__events__arduino_i2c__init(wire, 0x30);
+        blm_boards__comm__events__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
     }
 
     blm_master__sysex_handler__init(serial);
