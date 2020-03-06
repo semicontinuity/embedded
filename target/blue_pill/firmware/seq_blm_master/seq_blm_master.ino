@@ -148,6 +148,7 @@ void setup() {
 
     if (!DEBUG_COMM_LEDS) {
         blm_boards__comm_p1__leds__arduino_i2c__init(wire, 0x30);
+        blm_boards__comm_p2__leds__arduino_i2c__init(wire, 0x30);
     }
 
     if (!DEBUG_COMM_EVENTS) {
