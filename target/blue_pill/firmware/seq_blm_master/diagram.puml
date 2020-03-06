@@ -7,13 +7,13 @@ midi_parser__callbacks_channel_msg          [shape = "Mrecord" style="filled" fi
 midi_parser__callbacks_sysex_msg            [shape = "Mrecord" style="filled" fillcolor="beige"];
 blm_master_leds                             [shape = "Mrecord" style="filled" fillcolor="beige"];
 blm_master__sysex_msg_handler__callbacks    [shape = "Mrecord" style="filled" fillcolor="beige"];
-multi_blm_leds_buffer__scanner__callbacks   [shape = "Mrecord" style="filled" fillcolor="beige"];
+multi_blm_p1_leds_buffer__scanner__callbacks[shape = "Mrecord" style="filled" fillcolor="beige"];
 blm_boards__comm__events__handler           [shape = "Mrecord" style="filled" fillcolor="beige"];
 midi__sender                                [shape = "Mrecord" style="filled" fillcolor="beige"];
 
-multi_blm_leds_buffer                       [style = filled];
+multi_blm_p1_leds_buffer                    [style = filled];
 
-multi_blm_leds_buffer__scanner              [style="filled" fillcolor="Honeydew"];
+multi_blm_p1_leds_buffer__scanner           [style="filled" fillcolor="Honeydew"];
 serial_midi_receiver                        [style="filled" fillcolor="Honeydew"];
 midi_parser                                 [style="filled" fillcolor="Honeydew"];
 blm_boards__comm_events__reader             [style="filled" fillcolor="Honeydew"];
@@ -26,10 +26,10 @@ serial_midi_receiver
 
 blm_master__channel_msg_handler
 -> blm_master_leds
--> multi_blm_leds_buffer__blm_master_led_updates
--> multi_blm_leds_buffer
--> multi_blm_leds_buffer__scanner
--> multi_blm_leds_buffer__scanner__callbacks
+-> multi_blm_p1_leds_buffer__blm_master_led_updates
+-> multi_blm_p1_leds_buffer
+-> multi_blm_p1_leds_buffer__scanner
+-> multi_blm_p1_leds_buffer__scanner__callbacks
 -> blm_boards__comm__leds__arduino_i2c;
 
 midi_parser

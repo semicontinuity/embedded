@@ -27,10 +27,10 @@ add_executable(seq_blm_master
         blm_boards__comm__leds__arduino_i2c.h
         blm_boards__comm__leds__debug_arduino_serial_midi.h
 
-        multi_blm_leds_buffer.h
-        multi_blm_leds_buffer__blm_master_led_updates.h
-        multi_blm_leds_buffer__scanner.h
-        multi_blm_leds_buffer__scanner__callbacks.h
+        multi_blm_p1_leds_buffer.h
+        multi_blm_p1_leds_buffer__blm_master_led_updates.h
+        multi_blm_p1_leds_buffer__scanner.h
+        multi_blm_p1_leds_buffer__scanner__callbacks.h
 
         debug__arduino_serial_midi.h
 

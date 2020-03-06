@@ -15,18 +15,18 @@
 
 #include <stdint.h>
 
-uint32_t multi_blm_leds_buffer__current[16];
-uint32_t multi_blm_leds_buffer__requested[16];
-uint16_t multi_blm_leds_buffer__dirty;
+uint32_t multi_blm_p1_leds_buffer__current[16];
+uint32_t multi_blm_p1_leds_buffer__requested[16];
+uint16_t multi_blm_p1_leds_buffer__dirty;
 
-void multi_blm_leds_buffer__init() {
+void multi_blm_p1_leds_buffer__init() {
     for (int i = 0; i < 16; i++) {
-        multi_blm_leds_buffer__current[i] = 0U;
+        multi_blm_p1_leds_buffer__current[i] = 0U;
     }
     for (int i = 0; i < 16; i++) {
-        multi_blm_leds_buffer__requested[i] = 0U;
+        multi_blm_p1_leds_buffer__requested[i] = 0U;
     }
-    multi_blm_leds_buffer__dirty = 0U;
+    multi_blm_p1_leds_buffer__dirty = 0U;
 }
 
 #endif

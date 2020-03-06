@@ -1,7 +1,7 @@
 #include <stdint.h>
 
 
-void multi_blm_leds_buffer__scanner__update_one(
+void multi_blm_p1_leds_buffer__scanner__update_one(
     uint8_t matrix,
     uint8_t led,
     uint8_t r,

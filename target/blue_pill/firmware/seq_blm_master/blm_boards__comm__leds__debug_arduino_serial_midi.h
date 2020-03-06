@@ -8,7 +8,7 @@
 
 #include <Arduino.h>
 #include <stdint.h>
-#include "multi_blm_leds_buffer__scanner__callbacks.h"
+#include "multi_blm_p1_leds_buffer__scanner__callbacks.h"
 
 static HardwareSerial *blm_boards_leds__comm__serial;
 
