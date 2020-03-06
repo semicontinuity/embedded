@@ -1,11 +1,11 @@
 #define BLM_SCALAR_NUM_COLOURS 2
 #define BLM_SCALAR_NUM_BOARDS 4
-#define DEBUG 0
+#define DEBUG_MIDI_NOTE_OFF 0
+#define DEBUG_MIDI_SYSEX 0
 #define DEBUG_COMM_LEDS 0
 #define DEBUG_COMM_EVENTS 1
 
 #include <Arduino.h>
-#include <string.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 // GLOBALS
@@ -142,13 +142,11 @@ void setup() {
 
     HardwareSerial *serial = &Serial2;
     serial->begin(31250);
-    debug__serial__init(serial);
-    serial_midi_receiver__init(serial);
+    debug_midi__serial__init(serial);
+    midi_receiver__serial__init(serial);
     midi_sender__serial__init(serial);
 
-    if (DEBUG_COMM_LEDS) {
-        blm_boards__comm_p1__leds__debug_arduino_serial_midi__init(serial);
-    } else {
+    if (!DEBUG_COMM_LEDS) {
         blm_boards__comm_p1__leds__arduino_i2c__init(wire, 0x30);
     }
 
@@ -165,8 +163,8 @@ void setup() {
 
 
 void loop() {
-    if (serial_midi_receiver__is_runnable()) {
-        serial_midi_receiver__run();
+    if (midi_receiver__serial__is_runnable()) {
+        midi_receiver__serial__run();
     } else {
         // prefer handling of incoming MIDI messages
         blm_master__alive_handler__run();

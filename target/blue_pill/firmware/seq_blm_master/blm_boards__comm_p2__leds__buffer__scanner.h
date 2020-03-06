@@ -8,7 +8,7 @@
 #include <Arduino.h>
 #include "blm_boards__comm_p2__leds__buffer.h"
 #include "blm_boards__comm_p2__leds__buffer__scanner__callbacks.h"
-#include "debug__arduino_serial_midi.h"
+#include "debug_midi__arduino_serial.h"
 
 
 

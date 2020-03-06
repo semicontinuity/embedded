@@ -39,7 +39,7 @@ add_executable(seq_blm_master
         blm_boards__comm_p2__leds__arduino_i2c.h
         blm_boards__comm_p2__leds__debug_arduino_serial_midi.h
 
-        debug__arduino_serial_midi.h
+        debug_midi__arduino_serial.h
 
         midi_parser.h
         midi_parser__pt.h

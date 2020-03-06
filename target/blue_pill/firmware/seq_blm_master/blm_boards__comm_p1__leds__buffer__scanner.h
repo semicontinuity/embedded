@@ -8,29 +8,29 @@
 #include <Arduino.h>
 #include "blm_boards__comm_p1__leds__buffer.h"
 #include "blm_boards__comm_p1__leds__buffer__scanner__callbacks.h"
-#include "debug__arduino_serial_midi.h"
+#include "debug_midi__arduino_serial.h"
 
 
 /** @return true if the board became synchronized (clean), false otherwise */
 static bool blm_boards__comm_p1__leds__buffer__scanner__scan(unsigned int board) {
-    debug_p0(D_SCAN);
-    debug_p8(D_BOARD, board);
+    debug_midi__sysex_p0(D_SCAN);
+    debug_midi__sysex_p8(D_BOARD, board);
 
     uint32_t current = blm_boards__comm_p1__leds__buffer__current[board];
-    debug_p32(D_CURRENT, current);
+    debug_midi__sysex_p32(D_CURRENT, current);
     uint32_t requested = blm_boards__comm_p1__leds__buffer__requested[board];
-    debug_p32(D_REQUESTED, requested);
+    debug_midi__sysex_p32(D_REQUESTED, requested);
 
     uint32_t raw_diff = current ^ requested;
-    debug_p32(D_RAW_DIFF, raw_diff);
+    debug_midi__sysex_p32(D_RAW_DIFF, raw_diff);
     uint16_t green_diff = raw_diff & 0xFFFFU;
-    debug_p16(D_GREEN_DIFF, green_diff);
+    debug_midi__sysex_p16(D_GREEN_DIFF, green_diff);
     uint16_t red_diff = (raw_diff >> 16U) & 0xFFFFU;
-    debug_p16(D_RED_DIFF, red_diff);
+    debug_midi__sysex_p16(D_RED_DIFF, red_diff);
     uint16_t diff = green_diff | red_diff;
-    debug_p16(D_DIFF, diff);
+    debug_midi__sysex_p16(D_DIFF, diff);
     int led = __builtin_ffs(diff) - 1;
-    debug_p8(D_LED, led);
+    debug_midi__sysex_p8(D_LED, led);
     if (led >= 0) { // must be always true if there are no bugs
         uint32_t green_mask = 1U << (uint32_t)led;
         uint32_t green = requested & green_mask;
@@ -51,7 +51,7 @@ static bool blm_boards__comm_p1__leds__buffer__scanner__scan(unsigned int board)
         }
 
         blm_boards__comm_p1__leds__buffer__current[board] = current;
-        debug_p32(D_CURRENT, blm_boards__comm_p1__leds__buffer__current[board]);
+        debug_midi__sysex_p32(D_CURRENT, blm_boards__comm_p1__leds__buffer__current[board]);
 
         blm_boards__comm_p1__leds__buffer__scanner__update_one(board, led, red, green, 0);
     }

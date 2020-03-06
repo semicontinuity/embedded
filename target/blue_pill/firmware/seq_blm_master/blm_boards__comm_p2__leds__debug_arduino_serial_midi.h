@@ -2,15 +2,8 @@
 // -----------------------------------------------------------------------------
 
 #include <Arduino.h>
-#include <stdint.h>
+#include "debug_midi__arduino_serial.h"
 
-
-static HardwareSerial *blm_boards__comm_p2__leds__debug_arduino_serial;
-
-
-void blm_boards__comm_p2__leds__debug_arduino_serial_midi__init(HardwareSerial *serial) {
-    blm_boards__comm_p2__leds__debug_arduino_serial = serial;
-}
 
 // Implements blm_boards__comm_p2__leds__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
