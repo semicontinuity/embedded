@@ -8,13 +8,16 @@
 
 #include <Arduino.h>
 #include <stdint.h>
-#include "blm_boards__comm_p1__leds__buffer__scanner__callbacks.h"
 
 static HardwareSerial *blm_boards__comm_p1__leds__debug_arduino_serial;
+
 
 void blm_boards__comm_p1__leds__debug_arduino_serial_midi__init(HardwareSerial *serial) {
     blm_boards__comm_p1__leds__debug_arduino_serial = serial;
 }
+
+// Implements blm_boards__comm_p1__leds__buffer__scanner__callbacks.h
+// -----------------------------------------------------------------------------
 
 void blm_boards__comm_p1__leds__debug_arduino_serial_midi__update_one(uint8_t matrix, uint8_t led, uint8_t r, uint8_t g) {
     r = r ? 1 : 0;
