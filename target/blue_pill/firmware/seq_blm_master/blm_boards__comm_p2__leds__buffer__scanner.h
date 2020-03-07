@@ -16,12 +16,12 @@
  * @return true if the board became synchronized (clean), false otherwise
  */
 static bool blm_boards__comm_p2__leds__buffer__scanner__scan(unsigned int board) {
-    uint16_t dirty_commands = blm_boards__comm_p2__leds__buffer__boards__dirty[board];
+    uint16_t dirty_commands = blm_boards__comm_p2__leds__buffer__commands__dirty[board];
     int index = __builtin_ffs(dirty_commands) - 1;
     if (index >= 0) {
         blm_boards__comm_p2__leds__buffer__scanner__emit_command(board, blm_boards__comm_p2__leds__buffer__commands[board][index]);
         dirty_commands &= ~(1U << (uint16_t) index);
-        blm_boards__comm_p2__leds__buffer__boards__dirty[board] = dirty_commands;
+        blm_boards__comm_p2__leds__buffer__commands__dirty[board] = dirty_commands;
         return dirty_commands == 0U;
     }
 }

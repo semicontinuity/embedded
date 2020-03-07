@@ -10,7 +10,7 @@
 #include <stdint.h>
 
 uint8_t  blm_boards__comm_p2__leds__buffer__commands[16][16];     // every entry is a 1-byte command to be sent to a board
-uint16_t blm_boards__comm_p2__leds__buffer__boards__dirty[16];    // 1 bit means that corresponding board is dirty
+uint16_t blm_boards__comm_p2__leds__buffer__commands__dirty[16];  // 1 bit means that corresponding command for the board is dirty
 uint32_t blm_boards__comm_p2__leds__buffer__dirty;                // 1 bit means that corresponding entry in commands__dirty is dirty (8 bits used)
 
 
@@ -22,7 +22,7 @@ void blm_boards__comm_p2__leds__buffer__init() {
         }
     }
     for (int i = 0; i < 4*2; i++) {
-        blm_boards__comm_p2__leds__buffer__boards__dirty[i] = 0U;
+        blm_boards__comm_p2__leds__buffer__commands__dirty[i] = 0U;
     }
 }
 

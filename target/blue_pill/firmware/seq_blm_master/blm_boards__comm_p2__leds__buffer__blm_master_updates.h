@@ -9,7 +9,6 @@
 #include "blm_boards__comm_p2__leds__buffer.h"
 #include "debug_midi__arduino_serial.h"
 #include "debug_midi__sysex_parameters.h"
-#include "blm_boards__comm_p2__leds__buffer__scanner__callbacks.h"
 
 
 // Implements blm_master__leds.h
@@ -35,15 +34,22 @@ void blm_boards__comm_p2__leds__buffer__blm_master__update_row(uint8_t row, uint
     debug_midi__sysex_p8(D_PATTERN, pattern);
 
     uint8_t matrix_y = row >> 2U;
+    uint8_t pos = row & 0x03U;
+    uint8_t command_base = (color_code << 7U) + (pos << 5U) + (0U << 4U);
+    uint8_t command_index = 1U << ((pos << 2U) + (color_code << 1U) + (0U << 0U));
+
     uint8_t matrix = (matrix_y << 2U) + (is_second_half ? 2 : 0);
     debug_midi__sysex_p8(D_BOARD, matrix);
-
-    uint8_t local_y = row & 0x03U;
-    uint8_t command_base = (color_code << 7U) + (local_y << 5U) + (0U << 4U);
     uint8_t command1 = command_base + (pattern & 0x0FU);
-    // put to buffer
+
+    blm_boards__comm_p2__leds__buffer__commands[matrix][command_index] = command1;
+    blm_boards__comm_p2__leds__buffer__commands__dirty[matrix] |= (1U << command_index);
+
+    ++matrix;
+    debug_midi__sysex_p8(D_BOARD, matrix);
     uint8_t command2 = command_base + ((pattern >> 4U) & 0x0FU);
-    // put to buffer
+    blm_boards__comm_p2__leds__buffer__commands[matrix][command_index] = command2;
+    blm_boards__comm_p2__leds__buffer__commands__dirty[matrix] = command_index;
 }
 
 
@@ -52,16 +58,22 @@ void blm_boards__comm_p2__leds__buffer__blm_master__update_column(uint8_t column
     debug_midi__sysex_p8(D_COLUMN, column);
     debug_midi__sysex_p8(D_PATTERN, pattern);
 
-    uint8_t matrix_y = column >> 2U;
-    uint8_t matrix = matrix_y + (is_second_half ? 8 : 0);
+    uint8_t matrix_x = column >> 2U;
+    uint8_t pos = column & 0x03U;
+    uint8_t command_base = (color_code << 7U) + (pos << 5U) + (1U << 4U);
+    uint8_t command_index = 1U << ((pos << 2U) + (color_code << 1U) + (0U << 0U));
+    
+    uint8_t matrix = matrix_x + (is_second_half ? 8 : 0);
     debug_midi__sysex_p8(D_BOARD, matrix);
-
-    uint8_t local_x = column & 0x03U;
-    uint8_t command_base = (color_code << 7U) + (local_x << 5U) + (1U << 4U);
     uint8_t command1 = command_base + (pattern & 0x0FU);
-    // put to buffer
+    blm_boards__comm_p2__leds__buffer__commands[matrix][command_index] = command1;
+    blm_boards__comm_p2__leds__buffer__commands__dirty[matrix] |= (1U << command_index);
+    
+    matrix += 4;
+    debug_midi__sysex_p8(D_BOARD, matrix);
     uint8_t command2 = command_base + ((pattern >> 4U) & 0x0FU);
-    // put to buffer
+    blm_boards__comm_p2__leds__buffer__commands[matrix][command_index] = command2;
+    blm_boards__comm_p2__leds__buffer__commands__dirty[matrix] |= (1U << command_index);
 }
 
 
