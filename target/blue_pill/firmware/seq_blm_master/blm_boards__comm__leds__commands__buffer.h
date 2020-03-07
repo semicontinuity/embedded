@@ -30,21 +30,10 @@ void blm_boards__comm__leds__commands__buffer__init() {
 }
 
 
-static void blm_boards__comm__leds__commands__buffer__blm_master__put_command(uint8_t matrix, uint8_t command_index, uint8_t command) {
+static void blm_boards__comm__leds__commands__buffer__put(uint8_t matrix, uint8_t command_index, uint8_t command) {
     debug_midi__sysex_p8(D_BOARD, matrix);
     blm_boards__comm__leds__commands__buffer__commands[matrix][command_index] = command;
     blm_boards__comm__leds__commands__buffer__commands__dirty[matrix] |= (1U << command_index);
-}
-
-
-void blm_boards__comm__leds__commands__buffer__blm_master__put_commands(
-    uint8_t base_matrix, uint8_t d, uint8_t dir, uint8_t coord, uint8_t pattern, uint8_t color_code)
-{
-    uint8_t pos = coord & 0x03U;
-    uint8_t command_base = (color_code << 7U) + (pos << 5U) + (dir << 4U);
-    uint8_t command_index = (pos << 2U) + (color_code << 1U) + (dir << 0U);
-    blm_boards__comm__leds__commands__buffer__blm_master__put_command(base_matrix + 0, command_index, command_base + (pattern & 0x0FU));
-    blm_boards__comm__leds__commands__buffer__blm_master__put_command(base_matrix + d, command_index, command_base + ((pattern >> 4U) & 0x0FU));
 }
 
 
