@@ -58,4 +58,62 @@ uint8_t blm_boards__comm_p1__leds__buffer__update_h_nibble(uint8_t matrix, uint8
 }
 
 
+void blm_boards__comm_p1__leds__buffer__update_v_nibble(uint8_t matrix, uint32_t shift, uint8_t pattern) {
+    debug_midi__sysex_p8(D_BOARD, matrix);
+
+    uint32_t requested = blm_boards__comm_p1__leds__buffer__requested[matrix];
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+
+    uint32_t set_mask;
+
+    // bit 0/4 of pattern
+    debug_midi__sysex_p8(D_SHIFT, shift);
+    debug_midi__sysex_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_midi__sysex_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+
+    pattern >>= 1U;
+    shift += 4;
+
+    // bit 1/5 of pattern
+    debug_midi__sysex_p8(D_SHIFT, shift);
+    debug_midi__sysex_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_midi__sysex_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+
+    pattern >>= 1U;
+    shift += 4;
+
+    // bit 2/6 of pattern
+    debug_midi__sysex_p8(D_SHIFT, shift);
+    debug_midi__sysex_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_midi__sysex_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+
+    pattern >>= 1U;
+    shift += 4;
+
+    // bit 3/7 of pattern
+    debug_midi__sysex_p8(D_SHIFT, shift);
+    debug_midi__sysex_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_midi__sysex_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+
+    blm_boards__comm_p1__leds__buffer__requested[matrix] = requested;
+    uint32_t current = blm_boards__comm_p1__leds__buffer__current[matrix];
+    debug_midi__sysex_p32(D_CURRENT, current);
+    if (current != requested) {
+        blm_boards__comm_p1__leds__buffer__dirty |= (1U << matrix);
+        debug_midi__sysex_p16(D_DIRTY, blm_boards__comm_p1__leds__buffer__dirty);
+    }
+}
+
 #endif
