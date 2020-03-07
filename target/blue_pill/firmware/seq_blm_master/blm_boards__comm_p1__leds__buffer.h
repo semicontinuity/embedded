@@ -14,6 +14,8 @@
 #define __BLM_BOARDS__COMM_P1__LEDS__BUFFER
 
 #include <stdint.h>
+#include "debug_midi__arduino_serial.h"
+#include "debug_midi__sysex_parameters.h"
 
 uint32_t blm_boards__comm_p1__leds__buffer__current[16];
 uint32_t blm_boards__comm_p1__leds__buffer__requested[16];
@@ -29,5 +31,31 @@ void blm_boards__comm_p1__leds__buffer__init() {
     }
     blm_boards__comm_p1__leds__buffer__dirty = 0U;
 }
+
+
+/**
+ * @return true if buffer data was updated and marked dirty
+ */
+uint8_t blm_boards__comm_p1__leds__buffer__update_h_nibble(uint8_t matrix, uint8_t shift, uint32_t mask, uint8_t bits) {
+    uint32_t requested = blm_boards__comm_p1__leds__buffer__requested[matrix];
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+    uint32_t new_requested = (requested & mask) | (bits << shift);
+    if (requested == new_requested) {
+        return false;
+    }
+    requested = new_requested;
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+    blm_boards__comm_p1__leds__buffer__requested[matrix] = requested;
+
+    uint32_t current = blm_boards__comm_p1__leds__buffer__current[matrix];
+    debug_midi__sysex_p32(D_CURRENT, current);
+    if (requested == current) {
+        return false;
+    }
+    blm_boards__comm_p1__leds__buffer__dirty |= (1U << matrix);
+    debug_midi__sysex_p16(D_DIRTY, blm_boards__comm_p1__leds__buffer__dirty);
+    return true;
+}
+
 
 #endif
