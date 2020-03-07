@@ -41,6 +41,22 @@ void blm_boards__comm_p1__leds__buffer__blm_master__update_one(uint8_t row, uint
 }
 
 
+void blm_boards__comm_p1__leds__buffer__blm_master__update_h_nibble(uint8_t matrix, uint8_t shift, uint32_t mask, uint8_t bits) {
+    uint32_t requested = blm_boards__comm_p1__leds__buffer__requested[matrix];
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+    uint32_t new_requested = (requested & mask) | (bits << shift);
+    requested = new_requested;
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+    blm_boards__comm_p1__leds__buffer__requested[matrix] = requested;
+
+    uint32_t current = blm_boards__comm_p1__leds__buffer__current[matrix];
+    debug_midi__sysex_p32(D_CURRENT, current);
+    if (requested != current) {
+        blm_boards__comm_p1__leds__buffer__dirty |= (1U << matrix);
+        debug_midi__sysex_p16(D_DIRTY, blm_boards__comm_p1__leds__buffer__dirty);
+    }
+}
+
 void blm_boards__comm_p1__leds__buffer__blm_master__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
     debug_midi__sysex_p0(D_UPDATE_ROW);
     debug_midi__sysex_p8(D_ROW, row);
@@ -48,7 +64,6 @@ void blm_boards__comm_p1__leds__buffer__blm_master__update_row(uint8_t row, uint
     
     uint8_t matrix_y = row >> 2U;
     uint8_t matrix = (matrix_y << 2U) + (is_second_half ? 2 : 0);
-    debug_midi__sysex_p8(D_BOARD, matrix);
 
     uint8_t local_y = row & 0x03U;
     uint8_t shift = (color_code ? 16 : 0) + (local_y << 2U);
@@ -56,37 +71,8 @@ void blm_boards__comm_p1__leds__buffer__blm_master__update_row(uint8_t row, uint
     uint32_t mask = ~(0x000FU << shift);
     debug_midi__sysex_p32(D_MASK, mask);
 
-    uint32_t requested;
-    uint32_t current;
-
-    requested = blm_boards__comm_p1__leds__buffer__requested[matrix];
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-    requested = (requested & mask) | ((pattern & 0x0FU) << shift);
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-    blm_boards__comm_p1__leds__buffer__requested[matrix] = requested;
-
-    current = blm_boards__comm_p1__leds__buffer__current[matrix];
-    debug_midi__sysex_p32(D_CURRENT, current);
-    if (requested != current) {
-        blm_boards__comm_p1__leds__buffer__dirty |= (1U << matrix);
-        debug_midi__sysex_p16(D_DIRTY, blm_boards__comm_p1__leds__buffer__dirty);
-    }
-
-    ++matrix;
-    debug_midi__sysex_p8(D_BOARD, matrix);
-
-    requested = blm_boards__comm_p1__leds__buffer__requested[matrix];
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-    requested = (requested & mask) | (((pattern >> 4U) & 0x0FU) << shift);
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-    blm_boards__comm_p1__leds__buffer__requested[matrix] = requested;
-
-    current = blm_boards__comm_p1__leds__buffer__current[matrix];
-    debug_midi__sysex_p32(D_CURRENT, current);
-    if (requested != current) {
-        blm_boards__comm_p1__leds__buffer__dirty |= (1U << matrix);
-        debug_midi__sysex_p16(D_DIRTY, blm_boards__comm_p1__leds__buffer__dirty);
-    }
+    blm_boards__comm_p1__leds__buffer__blm_master__update_h_nibble(matrix + 0, shift, mask, pattern & 0x0FU);
+    blm_boards__comm_p1__leds__buffer__blm_master__update_h_nibble(matrix + 1, shift, mask, (pattern >> 4U) & 0x0FU);
 }
 
 
