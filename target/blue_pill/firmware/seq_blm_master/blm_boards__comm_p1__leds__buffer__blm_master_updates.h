@@ -11,6 +11,8 @@
 #include "debug_midi__sysex_parameters.h"
 
 
+
+
 void blm_boards__comm_p1__leds__buffer__blm_master__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
     debug_midi__sysex_p0(D_UPDATE_ONE);
     uint8_t matrix_x = ((uint8_t)(column >> 2U)) & 0x03U;
@@ -60,6 +62,65 @@ void blm_boards__comm_p1__leds__buffer__blm_master__update_row(uint8_t row, uint
 }
 
 
+void blm_boards__comm_p1__leds__buffer__update_v_nibble(uint8_t matrix, uint32_t shift, uint8_t pattern) {
+    debug_midi__sysex_p8(D_BOARD, matrix);
+
+    uint32_t requested = blm_boards__comm_p1__leds__buffer__requested[matrix];
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+
+    uint32_t set_mask;
+
+    // bit 0/4 of pattern
+    debug_midi__sysex_p8(D_SHIFT, shift);
+    debug_midi__sysex_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_midi__sysex_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+
+    pattern >>= 1U;
+    shift += 4;
+
+    // bit 1/5 of pattern
+    debug_midi__sysex_p8(D_SHIFT, shift);
+    debug_midi__sysex_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_midi__sysex_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+
+    pattern >>= 1U;
+    shift += 4;
+
+    // bit 2/6 of pattern
+    debug_midi__sysex_p8(D_SHIFT, shift);
+    debug_midi__sysex_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_midi__sysex_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+
+    pattern >>= 1U;
+    shift += 4;
+
+    // bit 3/7 of pattern
+    debug_midi__sysex_p8(D_SHIFT, shift);
+    debug_midi__sysex_p8(D_PATTERN, pattern);
+    set_mask = (pattern & 0x01U) << shift;
+    debug_midi__sysex_p32(D_MASK, set_mask);
+    requested = (requested & ~(0x0001U << shift)) | set_mask;
+    debug_midi__sysex_p32(D_REQUESTED, requested);
+
+    blm_boards__comm_p1__leds__buffer__requested[matrix] = requested;
+    uint32_t current = blm_boards__comm_p1__leds__buffer__current[matrix];
+    debug_midi__sysex_p32(D_CURRENT, current);
+    if (current != requested) {
+        blm_boards__comm_p1__leds__buffer__dirty |= (1U << matrix);
+        debug_midi__sysex_p16(D_DIRTY, blm_boards__comm_p1__leds__buffer__dirty);
+    }
+}
+
+
 void blm_boards__comm_p1__leds__buffer__blm_master__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
     debug_midi__sysex_p0(D_UPDATE_COLUMN);
     debug_midi__sysex_p8(D_COLUMN, column);
@@ -67,127 +128,13 @@ void blm_boards__comm_p1__leds__buffer__blm_master__update_column(uint8_t column
 
     uint8_t matrix_y = column >> 2U;
     uint8_t matrix = matrix_y + (is_second_half ? 8 : 0);
-    debug_midi__sysex_p8(D_BOARD, matrix);
-
     uint8_t local_x = column & 0x03U;
+
     uint8_t initial_shift = (color_code ? 16 : 0) + local_x;
     debug_midi__sysex_p8(D_SHIFT, initial_shift);
 
-    uint32_t requested;
-    uint32_t current;
-    uint32_t set_mask;
-    uint32_t shift;
-
-    requested = blm_boards__comm_p1__leds__buffer__requested[matrix];
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-    shift = initial_shift;
-
-    // bit 0 of pattern
-    debug_midi__sysex_p8(D_SHIFT, shift);
-    debug_midi__sysex_p8(D_PATTERN, pattern);
-    set_mask = (pattern & 0x01U) << shift;
-    debug_midi__sysex_p32(D_MASK, set_mask);
-    requested = (requested & ~(0x0001U << shift)) | set_mask;
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-
-    pattern >>= 1U;
-    shift += 4;
-
-    // bit 1 of pattern
-    debug_midi__sysex_p8(D_SHIFT, shift);
-    debug_midi__sysex_p8(D_PATTERN, pattern);
-    set_mask = (pattern & 0x01U) << shift;
-    debug_midi__sysex_p32(D_MASK, set_mask);
-    requested = (requested & ~(0x0001U << shift)) | set_mask;
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-
-    pattern >>= 1U;
-    shift += 4;
-
-    // bit 2 of pattern
-    debug_midi__sysex_p8(D_SHIFT, shift);
-    debug_midi__sysex_p8(D_PATTERN, pattern);
-    set_mask = (pattern & 0x01U) << shift;
-    debug_midi__sysex_p32(D_MASK, set_mask);
-    requested = (requested & ~(0x0001U << shift)) | set_mask;
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-
-    pattern >>= 1U;
-    shift += 4;
-
-    // bit 3 of pattern
-    debug_midi__sysex_p8(D_SHIFT, shift);
-    debug_midi__sysex_p8(D_PATTERN, pattern);
-    set_mask = (pattern & 0x01U) << shift;
-    debug_midi__sysex_p32(D_MASK, set_mask);
-    requested = (requested & ~(0x0001U << shift)) | set_mask;
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-
-    pattern >>= 1U;
-    shift = initial_shift;
-
-    blm_boards__comm_p1__leds__buffer__requested[matrix] = requested;
-    current = blm_boards__comm_p1__leds__buffer__current[matrix];
-    debug_midi__sysex_p32(D_CURRENT, current);
-    if (current != requested) {
-        blm_boards__comm_p1__leds__buffer__dirty |= (1U << matrix);
-        debug_midi__sysex_p16(D_DIRTY, blm_boards__comm_p1__leds__buffer__dirty);
-    }
-
-    matrix += 4;
-    debug_midi__sysex_p8(D_BOARD, matrix);
-
-    requested = blm_boards__comm_p1__leds__buffer__requested[matrix];
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-
-    // bit 4 of pattern
-    debug_midi__sysex_p8(D_SHIFT, shift);
-    debug_midi__sysex_p8(D_PATTERN, pattern);
-    set_mask = (pattern & 0x01U) << shift;
-    debug_midi__sysex_p32(D_MASK, set_mask);
-    requested = (requested & ~(0x0001U << shift)) | set_mask;
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-
-    pattern >>= 1U;
-    shift += 4;
-
-    // bit 5 of pattern
-    debug_midi__sysex_p8(D_SHIFT, shift);
-    debug_midi__sysex_p8(D_PATTERN, pattern);
-    set_mask = (pattern & 0x01U) << shift;
-    debug_midi__sysex_p32(D_MASK, set_mask);
-    requested = (requested & ~(0x0001U << shift)) | set_mask;
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-
-    pattern >>= 1U;
-    shift += 4;
-
-    // bit 6 of pattern
-    debug_midi__sysex_p8(D_SHIFT, shift);
-    debug_midi__sysex_p8(D_PATTERN, pattern);
-    set_mask = (pattern & 0x01U) << shift;
-    debug_midi__sysex_p32(D_MASK, set_mask);
-    requested = (requested & ~(0x0001U << shift)) | set_mask;
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-
-    pattern >>= 1U;
-    shift += 4;
-
-    // bit 7 of pattern
-    debug_midi__sysex_p8(D_SHIFT, shift);
-    debug_midi__sysex_p8(D_PATTERN, pattern);
-    set_mask = (pattern & 0x01U) << shift;
-    debug_midi__sysex_p32(D_MASK, set_mask);
-    requested = (requested & ~(0x0001U << shift)) | set_mask;
-    debug_midi__sysex_p32(D_REQUESTED, requested);
-
-    blm_boards__comm_p1__leds__buffer__requested[matrix] = requested;
-    current = blm_boards__comm_p1__leds__buffer__current[matrix];
-    debug_midi__sysex_p32(D_CURRENT, current);
-    if (current != requested) {
-        blm_boards__comm_p1__leds__buffer__dirty |= (1U << matrix);
-        debug_midi__sysex_p16(D_DIRTY, blm_boards__comm_p1__leds__buffer__dirty);
-    }
+    blm_boards__comm_p1__leds__buffer__update_v_nibble(matrix + 0, initial_shift, pattern);
+    blm_boards__comm_p1__leds__buffer__update_v_nibble(matrix + 4, initial_shift, pattern);
 }
 
 
