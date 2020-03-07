@@ -93,27 +93,27 @@ void blm_boards__comm_p2__leds__buffer__scanner__emit_command(
 // -----------------------------------------------------------------------------
 
 void blm_master__leds__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
-    blm_boards__comm_p1__leds__buffer__blm_master__update_one(row, column, color_code);
+    blm_boards__comm_p2__leds__buffer__blm_master__update_one(row, column, color_code);
 }
 
 void blm_master__leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm_p1__leds__buffer__blm_master__update_row(row, is_second_half, pattern, color_code);
+    blm_boards__comm_p2__leds__buffer__blm_master__update_row(row, is_second_half, pattern, color_code);
 }
 
 void blm_master__leds__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm_p1__leds__buffer__blm_master__update_column(column, is_second_half, pattern, color_code);
+    blm_boards__comm_p2__leds__buffer__blm_master__update_column(column, is_second_half, pattern, color_code);
 }
 
 void blm_master__leds__update_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm_p1__leds__buffer__blm_master__update_extra_row(is_second_half, pattern, color_code);
+    blm_boards__comm_p2__leds__buffer__blm_master__update_extra_row(is_second_half, pattern, color_code);
 }
 
 void blm_master__leds__update_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm_p1__leds__buffer__blm_master__update_extra_column(is_second_half, pattern, color_code);
+    blm_boards__comm_p2__leds__buffer__blm_master__update_extra_column(is_second_half, pattern, color_code);
 }
 
 void blm_master__leds__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm_p1__leds__buffer__blm_master__update_extra(is_second_half, pattern, color_code);
+    blm_boards__comm_p2__leds__buffer__blm_master__update_extra(is_second_half, pattern, color_code);
 }
 
 
