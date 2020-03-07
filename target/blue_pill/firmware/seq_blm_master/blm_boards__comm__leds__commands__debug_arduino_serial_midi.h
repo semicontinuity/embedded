@@ -5,10 +5,10 @@
 #include "debug_midi__arduino_serial.h"
 
 
-// Implements blm_boards__comm_p2__leds__buffer__scanner__callbacks.h
+// Implements blm_boards__comm__leds__commands__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
 
-void blm_boards__comm_p2__leds__debug_arduino_serial_midi__emit_command(
+void blm_boards__comm__leds__commands__debug_arduino_serial_midi__emit_command(
         uint8_t matrix,
         uint8_t command)
 {

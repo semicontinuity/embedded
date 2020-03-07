@@ -32,12 +32,12 @@ add_executable(seq_blm_master
         blm_boards__comm_p1__leds__arduino_i2c.h
         blm_boards__comm_p1__leds__debug_arduino_serial_midi.h
 
-        blm_boards__comm_p2__leds__buffer.h
-        blm_boards__comm_p2__leds__buffer__blm_master_updates.h
-        blm_boards__comm_p2__leds__buffer__scanner.h
-        blm_boards__comm_p2__leds__buffer__scanner__callbacks.h
-        blm_boards__comm_p2__leds__arduino_i2c.h
-        blm_boards__comm_p2__leds__debug_arduino_serial_midi.h
+        blm_boards__comm__leds__commands__buffer.h
+        blm_boards__comm__leds__commands__buffer__blm_master_updates.h
+        blm_boards__comm__leds__commands__buffer__scanner.h
+        blm_boards__comm__leds__commands__buffer__scanner__callbacks.h
+        blm_boards__comm__leds__commands__arduino_i2c.h
+        blm_boards__comm__leds__commands__debug_arduino_serial_midi.h
 
         debug_midi__arduino_serial.h
         debug_midi__sysex_parameters.h

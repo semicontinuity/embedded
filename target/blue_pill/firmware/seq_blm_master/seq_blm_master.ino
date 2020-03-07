@@ -18,11 +18,11 @@
 #include "blm_boards__comm_p1__leds__debug_arduino_serial_midi.h"
 #include "blm_boards__comm_p1__leds__arduino_i2c.h"
 
-#include "blm_boards__comm_p2__leds__buffer.h"
-#include "blm_boards__comm_p2__leds__buffer__blm_master_updates.h"
-#include "blm_boards__comm_p2__leds__buffer__scanner.h"
-#include "blm_boards__comm_p2__leds__debug_arduino_serial_midi.h"
-#include "blm_boards__comm_p2__leds__arduino_i2c.h"
+#include "blm_boards__comm__leds__commands__buffer.h"
+#include "blm_boards__comm__leds__commands__buffer__blm_master_updates.h"
+#include "blm_boards__comm__leds__commands__buffer__scanner.h"
+#include "blm_boards__comm__leds__commands__debug_arduino_serial_midi.h"
+#include "blm_boards__comm__leds__commands__arduino_i2c.h"
 
 #include "blm_boards__comm__events__reader.h"
 #include "blm_boards__comm__events__reader__arduino_i2c.h"
@@ -74,17 +74,17 @@ void blm_boards__comm_p1__leds__buffer__scanner__update_one(uint8_t matrix, uint
     }
 }
 
-// Implements blm_boards__comm_p2__leds__buffer__scanner__callbacks.h
+// Implements blm_boards__comm__leds__commands__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
 
-void blm_boards__comm_p2__leds__buffer__scanner__emit_command(
+void blm_boards__comm__leds__commands__buffer__scanner__emit_command(
         uint8_t matrix,
         uint8_t command)
 {
     if (DEBUG_COMM_LEDS) {
-        blm_boards__comm_p2__leds__debug_arduino_serial_midi__emit_command(matrix, command);
+        blm_boards__comm__leds__commands__debug_arduino_serial_midi__emit_command(matrix, command);
     } else {
-        blm_boards__comm_p2__leds__arduino_i2c__emit_command(matrix, command);
+        blm_boards__comm__leds__commands__arduino_i2c__emit_command(matrix, command);
     }
 }
 
@@ -93,27 +93,27 @@ void blm_boards__comm_p2__leds__buffer__scanner__emit_command(
 // -----------------------------------------------------------------------------
 
 void blm_master__leds__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
-    blm_boards__comm_p2__leds__buffer__blm_master__update_one(row, column, color_code);
+    blm_boards__comm__leds__commands__buffer__blm_master__update_one(row, column, color_code);
 }
 
 void blm_master__leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm_p2__leds__buffer__blm_master__update_row(row, is_second_half, pattern, color_code);
+    blm_boards__comm__leds__commands__buffer__blm_master__update_row(row, is_second_half, pattern, color_code);
 }
 
 void blm_master__leds__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm_p2__leds__buffer__blm_master__update_column(column, is_second_half, pattern, color_code);
+    blm_boards__comm__leds__commands__buffer__blm_master__update_column(column, is_second_half, pattern, color_code);
 }
 
 void blm_master__leds__update_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm_p2__leds__buffer__blm_master__update_extra_row(is_second_half, pattern, color_code);
+    blm_boards__comm__leds__commands__buffer__blm_master__update_extra_row(is_second_half, pattern, color_code);
 }
 
 void blm_master__leds__update_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm_p2__leds__buffer__blm_master__update_extra_column(is_second_half, pattern, color_code);
+    blm_boards__comm__leds__commands__buffer__blm_master__update_extra_column(is_second_half, pattern, color_code);
 }
 
 void blm_master__leds__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm_p2__leds__buffer__blm_master__update_extra(is_second_half, pattern, color_code);
+    blm_boards__comm__leds__commands__buffer__blm_master__update_extra(is_second_half, pattern, color_code);
 }
 
 
@@ -136,7 +136,7 @@ void setup() {
 
     if (!DEBUG_COMM_LEDS) {
         blm_boards__comm_p1__leds__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
-        blm_boards__comm_p2__leds__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
+        blm_boards__comm__leds__commands__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
     }
 
     if (!DEBUG_COMM_EVENTS) {
@@ -148,7 +148,7 @@ void setup() {
     blm_boards__comm_events__reader__init();
 
 //    blm_boards__comm_p1__leds__buffer__init();
-    blm_boards__comm_p2__leds__buffer__init();
+    blm_boards__comm__leds__commands__buffer__init();
 }
 
 
@@ -161,8 +161,8 @@ void loop() {
     }
 
 
-    if (blm_boards__comm_p2__leds__buffer__scanner__is_runnable()) {
-        blm_boards__comm_p2__leds__buffer__scanner__run();
+    if (blm_boards__comm__leds__commands__buffer__scanner__is_runnable()) {
+        blm_boards__comm__leds__commands__buffer__scanner__run();
     } else {
         // if there are events to be sent to BLM boards, prefer to send them first
         // to avoid any visual lags
