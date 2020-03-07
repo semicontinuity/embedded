@@ -123,14 +123,16 @@ void setup() {
     pinMode(PA5, OUTPUT);
     pinMode(PA1, OUTPUT);
 
-    TwoWire *wire = &Wire2;
-    wire->begin();
 
     HardwareSerial *serial = &Serial2;
     serial->begin(31250);
     debug_midi__serial__init(serial);
     midi_receiver__serial__init(serial);
     midi_sender__serial__init(serial);
+    blm_master__sysex_handler__init(serial);
+
+    TwoWire *wire = &Wire2;
+    wire->begin();
 
     if (!DEBUG_COMM_LEDS) {
         blm_boards__comm_p1__leds__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
@@ -141,7 +143,7 @@ void setup() {
         blm_boards__comm__events__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
     }
 
-    blm_master__sysex_handler__init(serial);
+
     midi_parser__init();
     blm_boards__comm_events__reader__init();
 

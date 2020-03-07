@@ -3,8 +3,8 @@ digraph g {
 
 node  [ shape = "record" ];
 
-midi_parser__callbacks_channel_msg                      [shape = "Mrecord" style="filled" fillcolor="beige"];
-midi_parser__callbacks_sysex_msg                        [shape = "Mrecord" style="filled" fillcolor="beige"];
+midi_parser__callbacks__channel_msg                     [shape = "Mrecord" style="filled" fillcolor="beige"];
+midi_parser__callbacks__sysex_msg                        [shape = "Mrecord" style="filled" fillcolor="beige"];
 blm_master_leds                                         [shape = "Mrecord" style="filled" fillcolor="beige"];
 blm_master__sysex_msg_handler__callbacks                [shape = "Mrecord" style="filled" fillcolor="beige"];
 blm_boards__comm_p1__leds__buffer__scanner__callbacks   [shape = "Mrecord" style="filled" fillcolor="beige"];
@@ -13,15 +13,17 @@ midi__sender                                            [shape = "Mrecord" style
 
 blm_boards__comm_p1__leds__buffer                       [style = filled];
 
+# threads
+#########
 blm_boards__comm_p1__leds__buffer__scanner              [style="filled" fillcolor="Honeydew"];
-serial_midi_receiver                                    [style="filled" fillcolor="Honeydew"];
+midi_receiver__serial_arduino                           [style="filled" fillcolor="Honeydew"];
 midi_parser                                             [style="filled" fillcolor="Honeydew"];
 blm_boards__comm_events__reader                         [style="filled" fillcolor="Honeydew"];
 blm_master__alive_handler                               [style="filled" fillcolor="Honeydew"];
 
-serial_midi_receiver
+midi_receiver__serial_arduino
 -> midi_parser
--> midi_parser__callbacks_channel_msg
+-> midi_parser__callbacks__channel_msg
 -> blm_master__channel_msg_handler;
 
 blm_master__channel_msg_handler
@@ -33,7 +35,7 @@ blm_master__channel_msg_handler
 -> blm_boards__comm_p1__leds__arduino_i2c;
 
 midi_parser
--> midi_parser__callbacks_sysex_msg
+-> midi_parser__callbacks__sysex_msg
 -> blm_master__sysex_msg_handler
 -> blm_master__sysex_msg_handler__callbacks
 -> blm_master__sysex_msg_handler__arduino_serial_midi;
@@ -44,7 +46,7 @@ blm_boards__comm_events__reader
 -> midi__sender
 -> midi__sender__serial_arduino;
 
-midi_parser__callbacks_channel_msg
+midi_parser__callbacks__channel_msg
 -> blm_master__alive_handler
 -> blm_master__sysex_msg_handler__arduino_serial_midi;
 }
