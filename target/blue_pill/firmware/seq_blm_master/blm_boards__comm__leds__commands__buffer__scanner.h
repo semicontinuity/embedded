@@ -11,6 +11,8 @@
 #include "debug_midi__arduino_serial.h"
 
 
+static uint16_t blm_boards__comm__leds__commands__buffer__scanner__mask = 0xFFFFU;
+
 /**
  * Finds dirty command for the given board and passes it to the appropriate callback.
  * @return true if the board became synchronized (clean), false otherwise
@@ -37,6 +39,13 @@ void blm_boards__comm__leds__commands__buffer__scanner__run() {
         if (blm_boards__comm__leds__commands__buffer__scanner__scan(board)) {
             blm_boards__comm__leds__commands__buffer__dirty &= ~(1U << (uint32_t) board);
         }
+        // mask out current board index and all lower indices
+        // the boar may remain dirty, and it will be processed in the next run (fairness)
+        blm_boards__comm__leds__commands__buffer__scanner__mask = (0xFFFFU << (board + 1U));
+    }
+    if (blm_boards__comm__leds__commands__buffer__scanner__mask == 0U) {
+        // run finished, scanned all bits, roll over
+        blm_boards__comm__leds__commands__buffer__scanner__mask = 0xFFFFU;
     }
     // as optimisation, if all boards are clean, "suspend" the thread, and wake it up when LED updates are received.
     // (on the other hand, this check is quite fast anyway)
