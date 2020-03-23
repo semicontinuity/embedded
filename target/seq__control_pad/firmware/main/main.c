@@ -86,8 +86,8 @@ int main(void) {
 #endif
     for(;;) {
         keyboard__run();
-//        encoder0__run();
-//        encoder0__switch__run();
+        encoder0__run();
+        encoder0__switch__run();
 
         if (twi__slave__handler__is_runnable()) {
             twi__slave__handler__run();

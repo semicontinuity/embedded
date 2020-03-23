@@ -20,8 +20,6 @@ void encoder0__init(void) {
     ENABLE_PULLUP(IN__ENCODER0__A);
     USE_AS_INPUT(IN__ENCODER0__B);
     ENABLE_PULLUP(IN__ENCODER0__B);
-    USE_AS_INPUT(IN__ENCODER0__SWITCH);
-    ENABLE_PULLUP(IN__ENCODER0__SWITCH);
 }
 
 void encoder0__debounce_timer__run(void) {

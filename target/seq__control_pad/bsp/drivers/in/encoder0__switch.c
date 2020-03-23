@@ -17,6 +17,7 @@ void encoder0__switch__init(void) {
 }
 
 void encoder0__switch__run(void) {
+    __asm__ __volatile__("encoder0__switch__run:");
     uint8_t raw_port_value = IN(IN__ENCODER0__SWITCH);
     uint8_t masked_port_value = raw_port_value & (1U << IN__ENCODER0__SWITCH__PIN);
 
