@@ -1,0 +1,1 @@
+add_definitions(-DCOMM_ENCODER__ENCODER0__DELTA__REG=29)

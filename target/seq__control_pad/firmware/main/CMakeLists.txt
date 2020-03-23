@@ -31,10 +31,12 @@ set(SOURCE_FILES
         ../../../../cpu/avr/services/keyboard/keyboard__port_c__buttons.c
         ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.c
 
-        ../../bsp/drivers/in/encoder__step.h
-        ../../bsp/drivers/in/encoder__step.c
         ../../bsp/drivers/in/encoder0.h
         ../../bsp/drivers/in/encoder0.c
+        ../../bsp/drivers/in/encoder0__switch.h
+        ../../bsp/drivers/in/encoder0__switch.c
+        ../../bsp/drivers/in/encoder__step.h
+        ../../bsp/drivers/in/encoder__step.c
 
         ../../../../cpu/avr/twi.h
         twi_slave__handler.h
@@ -70,4 +72,5 @@ include(CMakeLists.io.txt)
 include(CMakeLists.encoder.txt)
 include(CMakeLists.keyboard.txt)
 include(CMakeLists.comm_events_simple.txt)
+include(CMakeLists.comm_encoder.txt)
 include(CMakeLists.twi.txt)

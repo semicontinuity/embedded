@@ -32,6 +32,8 @@ CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.encode
 include config.encoder.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_events_simple.properties)
 include config.comm_events_simple.properties
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_encoder.properties)
+include config.comm_encoder.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.twi_slave__handler.properties)
 include config.twi_slave__handler.properties
 

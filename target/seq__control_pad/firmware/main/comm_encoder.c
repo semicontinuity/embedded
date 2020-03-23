@@ -12,6 +12,13 @@
 #include <drivers/out/led_a.h>
 
 
+#ifdef COMM_ENCODER__ENCODER0__DELTA__REG
+register volatile uint8_t comm_encoder__encoder0__delta asm(QUOTE(COMM_ENCODER__ENCODER0__DELTA__REG));
+#else
+volatile uint8_t comm_encoder__encoder0__delta;
+#endif
+
+
 // encoder callbacks
 // -----------------------------------------------------------------------------
 

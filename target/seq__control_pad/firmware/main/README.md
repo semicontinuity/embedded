@@ -30,6 +30,6 @@
 | 26 | allocated by compiler                                           |
 | 27 | allocated by compiler                                           |
 | 28 | allocated by compiler                                           |
-| 29 | allocated by compiler                                           |
+| 29 | COMM_ENCODER__ENCODER0__DELTA__REG                              |
 | 30 | IO_MATRIX__SCANNER__THREAD__IP__REG (L)                         |
 | 31 | IO_MATRIX__SCANNER__THREAD__IP__REG (H)                         |
