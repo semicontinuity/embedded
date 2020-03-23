@@ -46,6 +46,7 @@ set(SOURCE_FILES
         comm_keyboard_simple.c
         comm_keyboard.h
         comm_encoder.c
+        comm_encoder.h
 
         ../../bsp/drivers/out/led_a.h
         ../../bsp/drivers/out/led_b.h

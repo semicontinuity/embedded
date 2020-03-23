@@ -26,15 +26,10 @@ volatile uint8_t comm_encoder__encoder0__delta;
  * Callback to be implemented to handle encoder rotation events.
  * @param delta determines the direction of rotation: 0x01 or 0xFF
  */
-bool encoder0__handle_rotation_event(uint8_t encoder, uint8_t delta) {
+bool encoder0__handle_rotation_event(uint8_t delta) {
     led_a__toggle();
-    if (!comm_events__queue__is_full()) {
-        comm_events__queue__put(
-            COMM_EVENTS__ENCODER__ROTATION_EVENT(encoder, delta)
-        );
-        return true;
-    }
-    return false;
+    comm_encoder__encoder0__delta += delta;
+    return true;
 }
 
 /**
@@ -54,4 +49,30 @@ bool encoder0__handle_switch_event(uint8_t encoder, uint8_t new_state, uint8_t b
         return true;
     }
     return false;
+}
+
+
+// event pumping
+// ---------------------------------------------------------------------------------------------------------------------
+
+/**
+ * If there are pending events, pick the event, and put it to the comm events queue.
+ */
+void comm_encoder__run(void) {
+    __asm__ __volatile__("comm_encoder__run:");
+    if (!comm_events__queue__is_full()) {
+        __asm__ __volatile__("comm_encoder__run__0:");
+        if (comm_encoder__encoder0__delta != 0) {
+            comm_events__queue__put(
+                    COMM_EVENTS__ENCODER__ROTATION_EVENT(0, comm_encoder__encoder0__delta)
+            );
+            comm_encoder__encoder0__delta = 0;
+            return;
+        }
+    }
+}
+
+void comm_encoder__start(void) {
+    __asm__ __volatile__("comm_encoder__start:");
+    comm_encoder__encoder0__delta = 0;
 }

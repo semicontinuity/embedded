@@ -21,6 +21,7 @@
 #include <cpu/avr/twi.h>
 #include "twi_slave__handler.h"
 #include "comm_events.h"
+#include "comm_encoder.h"
 
 #include <drivers/out/alarm.h>
 #include <drivers/out/led_a.h>
@@ -67,6 +68,7 @@ void application__start(void) {
     io_matrix__in__start();
     io_matrix__scanner__thread__timer__start();
     comm_events__start();
+    comm_encoder__start();
     twi__slave__start();
 }
 
@@ -88,7 +90,7 @@ int main(void) {
         keyboard__run();
         encoder0__run();
         encoder0__switch__run();
-
+        comm_encoder__run();
         if (twi__slave__handler__is_runnable()) {
             twi__slave__handler__run();
         }
