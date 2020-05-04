@@ -1,3 +1,6 @@
+add_definitions(-Dws2812_port=D)
+add_definitions(-Dws2812_pin=1)
+
 add_definitions(-DLEDS__REFRESH__HOST=GPIOR0)
 add_definitions(-DLEDS__REFRESH__BIT=2)
 add_definitions(-DLEDS__COUNT=16)

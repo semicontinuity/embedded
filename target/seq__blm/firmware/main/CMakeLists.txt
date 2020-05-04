@@ -33,6 +33,8 @@ set(SOURCE_FILES
         ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.c
         leds.h
         leds.c
+        ../../bsp/drivers/comm/ws2812b.c
+        ../../bsp/drivers/comm/ws2812b.h
 
         comm_keyboard.h
         comm_keyboard_simple.c

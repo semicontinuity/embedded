@@ -34,13 +34,13 @@
 ///////////////////////////////////////////////////////////////////////
 // Define I/O pin
 ///////////////////////////////////////////////////////////////////////
-//#if !defined(ws2812_port)
+#if !defined(ws2812_port)
 #define ws2812_port D   // Data port
-//#endif
+#endif
 
-//#if !defined(ws2812_pin)
+#if !defined(ws2812_pin)
 #define ws2812_pin  1   // Data out pin
-//#endif
+#endif
 
 /*
  *  Structure of the LED array
