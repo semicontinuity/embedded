@@ -28,3 +28,4 @@
 #include "comm_keyboard_simple.c"
 
 #include "main.c"
+#include "tracer.c"

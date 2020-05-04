@@ -38,7 +38,12 @@ set(SOURCE_FILES
         comm_keyboard_simple.c
         comm_leds.c
 
+        twi_slave__handler.h
+        twi_slave__handler.c
+        twi_slave__tracer.h
+
         main.c
+        tracer.c
         services/tracer.h
         __all__.c
         )
