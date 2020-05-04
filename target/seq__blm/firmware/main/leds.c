@@ -21,10 +21,6 @@ DEFINE_BITVAR(leds__refresh, leds__refresh, 0);
 #endif
 
 
-void leds__refresh(void) {
-    leds__refresh__set(1);
-}
-
 void leds__run(void) {
     if (leds__refresh__is_set()) {
         ws2812_sendarray_mask((uint8_t *) leds__data, LEDS__COUNT * 3, _BV(1U));

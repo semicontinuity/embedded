@@ -54,7 +54,6 @@ void twi__slave__on_data_reception_started(void) {
 
 void twi__slave__on_data_byte_received(const uint8_t value) {
     __asm__ __volatile__("twi__slave__on_data_byte_received:");
-    twi__continue(true, false);
 
     if (comm_leds__header_received__get()) {
         // Received payload byte of multi-byte message.
@@ -103,6 +102,7 @@ void twi__slave__on_data_byte_received(const uint8_t value) {
         comm_leds__header_received__set(1);
         comm_leds__header = value;
     }
+    twi__continue(true, false);
 }
 
 
@@ -118,7 +118,7 @@ void twi__slave__on_data_reception_finished(void) {
             if (!(comm_leds__header & 0x80U)) {     // not WRITE_PALETTE?
                 // WRITE_VMEM or UNPACK128
                 if (comm_leds__header & 0x10U) {    // bit 4 is REFRESH, is it set?
-                    leds__refresh();
+                    leds__refresh__set(1);
                 }
             }
         } else {
@@ -217,8 +217,8 @@ void twi__slave__on_data_reception_finished(void) {
                 *comm_leds__memory__ptr++ = *color0_ptr++;
                 *comm_leds__memory__ptr++ = *color0_ptr++;
                 *comm_leds__memory__ptr++ = *color0_ptr;
-                
-                
+
+
                 uint8_t color1_index = *selector_ptr;
                 color1_index &= (uint8_t) ~mask;    // clear bit of selected CHANNEL
                 if (comm_leds__header & 0x02U)      // bit 1 of PATTERN set?
@@ -254,11 +254,12 @@ void twi__slave__on_data_reception_finished(void) {
                 *comm_leds__memory__ptr++ = *color3_ptr++;
                 *comm_leds__memory__ptr++ = *color3_ptr;
             }
-            
-            leds__refresh();
+
+            leds__refresh__set(1);
         }
     } else {
         // Empty message => RESET
-        leds__refresh();
+        leds__refresh__set(1);
     }
+    leds__refresh__set(1);
 }

@@ -7,19 +7,24 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/timer0.h
+        ../../../../cpu/avr/timer2.c
+        ../../../../cpu/avr/timer2.h
+
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer__timer2a.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b.c
+
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__physical.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer0.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_a.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_b.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_c.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_d.c
         ../../../../cpu/avr/services/keyboard/keyboard.c
         ../../../../cpu/avr/services/keyboard/keyboard.h
-        ../../../../cpu/avr/services/keyboard/keyboard__port_a__buttons.h
-        ../../../../cpu/avr/services/keyboard/keyboard__port_a__buttons.c
         ../../../../cpu/avr/services/keyboard/keyboard__port_b__buttons.h
         ../../../../cpu/avr/services/keyboard/keyboard__port_b__buttons.c
         ../../../../cpu/avr/services/keyboard/keyboard__port_c__buttons.h
