@@ -20,6 +20,7 @@
 #include <util/delay.h>
 #include <cpu/avr/twi.h>
 #include <avr/interrupt.h>
+#include <services/tracer.h>
 
 
 uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
@@ -34,18 +35,21 @@ void keyboard__port_d__encoders__process(uint8_t state, uint8_t changes) {}
 // ---------------------------------------------------------------------------------------------------------------------
 
 void application__init(void) {
+    tracer__init();
+
     alarm__init();
     led_a__init();
     led_b__init();
 
     leds__init();
-    keyboard__init();
+//    keyboard__init();
 
     twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
 }
 
 
 void application__start(void) {
+//    tracer__start();
     comm_keyboard__start();
     twi__slave__start();
 }
@@ -68,7 +72,7 @@ int main(void) {
 #endif
     for(;;) {
         leds__run();
-        keyboard__run();
+//        keyboard__run();
 
         // must be in interrupt to reduce latency
         if (twi__slave__handler__is_runnable()) {

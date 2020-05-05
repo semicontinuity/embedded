@@ -1,5 +1,5 @@
 add_definitions(-DOUT__ALARM__PORT=D)
-add_definitions(-DOUT__ALARM__PIN=0)
+add_definitions(-DOUT__ALARM__PIN=1)
 
 add_definitions(-DOUT__LED_A__PORT=B)
 add_definitions(-DOUT__LED_A__PIN=6)
@@ -11,3 +11,5 @@ add_definitions(-DOUT__LED_B__PIN=7)
 #add_definitions(-DOUT__LED_A__PIN=6)
 #add_definitions(-DOUT__LED_B__PORT=C)
 #add_definitions(-DOUT__LED_B__PIN=7)
+
+add_definitions(-DUSART0__BAUD_RATE=38400)

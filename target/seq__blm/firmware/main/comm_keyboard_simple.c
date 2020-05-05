@@ -16,7 +16,7 @@
 #include <drivers/out/led_a.h>
 #include <drivers/out/led_b.h>
 
-register volatile uint8_t comm_keyboard__event asm(QUOTE(COMM_KEYBOARD__EVENT__REG));
+//register volatile uint8_t comm_keyboard__event asm(QUOTE(COMM_KEYBOARD__EVENT__REG));
 
 
 // Keyboard callbacks
@@ -48,16 +48,20 @@ inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
 
 // TWI Slave callbacks
 // -----------------------------------------------------------------------------
+/*
 
 void twi__slave__on_data_byte_requested(void) {
     __asm__ __volatile__("twi__slave__on_data_byte_requested:");
     twi__data__set(comm_keyboard__event);
-    twi__continue(/*false*/true, false);
+    twi__continue(false*/
+/*true*//*
+, false);
     comm_keyboard__event = 0;
 //    alarm__set(0);
 }
+*/
 
 
 void comm_keyboard__start(void) {
-    comm_keyboard__event = 0;
+//    comm_keyboard__event = 0;
 }

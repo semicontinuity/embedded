@@ -181,5 +181,5 @@ w_nop16
     );
   }
   
-  SREG=sreg_prev;
+  SREG=sreg_prev;   // enable interrupts if they were enabled; don't enable, if were disabled
 }
