@@ -20,6 +20,63 @@ void console__i2c__init(void) {
     i2c_init();
 }
 
+uint8_t console__i2c__start(void) {
+    uint8_t src_index = 1;
+    uint8_t c1 = console__input_buffer[src_index++];
+    uint8_t c2 = console__input_buffer[src_index++];
+    uint16_t parsed_byte = parser__parse_hex_chars(c1, c2);
+    if ((uint8_t) (parsed_byte >> 8)) {
+        return EXIT_FAILURE;
+    }
+
+    if (i2c_start(parsed_byte)) {
+        console__print('N');
+    }
+
+    console__print('A');
+    console__print('C');
+    console__print('K');
+    console__println();
+    return EXIT_SUCCESS;
+}
+
+uint8_t console__i2c__stop(void) {
+    i2c_stop();
+    console__print_ok();
+    console__println();
+    return EXIT_SUCCESS;
+}
+
+
+uint8_t console__i2c__write_byte(void) {
+    uint8_t src_index = 1;
+    uint8_t c1 = console__input_buffer[src_index++];
+    uint8_t c2 = console__input_buffer[src_index++];
+    uint16_t parsed_byte = parser__parse_hex_chars(c1, c2);
+    if ((uint8_t) (parsed_byte >> 8)) {
+        return EXIT_FAILURE;
+    }
+
+    if (i2c_write(parsed_byte)) {
+        console__print('N');
+    }
+
+    console__print('A');
+    console__print('C');
+    console__print('K');
+    console__println();
+    return EXIT_SUCCESS;
+}
+
+
+uint8_t console__i2c__read_byte(void) {
+    uint8_t value  = i2c_read_ack();
+    uint16_t hex = formatter__byte_to_hex_chars(value);
+    console__print((uint8_t) (hex >> 8));
+    console__print((uint8_t) (hex & 0xFF));
+    console__println();
+    return EXIT_SUCCESS;
+}
 
 /**
  * @return EXIT_SUCCESS or EXIT_FAILURE; if success, length bytes are placed into console__i2c__buffer
@@ -48,7 +105,6 @@ uint8_t console__i2c__read(uint8_t address_byte, uint8_t length) {
 
     return EXIT_SUCCESS;
 }
-
 
 uint8_t console__i2c__write(uint8_t address_byte) {
     uint8_t *bytes_ptr = console__i2c__buffer;
@@ -137,6 +193,16 @@ uint8_t console__i2c__detect(void) {
 
 uint8_t console__i2c__run(void) __attribute__ ((noinline));
 uint8_t console__i2c__run(void) {
+    if (console__input_length == 1) {
+        if (console__input_buffer[0] == 'D') {
+            return console__i2c__detect();
+        } else if (console__input_buffer[0] == 'R') {
+            return console__i2c__read_byte();
+        } else if (console__input_buffer[0] == 'P') {
+            return console__i2c__stop();
+        }
+    }
+
     if (console__input_length == 2 && console__input_buffer[0] == 'I') {
         uint8_t rate_code = console__input_buffer[1];
         if (rate_code == '2') {
@@ -149,12 +215,12 @@ uint8_t console__i2c__run(void) {
         return EXIT_SUCCESS;
     }
 
-    if (console__input_length == 1 && console__input_buffer[0] == 'D') {
-        return console__i2c__detect();
-    }
 
-    if (console__input_length < 5) {
-        return EXIT_FAILURE;
+    if (console__input_buffer[0] == 'S' && console__input_length == 3) {
+        return console__i2c__start();
+    }
+    if (console__input_buffer[0] == 'W' && console__input_length == 3) {
+        return console__i2c__write_byte();
     }
 
     uint16_t parsed_address_byte = parser__parse_hex_byte(console__input_buffer);
@@ -178,7 +244,6 @@ uint8_t console__i2c__run(void) {
         return result;
     } else if (console__input_buffer[2] == '=' && (console__input_length & 1) != 0) {
         return console__i2c__write(address_byte);
-    } else {
-        return EXIT_FAILURE;
     }
+    return EXIT_FAILURE;
 }

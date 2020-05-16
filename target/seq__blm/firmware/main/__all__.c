@@ -28,5 +28,4 @@
 #include "comm_keyboard_simple.c"
 
 #include "main.c"
-#include "tracer__usart0.c"
-//#include "util/hex.c"
+#include "tracer__leds.c"

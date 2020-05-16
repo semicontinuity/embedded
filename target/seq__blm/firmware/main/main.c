@@ -49,7 +49,8 @@ void application__init(void) {
 
 
 void application__start(void) {
-//    tracer__start();
+    tracer__start();
+
     comm_keyboard__start();
     twi__slave__start();
 }

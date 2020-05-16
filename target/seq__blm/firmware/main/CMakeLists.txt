@@ -45,7 +45,7 @@ set(SOURCE_FILES
         twi_slave__tracer.h
 
         main.c
-        tracer__usart0.c
+        tracer__leds.c
         services/tracer.h
         __all__.c
         )
