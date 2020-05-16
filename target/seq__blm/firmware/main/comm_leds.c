@@ -122,11 +122,7 @@ void twi__slave__on_data_reception_finished(void) {
                     leds__refresh__set(1);
                 }
             }
-
-//            twi__continue(true, false);
         } else {
-            PORTD |= 4U;
-
             // 1-byte message, stored in comm_leds__header => type PACKED4, format [ CHANNEL: 1 ] [ POS : 2] [ DIR: 1 ] [ PATTERN : 4]
             // first, updates one of two lowest bits of selector memory entry,
             // then fetches 24-bit color value from the corresponding palette entry,
@@ -262,7 +258,6 @@ void twi__slave__on_data_reception_finished(void) {
                 *comm_leds__memory__ptr++ = *color3_ptr;
             }
             __asm__ __volatile__("twi__slave__on_data_reception_finished__PACKED4_refresh:");
-            PORTD |= 16U;
             leds__refresh__set(1);
         }
         twi__continue(true, false);
@@ -273,12 +268,4 @@ void twi__slave__on_data_reception_finished(void) {
         leds__refresh__set(1);
         twi__continue(true, false);
     }
-}
-
-
-void twi__slave__on_data_byte_requested(void) {
-    __asm__ __volatile__("twi__slave__on_data_byte_requested:");
-    twi__data__set(*comm_leds__memory__ptr++);
-    twi__continue(false/*true*/, false);
-//    alarm__set(0);
 }

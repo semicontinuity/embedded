@@ -16,7 +16,7 @@
 #include <drivers/out/led_a.h>
 #include <drivers/out/led_b.h>
 
-//register volatile uint8_t comm_keyboard__event asm(QUOTE(COMM_KEYBOARD__EVENT__REG));
+register volatile uint8_t comm_keyboard__event asm(QUOTE(COMM_KEYBOARD__EVENT__REG));
 
 
 // Keyboard callbacks
@@ -32,7 +32,7 @@
  * @param bit index of button's pin in the port
  */
 inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
-    /*led_a__toggle();
+    led_a__toggle();
     if (!alarm__get()) {
         comm_keyboard__event = IF_BIT_SET_CONST_A_ELSE_CONST_B(
             state, bit, (uint8_t) ('A' + button), (uint8_t) ('a' + button)
@@ -41,27 +41,22 @@ inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
         alarm__set(1);
         return true;
     }
-    return false;*/
-    return true;
+    return false;
 }
 
 
 // TWI Slave callbacks
 // -----------------------------------------------------------------------------
-/*
 
 void twi__slave__on_data_byte_requested(void) {
     __asm__ __volatile__("twi__slave__on_data_byte_requested:");
     twi__data__set(comm_keyboard__event);
-    twi__continue(false*/
-/*true*//*
-, false);
+    twi__continue(false /*true*/ , false);
     comm_keyboard__event = 0;
-//    alarm__set(0);
+    alarm__set(0);
 }
-*/
 
 
 void comm_keyboard__start(void) {
-//    comm_keyboard__event = 0;
+    comm_keyboard__event = 0;
 }

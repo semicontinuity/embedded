@@ -9,7 +9,7 @@
 |  4 | allocated by compiler                                           |
 |  5 | allocated by compiler                                           |
 |  6 | allocated by compiler                                           |
-|  7 | allocated by compiler                                           |
+|  7 | COMM_LEDS__HEADER__REG                                          |
 |  8 | allocated by compiler                                           |
 |  9 | allocated by compiler                                           |
 | 10 | allocated by compiler                                           |
@@ -43,3 +43,10 @@
 | GPIOR0 | 0 | COMM_LEDS__HEADER_RECEIVED                              |
 | GPIOR0 | 1 | COMM_LEDS__HEADER_PARSED                                |
 | GPIOR0 | 2 | LEDS__REFRESH                                           |
+
+
+## Notes
+
+The WS2812 pin is kept low between transmissions, so LEDs are kept in reset.
+Data transmission to LEDs can commence right away, without issuing reset pulse.
+As a consequence, the interval between LED updates must be at least 50uS.
