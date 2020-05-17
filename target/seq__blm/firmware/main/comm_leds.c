@@ -48,6 +48,11 @@ DEFINE_BITVAR(comm_leds__header_parsed, comm_leds__header_parsed, 0);
 #endif
 
 
+
+uint8_t *comm_leds__selectors__position(const uint8_t position) {
+    return leds__selectors + position;
+}
+
 uint8_t comm_leds__selectors__get(void) {
 #if defined(COMM_LEDS__SELECTORS__PTR__REG) && COMM_LEDS__SELECTORS__PTR__REG==28
     return LOAD_Y_OFFSET(comm_leds__selectors__ptr, 0);
@@ -68,10 +73,16 @@ void comm_leds__selectors__write(const uint8_t value) {
 #endif
 }
 
+
 uint8_t *comm_leds__palette__position(const uint8_t position) {
     return leds__palette + ((uint8_t)(position + position) + position);
 }
 
+
+
+uint8_t *comm_leds__data__position(const uint8_t position) {
+    return leds__data + ((uint8_t)(position + position) + position);
+}
 
 void comm_leds__data__write(const uint8_t value) {
 #if defined(COMM_LEDS__MEMORY__PTR__REG) && COMM_LEDS__MEMORY__PTR__REG==26
@@ -115,11 +126,9 @@ void twi__slave__on_data_byte_received(const uint8_t value) {
             // WRITE_PALETTE message, format [1][palette index]
             if (!comm_leds__header_parsed__get()) {
                 comm_leds__header_parsed__set(1);
-                uint8_t palette_index = comm_leds__header & 0x7FU;
-                comm_leds__memory__ptr = leds__palette + (palette_index + palette_index + palette_index);
+                comm_leds__memory__ptr = comm_leds__palette__position(comm_leds__header & 0x7FU);
             }
-            // optimize it
-            *comm_leds__memory__ptr++ = value;
+            comm_leds__data__write(value);  // memory ptr used - use palette ptr
         } else {
             // bit 6 is 1 for UNPACK128 message, 0 for WRITE_VMEM
             if (comm_leds__header & 0x40U) {        // is UNPACK128?
@@ -128,8 +137,8 @@ void twi__slave__on_data_byte_received(const uint8_t value) {
                 if (!comm_leds__header_parsed__get()) {
                     comm_leds__header_parsed__set(1);
                     uint8_t led_index = comm_leds__header & 0x0FU;  // extract LED field
-                    comm_leds__selectors__ptr = leds__selectors + led_index;
-                    comm_leds__memory__ptr = leds__data + ((uint8_t)(led_index + led_index) + led_index);
+                    comm_leds__selectors__ptr = comm_leds__selectors__position(led_index);
+                    comm_leds__memory__ptr = comm_leds__data__position(led_index);
                 }
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__unpack128__write_selector:");
@@ -139,7 +148,7 @@ void twi__slave__on_data_byte_received(const uint8_t value) {
                 }
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__unpack128__write_vmem:");
-                uint8_t *color_ptr = leds__palette + (value + value + value);   // value is INDEX field, assume RESERVED is 0
+                uint8_t *color_ptr = comm_leds__palette__position(value);   // value is INDEX field, assume RESERVED is 0
                 comm_leds__data__write(*color_ptr++);
                 comm_leds__data__write(*color_ptr++);
                 comm_leds__data__write(*color_ptr);
