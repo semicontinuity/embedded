@@ -12,7 +12,7 @@
 #include <drivers/out/alarm.h>
 #include <drivers/out/led_a.h>
 #include <drivers/out/led_b.h>
-
+#include <cpu/avr/asm.h>
 
 
 #ifdef COMM_LEDS__SELECTORS__PTR__REG
@@ -48,6 +48,29 @@ DEFINE_BITVAR(comm_leds__header_parsed, comm_leds__header_parsed, 0);
 #endif
 
 
+
+void comm_leds__selectors__write(const uint8_t value) {
+#if defined(COMM_LEDS__SELECTORS__PTR__REG) && COMM_LEDS__SELECTORS__PTR__REG==28
+    STORE_YPLUS(comm_leds__selectors__ptr, value);
+#elif defined(COMM_LEDS__SELECTORS__PTR__REG) && COMM_LEDS__SELECTORS__PTR__REG==30
+    STORE_ZPLUS(comm_leds__selectors__ptr, value);
+#else
+    *comm_leds__selectors__ptr++ = value;
+#endif
+}
+
+void comm_leds__data__write(const uint8_t value) {
+#if defined(COMM_LEDS__MEMORY__PTR__REG) && COMM_LEDS__MEMORY__PTR__REG==26
+    STORE_XPLUS(comm_leds__memory__ptr, value);
+#elif defined(COMM_LEDS__MEMORY__PTR__REG) && COMM_LEDS__MEMORY__PTR__REG==28
+    STORE_YPLUS(comm_leds__memory__ptr, value);
+#elif defined(COMM_LEDS__MEMORY__PTR__REG) && COMM_LEDS__MEMORY__PTR__REG==30
+    STORE_ZPLUS(comm_leds__memory__ptr, value);
+#else
+    *comm_leds__memory__ptr++ = value;
+#endif
+}
+
 // TWI Slave callbacks
 // -----------------------------------------------------------------------------
 
@@ -78,41 +101,50 @@ void twi__slave__on_data_byte_received(const uint8_t value) {
             // bit 6 is 1 for UNPACK128 message, 0 for WRITE_VMEM
             if (comm_leds__header & 0x40U) {        // is UNPACK128?
                 // UNPACK128 message, format [ 01 ] [DIR : 1] [ REFRESH : 1] [ LED : 4] + [ RESERVED: 1] [ INDEX : 7 ]
+                __asm__ __volatile__("twi__slave__on_data_reception_finished__unpack128__init:");
                 if (!comm_leds__header_parsed__get()) {
                     comm_leds__header_parsed__set(1);
                     uint8_t led_index = comm_leds__header & 0x0FU;  // extract LED field
                     comm_leds__selectors__ptr = leds__selectors + led_index;
                     comm_leds__memory__ptr = leds__data + ((uint8_t)(led_index + led_index) + led_index);
                 }
-                *comm_leds__selectors__ptr++ = value;
-                uint8_t *color_ptr = leds__palette + (value + value + value);   // value is INDEX field, assume RESERVED is 0
-                *comm_leds__memory__ptr++ = *color_ptr++;
-                *comm_leds__memory__ptr++ = *color_ptr++;
-                *comm_leds__memory__ptr++ = *color_ptr;
+
+                __asm__ __volatile__("twi__slave__on_data_reception_finished__unpack128__write_selector:");
+                comm_leds__selectors__write(value);
                 if (comm_leds__header & 0x20U) {    // DIR bit set?
                     comm_leds__selectors__ptr += 3; // point to the selector of LED below
                 }
+
+                __asm__ __volatile__("twi__slave__on_data_reception_finished__unpack128__write_vmem:");
+                uint8_t *color_ptr = leds__palette + (value + value + value);   // value is INDEX field, assume RESERVED is 0
+                comm_leds__data__write(*color_ptr++);
+                comm_leds__data__write(*color_ptr++);
+                comm_leds__data__write(*color_ptr);
                 if (comm_leds__header & 0x20U) {    // DIR bit set?
                     comm_leds__memory__ptr += 9;    // point to the memory of LED below
                 }
             } else {
                 // WRITE_VMEM message, format [ 00 ] [ DIR: 1] [ REFRESH: 1] [ START_LED : 4] + [ 3-byte color value ]+
+                __asm__ __volatile__("twi__slave__on_data_reception_finished__write_vmem__init:");
                 if (!comm_leds__header_parsed__get()) {
                     comm_leds__header_parsed__set(1);
                     uint8_t led_index = comm_leds__header & 0x0FU;  // extract START_LED field
                     comm_leds__memory__ptr = leds__data + (led_index + led_index + led_index);
                 }
-                // optimize it
-                *comm_leds__memory__ptr++ = value;
+
+                __asm__ __volatile__("twi__slave__on_data_reception_finished__write_vmem:");
+                comm_leds__data__write(value);
                 if (comm_leds__header & 0x20U) {    // DIR bit set?
                     comm_leds__memory__ptr += 9;    // point to the memory of LED below
                 }
             }
         }
     } else {
+        __asm__ __volatile__("twi__slave__on_data_reception_finished__received_header:");
         comm_leds__header_received__set(1);
         comm_leds__header = value;
     }
+    __asm__ __volatile__("twi__slave__on_data_reception_finished__exit:");
     twi__continue(true, false);
 }
 
@@ -139,7 +171,7 @@ void twi__slave__on_data_reception_finished(void) {
             // then fetches 24-bit color value from the corresponding palette entry,
             // writes the color to the corresponding position of the video memory,
             // and finally, requests the LEDs refresh.
-            uint8_t *comm_leds__selectors__ptr = leds__selectors;
+            /*uint8_t **/comm_leds__selectors__ptr = leds__selectors;
             comm_leds__memory__ptr = leds__data;
             uint8_t mask = 0x01U;                   // mask for CHANNEL 0
             if (comm_leds__header & 0x80U)          // CHANNEL 1?

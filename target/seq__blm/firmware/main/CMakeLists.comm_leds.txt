@@ -1,3 +1,5 @@
+add_definitions(-DCOMM_LEDS__PALETTE__PTR__REG=26)
+add_definitions(-DCOMM_LEDS__SELECTORS__PTR__REG=28)
 add_definitions(-DCOMM_LEDS__MEMORY__PTR__REG=30)
 add_definitions(-DCOMM_LEDS__HEADER__REG=7)
 add_definitions(-DCOMM_LEDS__HEADER_RECEIVED__HOST=GPIOR0)
