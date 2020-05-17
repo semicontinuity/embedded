@@ -42,7 +42,7 @@ void application__init(void) {
     led_b__init();
 
     leds__init();
-//    keyboard__init();
+    keyboard__init();
 
     twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
 }
@@ -73,7 +73,7 @@ int main(void) {
 #endif
     for(;;) {
         leds__run();
-//        keyboard__run();
+        keyboard__run();
 
         // could be in interrupt to reduce latency - but interrupt handler would be big, with lots of registers to save
         if (twi__slave__handler__is_runnable()) {

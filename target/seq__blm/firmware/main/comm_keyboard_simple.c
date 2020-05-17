@@ -16,6 +16,11 @@
 #include <drivers/out/led_a.h>
 #include <drivers/out/led_b.h>
 
+
+#define COMM_EVENTS__BUTTONS__EVENT_PRESSED(button) (0x80 | ((button) << 1) | 0x00U)
+#define COMM_EVENTS__BUTTONS__EVENT_DEPRESSED(button) (0x80 | ((button) << 1) | 0x01U)
+
+
 register volatile uint8_t comm_keyboard__event asm(QUOTE(COMM_KEYBOARD__EVENT__REG));
 
 
@@ -35,7 +40,9 @@ inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
     led_a__toggle();
     if (!alarm__get()) {
         comm_keyboard__event = IF_BIT_SET_CONST_A_ELSE_CONST_B(
-            state, bit, (uint8_t) ('A' + button), (uint8_t) ('a' + button)
+            state, bit,
+            (uint8_t) COMM_EVENTS__BUTTONS__EVENT_DEPRESSED(button),
+            (uint8_t) COMM_EVENTS__BUTTONS__EVENT_PRESSED(button)
         );
         led_b__toggle();
         alarm__set(1);
