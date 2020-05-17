@@ -1,6 +1,6 @@
 // =============================================================================
-// Receives 4-byte messages via I2C with color data.
-// Datagram format: {button index: 1 byte + 3-byte color value}
+// Handles paint commands, received via I2C.
+// See protocol.txt for details.
 // =============================================================================
 
 #include <cpu/avr/twi.h>
@@ -85,6 +85,18 @@ uint8_t *comm_leds__palette__position(const uint8_t position) {
     return leds__palette + ((uint8_t)(position + position) + position);
 }
 
+uint8_t comm_leds__palette__read(void) {
+#if defined(COMM_LEDS__PALETTE__PTR__REG) && COMM_LEDS__PALETTE__PTR__REG==26
+    return LOAD_XPLUS(comm_leds__palette__ptr);
+#elif defined(COMM_LEDS__PALETTE__PTR__REG) && COMM_LEDS__PALETTE__PTR__REG==28
+    return LOAD_YPLUS(comm_leds__palette__ptr);
+#elif defined(COMM_LEDS__PALETTE__PTR__REG) && COMM_LEDS__PALETTE__PTR__REG==30
+    return LOAD_ZPLUS(comm_leds__palette__ptr);
+#else
+    return *comm_leds__palette__ptr++;
+#endif
+}
+
 
 
 uint8_t *comm_leds__data__position(const uint8_t position) {
@@ -106,9 +118,9 @@ void comm_leds__data__write(const uint8_t value) {
 
 void comm_leds__data__put_indexed_color(uint8_t index) {
     comm_leds__palette__ptr = comm_leds__palette__position(index);
-    comm_leds__data__write(LOAD_XPLUS(comm_leds__palette__ptr));
-    comm_leds__data__write(LOAD_XPLUS(comm_leds__palette__ptr));
-    comm_leds__data__write(LOAD_XPLUS(comm_leds__palette__ptr));
+    comm_leds__data__write(comm_leds__palette__read());
+    comm_leds__data__write(comm_leds__palette__read());
+    comm_leds__data__write(comm_leds__palette__read());
 }
 
 
@@ -124,6 +136,7 @@ void twi__slave__on_data_reception_started(void) {
 
 void twi__slave__on_data_byte_received(const uint8_t value) {
     __asm__ __volatile__("twi__slave__on_data_byte_received:");
+    twi__continue(true, false);
 
     if (comm_leds__header_received__get()) {
         // Received payload byte of multi-byte message.
@@ -182,7 +195,6 @@ void twi__slave__on_data_byte_received(const uint8_t value) {
         comm_leds__header = value;
     }
     __asm__ __volatile__("twi__slave__on_data_reception_finished__exit:");
-    twi__continue(true, false);
 }
 
 
@@ -196,6 +208,7 @@ uint8_t modify_indexed_color(uint8_t color_index, uint8_t pattern_mask, uint8_t 
 
 void twi__slave__on_data_reception_finished(void) {
     __asm__ __volatile__("twi__slave__on_data_reception_finished:");
+    twi__continue(true, false);
 
     if (comm_leds__header_received__get()) {
         comm_leds__header_received__set(0);
@@ -313,12 +326,9 @@ void twi__slave__on_data_reception_finished(void) {
             __asm__ __volatile__("twi__slave__on_data_reception_finished__PACKED4_refresh:");
             leds__refresh__set(1);
         }
-        twi__continue(true, false);
-        comm_leds__memory__ptr = leds__data;
     } else {
         // Empty message => REFRESH
         // (could also be RESET, but REFRESH seems more useful: fill the video memory and render it to LEDS when necessary)
         leds__refresh__set(1);
-        twi__continue(true, false);
     }
 }
