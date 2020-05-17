@@ -433,6 +433,19 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 // Operations with X register
 // ----------------------------------------------
 
+#define INIT_X(k)                               \
+(__extension__({                                \
+    uint16_t __result;                          \
+    __asm__ __volatile__ (                      \
+        "ldi %A0, %1\n\t"			            \
+        "ldi %B0, %2\n\t"			            \
+            : "=x"(__result)			        \
+            : "M"((uint8_t)((k) & 0xFF)),	    \
+              "M"((uint8_t)((k) >> 8))          \
+    );                                          \
+    __result;                                   \
+}))
+
 #define LOAD_XPLUS(ptr)			                \
 (__extension__({                                \
     uint8_t __result;                           \

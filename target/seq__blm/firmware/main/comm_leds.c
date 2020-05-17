@@ -48,6 +48,15 @@ DEFINE_BITVAR(comm_leds__header_parsed, comm_leds__header_parsed, 0);
 #endif
 
 
+uint8_t comm_leds__selectors__get(void) {
+#if defined(COMM_LEDS__SELECTORS__PTR__REG) && COMM_LEDS__SELECTORS__PTR__REG==28
+    return LOAD_Y_OFFSET(comm_leds__selectors__ptr, 0);
+#elif defined(COMM_LEDS__SELECTORS__PTR__REG) && COMM_LEDS__SELECTORS__PTR__REG==30
+    return LOAD_Z_OFFSET(comm_leds__selectors__ptr, 0);
+#else
+    return *comm_leds__selectors__ptr;
+#endif
+}
 
 void comm_leds__selectors__write(const uint8_t value) {
 #if defined(COMM_LEDS__SELECTORS__PTR__REG) && COMM_LEDS__SELECTORS__PTR__REG==28
@@ -58,6 +67,7 @@ void comm_leds__selectors__write(const uint8_t value) {
     *comm_leds__selectors__ptr++ = value;
 #endif
 }
+
 
 void comm_leds__data__write(const uint8_t value) {
 #if defined(COMM_LEDS__MEMORY__PTR__REG) && COMM_LEDS__MEMORY__PTR__REG==26
@@ -171,7 +181,7 @@ void twi__slave__on_data_reception_finished(void) {
             // then fetches 24-bit color value from the corresponding palette entry,
             // writes the color to the corresponding position of the video memory,
             // and finally, requests the LEDs refresh.
-            /*uint8_t **/comm_leds__selectors__ptr = leds__selectors;
+            comm_leds__selectors__ptr = leds__selectors;
             comm_leds__memory__ptr = leds__data;
             uint8_t mask = 0x01U;                   // mask for CHANNEL 0
             if (comm_leds__header & 0x80U)          // CHANNEL 1?
@@ -190,65 +200,65 @@ void twi__slave__on_data_reception_finished(void) {
 
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_v0p:");
-                uint8_t color0_index = *comm_leds__selectors__ptr;   // load indexed color for the current LED
-                color0_index &= (uint8_t) ~mask;            // clear bit of selected CHANNEL
-                if (comm_leds__header & 0x01U)              // bit 0 of PATTERN set?
-                    color0_index |= mask;                   // set bit of selected CHANNEL
-                comm_leds__selectors__write(color0_index);  // store indexed color for the current LED
-                comm_leds__selectors__ptr += 3;             // select next LED (below current one)
+                uint8_t color0_index = comm_leds__selectors__get(); // load indexed color for the current LED
+                color0_index &= (uint8_t) ~mask;                    // clear bit of selected CHANNEL
+                if (comm_leds__header & 0x01U)                      // bit 0 of PATTERN set?
+                    color0_index |= mask;                           // set bit of selected CHANNEL
+                comm_leds__selectors__write(color0_index);          // store indexed color for the current LED
+                comm_leds__selectors__ptr += 3;                     // select next LED (below current one)
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_v0c:");
                 uint8_t *color0_ptr = leds__palette + ((uint8_t)(color0_index + color0_index) + color0_index);
-                comm_leds__data__write(*color0_ptr++);
-                comm_leds__data__write(*color0_ptr++);
-                comm_leds__data__write(*color0_ptr);
+                comm_leds__data__write(LOAD_XPLUS(color0_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color0_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color0_ptr));
                 comm_leds__memory__ptr += 9;                // point to the video memory of the next LED (below current one)
 
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_v1p:");
-                uint8_t color1_index = *comm_leds__selectors__ptr;   // load indexed color for the current LED
-                color1_index &= (uint8_t) ~mask;            // clear bit of selected CHANNEL
-                if (comm_leds__header & 0x02U)              // bit 1 of PATTERN set?
-                    color1_index |= mask;                   // set bit of selected CHANNEL
-                comm_leds__selectors__write(color1_index);  // store indexed color for the current LED
-                comm_leds__selectors__ptr += 3;             // select next LED (below current one)
+                uint8_t color1_index = comm_leds__selectors__get(); // load indexed color for the current LED
+                color1_index &= (uint8_t) ~mask;                    // clear bit of selected CHANNEL
+                if (comm_leds__header & 0x02U)                      // bit 1 of PATTERN set?
+                    color1_index |= mask;                           // set bit of selected CHANNEL
+                comm_leds__selectors__write(color1_index);          // store indexed color for the current LED
+                comm_leds__selectors__ptr += 3;                     // select next LED (below current one)
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_v1c:");
                 uint8_t *color1_ptr = leds__palette + ((uint8_t)(color1_index + color1_index) + color1_index);
-                comm_leds__data__write(*color1_ptr++);
-                comm_leds__data__write(*color1_ptr++);
-                comm_leds__data__write(*color1_ptr);
+                comm_leds__data__write(LOAD_XPLUS(color1_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color1_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color1_ptr));
                 comm_leds__memory__ptr += 9;                // point to the video memory of the next LED (below current one)
 
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_v2p:");
-                uint8_t color2_index = *comm_leds__selectors__ptr;   // load indexed color for the current LED
-                color2_index &= (uint8_t) ~mask;            // clear bit of selected CHANNEL
-                if (comm_leds__header & 0x04U)              // bit 2 of PATTERN set?
-                    color2_index |= mask;                   // set bit of selected CHANNEL
-                comm_leds__selectors__write(color2_index);  // store indexed color for the current LED
-                comm_leds__selectors__ptr += 3;             // select next LED (below current one)
+                uint8_t color2_index = comm_leds__selectors__get(); // load indexed color for the current LED
+                color2_index &= (uint8_t) ~mask;                    // clear bit of selected CHANNEL
+                if (comm_leds__header & 0x04U)                      // bit 2 of PATTERN set?
+                    color2_index |= mask;                           // set bit of selected CHANNEL
+                comm_leds__selectors__write(color2_index);          // store indexed color for the current LED
+                comm_leds__selectors__ptr += 3;                     // select next LED (below current one)
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_v2c:");
                 uint8_t *color2_ptr = leds__palette + ((uint8_t)(color2_index + color2_index) + color2_index);
-                comm_leds__data__write(*color2_ptr++);
-                comm_leds__data__write(*color2_ptr++);
-                comm_leds__data__write(*color2_ptr);
+                comm_leds__data__write(LOAD_XPLUS(color2_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color2_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color2_ptr));
                 comm_leds__memory__ptr += 9;                // point to the video memory of the next LED (below current one)
 
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_v3p:");
-                uint8_t color3_index = *comm_leds__selectors__ptr;   // load indexed color for the current LED
-                color3_index &= (uint8_t) ~mask;            // clear bit of selected CHANNEL
-                if (comm_leds__header & 0x08U)              // bit 3 of PATTERN set?
-                    color3_index |= mask;                   // set bit of selected CHANNEL
-                comm_leds__selectors__write(color3_index);  // store indexed color for the current LED
+                uint8_t color3_index = comm_leds__selectors__get(); // load indexed color for the current LED
+                color3_index &= (uint8_t) ~mask;                    // clear bit of selected CHANNEL
+                if (comm_leds__header & 0x08U)                      // bit 3 of PATTERN set?
+                    color3_index |= mask;                           // set bit of selected CHANNEL
+                comm_leds__selectors__write(color3_index);          // store indexed color for the current LED
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_v3c:");
                 uint8_t *color3_ptr = leds__palette + ((uint8_t)(color3_index + color3_index) + color3_index);
-                comm_leds__data__write(*color3_ptr++);
-                comm_leds__data__write(*color3_ptr++);
-                comm_leds__data__write(*color3_ptr);
+                comm_leds__data__write(LOAD_XPLUS(color3_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color3_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color3_ptr));
             } else {                                // horizontal
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_h:");
                 if (comm_leds__header & 0x40U)      // lower 2 rows?
@@ -262,59 +272,59 @@ void twi__slave__on_data_reception_finished(void) {
 
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_h0p:");
-                uint8_t color0_index = *comm_leds__selectors__ptr;   // load indexed color for the current LED
-                color0_index &= (uint8_t) ~mask;            // clear bit of selected CHANNEL
-                if (comm_leds__header & 0x01U)              // bit 0 of PATTERN set?
-                    color0_index |= mask;                   // set bit of selected CHANNEL
-                comm_leds__selectors__write(color0_index);  // store indexed color for the current LED and select next LED
+                uint8_t color0_index = comm_leds__selectors__get(); // load indexed color for the current LED
+                color0_index &= (uint8_t) ~mask;                    // clear bit of selected CHANNEL
+                if (comm_leds__header & 0x01U)                      // bit 0 of PATTERN set?
+                    color0_index |= mask;                           // set bit of selected CHANNEL
+                comm_leds__selectors__write(color0_index);          // store indexed color for the current LED and select next LED
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_h0c:");
                 uint8_t *color0_ptr = leds__palette + (color0_index + color0_index + color0_index);
-                comm_leds__data__write(*color0_ptr++);
-                comm_leds__data__write(*color0_ptr++);
-                comm_leds__data__write(*color0_ptr);
+                comm_leds__data__write(LOAD_XPLUS(color0_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color0_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color0_ptr));
 
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_h1p:");
-                uint8_t color1_index = *comm_leds__selectors__ptr;   // load indexed color for the current LED
-                color1_index &= (uint8_t) ~mask;            // clear bit of selected CHANNEL
-                if (comm_leds__header & 0x02U)              // bit 1 of PATTERN set?
-                    color1_index |= mask;                   // set bit of selected CHANNEL
-                comm_leds__selectors__write(color1_index);  // store indexed color for the current LED and select next LED
+                uint8_t color1_index = comm_leds__selectors__get(); // load indexed color for the current LED
+                color1_index &= (uint8_t) ~mask;                    // clear bit of selected CHANNEL
+                if (comm_leds__header & 0x02U)                      // bit 1 of PATTERN set?
+                    color1_index |= mask;                           // set bit of selected CHANNEL
+                comm_leds__selectors__write(color1_index);          // store indexed color for the current LED and select next LED
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_h1c:");
                 uint8_t *color1_ptr = leds__palette + (color1_index + color1_index + color1_index);
-                comm_leds__data__write(*color1_ptr++);
-                comm_leds__data__write(*color1_ptr++);
-                comm_leds__data__write(*color1_ptr);
+                comm_leds__data__write(LOAD_XPLUS(color1_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color1_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color1_ptr));
 
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_h2p:");
-                uint8_t color2_index = *comm_leds__selectors__ptr;   // load indexed color for the current LED
-                color2_index &= (uint8_t) ~mask;            // clear bit of selected CHANNEL
-                if (comm_leds__header & 0x04U)              // bit 2 of PATTERN set?
-                    color2_index |= mask;                   // set bit of selected CHANNEL
-                comm_leds__selectors__write(color2_index);  // load indexed color for the current LED and select next LED
+                uint8_t color2_index = comm_leds__selectors__get(); // load indexed color for the current LED
+                color2_index &= (uint8_t) ~mask;                    // clear bit of selected CHANNEL
+                if (comm_leds__header & 0x04U)                      // bit 2 of PATTERN set?
+                    color2_index |= mask;                           // set bit of selected CHANNEL
+                comm_leds__selectors__write(color2_index);          // load indexed color for the current LED and select next LED
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_h2c:");
                 uint8_t *color2_ptr = leds__palette + (color2_index + color2_index + color2_index);
-                comm_leds__data__write(*color2_ptr++);
-                comm_leds__data__write(*color2_ptr++);
-                comm_leds__data__write(*color2_ptr);
+                comm_leds__data__write(LOAD_XPLUS(color2_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color2_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color2_ptr));
 
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_h3p:");
-                uint8_t color3_index = *comm_leds__selectors__ptr;   // load indexed color for the current LED
-                color3_index &= (uint8_t) ~mask;            // clear bit of selected CHANNEL
-                if (comm_leds__header & 0x08U)              // bit 3 of PATTERN set?
-                    color3_index |= mask;                   // set bit of selected CHANNEL
-                comm_leds__selectors__write(color3_index);  // save indexed color for the current LED
+                uint8_t color3_index = comm_leds__selectors__get(); // load indexed color for the current LED
+                color3_index &= (uint8_t) ~mask;                    // clear bit of selected CHANNEL
+                if (comm_leds__header & 0x08U)                      // bit 3 of PATTERN set?
+                    color3_index |= mask;                           // set bit of selected CHANNEL
+                comm_leds__selectors__write(color3_index);          // save indexed color for the current LED
 
                 __asm__ __volatile__("twi__slave__on_data_reception_finished__packed4_h3c:");
                 uint8_t *color3_ptr = leds__palette + (color3_index + color3_index + color3_index);
-                comm_leds__data__write(*color3_ptr++);
-                comm_leds__data__write(*color3_ptr++);
-                comm_leds__data__write(*color3_ptr);
+                comm_leds__data__write(LOAD_XPLUS(color3_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color3_ptr));
+                comm_leds__data__write(LOAD_XPLUS(color3_ptr));
             }
             __asm__ __volatile__("twi__slave__on_data_reception_finished__PACKED4_refresh:");
             leds__refresh__set(1);
