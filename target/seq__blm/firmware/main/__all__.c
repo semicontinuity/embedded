@@ -28,4 +28,4 @@
 #include "comm_keyboard_simple.c"
 
 #include "main.c"
-#include "tracer__leds.c"
+#include "tracer__nop.c"

@@ -1,4 +1,5 @@
 # Keyboard handler
+
 add_definitions(-Dtimer0__comp_b__run=keyboard__port_b__debounce_timer__expired)
 add_definitions(-DKEYBOARD__PORT_B__DEBOUNCE_TIMER__CONF__INITIALIZED=TIMER0_CONF_DEFAULT)
 add_definitions(-DKEYBOARD__PORT_B__DEBOUNCE_TIMER__CONF__STARTED=TIMER0_CONF_PRESCALER_1024)

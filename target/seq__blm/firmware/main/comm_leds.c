@@ -4,7 +4,7 @@
 // =============================================================================
 
 #include <cpu/avr/twi.h>
-#include "twi_slave_callbacks.h"
+#include "twi_slave__callbacks.h"
 
 #include "leds.h"
 #include "util/bitops.h"

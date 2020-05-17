@@ -1,8 +1,8 @@
 // =============================================================================
 // Firmware for Button LED Matrix board (16 WS2812 LEDs + 16 buttons).
 // Communication with the board is performed via I2C interface.
-// I2C writes payload is 4 bytes: {LED index, G, R, B}.
-// I2C reads must read 1 bytes; returned is the latest keyboard event or 0.
+// I2C writes: see protocol.txt.
+// I2C reads must read 1 byte; returned byte is the latest keyboard event, or 0.
 // =============================================================================
 
 #include <cpu/avr/eeprom.h>
@@ -75,7 +75,7 @@ int main(void) {
         leds__run();
 //        keyboard__run();
 
-        // must be in interrupt to reduce latency
+        // could be in interrupt to reduce latency - but interrupt handler would be big, with lots of registers to save
         if (twi__slave__handler__is_runnable()) {
             twi__slave__handler__run();
         }

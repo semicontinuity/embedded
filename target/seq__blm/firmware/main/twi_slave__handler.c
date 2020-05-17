@@ -5,13 +5,10 @@
 // Only 1-byte reads are supported.
 // =============================================================================
 
-#include <drivers/out/led_b.h>
-#include <drivers/out/led_a.h>
 #include "cpu/avr/twi.h"
-#include "twi_slave_callbacks.h"
+#include "twi_slave__callbacks.h"
 #include "twi_slave__handler.h"
 #include "twi_slave__tracer.h"
-#include "util/twi.h"
 
 
 bool twi__slave__handler__is_runnable(void) {

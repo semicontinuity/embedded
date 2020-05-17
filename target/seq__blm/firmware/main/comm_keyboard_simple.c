@@ -10,7 +10,7 @@
 #include <cpu/avr/asm.h>
 
 #include <cpu/avr/twi.h>
-#include "twi_slave_callbacks.h"
+#include "twi_slave__callbacks.h"
 
 #include <drivers/out/alarm.h>
 #include <drivers/out/led_a.h>
