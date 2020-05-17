@@ -501,6 +501,24 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
     __result;                                   \
 }))
 
+#define LOAD_Y_OFFSET(ptr, d)                   \
+(__extension__({                                \
+    uint8_t __result;                           \
+    __asm__ (                                   \
+    "ldd %0, y + " QUOTE(d) "\n\t"              \
+        : "=r"(__result), "+y"(ptr)             \
+    );                                          \
+    __result;                                   \
+}))
+
+#define STORE_Y_OFFSET(ptr, d, var) do {        \
+  __asm__ __volatile__ (                        \
+    "std y + " QUOTE(d) ", %1\n\t"              \
+    :"+y"(ptr)                                  \
+    :"r"(var)                                   \
+  );                                            \
+} while(0)
+
 #define LOAD_YPLUS(ptr)			                \
 (__extension__({                                \
     uint8_t __result;                           \
@@ -581,6 +599,25 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 // ----------------------------------------------
 // Operations with Z register
 // ----------------------------------------------
+
+#define LOAD_Z_OFFSET(ptr, d)                   \
+(__extension__({                                \
+    uint8_t __result;                           \
+    __asm__ (                                   \
+    "ldd %0, z + " QUOTE(d) "\n\t"              \
+        : "=r"(__result), , "+z"(ptr)           \
+    );                                          \
+    __result;                                   \
+}))
+
+
+#define STORE_Z_OFFSET(ptr, d, var) do {        \
+  __asm__ __volatile__ (                        \
+    "st	z + " QUOTE(d) ", %1\n\t"               \
+    :"+z"(ptr)                                  \
+    :"r"(var)                                   \
+  );                                            \
+} while(0)
 
 #define LOAD_ZPLUS(ptr)			                \
 (__extension__({                                \
