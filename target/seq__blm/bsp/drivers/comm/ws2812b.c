@@ -15,6 +15,7 @@
 #include "drivers/comm/ws2812b.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include <cpu/avr/asm.h>
 #include "leds.h"
 
 /*
@@ -86,22 +87,34 @@ volatile uint8_t* ws2812__ptr;
 #endif
 
 
+uint8_t ws2812__data__read(void) {
+#if defined(WS2812__PTR__REG) && WS2812__PTR__REG==26
+    return LOAD_XPLUS(ws2812__ptr);
+#elif defined(WS2812__PTR__REG) && WS2812__PTR__REG==28
+    return LOAD_YPLUS(ws2812__ptr);
+#elif defined(WS2812__PTR__REG) && WS2812__PTR__REG==30
+    return LOAD_ZPLUS(ws2812__ptr);
+#else
+    return *ws2812__ptr++;
+#endif
+}
+
+
 void inline ws2812_sendarray_mask(/*uint8_t *data,*/ uint16_t datlen, uint8_t maskhi)
 {
   ws2812__ptr = leds__data;
   uint8_t curbyte,ctr,masklo;
   uint8_t sreg_prev;
   
-//  ws2812_DDRREG |= maskhi; // Enable output
   sreg_prev=SREG;
   cli();
 
-  masklo =~maskhi&ws2812_PORTREG;
+  masklo =~maskhi & ws2812_PORTREG;
   maskhi |= ws2812_PORTREG;
 
 
   while (datlen--) {
-    curbyte=*ws2812__ptr++;
+    curbyte = ws2812__data__read();
     
     asm volatile(
     "       ldi   %0,8  \n\t"

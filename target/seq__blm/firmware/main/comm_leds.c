@@ -21,6 +21,13 @@ register volatile uint8_t* comm_leds__selectors__ptr asm(QUOTE(COMM_LEDS__SELECT
 volatile uint8_t* comm_leds__selectors__ptr;
 #endif
 
+
+#ifdef COMM_LEDS__PALETTE__PTR__REG
+register volatile uint8_t* comm_leds__palette__ptr asm(QUOTE(COMM_LEDS__PALETTE__PTR__REG));
+#else
+volatile uint8_t* comm_leds__palette__ptr;
+#endif
+
 #ifdef COMM_LEDS__MEMORY__PTR__REG
 register volatile uint8_t* comm_leds__memory__ptr asm(QUOTE(COMM_LEDS__MEMORY__PTR__REG));
 #else
@@ -98,10 +105,10 @@ void comm_leds__data__write(const uint8_t value) {
 
 
 void comm_leds__data__put_indexed_color(uint8_t index) {
-    uint8_t *palette_position = comm_leds__palette__position(index);
-    comm_leds__data__write(LOAD_XPLUS(palette_position));
-    comm_leds__data__write(LOAD_XPLUS(palette_position));
-    comm_leds__data__write(LOAD_XPLUS(palette_position));
+    comm_leds__palette__ptr = comm_leds__palette__position(index);
+    comm_leds__data__write(LOAD_XPLUS(comm_leds__palette__ptr));
+    comm_leds__data__write(LOAD_XPLUS(comm_leds__palette__ptr));
+    comm_leds__data__write(LOAD_XPLUS(comm_leds__palette__ptr));
 }
 
 
