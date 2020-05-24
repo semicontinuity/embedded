@@ -31,8 +31,9 @@ int blm_boards__comm_events__reader__run() {
         blm_boards__comm_events__reader__board = board;
 
         if (event) {
+            // TODO update protocol
             bool is_pressed = event >= 'a';
-            uint8_t button = (event | 0x20) - 'a';
+            uint8_t button = (event | 0x20U) - 'a';
             blm_boards__comm_events__handler__on_button_event(board, button, is_pressed);
         }
 

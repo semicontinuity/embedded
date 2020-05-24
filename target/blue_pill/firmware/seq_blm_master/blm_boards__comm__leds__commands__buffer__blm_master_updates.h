@@ -25,6 +25,8 @@ void blm_boards__comm__leds__commands__buffer__blm_master__update_one(uint8_t ro
     uint8_t local_y = row & 0x03U;
     uint8_t led = (local_y << 2U) + local_x;
     debug_midi__sysex_p8(D_LED, led);
+
+    // TODO implement
 }
 
 static void blm_boards__comm__leds__commands__buffer__blm_master__update(

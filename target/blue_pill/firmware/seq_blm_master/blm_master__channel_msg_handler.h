@@ -1,16 +1,47 @@
-// Handles MIDI BLM LEDs control protocol:
+// Handles MIDI BLM LEDs control protocol (see blm_scalar/README.txt), with ACCENT and PRESENT extensions:
 //
-// Update one: 9<row> <column> <colour>
+// Select palette: 0xCc (program change)
+//   c=palette number, 0-15
 //
-// Update row: B<row> [00cc00hl] [pattern]
+// Accent single LED: 0xD<row> [0Akk<column>] (channel pressure)
+//   A=accent; 1=accent on, 0=accent off
+//   kk=kind; 00=LED from main 16x16 matrix; 01=LED from extra rows; 10=LED from extra columns, 11=LED from extra LEDs
+//
+// Update one LED:               9<row> <column>    <colour>
+// Update one extra-column LED : 9<row> <40+column> <colour>
+// Update one extra-row LED :    90     <60+column> <colour>
+// Update one LED :              90     <60+column> <colour>
+//   Colors: 0x00: both LEDs off, 0x01..0x3f: green LED on, 0x40..0x5f: red LED on, 0x60..0x7f: both LEDs on
+//
+// Update row: B<row> [00cc0Ahl] [pattern]
 //   cc=color, 10=red, 01=green
 //   h=1 for second half, 0 for first half
+//   A=accent, 1 if it is accent pattern
 //   l=value for last led (8th or 16th)
 //
-// Update column: B<col> [00cc10hl] [pattern]
+// Update extra row: B0 [0110cAhl] [pattern]
+//   c=color, 1=red, 0=green
+//   h=1 for second half, 0 for first half
+//   A=accent, 1 if it is accent pattern
+//   l=value for last led (8th or 16th)
+//
+// Update column: B<col> [00cc1Ahl] [pattern]
 //   cc=color, 10=red, 01=green
 //   h=1 for second half, 0 for first half
+//   A=accent, 1 if it is accent pattern
 //   l=value for last led (8th or 16th)
+//
+// Update extra column: B0 [0100cAhl] [pattern]
+//   c=color, 1=red, 0=green
+//   h=1 for second half, 0 for first half
+//   A=accent, 1 if it is accent pattern
+//   l=value for last led (8th or 16th)
+//
+// Update extra LEDs: BF [0110cA0l] [pattern]
+//   c=color, 1=red, 0=green
+//   A=accent, 1 if it is accent pattern
+//   h=1 for second half, 0 for first half
+//   l=value for 8th led
 
 #include <Arduino.h>
 
