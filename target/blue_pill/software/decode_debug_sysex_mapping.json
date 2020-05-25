@@ -1,0 +1,25 @@
+{
+  "01": "matrix",
+  "02": "led",
+  "03": "shift",
+  "04": "mask",
+  "05": "pattern",
+  "06": "row",
+  "07": "column",
+
+  "10": "current",
+  "11": "requested",
+  "14": "raw_diff",
+  "15": "green_diff",
+  "16": "red_diff",
+  "17": "diff",
+  "18": "dirty",
+
+  "70": "update_one",
+  "71": "update_row",
+  "72": "update_column",
+  "73": "update_ex_row",
+  "74": "update_ex_column",
+  "75": "update_ex",
+  "7F": "scan"
+}

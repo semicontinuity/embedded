@@ -1,0 +1,100 @@
+STM32F103C8T6
+=============
+
+ 1	VBAT
+ 2	LED	PC13			(c)
+ 3	-	PC14			(b)
+ 4	-	PC15			(b)
+ 5	OSCIN
+ 6	OSCOUT
+ 7	NRST
+ 8	VSSA
+ 9	VDDA
+10	ADC0	PA0			(A)
+11	ADC1	PA1			(A)
+12	ADC2	PA2	TX2		(y)	(a)
+13	ADC3	PA3	RX2		(y)	(a)
+14	ADC4	PA4			(A)
+15	ADC5	PA5			(A)
+16	ADC6	PA6			(A)
+17	ADC7	PA7			(A)
+18	ADC8	PB0			(A)
+19	ADC9	PB1			(A)
+20	BOOT1	PB2			(B)
+21	-	PB10	TX3	(SCL2)	(x)
+22	-	PB11	RX3	(SDA2)	(x)
+23	VSS_1
+24	VDD_1
+25	-	PB12			(X)
+26	-	PB13			(X)
+27	-	PB14			(X)
+28	-	PB15			(X)
+29	-	PA8			(X)
+30	-	PA9	TX1		(x)
+31	-	PA10	RX1		(x)
+32	USB_DM	PA11
+33	USB_DP	PA12
+34	SWDIO	PA13
+35	VSS_2
+36	VDD_2
+37	SWCLK	PA14
+38	-	PA15			(X)
+39	SWO	PB3			(z)
+40	-	PB4			(X)
+41	-	PB5			(X)
+42	-	PB6	SCL1	(TX1)	(x)
+43	-	PB7	SDA1	(RX1)	(x)
+44	BOOT0
+45	-	PB8		(SCL1)
+46	-	PB9		(SDA1)
+47	VSS_3
+48	VDD_3
+
+Summary
+=======
+
+(X):	8x pins, 5V-tolerant
+(x):	6x pins, at the expense of extra coommunication interfaces
+(y):	2x pins, at the expense of SERIAL2
+(A):	8x pins, not 5V-tolerant, analog
+(a)	2x pins, not 5V-tolerant, analog
+(z)	1x pins, 5V-tolerant, SWO pin
+(b)	2x pins, not 5V-tolerant
+(c)	1x pins, not 5V-tolerant, LED
+(B)	1x pins, BOOT1
+
+
+Proposed pins assignment:
+=========================
+
+* Up to 8x analog pins
+* Serial port 2 at PA2, PA3
+* I2C port on PB8, PB9
+* No extra serial ports
+* 16X interrupt lines
+* 4X lines can be reassigned form analog ports
+* 2X lines can be reassigned from debug pins (SWO, PC13)
+* Analog scanning can also be performed by BLM boards themselves
+
+
+Interrupt lines from (X), (x) and (b):
+
+PB12
+PB13
+PB14 #
+PB15 #
+PA8
+PA15 #
+PB4
+PB5
+PB10 #
+PB11
+PA9
+PA10 #
+PB6
+PB7
+PC14 #
+PC15 #
+
+bits 10,14,15 from several ports: there is limitation in Arduino on external interrupts, must be on different lines.
+Need to use pins on lines 0, 1, 2, 3: PB0..PB3
