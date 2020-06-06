@@ -39,6 +39,8 @@ add_executable(seq_blm_master
         blm_boards__comm__leds__commands__arduino_i2c.h
         blm_boards__comm__leds__commands__debug_arduino_serial_midi.h
 
+        blm_boards__comm__leds__palettes.h
+
         debug_midi__arduino_serial.h
         debug_midi__sysex_parameters.h
 
@@ -56,7 +58,8 @@ add_executable(seq_blm_master
         blm_master__alive_handler.h
         blm_master__sysex_msg_handler.h
         blm_master__sysex_msg_handler__callbacks.h
-        blm_master__sysex_msg_handler__arduino_serial_midi.h
+        blm_master__sysex_msg_handler__sender.h
+        blm_master__sysex_msg_handler__set_palette_data.h
         )
 
 include_directories(

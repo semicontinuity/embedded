@@ -1,7 +1,14 @@
-// Handles MIDI BLM LEDs control protocol (see blm_scalar/README.txt), with ACCENT and PRESENT extensions:
+// Handles MIDI BLM LEDs control protocol (see blm_scalar/README.txt), with ACCENT and PRESENT extensions.
+// Note, that CHANNEL field is used by this protocol, therefore, only one BLM_MASTER device can reside on the MIDI port.
 //
-// Select palette: 0xCc (program change)
-//   c=palette number, 0-15
+// Select palette: 0xC[MMMM] [0sRCpppp] - implemented with Program change messages
+//   p=palette number, 0-15
+//   s=specific matrix flag (proposed): s=0: update palette on all matrices; s=1: update palette on specific matrix
+//   R=extra row flag (proposed)
+//   C=extra column flag
+//   MMMM=matrix number
+//
+// Update single LED messages - implemented with NoteOn/NoteOff messages
 //
 // Accent single LED: 0xD<row> [0Akk<column>] (channel pressure)
 //   A=accent; 1=accent on, 0=accent off
@@ -12,6 +19,8 @@
 // Update one extra-row LED :    90     <60+column> <colour>
 // Update one extra LED :        9F     <60+led>    <colour>
 //   Colors: 0x00: both LEDs off, 0x01..0x3f: green LED on, 0x40..0x5f: red LED on, 0x60..0x7f: both LEDs on
+//
+// Multi-LED update commands (packed format) - implemented with Change Control messages
 //
 // Update row: B<row> [00cc0Ahl] [pattern]
 //   cc=color, 10=red, 01=green
@@ -47,6 +56,11 @@
 #include "midi_parser__callbacks__channel_msg.h"
 #include "blm_master__leds.h"
 
+
+static void blm_master__channel_msg_handler__process_select_palette_event(midi_package_t midi_package) {
+    uint8_t palette = midi_package.program_change & 0x0FU;
+    blm_master__leds__select_palette(palette);
+}
 
 static void blm_master__channel_msg_handler__process_single_led_change_event(midi_package_t midi_package) {
     uint8_t row = midi_package.chn;
@@ -108,16 +122,16 @@ static void blm_master__channel_msg_handler__process_packed_leds_change_event(mi
 
 void blm_master__channel_msg_handler__process(const midi_package_t &midi_package) {
     if (midi_package.event == NoteOff || midi_package.event == NoteOn) {
-        // control the Duo-LEDs via Note On/Off Events
+        // control the LEDs with Note On/Off Events
         // The colour is controlled with velocity value:
         // 0x00:       both LEDs off
         // 0x01..0x3f: green LED on
         // 0x40..0x5f: red LED on
         // 0x60..0x7f: both LEDs on
         blm_master__channel_msg_handler__process_single_led_change_event(midi_package);
-    }
-    else if (midi_package.event == CC) {
-        // "check for packed format" which is transferred via CCs
+    } else if (midi_package.event == CC) {
         blm_master__channel_msg_handler__process_packed_leds_change_event(midi_package);
+    } else if (midi_package.event == ProgramChange) {
+        blm_master__channel_msg_handler__process_select_palette_event(midi_package);
     }
 }
