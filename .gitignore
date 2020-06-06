@@ -10,3 +10,4 @@
 *.elf
 *.report
 cmake-build-debug
+**/project_build
