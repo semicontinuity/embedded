@@ -16,6 +16,7 @@ add_executable(seq_blm_master
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/Wire.cpp
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/stm32f1/include/series/gpio.h
 
+        seq_blm_master__config.h
         seq_blm_master.ino
 
         midi_package.h
@@ -39,7 +40,7 @@ add_executable(seq_blm_master
         blm_boards__comm__leds__commands__arduino_i2c.h
         blm_boards__comm__leds__commands__debug_arduino_serial_midi.h
 
-        blm_boards__comm__leds__palettes.h
+        blm_boards__comm__leds__palette_uploader.h
 
         debug_midi__arduino_serial.h
         debug_midi__sysex_parameters.h
@@ -79,6 +80,4 @@ include_directories(
 add_definitions(-DDSTM32F10X_MD)
 add_definitions(-DMCU_STM32F103CB)
 add_definitions(-DLC_INCLUDE="lc-addrlabels.h")
-add_definitions(-DBLM_SCALAR_NUM_COLOURS=2)
-add_definitions(-DBLM_SCALAR_NUM_BOARDS=4)
 add_definitions(-DDEBUG=0)

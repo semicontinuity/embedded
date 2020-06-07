@@ -5,6 +5,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <stdint.h>
+#include "seq_blm_master__config.h"
 
 
 static TwoWire *blm_boards__comm__leds__commands__arduino_i2c__wire;

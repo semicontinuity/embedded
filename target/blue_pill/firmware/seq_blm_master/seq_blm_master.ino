@@ -1,12 +1,5 @@
-#define BLM_SCALAR_NUM_COLOURS 2
-#define BLM_SCALAR_NUM_BOARDS 4
-#define BLM_BOARDS_BASE_ADDRESS 0x30
-#define DEBUG_MIDI_NOTE_OFF 0
-#define DEBUG_MIDI_SYSEX 0
-#define DEBUG_COMM_LEDS 0
-#define DEBUG_COMM_EVENTS 1
-
 #include <Arduino.h>
+#include "seq_blm_master__config.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // GLOBALS
@@ -29,7 +22,7 @@
 #include "blm_boards__comm__events__handler.h"
 #include "blm_boards__comm__events__handler__midi.h"
 
-#include "blm_boards__comm__leds__palettes.h"
+#include "blm_boards__comm__leds__palette_uploader.h"
 
 #include "blm_master__channel_msg_handler.h"
 #include "blm_master__sysex_msg_handler__callbacks.h"
@@ -98,7 +91,7 @@ void blm_boards__comm__leds__commands__buffer__scanner__emit_command(
 // -----------------------------------------------------------------------------
 
 void blm_master__leds__select_palette(uint8_t palette) {
-    blm_boards__comm__leds__palettes__request(palette);
+    blm_boards__comm__leds__palette_uploader__request(palette);
 }
 
 void blm_master__leds__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
@@ -146,7 +139,7 @@ void setup() {
     if (!DEBUG_COMM_LEDS) {
         blm_boards__comm_p1__leds__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
         blm_boards__comm__leds__commands__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
-        blm_boards__comm__leds__palettes__init(wire, BLM_BOARDS_BASE_ADDRESS);
+        blm_boards__comm__leds__palette_uploader__init(wire, BLM_BOARDS_BASE_ADDRESS);
     }
 
     if (!DEBUG_COMM_EVENTS) {
@@ -179,5 +172,9 @@ void loop() {
         if (!DEBUG_COMM_EVENTS) {
             blm_boards__comm_events__reader__run();
         }
+    }
+
+    if (blm_boards__comm__leds__palette_uploader__is_runnable()) {
+        blm_boards__comm__leds__palette_uploader__run();
     }
 }

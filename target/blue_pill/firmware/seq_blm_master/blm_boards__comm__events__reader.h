@@ -3,6 +3,7 @@
 
 #define LC_INCLUDE "lc-addrlabels.h"
 #include "blm_boards__comm__events__handler.h"
+#include "seq_blm_master__config.h"
 #include <Arduino.h>
 #include <pt.h>
 
