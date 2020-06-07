@@ -1,4 +1,4 @@
-// Collection of palette data.
+// Palette uploader with area to keep 16 palettes.
 //
 // When a request to change palette arrives, 'requested_palette' is set to the requested palette number.
 // Then, palette is uploaded to multiple boards when I2C bus becomes free, this is time-consuming.
@@ -6,8 +6,8 @@
 // it is assumed that they are issued extremely rarely, when the device is initialized.
 // ---------------------------------------------------------------------------------------------------------------------------------
 
-#ifndef __BLM_BOARDS__COMM__LEDS__PALETTES
-#define __BLM_BOARDS__COMM__LEDS__PALETTES
+#ifndef __BLM_BOARDS__COMM__LEDS__PALETTE_UPLOADER
+#define __BLM_BOARDS__COMM__LEDS__PALETTE_UPLOADER
 
 #include <stdint.h>
 #include <Arduino.h>
@@ -33,7 +33,7 @@ void blm_boards__comm__leds__palette_uploader__request(uint8_t palette) {
 
 void blm_boards__comm__leds__palette_uploader__upload(uint8_t board, uint8_t palette) {
     blm_boards__comm__leds__palette_uploader__wire->beginTransmission(blm_boards__comm__leds__palette_uploader__base_address + board);
-    blm_boards__comm__leds__palette_uploader__wire->write(0x80);
+    blm_boards__comm__leds__palette_uploader__wire->write(0x80);    // WRITE_PALETTE_MEMORY from offset 0 command
     blm_boards__comm__leds__palette_uploader__wire->write(&blm_boards__comm__leds__palette_uploader__palettes[palette][0], 128 * 3);
     blm_boards__comm__leds__palette_uploader__wire->endTransmission();
 }

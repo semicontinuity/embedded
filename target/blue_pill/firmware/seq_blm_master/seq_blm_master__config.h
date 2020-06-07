@@ -1,6 +1,8 @@
 #ifndef __SEQ_BLM_MASTER__CONFIG
 #define __SEQ_BLM_MASTER__CONFIG
 
+#include <Wire.h>
+
 #define BLM_SCALAR_NUM_COLOURS 2
 #define BLM_SCALAR_NUM_BOARDS_X 4
 #define BLM_SCALAR_NUM_BOARDS_Y 1
@@ -9,6 +11,16 @@
 #define DEBUG_MIDI_NOTE_OFF 0
 #define DEBUG_MIDI_SYSEX 0
 #define DEBUG_COMM_LEDS 0
-#define DEBUG_COMM_EVENTS 1
+#define DEBUG_COMM_EVENTS 0
+
+#define PIN_LED_HOST_CONNECTED PA1
+#define PIN_LED_DEBUG PA5
+
+
+TwoWire Wire2(2);
+#define WIRE Wire2
+
+#define SERIAL_PORT Serial2
+#define SERIAL_BAUD_RATE 31250
 
 #endif

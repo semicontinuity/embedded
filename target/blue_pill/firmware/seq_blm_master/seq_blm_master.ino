@@ -1,10 +1,6 @@
 #include <Arduino.h>
 #include "seq_blm_master__config.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// GLOBALS
-///////////////////////////////////////////////////////////////////////////////
-
 #include "blm_boards__comm_p1__leds__buffer.h"
 #include "blm_boards__comm_p1__leds__buffer__blm_master_updates.h"
 #include "blm_boards__comm_p1__leds__buffer__scanner.h"
@@ -68,7 +64,7 @@ void blm_boards__comm_p1__leds__buffer__scanner__update_one(uint8_t matrix, uint
         blm_boards__comm_p1__leds__debug_arduino_serial_midi__update_one(matrix, led, r, g);
     } else {
         blm_boards__comm_p1__leds__arduino_i2c__update_one(matrix, led, r, g, b);
-        delayMicroseconds(3000);
+//        delayMicroseconds(3000);
     }
 }
 
@@ -119,21 +115,19 @@ void blm_master__leds__update_extra(uint8_t is_second_half, uint8_t pattern, uin
 }
 
 
-TwoWire Wire2(2);
-
 void setup() {
-    pinMode(PA5, OUTPUT);
-    pinMode(PA1, OUTPUT);
+    pinMode(PIN_LED_DEBUG, OUTPUT);
+    pinMode(PIN_LED_HOST_CONNECTED, OUTPUT);
 
 
-    HardwareSerial *serial = &Serial2;
-    serial->begin(31250);
+    HardwareSerial *serial = &SERIAL_PORT;
+    serial->begin(SERIAL_BAUD_RATE);
     debug_midi__serial__init(serial);
     midi_receiver__serial__init(serial);
     midi_sender__serial__init(serial);
     blm_master__sysex_handler__init(serial);
 
-    TwoWire *wire = &Wire2;
+    TwoWire *wire = &WIRE;
     wire->begin();
 
     if (!DEBUG_COMM_LEDS) {
