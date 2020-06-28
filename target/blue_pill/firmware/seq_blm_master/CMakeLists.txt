@@ -44,6 +44,7 @@ add_executable(seq_blm_master
         blm_boards__comm__leds__u128_commands__buffer__blm_master_updates.h
         blm_boards__comm__leds__u128_commands__buffer__scanner.h
         blm_boards__comm__leds__u128_commands__buffer__scanner__callbacks.h
+        blm_boards__comm__leds__u128_commands__arduino_i2c.h
 
         blm_boards__comm__leds__palette_uploader.h
 

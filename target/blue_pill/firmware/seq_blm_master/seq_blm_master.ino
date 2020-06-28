@@ -78,7 +78,7 @@ void blm_boards__comm__leds__p4_commands__buffer__scanner__emit_command(uint8_t 
     if (DEBUG_COMM_LEDS) {
         blm_boards__comm__leds__p4_commands__debug_arduino_serial_midi__emit_packed4_command(matrix, command);
     } else {
-        blm_boards__comm__leds__p4_commands__arduino_i2c__emit_packed4_command(matrix, command);
+        blm_boards__comm__leds__p4_commands__arduino_i2c__emit_command(matrix, command);
     }
 }
 
