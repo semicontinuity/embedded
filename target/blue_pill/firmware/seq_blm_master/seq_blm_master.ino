@@ -24,6 +24,7 @@
 #include "blm_boards__comm__events__reader__arduino_i2c.h"
 #include "blm_boards__comm__events__handler.h"
 #include "blm_boards__comm__events__handler__midi.h"
+#include "blm_boards__comm__events__handler__test_mode.h"
 
 #include "blm_master__channel_msg_handler.h"
 #include "blm_master__sysex_msg_handler__callbacks.h"
@@ -51,6 +52,8 @@ uint8_t blm_boards__comm_events__reader__read(uint8_t board) {
 void blm_boards__comm_events__handler__on_button_event(uint8_t board, uint8_t button, bool is_pressed) {
     if (blm_master__alive_handler__is_host_connected()) {
         blm_boards__comm_events__handler__midi__on_button_event(board, button, is_pressed);
+    } else {
+        blm_boards__comm_events__handler__test_mode__on_button_event(board, button, is_pressed);
     }
 }
 
@@ -176,6 +179,7 @@ void setup() {
     blm_boards__comm_events__reader__init();
     blm_boards__comm__leds__p4_commands__buffer__init();
     blm_boards__comm__leds__u128_commands__buffer__init();
+    blm_boards__comm_events__handler__test_mode__init();
 }
 
 

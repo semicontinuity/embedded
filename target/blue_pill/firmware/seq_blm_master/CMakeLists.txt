@@ -24,6 +24,7 @@ add_executable(seq_blm_master
         blm_boards__comm__events__reader.h
         blm_boards__comm__events__handler.h
         blm_boards__comm__events__handler__midi.h
+        blm_boards__comm__events__handler__test_mode.h
         blm_boards__comm__events__reader__arduino_i2c.h
 
         blm_boards__comm_p1__leds__buffer.h
