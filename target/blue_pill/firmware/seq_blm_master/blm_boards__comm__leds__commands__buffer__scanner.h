@@ -21,7 +21,9 @@ static bool blm_boards__comm__leds__commands__buffer__scanner__scan(unsigned int
     uint16_t dirty_commands = blm_boards__comm__leds__commands__buffer__commands__dirty[board];
     int index = __builtin_ffs(dirty_commands) - 1;
     if (index >= 0) {
-        blm_boards__comm__leds__commands__buffer__scanner__emit_command(board, blm_boards__comm__leds__commands__buffer__commands[board][index]);
+        blm_boards__comm__leds__commands__buffer__scanner__emit_packed4_command(
+                board, blm_boards__comm__leds__commands__buffer__commands[board][index]
+        );
         dirty_commands &= ~(1U << (uint16_t) index);
         blm_boards__comm__leds__commands__buffer__commands__dirty[board] = dirty_commands;
         return dirty_commands == 0U;

@@ -1,5 +1,6 @@
 // LED state data structures tuned for updates of 16 4x4 boards of "abstract" bi-color LEDs.
-// For every board, there are 4 rows, that can be updated with I2C command, and 4 columns.
+// BLM Board supports uprating a row or a column of LEDS with a 1-byte PACKED4 I2C command.
+// For every board, there are 4 rows, and 4 columns.
 // So, in total, there are 16 * 4 * 2 * 2 commands possible (x2 commands because of separate commands for each color channel)
 // If a certain command is to be sent, the corresponding bit is set in blm_boards__comm__leds__commands__buffer__commands.
 // ---------------------------------------------------------------------------------------------------------------------------------

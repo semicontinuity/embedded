@@ -1,4 +1,6 @@
-// Debugs LED update commands by sending them over serial port as MIDI.
+// Debug translation of packed LED update commands from host
+// to PACKED4 I2C to be sent to BLM.
+// Encode these commands to MIDI messages and send them back to host.
 // -----------------------------------------------------------------------------
 
 #include <Arduino.h>
@@ -8,10 +10,7 @@
 // Implements blm_boards__comm__leds__commands__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
 
-void blm_boards__comm__leds__commands__debug_arduino_serial_midi__emit_command(
-        uint8_t matrix,
-        uint8_t command)
-{
+void blm_boards__comm__leds__commands__debug_arduino_serial_midi__emit_packed4_command(uint8_t matrix, uint8_t command) {
     if (command & 0x80U) {
         debug_midi__channel_pressure(matrix, command & 0x7FU);
     } else {

@@ -31,11 +31,17 @@ void blm_boards__comm__leds__palette_uploader__request(uint8_t palette) {
     blm_boards__comm__leds__palette_uploader__requested_palette = palette;
 }
 
+/**
+ * Upload the specified palette to the specified board.
+ * Because I2C payload size is limited by Wire library, do multiple (16) uploads, each carrying data for 8 entries.
+ */
 void blm_boards__comm__leds__palette_uploader__upload(uint8_t board, uint8_t palette) {
-    blm_boards__comm__leds__palette_uploader__wire->beginTransmission(blm_boards__comm__leds__palette_uploader__base_address + board);
-    blm_boards__comm__leds__palette_uploader__wire->write(0x80);    // WRITE_PALETTE_MEMORY from offset 0 command
-    blm_boards__comm__leds__palette_uploader__wire->write(&blm_boards__comm__leds__palette_uploader__palettes[palette][0], 128 * 3);
-    blm_boards__comm__leds__palette_uploader__wire->endTransmission();
+    for (int entry = 0; entry < 128; entry += 8) {
+        blm_boards__comm__leds__palette_uploader__wire->beginTransmission(blm_boards__comm__leds__palette_uploader__base_address + board);
+        blm_boards__comm__leds__palette_uploader__wire->write(0x80 + entry);    // WRITE_PALETTE_MEMORY command
+        blm_boards__comm__leds__palette_uploader__wire->write(&blm_boards__comm__leds__palette_uploader__palettes[palette][entry * 3], 16 * 3);
+        blm_boards__comm__leds__palette_uploader__wire->endTransmission();
+    }
 }
 
 bool blm_boards__comm__leds__palette_uploader__is_runnable() {

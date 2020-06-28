@@ -32,6 +32,13 @@
 #include "midi_sender__serial_arduino.h"
 
 
+// Implementation of callbacks for blm_boards__comm__events__reader_pt.h
+// -----------------------------------------------------------------------------
+
+uint8_t blm_boards__comm_events__reader__read(uint8_t board) {
+    return blm_boards__comm__events__arduino_i2c__read(board);
+}
+
 // Implementation of callbacks for blm_boards__comm__events__handler.h
 // -----------------------------------------------------------------------------
 
@@ -39,13 +46,6 @@ void blm_boards__comm_events__handler__on_button_event(uint8_t board, uint8_t bu
     if (blm_master__alive_handler__is_host_connected()) {
         blm_boards__comm_events__handler__midi__on_button_event(board, button, is_pressed);
     }
-}
-
-// Implementation of callbacks for blm_boards__comm__events__reader_pt.h
-// -----------------------------------------------------------------------------
-
-uint8_t blm_boards__comm_events__reader__read(uint8_t board) {
-    return blm_boards__comm__events__arduino_i2c__read(board);
 }
 
 // Implementation of callbacks from midi_parser_callbacks__channel_msg
@@ -73,14 +73,11 @@ void blm_boards__comm_p1__leds__buffer__scanner__update_one(uint8_t matrix, uint
 // Implements blm_boards__comm__leds__commands__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
 
-void blm_boards__comm__leds__commands__buffer__scanner__emit_command(
-        uint8_t matrix,
-        uint8_t command)
-{
+void blm_boards__comm__leds__commands__buffer__scanner__emit_packed4_command(uint8_t matrix, uint8_t command) {
     if (DEBUG_COMM_LEDS) {
-        blm_boards__comm__leds__commands__debug_arduino_serial_midi__emit_command(matrix, command);
+        blm_boards__comm__leds__commands__debug_arduino_serial_midi__emit_packed4_command(matrix, command);
     } else {
-        blm_boards__comm__leds__commands__arduino_i2c__emit_command(matrix, command);
+        blm_boards__comm__leds__commands__arduino_i2c__emit_packed4_command(matrix, command);
     }
 }
 
