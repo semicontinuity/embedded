@@ -53,6 +53,7 @@
 
 #include <Arduino.h>
 
+#include "seq_blm_master__config.h"
 #include "midi_parser__callbacks__channel_msg.h"
 #include "blm_master__leds.h"
 
@@ -65,8 +66,8 @@ static void blm_master__channel_msg_handler__process_select_palette_event(midi_p
 static void blm_master__channel_msg_handler__process_single_led_change_event(midi_package_t midi_package) {
     uint8_t row = midi_package.chn;
     uint8_t column = midi_package.note;
-    uint8_t colour = midi_package.velocity;
-    blm_master__leds__update_one(row, column, colour);
+    uint8_t color = midi_package.velocity;
+    blm_master__leds__update_one(row, column, color);
 }
 
 
