@@ -1,43 +1,44 @@
 #include <Arduino.h>
 #include "seq_blm_master__config.h"
 
-#include "blm_boards__comm_p1__leds__buffer.h"
-#include "blm_boards__comm_p1__leds__buffer__blm_master_updates.h"
-#include "blm_boards__comm_p1__leds__buffer__scanner.h"
-#include "blm_boards__comm_p1__leds__debug_arduino_serial_midi.h"
-#include "blm_boards__comm_p1__leds__arduino_i2c.h"
+//#include "blm_boards__comm_p1__leds__buffer.h"
+//#include "blm_boards__comm_p1__leds__buffer__blm_master_updates.h"
+//#include "blm_boards__comm_p1__leds__buffer__scanner.h"
+//#include "blm_boards__comm_p1__leds__debug_arduino_serial_midi.h"
+//#include "blm_boards__comm_p1__leds__arduino_i2c.h"
 
 #include "blm_boards__comm__leds__commands__buffer.h"
 #include "blm_boards__comm__leds__commands__buffer__blm_master_updates.h"
 #include "blm_boards__comm__leds__commands__buffer__scanner.h"
 #include "blm_boards__comm__leds__commands__debug_arduino_serial_midi.h"
 #include "blm_boards__comm__leds__commands__arduino_i2c.h"
+#include "blm_boards__comm__leds__palette_uploader.h"
 
 #include "blm_boards__comm__events__reader.h"
 #include "blm_boards__comm__events__reader__arduino_i2c.h"
 #include "blm_boards__comm__events__handler.h"
 #include "blm_boards__comm__events__handler__midi.h"
 
-#include "blm_boards__comm__leds__palette_uploader.h"
-
 #include "blm_master__channel_msg_handler.h"
 #include "blm_master__sysex_msg_handler__callbacks.h"
 #include "blm_master__sysex_msg_handler__sender.h"
 #include "blm_master__sysex_msg_handler__set_palette_data.h"
 #include "blm_master__sysex_msg_handler.h"
+#include "blm_master__alive_handler.h"
 
-#include "midi_receiver__serial_arduino_pt.h"
 #include "midi_package.h"
+#include "midi_receiver__serial_arduino_pt.h"
 #include "midi_parser__pt.h"
 #include "midi_sender__serial_arduino.h"
-#include "blm_master__alive_handler.h"
 
 
 // Implementation of callbacks for blm_boards__comm__events__handler.h
 // -----------------------------------------------------------------------------
 
 void blm_boards__comm_events__handler__on_button_event(uint8_t board, uint8_t button, bool is_pressed) {
-    blm_boards__comm_events__handler__midi__on_button_event(board, button, is_pressed);
+    if (blm_master__alive_handler__is_host_connected()) {
+        blm_boards__comm_events__handler__midi__on_button_event(board, button, is_pressed);
+    }
 }
 
 // Implementation of callbacks for blm_boards__comm__events__reader_pt.h
@@ -59,14 +60,15 @@ void midi_parser__on_channel_msg(midi_package_t midi_package) {
 // Implements blm_boards__comm_p1__leds__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
 
+/*
 void blm_boards__comm_p1__leds__buffer__scanner__update_one(uint8_t matrix, uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
     if (DEBUG_COMM_LEDS) {
         blm_boards__comm_p1__leds__debug_arduino_serial_midi__update_one(matrix, led, r, g);
     } else {
         blm_boards__comm_p1__leds__arduino_i2c__update_one(matrix, led, r, g, b);
-//        delayMicroseconds(3000);
     }
 }
+*/
 
 // Implements blm_boards__comm__leds__commands__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
@@ -114,6 +116,21 @@ void blm_master__leds__update_extra(uint8_t is_second_half, uint8_t pattern, uin
     blm_boards__comm__leds__commands__buffer__blm_master__update_extra(is_second_half, pattern, color_code);
 }
 
+// Implements blm_master__sysex_msg_handler__callbacks.h
+// -----------------------------------------------------------------------------
+
+void blm_master__sysex_msg_handler__handle_ping() {
+    blm_master__sysex_msg_sender__send_ack();
+}
+
+void blm_master__sysex_msg_handler__handle_invalid_command() {
+    blm_master__sysex_msg_sender__send_disack_invalid_command();
+}
+
+void blm_master__sysex_msg_handler__handle_request_layout_info() {
+    blm_master__sysex_msg_sender__send_layout_info();
+}
+
 
 void setup() {
     pinMode(PIN_LED_DEBUG, OUTPUT);
@@ -125,13 +142,13 @@ void setup() {
     debug_midi__serial__init(serial);
     midi_receiver__serial__init(serial);
     midi_sender__serial__init(serial);
-    blm_master__sysex_handler__init(serial);
+    blm_master__sysex_msg_sender__init(serial);
 
     TwoWire *wire = &WIRE;
     wire->begin();
 
     if (!DEBUG_COMM_LEDS) {
-        blm_boards__comm_p1__leds__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
+//        blm_boards__comm_p1__leds__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
         blm_boards__comm__leds__commands__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
         blm_boards__comm__leds__palette_uploader__init(wire, BLM_BOARDS_BASE_ADDRESS);
     }
