@@ -17,13 +17,10 @@ void blm_boards__comm__leds__u128_commands__arduino_i2c__init(TwoWire *wire, uin
     blm_boards__comm__leds__u128_commands__arduino_i2c__base_address = base_address;
 }
 
-// Implements blm_boards__comm__leds__u128_commands__buffer__scanner__callbacks.h
-// -----------------------------------------------------------------------------
-
-void blm_boards__comm__leds__u128_commands__arduino_i2c__emit_command(uint8_t board, uint8_t command) {
+void blm_boards__comm__leds__u128_commands__arduino_i2c__emit_command(uint8_t board, uint8_t led, uint8_t color) {
     if (board < BLM_SCALAR_NUM_BOARDS) {
         blm_boards__comm__leds__u128_commands__arduino_i2c__wire->beginTransmission(blm_boards__comm__leds__u128_commands__arduino_i2c__base_address + board);
-        blm_boards__comm__leds__u128_commands__arduino_i2c__wire->write(command);
+        blm_boards__comm__leds__u128_commands__arduino_i2c__wire->write(led);
         blm_boards__comm__leds__u128_commands__arduino_i2c__wire->endTransmission();
     }
 }

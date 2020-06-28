@@ -3,8 +3,7 @@
 // For every board, there are 4 rows, and 4 columns.
 // So, in total, there are 16 * 4 * 2 * 2 commands possible (x2 commands because of separate commands for each color channel).
 // Per board row or column, only the latest command is stored,
-// and if some row or column is updated very frequently (within tens of ms), some updates may be lost.
-// If a certain command is to be sent, the corresponding bit is set in blm_boards__comm__leds__p4_commands__buffer__commands.
+// but it should be OK, because I2C commands are sent faster than MIDI commands are received.
 // ---------------------------------------------------------------------------------------------------------------------------------
 
 #ifndef __BLM_BOARDS__COMM__LEDS__P4_COMMANDS__BUFFER

@@ -3,8 +3,7 @@
 // For every board, there are 16 LED.
 // So, in total, there are 16 * 16 pending commands possible.
 // Per LED, only the latest command is stored,
-// and if some LED is updated very frequently (within tens of ms), some updates may be lost.
-// If a certain command is to be sent, the corresponding bit is set in blm_boards__comm__leds__u128_commands__buffer__commands.
+// but it should be OK, because I2C commands are sent faster than MIDI commands are received.
 // ---------------------------------------------------------------------------------------------------------------------------------
 
 #ifndef __BLM_BOARDS__COMM__LEDS__U128_COMMANDS__BUFFER

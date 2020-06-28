@@ -14,7 +14,7 @@
 static uint16_t blm_boards__comm__leds__p4_commands__buffer__scanner__mask = 0xFFFFU;
 
 /**
- * Finds dirty command for the given board and passes it to the appropriate callback.
+ * Finds pending command for the given board and passes it to the appropriate callback.
  * @return true if the board became synchronized (clean), false otherwise
  */
 static bool blm_boards__comm__leds__p4_commands__buffer__scanner__scan(unsigned int board) {
