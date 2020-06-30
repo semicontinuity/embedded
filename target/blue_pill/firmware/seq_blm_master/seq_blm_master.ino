@@ -42,6 +42,8 @@
 // Implementation of callbacks for blm_boards__comm__events__reader_pt.h
 // -----------------------------------------------------------------------------
 
+void populate_midibox_palette(int palette);
+
 uint8_t blm_boards__comm_events__reader__read(uint8_t board) {
     return blm_boards__comm__events__arduino_i2c__read(board);
 }
@@ -150,10 +152,33 @@ void blm_master__sysex_msg_handler__handle_invalid_command() {
     blm_master__sysex_msg_sender__send_disack_invalid_command();
 }
 
+void populate_midibox_palette(int palette) {
+    // format: GRB
+    int offset = 0;
+    for (int e = 0; e < 32; e++) {
+        // black
+        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
+        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
+        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
+        // green
+        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 4;
+        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
+        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
+        // red
+        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
+        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 4;
+        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
+        // yellow
+        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 4;
+        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 4;
+        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
+    }
+}
+
+
 void blm_master__sysex_msg_handler__handle_request_layout_info() {
     blm_master__sysex_msg_sender__send_layout_info();
 }
-
 
 void setup() {
     pinMode(PIN_LED_DEBUG, OUTPUT);
@@ -187,6 +212,9 @@ void setup() {
     blm_boards__comm__leds__p4_commands__buffer__init();
     blm_boards__comm__leds__u128_commands__buffer__init();
     blm_boards__comm_events__handler__test_mode__init();
+
+    populate_midibox_palette(0);
+    blm_boards__comm__leds__palette_uploader__request(0);
 }
 
 
