@@ -63,6 +63,13 @@ static void blm_master__channel_msg_handler__process_select_palette_event(midi_p
     blm_master__leds__select_palette(palette);
 }
 
+static void blm_master__channel_msg_handler__process_single_led_color_event(midi_package_t midi_package) {
+    uint8_t row = midi_package.chn;
+    uint8_t column = midi_package.note;
+    uint8_t color = midi_package.velocity;
+    blm_master__leds__update_color(row, column, color);
+}
+
 static void blm_master__channel_msg_handler__process_single_led_change_event(midi_package_t midi_package) {
     uint8_t row = midi_package.chn;
     uint8_t column = midi_package.note;
@@ -132,6 +139,8 @@ void blm_master__channel_msg_handler__process(const midi_package_t &midi_package
         blm_master__channel_msg_handler__process_single_led_change_event(midi_package);
     } else if (midi_package.event == CC) {
         blm_master__channel_msg_handler__process_packed_leds_change_event(midi_package);
+    } else if (midi_package.event == PolyPressure) {
+        blm_master__channel_msg_handler__process_single_led_color_event(midi_package);
     } else if (midi_package.event == ProgramChange) {
         blm_master__channel_msg_handler__process_select_palette_event(midi_package);
     }

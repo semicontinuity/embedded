@@ -106,6 +106,13 @@ void blm_master__leds__select_palette(uint8_t palette) {
 }
 
 /**
+ * @param color indexed color from the current palette, values: 0-127
+ */
+void blm_master__leds__update_color(uint8_t row, uint8_t column, uint8_t color) {
+    blm_boards__comm__leds__commands__buffer__blm_master__update_color(row, column, color);
+}
+
+/**
  * @param color_code 00..1f: black; 20..3f: green; 40..5f red; 60..7f yellow
  */
 void blm_master__leds__update_one(uint8_t row, uint8_t column, uint8_t color_code) {

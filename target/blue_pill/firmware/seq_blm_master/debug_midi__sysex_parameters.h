@@ -23,6 +23,7 @@
 #define D_UPDATE_EX_ROW     0x73
 #define D_UPDATE_EX_COLUMN  0x74
 #define D_UPDATE_EX         0x75
+#define D_UPDATE_COLOR      0x76
 #define D_SCAN              0x7F
 
 #endif
