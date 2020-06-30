@@ -1,4 +1,6 @@
 #include <Arduino.h>
+#include <USBComposite.h>
+
 #include "seq_blm_master__config.h"
 
 //#include "blm_boards__comm_p1__leds__buffer.h"
@@ -180,7 +182,35 @@ void blm_master__sysex_msg_handler__handle_request_layout_info() {
     blm_master__sysex_msg_sender__send_layout_info();
 }
 
+static midi_package_t fill_midi_package(unsigned int channel, unsigned int note, unsigned int velocity) {
+    midi_package_t p;
+    p.event = NoteOff,
+    p.chn = static_cast<uint8_t>(channel),
+    p.note = static_cast<uint8_t>(note),
+    p.velocity = static_cast<uint8_t>(velocity);
+    return p;
+}
+
+class UsbMidi : public USBMIDI {
+    virtual void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) {
+        blm_master__channel_msg_handler__process_single_led_change_event(fill_midi_package(channel, note, velocity));
+    }
+    virtual void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) {
+        blm_master__channel_msg_handler__process_single_led_change_event(fill_midi_package(channel, note, velocity));
+    }
+    virtual void handleVelocityChange(unsigned int channel, unsigned int note, unsigned int velocity) {
+        blm_master__channel_msg_handler__process_single_led_color_event(fill_midi_package(channel, note, velocity));
+    }
+};
+
+UsbMidi usbMidi;
+
+
 void setup() {
+    USBComposite.setProductId(0x0030);
+    usbMidi.registerComponent();
+    USBComposite.begin();
+
     pinMode(PIN_LED_DEBUG, OUTPUT);
     pinMode(PIN_LED_HOST_CONNECTED, OUTPUT);
 
@@ -219,6 +249,8 @@ void setup() {
 
 
 void loop() {
+    usbMidi.poll();
+
     if (midi_receiver__serial__is_runnable()) {
         midi_receiver__serial__run();
     } else {

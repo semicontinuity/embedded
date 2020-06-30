@@ -11,10 +11,11 @@ add_executable(seq_blm_master
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/gpio_f1.c
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c.c
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c_f1.c
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/stm32f1/include/series/gpio.h
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/utility/WireBase.cpp
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/utility/WireBase.h
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/Wire.cpp
-        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/stm32f1/include/series/gpio.h
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/USBComposite/USBComposite.h
 
         seq_blm_master__config.h
         seq_blm_master.ino
@@ -81,6 +82,7 @@ include_directories(
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/usb/stm32f1
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/EEPROM
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire
+        /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/USBComposite
 )
 
 
