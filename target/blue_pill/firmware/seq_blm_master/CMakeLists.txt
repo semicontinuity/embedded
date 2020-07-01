@@ -31,13 +31,6 @@ add_executable(seq_blm_master
         blm_boards__comm__events__handler__test_mode.h
         blm_boards__comm__events__reader__arduino_i2c.h
 
-        blm_boards__comm_p1__leds__buffer.h
-        blm_boards__comm_p1__leds__buffer__blm_master_updates.h
-        blm_boards__comm_p1__leds__buffer__scanner.h
-        blm_boards__comm_p1__leds__buffer__scanner__callbacks.h
-        blm_boards__comm_p1__leds__arduino_i2c.h
-        blm_boards__comm_p1__leds__debug_arduino_serial_midi.h
-
         blm_boards__comm__leds__p4_commands__buffer.h
         blm_boards__comm__leds__p4_commands__buffer__blm_master_updates.h
         blm_boards__comm__leds__p4_commands__buffer__scanner.h
@@ -51,7 +44,8 @@ add_executable(seq_blm_master
         blm_boards__comm__leds__u128_commands__buffer__scanner__callbacks.h
         blm_boards__comm__leds__u128_commands__arduino_i2c.h
 
-        blm_boards__comm__leds__palette_uploader.h
+        blm_boards__comm__leds__palette__buffer.h
+        blm_boards__comm__leds__palette__uploader.h
 
         debug_midi__arduino_serial.h
         debug_midi__sysex_parameters.h
@@ -71,7 +65,6 @@ add_executable(seq_blm_master
         blm_master__sysex_msg_handler.h
         blm_master__sysex_msg_handler__callbacks.h
         blm_master__sysex_msg_handler__sender.h
-        blm_master__sysex_msg_handler__set_palette_data.h
         )
 
 include_directories(

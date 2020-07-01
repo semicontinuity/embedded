@@ -3,12 +3,6 @@
 
 #include "seq_blm_master__config.h"
 
-//#include "blm_boards__comm_p1__leds__buffer.h"
-//#include "blm_boards__comm_p1__leds__buffer__blm_master_updates.h"
-//#include "blm_boards__comm_p1__leds__buffer__scanner.h"
-//#include "blm_boards__comm_p1__leds__debug_arduino_serial_midi.h"
-//#include "blm_boards__comm_p1__leds__arduino_i2c.h"
-
 #include "blm_boards__comm__leds__p4_commands__buffer.h"
 #include "blm_boards__comm__leds__p4_commands__buffer__blm_master_updates.h"
 #include "blm_boards__comm__leds__p4_commands__buffer__scanner.h"
@@ -20,7 +14,8 @@
 #include "blm_boards__comm__leds__u128_commands__buffer__scanner.h"
 #include "blm_boards__comm__leds__u128_commands__arduino_i2c.h"
 
-#include "blm_boards__comm__leds__palette_uploader.h"
+#include "blm_boards__comm__leds__palette__buffer.h"
+#include "blm_boards__comm__leds__palette__uploader.h"
 
 #include "blm_boards__comm__events__reader.h"
 #include "blm_boards__comm__events__reader__arduino_i2c.h"
@@ -31,7 +26,6 @@
 #include "blm_master__channel_msg_handler.h"
 #include "blm_master__sysex_msg_handler__callbacks.h"
 #include "blm_master__sysex_msg_handler__sender.h"
-#include "blm_master__sysex_msg_handler__set_palette_data.h"
 #include "blm_master__sysex_msg_handler.h"
 #include "blm_master__alive_handler.h"
 
@@ -101,19 +95,6 @@ void midi_parser__on_channel_msg(midi_package_t midi_package) {
 }
 
 
-// Implements blm_boards__comm_p1__leds__buffer__scanner__callbacks.h
-// -----------------------------------------------------------------------------
-
-/*
-void blm_boards__comm_p1__leds__buffer__scanner__update_one(uint8_t matrix, uint8_t led, uint8_t r, uint8_t g, uint8_t b) {
-    if (DEBUG_COMM_LEDS) {
-        blm_boards__comm_p1__leds__debug_arduino_serial_midi__update_one(matrix, led, r, g);
-    } else {
-        blm_boards__comm_p1__leds__arduino_i2c__update_one(matrix, led, r, g, b);
-    }
-}
-*/
-
 // Implements blm_boards__comm__leds__commands__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
 
@@ -137,7 +118,7 @@ void blm_boards__comm__leds__u128_commands__buffer__scanner__emit_command(uint8_
 // -----------------------------------------------------------------------------
 
 void blm_master__leds__select_palette(uint8_t palette) {
-    blm_boards__comm__leds__palette_uploader__request(palette);
+    blm_boards__comm__leds__palette__uploader__request(palette);
 }
 
 /**
@@ -190,21 +171,21 @@ void populate_midibox_palette(int palette) {
     int offset = 0;
     for (int e = 0; e < 32; e++) {
         // black
-        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
-        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
-        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
+        blm_boards__comm__leds__palette__buffer__palettes[palette][offset++] = 0;
+        blm_boards__comm__leds__palette__buffer__palettes[palette][offset++] = 0;
+        blm_boards__comm__leds__palette__buffer__palettes[palette][offset++] = 0;
         // green
-        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 4;
-        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
-        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
+        blm_boards__comm__leds__palette__buffer__palettes[palette][offset++] = 4;
+        blm_boards__comm__leds__palette__buffer__palettes[palette][offset++] = 0;
+        blm_boards__comm__leds__palette__buffer__palettes[palette][offset++] = 0;
         // red
-        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
-        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 4;
-        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
+        blm_boards__comm__leds__palette__buffer__palettes[palette][offset++] = 0;
+        blm_boards__comm__leds__palette__buffer__palettes[palette][offset++] = 4;
+        blm_boards__comm__leds__palette__buffer__palettes[palette][offset++] = 0;
         // yellow
-        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 4;
-        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 4;
-        blm_boards__comm__leds__palette_uploader__palettes[palette][offset++] = 0;
+        blm_boards__comm__leds__palette__buffer__palettes[palette][offset++] = 4;
+        blm_boards__comm__leds__palette__buffer__palettes[palette][offset++] = 4;
+        blm_boards__comm__leds__palette__buffer__palettes[palette][offset++] = 0;
     }
 }
 
@@ -213,6 +194,9 @@ void blm_master__sysex_msg_handler__handle_request_layout_info() {
     blm_master__sysex_msg_sender__send_layout_info();
 }
 
+void blm_master__sysex_msg_handler__handle_set_palette_data(uint8_t palette, uint8_t *data, int32_t length) {
+    blm_boards__comm__leds__palette__buffer__palettes__set_palette_data(palette, data, length);
+}
 
 void setup() {
     pinMode(PIN_LED_DEBUG, OUTPUT);
@@ -230,10 +214,9 @@ void setup() {
     wire->begin();
 
     if (!DEBUG_COMM_LEDS) {
-//        blm_boards__comm_p1__leds__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
         blm_boards__comm__leds__p4_commands__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
         blm_boards__comm__leds__u128_commands__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
-        blm_boards__comm__leds__palette_uploader__init(wire, BLM_BOARDS_BASE_ADDRESS);
+        blm_boards__comm__leds__palette__uploader__init(wire, BLM_BOARDS_BASE_ADDRESS);
     }
 
     if (!DEBUG_COMM_EVENTS) {
@@ -276,12 +259,12 @@ void loop() {
         blm_boards__comm__leds__u128_commands__buffer__scanner__run();
     } else {
         if (!DEBUG_COMM_EVENTS) {
-//            blm_boards__comm_events__reader__run();
+            blm_boards__comm_events__reader__run();
         }
     }
 
     // NB: Full Palette transfer takes ~40ms @ 100KHz per board, thus 640ms for 16 boards!
-    if (blm_boards__comm__leds__palette_uploader__is_runnable()) {
-        blm_boards__comm__leds__palette_uploader__run();
+    if (blm_boards__comm__leds__palette__uploader__is_runnable()) {
+        blm_boards__comm__leds__palette__uploader__run();
     }
 }
