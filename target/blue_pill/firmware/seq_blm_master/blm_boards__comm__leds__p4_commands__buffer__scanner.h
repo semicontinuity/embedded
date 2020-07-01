@@ -28,6 +28,7 @@ static bool blm_boards__comm__leds__p4_commands__buffer__scanner__scan(unsigned 
         blm_boards__comm__leds__p4_commands__buffer__commands__pending[board] = dirty_commands;
         return dirty_commands == 0U;
     }
+    return false;
 }
 
 

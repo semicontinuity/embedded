@@ -41,10 +41,41 @@
 #include "midi_sender__serial_arduino.h"
 
 
+static midi_package_t fill_midi_package(unsigned int channel, unsigned int note, unsigned int velocity) {
+    midi_package_t p;
+    p.event = NoteOff,
+    p.chn = static_cast<uint8_t>(channel),
+    p.note = static_cast<uint8_t>(note),
+    p.velocity = static_cast<uint8_t>(velocity);
+    return p;
+}
+
+class UsbMidi : public USBMIDI {
+    void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) override {
+        blm_master__channel_msg_handler__process_single_led_change_event(fill_midi_package(channel, note, velocity));
+    }
+    void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) override {
+        blm_master__channel_msg_handler__process_single_led_change_event(fill_midi_package(channel, note, velocity));
+    }
+    // MIDI message A0 nn vv
+    void handleVelocityChange(unsigned int channel, unsigned int note, unsigned int velocity) override {
+        blm_master__channel_msg_handler__process_single_led_color_event(fill_midi_package(channel, note, velocity));
+    }
+    // MIDI message B0 cc vv
+    void handleControlChange(unsigned int channel, unsigned int controller, unsigned int value) override {
+        blm_master__channel_msg_handler__process_packed_leds_change_event(fill_midi_package(channel, controller, value));
+    }
+    // MIDI message C0 pp
+    void handleProgramChange(unsigned int channel, unsigned int program) override {
+        blm_master__leds__select_palette(program & 0x0Fu);
+    }
+};
+
+USBCompositeSerial usbSerial;
+UsbMidi usbMidi;
+
 // Implementation of callbacks for blm_boards__comm__events__reader_pt.h
 // -----------------------------------------------------------------------------
-
-void populate_midibox_palette(int palette);
 
 uint8_t blm_boards__comm_events__reader__read(uint8_t board) {
     return blm_boards__comm__events__arduino_i2c__read(board);
@@ -182,35 +213,8 @@ void blm_master__sysex_msg_handler__handle_request_layout_info() {
     blm_master__sysex_msg_sender__send_layout_info();
 }
 
-static midi_package_t fill_midi_package(unsigned int channel, unsigned int note, unsigned int velocity) {
-    midi_package_t p;
-    p.event = NoteOff,
-    p.chn = static_cast<uint8_t>(channel),
-    p.note = static_cast<uint8_t>(note),
-    p.velocity = static_cast<uint8_t>(velocity);
-    return p;
-}
-
-class UsbMidi : public USBMIDI {
-    virtual void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) {
-        blm_master__channel_msg_handler__process_single_led_change_event(fill_midi_package(channel, note, velocity));
-    }
-    virtual void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) {
-        blm_master__channel_msg_handler__process_single_led_change_event(fill_midi_package(channel, note, velocity));
-    }
-    virtual void handleVelocityChange(unsigned int channel, unsigned int note, unsigned int velocity) {
-        blm_master__channel_msg_handler__process_single_led_color_event(fill_midi_package(channel, note, velocity));
-    }
-};
-
-UsbMidi usbMidi;
-
 
 void setup() {
-    USBComposite.setProductId(0x0030);
-    usbMidi.registerComponent();
-    USBComposite.begin();
-
     pinMode(PIN_LED_DEBUG, OUTPUT);
     pinMode(PIN_LED_HOST_CONNECTED, OUTPUT);
 
@@ -244,7 +248,12 @@ void setup() {
     blm_boards__comm_events__handler__test_mode__init();
 
     populate_midibox_palette(0);
-    blm_boards__comm__leds__palette_uploader__request(0);
+    blm_master__leds__select_palette(0);
+
+    USBComposite.setProductId(0x0030);
+    usbMidi.registerComponent();
+    usbSerial.registerComponent();
+    USBComposite.begin();
 }
 
 
@@ -267,11 +276,11 @@ void loop() {
         blm_boards__comm__leds__u128_commands__buffer__scanner__run();
     } else {
         if (!DEBUG_COMM_EVENTS) {
-            blm_boards__comm_events__reader__run();
+//            blm_boards__comm_events__reader__run();
         }
     }
 
-    // NB: Palette transfer takes ~40ms @ 100KHz
+    // NB: Full Palette transfer takes ~40ms @ 100KHz per board, thus 640ms for 16 boards!
     if (blm_boards__comm__leds__palette_uploader__is_runnable()) {
         blm_boards__comm__leds__palette_uploader__run();
     }

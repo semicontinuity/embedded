@@ -19,6 +19,7 @@ void blm_boards__comm__leds__p4_commands__arduino_i2c__init(TwoWire *wire, uint8
 
 void blm_boards__comm__leds__p4_commands__arduino_i2c__emit_command(uint8_t board, uint8_t command) {
     if (board < BLM_SCALAR_NUM_BOARDS) {
+        // PACKED4, format [ CHANNEL: 1 ] [ POS : 2] [ DIR: 1 ] [ PATTERN : 4]
         blm_boards__comm__leds__p4_commands__arduino_i2c__wire->beginTransmission(blm_boards__comm__leds__p4_commands__arduino_i2c__base_address + board);
         blm_boards__comm__leds__p4_commands__arduino_i2c__wire->write(command);
         blm_boards__comm__leds__p4_commands__arduino_i2c__wire->endTransmission();

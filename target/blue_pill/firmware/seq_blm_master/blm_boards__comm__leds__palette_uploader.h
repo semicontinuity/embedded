@@ -16,7 +16,7 @@
 
 
 uint8_t blm_boards__comm__leds__palette_uploader__palettes[16][128 * 3];
-volatile int8_t blm_boards__comm__leds__palette_uploader__requested_palette = -1;
+int8_t blm_boards__comm__leds__palette_uploader__requested_palette;
 
 static TwoWire *blm_boards__comm__leds__palette_uploader__wire;
 static uint8_t blm_boards__comm__leds__palette_uploader__base_address;
@@ -25,6 +25,7 @@ static uint8_t blm_boards__comm__leds__palette_uploader__base_address;
 void blm_boards__comm__leds__palette_uploader__init(TwoWire *wire, uint8_t base_address) {
     blm_boards__comm__leds__palette_uploader__wire = wire;
     blm_boards__comm__leds__palette_uploader__base_address = base_address;
+    blm_boards__comm__leds__palette_uploader__requested_palette = -1;
 }
 
 void blm_boards__comm__leds__palette_uploader__request(uint8_t palette) {
@@ -39,13 +40,13 @@ void blm_boards__comm__leds__palette_uploader__upload(uint8_t board, uint8_t pal
     for (int entry = 0; entry < 128; entry += 8) {
         blm_boards__comm__leds__palette_uploader__wire->beginTransmission(blm_boards__comm__leds__palette_uploader__base_address + board);
         blm_boards__comm__leds__palette_uploader__wire->write(0x80 + entry);    // WRITE_PALETTE_MEMORY command
-        blm_boards__comm__leds__palette_uploader__wire->write(&blm_boards__comm__leds__palette_uploader__palettes[palette][entry * 3], 16 * 3);
+        blm_boards__comm__leds__palette_uploader__wire->write(&blm_boards__comm__leds__palette_uploader__palettes[palette][entry * 3], 8 * 3);
         blm_boards__comm__leds__palette_uploader__wire->endTransmission();
     }
 }
 
 bool blm_boards__comm__leds__palette_uploader__is_runnable() {
-    return blm_boards__comm__leds__palette_uploader__requested_palette < 0;
+    return blm_boards__comm__leds__palette_uploader__requested_palette >= 0;
 }
 
 void blm_boards__comm__leds__palette_uploader__run() {

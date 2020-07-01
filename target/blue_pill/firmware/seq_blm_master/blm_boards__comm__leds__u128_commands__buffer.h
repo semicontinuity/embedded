@@ -36,6 +36,7 @@ static void blm_boards__comm__leds__u128_commands__buffer__put(uint8_t matrix, u
     debug_midi__sysex_p8(D_BOARD, matrix);
     blm_boards__comm__leds__u128_commands__buffer__colors[matrix][led] = color;
     blm_boards__comm__leds__u128_commands__buffer__commands__pending[matrix] |= (1U << led);
+    blm_boards__comm__leds__u128_commands__buffer__boards_dirty |= (1U << (uint32_t) matrix);
 }
 
 

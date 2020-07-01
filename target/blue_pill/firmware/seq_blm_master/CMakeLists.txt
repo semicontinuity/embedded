@@ -11,7 +11,10 @@ add_executable(seq_blm_master
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/gpio_f1.c
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c.c
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple/libmaple/i2c_f1.c
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/i2c_private.h
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/stm32f1/include/series/gpio.h
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/stm32f1/include/series/i2c.h
+        ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/stm32f1/include/series/stm32.h
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/utility/WireBase.cpp
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/utility/WireBase.h
         ../../../../../../../../../../opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/Wire/Wire.cpp
@@ -77,7 +80,9 @@ include_directories(
         /opt/arduino-1.8.10/libraries/pt-1.4
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/variants/maple
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/cores/maple
+        /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/include
+        /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/stm32f1/include/series
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/usb/usb_lib
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/system/libmaple/usb/stm32f1
         /opt/arduino-1.8.10/hardware/Arduino_STM32/STM32F1/libraries/EEPROM

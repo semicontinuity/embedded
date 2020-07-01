@@ -18,15 +18,17 @@ static uint16_t blm_boards__comm__leds__u128_commands__buffer__scanner__mask = 0
  * @return true if the board became synchronized (clean), false otherwise
  */
 static bool blm_boards__comm__leds__u128_commands__buffer__scanner__scan(unsigned int board) {
-    uint16_t dirty_commands = blm_boards__comm__leds__u128_commands__buffer__commands__pending[board];
-    int index = __builtin_ffs(dirty_commands) - 1;
-    if (index >= 0) {
+    uint16_t dirty_leds = blm_boards__comm__leds__u128_commands__buffer__commands__pending[board];
+    int led = __builtin_ffs(dirty_leds) - 1;
+    if (led >= 0) {
         blm_boards__comm__leds__u128_commands__buffer__scanner__emit_command(
-                board, blm_boards__comm__leds__u128_commands__buffer__colors[board][index], 0);
-        dirty_commands &= ~(1U << (uint16_t) index);
-        blm_boards__comm__leds__u128_commands__buffer__commands__pending[board] = dirty_commands;
-        return dirty_commands == 0U;
+                board, led, blm_boards__comm__leds__u128_commands__buffer__colors[board][led]
+        );
+        dirty_leds &= ~(1U << (uint16_t) led);
+        blm_boards__comm__leds__u128_commands__buffer__commands__pending[board] = dirty_leds;
+        return dirty_leds == 0U;
     }
+    return false;
 }
 
 
