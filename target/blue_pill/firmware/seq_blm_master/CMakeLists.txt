@@ -71,6 +71,7 @@ add_executable(seq_blm_master
         blm_master__sysex_msg_handler__callbacks.h
         blm_master__sysex_msg_sender.h
         blm_master__sysex_msg_sender__arduino_serial.h
+        blm_master__sysex_msg_sender__usb_midi.h
         )
 
 include_directories(
