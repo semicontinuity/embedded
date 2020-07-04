@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include "seq_blm_master__config.h"
 #include "blm_master__sysex_msg_sender__arduino_serial.h"
+#include "blm_master__sysex_msg_sender__usb_midi.h"
 
 
 static const unsigned char blm_master__sysex_msg_sender__packet__ack[] = {
@@ -42,6 +43,7 @@ static const unsigned char blm_master__sysex_msg_sender__packet__layout_info[] =
 
 void blm_master__sysex_msg_sender__send(uint8_t *payload, uint32 length) {
     blm_master__sysex_msg_sender__arduino_serial__send(payload, length);
+    blm_master__sysex_msg_sender__usb_midi__send(payload, length);
 }
 
 

@@ -62,7 +62,7 @@ add_executable(seq_blm_master
 
         midi_receiver__serial_arduino_pt.h
         midi_sender.h
-        midi_sender__serial_arduino.h
+        midi_sender__arduino_serial.h
 
         blm_master__leds.h
         blm_master__channel_msg_handler.h

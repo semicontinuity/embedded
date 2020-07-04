@@ -25,5 +25,6 @@ void blm_boards__comm_events__handler__midi__on_button_event(uint8_t board, uint
     p.chn = row;
     p.note = column;
     p.velocity = is_pressed ? 0x7F : 0x00;
+
     midi_sender__send_package(p);
 }
