@@ -33,7 +33,7 @@
 #include "midi_receiver__serial_arduino_pt.h"
 #include "midi_parser__pt.h"
 #include "midi_sender__arduino_serial.h"
-#include "midi_sender__usb_midi.h"
+#include "midi_sender__arduino_usb_midi.h"
 
 
 static midi_package_t fill_midi_package(unsigned int channel, unsigned int note, unsigned int velocity) {
@@ -216,16 +216,13 @@ void setup() {
     pinMode(PIN_LED_DEBUG, OUTPUT);
     pinMode(PIN_LED_HOST_CONNECTED, OUTPUT);
 
-    UsbMidi *pUsbMidi = &usbMidi;
-    blm_master__sysex_msg_sender__usb_midi__init(pUsbMidi);
-    midi_sender__arduino_usb_midi__init(pUsbMidi);
+    midi_sender__arduino_usb_midi__init(&usbMidi);
 
     HardwareSerial *serial = &SERIAL_PORT;
     serial->begin(SERIAL_BAUD_RATE);
     debug_midi__serial__init(serial);
     midi_receiver__serial__init(serial);
     midi_sender__arduino_serial__init(serial);
-    blm_master__sysex_msg_sender__arduino_serial__init(serial);
 
     TwoWire *wire = &WIRE;
     wire->begin();

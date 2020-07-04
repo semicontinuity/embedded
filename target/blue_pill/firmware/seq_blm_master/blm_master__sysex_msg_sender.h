@@ -4,8 +4,7 @@
 #include <Arduino.h>
 #include <stdint.h>
 #include "seq_blm_master__config.h"
-#include "blm_master__sysex_msg_sender__arduino_serial.h"
-#include "blm_master__sysex_msg_sender__usb_midi.h"
+#include "midi_sender.h"
 
 
 static const unsigned char blm_master__sysex_msg_sender__packet__ack[] = {
@@ -41,28 +40,22 @@ static const unsigned char blm_master__sysex_msg_sender__packet__layout_info[] =
 };
 
 
-void blm_master__sysex_msg_sender__send(uint8_t *payload, uint32 length) {
-    blm_master__sysex_msg_sender__arduino_serial__send(payload, length);
-    blm_master__sysex_msg_sender__usb_midi__send(payload, length);
-}
-
-
 void blm_master__sysex_msg_sender__send_ack() {
-    blm_master__sysex_msg_sender__send(
+    midi_sender__send_sysex(
             const_cast<uint8_t *>(blm_master__sysex_msg_sender__packet__ack),
             sizeof(blm_master__sysex_msg_sender__packet__ack)
     );
 }
 
 void blm_master__sysex_msg_sender__send_disack_invalid_command() {
-    blm_master__sysex_msg_sender__send(
+    midi_sender__send_sysex(
             const_cast<uint8_t *>(blm_master__sysex_msg_sender__packet__disack_invalid_command),
             sizeof(blm_master__sysex_msg_sender__packet__disack_invalid_command)
     );
 }
 
 void blm_master__sysex_msg_sender__send_layout_info() {
-    blm_master__sysex_msg_sender__send(
+    midi_sender__send_sysex(
             const_cast<uint8_t *>(blm_master__sysex_msg_sender__packet__layout_info),
             sizeof(blm_master__sysex_msg_sender__packet__layout_info)
     );

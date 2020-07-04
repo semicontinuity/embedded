@@ -63,7 +63,7 @@ add_executable(seq_blm_master
         midi_receiver__serial_arduino_pt.h
         midi_sender.h
         midi_sender__arduino_serial.h
-        midi_sender__usb_midi.h
+        midi_sender__arduino_usb_midi.h
 
         blm_master__leds.h
         blm_master__channel_msg_handler.h
@@ -71,8 +71,6 @@ add_executable(seq_blm_master
         blm_master__sysex_msg_handler.h
         blm_master__sysex_msg_handler__callbacks.h
         blm_master__sysex_msg_sender.h
-        blm_master__sysex_msg_sender__arduino_serial.h
-        blm_master__sysex_msg_sender__usb_midi.h
         )
 
 include_directories(
