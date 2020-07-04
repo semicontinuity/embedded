@@ -1,5 +1,5 @@
-#ifndef __DEBUG_MIDI__SYSEX_PARAMETERS
-#define __DEBUG_MIDI__SYSEX_PARAMETERS
+#ifndef __DEBUG__MIDI_SYSEX__PARAMETERS
+#define __DEBUG__MIDI_SYSEX__PARAMETERS
 
 #define D_BOARD             0x01
 #define D_LED               0x02

@@ -5,8 +5,8 @@
 
 #include <Arduino.h>
 #include <stdint.h>
-#include "debug_midi__arduino_serial.h"
-#include "debug_midi__sysex_parameters.h"
+#include "debug__midi_sysex.h"
+#include "debug__midi_sysex__parameters.h"
 #include "blm_boards__comm__leds__u128_commands__buffer.h"
 
 
@@ -14,16 +14,16 @@
  * @param color indexed color from the current palette, values: 0-127
  */
 void blm_boards__comm__leds__commands__buffer__blm_master__update_color(uint8_t row, uint8_t column, uint8_t color) {
-    debug_midi__sysex_p0(D_UPDATE_COLOR);
+    debug__midi_sysex__p0(D_UPDATE_COLOR);
     uint8_t matrix_x = ((uint8_t)(column >> 2U)) & 0x03U;
     uint8_t matrix_y = row >> 2U;
     uint8_t matrix = (matrix_y << 2U) + matrix_x;
-    debug_midi__sysex_p8(D_BOARD, matrix);
+    debug__midi_sysex__p8(D_BOARD, matrix);
 
     uint8_t local_x = column & 0x03U;
     uint8_t local_y = row & 0x03U;
     uint8_t led = (local_y << 2U) + local_x;
-    debug_midi__sysex_p8(D_LED, led);
+    debug__midi_sysex__p8(D_LED, led);
 
     blm_boards__comm__leds__u128_commands__buffer__put(matrix, led, color);
 }
@@ -32,16 +32,16 @@ void blm_boards__comm__leds__commands__buffer__blm_master__update_color(uint8_t 
  * @param color_code 00..1f: black; 20..3f: green; 40..5f red; 60..7f yellow
  */
 void blm_boards__comm__leds__commands__buffer__blm_master__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
-    debug_midi__sysex_p0(D_UPDATE_ONE);
+    debug__midi_sysex__p0(D_UPDATE_ONE);
     uint8_t matrix_x = ((uint8_t)(column >> 2U)) & 0x03U;
     uint8_t matrix_y = row >> 2U;
     uint8_t matrix = (matrix_y << 2U) + matrix_x;
-    debug_midi__sysex_p8(D_BOARD, matrix);
+    debug__midi_sysex__p8(D_BOARD, matrix);
 
     uint8_t local_x = column & 0x03U;
     uint8_t local_y = row & 0x03U;
     uint8_t led = (local_y << 2U) + local_x;
-    debug_midi__sysex_p8(D_LED, led);
+    debug__midi_sysex__p8(D_LED, led);
 
     // Every LED on the BLM board has 8 associated palette entries.
     // They are assigned as follows (for MB SEQ V4):

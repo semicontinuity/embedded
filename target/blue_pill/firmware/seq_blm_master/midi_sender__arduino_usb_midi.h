@@ -19,5 +19,4 @@ void midi_sender__arduino_usb_midi__send_sysex(uint8_t *payload, uint32 length) 
     midi_sender__arduino_usb_midi->sendSysexData(payload, length);
 }
 
-
 #endif

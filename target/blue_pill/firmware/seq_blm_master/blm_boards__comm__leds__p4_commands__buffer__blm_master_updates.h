@@ -6,8 +6,8 @@
 #include <Arduino.h>
 #include <stdint.h>
 #include "blm_boards__comm__leds__p4_commands__buffer.h"
-#include "debug_midi__arduino_serial.h"
-#include "debug_midi__sysex_parameters.h"
+#include "debug__midi_sysex.h"
+#include "debug__midi_sysex__parameters.h"
 
 
 static void blm_boards__comm__leds__p4_commands__buffer__blm_master__update(
@@ -21,9 +21,9 @@ static void blm_boards__comm__leds__p4_commands__buffer__blm_master__update(
 }
 
 void blm_boards__comm__leds__p4_commands__buffer__blm_master__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    debug_midi__sysex_p0(D_UPDATE_ROW);
-    debug_midi__sysex_p8(D_ROW, row);
-    debug_midi__sysex_p8(D_PATTERN, pattern);
+    debug__midi_sysex__p0(D_UPDATE_ROW);
+    debug__midi_sysex__p8(D_ROW, row);
+    debug__midi_sysex__p8(D_PATTERN, pattern);
 
     uint8_t matrix_y = row >> 2U;
     uint8_t base_matrix = (matrix_y << 2U) + (is_second_half ? 2 : 0);
@@ -31,9 +31,9 @@ void blm_boards__comm__leds__p4_commands__buffer__blm_master__update_row(uint8_t
 }
 
 void blm_boards__comm__leds__p4_commands__buffer__blm_master__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    debug_midi__sysex_p0(D_UPDATE_COLUMN);
-    debug_midi__sysex_p8(D_COLUMN, column);
-    debug_midi__sysex_p8(D_PATTERN, pattern);
+    debug__midi_sysex__p0(D_UPDATE_COLUMN);
+    debug__midi_sysex__p8(D_COLUMN, column);
+    debug__midi_sysex__p8(D_PATTERN, pattern);
 
     uint8_t matrix_x = column >> 2U;
     uint8_t base_matrix = matrix_x + (is_second_half ? 8 : 0);
@@ -42,15 +42,15 @@ void blm_boards__comm__leds__p4_commands__buffer__blm_master__update_column(uint
 
 
 void blm_boards__comm__leds__p4_commands__buffer__blm_master__update_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    debug_midi__sysex_p0(D_UPDATE_EX_ROW);
+    debug__midi_sysex__p0(D_UPDATE_EX_ROW);
 }
 
 
 void blm_boards__comm__leds__p4_commands__buffer__blm_master__update_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    debug_midi__sysex_p0(D_UPDATE_EX_COLUMN);
+    debug__midi_sysex__p0(D_UPDATE_EX_COLUMN);
 }
 
 
 void blm_boards__comm__leds__p4_commands__buffer__blm_master__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    debug_midi__sysex_p0(D_UPDATE_EX);
+    debug__midi_sysex__p0(D_UPDATE_EX);
 }

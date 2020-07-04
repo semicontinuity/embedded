@@ -41,7 +41,7 @@ add_executable(seq_blm_master
         blm_boards__comm__leds__p4_commands__buffer__scanner.h
         blm_boards__comm__leds__p4_commands__buffer__scanner__callbacks.h
         blm_boards__comm__leds__p4_commands__arduino_i2c.h
-        blm_boards__comm__leds__p4_commands__debug_arduino_serial_midi.h
+        blm_boards__comm__leds__p4_commands__debug__arduino_serial_midi.h
 
         blm_boards__comm__leds__u128_commands__buffer.h
         blm_boards__comm__leds__u128_commands__buffer__blm_master_updates.h
@@ -52,8 +52,8 @@ add_executable(seq_blm_master
         blm_boards__comm__leds__palette__buffer.h
         blm_boards__comm__leds__palette__uploader.h
 
-        debug_midi__arduino_serial.h
-        debug_midi__sysex_parameters.h
+        debug__midi_sysex.h
+        debug__midi_sysex__parameters.h
 
         midi_parser.h
         midi_parser__pt.h

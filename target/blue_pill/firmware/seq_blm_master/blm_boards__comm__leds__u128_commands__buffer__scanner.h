@@ -8,7 +8,6 @@
 #include <Arduino.h>
 #include "blm_boards__comm__leds__u128_commands__buffer.h"
 #include "blm_boards__comm__leds__u128_commands__buffer__scanner__callbacks.h"
-#include "debug_midi__arduino_serial.h"
 
 
 static uint16_t blm_boards__comm__leds__u128_commands__buffer__scanner__mask = 0xFFFFU;

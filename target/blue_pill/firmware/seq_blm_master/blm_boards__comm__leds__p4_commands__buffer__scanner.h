@@ -8,7 +8,7 @@
 #include <Arduino.h>
 #include "blm_boards__comm__leds__p4_commands__buffer.h"
 #include "blm_boards__comm__leds__p4_commands__buffer__scanner__callbacks.h"
-#include "debug_midi__arduino_serial.h"
+#include "debug__midi_sysex.h"
 
 
 static uint16_t blm_boards__comm__leds__p4_commands__buffer__scanner__mask = 0xFFFFU;

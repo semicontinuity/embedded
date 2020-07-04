@@ -10,8 +10,8 @@
 #define __BLM_BOARDS__COMM__LEDS__P4_COMMANDS__BUFFER
 
 #include <stdint.h>
-#include "debug_midi__arduino_serial.h"
-#include "debug_midi__sysex_parameters.h"
+#include "debug__midi_sysex.h"
+#include "debug__midi_sysex__parameters.h"
 
 
 uint8_t  blm_boards__comm__leds__p4_commands__buffer__commands[16][16];         // every entry is a 1-byte command to be sent to a board
@@ -33,7 +33,7 @@ void blm_boards__comm__leds__p4_commands__buffer__init() {
 
 
 static void blm_boards__comm__leds__p4_commands__buffer__put(uint8_t matrix, uint8_t command_index, uint8_t command) {
-    debug_midi__sysex_p8(D_BOARD, matrix);
+    debug__midi_sysex__p8(D_BOARD, matrix);
     blm_boards__comm__leds__p4_commands__buffer__commands[matrix][command_index] = command;
     blm_boards__comm__leds__p4_commands__buffer__commands__pending[matrix] |= (1U << command_index);
     blm_boards__comm__leds__p4_commands__buffer__boards_dirty |= (1U << (uint32_t) matrix);

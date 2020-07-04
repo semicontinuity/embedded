@@ -7,7 +7,7 @@
 #include "blm_boards__comm__leds__p4_commands__buffer__blm_master_updates.h"
 #include "blm_boards__comm__leds__p4_commands__buffer__scanner.h"
 #include "blm_boards__comm__leds__p4_commands__arduino_i2c.h"
-#include "blm_boards__comm__leds__p4_commands__debug_arduino_serial_midi.h"
+#include "blm_boards__comm__leds__p4_commands__debug__arduino_serial_midi.h"
 
 #include "blm_boards__comm__leds__u128_commands__buffer.h"
 #include "blm_boards__comm__leds__u128_commands__buffer__blm_master_updates.h"
@@ -114,7 +114,7 @@ void midi_parser__on_channel_msg(midi_package_t midi_package) {
 
 void blm_boards__comm__leds__p4_commands__buffer__scanner__emit_command(uint8_t matrix, uint8_t command) {
     if (DEBUG_COMM_LEDS) {
-        blm_boards__comm__leds__p4_commands__debug_arduino_serial_midi__emit_packed4_command(matrix, command);
+        blm_boards__comm__leds__p4_commands__debug__arduino_serial_midi__emit_command(matrix, command);
     } else {
         blm_boards__comm__leds__p4_commands__arduino_i2c__emit_command(matrix, command);
     }
@@ -220,7 +220,6 @@ void setup() {
 
     HardwareSerial *serial = &SERIAL_PORT;
     serial->begin(SERIAL_BAUD_RATE);
-    debug_midi__serial__init(serial);
     midi_receiver__serial__init(serial);
     midi_sender__arduino_serial__init(serial);
 
