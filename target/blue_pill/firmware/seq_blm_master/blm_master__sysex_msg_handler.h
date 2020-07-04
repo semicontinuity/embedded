@@ -3,7 +3,7 @@
 #include "blm_master__sysex_msg_handler__callbacks.h"
 
 uint8_t blm_master__sysex_msg_handler__command_payload[768] = {};
-static const uint8_t blm_master__sysex_msg_handler__command_header[5 + 1] = {0xf0, 0x00, 0x00, 0x7e, 0x4e, 0x00 }; // SYSEX Header + device ID 0
+static const uint8_t blm_master__sysex_msg_handler__command_header[1 + 5] = {0xf0, 0x00, 0x00, 0x7e, 0x4e, 0x00 }; // SYSEX Header + device ID 0
 static uint8_t blm_master__sysex_msg_handler__command;
 static uint8_t blm_master__sysex_msg_handler__command_length = 0;
 static uint8_t blm_master__sysex_msg_handler__command_header_matched = 0;

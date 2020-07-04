@@ -11,7 +11,7 @@
 
 void debug__midi_sysex__p0(uint8_t param) {
 #if DEBUG_MIDI_SYSEX
-    midi_sender__send_sysex(&param, 1);
+    midi_sender__send_sysex_payload(&param, 1);
 #endif
 }
 
@@ -22,7 +22,7 @@ void debug__midi_sysex__p8(uint8_t param, uint8_t v) {
             static_cast<uint8_t>((v >> 4) & 0x0FU),
             static_cast<uint8_t>(v & 0x0FU)
     };
-    midi_sender__send_sysex(payload, 3);
+    midi_sender__send_sysex_payload(payload, 3);
 #endif
 }
 
@@ -35,7 +35,7 @@ void debug__midi_sysex__p16(uint8_t param, uint16_t v) {
         static_cast<uint8_t>((v >> 4) & 0x0F),
         static_cast<uint8_t>(v & 0x0F),
     };
-    midi_sender__send_sysex(payload, 5);
+    midi_sender__send_sysex_payload(payload, 5);
 #endif
 }
 
@@ -52,7 +52,7 @@ void debug__midi_sysex__p32(uint8_t param, uint32_t v) {
         static_cast<uint8_t>((v >> 4) & 0x0F),
         static_cast<uint8_t>(v & 0x0F),
     };
-    midi_sender__send_sysex(payload, 9);
+    midi_sender__send_sysex_payload(payload, 9);
 #endif
 }
 

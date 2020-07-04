@@ -3,6 +3,8 @@
 
 #include "seq_blm_master__config.h"
 
+USBCompositeSerial usbSerial;
+
 #include "blm_boards__comm__leds__p4_commands__buffer.h"
 #include "blm_boards__comm__leds__p4_commands__buffer__blm_master_updates.h"
 #include "blm_boards__comm__leds__p4_commands__buffer__scanner.h"
@@ -66,9 +68,6 @@ class UsbMidi : public USBMIDI {
     }
     void handleSysExData(unsigned char b) override {
         midi_parser__on_sysex_data(b);
-        if (b < 0x80) {
-            midi_parser__on_sysex_data(b);
-        }
     }
     void handleSysExEnd(unsigned char b) override {
         if (b == 0xF7) {
@@ -247,6 +246,7 @@ void setup() {
 
     USBComposite.setProductId(0x0030);
     usbMidi.registerComponent();
+    usbSerial.registerComponent();
     USBComposite.begin();
 }
 

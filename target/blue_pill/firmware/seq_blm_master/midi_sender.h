@@ -32,9 +32,9 @@ void midi_sender__channel_pressure(uint8_t channel, uint8_t value) {
 }
 
 
-void midi_sender__send_sysex(uint8_t *payload, uint32 length) {
-    midi_sender__arduino_serial__send_sysex(payload, length);
-    midi_sender__arduino_usb_midi__send_sysex(payload, length);
+void midi_sender__send_sysex_payload(uint8_t *payload, uint32 length) {
+    midi_sender__arduino_serial__send_sysex_payload(payload, length);
+    midi_sender__arduino_usb_midi__send_sysex_payload(payload, length);
 }
 
 
