@@ -79,10 +79,9 @@ class UsbMidi : public USBMIDI {
     }
 };
 
-USBCompositeSerial usbSerial;
 UsbMidi usbMidi;
 
-// Implementation of callbacks for blm_boards__comm__events__reader_pt.h
+// Implementation of callbacks for blm_boards__comm__events__reader.h
 // -----------------------------------------------------------------------------
 
 uint8_t blm_boards__comm_events__reader__read(uint8_t board) {
@@ -100,7 +99,7 @@ void blm_boards__comm_events__handler__on_button_event(uint8_t board, uint8_t bu
     }
 }
 
-// Implementation of callbacks from midi_parser_callbacks__channel_msg
+// Implementation of callbacks from midi_parser__callbacks__channel_msg.h
 // -----------------------------------------------------------------------------
 
 void midi_parser__on_channel_msg(midi_package_t midi_package) {
@@ -109,7 +108,7 @@ void midi_parser__on_channel_msg(midi_package_t midi_package) {
 }
 
 
-// Implements blm_boards__comm__leds__commands__buffer__scanner__callbacks.h
+// Implements blm_boards__comm__leds__p4_commands__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
 
 void blm_boards__comm__leds__p4_commands__buffer__scanner__emit_command(uint8_t matrix, uint8_t command) {
@@ -120,7 +119,7 @@ void blm_boards__comm__leds__p4_commands__buffer__scanner__emit_command(uint8_t 
     }
 }
 
-// Implements blm_boards__comm__leds__commands__buffer__scanner__callbacks.h
+// Implements blm_boards__comm__leds__u128_commands__buffer__scanner__callbacks.h
 // -----------------------------------------------------------------------------
 
 void blm_boards__comm__leds__u128_commands__buffer__scanner__emit_command(uint8_t matrix, uint8_t led, uint8_t color) {
@@ -248,7 +247,6 @@ void setup() {
 
     USBComposite.setProductId(0x0030);
     usbMidi.registerComponent();
-    usbSerial.registerComponent();
     USBComposite.begin();
 }
 
