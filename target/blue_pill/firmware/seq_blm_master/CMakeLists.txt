@@ -69,7 +69,8 @@ add_executable(seq_blm_master
         blm_master__alive_handler.h
         blm_master__sysex_msg_handler.h
         blm_master__sysex_msg_handler__callbacks.h
-        blm_master__sysex_msg_handler__sender.h
+        blm_master__sysex_msg_sender.h
+        blm_master__sysex_msg_sender__arduino_serial.h
         )
 
 include_directories(

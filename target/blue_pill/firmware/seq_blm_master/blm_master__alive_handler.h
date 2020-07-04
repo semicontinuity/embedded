@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include "seq_blm_master__config.h"
 #include "blm_master__sysex_msg_handler__callbacks.h"
-#include "blm_master__sysex_msg_handler__sender.h"
+#include "blm_master__sysex_msg_sender.h"
 
 
 bool blm_master__alive_handler__host_connected = false;

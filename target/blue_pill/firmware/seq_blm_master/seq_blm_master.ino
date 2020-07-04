@@ -25,7 +25,7 @@
 
 #include "blm_master__channel_msg_handler.h"
 #include "blm_master__sysex_msg_handler__callbacks.h"
-#include "blm_master__sysex_msg_handler__sender.h"
+#include "blm_master__sysex_msg_sender.h"
 #include "blm_master__sysex_msg_handler.h"
 #include "blm_master__alive_handler.h"
 
@@ -62,6 +62,21 @@ class UsbMidi : public USBMIDI {
     // MIDI message C0 pp
     void handleProgramChange(unsigned int channel, unsigned int program) override {
         blm_master__leds__select_palette(program & 0x0Fu);
+    }
+
+public:
+    void handleSysExData(unsigned char b) override {
+        midi_parser__on_sysex_data(b);
+        if (b < 0x80) {
+            midi_parser__on_sysex_data(b);
+        }
+    }
+    void handleSysExEnd(unsigned char b) override {
+        if (b == 0xF7) {
+            midi_parser__on_sysex_finish();
+        } else {
+            midi_parser__on_sysex_error();
+        }
     }
 };
 
@@ -208,7 +223,7 @@ void setup() {
     debug_midi__serial__init(serial);
     midi_receiver__serial__init(serial);
     midi_sender__serial__init(serial);
-    blm_master__sysex_msg_sender__init(serial);
+    blm_master__sysex_msg_sender__arduino_serial__init(serial);
 
     TwoWire *wire = &WIRE;
     wire->begin();
