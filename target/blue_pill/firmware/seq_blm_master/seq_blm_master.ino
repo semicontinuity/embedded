@@ -38,9 +38,9 @@ USBCompositeSerial usbSerial;
 #include "midi_sender__arduino_usb_midi.h"
 
 
-static midi_package_t fill_midi_package(unsigned int channel, unsigned int note, unsigned int velocity) {
+static midi_package_t fill_midi_package(unsigned int event, unsigned int channel, unsigned int note, unsigned int velocity) {
     midi_package_t p;
-    p.event = NoteOff,
+    p.event = event,
     p.chn = static_cast<uint8_t>(channel),
     p.note = static_cast<uint8_t>(note),
     p.velocity = static_cast<uint8_t>(velocity);
@@ -49,22 +49,27 @@ static midi_package_t fill_midi_package(unsigned int channel, unsigned int note,
 
 class UsbMidi : public USBMIDI {
     void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) override {
-        blm_master__channel_msg_handler__process_single_led_change_event(fill_midi_package(channel, note, velocity));
+        blm_master__channel_msg_handler__process_single_led_change_event(fill_midi_package(NoteOff, channel, note, velocity));
+        blm_master__alive_handler__set_host_connected();
     }
     void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) override {
-        blm_master__channel_msg_handler__process_single_led_change_event(fill_midi_package(channel, note, velocity));
+        blm_master__channel_msg_handler__process_single_led_change_event(fill_midi_package(NoteOn, channel, note, velocity));
+        blm_master__alive_handler__set_host_connected();
     }
     // MIDI message A0 nn vv
     void handleVelocityChange(unsigned int channel, unsigned int note, unsigned int velocity) override {
-        blm_master__channel_msg_handler__process_single_led_color_event(fill_midi_package(channel, note, velocity));
+        blm_master__channel_msg_handler__process_single_led_color_event(fill_midi_package(PolyPressure, channel, note, velocity));
+        blm_master__alive_handler__set_host_connected();
     }
     // MIDI message B0 cc vv
     void handleControlChange(unsigned int channel, unsigned int controller, unsigned int value) override {
-        blm_master__channel_msg_handler__process_packed_leds_change_event(fill_midi_package(channel, controller, value));
+        blm_master__channel_msg_handler__process_packed_leds_change_event(fill_midi_package(CC, channel, controller, value));
+        blm_master__alive_handler__set_host_connected();
     }
     // MIDI message C0 pp
     void handleProgramChange(unsigned int channel, unsigned int program) override {
         blm_master__leds__select_palette(program & 0x0Fu);
+        blm_master__alive_handler__set_host_connected();
     }
     void handleSysExData(unsigned char b) override {
         midi_parser__on_sysex_data(b);
@@ -212,7 +217,9 @@ void blm_master__sysex_msg_handler__handle_set_palette_data(uint8_t palette, uin
 
 void setup() {
     pinMode(PIN_LED_DEBUG, OUTPUT);
+
     pinMode(PIN_LED_HOST_CONNECTED, OUTPUT);
+    digitalWrite(PIN_LED_HOST_CONNECTED, PIN_LED_HOST_CONNECTED_OFF);
 
     midi_sender__arduino_usb_midi__init(&usbMidi);
 
@@ -250,10 +257,10 @@ void setup() {
     USBComposite.begin();
 }
 
+//unsigned int counter;
 
 void loop() {
     usbMidi.poll();
-
     if (midi_receiver__arduino_serial__is_runnable()) {
         midi_receiver__arduino_serial__run();
     }
@@ -270,7 +277,10 @@ void loop() {
         blm_boards__comm__leds__u128_commands__buffer__scanner__run();
     } else {
         if (!DEBUG_COMM_EVENTS) {
-            blm_boards__comm_events__reader__run();
+//            ++counter;
+//            if ((counter & 0xFFFFU) == 0U) {
+//                blm_boards__comm_events__reader__run();
+//            }
         }
     }
 

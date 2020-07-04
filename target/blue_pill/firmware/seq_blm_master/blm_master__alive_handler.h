@@ -16,8 +16,9 @@ bool blm_master__alive_handler__is_host_connected() {
 }
 
 void blm_master__alive_handler__set_host_connected() {
+    blm_master__alive_handler__last_tx_millis = millis();
     blm_master__alive_handler__host_connected = true;
-    digitalWrite(PIN_LED_HOST_CONNECTED, HIGH);
+    digitalWrite(PIN_LED_HOST_CONNECTED, PIN_LED_HOST_CONNECTED_ON);
 }
 
 
@@ -33,7 +34,7 @@ void blm_master__alive_handler__run() {
     }
     blm_master__alive_handler__last_tx_millis = millis();
     blm_master__alive_handler__host_connected = false;
-    digitalWrite(PIN_LED_HOST_CONNECTED, LOW);
+    digitalWrite(PIN_LED_HOST_CONNECTED, PIN_LED_HOST_CONNECTED_OFF);
 }
 
 #endif

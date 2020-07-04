@@ -15,6 +15,8 @@
 
 // For Blue Pill Board
 #define PIN_LED_HOST_CONNECTED PC13
+#define PIN_LED_HOST_CONNECTED_ON LOW
+#define PIN_LED_HOST_CONNECTED_OFF HIGH
 #define PIN_LED_DEBUG PC13
 
 // For Olimexino board
