@@ -60,7 +60,7 @@ add_executable(seq_blm_master
         midi_parser__callbacks__sysex_msg.h
         midi_parser__callbacks__channel_msg.h
 
-        midi_receiver__serial_arduino_pt.h
+        midi_receiver__arduino_serial.h
         midi_sender.h
         midi_sender__arduino_serial.h
         midi_sender__arduino_usb_midi.h

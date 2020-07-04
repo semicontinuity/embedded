@@ -30,7 +30,7 @@
 #include "blm_master__alive_handler.h"
 
 #include "midi_package.h"
-#include "midi_receiver__serial_arduino_pt.h"
+#include "midi_receiver__arduino_serial.h"
 #include "midi_parser__pt.h"
 #include "midi_sender__arduino_serial.h"
 #include "midi_sender__arduino_usb_midi.h"
@@ -220,7 +220,7 @@ void setup() {
 
     HardwareSerial *serial = &SERIAL_PORT;
     serial->begin(SERIAL_BAUD_RATE);
-    midi_receiver__serial__init(serial);
+    midi_receiver__arduino_serial__init(serial);
     midi_sender__arduino_serial__init(serial);
 
     TwoWire *wire = &WIRE;
@@ -256,8 +256,8 @@ void setup() {
 void loop() {
     usbMidi.poll();
 
-    if (midi_receiver__serial__is_runnable()) {
-        midi_receiver__serial__run();
+    if (midi_receiver__arduino_serial__is_runnable()) {
+        midi_receiver__arduino_serial__run();
     }
 
     if (blm_master__alive_handler__is_runnable()) {
