@@ -15,26 +15,25 @@ bool blm_master__alive_handler__is_host_connected() {
     return blm_master__alive_handler__host_connected;
 }
 
-void blm_master__alive_handler__midi_channel_msg_received() {
+void blm_master__alive_handler__set_host_connected() {
     blm_master__alive_handler__host_connected = true;
     digitalWrite(PIN_LED_HOST_CONNECTED, HIGH);
 }
 
 
-void blm_master__alive_handler__run() {
-    uint32 last_ms = blm_master__alive_handler__last_tx_millis;
-    uint32 ms = millis();
+bool blm_master__alive_handler__is_runnable() {
+    return millis() - blm_master__alive_handler__last_tx_millis > 5000;
+}
 
-    if (ms - last_ms > 5000) {
-        if (blm_master__alive_handler__host_connected) {
-            blm_master__sysex_msg_sender__send_ack();
-        } else {
-            blm_master__sysex_msg_sender__send_layout_info();
-        }
-        blm_master__alive_handler__last_tx_millis = ms;
-        blm_master__alive_handler__host_connected = false;
-        digitalWrite(PIN_LED_HOST_CONNECTED, LOW);
+void blm_master__alive_handler__run() {
+    if (blm_master__alive_handler__host_connected) {
+        blm_master__sysex_msg_sender__send_ack();
+    } else {
+        blm_master__sysex_msg_sender__send_layout_info();
     }
+    blm_master__alive_handler__last_tx_millis = millis();
+    blm_master__alive_handler__host_connected = false;
+    digitalWrite(PIN_LED_HOST_CONNECTED, LOW);
 }
 
 #endif

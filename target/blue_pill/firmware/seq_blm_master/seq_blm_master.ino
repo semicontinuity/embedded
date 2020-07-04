@@ -63,8 +63,6 @@ class UsbMidi : public USBMIDI {
     void handleProgramChange(unsigned int channel, unsigned int program) override {
         blm_master__leds__select_palette(program & 0x0Fu);
     }
-
-public:
     void handleSysExData(unsigned char b) override {
         midi_parser__on_sysex_data(b);
         if (b < 0x80) {
@@ -106,7 +104,7 @@ void blm_boards__comm_events__handler__on_button_event(uint8_t board, uint8_t bu
 
 void midi_parser__on_channel_msg(midi_package_t midi_package) {
     blm_master__channel_msg_handler__process(midi_package);
-    blm_master__alive_handler__midi_channel_msg_received();
+    blm_master__alive_handler__set_host_connected();
 }
 
 
@@ -260,11 +258,11 @@ void loop() {
 
     if (midi_receiver__serial__is_runnable()) {
         midi_receiver__serial__run();
-    } else {
-        // prefer handling of incoming MIDI messages
-        blm_master__alive_handler__run();
     }
 
+    if (blm_master__alive_handler__is_runnable()) {
+        blm_master__alive_handler__run();
+    }
 
     // if there are events to be sent to BLM boards, prefer to send them first
     // to avoid any visual lags
