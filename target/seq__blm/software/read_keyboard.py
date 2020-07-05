@@ -1,3 +1,4 @@
+# Reads events via serial port of connected I2C-Explorer (obsolete)
 import sys
 import serial
 import time
