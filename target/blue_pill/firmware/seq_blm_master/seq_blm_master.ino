@@ -257,7 +257,7 @@ void setup() {
     USBComposite.begin();
 }
 
-//unsigned int counter;
+unsigned int counter;
 
 void loop() {
     usbMidi.poll();
@@ -277,10 +277,10 @@ void loop() {
         blm_boards__comm__leds__u128_commands__buffer__scanner__run();
     } else {
         if (!DEBUG_COMM_EVENTS) {
-//            ++counter;
-//            if ((counter & 0xFFFFU) == 0U) {
-//                blm_boards__comm_events__reader__run();
-//            }
+            ++counter;
+            if ((counter & 0xFFFFU) == 0U) {
+                blm_boards__comm_events__reader__run();
+            }
         }
     }
 

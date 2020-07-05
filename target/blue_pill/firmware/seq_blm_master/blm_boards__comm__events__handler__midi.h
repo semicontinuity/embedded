@@ -21,6 +21,7 @@ void blm_boards__comm_events__handler__midi__on_button_event(uint8_t board, uint
     uint8_t row = (matrix_y << 2U) + local_y;
 
     midi_package_t p = {.ALL = 0};
+    p.cin = NoteOn;
     p.event = NoteOn;
     p.chn = row;
     p.note = column;

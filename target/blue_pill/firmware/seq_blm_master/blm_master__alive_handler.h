@@ -37,9 +37,9 @@ void blm_master__alive_handler__run() {
     if (blm_master__alive_handler__host_connected) {
         if (blm_master__alive_handler__last_tx_millis - blm_master__alive_handler__last_rx_millis > 5000) {
             blm_master__alive_handler__host_connected = false;
+            digitalWrite(PIN_LED_HOST_CONNECTED, PIN_LED_HOST_CONNECTED_OFF);
         }
     }
-    digitalWrite(PIN_LED_HOST_CONNECTED, PIN_LED_HOST_CONNECTED_OFF);
 }
 
 #endif
