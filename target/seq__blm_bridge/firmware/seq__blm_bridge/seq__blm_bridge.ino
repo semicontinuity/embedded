@@ -228,6 +228,7 @@ static struct arduino_serial__reader midi__host__reader {
         .process            = [](uint8_t b) { return midi_parser__process(&midi__host__parser, b); }
 };
 
+
 void setup() {
     pinMode(PIN_LED_DEBUG, OUTPUT);
 
