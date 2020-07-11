@@ -39,7 +39,8 @@ add_executable(test_forwarding_midi
         host__sysex_msg_sender.h
 
         arduino_serial__reader.h
-)
+        midi_sender__arduino_serial.h
+        )
 
 include_directories(
         .

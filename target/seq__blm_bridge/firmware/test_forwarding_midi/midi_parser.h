@@ -11,6 +11,7 @@ struct midi_parser {
     void (*on_sysex_finish)();
 
     struct pt thread;
+    uint8_t cable;
     uint8_t running_status;
     uint8_t first_payload_byte;
 };
@@ -56,16 +57,19 @@ int midi_parser__process(struct midi_parser *p, uint8_t b) {
                 }
 
                 midi_package_t midi_package;
-                midi_package.cin_cable = 0;
+                midi_package.cable = p->cable;
                 midi_package.evnt0 = p->running_status;
                 midi_package.evnt1 = p->first_payload_byte;
                 midi_package.evnt2 = second_payload_byte;
+                midi_package.type = midi_package.event;     // equal for channel messages
                 p->on_channel_msg(midi_package);
             }
         } else {
             // system common, system exclusive, or real-time messages
 
             if (b == 0xF0) {                        // SYSEX start
+                p->on_sysex_data(b);                // SYSEX START belongs to SYSEX message
+
                 while (true) {                      // Process SYSEX message
                     PT_YIELD(pt);                   // Byte consumed, await another byte
 

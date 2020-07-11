@@ -14,6 +14,7 @@ USBCompositeSerial usbSerial;
 #include "midi_sender__arduino_usb_midi.h"
 
 #include "arduino_serial__reader.h"
+#include "midi_sender__arduino_serial.h"
 
 
 static midi_package_t fill_midi_package(unsigned int event, unsigned int channel, unsigned int note, unsigned int velocity) {
@@ -32,6 +33,7 @@ class UsbMidi : public USBMIDI {
     }
     // MIDI message A0 nn vv
     void handleVelocityChange(unsigned int channel, unsigned int note, unsigned int velocity) override {
+        midi_sender__arduino_serial__send_package(fill_midi_package(PolyPressure, channel, note, velocity));
     }
     // MIDI message B0 cc vv
     void handleControlChange(unsigned int channel, unsigned int controller, unsigned int value) override {
@@ -54,6 +56,7 @@ UsbMidi usbMidi;
 // -----------------------------------------------------------------------------
 
 void host__on_channel_msg(midi_package_t midi_package) {
+    usbSerial.println("host__on_channel_msg");
     midi_sender__send_package(midi_package);
 }
 
@@ -62,14 +65,17 @@ void host__on_channel_msg(midi_package_t midi_package) {
 // -----------------------------------------------------------------------------
 
 void host__sysex_msg_handler__handle_ping() {
+    usbSerial.println("ping");
     host__sysex_msg_sender__send_ack();
 }
 
 void host__sysex_msg_handler__handle_invalid_command() {
+    usbSerial.println("invalid_command");
     host__sysex_msg_sender__send_disack_invalid_command();
 }
 
 void host__sysex_msg_handler__handle_request_layout_info() {
+    usbSerial.println("request_layout_info");
     host__sysex_msg_sender__send_layout_info();
 }
 
@@ -81,7 +87,8 @@ struct midi_parser midi__bridge_helper__parser = {
         .on_channel_msg     = host__on_channel_msg,
         .on_sysex_data      = host__sysex_msg_handler__on_sysex_data,
         .on_sysex_finish    = host__sysex_msg_handler__on_sysex_finish,
-        .thread             = {.lc = nullptr}
+        .thread             = {.lc = nullptr},
+        .cable              = 0
 };
 
 static struct arduino_serial__reader midi__bridge_helper__reader {
@@ -100,6 +107,8 @@ void setup() {
 
     HardwareSerial *serial = &BRIDGE_HELPER_SERIAL_PORT;
     serial->begin(BRIDGE_HELPER_SERIAL_BAUD_RATE);
+
+    midi_sender__arduino_serial__init(&BRIDGE_HELPER_SERIAL_PORT);
 
     USBComposite.setProductId(0x0030);
     usbMidi.registerComponent();
