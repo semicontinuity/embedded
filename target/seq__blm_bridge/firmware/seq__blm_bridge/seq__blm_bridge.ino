@@ -215,7 +215,8 @@ struct midi_parser midi__host__parser = {
         .on_channel_msg     = host__on_channel_msg,
         .on_sysex_data      = host__sysex_msg_handler__on_sysex_data,
         .on_sysex_finish    = host__sysex_msg_handler__on_sysex_finish,
-        .thread             = {.lc = nullptr}
+        .thread             = {.lc = nullptr},
+        .cable              = 0
 };
 
 static struct arduino_serial__reader midi__host__reader {

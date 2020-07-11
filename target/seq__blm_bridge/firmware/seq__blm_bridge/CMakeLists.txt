@@ -28,8 +28,6 @@ add_executable(seq_blm_bridge
         seq__blm_bridge__config.h
         seq__blm_bridge.ino
 
-        midi_package.h
-
         blm_boards__comm__events__reader.h
         blm_boards__comm__events__handler.h
         blm_boards__comm__events__handler__midi.h
@@ -37,14 +35,12 @@ add_executable(seq_blm_bridge
         blm_boards__comm__events__reader__arduino_i2c.h
 
         blm_boards__comm__leds__p4_commands__buffer.h
-        host__leds_msg_handler__p4.h
         blm_boards__comm__leds__p4_commands__buffer__scanner.h
         blm_boards__comm__leds__p4_commands__buffer__scanner__callbacks.h
         blm_boards__comm__leds__p4_commands__arduino_i2c.h
         blm_boards__comm__leds__p4_commands__debug__arduino_serial_midi.h
 
         blm_boards__comm__leds__u128_commands__buffer.h
-        host__leds_msg_handler__u128.h
         blm_boards__comm__leds__u128_commands__buffer__scanner.h
         blm_boards__comm__leds__u128_commands__buffer__scanner__callbacks.h
         blm_boards__comm__leds__u128_commands__arduino_i2c.h
@@ -55,18 +51,24 @@ add_executable(seq_blm_bridge
         debug__midi_sysex.h
         debug__midi_sysex__parameters.h
 
+        arduino_serial__reader.h
+
+        midi_package.h
         midi_parser.h
         midi_sender.h
         midi_sender__arduino_serial.h
         midi_sender__arduino_usb_midi.h
 
         host__leds_msg.h
+        host__leds_msg_handler__u128.h
+        host__leds_msg_handler__p4.h
+
         host__channel_msg_handler.h
         host__alive_handler.h
         host__sysex_msg_handler.h
         host__sysex_msg_handler__callbacks.h
         host__sysex_msg_sender.h
-        arduino_serial__reader.h)
+)
 
 include_directories(
         .
