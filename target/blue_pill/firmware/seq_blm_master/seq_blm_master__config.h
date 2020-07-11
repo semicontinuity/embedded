@@ -27,7 +27,7 @@
 TwoWire Wire2(2);
 #define WIRE Wire2
 
-#define SERIAL_PORT Serial2
-#define SERIAL_BAUD_RATE 31250
+#define HOST_SERIAL_PORT Serial2
+#define HOST_SERIAL_BAUD_RATE 31250
 
 #endif

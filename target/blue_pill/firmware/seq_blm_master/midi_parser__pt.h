@@ -2,27 +2,31 @@
 #include <Arduino.h>
 #include <stdbool.h>
 #include <pt.h>
-#include "midi_parser.h"
 #include "midi_package.h"
-#include "midi_parser__callbacks__channel_msg.h"
-#include "midi_parser__callbacks__sysex_msg.h"
 
 
-// Implementation of midi_parser.h
+struct midi_parser__pt {
+    void (*on_channel_msg)(midi_package_t);
+    void (*on_sysex_data)(uint8_t);
+    void (*on_sysex_finish)();
+    void (*on_sysex_error)();
 
-static struct pt midi_parser__thread;
-static uint8_t midi_parser__running_status;
-static uint8_t midi_parser__first_payload_byte;
+    struct pt thread;
+    uint8_t running_status;
+    uint8_t first_payload_byte;
+};
 
-
-void midi_parser__init() {
-    PT_INIT(&midi_parser__thread);
+void midi_parser__init(struct midi_parser__pt *p) {
+    PT_INIT(&p->thread);
 }
 
-
-// no REALTIME support
-int midi_parser__process(uint8_t b) {
-    struct pt *pt = &midi_parser__thread;
+/**
+ * Process incoming MIDI byte.
+ * System realtime messages must be filtered.
+ * System common messages are ignored.
+ */
+int midi_parser__process(struct midi_parser__pt *p, uint8_t b) {
+    struct pt *pt = &p->thread;
     PT_BEGIN(pt);
 
     if (b < 0x80) {
@@ -31,7 +35,7 @@ int midi_parser__process(uint8_t b) {
 
     while (true) {
         if (b < 0xF0) {                 // Channel messages
-            midi_parser__running_status = b;
+            p->running_status = b;
 
             // channel messages payloads follow in groups of 1 or 2 bytes, depending on kind.
             while (true) {
@@ -43,11 +47,11 @@ int midi_parser__process(uint8_t b) {
                     break;
                 }
 
-                midi_parser__first_payload_byte = b;
+                p->first_payload_byte = b;
                 uint8_t second_payload_byte = 0;
 
                 // messages 0xCx and 0xDx have highest 3 bits = 110; they have 1-byte payloads..
-                if ((midi_parser__running_status & 0xE0U) != 0xC0U) {
+                if ((p->running_status & 0xE0U) != 0xC0U) {
                     PT_YIELD(pt);       // For other channel messages, read extra byte
                     if (b >= 0x80) {    // Valid payload byte must be < 0x80, it cannot be status byte!
                         break;          // Scrap current payload and re-parse with this byte at the beginning of the new message
@@ -57,10 +61,10 @@ int midi_parser__process(uint8_t b) {
 
                 midi_package_t midi_package;
                 midi_package.cin_cable = 0;
-                midi_package.evnt0 = midi_parser__running_status;
-                midi_package.evnt1 = midi_parser__first_payload_byte;
+                midi_package.evnt0 = p->running_status;
+                midi_package.evnt1 = p->first_payload_byte;
                 midi_package.evnt2 = second_payload_byte;
-                midi_parser__on_channel_msg(midi_package);
+                p->on_channel_msg(midi_package);
             }
         } else {
             // system common, system exclusive, or real-time messages
@@ -70,12 +74,12 @@ int midi_parser__process(uint8_t b) {
                     PT_YIELD(pt);           // Byte consumed, await another byte
 
                     if (b < 0x80) {
-                        midi_parser__on_sysex_data(b);
+                        p->on_sysex_data(b);
                     } else {                // Any status byte (>= 0x80) terminates SYSEX message
                         if (b == 0xF7) {    // SYSEX END
-                            midi_parser__on_sysex_finish();
+                            p->on_sysex_finish();
                         } else {
-                            midi_parser__on_sysex_error();
+                            p->on_sysex_error();
                         }
                         break;
                     }

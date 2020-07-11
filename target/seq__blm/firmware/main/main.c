@@ -44,7 +44,8 @@ void application__init(void) {
     leds__init();
     keyboard__init();
 
-    twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
+//    twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
+    twi__slave_address__set(TWI__SLAVE__ADDRESS);
 }
 
 

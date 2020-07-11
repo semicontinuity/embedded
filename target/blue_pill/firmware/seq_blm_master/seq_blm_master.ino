@@ -32,10 +32,11 @@ USBCompositeSerial usbSerial;
 #include "blm_master__alive_handler.h"
 
 #include "midi_package.h"
-#include "midi_receiver__arduino_serial.h"
 #include "midi_parser__pt.h"
 #include "midi_sender__arduino_serial.h"
 #include "midi_sender__arduino_usb_midi.h"
+
+#include "arduino_serial__reader.h"
 
 
 static midi_package_t fill_midi_package(unsigned int event, unsigned int channel, unsigned int note, unsigned int velocity) {
@@ -72,13 +73,13 @@ class UsbMidi : public USBMIDI {
         blm_master__alive_handler__set_host_connected();
     }
     void handleSysExData(unsigned char b) override {
-        midi_parser__on_sysex_data(b);
+        blm_master__sysex_msg_handler__on_sysex_data(b);
     }
     void handleSysExEnd(unsigned char b) override {
         if (b == 0xF7) {
-            midi_parser__on_sysex_finish();
+            blm_master__sysex_msg_handler__on_sysex_finish();
         } else {
-            midi_parser__on_sysex_error();
+            blm_master__sysex_msg_handler__on_sysex_error();
         }
     }
 };
@@ -106,7 +107,7 @@ void blm_boards__comm_events__handler__on_button_event(uint8_t board, uint8_t bu
 // Implementation of callbacks from midi_parser__callbacks__channel_msg.h
 // -----------------------------------------------------------------------------
 
-void midi_parser__on_channel_msg(midi_package_t midi_package) {
+void blm_master__on_channel_msg(midi_package_t midi_package) {
     blm_master__channel_msg_handler__process(midi_package);
     blm_master__alive_handler__set_host_connected();
 }
@@ -215,6 +216,20 @@ void blm_master__sysex_msg_handler__handle_set_palette_data(uint8_t palette, uin
     blm_boards__comm__leds__palette__buffer__palettes__set_palette_data(palette, data, length);
 }
 
+
+struct midi_parser__pt midi__host__parser = {
+        .on_channel_msg     = blm_master__on_channel_msg,
+        .on_sysex_data      = blm_master__sysex_msg_handler__on_sysex_data,
+        .on_sysex_finish    = blm_master__sysex_msg_handler__on_sysex_finish,
+        .on_sysex_error     = blm_master__sysex_msg_handler__on_sysex_error,
+        .thread             = {.lc = nullptr}
+};
+
+static struct arduino_serial__reader midi__host__reader {
+        .arduino_serial     = &HOST_SERIAL_PORT,
+        .process            = [](uint8_t b) { return midi_parser__process(&midi__host__parser, b); }
+};
+
 void setup() {
     pinMode(PIN_LED_DEBUG, OUTPUT);
 
@@ -223,9 +238,8 @@ void setup() {
 
     midi_sender__arduino_usb_midi__init(&usbMidi);
 
-    HardwareSerial *serial = &SERIAL_PORT;
-    serial->begin(SERIAL_BAUD_RATE);
-    midi_receiver__arduino_serial__init(serial);
+    HardwareSerial *serial = &HOST_SERIAL_PORT;
+    serial->begin(HOST_SERIAL_BAUD_RATE);
     midi_sender__arduino_serial__init(serial);
 
     TwoWire *wire = &WIRE;
@@ -240,8 +254,6 @@ void setup() {
     if (!DEBUG_COMM_EVENTS) {
         blm_boards__comm__events__arduino_i2c__init(wire, BLM_BOARDS_BASE_ADDRESS);
     }
-
-    midi_parser__init();
 
     blm_boards__comm_events__reader__init();
     blm_boards__comm__leds__p4_commands__buffer__init();
@@ -261,8 +273,8 @@ unsigned int counter;
 
 void loop() {
     usbMidi.poll();
-    if (midi_receiver__arduino_serial__is_runnable()) {
-        midi_receiver__arduino_serial__run();
+    if (arduino_serial__reader__is_runnable(&midi__host__reader)) {
+        arduino_serial__reader__run(&midi__host__reader);
     }
 
     if (blm_master__alive_handler__is_runnable()) {

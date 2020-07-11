@@ -71,7 +71,7 @@ add_executable(seq_blm_master
         blm_master__sysex_msg_handler.h
         blm_master__sysex_msg_handler__callbacks.h
         blm_master__sysex_msg_sender.h
-        )
+        arduino_serial__reader.h)
 
 include_directories(
         .

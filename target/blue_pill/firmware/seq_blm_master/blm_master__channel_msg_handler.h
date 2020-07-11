@@ -54,7 +54,6 @@
 #include <Arduino.h>
 
 #include "seq_blm_master__config.h"
-#include "midi_parser__callbacks__channel_msg.h"
 #include "blm_master__leds.h"
 
 

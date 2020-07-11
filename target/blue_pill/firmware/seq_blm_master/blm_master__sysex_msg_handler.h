@@ -1,5 +1,4 @@
 #include <stdint.h>
-#include "midi_parser__callbacks__sysex_msg.h"
 #include "blm_master__sysex_msg_handler__callbacks.h"
 
 uint8_t blm_master__sysex_msg_handler__command_payload[768] = {};
@@ -9,10 +8,7 @@ static uint8_t blm_master__sysex_msg_handler__command_length = 0;
 static uint8_t blm_master__sysex_msg_handler__command_header_matched = 0;
 
 
-// Implementation of midi_parser__callbacks__sysex_msg.h
-// -----------------------------------------------------------------------------
-
-void midi_parser__on_sysex_data(uint8_t data) {
+void blm_master__sysex_msg_handler__on_sysex_data(uint8_t data) {
     if (blm_master__sysex_msg_handler__command_length < sizeof(blm_master__sysex_msg_handler__command_header)) {
         if (data != blm_master__sysex_msg_handler__command_header[blm_master__sysex_msg_handler__command_length]) {
             blm_master__sysex_msg_handler__command_header_matched = 0;
@@ -28,7 +24,7 @@ void midi_parser__on_sysex_data(uint8_t data) {
 }
 
 
-void midi_parser__on_sysex_finish() {
+void blm_master__sysex_msg_handler__on_sysex_finish() {
     if (blm_master__sysex_msg_handler__command_header_matched && blm_master__sysex_msg_handler__command_length == sizeof(blm_master__sysex_msg_handler__command_header) + 1) {
         switch (blm_master__sysex_msg_handler__command) {
             case 0x00:
@@ -58,7 +54,7 @@ void midi_parser__on_sysex_finish() {
 }
 
 
-void midi_parser__on_sysex_error() {
+void blm_master__sysex_msg_handler__on_sysex_error() {
     blm_master__sysex_msg_handler__handle_invalid_command();
     blm_master__sysex_msg_handler__command_length = 0;
     blm_master__sysex_msg_handler__command_header_matched = 0;
