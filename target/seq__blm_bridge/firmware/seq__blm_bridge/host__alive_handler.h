@@ -2,7 +2,7 @@
 #define __HOST__ALIVE_HANDLER
 
 #include <Arduino.h>
-#include "seq_blm_bridge__config.h"
+#include "seq__blm_bridge__config.h"
 #include "host__sysex_msg_handler__callbacks.h"
 #include "host__sysex_msg_sender.h"
 

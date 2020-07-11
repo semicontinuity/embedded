@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <Arduino.h>
 #include <Wire.h>
-#include "seq_blm_bridge__config.h"
+#include "seq__blm_bridge__config.h"
 #include "blm_boards__comm__leds__palette__buffer.h"
 
 int8_t blm_boards__comm__leds__palette__uploader__requested_palette;

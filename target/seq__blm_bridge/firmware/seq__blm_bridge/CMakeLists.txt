@@ -25,8 +25,8 @@ add_executable(seq_blm_bridge
         ../../../../../../../../../../opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/libraries/USBComposite/USBMIDI.h
         ../../../../../../../../../../opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/libraries/USBComposite/USBMIDI.cpp
 
-        seq_blm_bridge__config.h
-        seq_blm_bridge.ino
+        seq__blm_bridge__config.h
+        seq__blm_bridge.ino
 
         midi_package.h
 

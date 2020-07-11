@@ -9,7 +9,6 @@ struct midi_parser {
     void (*on_channel_msg)(midi_package_t);
     void (*on_sysex_data)(uint8_t);
     void (*on_sysex_finish)();
-    void (*on_sysex_error)();
 
     struct pt thread;
     uint8_t running_status;
@@ -66,19 +65,21 @@ int midi_parser__process(struct midi_parser *p, uint8_t b) {
         } else {
             // system common, system exclusive, or real-time messages
 
-            if (b == 0xF0) {                // SYSEX start
-                while (true) {              // Process SYSEX message
-                    PT_YIELD(pt);           // Byte consumed, await another byte
+            if (b == 0xF0) {                        // SYSEX start
+                while (true) {                      // Process SYSEX message
+                    PT_YIELD(pt);                   // Byte consumed, await another byte
 
                     if (b < 0x80) {
                         p->on_sysex_data(b);
-                    } else {                // Any status byte (>= 0x80) terminates SYSEX message
-                        if (b == 0xF7) {    // SYSEX END
+                    } else {                        // Any status byte (>= 0x80) terminates SYSEX message
+                        if (b == 0xF7) {            // SYSEX END
+                            p->on_sysex_data(b);    // SYSEX END belongs to SYSEX message
                             p->on_sysex_finish();
+                            PT_RESTART(pt);
                         } else {
-                            p->on_sysex_error();
+                            p->on_sysex_finish();
+                            continue;               // Process b as new status byte
                         }
-                        break;
                     }
                 }
             }

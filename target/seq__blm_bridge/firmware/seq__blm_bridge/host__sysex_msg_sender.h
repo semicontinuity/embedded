@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <stdint.h>
-#include "seq_blm_bridge__config.h"
+#include "seq__blm_bridge__config.h"
 #include "midi_sender.h"
 
 

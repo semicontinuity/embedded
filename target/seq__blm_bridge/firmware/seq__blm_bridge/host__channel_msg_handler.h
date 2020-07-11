@@ -53,7 +53,7 @@
 
 #include <Arduino.h>
 
-#include "seq_blm_bridge__config.h"
+#include "seq__blm_bridge__config.h"
 #include "host__leds_msg.h"
 #include "midi_package.h"
 

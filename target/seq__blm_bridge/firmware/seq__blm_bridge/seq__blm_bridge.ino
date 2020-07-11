@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <USBComposite.h>
 
-#include "seq_blm_bridge__config.h"
+#include "seq__blm_bridge__config.h"
 
 USBCompositeSerial usbSerial;
 
@@ -76,12 +76,8 @@ class UsbMidi : public USBMIDI {
     void handleSysExData(unsigned char b) override {
         host__sysex_msg_handler__on_sysex_data(b);
     }
-    void handleSysExEnd(unsigned char b) override {
-        if (b == 0xF7) {
-            host__sysex_msg_handler__on_sysex_finish();
-        } else {
-            host__sysex_msg_handler__on_sysex_error();
-        }
+    void handleSysExEnd(void) override {
+        host__sysex_msg_handler__on_sysex_finish();
     }
 };
 
@@ -219,7 +215,6 @@ struct midi_parser midi__host__parser = {
         .on_channel_msg     = host__on_channel_msg,
         .on_sysex_data      = host__sysex_msg_handler__on_sysex_data,
         .on_sysex_finish    = host__sysex_msg_handler__on_sysex_finish,
-        .on_sysex_error     = host__sysex_msg_handler__on_sysex_error,
         .thread             = {.lc = nullptr}
 };
 
