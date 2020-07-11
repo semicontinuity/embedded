@@ -60,8 +60,7 @@ add_executable(seq_blm_bridge
         midi_sender__arduino_usb_midi.h
 
         host__leds_msg.h
-        host__leds_msg_handler__u128.h
-        host__leds_msg_handler__p4.h
+        host__leds_msg_handler.h
 
         host__channel_msg_handler.h
         host__alive_handler.h

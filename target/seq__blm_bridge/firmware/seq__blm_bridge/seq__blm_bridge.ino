@@ -6,13 +6,11 @@
 USBCompositeSerial usbSerial;
 
 #include "blm_boards__comm__leds__p4_commands__buffer.h"
-#include "host__leds_msg_handler__p4.h"
 #include "blm_boards__comm__leds__p4_commands__buffer__scanner.h"
 #include "blm_boards__comm__leds__p4_commands__arduino_i2c.h"
 #include "blm_boards__comm__leds__p4_commands__debug__arduino_serial_midi.h"
 
 #include "blm_boards__comm__leds__u128_commands__buffer.h"
-#include "host__leds_msg_handler__u128.h"
 #include "blm_boards__comm__leds__u128_commands__buffer__scanner.h"
 #include "blm_boards__comm__leds__u128_commands__arduino_i2c.h"
 
@@ -30,12 +28,12 @@ USBCompositeSerial usbSerial;
 #include "host__sysex_msg_sender.h"
 #include "host__sysex_msg_handler.h"
 #include "host__alive_handler.h"
+#include "host__leds_msg_handler.h"
 
 #include "midi_package.h"
 #include "midi_parser.h"
 #include "midi_sender__arduino_serial.h"
 #include "midi_sender__arduino_usb_midi.h"
-
 #include "arduino_serial__reader.h"
 
 
