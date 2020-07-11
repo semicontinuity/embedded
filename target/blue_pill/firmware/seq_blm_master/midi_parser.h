@@ -5,7 +5,7 @@
 #include "midi_package.h"
 
 
-struct midi_parser__pt {
+struct midi_parser {
     void (*on_channel_msg)(midi_package_t);
     void (*on_sysex_data)(uint8_t);
     void (*on_sysex_finish)();
@@ -16,16 +16,13 @@ struct midi_parser__pt {
     uint8_t first_payload_byte;
 };
 
-void midi_parser__init(struct midi_parser__pt *p) {
-    PT_INIT(&p->thread);
-}
 
 /**
  * Process incoming MIDI byte.
  * System realtime messages must be filtered.
  * System common messages are ignored.
  */
-int midi_parser__process(struct midi_parser__pt *p, uint8_t b) {
+int midi_parser__process(struct midi_parser *p, uint8_t b) {
     struct pt *pt = &p->thread;
     PT_BEGIN(pt);
 

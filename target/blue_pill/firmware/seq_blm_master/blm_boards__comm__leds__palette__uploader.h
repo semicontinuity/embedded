@@ -12,7 +12,7 @@
 #include <stdint.h>
 #include <Arduino.h>
 #include <Wire.h>
-#include "seq_blm_master__config.h"
+#include "seq_blm_bridge__config.h"
 #include "blm_boards__comm__leds__palette__buffer.h"
 
 int8_t blm_boards__comm__leds__palette__uploader__requested_palette;
@@ -49,7 +49,7 @@ bool blm_boards__comm__leds__palette__uploader__is_runnable() {
 }
 
 void blm_boards__comm__leds__palette__uploader__run() {
-    for (uint8_t board = 0; board < BLM_SCALAR_NUM_BOARDS; board++) {
+    for (uint8_t board = 0; board < NUM_BOARDS; board++) {
         blm_boards__comm__leds__palette__uploader__upload(board, blm_boards__comm__leds__palette__uploader__requested_palette);
     }
     blm_boards__comm__leds__palette__uploader__requested_palette = -1;

@@ -7,8 +7,8 @@ node  [ shape = "record" ];
 ############
 midi_parser__callbacks__channel_msg                                 [shape = "Mrecord" style="filled" fillcolor="beige"];
 midi_parser__callbacks__sysex_msg                                   [shape = "Mrecord" style="filled" fillcolor="beige"];
-blm_master_leds                                                     [shape = "Mrecord" style="filled" fillcolor="beige"];
-blm_master__sysex_msg_handler__callbacks                            [shape = "Mrecord" style="filled" fillcolor="beige"];
+host_leds                                                           [shape = "Mrecord" style="filled" fillcolor="beige"];
+host__sysex_msg_handler__callbacks                                  [shape = "Mrecord" style="filled" fillcolor="beige"];
 blm_boards__comm__leds__p4_commands__buffer__scanner__callbacks     [shape = "Mrecord" style="filled" fillcolor="beige"];
 blm_boards__comm__leds__u128_commands__buffer__scanner__callbacks   [shape = "Mrecord" style="filled" fillcolor="beige"];
 blm_boards__comm__events__handler                                   [shape = "Mrecord" style="filled" fillcolor="beige"];
@@ -21,7 +21,7 @@ blm_boards__comm__leds__u128_commands__buffer__scanner  [style="filled" fillcolo
 midi_receiver__serial_arduino                           [style="filled" fillcolor="Honeydew"];
 midi_parser                                             [style="filled" fillcolor="Honeydew"];
 blm_boards__comm_events__reader                         [style="filled" fillcolor="Honeydew"];
-blm_master__alive_handler                               [style="filled" fillcolor="Honeydew"];
+host__alive_handler                                     [style="filled" fillcolor="Honeydew"];
 blm_boards__comm__leds__palette__uploader               [style="filled" fillcolor="Honeydew"];
 # buffers
 #########
@@ -33,18 +33,18 @@ blm_boards__comm__leds__palette__buffer                 [style = filled];
 midi_receiver__serial_arduino
 -> midi_parser
 -> midi_parser__callbacks__channel_msg
--> blm_master__channel_msg_handler
--> blm_master_leds;
+-> host__channel_msg_handler
+-> host_leds;
 
-blm_master_leds
--> blm_boards__comm__leds__p4_commands__buffer__blm_master_led_updates
+host_leds
+-> blm_boards__comm__leds__p4_commands__buffer__host_led_updates
 -> blm_boards__comm__leds__p4_commands__buffer
 -> blm_boards__comm__leds__p4_commands__buffer__scanner
 -> blm_boards__comm__leds__p4_commands__buffer__scanner__callbacks
 -> blm_boards__comm__leds__p4_commands__arduino_i2c;
 
-blm_master_leds
--> blm_boards__comm__leds__u128_commands__buffer__blm_master_led_updates
+host_leds
+-> blm_boards__comm__leds__u128_commands__buffer__host_led_updates
 -> blm_boards__comm__leds__u128_commands__buffer
 -> blm_boards__comm__leds__u128_commands__buffer__scanner
 -> blm_boards__comm__leds__u128_commands__buffer__scanner__callbacks
@@ -52,9 +52,9 @@ blm_master_leds
 
 midi_parser
 -> midi_parser__callbacks__sysex_msg
--> blm_master__sysex_msg_handler
--> blm_master__sysex_msg_handler__callbacks
--> blm_master__sysex_msg_handler__arduino_serial_midi;
+-> host__sysex_msg_handler
+-> host__sysex_msg_handler__callbacks
+-> host__sysex_msg_handler__arduino_serial_midi;
 
 blm_boards__comm_events__reader
 -> blm_boards__comm__events__handler
@@ -63,10 +63,10 @@ blm_boards__comm_events__reader
 -> midi_sender__serial_arduino;
 
 midi_parser__callbacks__channel_msg
--> blm_master__alive_handler
--> blm_master__sysex_msg_handler__arduino_serial_midi;
+-> host__alive_handler
+-> host__sysex_msg_handler__arduino_serial_midi;
 
-blm_master_leds
+host_leds
 -> blm_boards__comm__leds__palette__buffer
 -> blm_boards__comm__leds__palette__uploader;
 }

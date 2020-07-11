@@ -1,18 +1,18 @@
 #include <Arduino.h>
 #include <USBComposite.h>
 
-#include "seq_blm_master__config.h"
+#include "seq_blm_bridge__config.h"
 
 USBCompositeSerial usbSerial;
 
 #include "blm_boards__comm__leds__p4_commands__buffer.h"
-#include "blm_boards__comm__leds__p4_commands__buffer__blm_master_updates.h"
+#include "host__leds_msg_handler__p4.h"
 #include "blm_boards__comm__leds__p4_commands__buffer__scanner.h"
 #include "blm_boards__comm__leds__p4_commands__arduino_i2c.h"
 #include "blm_boards__comm__leds__p4_commands__debug__arduino_serial_midi.h"
 
 #include "blm_boards__comm__leds__u128_commands__buffer.h"
-#include "blm_boards__comm__leds__u128_commands__buffer__blm_master_updates.h"
+#include "host__leds_msg_handler__u128.h"
 #include "blm_boards__comm__leds__u128_commands__buffer__scanner.h"
 #include "blm_boards__comm__leds__u128_commands__arduino_i2c.h"
 
@@ -25,14 +25,14 @@ USBCompositeSerial usbSerial;
 #include "blm_boards__comm__events__handler__midi.h"
 #include "blm_boards__comm__events__handler__test_mode.h"
 
-#include "blm_master__channel_msg_handler.h"
-#include "blm_master__sysex_msg_handler__callbacks.h"
-#include "blm_master__sysex_msg_sender.h"
-#include "blm_master__sysex_msg_handler.h"
-#include "blm_master__alive_handler.h"
+#include "host__channel_msg_handler.h"
+#include "host__sysex_msg_handler__callbacks.h"
+#include "host__sysex_msg_sender.h"
+#include "host__sysex_msg_handler.h"
+#include "host__alive_handler.h"
 
 #include "midi_package.h"
-#include "midi_parser__pt.h"
+#include "midi_parser.h"
 #include "midi_sender__arduino_serial.h"
 #include "midi_sender__arduino_usb_midi.h"
 
@@ -50,36 +50,37 @@ static midi_package_t fill_midi_package(unsigned int event, unsigned int channel
 
 class UsbMidi : public USBMIDI {
     void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) override {
-        blm_master__channel_msg_handler__process_single_led_change_event(fill_midi_package(NoteOff, channel, note, velocity));
-        blm_master__alive_handler__set_host_connected();
+        host__channel_msg_handler__process_single_led_change_event(fill_midi_package(NoteOff, channel, note, velocity));
+        host__alive_handler__set_host_connected();
     }
     void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) override {
-        blm_master__channel_msg_handler__process_single_led_change_event(fill_midi_package(NoteOn, channel, note, velocity));
-        blm_master__alive_handler__set_host_connected();
+        host__channel_msg_handler__process_single_led_change_event(fill_midi_package(NoteOn, channel, note, velocity));
+        host__alive_handler__set_host_connected();
     }
     // MIDI message A0 nn vv
     void handleVelocityChange(unsigned int channel, unsigned int note, unsigned int velocity) override {
-        blm_master__channel_msg_handler__process_single_led_color_event(fill_midi_package(PolyPressure, channel, note, velocity));
-        blm_master__alive_handler__set_host_connected();
+        host__channel_msg_handler__process_single_led_color_event(
+                fill_midi_package(PolyPressure, channel, note, velocity));
+        host__alive_handler__set_host_connected();
     }
     // MIDI message B0 cc vv
     void handleControlChange(unsigned int channel, unsigned int controller, unsigned int value) override {
-        blm_master__channel_msg_handler__process_packed_leds_change_event(fill_midi_package(CC, channel, controller, value));
-        blm_master__alive_handler__set_host_connected();
+        host__channel_msg_handler__process_packed_leds_change_event(fill_midi_package(CC, channel, controller, value));
+        host__alive_handler__set_host_connected();
     }
     // MIDI message C0 pp
     void handleProgramChange(unsigned int channel, unsigned int program) override {
-        blm_master__leds__select_palette(program & 0x0Fu);
-        blm_master__alive_handler__set_host_connected();
+        host__leds_msg__select_palette(program & 0x0Fu);
+        host__alive_handler__set_host_connected();
     }
     void handleSysExData(unsigned char b) override {
-        blm_master__sysex_msg_handler__on_sysex_data(b);
+        host__sysex_msg_handler__on_sysex_data(b);
     }
     void handleSysExEnd(unsigned char b) override {
         if (b == 0xF7) {
-            blm_master__sysex_msg_handler__on_sysex_finish();
+            host__sysex_msg_handler__on_sysex_finish();
         } else {
-            blm_master__sysex_msg_handler__on_sysex_error();
+            host__sysex_msg_handler__on_sysex_error();
         }
     }
 };
@@ -97,7 +98,7 @@ uint8_t blm_boards__comm_events__reader__read(uint8_t board) {
 // -----------------------------------------------------------------------------
 
 void blm_boards__comm_events__handler__on_button_event(uint8_t board, uint8_t button, bool is_pressed) {
-    if (blm_master__alive_handler__is_host_connected()) {
+    if (host__alive_handler__is_host_connected()) {
         blm_boards__comm_events__handler__midi__on_button_event(board, button, is_pressed);
     } else {
         blm_boards__comm_events__handler__test_mode__on_button_event(board, button, is_pressed);
@@ -107,9 +108,9 @@ void blm_boards__comm_events__handler__on_button_event(uint8_t board, uint8_t bu
 // Implementation of callbacks from midi_parser__callbacks__channel_msg.h
 // -----------------------------------------------------------------------------
 
-void blm_master__on_channel_msg(midi_package_t midi_package) {
-    blm_master__channel_msg_handler__process(midi_package);
-    blm_master__alive_handler__set_host_connected();
+void host__on_channel_msg(midi_package_t midi_package) {
+    host__channel_msg_handler__process(midi_package);
+    host__alive_handler__set_host_connected();
 }
 
 
@@ -132,56 +133,53 @@ void blm_boards__comm__leds__u128_commands__buffer__scanner__emit_command(uint8_
 }
 
 
-// Implements blm_master__leds.h
+// Implements host__leds_msg.h
 // -----------------------------------------------------------------------------
 
-void blm_master__leds__select_palette(uint8_t palette) {
+void host__leds_msg__select_palette(uint8_t palette) {
     blm_boards__comm__leds__palette__uploader__request(palette);
 }
 
 /**
  * @param color indexed color from the current palette, values: 0-127
  */
-void blm_master__leds__update_color(uint8_t row, uint8_t column, uint8_t color) {
-    blm_boards__comm__leds__commands__buffer__blm_master__update_color(row, column, color);
+void host__leds_msg__update_color(uint8_t row, uint8_t column, uint8_t color) {
+    host__leds_msg_handler__u128__update_color(row, column, color);
 }
 
 /**
  * @param color_code 00..1f: black; 20..3f: green; 40..5f red; 60..7f yellow
  */
-void blm_master__leds__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
-    blm_boards__comm__leds__commands__buffer__blm_master__update_one(row, column, color_code);
+void host__leds_msg__update_one(uint8_t row, uint8_t column, uint8_t color_code) {
+    host__leds_msg_handler__u128__update_one(row, column, color_code);
 }
 
-void blm_master__leds__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm__leds__p4_commands__buffer__blm_master__update_row(row, is_second_half, pattern, color_code);
+void host__leds_msg__update_row(uint8_t row, uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
+    host__leds_msg_handler__p4__update_row(row, is_second_half, pattern, color_code);
 }
 
-void blm_master__leds__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm__leds__p4_commands__buffer__blm_master__update_column(column, is_second_half, pattern, color_code);
+void host__leds_msg__update_column(uint8_t column, uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
+    host__leds_msg_handler__p4__update_column(column, is_second_half, pattern, color_code);
 }
 
-void blm_master__leds__update_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm__leds__p4_commands__buffer__blm_master__update_extra_row(is_second_half, pattern, color_code);
+void host__leds_msg__update_extra_row(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
+    host__leds_msg_handler__p4__update_extra_row(is_second_half, pattern, color_code);
 }
 
-void blm_master__leds__update_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm__leds__p4_commands__buffer__blm_master__update_extra_column(is_second_half, pattern, color_code);
+void host__leds_msg__update_extra_column(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
+    host__leds_msg_handler__p4__update_extra_column(is_second_half, pattern, color_code);
 }
 
-void blm_master__leds__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
-    blm_boards__comm__leds__p4_commands__buffer__blm_master__update_extra(is_second_half, pattern, color_code);
+void host__leds_msg__update_extra(uint8_t is_second_half, uint8_t pattern, uint8_t color_code) {
+    host__leds_msg_handler__p4__update_extra_leds(is_second_half, pattern, color_code);
 }
 
-// Implements blm_master__sysex_msg_handler__callbacks.h
-// -----------------------------------------------------------------------------
-
-void blm_master__sysex_msg_handler__handle_ping() {
-    blm_master__sysex_msg_sender__send_ack();
+void host__sysex_msg_handler__handle_ping() {
+    host__sysex_msg_sender__send_ack();
 }
 
-void blm_master__sysex_msg_handler__handle_invalid_command() {
-    blm_master__sysex_msg_sender__send_disack_invalid_command();
+void host__sysex_msg_handler__handle_invalid_command() {
+    host__sysex_msg_sender__send_disack_invalid_command();
 }
 
 void populate_midibox_palette(int palette) {
@@ -208,20 +206,20 @@ void populate_midibox_palette(int palette) {
 }
 
 
-void blm_master__sysex_msg_handler__handle_request_layout_info() {
-    blm_master__sysex_msg_sender__send_layout_info();
+void host__sysex_msg_handler__handle_request_layout_info() {
+    host__sysex_msg_sender__send_layout_info();
 }
 
-void blm_master__sysex_msg_handler__handle_set_palette_data(uint8_t palette, uint8_t *data, int32_t length) {
+void host__sysex_msg_handler__handle_set_palette_data(uint8_t palette, uint8_t *data, int32_t length) {
     blm_boards__comm__leds__palette__buffer__palettes__set_palette_data(palette, data, length);
 }
 
 
-struct midi_parser__pt midi__host__parser = {
-        .on_channel_msg     = blm_master__on_channel_msg,
-        .on_sysex_data      = blm_master__sysex_msg_handler__on_sysex_data,
-        .on_sysex_finish    = blm_master__sysex_msg_handler__on_sysex_finish,
-        .on_sysex_error     = blm_master__sysex_msg_handler__on_sysex_error,
+struct midi_parser midi__host__parser = {
+        .on_channel_msg     = host__on_channel_msg,
+        .on_sysex_data      = host__sysex_msg_handler__on_sysex_data,
+        .on_sysex_finish    = host__sysex_msg_handler__on_sysex_finish,
+        .on_sysex_error     = host__sysex_msg_handler__on_sysex_error,
         .thread             = {.lc = nullptr}
 };
 
@@ -261,7 +259,7 @@ void setup() {
     blm_boards__comm_events__handler__test_mode__init();
 
     populate_midibox_palette(0);
-    blm_master__leds__select_palette(0);
+    host__leds_msg__select_palette(0);
 
     USBComposite.setProductId(0x0030);
     usbMidi.registerComponent();
@@ -277,8 +275,8 @@ void loop() {
         arduino_serial__reader__run(&midi__host__reader);
     }
 
-    if (blm_master__alive_handler__is_runnable()) {
-        blm_master__alive_handler__run();
+    if (host__alive_handler__is_runnable()) {
+        host__alive_handler__run();
     }
 
     // if there are events to be sent to BLM boards, prefer to send them first

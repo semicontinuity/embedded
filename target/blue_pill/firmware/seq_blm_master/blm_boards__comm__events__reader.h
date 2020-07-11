@@ -3,7 +3,7 @@
 
 #define LC_INCLUDE "lc-addrlabels.h"
 #include "blm_boards__comm__events__handler.h"
-#include "seq_blm_master__config.h"
+#include "seq_blm_bridge__config.h"
 #include <Arduino.h>
 #include <pt.h>
 
@@ -28,7 +28,7 @@ int blm_boards__comm_events__reader__run() {
         uint8_t board = blm_boards__comm_events__reader__board;
         uint8_t event = blm_boards__comm_events__reader__read(board);
         ++board;
-        if (board >= BLM_SCALAR_NUM_BOARDS) board = 0;
+        if (board >= NUM_BOARDS) board = 0;
         blm_boards__comm_events__reader__board = board;
 
         if (event & 0x80U) {

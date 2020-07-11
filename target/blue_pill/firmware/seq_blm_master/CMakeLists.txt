@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.11)
-project(seq_blm_master)
+project(seq_blm_bridge)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_STANDARD 11)
 
-add_executable(seq_blm_master
+add_executable(seq_blm_bridge
         ../../../../../../../../../../opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/variants/maple/variant.h
         ../../../../../../../../../../opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/variants/maple/board.cpp
         ../../../../../../../../../../opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/cores/maple/boards.h
@@ -25,8 +25,8 @@ add_executable(seq_blm_master
         ../../../../../../../../../../opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/libraries/USBComposite/USBMIDI.h
         ../../../../../../../../../../opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/libraries/USBComposite/USBMIDI.cpp
 
-        seq_blm_master__config.h
-        seq_blm_master.ino
+        seq_blm_bridge__config.h
+        seq_blm_bridge.ino
 
         midi_package.h
 
@@ -37,14 +37,14 @@ add_executable(seq_blm_master
         blm_boards__comm__events__reader__arduino_i2c.h
 
         blm_boards__comm__leds__p4_commands__buffer.h
-        blm_boards__comm__leds__p4_commands__buffer__blm_master_updates.h
+        host__leds_msg_handler__p4.h
         blm_boards__comm__leds__p4_commands__buffer__scanner.h
         blm_boards__comm__leds__p4_commands__buffer__scanner__callbacks.h
         blm_boards__comm__leds__p4_commands__arduino_i2c.h
         blm_boards__comm__leds__p4_commands__debug__arduino_serial_midi.h
 
         blm_boards__comm__leds__u128_commands__buffer.h
-        blm_boards__comm__leds__u128_commands__buffer__blm_master_updates.h
+        host__leds_msg_handler__u128.h
         blm_boards__comm__leds__u128_commands__buffer__scanner.h
         blm_boards__comm__leds__u128_commands__buffer__scanner__callbacks.h
         blm_boards__comm__leds__u128_commands__arduino_i2c.h
@@ -56,7 +56,7 @@ add_executable(seq_blm_master
         debug__midi_sysex__parameters.h
 
         midi_parser.h
-        midi_parser__pt.h
+        midi_parser.h
         midi_parser__callbacks__sysex_msg.h
         midi_parser__callbacks__channel_msg.h
 
@@ -65,12 +65,12 @@ add_executable(seq_blm_master
         midi_sender__arduino_serial.h
         midi_sender__arduino_usb_midi.h
 
-        blm_master__leds.h
-        blm_master__channel_msg_handler.h
-        blm_master__alive_handler.h
-        blm_master__sysex_msg_handler.h
-        blm_master__sysex_msg_handler__callbacks.h
-        blm_master__sysex_msg_sender.h
+        host__leds_msg.h
+        host__channel_msg_handler.h
+        host__alive_handler.h
+        host__sysex_msg_handler.h
+        host__sysex_msg_handler__callbacks.h
+        host__sysex_msg_sender.h
         arduino_serial__reader.h)
 
 include_directories(

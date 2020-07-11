@@ -53,31 +53,32 @@
 
 #include <Arduino.h>
 
-#include "seq_blm_master__config.h"
-#include "blm_master__leds.h"
+#include "seq_blm_bridge__config.h"
+#include "host__leds_msg.h"
+#include "midi_package.h"
 
 
-static void blm_master__channel_msg_handler__process_select_palette_event(midi_package_t midi_package) {
+static void host__channel_msg_handler__process_select_palette_event(midi_package_t midi_package) {
     uint8_t palette = midi_package.program_change & 0x0FU;
-    blm_master__leds__select_palette(palette);
+    host__leds_msg__select_palette(palette);
 }
 
-static void blm_master__channel_msg_handler__process_single_led_color_event(midi_package_t midi_package) {
+static void host__channel_msg_handler__process_single_led_color_event(midi_package_t midi_package) {
     uint8_t row = midi_package.chn;
     uint8_t column = midi_package.note;
     uint8_t color = midi_package.velocity;
-    blm_master__leds__update_color(row, column, color);
+    host__leds_msg__update_color(row, column, color);
 }
 
-static void blm_master__channel_msg_handler__process_single_led_change_event(midi_package_t midi_package) {
+static void host__channel_msg_handler__process_single_led_change_event(midi_package_t midi_package) {
     uint8_t row = midi_package.chn;
     uint8_t column = midi_package.note;
     uint8_t color = midi_package.velocity;
-    blm_master__leds__update_one(row, column, color);
+    host__leds_msg__update_one(row, column, color);
 }
 
 
-static void blm_master__channel_msg_handler__process_packed_leds_change_event(midi_package_t midi_package) {
+static void host__channel_msg_handler__process_packed_leds_change_event(midi_package_t midi_package) {
     const uint8_t chn = midi_package.chn;
     const uint8_t cc_number = midi_package.cc_number;
 
@@ -89,36 +90,41 @@ static void blm_master__channel_msg_handler__process_packed_leds_change_event(mi
     const uint8_t cc_number_masked = cc_number & 0xFCu;
     switch (cc_number_masked) {
         case 0x10:
-#if BLM_SCALAR_NUM_COLOURS >= 2
+#if NUM_COLOURS >= 2
         case 0x20:
 #endif
-            blm_master__leds__update_row(chn, is_second_half, pattern, cc_number_masked == 0x10 ? 0 : 1 /* green or red */);
+            host__leds_msg__update_row(chn, is_second_half, pattern,
+                                       cc_number_masked == 0x10 ? 0 : 1 /* green or red */);
             break;
 
         case 0x18:
-#if BLM_SCALAR_NUM_COLOURS >= 2
+#if NUM_COLOURS >= 2
         case 0x28:
 #endif
-            blm_master__leds__update_column(chn, is_second_half, pattern, cc_number_masked == 0x18 ? 0 : 1 /* green or red */);
+            host__leds_msg__update_column(chn, is_second_half, pattern,
+                                          cc_number_masked == 0x18 ? 0 : 1 /* green or red */);
             break;
 
         case 0x40:
-#if BLM_SCALAR_NUM_COLOURS >= 2
+#if NUM_COLOURS >= 2
         case 0x48:
 #endif
             if (chn == 0) {
-                blm_master__leds__update_extra_column(is_second_half, pattern, cc_number_masked == 0x40 ? 0 : 1 /* green or red */);
+                host__leds_msg__update_extra_column(is_second_half, pattern,
+                                                    cc_number_masked == 0x40 ? 0 : 1 /* green or red */);
             }
             break;
 
         case 0x60:
-#if BLM_SCALAR_NUM_COLOURS >= 2
+#if NUM_COLOURS >= 2
         case 0x68:
 #endif
             if (chn == 0) {
-                blm_master__leds__update_extra_row(is_second_half, pattern, cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
+                host__leds_msg__update_extra_row(is_second_half, pattern,
+                                                 cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
             } else if (chn == 15) {
-                blm_master__leds__update_extra(is_second_half, pattern, cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
+                host__leds_msg__update_extra(is_second_half, pattern,
+                                             cc_number_masked == 0x60 ? 0 : 1 /* green or red */);
             }
             break;
         default:
@@ -127,7 +133,7 @@ static void blm_master__channel_msg_handler__process_packed_leds_change_event(mi
 }
 
 
-void blm_master__channel_msg_handler__process(const midi_package_t &midi_package) {
+void host__channel_msg_handler__process(const midi_package_t &midi_package) {
     if (midi_package.event == NoteOff || midi_package.event == NoteOn) {
         // control the LEDs with Note On/Off Events
         // The colour is controlled with velocity value:
@@ -135,12 +141,12 @@ void blm_master__channel_msg_handler__process(const midi_package_t &midi_package
         // 0x01..0x3f: green LED on
         // 0x40..0x5f: red LED on
         // 0x60..0x7f: both LEDs on
-        blm_master__channel_msg_handler__process_single_led_change_event(midi_package);
+        host__channel_msg_handler__process_single_led_change_event(midi_package);
     } else if (midi_package.event == CC) {
-        blm_master__channel_msg_handler__process_packed_leds_change_event(midi_package);
+        host__channel_msg_handler__process_packed_leds_change_event(midi_package);
     } else if (midi_package.event == PolyPressure) {
-        blm_master__channel_msg_handler__process_single_led_color_event(midi_package);
+        host__channel_msg_handler__process_single_led_color_event(midi_package);
     } else if (midi_package.event == ProgramChange) {
-        blm_master__channel_msg_handler__process_select_palette_event(midi_package);
+        host__channel_msg_handler__process_select_palette_event(midi_package);
     }
 }

@@ -6,7 +6,7 @@
 
 #include <stdint.h>
 #include <Arduino.h>
-#include "seq_blm_master__config.h"
+#include "seq_blm_bridge__config.h"
 
 uint8_t blm_boards__comm__leds__palette__buffer__palettes[16][128 * 3];
 
