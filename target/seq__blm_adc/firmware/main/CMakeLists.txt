@@ -10,17 +10,21 @@ add_executable(main
         ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/cores/arduino/HardwareSerial.h
         ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/cores/arduino/HardwareSerial.cpp
         ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/cores/arduino/stm32/PinConfigured.h
+        ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/cores/arduino/stm32/analog.h
+        ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/cores/arduino/stm32/LL/stm32yyxx_ll_adc.h
+        ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/libraries/SrcWrapper/src/stm32/analog.cpp
         midi_package.h
         midi_sender__arduino_serial.h
         main.ino
 
-        midi_sender.h)
+        midi_sender.h analog_nonblocking.h)
 
 include_directories(
         .
-        ../../../../../../../../arduino/packages/STM32/hardware/stm32/1.9.0/cores/arduino
-        ../../../../../../../../arduino/packages/STM32/hardware/stm32/1.9.0/variants/DEMO_F030F4
+        ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/cores/arduino
         ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/cores/arduino/stm32
+        ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/cores/arduino/stm32/LL/
+        ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/variants/DEMO_F030F4
 
         /opt/gcc-arm-none-eabi-8-2019-q3-update/arm-none-eabi/include
         /opt/arduino-1.8.13/libraries/pt-1.4
@@ -28,5 +32,6 @@ include_directories(
 
 add_definitions(-DLC_INCLUDE="lc-addrlabels.h")
 add_definitions(-DDEBUG=0)
+add_definitions(-DHAL_ADC_MODULE_ENABLED)
 
 set_target_properties(main PROPERTIES LINKER_LANGUAGE CXX)
