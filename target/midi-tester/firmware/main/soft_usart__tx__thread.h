@@ -27,7 +27,7 @@ void soft_usart__tx__thread__init(void) {
 }
 
 
-inline void soft_usart__tx__thread__send_bit(const uint8_t mask) {
+static void soft_usart__tx__thread__send_bit(const uint8_t mask) {
     uint8_t data = soft_usart__tx__thread__data;
     if (data & mask)
         soft_usart__tx__pin__set(1);

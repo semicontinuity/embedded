@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "midi_sender.h"
 #include "midi_sender__arduino_serial.h"
-
+#include "analog_nonblocking.h"
 
 int32_t readings[8];
 
@@ -24,7 +24,13 @@ void setup() {
 
 
 void read(int pin, int index, int channel) {
-    auto reading = analogRead(pin);
+//    auto reading = analogRead(pin);
+    auto pinName = analogInputToPinName(pin);
+    ADC_HandleTypeDef AdcHandle = {};
+    adc_read_value_non_blocking_init(AdcHandle, pinName, 12);
+
+    auto reading = adc_read_value_blocking(pinName, 12);
+
     auto readingSigned = (int32_t) reading;
     auto prevReading = readings[index];
     auto diff = (readingSigned - prevReading);
@@ -42,9 +48,10 @@ void loop() {
     read(A1, 1, 0x09);
     read(A2, 2, 0x0A);
     read(A3, 3, 0x0B);
-    read(A4, 4, 0x0C);
-    read(A5, 5, 0x0D);
-    read(A6, 6, 0x0E);
-    read(A7, 7, 0x0F);
+//    read(A4, 4, 0x0C);
+//    read(A5, 5, 0x0D);
+//    read(A6, 6, 0x0E);
+//    read(A7, 7, 0x0F);
+    delay(500);
 }
 #pragma clang diagnostic pop

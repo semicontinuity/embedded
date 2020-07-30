@@ -19,6 +19,9 @@ endif
 CONF  = $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
 
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.keyboard.properties)
+include config.keyboard.properties
+
 #CDEFS += -fno-tree-loop-optimize -fno-unswitch-loops
 CDEFS += -fwhole-program -Wl,--relax
 

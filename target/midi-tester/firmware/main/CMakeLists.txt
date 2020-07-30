@@ -7,12 +7,26 @@ set(CMAKE_C_STANDARD 11)
 set(SOURCE_FILES
         ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/timer0.h
-        main.c
         soft_usart__timer.h
         soft_usart__tx.h
         soft_usart__tx__pin.h
         soft_usart__tx__pin.h
         soft_usart__tx__thread.h
+
+#        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer.h
+#        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b.c
+
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__physical.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_b.c
+        ../../../../cpu/avr/services/keyboard/keyboard.c
+        ../../../../cpu/avr/services/keyboard/keyboard.h
+        ../../../../cpu/avr/services/keyboard/keyboard__port_b__buttons.h
+        ../../../../cpu/avr/services/keyboard/keyboard__port_b__buttons.c
+
+        main.c
+        tracer__nop.c
         __all__.c
         )
 
@@ -29,5 +43,7 @@ add_definitions(-Dsoft_usart__tx__thread__is_runnable=timer0__compare_a__interru
 add_definitions(-Dsoft_usart__tx__thread__on_finish=soft_usart__timer__stop)
 
 add_definitions(-DSOFT_USART__TX__PORT=B)
-add_definitions(-DSOFT_USART__TX__PIN=4)
+add_definitions(-DSOFT_USART__TX__PIN=1)
 add_definitions(-DSOFT_USART__BAUD_RATE=2400UL)
+
+include(CMakeLists.keyboard.txt)

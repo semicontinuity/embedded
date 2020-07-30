@@ -1,0 +1,19 @@
+# Keyboard handler
+
+add_definitions(-DKEYBOARD__PORT_B__USED=1)
+
+# Keyboard pins
+add_definitions(-DIN__BUTTON0__PORT=B)
+add_definitions(-DIN__BUTTON0__PIN=2)
+add_definitions(-DIN__BUTTON1__PORT=B)
+add_definitions(-DIN__BUTTON1__PIN=3)
+add_definitions(-DIN__BUTTON2__PORT=B)
+add_definitions(-DIN__BUTTON2__PIN=0)
+add_definitions(-DIN__BUTTON3__PORT=B)
+add_definitions(-DIN__BUTTON3__PIN=4)
+
+#add_definitions(-Dtimer0__comp_b__run=keyboard__port_b__debounce_timer__expired)
+#add_definitions(-DKEYBOARD__PORT_B__DEBOUNCE_TIMER__CONF__INITIALIZED=TIMER0_CONF_DEFAULT)
+#add_definitions(-DKEYBOARD__PORT_B__DEBOUNCE_TIMER__CONF__STARTED=TIMER0_CONF_PRESCALER_1024)
+#add_definitions(-DKEYBOARD__PORT_B__DEBOUNCE_TIMER__DELAY=64)
+#add_definitions(-Dkeyboard__port_b__debounce_timer__run=keyboard__port_b__mask__reset)
