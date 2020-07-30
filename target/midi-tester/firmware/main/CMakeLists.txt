@@ -13,9 +13,6 @@ set(SOURCE_FILES
         soft_usart__tx__pin.h
         soft_usart__tx__thread.h
 
-#        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer.h
-#        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b.c
-
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__physical.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.h
@@ -37,13 +34,12 @@ add_definitions(-D__AVR_ATtiny85__)
 add_definitions(-DF_CPU=1000000UL)
 add_definitions(-DINLINE=)
 
-#add_definitions(-DTIMER0_COMPA_vect_naked=1)
 add_definitions(-Dtimer0__comp_a__run=soft_usart__tx__thread__run)
 add_definitions(-Dsoft_usart__tx__thread__is_runnable=timer0__compare_a__interrupt__is_enabled)
 add_definitions(-Dsoft_usart__tx__thread__on_finish=soft_usart__timer__stop)
 
 add_definitions(-DSOFT_USART__TX__PORT=B)
 add_definitions(-DSOFT_USART__TX__PIN=1)
-add_definitions(-DSOFT_USART__BAUD_RATE=2400UL)
+add_definitions(-DSOFT_USART__BAUD_RATE=31250UL)
 
 include(CMakeLists.keyboard.txt)
