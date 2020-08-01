@@ -27,7 +27,7 @@ void read(int pin, int index, int channel) {
 //    auto reading = analogRead(pin);
     auto pinName = analogInputToPinName(pin);
     ADC_HandleTypeDef AdcHandle = {};
-    adc_read_value_non_blocking_init(AdcHandle, pinName, 12);
+    adc_init(AdcHandle, pinName, 12);
 
     auto reading = adc_read_value_blocking(pinName, 12);
 

@@ -25,6 +25,7 @@ add_executable(main
         ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/libraries/SrcWrapper/src/stm32/analog.cpp
         ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/system/Drivers/CMSIS/Device/ST/STM32F0xx/Include/stm32f0xx.h
         ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/system/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal.h
+        ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/system/Drivers/STM32F0xx_HAL_Driver/Src/stm32f0xx_hal_adc.c
         ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/system/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_adc.h
         ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/system/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_adc_ex.h
         ../../../../../../../../.arduino15/packages/STM32/hardware/stm32/1.9.0/system/Drivers/STM32F0xx_HAL_Driver/Inc/stm32f0xx_hal_gpio.h

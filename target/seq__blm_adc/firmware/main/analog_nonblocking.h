@@ -491,14 +491,12 @@ uint16_t adc_read_value_blocking(PinName pin, uint32_t resolution)
 
 
 /**
-  * @brief  This function will set the ADC to the required value
+  * @brief  initialize ADC pin
   * @param  pin : the pin to use
   * @param  resolution : resolution for converted data: 6/8/10/12/14/16
-  * @retval the value of the adc
+  * @retval true if ok
   */
-uint16_t adc_read_value_non_blocking_init(ADC_HandleTypeDef &AdcHandle,  PinName pin, uint32_t resolution)
-{
-//    ADC_HandleTypeDef AdcHandle = {};
+bool adc_init(ADC_HandleTypeDef &AdcHandle, PinName pin, uint32_t resolution) {
     ADC_ChannelConfTypeDef  AdcChannelConf = {};
     uint32_t samplingTime = ADC_SAMPLINGTIME;
     uint32_t channel = 0;
@@ -522,7 +520,7 @@ uint16_t adc_read_value_non_blocking_init(ADC_HandleTypeDef &AdcHandle,  PinName
     }
 
     if (AdcHandle.Instance == NP) {
-        return 0;
+        return false;
     }
 
 #ifdef ADC_CLOCK_DIV
@@ -642,7 +640,7 @@ uint16_t adc_read_value_non_blocking_init(ADC_HandleTypeDef &AdcHandle,  PinName
     g_current_pin = pin; /* Needed for HAL_ADC_MspInit*/
 
     if (HAL_ADC_Init(&AdcHandle) != HAL_OK) {
-        return 0;
+        return false;
     }
 
     AdcChannelConf.Channel      = channel;                          /* Specifies the channel to configure into ADC */
@@ -654,7 +652,7 @@ uint16_t adc_read_value_non_blocking_init(ADC_HandleTypeDef &AdcHandle,  PinName
 #else
     if (!IS_ADC_CHANNEL(AdcChannelConf.Channel)) {
 #endif /* STM32L4xx || STM32WBxx */
-        return 0;
+        return false;
     }
 #ifdef ADC_SCAN_SEQ_FIXED
     AdcChannelConf.Rank         = ADC_RANK_CHANNEL_NUMBER;          /* Enable the rank of the selected channels when not fully configurable */
@@ -688,7 +686,7 @@ uint16_t adc_read_value_non_blocking_init(ADC_HandleTypeDef &AdcHandle,  PinName
     /*##-2- Configure ADC regular channel ######################################*/
     if (HAL_ADC_ConfigChannel(&AdcHandle, &AdcChannelConf) != HAL_OK) {
         /* Channel Configuration Error */
-        return 0;
+        return false;
     }
 
 #if defined(STM32F0xx) || defined(STM32F1xx) || defined(STM32F3xx) || \
@@ -706,11 +704,70 @@ uint16_t adc_read_value_non_blocking_init(ADC_HandleTypeDef &AdcHandle,  PinName
 #endif
   {
     /* ADC Calibration Error */
-    return 0;
+    return false;
   }
 #endif
-    return 0;
+    return true;
 }
+
+
+/**
+  * @brief  initialize ADC pin
+  * @param  pin : the pin to use
+  * @param  resolution : resolution for converted data: 6/8/10/12/14/16
+  * @retval true if ok
+  */
+bool adc_conversion_start(ADC_HandleTypeDef &AdcHandle) {
+    /*##-3- Start the conversion process ####################*/
+    return !(HAL_ADC_Start(&AdcHandle) != HAL_OK);
+}
+
+/**
+  * @brief  initialize ADC pin
+  * @param  pin : the pin to use
+  * @param  resolution : resolution for converted data: 6/8/10/12/14/16
+  * @retval true if ok
+  */
+bool adc_conversion_is_running(ADC_HandleTypeDef &AdcHandle) {
+    return HAL_IS_BIT_CLR(AdcHandle.Instance->ISR, (ADC_FLAG_EOC | ADC_FLAG_EOS));
+}
+
+/**
+  * @brief  initialize ADC pin
+  * @param  pin : the pin to use
+  * @param  resolution : resolution for converted data: 6/8/10/12/14/16
+  * @retval true if ok
+  */
+bool adc_conversion_get(ADC_HandleTypeDef &AdcHandle) {
+    /* Update ADC state machine */
+    SET_BIT(AdcHandle.State, HAL_ADC_STATE_REG_EOC);
+    return HAL_ADC_GetValue(&AdcHandle);
+}
+
+
+/**
+  * @brief  initialize ADC pin
+  * @param  pin : the pin to use
+  * @param  resolution : resolution for converted data: 6/8/10/12/14/16
+  * @retval true if ok
+  */
+bool adc_deinit(ADC_HandleTypeDef &AdcHandle) {
+
+    if (HAL_ADC_Stop(&AdcHandle) != HAL_OK) {
+        /* Stop Conversation Error */
+        return false;
+    }
+
+    if (HAL_ADC_DeInit(&AdcHandle) != HAL_OK) {
+        return false;
+    }
+
+    if (__LL_ADC_COMMON_INSTANCE(AdcHandle.Instance) != 0U) {
+        LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(AdcHandle.Instance), LL_ADC_PATH_INTERNAL_NONE);
+    }
+    return true;
+}
+
 
 
 #ifdef __cplusplus
