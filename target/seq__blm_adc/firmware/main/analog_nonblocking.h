@@ -2,7 +2,6 @@
 #define ANALOG_NONBLOCKING_H
 
 #include <stdint.h>
-#include <PinNames.h>
 #include "stm32_def.h"
 #include "PinAF_STM32F1.h"
 #include "stm32yyxx_ll_adc.h"
@@ -738,7 +737,7 @@ bool adc_conversion_is_running(ADC_HandleTypeDef &AdcHandle) {
   * @param  resolution : resolution for converted data: 6/8/10/12/14/16
   * @retval true if ok
   */
-bool adc_conversion_get(ADC_HandleTypeDef &AdcHandle) {
+uint32_t adc_conversion_get(ADC_HandleTypeDef &AdcHandle) {
     /* Update ADC state machine */
     SET_BIT(AdcHandle.State, HAL_ADC_STATE_REG_EOC);
     return HAL_ADC_GetValue(&AdcHandle);
