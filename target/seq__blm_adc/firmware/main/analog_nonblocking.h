@@ -6,6 +6,7 @@
 #include "stm32_def.h"
 #include "PinAF_STM32F1.h"
 #include "stm32yyxx_ll_adc.h"
+#include "analog.h"
 
 
 #ifdef __cplusplus
