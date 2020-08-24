@@ -1,3 +1,8 @@
+## Communications protocol
+
+* Write LEDs data to device: issue I2C Write with 4-byte payload; every bit corresponds to a LED.
+
+
 ## Register allocations
 
 |    |                                                                 |
