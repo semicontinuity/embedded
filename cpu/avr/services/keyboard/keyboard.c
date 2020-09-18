@@ -199,8 +199,7 @@ void keyboard__port_d__mask__reset(void) {
 }
 
 
-inline void keyboard__reset_masks(void) {
-    __asm__ __volatile__("keyboard__reset_masks:");
+void keyboard__reset_masks(void) {
     keyboard__port_a__mask__reset();
     keyboard__port_b__mask__reset();
     keyboard__port_c__mask__reset();
@@ -262,9 +261,9 @@ void keyboard__port_a__run(void) {
     uint8_t state = keyboard__pins__port_a__read();
     uint8_t changes = keyboard__port_a__mask & ((uint8_t) (keyboard__port_a__previous_state ^ state));
     if (changes) {
-//        keyboard__port_a__debounce_timer__start();
+        keyboard__port_a__debounce_timer__start();
         tracer__keyboard__changes(0, changes);
-//        keyboard__port_a__mask ^= changes;
+        keyboard__port_a__mask ^= changes;
         keyboard__port_a__previous_state = state;
         keyboard__port_a__buttons__process(state, changes);
         keyboard__port_a__encoders__process(state, changes);
@@ -281,9 +280,9 @@ void keyboard__port_b__run(void) {
     uint8_t state = keyboard__pins__port_b__read();
     uint8_t changes = keyboard__port_b__mask & ((uint8_t) (keyboard__port_b__previous_state ^ state));
     if (changes) {
-//        keyboard__port_b__debounce_timer__start();
+        keyboard__port_b__debounce_timer__start();
         tracer__keyboard__changes(1, changes);
-//        keyboard__port_b__mask ^= changes;
+        keyboard__port_b__mask ^= changes;
         keyboard__port_b__previous_state = state;
         keyboard__port_b__buttons__process(state, changes);
         keyboard__port_b__encoders__process(state, changes);
@@ -300,9 +299,9 @@ void keyboard__port_c__run(void) {
     uint8_t state = keyboard__pins__port_c__read();
     uint8_t changes = keyboard__port_c__mask & ((uint8_t) (state ^ keyboard__port_c__previous_state));
     if (changes) {
-//        keyboard__port_c__debounce_timer__start();
+        keyboard__port_c__debounce_timer__start();
         tracer__keyboard__changes(2, changes);
-//        keyboard__port_c__mask ^= changes;
+        keyboard__port_c__mask ^= changes;
         keyboard__port_c__previous_state = state;
         keyboard__port_c__buttons__process(state, changes);
         keyboard__port_c__encoders__process(state, changes);
@@ -319,9 +318,9 @@ void keyboard__port_d__run(void) {
     uint8_t state = keyboard__pins__port_d__read();
     uint8_t changes = keyboard__port_d__mask & ((uint8_t) (state ^ keyboard__port_d__previous_state));
     if (changes) {
-//        keyboard__port_d__debounce_timer__start();
+        keyboard__port_d__debounce_timer__start();
         tracer__keyboard__changes(3, changes);
-//        keyboard__port_d__mask ^= changes;
+        keyboard__port_d__mask ^= changes;
         keyboard__port_d__previous_state = state;
         keyboard__port_d__buttons__process(state, changes);
         keyboard__port_d__encoders__process(state, changes);

@@ -4,12 +4,14 @@
 #include "services/tracer.h"
 
 // Keyboard
-#include "cpu/avr/timer0.c"
-#include "cpu/avr/timer2.c"
+//#include "cpu/avr/timer0.c"
+//#include "cpu/avr/timer2.c"
+#include "cpu/avr/timer1.c"
 
-#include "cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b.c"
-#include "cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer__timer2a.c"
-#include "cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b.c"
+#include "cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer1.c"
+//#include "cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b.c"
+//#include "cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer__timer2a.c"
+//#include "cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b.c"
 
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_b.c"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_c.c"

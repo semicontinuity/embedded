@@ -41,6 +41,8 @@ void keyboard__init(void);
 
 void keyboard__run(void);
 
+void keyboard__reset_masks(void);
+
 /**
  * Callback to be implemented to handle button event.
  * The type of event can be determined by checking the corresponding bit in the button's port:

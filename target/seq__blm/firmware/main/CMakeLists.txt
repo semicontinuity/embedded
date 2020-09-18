@@ -5,17 +5,22 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_STANDARD 11)
 
 set(SOURCE_FILES
-        ../../../../cpu/avr/timer0.c
-        ../../../../cpu/avr/timer0.h
-        ../../../../cpu/avr/timer2.c
-        ../../../../cpu/avr/timer2.h
+#        ../../../../cpu/avr/timer0.c
+#        ../../../../cpu/avr/timer0.h
+#        ../../../../cpu/avr/timer2.c
+#        ../../../../cpu/avr/timer2.h
+        ../../../../cpu/avr/timer1.c
+        ../../../../cpu/avr/timer1.h
 
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer__timer2a.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__timer1.c
+
+#        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer.h
+#        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b.c
+#        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer.h
+#        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer__timer2a.c
+#        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer.h
+#        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b.c
 
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__physical.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h

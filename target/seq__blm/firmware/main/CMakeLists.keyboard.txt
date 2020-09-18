@@ -1,5 +1,12 @@
 # Keyboard handler
 
+add_definitions(-Dtimer1__comp_a__run=keyboard__debounce_timer__expired)
+add_definitions(-DKEYBOARD__DEBOUNCE_TIMER__CONF__INITIALIZED=TIMER1_CONF_DEFAULT)
+add_definitions(-DKEYBOARD__DEBOUNCE_TIMER__CONF__STARTED=\(\(unsigned\)\(TIMER1_CONF_WGM_NORMAL\|TIMER1_CONF_PRESCALER_1024\)\))
+add_definitions(-DKEYBOARD__DEBOUNCE_TIMER__DELAY=500)
+add_definitions(-DTIMER1_COMPA_vect_naked=1)
+add_definitions(-Dkeyboard__debounce_timer__run=keyboard__reset_masks)
+
 add_definitions(-Dtimer0__comp_b__run=keyboard__port_b__debounce_timer__expired)
 add_definitions(-DKEYBOARD__PORT_B__DEBOUNCE_TIMER__CONF__INITIALIZED=TIMER0_CONF_DEFAULT)
 add_definitions(-DKEYBOARD__PORT_B__DEBOUNCE_TIMER__CONF__STARTED=TIMER0_CONF_PRESCALER_1024)
