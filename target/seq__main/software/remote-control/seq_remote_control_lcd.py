@@ -16,7 +16,7 @@ def run(port):
     print(m)
     port.send(m)
 
-    text = 'Counter: ' + str(counter)
+    text = '\nCounter: ' + str(counter)
 
     # render text on LCD
     cmd = bytearray([0xf0, 0x00, 0x00,  0x7e, 0x4d, 0x00,  0x09, 0x02, 16, 0x00]) + bytearray(text, 'utf8') + bytearray([0xf7])
@@ -25,6 +25,7 @@ def run(port):
     port.send(m)
 
     time.sleep(1)
+    counter += 1
 
 
 if __name__ == "__main__":

@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
+
+################################################
+# STDIN: LED events, one per line, in TSV format
+# ON/OFF<tab>LED_NAME
+#
+# STDOUT: MIDI messages in hex format, like
+# F0 00 00 7E ...
+################################################
+
 import sys
 import json
 
-dout = [0] * 16
+dout = [0] * 28
 
 
 def stdout_print(*args, **kwargs):
