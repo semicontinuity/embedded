@@ -1,7 +1,10 @@
 #ifndef ANALOG_NONBLOCKING_H
 #define ANALOG_NONBLOCKING_H
 
+
 #include <stdint.h>
+
+
 #include "stm32_def.h"
 #include "PinAF_STM32F1.h"
 #include "stm32yyxx_ll_adc.h"
@@ -232,6 +235,66 @@ static uint32_t get_adc_internal_channel(PinName pin)
 }
 
 
+void adc_pin_init(PinName pin) {
+    pinmap_pinout(pin, PinMap_ADC);
+}
+
+void adc_channel_init(ADC_HandleTypeDef &AdcHandle, const PinName &pin, int rank) {
+    ADC_ChannelConfTypeDef  AdcChannelConf = {};
+
+#if !defined(STM32L0xx)
+#if !defined(STM32G0xx)
+    AdcChannelConf.SamplingTime = ADC_SAMPLINGTIME;                     /* Sampling time value to be set for the selected channel */
+#else
+    AdcChannelConf.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;        /* Sampling time value to be set for the selected channel */
+#endif
+#endif
+#if !defined(STM32F0xx) && !defined(STM32F1xx) && !defined(STM32F2xx) && \
+    !defined(STM32F4xx) && !defined(STM32F7xx) && !defined(STM32G0xx) && \
+    !defined(STM32L0xx) && !defined(STM32L1xx) && \
+    !defined(STM32F373xC) && !defined(STM32F378xx)
+    AdcChannelConf.SingleDiff   = ADC_SINGLE_ENDED;                 /* Single-ended input channel */
+    AdcChannelConf.OffsetNumber = ADC_OFFSET_NONE;                  /* No offset subtraction */
+#endif
+#if !defined(STM32F0xx) && !defined(STM32F1xx) && !defined(STM32F2xx) && \
+    !defined(STM32G0xx) && !defined(STM32L0xx) && !defined(STM32L1xx) && \
+    !defined(STM32WBxx) && !defined(STM32F373xC) && !defined(STM32F378xx)
+    AdcChannelConf.Offset = 0;                                      /* Parameter discarded because offset correction is disabled */
+#endif
+#if defined (STM32H7xx) || defined(STM32MP1xx)
+    AdcChannelConf.OffsetRightShift = DISABLE;                      /* No Right Offset Shift */
+  AdcChannelConf.OffsetSignedSaturation = DISABLE;                /* Signed saturation feature is not used */
+#endif
+
+    uint32_t channel = get_adc_channel(pin);
+    AdcChannelConf.Channel      = channel;
+    AdcChannelConf.Rank         = rank;
+    HAL_ADC_ConfigChannel(&AdcHandle, &AdcChannelConf);
+}
+
+
+bool adc_calibrate(ADC_HandleTypeDef &AdcHandle) {
+#if defined(STM32F0xx) || defined(STM32F1xx) || defined(STM32F3xx) || \
+    defined(STM32G0xx) || defined(STM32G4xx) || defined(STM32H7xx) || \
+    defined(STM32L0xx) || defined(STM32L4xx) || defined(STM32MP1xx) || \
+    defined(STM32WBxx)
+/*##-2.1- Calibrate ADC then Start the conversion process ####################*/
+#if defined(STM32F0xx) || defined(STM32G0xx) || defined(STM32F1xx) || \
+    defined(STM32F373xC) || defined(STM32F378xx)
+    if (HAL_ADCEx_Calibration_Start(&AdcHandle) !=  HAL_OK)
+#elif defined (STM32H7xx) || defined(STM32MP1xx)
+        if (HAL_ADCEx_Calibration_Start(&AdcHandle, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED) != HAL_OK)
+  #else
+    if (HAL_ADCEx_Calibration_Start(&AdcHandle, ADC_SINGLE_ENDED) !=  HAL_OK)
+#endif
+    {
+        /* ADC Calibration Error */
+        return false;
+    }
+#endif
+    return true;
+}
+
 /**
   * @brief  initialize ADC pin
   * @param  pin : the pin to use
@@ -239,31 +302,10 @@ static uint32_t get_adc_internal_channel(PinName pin)
   * @retval true if ok
   */
 bool adc_init(ADC_HandleTypeDef &AdcHandle, PinName pin, uint32_t resolution) {
-    ADC_ChannelConfTypeDef  AdcChannelConf = {};
     uint32_t samplingTime = ADC_SAMPLINGTIME;
-    uint32_t channel = 0;
 
-    if ((pin & PADC_BASE) && (pin < ANA_START)) {
-#if defined(STM32H7xx)
-        AdcHandle.Instance = ADC3;
-#else
-        AdcHandle.Instance = ADC1;
-#if defined(ADC5) && defined(ADC_CHANNEL_TEMPSENSOR_ADC5)
-        if (pin == PADC_TEMP_ADC5) {
-      AdcHandle.Instance = ADC5;
-    }
-#endif
-#endif
-        channel = get_adc_internal_channel(pin);
-        samplingTime = ADC_SAMPLINGTIME_INTERNAL;
-    } else {
-        AdcHandle.Instance = (ADC_TypeDef *)pinmap_peripheral(pin, PinMap_ADC);
-        channel = get_adc_channel(pin);
-    }
+    AdcHandle.Instance = (ADC_TypeDef *)pinmap_peripheral(pin, PinMap_ADC);
 
-    if (AdcHandle.Instance == NP) {
-        return false;
-    }
 
 #ifdef ADC_CLOCK_DIV
     AdcHandle.Init.ClockPrescaler        = ADC_CLOCK_DIV;                 /* (A)synchronous clock mode, input ADC clock divided */
@@ -323,7 +365,7 @@ bool adc_init(ADC_HandleTypeDef &AdcHandle, PinName pin, uint32_t resolution) {
 #ifdef ADC_CHANNELS_BANK_A
     AdcHandle.Init.ChannelsBank          = ADC_CHANNELS_BANK_A;
 #endif
-    AdcHandle.Init.ContinuousConvMode    = DISABLE;                       /* Continuous mode disabled to have only 1 conversion at each conversion trig */
+    AdcHandle.Init.ContinuousConvMode    = ENABLE;                       /* Continuous mode disabled to have only 1 conversion at each conversion trig */
 #if !defined(STM32F0xx) && !defined(STM32L0xx)
     AdcHandle.Init.NbrOfConversion       = 1;                             /* Specifies the number of ranks that will be converted within the regular group sequencer. */
 #endif
@@ -385,70 +427,6 @@ bool adc_init(ADC_HandleTypeDef &AdcHandle, PinName pin, uint32_t resolution) {
         return false;
     }
 
-    AdcChannelConf.Channel      = channel;                          /* Specifies the channel to configure into ADC */
-
-#if defined(STM32L4xx) || defined(STM32WBxx)
-    if (!IS_ADC_CHANNEL(&AdcHandle, AdcChannelConf.Channel)) {
-#elif defined(STM32G4xx)
-    if (!IS_ADC_CHANNEL(&AdcHandle, AdcChannelConf.Channel)) {
-#else
-    if (!IS_ADC_CHANNEL(AdcChannelConf.Channel)) {
-#endif /* STM32L4xx || STM32WBxx */
-        return false;
-    }
-#ifdef ADC_SCAN_SEQ_FIXED
-    AdcChannelConf.Rank         = ADC_RANK_CHANNEL_NUMBER;          /* Enable the rank of the selected channels when not fully configurable */
-#else
-    AdcChannelConf.Rank         = ADC_REGULAR_RANK_1;               /* Specifies the rank in the regular group sequencer */
-#endif
-#if !defined(STM32L0xx)
-#if !defined(STM32G0xx)
-    AdcChannelConf.SamplingTime = samplingTime;                     /* Sampling time value to be set for the selected channel */
-#else
-    AdcChannelConf.SamplingTime = ADC_SAMPLINGTIME_COMMON_1;        /* Sampling time value to be set for the selected channel */
-#endif
-#endif
-#if !defined(STM32F0xx) && !defined(STM32F1xx) && !defined(STM32F2xx) && \
-    !defined(STM32F4xx) && !defined(STM32F7xx) && !defined(STM32G0xx) && \
-    !defined(STM32L0xx) && !defined(STM32L1xx) && \
-    !defined(STM32F373xC) && !defined(STM32F378xx)
-    AdcChannelConf.SingleDiff   = ADC_SINGLE_ENDED;                 /* Single-ended input channel */
-    AdcChannelConf.OffsetNumber = ADC_OFFSET_NONE;                  /* No offset subtraction */
-#endif
-#if !defined(STM32F0xx) && !defined(STM32F1xx) && !defined(STM32F2xx) && \
-    !defined(STM32G0xx) && !defined(STM32L0xx) && !defined(STM32L1xx) && \
-    !defined(STM32WBxx) && !defined(STM32F373xC) && !defined(STM32F378xx)
-    AdcChannelConf.Offset = 0;                                      /* Parameter discarded because offset correction is disabled */
-#endif
-#if defined (STM32H7xx) || defined(STM32MP1xx)
-    AdcChannelConf.OffsetRightShift = DISABLE;                      /* No Right Offset Shift */
-  AdcChannelConf.OffsetSignedSaturation = DISABLE;                /* Signed saturation feature is not used */
-#endif
-
-    /*##-2- Configure ADC regular channel ######################################*/
-    if (HAL_ADC_ConfigChannel(&AdcHandle, &AdcChannelConf) != HAL_OK) {
-        /* Channel Configuration Error */
-        return false;
-    }
-
-#if defined(STM32F0xx) || defined(STM32F1xx) || defined(STM32F3xx) || \
-    defined(STM32G0xx) || defined(STM32G4xx) || defined(STM32H7xx) || \
-    defined(STM32L0xx) || defined(STM32L4xx) || defined(STM32MP1xx) || \
-    defined(STM32WBxx)
-    /*##-2.1- Calibrate ADC then Start the conversion process ####################*/
-#if defined(STM32F0xx) || defined(STM32G0xx) || defined(STM32F1xx) || \
-    defined(STM32F373xC) || defined(STM32F378xx)
-  if (HAL_ADCEx_Calibration_Start(&AdcHandle) !=  HAL_OK)
-#elif defined (STM32H7xx) || defined(STM32MP1xx)
-  if (HAL_ADCEx_Calibration_Start(&AdcHandle, ADC_CALIB_OFFSET, ADC_SINGLE_ENDED) != HAL_OK)
-#else
-  if (HAL_ADCEx_Calibration_Start(&AdcHandle, ADC_SINGLE_ENDED) !=  HAL_OK)
-#endif
-  {
-    /* ADC Calibration Error */
-    return false;
-  }
-#endif
     return true;
 }
 

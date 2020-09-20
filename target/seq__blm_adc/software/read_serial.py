@@ -1,6 +1,4 @@
 #!/usr/bin/env python
-# Test reading of Holding Register.
-# Frame format: [Slave Address][Function][16-bit first register][16-bit number of registers][16-bit CRC]
 
 import sys
 import serial

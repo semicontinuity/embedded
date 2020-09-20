@@ -36,7 +36,9 @@ add_executable(main
         midi_sender__arduino_serial.h
         main.ino
 
-        midi_sender.h analog_nonblocking.h)
+        midi_sender.h
+        analog_nonblocking2.h
+        )
 
 include_directories(
         .
