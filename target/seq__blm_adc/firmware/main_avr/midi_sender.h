@@ -23,6 +23,16 @@ void midi_sender__send_poly_pressure(uint8_t channel, uint8_t value1, uint8_t va
 }
 
 
+void midi_sender__send_control_change(uint8_t channel, uint8_t value1, uint8_t value2) {
+    midi_package_t p = {.ALL = 0};
+    p.event = CC;
+    p.chn = channel;
+    p.value1 = value1;
+    p.value2 = value2;
+    midi_sender__send_package(p);
+}
+
+
 void midi_sender__send_sysex_payload(uint8_t *payload, uint32_t length) {
     midi_sender__arduino_serial__send_sysex_payload(payload, length);
 }
