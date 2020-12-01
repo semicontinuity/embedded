@@ -27,7 +27,13 @@
 TwoWire Wire2(2);
 #define WIRE Wire2
 
-#define HOST_SERIAL_PORT Serial2
+#define HOST_SERIAL_PORT Serial1
 #define HOST_SERIAL_BAUD_RATE 31250
+
+#define POT_READER_1_SERIAL_PORT Serial2
+#define POT_READER_1_SERIAL_BAUD_RATE 31250
+
+#define POT_READER_2_SERIAL_PORT Serial3
+#define POT_READER_2_SERIAL_BAUD_RATE 31250
 
 #endif

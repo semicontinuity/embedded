@@ -15,7 +15,7 @@ void midi_sender__arduino_usb_midi__send_package(midi_package_t p) {
     midi_sender__arduino_usb_midi->writePacket(p.ALL);
 }
 
-void midi_sender__arduino_usb_midi__send_sysex_payload(uint8_t *payload, uint32 length) {
+void midi_sender__arduino_usb_midi__send_sysex_message(uint8_t *payload, uint32 length) {
     midi_sender__arduino_usb_midi->sendSysexPayload(payload, length);
 }
 

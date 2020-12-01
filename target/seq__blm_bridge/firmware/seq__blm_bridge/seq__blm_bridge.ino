@@ -217,9 +217,27 @@ struct midi_parser midi__host__parser = {
         .cable              = 0
 };
 
+struct midi_parser midi__pot__parser = {
+        .on_channel_msg     = [](midi_package_t midi_package) { midi_sender__send_package(midi_package); },
+        .on_sysex_data      = [](uint8_t b) {},
+        .on_sysex_finish    = []() {},
+        .thread             = {.lc = nullptr},
+        .cable              = 0
+};
+
 static struct arduino_serial__reader midi__host__reader {
         .arduino_serial     = &HOST_SERIAL_PORT,
         .process            = [](uint8_t b) { return midi_parser__process(&midi__host__parser, b); }
+};
+
+static struct arduino_serial__reader midi__pot_1__reader {
+        .arduino_serial     = &POT_READER_1_SERIAL_PORT,
+        .process            = [](uint8_t b) { return midi_parser__process(&midi__pot__parser, b); }
+};
+
+static struct arduino_serial__reader midi__pot_2__reader {
+        .arduino_serial     = &POT_READER_2_SERIAL_PORT,
+        .process            = [](uint8_t b) { return midi_parser__process(&midi__pot__parser, b); }
 };
 
 
@@ -230,6 +248,9 @@ void setup() {
     digitalWrite(PIN_LED_HOST_CONNECTED, PIN_LED_HOST_CONNECTED_OFF);
 
     midi_sender__arduino_usb_midi__init(&usbMidi);
+
+    POT_READER_1_SERIAL_PORT.begin(POT_READER_1_SERIAL_BAUD_RATE);
+    POT_READER_2_SERIAL_PORT.begin(POT_READER_2_SERIAL_BAUD_RATE);
 
     HardwareSerial *serial = &HOST_SERIAL_PORT;
     serial->begin(HOST_SERIAL_BAUD_RATE);
@@ -254,7 +275,7 @@ void setup() {
     blm_boards__comm_events__handler__test_mode__init();
 
     populate_midibox_palette(0);
-    host__leds_msg__select_palette(0);
+//    host__leds_msg__select_palette(0);
 
     USBComposite.setProductId(0x0030);
     usbMidi.registerComponent();
@@ -266,16 +287,26 @@ unsigned int counter;
 
 void loop() {
     usbMidi.poll();
+
     if (arduino_serial__reader__is_runnable(&midi__host__reader)) {
         arduino_serial__reader__run(&midi__host__reader);
     }
 
+    if (arduino_serial__reader__is_runnable(&midi__pot_1__reader)) {
+        arduino_serial__reader__run(&midi__pot_1__reader);
+    }
+
+    if (arduino_serial__reader__is_runnable(&midi__pot_2__reader)) {
+        arduino_serial__reader__run(&midi__pot_2__reader);
+    }
+/*
     if (host__alive_handler__is_runnable()) {
         host__alive_handler__run();
-    }
+    }*/
 
     // if there are events to be sent to BLM boards, prefer to send them first
     // to avoid any visual lags
+/*
     if (blm_boards__comm__leds__p4_commands__buffer__scanner__is_runnable()) {
         blm_boards__comm__leds__p4_commands__buffer__scanner__run();
     } else if (blm_boards__comm__leds__u128_commands__buffer__scanner__is_runnable()) {
@@ -288,9 +319,10 @@ void loop() {
             }
         }
     }
+*/
 
     // NB: Full Palette transfer takes ~40ms @ 100KHz per board, thus 640ms for 16 boards!
-    if (blm_boards__comm__leds__palette__uploader__is_runnable()) {
-        blm_boards__comm__leds__palette__uploader__run();
-    }
+//    if (blm_boards__comm__leds__palette__uploader__is_runnable()) {
+//        blm_boards__comm__leds__palette__uploader__run();
+//    }
 }
