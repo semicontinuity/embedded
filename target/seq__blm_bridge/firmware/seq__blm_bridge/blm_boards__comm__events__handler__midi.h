@@ -11,7 +11,7 @@
 #include <stdint.h>
 #include "midi_sender.h"
 
-void blm_boards__comm_events__handler__midi__on_button_event(uint8_t board, uint8_t button, bool is_pressed) {
+midi_package_t blm_boards__comm_events__handler__midi__event(uint8_t board, uint8_t button, bool is_pressed) {
     // No extra rows / columns / buttons exist at the moment
     uint8_t matrix_x = board & 0x03U;
     uint8_t matrix_y = board >> 2U;
@@ -26,6 +26,5 @@ void blm_boards__comm_events__handler__midi__on_button_event(uint8_t board, uint
     p.chn = row;
     p.note = column;
     p.velocity = is_pressed ? 0x7F : 0x00;
-
-    midi_sender__send_package(p);
+    return p;
 }

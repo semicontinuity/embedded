@@ -49,27 +49,26 @@ static midi_package_t fill_midi_package(unsigned int event, unsigned int channel
 class UsbMidi : public USBMIDI {
     void handleNoteOff(unsigned int channel, unsigned int note, unsigned int velocity) override {
         host__channel_msg_handler__process_single_led_change_event(fill_midi_package(NoteOff, channel, note, velocity));
-        host__alive_handler__set_host_connected();
+        host__alive_handler__host_connected__set(HOST_USB);
     }
     void handleNoteOn(unsigned int channel, unsigned int note, unsigned int velocity) override {
         host__channel_msg_handler__process_single_led_change_event(fill_midi_package(NoteOn, channel, note, velocity));
-        host__alive_handler__set_host_connected();
+        host__alive_handler__host_connected__set(HOST_USB);
     }
     // MIDI message A0 nn vv
     void handleVelocityChange(unsigned int channel, unsigned int note, unsigned int velocity) override {
-        host__channel_msg_handler__process_single_led_color_event(
-                fill_midi_package(PolyPressure, channel, note, velocity));
-        host__alive_handler__set_host_connected();
+        host__channel_msg_handler__process_single_led_color_event(fill_midi_package(PolyPressure, channel, note, velocity));
+        host__alive_handler__host_connected__set(HOST_USB);
     }
     // MIDI message B0 cc vv
     void handleControlChange(unsigned int channel, unsigned int controller, unsigned int value) override {
         host__channel_msg_handler__process_packed_leds_change_event(fill_midi_package(CC, channel, controller, value));
-        host__alive_handler__set_host_connected();
+        host__alive_handler__host_connected__set(HOST_USB);
     }
     // MIDI message C0 pp
     void handleProgramChange(unsigned int channel, unsigned int program) override {
         host__leds_msg__select_palette(program & 0x0Fu);
-        host__alive_handler__set_host_connected();
+        host__alive_handler__host_connected__set(HOST_USB);
     }
     void handleSysExData(unsigned char b) override {
         host__sysex_msg_handler__on_sysex_data(b);
@@ -92,8 +91,8 @@ uint8_t blm_boards__comm_events__reader__read(uint8_t board) {
 // -----------------------------------------------------------------------------
 
 void blm_boards__comm_events__handler__on_button_event(uint8_t board, uint8_t button, bool is_pressed) {
-    if (host__alive_handler__is_host_connected()) {
-        blm_boards__comm_events__handler__midi__on_button_event(board, button, is_pressed);
+    if (host__alive_handler__host_connected__get()) {
+        midi_sender__send_package(blm_boards__comm_events__handler__midi__event(board, button, is_pressed));
     } else {
         blm_boards__comm_events__handler__test_mode__on_button_event(board, button, is_pressed);
     }
@@ -104,7 +103,7 @@ void blm_boards__comm_events__handler__on_button_event(uint8_t board, uint8_t bu
 
 void host__on_channel_msg(midi_package_t midi_package) {
     host__channel_msg_handler__process(midi_package);
-    host__alive_handler__set_host_connected();
+    host__alive_handler__host_connected__set(HOST_SERIAL);
 }
 
 

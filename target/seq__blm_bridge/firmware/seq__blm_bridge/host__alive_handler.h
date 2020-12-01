@@ -6,20 +6,24 @@
 #include "host__sysex_msg_handler__callbacks.h"
 #include "host__sysex_msg_sender.h"
 
+#define HOST_ABSENT (0)
+#define HOST_SERIAL (1)
+#define HOST_USB    (4)
 
-bool host__alive_handler__host_connected = false;
+uint32_t host__alive_handler__host_connected = HOST_ABSENT;
 uint32_t host__alive_handler__last_rx_millis = 0;
 uint32_t host__alive_handler__last_tx_millis = 0;
 
 
-bool host__alive_handler__is_host_connected() {
-    return host__alive_handler__host_connected;
+
+void host__alive_handler__host_connected__set(const uint32_t host) {
+    host__alive_handler__last_rx_millis = millis();
+    host__alive_handler__host_connected = host;
+    digitalWrite(PIN_LED_HOST_CONNECTED, PIN_LED_HOST_CONNECTED_ON);
 }
 
-void host__alive_handler__set_host_connected() {
-    host__alive_handler__last_rx_millis = millis();
-    host__alive_handler__host_connected = true;
-    digitalWrite(PIN_LED_HOST_CONNECTED, PIN_LED_HOST_CONNECTED_ON);
+uint32_t host__alive_handler__host_connected__get() {
+    return host__alive_handler__host_connected;
 }
 
 
