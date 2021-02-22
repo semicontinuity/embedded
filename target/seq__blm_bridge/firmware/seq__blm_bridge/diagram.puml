@@ -3,29 +3,39 @@ digraph g {
 
 node  [ shape = "record" ];
 
+
 # interfaces
 ############
-host__leds_msg                                                      [shape = "Mrecord" style="filled" fillcolor="beige"];
-host__sysex_msg_handler__callbacks                                  [shape = "Mrecord" style="filled" fillcolor="beige"];
-blm_boards__comm__leds__p4_commands__buffer__scanner__callbacks     [shape = "Mrecord" style="filled" fillcolor="beige"];
-blm_boards__comm__leds__u128_commands__buffer__scanner__callbacks   [shape = "Mrecord" style="filled" fillcolor="beige"];
-blm_boards__comm__events__handler                                   [shape = "Mrecord" style="filled" fillcolor="beige"];
-midi_sender                                                         [shape = "Mrecord" style="filled" fillcolor="beige"];
+host__leds_msg,
+host__sysex_msg_handler__callbacks,
+blm_boards__comm__leds__p4_commands__buffer__scanner__callbacks,
+blm_boards__comm__leds__u128_commands__buffer__scanner__callbacks,
+blm_boards__comm__events__handler,
+midi_sender
+
+[shape = "Mrecord" style="filled" fillcolor="beige" fontcolor="black"];
+
 
 # threads
 #########
-blm_boards__comm__leds__p4_commands__buffer__scanner    [style="filled" fillcolor="Honeydew"];
-blm_boards__comm__leds__u128_commands__buffer__scanner  [style="filled" fillcolor="Honeydew"];
-midi__host__reader                                      [style="filled" fillcolor="Honeydew"];
-midi__host__parser                                      [style="filled" fillcolor="Honeydew"];
-blm_boards__comm_events__reader                         [style="filled" fillcolor="Honeydew"];
-host__alive_handler                                     [style="filled" fillcolor="Honeydew"];
-blm_boards__comm__leds__palette__uploader               [style="filled" fillcolor="Honeydew"];
+blm_boards__comm__leds__p4_commands__buffer__scanner,
+blm_boards__comm__leds__u128_commands__buffer__scanner,
+midi__host__reader,
+midi__host__parser,
+blm_boards__comm_events__reader,
+host__alive_handler,
+blm_boards__comm__leds__palette__uploader
+
+[style="filled" fillcolor="Honeydew" fontcolor="black"];
+
+
 # buffers
 #########
-blm_boards__comm__leds__p4_commands__buffer             [style = filled];
-blm_boards__comm__leds__u128_commands__buffer           [style = filled];
-blm_boards__comm__leds__palette__buffer                 [style = filled];
+blm_boards__comm__leds__p4_commands__buffer,
+blm_boards__comm__leds__u128_commands__buffer,
+blm_boards__comm__leds__palette__buffer
+
+[style = filled fontcolor="black"];
 
 
 midi__host__reader

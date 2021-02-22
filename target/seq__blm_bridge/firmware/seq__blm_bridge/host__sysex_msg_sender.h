@@ -34,22 +34,25 @@ static const unsigned char host__sysex_msg_sender__packet__layout_info[] = {
 };
 
 
-void host__sysex_msg_sender__send_ack() {
+void host__sysex_msg_sender__send_ack(midi_port_t port) {
     midi_sender__send_sysex_message(
+            port,
             const_cast<uint8_t *>(host__sysex_msg_sender__packet__ack),
             sizeof(host__sysex_msg_sender__packet__ack)
     );
 }
 
-void host__sysex_msg_sender__send_disack_invalid_command() {
+void host__sysex_msg_sender__send_disack_invalid_command(midi_port_t port) {
     midi_sender__send_sysex_message(
+            port,
             const_cast<uint8_t *>(host__sysex_msg_sender__packet__disack_invalid_command),
             sizeof(host__sysex_msg_sender__packet__disack_invalid_command)
     );
 }
 
-void host__sysex_msg_sender__send_layout_info() {
+void host__sysex_msg_sender__send_layout_info(midi_port_t port) {
     midi_sender__send_sysex_message(
+            port,
             const_cast<uint8_t *>(host__sysex_msg_sender__packet__layout_info),
             sizeof(host__sysex_msg_sender__packet__layout_info)
     );

@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.11)
-project(seq_blm_bridge)
+project(test_forwarding_serial)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_STANDARD 11)
 
-add_executable(seq_blm_bridge
+add_executable(test_forwarding_serial
         ../../../../../../../../../../opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/variants/maple/variant.h
         ../../../../../../../../../../opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/variants/maple/board.cpp
         ../../../../../../../../../../opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/cores/maple/boards.h
@@ -25,53 +25,11 @@ add_executable(seq_blm_bridge
         ../../../../../../../../../../opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/libraries/USBComposite/USBMIDI.h
         ../../../../../../../../../../opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/libraries/USBComposite/USBMIDI.cpp
 
-        seq__blm_bridge__config.h
-        seq__blm_bridge.ino
-
-        blm_boards__comm__events__reader.h
-        blm_boards__comm__events__handler.h
-        blm_boards__comm__events__handler__midi.h
-        blm_boards__comm__events__handler__test_mode.h
-        blm_boards__comm__events__reader__arduino_i2c.h
-
-        blm_boards__comm__leds__p4_commands__buffer.h
-        blm_boards__comm__leds__p4_commands__buffer__scanner.h
-        blm_boards__comm__leds__p4_commands__buffer__scanner__callbacks.h
-        blm_boards__comm__leds__p4_commands__arduino_i2c.h
-        blm_boards__comm__leds__p4_commands__debug__arduino_serial_midi.h
-
-        blm_boards__comm__leds__u128_commands__buffer.h
-        blm_boards__comm__leds__u128_commands__buffer__scanner.h
-        blm_boards__comm__leds__u128_commands__buffer__scanner__callbacks.h
-        blm_boards__comm__leds__u128_commands__arduino_i2c.h
-
-        blm_boards__comm__leds__palette__buffer.h
-        blm_boards__comm__leds__palette__uploader.h
-
-        debug__midi_sysex.h
-        debug__midi_sysex__parameters.h
-
-        arduino_serial__reader.h
-
-        midi_port.h
-        midi_package.h
-        midi_parser.h
-        midi_sender.h
-        midi_sender__arduino_serial.h
-        midi_sender__arduino_usb_midi.h
-
-        host__leds_msg.h
-        host__leds_msg_handler.h
-
-        host__channel_msg_handler.h
-        host__alive_handler.h
-        host__sysex_msg_handler.h
-        host__sysex_msg_handler__callbacks.h
-        host__sysex_msg_sender.h
+        config.h
+        test_forwarding_serial.ino
 )
 
-include_directories(
-        .
+include_directories(        .
         /opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/system/libmaple
         /opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/system/libmaple/include
         /opt/arduino-1.8.13/hardware/Arduino_STM32-1.0.0/STM32F1/system/libmaple/stm32f1/include
