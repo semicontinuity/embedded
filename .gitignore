@@ -1,5 +1,6 @@
 **/.idea
 **/.dep
+**/__pycache__
 *.obj
 *.bin
 *.lss

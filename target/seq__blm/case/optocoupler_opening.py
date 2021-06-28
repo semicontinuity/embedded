@@ -5,20 +5,20 @@ RM=1
 def milling_program(gcode):
     return gcode.program(
         gcode.with_spindle(
-            gcode.deep_line(0, 0, 25, 0)
+            gcode.deep_rect_depth_first(x_from=-6, x_to=6, y_from=-6, y_to=6)
         )
     )
 
 
 def gcode():
     gcode = GCode()
-    gcode.SPINDLE_SPEED = 300
+    gcode.SPINDLE_SPEED = 800
     gcode.FEED_RATE_XY = 480
     gcode.FEED_RATE_Z = 60
     gcode.Z_UP = 3
     gcode.Z_THRESHOLD = 1
     gcode.Z_FROM = 0
-    gcode.Z_DOWN = -3.2
+    gcode.Z_DOWN = -3.4
     gcode.Z_STEP = 0.2
     return gcode
 

@@ -5,7 +5,7 @@ RM=1
 def milling_program(gcode):
     return gcode.program(
         gcode.with_spindle(
-            gcode.deep_line(0, 0, 25, 0)
+            gcode.pyramidoid(0, 25, 1, 7.4, 0, 0.1)
         )
     )
 
@@ -19,7 +19,7 @@ def gcode():
     gcode.Z_THRESHOLD = 1
     gcode.Z_FROM = 0
     gcode.Z_DOWN = -3.2
-    gcode.Z_STEP = 0.2
+    gcode.Z_STEP = 0.1
     return gcode
 
 

@@ -4401,6 +4401,8 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <part name="SV2" library="con-lstb" deviceset="MA04-1" device=""/>
 <part name="SW1" library="switch-alps" deviceset="EC12E_SW" device=""/>
 <part name="R1" library="rcl" deviceset="R-EU_" device="R0805"/>
+<part name="R2" library="rcl" deviceset="R-EU_" device="R0805"/>
+<part name="R3" library="rcl" deviceset="R-EU_" device="R0805"/>
 </parts>
 <sheets>
 <sheet>
@@ -4422,6 +4424,8 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <instance part="SW1" gate="G$1" x="190.5" y="111.76"/>
 <instance part="SW1" gate="G$2" x="210.82" y="119.38"/>
 <instance part="R1" gate="G$1" x="160.02" y="109.22"/>
+<instance part="R2" gate="G$1" x="160.02" y="134.62"/>
+<instance part="R3" gate="G$1" x="172.72" y="132.08"/>
 </instances>
 <busses>
 </busses>
@@ -4606,6 +4610,16 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="165.1" y1="109.22" x2="175.26" y2="109.22" width="0.1524" layer="91"/>
 <label x="167.64" y="109.22" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="R2" gate="G$1" pin="2"/>
+<wire x1="165.1" y1="134.62" x2="167.64" y2="134.62" width="0.1524" layer="91"/>
+<label x="162.56" y="137.16" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R3" gate="G$1" pin="2"/>
+<wire x1="177.8" y1="132.08" x2="182.88" y2="132.08" width="0.1524" layer="91"/>
+<label x="177.8" y="137.16" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="LIGHT" class="0">
 <segment>
@@ -4632,6 +4646,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <pinref part="SV2" gate="1" pin="4"/>
 <wire x1="144.78" y1="134.62" x2="154.94" y2="134.62" width="0.1524" layer="91"/>
 <label x="147.32" y="134.62" size="1.778" layer="95"/>
+<pinref part="R2" gate="G$1" pin="1"/>
 </segment>
 <segment>
 <pinref part="U$1" gate="G$1" pin="A4"/>
@@ -4647,8 +4662,9 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 </segment>
 <segment>
 <pinref part="SV2" gate="1" pin="3"/>
-<wire x1="144.78" y1="132.08" x2="154.94" y2="132.08" width="0.1524" layer="91"/>
+<wire x1="144.78" y1="132.08" x2="167.64" y2="132.08" width="0.1524" layer="91"/>
 <label x="147.32" y="132.08" size="1.778" layer="95"/>
+<pinref part="R3" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="C" class="0">

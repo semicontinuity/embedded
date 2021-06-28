@@ -23,12 +23,12 @@ def milling_program(gcode):
             ),
 
 
-            gcode.grid('potetiometer chamfers', xstart=225 + 12.5,  ystart=12.5, ystop=112.5, ystep=25,
-              element=lambda x, y: gcode.cylinder(x, y, d=12, z_step=0.2, z_to=-0.61)
-            ),
-            gcode.grid('potetiometer chamfers', xstart=225 + 12.5,  ystart=12.5, ystop=112.5, ystep=25,
-              element=lambda x, y: gcode.cylinder(x, y, d=10, z_step=0.2, z_to=-0.61)
-            ),
+#            gcode.grid('potetiometer chamfers', xstart=225 + 12.5,  ystart=12.5, ystop=112.5, ystep=25,
+#              element=lambda x, y: gcode.cylinder(x, y, d=12, z_step=0.2, z_to=-0.61)
+#            ),
+#            gcode.grid('potetiometer chamfers', xstart=225 + 12.5,  ystart=12.5, ystop=112.5, ystep=25,
+#              element=lambda x, y: gcode.cylinder(x, y, d=10, z_step=0.2, z_to=-0.61)
+#            ),
 
             gcode.grid('potetiometer holes', xstart=225 + 12.5,  ystart=12.5, ystop=112.5, ystep=25,
               element=lambda x, y: gcode.hole(x, y)
