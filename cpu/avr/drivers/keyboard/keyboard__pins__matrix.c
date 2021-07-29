@@ -1,7 +1,6 @@
 // I/O-matrix based keyboard pins
 // ---------------------------------------------------------------------------------------------------------------------
 
-#include <cpu/avr/drivers/keyboard/keyboard__pins.h>
 #include <cpu/avr/drivers/io_matrix/io_matrix__in.h>
 #include <stdint.h>
 
@@ -43,7 +42,3 @@ uint8_t keyboard__pins__port_d__read(void) {
 }
 
 #endif
-
-
-void keyboard__pins__init(void) {
-}

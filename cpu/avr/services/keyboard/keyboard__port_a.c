@@ -1,6 +1,8 @@
 #include "cpu/avr/services/keyboard/keyboard.h"
 #include "cpu/avr/services/keyboard/keyboard__port_a__buttons.h"
 #include "cpu/avr/services/keyboard/keyboard__port_a__encoders.h"
+
+#include "cpu/avr/drivers/keyboard/keyboard__port_a__pins.h"
 #include "cpu/avr/drivers/keyboard/keyboard__port_a__pins__mapping.h"
 #include "cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer.h"
 

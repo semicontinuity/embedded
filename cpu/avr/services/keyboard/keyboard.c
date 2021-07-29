@@ -1,8 +1,4 @@
 #include "cpu/avr/services/keyboard/keyboard.h"
-#include "cpu/avr/drivers/keyboard/keyboard__pins.h"
-#include "cpu/avr/drivers/keyboard/keyboard__pins__mapping.h"
-
-#include <cpu/avr/asm.h>
 
 
 #ifdef KEYBOARD__COMMON_MASK__REG
@@ -102,7 +98,6 @@ void keyboard__init_debounce_timers(void) {
 
 
 void keyboard__init(void) {
-    keyboard__pins__init();
     keyboard__init_previous_states();
     keyboard__init_masks();
     keyboard__init_debounce_timers();
