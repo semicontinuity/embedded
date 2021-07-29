@@ -3,37 +3,56 @@
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <cpu/avr/macros.h>
+
+
+#ifdef KEYBOARD__COMMON_MASK__REG
+register volatile uint8_t keyboard__common_mask asm(QUOTE(KEYBOARD__COMMON_MASK__REG));
+#endif
 
 
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
-void keyboard__port_a__debounce_timer__start(void) __attribute__((weak));
+#include <cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer.h>
+void keyboard__port_a__init_previous_state(void);
 void keyboard__port_a__previous_state__copy_bit(uint8_t state, uint8_t bit);
 void keyboard__port_a__mask__clear_bit(uint8_t bit);
 void keyboard__port_a__mask__and_with(uint8_t mask);
+void keyboard__port_a__mask__reset(void);
+void keyboard__port_a__run(void);
 #endif
 
 
 #if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
-void keyboard__port_b__debounce_timer__start(void) __attribute__((weak));
+#include <cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer.h>
+void keyboard__port_b__init_previous_state(void);
 void keyboard__port_b__previous_state__copy_bit(uint8_t state, uint8_t bit);
 void keyboard__port_b__mask__clear_bit(uint8_t bit);
 void keyboard__port_b__mask__and_with(uint8_t mask);
+void keyboard__port_b__mask__reset(void);
+void keyboard__port_b__run(void);
 #endif
 
 
 #if defined(KEYBOARD__PORT_C__USED) && KEYBOARD__PORT_C__USED == 1
-void keyboard__port_c__debounce_timer__start(void) __attribute__((weak));
+#include <cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer.h>
+void keyboard__port_c__init_previous_state(void);
 void keyboard__port_c__previous_state__copy_bit(uint8_t state, uint8_t bit);
 void keyboard__port_c__mask__clear_bit(uint8_t bit);
 void keyboard__port_c__mask__and_with(uint8_t mask);
+void keyboard__port_c__mask__reset(void);
+void keyboard__port_c__run(void);
 #endif
 
 
 #if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
+#include <cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer.h>
 void keyboard__port_d__debounce_timer__start(void) __attribute__((weak));
+void keyboard__port_d__init_previous_state(void);
 void keyboard__port_d__previous_state__copy_bit(uint8_t state, uint8_t bit);
 void keyboard__port_d__mask__clear_bit(uint8_t bit);
 void keyboard__port_d__mask__and_with(uint8_t mask);
+void keyboard__port_d__mask__reset(void);
+void keyboard__port_d__run(void);
 #endif
 
 
