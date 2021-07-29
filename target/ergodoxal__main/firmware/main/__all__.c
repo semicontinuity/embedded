@@ -29,6 +29,10 @@
 #include "cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b.c"
 
 #include "cpu/avr/services/keyboard/keyboard.c"
+#include "cpu/avr/services/keyboard/keyboard__port_a.c"
+#include "cpu/avr/services/keyboard/keyboard__port_b.c"
+#include "cpu/avr/services/keyboard/keyboard__port_c.c"
+#include "cpu/avr/services/keyboard/keyboard__port_d.c"
 
 #include "cpu/avr/services/keyboard/keyboard__port_a__buttons.c"
 #include "cpu/avr/services/keyboard/keyboard__port_b__buttons.c"

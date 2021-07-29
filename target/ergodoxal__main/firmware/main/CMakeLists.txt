@@ -48,6 +48,11 @@ set(SOURCE_FILES
 
         ../../../../cpu/avr/services/keyboard/keyboard.h
         ../../../../cpu/avr/services/keyboard/keyboard.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_a.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_b.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_c.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_d.c
+
         ../../../../cpu/avr/services/keyboard/keyboard__port_a__buttons.h
         ../../../../cpu/avr/services/keyboard/keyboard__port_a__buttons.c
         ../../../../cpu/avr/services/keyboard/keyboard__port_b__buttons.h
