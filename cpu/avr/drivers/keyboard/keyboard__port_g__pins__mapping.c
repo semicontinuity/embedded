@@ -3,198 +3,198 @@
 
 /**
  * Provides pin number for the given button (if it pertains to port G)
- * @param button 0-31 for BUTTON0..BUTTON31
+ * @param button 32-63 for BUTTON32..BUTTON63
 */
 uint8_t keyboard__pins__port_g__pin_for_button(const uint8_t button) {
-#if defined(IN__BUTTON0__PORT) && defined(IN__BUTTON0__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 0) return IN__BUTTON0__PIN;
+#if defined(IN__BUTTON32__PORT) && defined(IN__BUTTON32__PIN)
+#if SINGLEQUOTED(IN__BUTTON32__PORT) == 'G'
+    if (button == 32) return IN__BUTTON32__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON1__PORT) && defined(IN__BUTTON1__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 1) return IN__BUTTON1__PIN;
+#if defined(IN__BUTTON33__PORT) && defined(IN__BUTTON33__PIN)
+#if SINGLEQUOTED(IN__BUTTON33__PORT) == 'G'
+    if (button == 33) return IN__BUTTON33__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON2__PORT) && defined(IN__BUTTON2__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 2) return IN__BUTTON2__PIN;
+#if defined(IN__BUTTON34__PORT) && defined(IN__BUTTON34__PIN)
+#if SINGLEQUOTED(IN__BUTTON34__PORT) == 'G'
+    if (button == 33) return IN__BUTTON34__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON3__PORT) && defined(IN__BUTTON3__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 3) return IN__BUTTON3__PIN;
+#if defined(IN__BUTTON35__PORT) && defined(IN__BUTTON35__PIN)
+#if SINGLEQUOTED(IN__BUTTON35__PORT) == 'G'
+    if (button == 35) return IN__BUTTON35__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON4__PORT) && defined(IN__BUTTON4__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 4) return IN__BUTTON4__PIN;
+#if defined(IN__BUTTON36__PORT) && defined(IN__BUTTON36__PIN)
+#if SINGLEQUOTED(IN__BUTTON36__PORT) == 'G'
+    if (button == 36) return IN__BUTTON36__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON5__PORT) && defined(IN__BUTTON5__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 5) return IN__BUTTON5__PIN;
+#if defined(IN__BUTTON37__PORT) && defined(IN__BUTTON37__PIN)
+#if SINGLEQUOTED(IN__BUTTON37__PORT) == 'G'
+    if (button == 37) return IN__BUTTON37__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON6__PORT) && defined(IN__BUTTON6__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 6) return IN__BUTTON6__PIN;
+#if defined(IN__BUTTON38__PORT) && defined(IN__BUTTON38__PIN)
+#if SINGLEQUOTED(IN__BUTTON38__PORT) == 'G'
+    if (button == 38) return IN__BUTTON38__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON7__PORT) && defined(IN__BUTTON7__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 7) return IN__BUTTON7__PIN;
+#if defined(IN__BUTTON39__PORT) && defined(IN__BUTTON39__PIN)
+#if SINGLEQUOTED(IN__BUTTON39__PORT) == 'G'
+    if (button == 39) return IN__BUTTON39__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON8__PORT) && defined(IN__BUTTON8__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 8) return IN__BUTTON8__PIN;
+#if defined(IN__BUTTON40__PORT) && defined(IN__BUTTON40__PIN)
+#if SINGLEQUOTED(IN__BUTTON40__PORT) == 'G'
+    if (button == 40) return IN__BUTTON40__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON9__PORT) && defined(IN__BUTTON9__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 9) return IN__BUTTON9__PIN;
+#if defined(IN__BUTTON41__PORT) && defined(IN__BUTTON41__PIN)
+#if SINGLEQUOTED(IN__BUTTON41__PORT) == 'G'
+    if (button == 41) return IN__BUTTON41__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON10__PORT) && defined(IN__BUTTON10__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 10) return IN__BUTTON10__PIN;
+#if defined(IN__BUTTON42__PORT) && defined(IN__BUTTON42__PIN)
+#if SINGLEQUOTED(IN__BUTTON42__PORT) == 'G'
+    if (button == 42) return IN__BUTTON42__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON11__PORT) && defined(IN__BUTTON11__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 11) return IN__BUTTON11__PIN;
+#if defined(IN__BUTTON43__PORT) && defined(IN__BUTTON43__PIN)
+#if SINGLEQUOTED(IN__BUTTON43__PORT) == 'G'
+    if (button == 43) return IN__BUTTON43__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON12__PORT) && defined(IN__BUTTON12__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 12) return IN__BUTTON12__PIN;
+#if defined(IN__BUTTON44__PORT) && defined(IN__BUTTON44__PIN)
+#if SINGLEQUOTED(IN__BUTTON44__PORT) == 'G'
+    if (button == 44) return IN__BUTTON44__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON13__PORT) && defined(IN__BUTTON13__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 13) return IN__BUTTON13__PIN;
+#if defined(IN__BUTTON45__PORT) && defined(IN__BUTTON45__PIN)
+#if SINGLEQUOTED(IN__BUTTON45__PORT) == 'G'
+    if (button == 45) return IN__BUTTON45__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON14__PORT) && defined(IN__BUTTON14__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 14) return IN__BUTTON14__PIN;
+#if defined(IN__BUTTON46__PORT) && defined(IN__BUTTON46__PIN)
+#if SINGLEQUOTED(IN__BUTTON46__PORT) == 'G'
+    if (button == 46) return IN__BUTTON46__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON15__PORT) && defined(IN__BUTTON15__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 15) return IN__BUTTON15__PIN;
+#if defined(IN__BUTTON47__PORT) && defined(IN__BUTTON47__PIN)
+#if SINGLEQUOTED(IN__BUTTON47__PORT) == 'G'
+    if (button == 47) return IN__BUTTON47__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON16__PORT) && defined(IN__BUTTON16__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 16) return IN__BUTTON16__PIN;
+#if defined(IN__BUTTON48__PORT) && defined(IN__BUTTON48__PIN)
+#if SINGLEQUOTED(IN__BUTTON48__PORT) == 'G'
+    if (button == 48) return IN__BUTTON48__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON17__PORT) && defined(IN__BUTTON17__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 17) return IN__BUTTON17__PIN;
+#if defined(IN__BUTTON49__PORT) && defined(IN__BUTTON49__PIN)
+#if SINGLEQUOTED(IN__BUTTON49__PORT) == 'G'
+    if (button == 49) return IN__BUTTON49__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON18__PORT) && defined(IN__BUTTON18__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 18) return IN__BUTTON18__PIN;
+#if defined(IN__BUTTON50__PORT) && defined(IN__BUTTON50__PIN)
+#if SINGLEQUOTED(IN__BUTTON50__PORT) == 'G'
+    if (button == 50) return IN__BUTTON50__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON19__PORT) && defined(IN__BUTTON19__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 19) return IN__BUTTON19__PIN;
+#if defined(IN__BUTTON51__PORT) && defined(IN__BUTTON51__PIN)
+#if SINGLEQUOTED(IN__BUTTON51__PORT) == 'G'
+    if (button == 51) return IN__BUTTON51__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON20__PORT) && defined(IN__BUTTON20__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 20) return IN__BUTTON20__PIN;
+#if defined(IN__BUTTON52__PORT) && defined(IN__BUTTON52__PIN)
+#if SINGLEQUOTED(IN__BUTTON52__PORT) == 'G'
+    if (button == 52) return IN__BUTTON52__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON21__PORT) && defined(IN__BUTTON21__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 21) return IN__BUTTON21__PIN;
+#if defined(IN__BUTTON53__PORT) && defined(IN__BUTTON53__PIN)
+#if SINGLEQUOTED(IN__BUTTON53__PORT) == 'G'
+    if (button == 53) return IN__BUTTON53__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON22__PORT) && defined(IN__BUTTON22__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 22) return IN__BUTTON22__PIN;
+#if defined(IN__BUTTON54__PORT) && defined(IN__BUTTON54__PIN)
+#if SINGLEQUOTED(IN__BUTTON54__PORT) == 'G'
+    if (button == 54) return IN__BUTTON54__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON23__PORT) && defined(IN__BUTTON23__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 23) return IN__BUTTON23__PIN;
+#if defined(IN__BUTTON55__PORT) && defined(IN__BUTTON55__PIN)
+#if SINGLEQUOTED(IN__BUTTON55__PORT) == 'G'
+    if (button == 55) return IN__BUTTON55__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON24__PORT) && defined(IN__BUTTON24__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 24) return IN__BUTTON24__PIN;
+#if defined(IN__BUTTON56__PORT) && defined(IN__BUTTON56__PIN)
+#if SINGLEQUOTED(IN__BUTTON56__PORT) == 'G'
+    if (button == 56) return IN__BUTTON56__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON25__PORT) && defined(IN__BUTTON25__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 25) return IN__BUTTON25__PIN;
+#if defined(IN__BUTTON57__PORT) && defined(IN__BUTTON57__PIN)
+#if SINGLEQUOTED(IN__BUTTON57__PORT) == 'G'
+    if (button == 57) return IN__BUTTON57__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON26__PORT) && defined(IN__BUTTON26__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 26) return IN__BUTTON26__PIN;
+#if defined(IN__BUTTON58__PORT) && defined(IN__BUTTON58__PIN)
+#if SINGLEQUOTED(IN__BUTTON58__PORT) == 'G'
+    if (button == 58) return IN__BUTTON58__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON27__PORT) && defined(IN__BUTTON27__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 27) return IN__BUTTON27__PIN;
+#if defined(IN__BUTTON59__PORT) && defined(IN__BUTTON59__PIN)
+#if SINGLEQUOTED(IN__BUTTON59__PORT) == 'G'
+    if (button == 59) return IN__BUTTON59__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON28__PORT) && defined(IN__BUTTON28__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 28) return IN__BUTTON28__PIN;
+#if defined(IN__BUTTON60__PORT) && defined(IN__BUTTON60__PIN)
+#if SINGLEQUOTED(IN__BUTTON60__PORT) == 'G'
+    if (button == 60) return IN__BUTTON60__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON29__PORT) && defined(IN__BUTTON29__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 29) return IN__BUTTON29__PIN;
+#if defined(IN__BUTTON61__PORT) && defined(IN__BUTTON61__PIN)
+#if SINGLEQUOTED(IN__BUTTON61__PORT) == 'G'
+    if (button == 61) return IN__BUTTON61__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON30__PORT) && defined(IN__BUTTON30__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 30) return IN__BUTTON30__PIN;
+#if defined(IN__BUTTON62__PORT) && defined(IN__BUTTON62__PIN)
+#if SINGLEQUOTED(IN__BUTTON62__PORT) == 'G'
+    if (button == 62) return IN__BUTTON62__PIN;
 #endif
 #endif
 
-#if defined(IN__BUTTON31__PORT) && defined(IN__BUTTON31__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    if (button == 31) return IN__BUTTON31__PIN;
+#if defined(IN__BUTTON63__PORT) && defined(IN__BUTTON63__PIN)
+#if SINGLEQUOTED(IN__BUTTON63__PORT) == 'G'
+    if (button == 63) return IN__BUTTON63__PIN;
 #endif
 #endif
 
@@ -205,195 +205,195 @@ uint8_t keyboard__pins__port_g__pin_for_button(const uint8_t button) {
 uint8_t keyboard__pins__port_g__button_pins_mask(void) {
     uint8_t mask = 0;
 
-#if defined(IN__BUTTON0__PORT) && defined(IN__BUTTON0__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON0__PIN));
+#if defined(IN__BUTTON32__PORT) && defined(IN__BUTTON32__PIN)
+#if SINGLEQUOTED(IN__BUTTON32__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON32__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON1__PORT) && defined(IN__BUTTON1__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON1__PIN));
+#if defined(IN__BUTTON33__PORT) && defined(IN__BUTTON33__PIN)
+#if SINGLEQUOTED(IN__BUTTON33__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON33__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON2__PORT) && defined(IN__BUTTON2__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON2__PIN));
+#if defined(IN__BUTTON34__PORT) && defined(IN__BUTTON34__PIN)
+#if SINGLEQUOTED(IN__BUTTON34__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON34__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON3__PORT) && defined(IN__BUTTON3__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON3__PIN));
+#if defined(IN__BUTTON35__PORT) && defined(IN__BUTTON35__PIN)
+#if SINGLEQUOTED(IN__BUTTON35__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON35__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON4__PORT) && defined(IN__BUTTON4__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON4__PIN));
+#if defined(IN__BUTTON36__PORT) && defined(IN__BUTTON36__PIN)
+#if SINGLEQUOTED(IN__BUTTON36__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON36__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON5__PORT) && defined(IN__BUTTON5__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON5__PIN));
+#if defined(IN__BUTTON37__PORT) && defined(IN__BUTTON37__PIN)
+#if SINGLEQUOTED(IN__BUTTON37__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON37__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON6__PORT) && defined(IN__BUTTON6__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON6__PIN));
+#if defined(IN__BUTTON38__PORT) && defined(IN__BUTTON38__PIN)
+#if SINGLEQUOTED(IN__BUTTON38__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON38__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON7__PORT) && defined(IN__BUTTON7__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON7__PIN));
+#if defined(IN__BUTTON39__PORT) && defined(IN__BUTTON39__PIN)
+#if SINGLEQUOTED(IN__BUTTON39__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON39__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON8__PORT) && defined(IN__BUTTON8__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON8__PIN));
+#if defined(IN__BUTTON40__PORT) && defined(IN__BUTTON40__PIN)
+#if SINGLEQUOTED(IN__BUTTON40__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON40__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON9__PORT) && defined(IN__BUTTON9__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON9__PIN));
+#if defined(IN__BUTTON41__PORT) && defined(IN__BUTTON41__PIN)
+#if SINGLEQUOTED(IN__BUTTON41__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON41__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON10__PORT) && defined(IN__BUTTON10__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON10__PIN));
+#if defined(IN__BUTTON42__PORT) && defined(IN__BUTTON42__PIN)
+#if SINGLEQUOTED(IN__BUTTON42__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON42__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON11__PORT) && defined(IN__BUTTON11__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON11__PIN));
+#if defined(IN__BUTTON43__PORT) && defined(IN__BUTTON43__PIN)
+#if SINGLEQUOTED(IN__BUTTON43__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON43__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON12__PORT) && defined(IN__BUTTON12__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON12__PIN));
+#if defined(IN__BUTTON44__PORT) && defined(IN__BUTTON44__PIN)
+#if SINGLEQUOTED(IN__BUTTON44__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON44__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON13__PORT) && defined(IN__BUTTON13__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON13__PIN));
+#if defined(IN__BUTTON45__PORT) && defined(IN__BUTTON45__PIN)
+#if SINGLEQUOTED(IN__BUTTON45__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON45__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON14__PORT) && defined(IN__BUTTON14__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON14__PIN));
+#if defined(IN__BUTTON46__PORT) && defined(IN__BUTTON46__PIN)
+#if SINGLEQUOTED(IN__BUTTON46__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON46__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON15__PORT) && defined(IN__BUTTON15__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON15__PIN));
+#if defined(IN__BUTTON47__PORT) && defined(IN__BUTTON47__PIN)
+#if SINGLEQUOTED(IN__BUTTON47__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON47__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON16__PORT) && defined(IN__BUTTON16__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON16__PIN));
+#if defined(IN__BUTTON48__PORT) && defined(IN__BUTTON48__PIN)
+#if SINGLEQUOTED(IN__BUTTON48__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON48__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON17__PORT) && defined(IN__BUTTON17__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON17__PIN));
+#if defined(IN__BUTTON49__PORT) && defined(IN__BUTTON49__PIN)
+#if SINGLEQUOTED(IN__BUTTON49__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON49__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON18__PORT) && defined(IN__BUTTON18__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON18__PIN));
+#if defined(IN__BUTTON50__PORT) && defined(IN__BUTTON50__PIN)
+#if SINGLEQUOTED(IN__BUTTON50__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON50__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON19__PORT) && defined(IN__BUTTON19__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON19__PIN));
+#if defined(IN__BUTTON51__PORT) && defined(IN__BUTTON51__PIN)
+#if SINGLEQUOTED(IN__BUTTON51__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON51__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON20__PORT) && defined(IN__BUTTON20__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON20__PIN));
+#if defined(IN__BUTTON52__PORT) && defined(IN__BUTTON52__PIN)
+#if SINGLEQUOTED(IN__BUTTON52__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON52__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON21__PORT) && defined(IN__BUTTON21__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON21__PIN));
+#if defined(IN__BUTTON53__PORT) && defined(IN__BUTTON53__PIN)
+#if SINGLEQUOTED(IN__BUTTON53__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON53__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON22__PORT) && defined(IN__BUTTON22__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON22__PIN));
+#if defined(IN__BUTTON54__PORT) && defined(IN__BUTTON54__PIN)
+#if SINGLEQUOTED(IN__BUTTON54__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON54__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON23__PORT) && defined(IN__BUTTON23__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON23__PIN));
+#if defined(IN__BUTTON55__PORT) && defined(IN__BUTTON55__PIN)
+#if SINGLEQUOTED(IN__BUTTON55__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON55__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON24__PORT) && defined(IN__BUTTON24__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON24__PIN));
+#if defined(IN__BUTTON56__PORT) && defined(IN__BUTTON56__PIN)
+#if SINGLEQUOTED(IN__BUTTON56__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON56__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON25__PORT) && defined(IN__BUTTON25__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON25__PIN));
+#if defined(IN__BUTTON57__PORT) && defined(IN__BUTTON57__PIN)
+#if SINGLEQUOTED(IN__BUTTON57__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON57__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON26__PORT) && defined(IN__BUTTON26__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON26__PIN));
+#if defined(IN__BUTTON58__PORT) && defined(IN__BUTTON58__PIN)
+#if SINGLEQUOTED(IN__BUTTON58__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON58__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON27__PORT) && defined(IN__BUTTON27__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON27__PIN));
+#if defined(IN__BUTTON59__PORT) && defined(IN__BUTTON59__PIN)
+#if SINGLEQUOTED(IN__BUTTON59__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON59__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON28__PORT) && defined(IN__BUTTON28__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON28__PIN));
+#if defined(IN__BUTTON60__PORT) && defined(IN__BUTTON60__PIN)
+#if SINGLEQUOTED(IN__BUTTON60__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON60__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON29__PORT) && defined(IN__BUTTON29__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON29__PIN));
+#if defined(IN__BUTTON61__PORT) && defined(IN__BUTTON61__PIN)
+#if SINGLEQUOTED(IN__BUTTON61__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON61__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON30__PORT) && defined(IN__BUTTON30__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON30__PIN));
+#if defined(IN__BUTTON62__PORT) && defined(IN__BUTTON62__PIN)
+#if SINGLEQUOTED(IN__BUTTON62__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON62__PIN));
 #endif
 #endif
 
-#if defined(IN__BUTTON31__PORT) && defined(IN__BUTTON31__PIN)
-#if SINGLEQUOTED(IN__BUTTON0__PORT) == 'G'
-    mask |= (1U << (uint8_t)(IN__BUTTON31__PIN));
+#if defined(IN__BUTTON63__PORT) && defined(IN__BUTTON63__PIN)
+#if SINGLEQUOTED(IN__BUTTON63__PORT) == 'G'
+    mask |= (1U << (uint8_t)(IN__BUTTON63__PIN));
 #endif
 #endif
 
