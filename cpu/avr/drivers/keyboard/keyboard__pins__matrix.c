@@ -42,3 +42,39 @@ uint8_t keyboard__pins__port_d__read(void) {
 }
 
 #endif
+
+
+#if defined(KEYBOARD__PORT_E__USED) && KEYBOARD__PORT_E__USED == 1
+
+uint8_t keyboard__pins__port_e__read(void) {
+    return io_matrix__in__column4__state__get();
+}
+
+#endif
+
+
+#if defined(KEYBOARD__PORT_F__USED) && KEYBOARD__PORT_F__USED == 1
+
+uint8_t keyboard__pins__port_f__read(void) {
+    return io_matrix__in__column5__state__get();
+}
+
+#endif
+
+
+#if defined(KEYBOARD__PORT_G__USED) && KEYBOARD__PORT_G__USED == 1
+
+uint8_t keyboard__pins__port_g__read(void) {
+    return io_matrix__in__column6__state__get();
+}
+
+#endif
+
+
+#if defined(KEYBOARD__PORT_H__USED) && KEYBOARD__PORT_H__USED == 1
+
+uint8_t keyboard__pins__port_d__read(void) {
+    return io_matrix__in__column7__state__get();
+}
+
+#endif

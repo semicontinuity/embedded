@@ -3,9 +3,6 @@
 #  include "services/tx_ring_buffer.c"
 #endif
 
-// LED data
-#include "data.c"
-
 // I/O matrix
 #include "cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer__timer1.c"
 #include "cpu/avr/drivers/io_matrix/io_matrix__in.c"
@@ -26,17 +23,26 @@
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_b.c"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_c.c"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_d.c"
+#include "cpu/avr/drivers/keyboard/keyboard__port_e__pins__mapping.c"
+#include "cpu/avr/drivers/keyboard/keyboard__port_f__pins__mapping.c"
+#include "cpu/avr/drivers/keyboard/keyboard__port_g__pins__mapping.c"
 
 #include "cpu/avr/services/keyboard/keyboard.c"
 #include "cpu/avr/services/keyboard/keyboard__port_a.c"
 #include "cpu/avr/services/keyboard/keyboard__port_b.c"
 #include "cpu/avr/services/keyboard/keyboard__port_c.c"
 #include "cpu/avr/services/keyboard/keyboard__port_d.c"
+#include "cpu/avr/services/keyboard/keyboard__port_e.c"
+#include "cpu/avr/services/keyboard/keyboard__port_f.c"
+#include "cpu/avr/services/keyboard/keyboard__port_g.c"
 
 #include "cpu/avr/services/keyboard/keyboard__port_a__buttons.c"
 #include "cpu/avr/services/keyboard/keyboard__port_b__buttons.c"
 #include "cpu/avr/services/keyboard/keyboard__port_c__buttons.c"
 #include "cpu/avr/services/keyboard/keyboard__port_d__buttons.c"
+#include "cpu/avr/services/keyboard/keyboard__port_e__buttons.c"
+#include "cpu/avr/services/keyboard/keyboard__port_f__buttons.c"
+#include "cpu/avr/services/keyboard/keyboard__port_g__buttons.c"
 
 #include "comm_keyboard.c"
 

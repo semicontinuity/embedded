@@ -56,6 +56,54 @@ void keyboard__port_d__run(void);
 #endif
 
 
+#if defined(KEYBOARD__PORT_E__USED) && KEYBOARD__PORT_E__USED == 1
+#include <cpu/avr/drivers/keyboard/keyboard__port_e__debounce_timer.h>
+void keyboard__port_e__debounce_timer__start(void) __attribute__((weak));
+void keyboard__port_e__init_previous_state(void);
+void keyboard__port_e__previous_state__copy_bit(uint8_t state, uint8_t bit);
+void keyboard__port_e__mask__clear_bit(uint8_t bit);
+void keyboard__port_e__mask__and_with(uint8_t mask);
+void keyboard__port_e__mask__reset(void);
+void keyboard__port_e__run(void);
+#endif
+
+
+#if defined(KEYBOARD__PORT_F__USED) && KEYBOARD__PORT_F__USED == 1
+#include <cpu/avr/drivers/keyboard/keyboard__port_f__debounce_timer.h>
+void keyboard__port_f__debounce_timer__start(void) __attribute__((weak));
+void keyboard__port_f__init_previous_state(void);
+void keyboard__port_f__previous_state__copy_bit(uint8_t state, uint8_t bit);
+void keyboard__port_f__mask__clear_bit(uint8_t bit);
+void keyboard__port_f__mask__and_with(uint8_t mask);
+void keyboard__port_f__mask__reset(void);
+void keyboard__port_f__run(void);
+#endif
+
+
+#if defined(KEYBOARD__PORT_G__USED) && KEYBOARD__PORT_G__USED == 1
+#include <cpu/avr/drivers/keyboard/keyboard__port_g__debounce_timer.h>
+void keyboard__port_g__debounce_timer__start(void) __attribute__((weak));
+void keyboard__port_g__init_previous_state(void);
+void keyboard__port_g__previous_state__copy_bit(uint8_t state, uint8_t bit);
+void keyboard__port_g__mask__clear_bit(uint8_t bit);
+void keyboard__port_g__mask__and_with(uint8_t mask);
+void keyboard__port_g__mask__reset(void);
+void keyboard__port_g__run(void);
+#endif
+
+
+#if defined(KEYBOARD__PORT_H__USED) && KEYBOARD__PORT_H__USED == 1
+#include <cpu/avr/drivers/keyboard/keyboard__port_h__debounce_timer.h>
+void keyboard__port_h__debounce_timer__start(void) __attribute__((weak));
+void keyboard__port_h__init_previous_state(void);
+void keyboard__port_h__previous_state__copy_bit(uint8_t state, uint8_t bit);
+void keyboard__port_h__mask__clear_bit(uint8_t bit);
+void keyboard__port_h__mask__and_with(uint8_t mask);
+void keyboard__port_h__mask__reset(void);
+void keyboard__port_h__run(void);
+#endif
+
+
 void keyboard__init(void);
 
 void keyboard__run(void);

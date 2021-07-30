@@ -18,7 +18,6 @@
 #include "cpu/avr/drivers/io_matrix/io_matrix__in.h"
 #include "drivers/io_matrix__out_columns.h"
 
-#include "data.h"
 #include <services/tracer.h>
 #include <cpu/avr/usart0.h>
 

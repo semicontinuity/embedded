@@ -24,10 +24,3 @@ void keyboard__debounce_timer__d__init(void) {
 void keyboard__debounce_timer__d__start(void) {
     timer2__compare_b__value__set(timer2__value__get() + KEYBOARD__DEBOUNCE_TIMER__D__DELAY);
 }
-
-/**
- * Invoked, when the programmed debounce delay has elapsed.
- */
-void keyboard__debounce_timer__d__expired(void) {
-    keyboard__debounce_timer__d__run();
-}

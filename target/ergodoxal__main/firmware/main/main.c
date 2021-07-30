@@ -23,6 +23,30 @@
 #include "cpu/avr/usart0.h"
 
 
+// keyboard tweaks
+// -----------------------------------------------------------------------------
+
+
+void keyboard__debounce_timer__a__expired(void) {
+    keyboard__port_a__mask__reset();
+    keyboard__port_b__mask__reset();
+}
+
+void keyboard__debounce_timer__b__expired(void) {
+    keyboard__port_c__mask__reset();
+    keyboard__port_d__mask__reset();
+}
+
+void keyboard__debounce_timer__c__expired(void) {
+    keyboard__port_e__mask__reset();
+    keyboard__port_f__mask__reset();
+}
+
+void keyboard__debounce_timer__d__expired(void) {
+    keyboard__port_g__mask__reset();
+}
+
+
 // application
 // -----------------------------------------------------------------------------
 

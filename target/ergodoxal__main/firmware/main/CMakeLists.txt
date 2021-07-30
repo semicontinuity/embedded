@@ -25,6 +25,16 @@ set(SOURCE_FILES
         ../../../../cpu/avr/timer2.h
         ../../../../cpu/avr/timer2.c
 
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__a.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__a__timer0a.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__b.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__b__timer0b.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__c.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__c__timer2a.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__d.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__d__timer2b.c
+
+
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__matrix.c
 
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__pins__mapping.h
@@ -36,14 +46,13 @@ set(SOURCE_FILES
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__pins__mapping.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_d.c
 
-        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__a.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__a__timer0a.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__b.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__b__timer0b.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__c.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__c__timer2a.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__d.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__d__timer2b.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_e__pins__mapping.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_e__pins__mapping.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_f__pins__mapping.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_f__pins__mapping.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_g__pins__mapping.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_g__pins__mapping.c
+
 
         ../../../../cpu/avr/services/keyboard/keyboard.h
         ../../../../cpu/avr/services/keyboard/keyboard.c
@@ -51,6 +60,9 @@ set(SOURCE_FILES
         ../../../../cpu/avr/services/keyboard/keyboard__port_b.c
         ../../../../cpu/avr/services/keyboard/keyboard__port_c.c
         ../../../../cpu/avr/services/keyboard/keyboard__port_d.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_e.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_f.c
+        ../../../../cpu/avr/services/keyboard/keyboard__port_g.c
 
         ../../../../cpu/avr/services/keyboard/keyboard__port_a__buttons.h
         ../../../../cpu/avr/services/keyboard/keyboard__port_a__buttons.c
@@ -68,8 +80,6 @@ set(SOURCE_FILES
         ../../bsp/drivers/out/led_b.h
         ../../bsp/drivers/out/led_c.h
 
-        data.c
-
         ../../bsp/services/tracer.h
         ../../bsp/services/tracer__nop.c
 
@@ -85,7 +95,6 @@ add_definitions(-DF_CPU=8000000UL)
 add_definitions(-DINLINE=)
 add_definitions(-DUSART0__BAUD_RATE=38400)
 
-include(CMakeLists.data.txt)
 include(CMakeLists.io_matrix__scanner.txt)
 include(CMakeLists.io_matrix.txt)
 include(CMakeLists.io.txt)

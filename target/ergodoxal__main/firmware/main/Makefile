@@ -17,9 +17,6 @@ CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh)
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.io.properties)
 include config.io.properties
 
-CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.data.properties)
-include config.data.properties
-
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.io_matrix__scanner.properties)
 include config.io_matrix__scanner.properties
 
