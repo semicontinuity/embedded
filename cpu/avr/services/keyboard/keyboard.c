@@ -2,6 +2,14 @@
 
 
 #ifdef KEYBOARD__COMMON_MASK__REG
+
+
+#include "cpu/avr/drivers/keyboard/keyboard__port_a__pins__mapping.h"
+#include "cpu/avr/drivers/keyboard/keyboard__port_b__pins__mapping.h"
+#include "cpu/avr/drivers/keyboard/keyboard__port_c__pins__mapping.h"
+#include "cpu/avr/drivers/keyboard/keyboard__port_d__pins__mapping.h"
+
+
 inline void keyboard__init_common_mask(void) {
     __asm__ __volatile__("keyboard__init_common_mask:");
 
@@ -9,22 +17,30 @@ inline void keyboard__init_common_mask(void) {
 
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
     common_mask |= keyboard__pins__port_a__button_pins_mask();
+#if defined(KEYBOARD__ENCODERS) && KEYBOARD__ENCODERS == 1
     common_mask |= keyboard__pins__port_a__encoders_pins_mask();
+#endif
 #endif
 
 #if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
     common_mask |= keyboard__pins__port_b__button_pins_mask();
+#if defined(KEYBOARD__ENCODERS) && KEYBOARD__ENCODERS == 1
     common_mask |= keyboard__pins__port_b__encoders_pins_mask();
+#endif
 #endif
 
 #if defined(KEYBOARD__PORT_C__USED) && KEYBOARD__PORT_C__USED == 1
     common_mask |= keyboard__pins__port_c__button_pins_mask();
+#if defined(KEYBOARD__ENCODERS) && KEYBOARD__ENCODERS == 1
     common_mask |= keyboard__pins__port_c__encoders_pins_mask();
+#endif
 #endif
 
 #if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
     common_mask |= keyboard__pins__port_d__button_pins_mask();
+#if defined(KEYBOARD__ENCODERS) && KEYBOARD__ENCODERS == 1
     common_mask |= keyboard__pins__port_d__encoders_pins_mask();
+#endif
 #endif
 
     keyboard__common_mask = common_mask;

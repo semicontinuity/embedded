@@ -8,7 +8,6 @@
 
 // I/O matrix
 #include "cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer__timer1.c"
-#include "cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer.h"
 #include "cpu/avr/drivers/io_matrix/io_matrix__in.c"
 #include "io_matrix__scanner__thread.c"
 
@@ -16,17 +15,17 @@
 #include "cpu/avr/timer0.c"
 #include "cpu/avr/timer2.c"
 
+#include "cpu/avr/drivers/keyboard/keyboard__debounce_timer__a__timer0a.c"
+#include "cpu/avr/drivers/keyboard/keyboard__debounce_timer__b__timer0b.c"
+#include "cpu/avr/drivers/keyboard/keyboard__debounce_timer__c__timer2a.c"
+#include "cpu/avr/drivers/keyboard/keyboard__debounce_timer__d__timer2b.c"
+
 #include "cpu/avr/drivers/keyboard/keyboard__pins__matrix.c"
 
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_a.c"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_b.c"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_c.c"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_d.c"
-
-#include "cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer__timer0a.c"
-#include "cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b.c"
-#include "cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer__timer2a.c"
-#include "cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b.c"
 
 #include "cpu/avr/services/keyboard/keyboard.c"
 #include "cpu/avr/services/keyboard/keyboard__port_a.c"

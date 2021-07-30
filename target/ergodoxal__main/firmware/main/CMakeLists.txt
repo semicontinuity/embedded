@@ -25,7 +25,6 @@ set(SOURCE_FILES
         ../../../../cpu/avr/timer2.h
         ../../../../cpu/avr/timer2.c
 
-        ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__matrix.c
 
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__pins__mapping.h
@@ -37,14 +36,14 @@ set(SOURCE_FILES
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__pins__mapping.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_d.c
 
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__debounce_timer__timer0a.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__debounce_timer__timer0b.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__debounce_timer__timer2a.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer.h
-        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__a.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__a__timer0a.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__b.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__b__timer0b.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__c.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__c__timer2a.c
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__d.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__debounce_timer__d__timer2b.c
 
         ../../../../cpu/avr/services/keyboard/keyboard.h
         ../../../../cpu/avr/services/keyboard/keyboard.c
@@ -61,15 +60,6 @@ set(SOURCE_FILES
         ../../../../cpu/avr/services/keyboard/keyboard__port_c__buttons.c
         ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.h
         ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.c
-
-        ../../../../cpu/avr/services/keyboard/keyboard__port_a__encoders.h
-        ../../../../cpu/avr/services/keyboard/keyboard__port_a__encoders.c
-        ../../../../cpu/avr/services/keyboard/keyboard__port_b__encoders.h
-        ../../../../cpu/avr/services/keyboard/keyboard__port_b__encoders.c
-        ../../../../cpu/avr/services/keyboard/keyboard__port_c__encoders.h
-        ../../../../cpu/avr/services/keyboard/keyboard__port_c__encoders.c
-        ../../../../cpu/avr/services/keyboard/keyboard__port_d__encoders.h
-        ../../../../cpu/avr/services/keyboard/keyboard__port_d__encoders.c
 
         comm_keyboard.h
         comm_keyboard.c

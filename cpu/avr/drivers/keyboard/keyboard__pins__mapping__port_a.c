@@ -1,7 +1,6 @@
 #include "cpu/avr/drivers/keyboard/keyboard__port_a__pins__mapping.h"
 #include "cpu/avr/macros.h"
 
-
 /**
  * Provides pin number for the given button (if it pertains to port A)
  * @param button 0-31 for BUTTON0..BUTTON31

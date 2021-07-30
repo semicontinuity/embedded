@@ -67,7 +67,9 @@ void keyboard__port_b__run(void) {
         keyboard__port_b__mask ^= changes;
         keyboard__port_b__previous_state = state;
         keyboard__port_b__buttons__process(state, changes);
+#if defined(KEYBOARD__ENCODERS) && KEYBOARD__ENCODERS == 1
         keyboard__port_b__encoders__process(state, changes);
+#endif
     }
 }
 

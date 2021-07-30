@@ -23,7 +23,6 @@ set(SOURCE_FILES
         ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/timer2.h
         ../../../../cpu/avr/timer2.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__matrix.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__port_a__pins__mapping.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_a.c

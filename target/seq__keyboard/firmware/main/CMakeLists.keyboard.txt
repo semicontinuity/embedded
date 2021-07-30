@@ -24,6 +24,8 @@ add_definitions(-DKEYBOARD__PORT_D__DEBOUNCE_TIMER__CONF__STARTED=TIMER2_CONF_PR
 add_definitions(-DKEYBOARD__PORT_D__DEBOUNCE_TIMER__DELAY=64)
 add_definitions(-Dkeyboard__port_d__debounce_timer__run=keyboard__port_d__mask__reset)
 
+add_definitions(-DKEYBOARD__ENCODERS=1)
+
 add_definitions(-DKEYBOARD__PORT_A__USED=1)
 add_definitions(-DKEYBOARD__PORT_B__USED=1)
 add_definitions(-DKEYBOARD__PORT_C__USED=1)
