@@ -58,11 +58,63 @@ inline void io_matrix__out__column3__set(const uint8_t value) {
 }
 
 
-inline void io_matrix__out_columns__init(void) {
+inline void io_matrix__out__column4__init(void) {
+    USE_AS_OUTPUT(IO_MATRIX__OUT__COLUMN4);
+}
+
+inline void io_matrix__out__column4__set(const uint8_t value) {
+    if (value)
+        OUT_1(IO_MATRIX__OUT__COLUMN4);
+    else
+        OUT_0(IO_MATRIX__OUT__COLUMN4);
+}
+
+
+inline void io_matrix__out__column5__init(void) {
+    USE_AS_OUTPUT(IO_MATRIX__OUT__COLUMN5);
+}
+
+inline void io_matrix__out__column5__set(const uint8_t value) {
+    if (value)
+        OUT_1(IO_MATRIX__OUT__COLUMN5);
+    else
+        OUT_0(IO_MATRIX__OUT__COLUMN5);
+}
+
+
+inline void io_matrix__out__column6__init(void) {
+    USE_AS_OUTPUT(IO_MATRIX__OUT__COLUMN6);
+}
+
+inline void io_matrix__out__column6__set(const uint8_t value) {
+    if (value)
+        OUT_1(IO_MATRIX__OUT__COLUMN6);
+    else
+        OUT_0(IO_MATRIX__OUT__COLUMN6);
+}
+
+
+void io_matrix__out_columns__init(void) {
+    __asm__ __volatile__("io_matrix__out_columns__init:");
     io_matrix__out__column0__init();
     io_matrix__out__column1__init();
     io_matrix__out__column2__init();
     io_matrix__out__column3__init();
+    io_matrix__out__column4__init();
+    io_matrix__out__column5__init();
+    io_matrix__out__column6__init();
+}
+
+
+void io_matrix__out_columns__start(void) {
+    __asm__ __volatile__("io_matrix__out_columns__start:");
+    io_matrix__out__column0__set(0);
+    io_matrix__out__column1__set(1);
+    io_matrix__out__column2__set(1);
+    io_matrix__out__column3__set(1);
+    io_matrix__out__column4__set(1);
+    io_matrix__out__column5__set(1);
+    io_matrix__out__column6__set(1);
 }
 
 #endif

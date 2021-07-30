@@ -43,8 +43,11 @@ void application__init(void) {
 }
 
 void application__start(void) {
+    io_matrix__out_columns__start();
     io_matrix__in__start();
+
     io_matrix__scanner__thread__timer__start();
+
     comm_keyboard__start();
     comm_keyboard__thread__start();
 }
