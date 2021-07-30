@@ -63,7 +63,7 @@ void keyboard__port_d__run(void) {
     uint8_t changes = keyboard__port_d__mask & ((uint8_t) (keyboard__port_d__previous_state ^ state));
     if (changes) {
         keyboard__port_d__debounce_timer__start();
-        tracer__keyboard__changes(0, changes);
+        tracer__keyboard__changes(3, changes);
         keyboard__port_d__mask ^= changes;
         keyboard__port_d__previous_state = state;
         keyboard__port_d__buttons__process(state, changes);
