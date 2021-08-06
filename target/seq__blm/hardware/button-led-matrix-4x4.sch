@@ -8950,6 +8950,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <part name="C17" library="rcl" deviceset="C-EU" device="C0805" value="0.1"/>
 <part name="C18" library="rcl" deviceset="C-EU" device="C0805" value="0.1"/>
 <part name="C19" library="rcl" deviceset="C-EU" device="C0805" value="0.1"/>
+<part name="PAD110" library="wirepad" deviceset="WIREPAD" device="SMD1,27-254"/>
 </parts>
 <sheets>
 <sheet>
@@ -9127,6 +9128,7 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <instance part="C17" gate="G$1" x="66.04" y="-121.92"/>
 <instance part="C18" gate="G$1" x="73.66" y="-149.86"/>
 <instance part="C19" gate="G$1" x="66.04" y="-149.86"/>
+<instance part="PAD110" gate="G$1" x="162.56" y="-137.16"/>
 </instances>
 <busses>
 </busses>
@@ -10197,6 +10199,11 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <wire x1="160.02" y1="-73.66" x2="170.18" y2="-73.66" width="0.1524" layer="91"/>
 <label x="162.56" y="-73.66" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="PAD110" gate="G$1" pin="P"/>
+<wire x1="165.1" y1="-137.16" x2="187.96" y2="-137.16" width="0.1524" layer="91"/>
+<label x="180.34" y="-137.16" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="B8" class="0">
 <segment>
@@ -10514,6 +10521,12 @@ Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
 <pinref part="PAD99" gate="G$1" pin="P"/>
 <wire x1="83.82" y1="-134.62" x2="106.68" y2="-134.62" width="0.1524" layer="91"/>
 <label x="99.06" y="-134.62" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$11" class="0">
+<segment>
+<pinref part="PAD84" gate="G$1" pin="P"/>
+<wire x1="165.1" y1="-129.54" x2="187.96" y2="-129.54" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
