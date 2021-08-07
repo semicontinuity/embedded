@@ -1,29 +1,45 @@
-ATMEGA48
-======================================================================================
-Pin	Func	Application		(I2C comms)	(Serial comms)	(SPI comms)
-======================================================================================
-PB0		Column 4
-PB1		Column 5
-PB2	SS	Column 6
-PB3	MOSI	LED 1							MOSI
-PB4	MISO	LED 2							MISO
-PB5	SCK	LED 3							SCK
-PB6	XTAL1	Pedal 1							optional CS1
-PB7	XTAL2	Pedal 2							optional CS2
+ATMEGA8, ATMEGA48, ATMEGA88, ATMEGA168, ATMEGA328
 
-PC0		Column 0
-PC1		Column 1
-PC2		Column 2
-PC3		Column 3
-PC4	SDA				SDA
-PC5	SCL				SCL
-PC6	RESET								Prog CS
+================================================================================================================
+Pin     Func    Application     Alt             Comms                   SPI comms       HD44780
+================================================================================================================
+PB0             Column 4        Column 0
+PB1             Column 5        Column 1
+PB2     SS      Column 6        Column 2
+PB3     MOSI    LED 1           Column 3                                MOSI            RS
+PB4     MISO    LED 2           Column 4                                MISO            D4
+PB5     SCK     LED 3           Column 5                                SCK             D5
+PB6     XTAL1   Pedal 1         Column 6                                optional CS1    D6
+PB7     XTAL2   Pedal 2         Pedal 1                                 optional CS2    D7
 
-PD0	RXD						Serial RX
-PD1	TXD						Serial TX
-PD2		Row 0
-PD3		Row 1
-PD4		Row 2
-PD5		Row 3
-PD6		Row 4
-PD7		Row 5
+PC0             Column 0        BL row 0
+PC1             Column 1        BL row 1
+PC2             Column 2        BL row 2
+PC3             Column 3        BL row 3
+PC4     SDA                     BL row 4        SDA                                     RW
+PC5     SCL                     BL row 5        SCL                                     E
+PC6     RESET                                                           Prog CS
+
+PD0     RXD                                     Serial RX
+PD1     TXD                                     Serial TX
+PD2             Row 0
+PD3     OC2B    Row 1
+PD4             Row 2
+PD5             Row 3
+PD6             Row 4
+PD7             Row 5
+
+Note:
+* variant 1: no backlight: possible to use extra comm interfaces (I2C, SPI)
+* variant 2: with backlight LEDs matrix, connected to BL row + columns; need to change hardware; ErgoDoxTW-based board has no space for LEDs, need to rework it.
+* variant 3: lots of LEDs (7), or 6 LED channels + pedal
+* variant 4: connect HD44780
+
+* hardware PWM not used, because timers are used heavily for debouncing
+
+TRRS serial female connector pinout:
+
+TIP	RX
+RING1	TX
+RING2	GND
+SLEEVE	VCC
