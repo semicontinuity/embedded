@@ -2,9 +2,23 @@
 
 #include <cpu/avr/usart0.h>
 
+#include <drivers/out/led_a.h>
+#include <drivers/out/led_b.h>
+#include <drivers/out/led_c.h>
+#include <drivers/out/led_d.h>
+#include <drivers/out/led_e.h>
+#include <drivers/out/led_f.h>
+#include <drivers/out/led_g.h>
 
-void comm_inbound__start(void) {
-    tx_ring_buffer__start();
+
+void comm_inbound__init(void) {
+    led_a__init();
+    led_b__init();
+    led_c__init();
+    led_d__init();
+    led_e__init();
+    led_f__init();
+    led_g__init();
 }
 
 

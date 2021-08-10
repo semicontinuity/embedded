@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-void comm_inbound__start(void);
+void comm_inbound__init(void);
 
 void comm_inbound__thread__start(void);
 

@@ -1,5 +1,5 @@
 // =============================================================================
-// Column is selected for 1/4 ms = 256*8 clocks; thus timer0_ovf prescaler 8.
+// Firmware for Ergodoxial keyboard
 // =============================================================================
 
 #include <avr/interrupt.h>
@@ -15,9 +15,6 @@
 
 #include "comm_keyboard.h"
 
-#include <drivers/out/led_a.h>
-#include <drivers/out/led_b.h>
-#include <drivers/out/led_c.h>
 #include <services/tracer.h>
 
 #include "cpu/avr/usart0.h"
@@ -59,10 +56,7 @@ void application__init(void) {
     io_matrix__scanner__thread__timer__init();
 
     keyboard__init();
-
-    led_a__init();
-    led_b__init();
-    led_c__init();
+    comm_inbound__init();
 
     usart0__init();
 }

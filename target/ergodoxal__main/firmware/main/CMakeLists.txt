@@ -82,6 +82,10 @@ set(SOURCE_FILES
         ../../bsp/drivers/out/led_a.h
         ../../bsp/drivers/out/led_b.h
         ../../bsp/drivers/out/led_c.h
+        ../../bsp/drivers/out/led_d.h
+        ../../bsp/drivers/out/led_e.h
+        ../../bsp/drivers/out/led_f.h
+        ../../bsp/drivers/out/led_g.h
 
         ../../bsp/services/tracer.h
         ../../bsp/services/tracer__nop.c
