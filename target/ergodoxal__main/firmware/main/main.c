@@ -21,6 +21,7 @@
 #include <services/tracer.h>
 
 #include "cpu/avr/usart0.h"
+#include "comm_inbound.h"
 
 
 // keyboard tweaks
@@ -74,6 +75,7 @@ void application__start(void) {
 
     comm_keyboard__start();
     comm_keyboard__thread__start();
+    comm_inbound__thread__start();
 }
 
 
@@ -96,6 +98,10 @@ int main(void) {
 
         while (comm_keyboard__thread__is_runnable()) {
             comm_keyboard__thread__run();
+        }
+
+        if (comm_inbound__thread__is_runnable()) {
+            comm_inbound__thread__run();
         }
     }
 

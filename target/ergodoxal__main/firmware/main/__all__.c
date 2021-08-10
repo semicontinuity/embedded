@@ -44,7 +44,9 @@
 #include "cpu/avr/services/keyboard/keyboard__port_f__buttons.c"
 #include "cpu/avr/services/keyboard/keyboard__port_g__buttons.c"
 
+// Comm
 #include "comm_keyboard.c"
+#include "comm_inbound.c"
 
 #include "services/tracer__nop.c"
 

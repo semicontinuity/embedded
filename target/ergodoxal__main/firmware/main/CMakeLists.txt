@@ -76,6 +76,9 @@ set(SOURCE_FILES
         comm_keyboard.h
         comm_keyboard.c
 
+        comm_inbound.h
+        comm_inbound.c
+
         ../../bsp/drivers/out/led_a.h
         ../../bsp/drivers/out/led_b.h
         ../../bsp/drivers/out/led_c.h
