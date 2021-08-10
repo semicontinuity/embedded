@@ -26,6 +26,16 @@ void comm_inbound__init(void) {
 // receives and interprets bytes from USART
 // runs in the context of main thread
 // -----------------------------------------------------------------------------
+void comm_inbound__thread__handle_event(uint8_t event) {
+    __asm__ __volatile__("comm_inbound__thread__handle_event:");
+    led_a__copy(event, 0);
+    led_b__copy(event, 1);
+    led_c__copy(event, 2);
+    led_d__copy(event, 3);
+    led_e__copy(event, 4);
+    led_f__copy(event, 5);
+    led_g__copy(event, 6);
+}
 
 
 void comm_inbound__thread__start(void) {
@@ -38,5 +48,5 @@ bool comm_inbound__thread__is_runnable(void) {
 
 void comm_inbound__thread__run(void) {
     __asm__ __volatile__("comm_inbound__thread__run:");
-    uint8_t event = usart0__getc();
+    comm_inbound__thread__handle_event(usart0__getc());
 }

@@ -8,6 +8,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "cpu/avr/gpio.h"
+#include <cpu/avr/asm.h>
 
 
 /**
@@ -26,6 +27,14 @@ inline void led_e__set(const uint8_t value) {
         OUT_1(OUT__LED_E);
     else
         OUT_0(OUT__LED_E);
+}
+
+
+/**
+ * Copy LED E bit value from the specified bit of the supplied argument.
+ */
+inline void led_e__copy(const uint8_t value, const uint8_t bit) {
+    OUT_BIT(SIGNAL_PORT_REG(OUT__LED_E), SIGNAL_PIN(OUT__LED_E), value, bit);
 }
 
 

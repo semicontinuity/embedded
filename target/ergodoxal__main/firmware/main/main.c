@@ -88,12 +88,15 @@ int main(void) {
 #endif
     __asm__ __volatile__("main__loop:");
     for(;;) {
+        __asm__ __volatile__("main__loop__1:");
         keyboard__run();
 
+        __asm__ __volatile__("main__loop__2:");
         while (comm_keyboard__thread__is_runnable()) {
             comm_keyboard__thread__run();
         }
 
+        __asm__ __volatile__("main__loop__3:");
         if (comm_inbound__thread__is_runnable()) {
             comm_inbound__thread__run();
         }

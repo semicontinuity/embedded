@@ -354,6 +354,21 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 }))
 
 
+#define OUT_BIT(ioreg, ioregbit, r, rbit) do {              \
+    __asm__ __volatile__(                                   \
+        "sbrc %0, %1\n\t"                                   \
+        "sbi %2, %3\n\t"                                    \
+        "sbrs %0, %1\n\t"                                   \
+        "cbi %2, %3\n\t"                                    \
+        :                                                   \
+        : "r"((r)),                                         \
+          "I"((rbit)),                                      \
+          "I"(_SFR_IO_ADDR(ioreg)),                         \
+          "I"(ioregbit)                                     \
+    );                                                      \
+} while (0)
+
+
 #define COMPARE_LO8_SKIP_IF_EQUAL(v1, v2, code) do {\
   __asm__ __volatile__(                         \
     "cpse %A0, %A1\n\t"                         \
