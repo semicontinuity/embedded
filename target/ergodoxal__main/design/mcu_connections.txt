@@ -1,23 +1,24 @@
-ATMEGA8, ATMEGA48, ATMEGA88, ATMEGA168, ATMEGA328
+Compatible MCUs: ATMEGA8, ATMEGA48, ATMEGA88, ATMEGA168, ATMEGA328
 
+```
 ================================================================================================================
-Pin     Func    Application     Alt             Comms                   SPI comms       HD44780
+Pin     Func    Application     Alt             Comms                   SPI comms       HD44780  Extra LEDs
 ================================================================================================================
 PB0             Column 4        Column 0
 PB1             Column 5        Column 1
 PB2     SS      Column 6        Column 2
-PB3     MOSI    LED 1           Column 3                                MOSI            RS
-PB4     MISO    LED 2           Column 4                                MISO            D4
-PB5     SCK     LED 3           Column 5                                SCK             D5
-PB6     XTAL1   Pedal 1         Column 6                                optional CS1    D6
-PB7     XTAL2   Pedal 2         Pedal 1                                 optional CS2    D7
+PB3     MOSI    LED A           Column 3                                MOSI            RS
+PB4     MISO    LED B           Column 4                                MISO            D4
+PB5     SCK     LED C           Column 5                                SCK             D5
+PB6     XTAL1   Pedal 1         Column 6                                optional CS1    D6       LED D
+PB7     XTAL2   Pedal 2         Pedal 1                                 optional CS2    D7       LED E
 
 PC0             Column 0        BL row 0
 PC1             Column 1        BL row 1
 PC2             Column 2        BL row 2
 PC3             Column 3        BL row 3
-PC4     SDA                     BL row 4        SDA                                     RW
-PC5     SCL                     BL row 5        SCL                                     E
+PC4     SDA                     BL row 4        SDA                                     RW       LED F
+PC5     SCL                     BL row 5        SCL                                     E        LED G
 PC6     RESET                                                           Prog CS
 
 PD0     RXD                                     Serial RX
@@ -28,6 +29,7 @@ PD4             Row 2
 PD5             Row 3
 PD6             Row 4
 PD7             Row 5
+```
 
 Note:
 * variant 1: no backlight: possible to use extra comm interfaces (I2C, SPI)
@@ -37,9 +39,34 @@ Note:
 
 * hardware PWM not used, because timers are used heavily for debouncing
 
-TRRS serial female connector pinout:
+-----------------------------------------------------------------------------------------------------------------
 
+TRRS serial female connector pinout:
+```
 TIP	RX
 RING1	TX
 RING2	GND
 SLEEVE	VCC
+```
+-----------------------------------------------------------------------------------------------------------------
+
+Pinout on test bed:
+
+```
+ 1 | PD3                        PD2 | 32
+ 2 | PD4                   TXD  PD1 | 31
+ 3 | GND                   RXD  PD0 | 30
+ 4 | VCC                 RESET      | 29
+ 5 | GND                 LED G  PC5 | 28
+ 6 | VCC                 LED F  PC4 | 27
+ 7 | PB6  LED D                     | 26
+ 8 | PB7  LED E                     | 25
+ 9 | PD5                            | 24
+10 | PD6                            | 23
+11 | PD7                            | 22
+12 | PB0                            | 21
+13 | PB1                            | 20
+14 | PB2                            | 19
+15 | PB3  LED A                     | 18
+16 | PB4  LED B         LED C   PB5 | 17
+```
