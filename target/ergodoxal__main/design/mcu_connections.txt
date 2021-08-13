@@ -53,20 +53,20 @@ SLEEVE	VCC
 Pinout on test bed:
 
 ```
- 1 | PD3                        PD2 | 32
- 2 | PD4                   TXD  PD1 | 31
+ 1 | PD3 R1                 R0  PD2 | 32
+ 2 | PD4 R2                TXD  PD1 | 31
  3 | GND                   RXD  PD0 | 30
- 4 | VCC                 RESET      | 29
+ 4 | VCC                 RESET  PC6 | 29
  5 | GND                 LED G  PC5 | 28
  6 | VCC                 LED F  PC4 | 27
- 7 | PB6  LED D                     | 26
- 8 | PB7  LED E                     | 25
- 9 | PD5                            | 24
-10 | PD6                            | 23
-11 | PD7                            | 22
-12 | PB0                            | 21
-13 | PB1                            | 20
-14 | PB2                            | 19
-15 | PB3  LED A                     | 18
+ 7 | PB6  LED D             C3  PC3 | 26
+ 8 | PB7  LED E             C2  PC2 | 25
+ 9 | PD5  R3                C1  PC1 | 24
+10 | PD6  R4                C0  PC0 | 23
+11 | PD7  R5                   ADC7 | 22
+12 | PB0  C4                    GND | 21
+13 | PB1  C5                   AREF | 20
+14 | PB2  C6                   ADC6 | 19
+15 | PB3  LED A                AVCC | 18
 16 | PB4  LED B         LED C   PB5 | 17
 ```
