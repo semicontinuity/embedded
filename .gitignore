@@ -13,3 +13,4 @@
 cmake-build-debug
 **/project_build
 **/*.swp
+gerber
