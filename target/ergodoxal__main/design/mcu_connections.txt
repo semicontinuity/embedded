@@ -50,7 +50,7 @@ SLEEVE	VCC
 ```
 -----------------------------------------------------------------------------------------------------------------
 
-Pinout on test bed:
+Pinout on test bed (logical rows and columns):
 
 ```
  1 | PD3 R1                 R0  PD2 | 32
@@ -70,3 +70,64 @@ Pinout on test bed:
 15 | PB3  LED A                AVCC | 18
 16 | PB4  LED B         LED C   PB5 | 17
 ```
+-----------------------------------------------------------------------------------------------------------------
+
+Actual columns mapping on Ergodoxial board:
+
+```
+COL:  6 5 4  3  2  1  0
+COL:  7 8 9 10 11 12 13
+
+PC0  COL3 (10)
+PC1  COL4 (9)
+PC2  COL5 (8)
+PC3  COL6 (7)
+PB0  COL0 (13)
+PB1  COL1 (12)
+PB2  COL2 (11)
+```
+
+----------------------------------------------------------------------------------------------------------------
+
+Actual rows mapping on Ergodoxial board:
+
+PD2  ROW1
+PD3  ROW2
+PD4  ROW3
+PD5  ROW4
+PD6  ROW5
+PD7  ROW0
+
+----------------------------------------------------------------------------------------------------------------
+Scan codes reported:
+
+scan_code = logical_column * 8 + logical_row
+
+----------------------------------------------------------------------------------------------------------------
+
+Pinout of QMK-hub:
+```
+                   SWD
+VBAT                                3V3  20
+PC13  LED1                          GND  19
+PC14                                5V0  18
+PC15                (right) GPIO3   PB9  17
+PA0   GPIO0 (left)  (right) GPIO2   PB8  16
+PA1   GPIO1 (left)           SDA1   PB7  15
+PA2     TX2 (ext)            SCL1   PB6  14
+PA3     RX2 (ext)                   PB5  13
+PA4   NSS1                          PB4  12
+PA5   SCK1                          PB3  11
+PA6   MISO1                         PA15 10
+PA7   MOSI1                  USBP   PA12  9
+PB0                          USBM   PA11  8   
+PB1                     (right) RX1 PA10  7
+PB10  TX3 (left)        (right) TX1 PA9   6
+PB11  RX3 (left)                    PA8   5
+RST                          MOSI2  PB15  4
+3V3                          MISO2  PB14  3
+GND                          SCK2   PB13  2
+GND                          NSS2   PB12  1
+                 USB
+```
+
