@@ -24,3 +24,5 @@ add_definitions(-DIO_MATRIX__IN__COLUMN0__STATE__REG=2)
 add_definitions(-DIO_MATRIX__IN__COLUMN1__STATE__REG=3)
 add_definitions(-DIO_MATRIX__IN__COLUMN2__STATE__REG=4)
 add_definitions(-DIO_MATRIX__IN__COLUMN3__STATE__REG=5)
+
+add_definitions(-DIO_MATRIX__IN__TEMP__REG=15)

@@ -367,8 +367,8 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
     __asm__ __volatile__(                                   \
         "sbic %2, %3\n\t"                                   \
         "sbr %0, %1\n\t"                                    \
-        : "r"((r))                                          \
-        : "I"((rbit))                                       \
+        : "=r"((r))                                         \
+        : "I"((rbit)),                                      \
           "I"(_SFR_IO_ADDR(ioreg)),                         \
           "I"(ioregbit)                                     \
     );                                                      \

@@ -17,7 +17,7 @@
 | 12 | KEYBOARD__DEBOUNCE_C__MASK__REG                                 |
 | 13 | KEYBOARD__DEBOUNCE_D__MASK__REG                                 |
 | 14 | allocated by compiler                                           |
-| 15 | allocated by compiler                                           |
+| 15 | IO_MATRIX__IN__TEMP__REG                                        |
 | 16 | allocated by compiler                                           |
 | 17 | allocated by compiler                                           |
 | 18 | allocated by compiler                                           |

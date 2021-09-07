@@ -1,5 +1,6 @@
 // =============================================================================
-// Firmware for Ergodoxial keyboard
+// Firmware for the modified Corne keyboard.
+// Each keyboard half reports key events via USART.
 // =============================================================================
 
 #include <avr/interrupt.h>

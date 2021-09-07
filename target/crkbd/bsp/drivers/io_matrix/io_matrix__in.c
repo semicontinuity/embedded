@@ -1,7 +1,15 @@
+// Hard-coded to use rows at ports C and B
+// Clobbers T bit - T bit must not be used elsewhere
+
 #include <cpu/avr/drivers/io_matrix/io_matrix__in.h>
 #include <stdint.h>
 #include "cpu/avr/asm.h"
 #include "cpu/avr/gpio.h"
+
+
+#ifdef IO_MATRIX__IN__TEMP__REG
+register volatile uint8_t io_matrix__in__temp asm(QUOTE(IO_MATRIX__IN__TEMP__REG));
+#endif
 
 
 // Column states
@@ -16,12 +24,10 @@ volatile uint8_t io_matrix__in__column0__state;
 
 uint8_t io_matrix__in__column0__state__update(void) {
 #ifdef IO_MATRIX__IN__COLUMN0__STATE__REG
-    ZERO_REG(io_matrix__in__column0__state);
-//    SET_BIT_IF_IO_BIT_IS_SET(io_matrix__in__column0__state, PIN_REG(SIGNAL_PORT(IO_MATRIX__IN__ROW0__PIN)), IO_MATRIX__IN__ROW0__PIN);
-    // IO_MATRIX__IN__ROW0__PIN
-
-#else
-
+    __IN(io_matrix__in__column0__state, PINC);
+    __IN(io_matrix__in__temp, PINB);
+    COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW4__PIN, io_matrix__in__column0__state, 4);
+    COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW5__PIN, io_matrix__in__column0__state, 5);
 #endif
     return io_matrix__in__column0__state;
 }
@@ -38,7 +44,10 @@ volatile uint8_t io_matrix__in__column1__state;
 
 void io_matrix__in__column1__state__update(void) {
 #ifdef IO_MATRIX__IN__COLUMN1__STATE__REG
-#else
+    __IN(io_matrix__in__column1__state, PINC);
+    __IN(io_matrix__in__temp, PINB);
+    COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW4__PIN, io_matrix__in__column1__state, 4);
+    COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW5__PIN, io_matrix__in__column1__state, 5);
 #endif
 }
 
@@ -54,7 +63,10 @@ volatile uint8_t io_matrix__in__column2__state;
 
 void io_matrix__in__column2__state__update(void) {
 #ifdef IO_MATRIX__IN__COLUMN2__STATE__REG
-#else
+    __IN(io_matrix__in__column2__state, PINC);
+    __IN(io_matrix__in__temp, PINB);
+    COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW4__PIN, io_matrix__in__column2__state, 4);
+    COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW5__PIN, io_matrix__in__column2__state, 5);
 #endif
 }
 
@@ -70,7 +82,10 @@ volatile uint8_t io_matrix__in__column3__state;
 
     void io_matrix__in__column3__state__update(void) {
 #ifdef IO_MATRIX__IN__COLUMN3__STATE__REG
-#else
+        __IN(io_matrix__in__column3__state, PINC);
+        __IN(io_matrix__in__temp, PINB);
+        COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW4__PIN, io_matrix__in__column3__state, 4);
+        COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW5__PIN, io_matrix__in__column3__state, 5);
 #endif
     }
 
