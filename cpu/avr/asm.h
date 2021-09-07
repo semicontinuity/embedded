@@ -59,6 +59,16 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 #define MARK(label)		                do { __asm__ __volatile__( #label ":"); } while(0)
 #define MARK0(label)                    do { __asm__ __volatile__( label ":"); } while(0)
 
+
+#define ZERO_REG(var)    do {                           \
+  __asm__ __volatile__ (                                \
+    "mov %0, r1\n\t"                                    \
+    : "=d"(var)                                         \
+    :                                                   \
+  );                                                    \
+} while(0)
+
+
 #define __CLT() do {                                    \
   asm volatile (                                        \
     "clt\r\n"                                           \
@@ -353,6 +363,16 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
     __result;                                               \
 }))
 
+#define SET_BIT_IF_IO_BIT_IS_SET(r, rbit, ioreg, ioregbit) do { \
+    __asm__ __volatile__(                                   \
+        "sbic %2, %3\n\t"                                   \
+        "sbr %0, %1\n\t"                                    \
+        : "r"((r))                                          \
+        : "I"((rbit))                                       \
+          "I"(_SFR_IO_ADDR(ioreg)),                         \
+          "I"(ioregbit)                                     \
+    );                                                      \
+} while (0)
 
 #define OUT_BIT(ioreg, ioregbit, r, rbit) do {              \
     __asm__ __volatile__(                                   \

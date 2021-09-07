@@ -1,0 +1,35 @@
+Compatible MCUs: ATMEGA8, ATMEGA48, ATMEGA88, ATMEGA168, ATMEGA328
+
+"Rows" in corne-chocolate schematics are connected to diode cathodes;
+For consistency with other projects, in this firmware, "columns" will be driving logical 0 and connected to cathodes.
+
+```
+=========================================================
+Pin     Func    Application     Alt             Comms
+=========================================================
+PB0
+PB1             SK6812
+PB2     SS
+PB3     MOSI
+PB4     MISO    Row 5
+PB5     SCK     Row 4
+PB6     XTAL1
+PB7     XTAL2
+
+PC0             Row 3
+PC1             Row 2
+PC2             Row 1
+PC3             Row 0
+PC4     SDA                                     SDA
+PC5     SCL                                     SCL
+PC6     RESET
+
+PD0     RXD                                     Serial RX
+PD1     TXD                                     Serial TX
+PD2
+PD3
+PD4             Column 0
+PD5             Column 1
+PD6             Column 2
+PD7             Column 3
+```
