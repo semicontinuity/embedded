@@ -15,8 +15,8 @@ void comm_inbound__init(void) {
     led_a__init();
     led_b__init();
     led_c__init();
-    led_d__init();
-    led_e__init();
+//    led_d__init();
+//    led_e__init();
     led_f__init();
     led_g__init();
 }
@@ -31,8 +31,8 @@ void comm_inbound__thread__handle_event(uint8_t event) {
     led_a__copy(event, 0);
     led_b__copy(event, 1);
     led_c__copy(event, 2);
-    led_d__copy(event, 3);
-    led_e__copy(event, 4);
+//    led_d__copy(event, 3);
+//    led_e__copy(event, 4);
     led_f__copy(event, 5);
     led_g__copy(event, 6);
 }
