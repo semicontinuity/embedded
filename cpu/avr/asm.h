@@ -807,7 +807,7 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 
 
 #define __IN(result, addr)              \
-    __asm__                             \
+    __asm__ __volatile__                \
     (                                   \
         "in %0, %1" "\n\t"              \
         : "=r" (result)                 \
