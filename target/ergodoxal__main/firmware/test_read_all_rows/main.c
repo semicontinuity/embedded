@@ -17,6 +17,8 @@
 // -----------------------------------------------------------------------------
 
 void application__init(void) {
+//    PORTB |= 0xC0;
+
     io_matrix__out_columns__init();
     io_matrix__in__init();
 
@@ -35,6 +37,9 @@ void application__start(void) {
     usart0__tx__enabled__set(1);
 }
 
+#ifdef IO_MATRIX__IN__TEMP__REG
+register volatile uint8_t io_matrix__in__temp asm(QUOTE(IO_MATRIX__IN__TEMP__REG));
+#endif
 
 // main
 // -----------------------------------------------------------------------------
@@ -43,7 +48,6 @@ int main(void) {
     application__init();
     application__start();
 
-    sei();
 
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic push
@@ -52,8 +56,23 @@ int main(void) {
     __asm__ __volatile__("main__loop:");
     for(;;) {
         _delay_ms(200);
-        uint8_t reading = PIND;
-        usart0__out__write(reading);
+
+        __asm__ __volatile__("main__loop__1:");
+        uint8_t portd;
+//        __IN(portd, PIND);
+//        uint8_t portb;
+//        __IN(portb, PINB);
+//        COPY_BIT(portb, 7, portd, 3);
+//        COPY_BIT(portb, 6, portd, 4);
+
+        __IN(portd, PIN_REG(SIGNAL_PORT(IO_MATRIX__IN)))
+        __IN(io_matrix__in__temp, PIN_REG(SIGNAL_PORT(IO_MATRIX__IN__ALT)));
+        COPY_BIT(io_matrix__in__temp, 7, portd, IO_MATRIX__IN__ROW1__PIN);
+        COPY_BIT(io_matrix__in__temp, 6, portd, IO_MATRIX__IN__ROW2__PIN);
+
+
+        __asm__ __volatile__("main__loop__2:");
+        usart0__out__write(portd);
     }
 
 #if !defined(__AVR_ARCH__)

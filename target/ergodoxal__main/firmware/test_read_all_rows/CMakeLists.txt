@@ -9,8 +9,8 @@ set(SOURCE_FILES
         ../../../../cpu/avr/macros.h
         ../../../../cpu/avr/drivers/io_matrix/io_matrix__in.h
         ../../../../cpu/avr/drivers/io_matrix/io_matrix__in.c
-        ../../bsp/drivers/io_matrix__out_rows.h
         ../../bsp/drivers/io_matrix__out_columns.h
+        ../../bsp/drivers/io_matrix__out_rows.h
 
         main.c
         __all__.c
