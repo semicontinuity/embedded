@@ -1,5 +1,7 @@
 // =============================================================================
 // Firmware for Ergodoxial keyboard
+// NB: It seems that on the righ half, PD3 and PD4 inputs malfuction.
+// Remapped to PB7 and PB6
 // =============================================================================
 
 #include <avr/interrupt.h>
@@ -51,6 +53,7 @@ void keyboard__debounce_timer__d__expired(void) {
 void application__init(void) {
     io_matrix__out_columns__init();
     io_matrix__in__init();
+    PORTB |= 0xC0;  // workaround: remapped rows
 
     io_matrix__scanner__thread__init();
     io_matrix__scanner__thread__timer__init();
