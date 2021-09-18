@@ -796,13 +796,24 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 #define IF_ZERO(body)       do { BRNE_TMP_LABEL(); body; MARK0(MARKED_LABEL(L, QUOTE(__LINE__))); } while(0)
 
 
-#define __DEC(r)			                    \
-(__extension__({                                \
-    __asm__ __volatile__ (                      \
-    "dec %0"                                    \
-        : "=r"(r) : "r"(r)                      \
-    );                                          \
-    r;                                          \
+#define __MOV(r)                        \
+(__extension__({                        \
+    register uint8_t __result;          \
+    __asm__ __volatile__ (              \
+        "mov %0, %1"                    \
+        : "=r"(__result) : "r"(r)       \
+    );                                  \
+    __result;                           \
+}))
+
+
+#define __DEC(r)			            \
+(__extension__({                        \
+    __asm__ __volatile__ (              \
+        "dec %0"                        \
+        : "=r"(r) : "r"(r)              \
+    );                                  \
+    r;                                  \
 }))
 
 
