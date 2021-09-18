@@ -61,14 +61,14 @@ void keyboard__port_g__mask__reset(void) {
 
 void keyboard__port_g__run(void) {
     __asm__ __volatile__("keyboard__port_g__run:");
-    uint8_t state = keyboard__pins__port_g__read();
+    uint8_t state = __MOV(keyboard__pins__port_g__read());
     uint8_t changes = keyboard__port_g__mask & ((uint8_t) (keyboard__port_g__previous_state ^ state));
     if (changes) {
         keyboard__port_g__debounce_timer__start();
         tracer__keyboard__changes(6, changes);
-        keyboard__port_g__mask ^= changes;
-        keyboard__port_g__previous_state = state;
-        keyboard__port_g__buttons__process(state, changes);
+        keyboard__port_g__mask &= ~changes;
+        keyboard__port_g__previous_state = (keyboard__port_g__previous_state & ~changes) | (state & changes);
+        keyboard__port_g__buttons__process(keyboard__port_g__previous_state, changes);
 #if defined(KEYBOARD__ENCODERS) && KEYBOARD__ENCODERS == 1
         keyboard__port_g__encoders__process(state, changes);
 #endif
