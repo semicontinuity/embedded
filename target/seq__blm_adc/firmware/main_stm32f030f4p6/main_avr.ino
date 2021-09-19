@@ -28,6 +28,10 @@ void setupReadings() {
 #pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
 void setup() {
     setupReadings();
+
+    Serial.setRx(PA10); // important! by default, RX is on another pin
+    Serial.setTx(PA9);  // important! by default, RX is on another pin
+
     Serial.begin(31250/*38400*/);
     midi_sender__arduino_serial__init(&Serial);
     delay(100);
