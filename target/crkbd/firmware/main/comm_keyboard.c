@@ -28,11 +28,18 @@ void comm_keyboard__start(void) {
  * @param bit index of button's pin in the port
  */
 inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t bit) {
+    // FIX_REGISTER(state); - do not use here, causes bugs
+    uint8_t event = IF_BIT_SET_CONST_A_ELSE_CONST_B(
+            state, bit,
+            (uint8_t) (EVENT_MASK_KEY_RELEASED | button),
+            (uint8_t) (EVENT_MASK_KEY_PRESSED | button));
+    // Send the scan code twice, for the rare case when some kind EMI destroys serial packet.
+    // The receiving side must maintain its copy of keyboard state,
+    // and ignore no-effect events (copies).
     if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
-        uint8_t event = IF_BIT_SET_CONST_A_ELSE_CONST_B(
-                state, bit,
-                (uint8_t) (EVENT_MASK_KEY_RELEASED | button),
-                (uint8_t) (EVENT_MASK_KEY_PRESSED | button));
+        tx_ring_buffer__put(event);
+    }
+    if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
         tx_ring_buffer__put(event);
     }
     return true;

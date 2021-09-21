@@ -817,13 +817,14 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 }))
 
 
-#define __IN(result, addr)              \
+#define __IN(result, addr) do {         \
     __asm__ __volatile__                \
     (                                   \
         "in %0, %1" "\n\t"              \
         : "=r" (result)                 \
         : "I" (_SFR_IO_ADDR(addr))      \
-    );                          
+    );                                  \
+  } while(0)
 
 #define __OUT(addr, value)              \
     __asm__                             \
