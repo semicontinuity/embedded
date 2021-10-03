@@ -9,8 +9,8 @@ add_definitions(-DIO_MATRIX__OUT__COLUMN3__PIN=7)
 
 add_definitions(-DIO_MATRIX__IN__PORT=C)
 add_definitions(-D=B)
-add_definitions(-DIO_MATRIX__IN__ROW4__BIT=4)
-add_definitions(-DIO_MATRIX__IN__ROW5__BIT=5)
+add_definitions(-DIO_MATRIX__IN__ROW4__BIT=5)
+add_definitions(-DIO_MATRIX__IN__ROW5__BIT=4)
 
 add_definitions(-DIO_MATRIX__IN__ROW0__PORT=IO_MATRIX__IN__PORT)
 add_definitions(-DIO_MATRIX__IN__ROW0__PIN=3)
