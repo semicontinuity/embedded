@@ -31,7 +31,7 @@ uint8_t io_matrix__in__column0__state__update(void) {
     __IN(io_matrix__in__temp, PIN_REG(SIGNAL_PORT(IO_MATRIX__IN__ALT)));
 
 #  ifdef IO_MATRIX__IN__ROW0__BIT
-    COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW4__PIN, io_matrix__in__column0__state, IO_MATRIX__IN__ROW0__BIT);
+    COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW0__PIN, io_matrix__in__column0__state, IO_MATRIX__IN__ROW0__BIT);
 #  endif
 
 #  ifdef IO_MATRIX__IN__ROW1__BIT
@@ -86,7 +86,7 @@ void io_matrix__in__column1__state__update(void) {
     __IN(io_matrix__in__temp, PIN_REG(SIGNAL_PORT(IO_MATRIX__IN__ALT)));
 
 #  ifdef IO_MATRIX__IN__ROW0__BIT
-    COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW4__PIN, io_matrix__in__column1__state, IO_MATRIX__IN__ROW0__BIT);
+    COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW0__PIN, io_matrix__in__column1__state, IO_MATRIX__IN__ROW0__BIT);
 #  endif
 
 #  ifdef IO_MATRIX__IN__ROW1__BIT
@@ -140,7 +140,7 @@ void io_matrix__in__column2__state__update(void) {
     __IN(io_matrix__in__temp, PIN_REG(SIGNAL_PORT(IO_MATRIX__IN__ALT)));
 
 #  ifdef IO_MATRIX__IN__ROW0__BIT
-    COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW4__PIN, io_matrix__in__column2__state, IO_MATRIX__IN__ROW0__BIT);
+    COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW0__PIN, io_matrix__in__column2__state, IO_MATRIX__IN__ROW0__BIT);
 #  endif
 
 #  ifdef IO_MATRIX__IN__ROW1__BIT
@@ -194,7 +194,7 @@ volatile uint8_t io_matrix__in__column3__state;
         __IN(io_matrix__in__temp, PIN_REG(SIGNAL_PORT(IO_MATRIX__IN__ALT)));
 
 #  ifdef IO_MATRIX__IN__ROW0__BIT
-        COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW4__PIN, io_matrix__in__column3__state, IO_MATRIX__IN__ROW0__BIT);
+        COPY_BIT(io_matrix__in__temp, IO_MATRIX__IN__ROW0__PIN, io_matrix__in__column3__state, IO_MATRIX__IN__ROW0__BIT);
 #  endif
 
 #  ifdef IO_MATRIX__IN__ROW1__BIT
