@@ -1,3 +1,4 @@
+
 ## Register allocations
 
 |    |                                                                 |
@@ -12,12 +13,12 @@
 |  7 | KEYBOARD__PORT_B__PREVIOUS_STATE__REG                           |
 |  8 | KEYBOARD__PORT_C__PREVIOUS_STATE__REG                           |
 |  9 | KEYBOARD__PORT_D__PREVIOUS_STATE__REG                           |
-| 10 | KEYBOARD__DEBOUNCE_A__MASK__REG                                 |
-| 11 | KEYBOARD__DEBOUNCE_B__MASK__REG                                 |
-| 12 | KEYBOARD__DEBOUNCE_C__MASK__REG                                 |
-| 13 | KEYBOARD__DEBOUNCE_D__MASK__REG                                 |
-| 14 | allocated by compiler                                           |
-| 15 | IO_MATRIX__IN__TEMP__REG                                        |
+| 10 | KEYBOARD__PORT_A__MASK__REG                                     |
+| 11 | KEYBOARD__PORT_B__MASK__REG                                     |
+| 12 | KEYBOARD__PORT_C__MASK__REG                                     |
+| 13 | KEYBOARD__PORT_D__MASK__REG                                     |
+| 14 | KEYBOARD__COMMON_MASK__REG                                      |
+| 15 | allocated by compiler                                           |
 | 16 | allocated by compiler                                           |
 | 17 | allocated by compiler                                           |
 | 18 | allocated by compiler                                           |
@@ -34,3 +35,10 @@
 | 29 | TX_RING_BUFFER__TAIL__REG (H)                                   |
 | 30 | IO_MATRIX__SCANNER__THREAD__IP__REG (L)                         |
 | 31 | IO_MATRIX__SCANNER__THREAD__IP__REG (H)                         |
+
+
+## Programming with arduino bootloader
+
+```
+/opt/arduino-1.8.13/hardware/tools/avr/bin/avrdude -C /opt/arduino-1.8.13/hardware/tools/avr/etc/avrdude.conf -c arduino -patmega168 -U flash:w:main.hex:i -P /dev/ttyUSB0 -b19200
+```

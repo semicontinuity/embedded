@@ -45,6 +45,8 @@ add_definitions(-DKEYBOARD__PORT_B__MASK__REG=11)
 add_definitions(-DKEYBOARD__PORT_C__MASK__REG=12)
 add_definitions(-DKEYBOARD__PORT_D__MASK__REG=13)
 
+add_definitions(-DKEYBOARD__COMMON_MASK__REG=14)
+
 # Placement of buttons on I/O matrix
 # (logical ports: column 0 = port A, .. column 3 = port D)
 
