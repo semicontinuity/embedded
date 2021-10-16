@@ -1,0 +1,42 @@
+Compatible MCUs: ATMEGA8, ATMEGA48, ATMEGA88, ATMEGA168, ATMEGA328
+
+```
+================================================================================================================
+Pin     Func    Application     Comms
+================================================================================================================
+PB0             LED_BAR
+PB1             LED_BAR
+PB2     SS      LED_BAR
+PB3     MOSI    LED_BAR
+PB4     MISO    LED_BAR
+PB5     SCK     LED_BAR
+PB6     XTAL1   LED_BAR
+PB7     XTAL2   LED_BAR
+
+PC0             Column 0
+PC1             Column 1
+PC2             Column 2
+PC3             Column 3
+PC4     SDA                     SDA
+PC5     SCL                     SCL
+PC6     RESET
+
+PD0     RXD                     Serial RX
+PD1     TXD                     Serial TX
+PD2             Row 0
+PD3             Row 1
+PD4             Row 2
+PD5             Row 3
+PD6             Row 4
+PD7             Backlight + can be used to read 1 bit of configuration from external pull-up/down resistors
+```
+
+-----------------------------------------------------------------------------------------------------------------
+
+TRRS serial female connector pinout:
+```
+TIP	RX
+RING1	TX
+RING2	GND
+SLEEVE	VCC
+```
