@@ -323,7 +323,7 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
     "sbrs %1, %2\n\t"                                       \
     "ldi  %0, %4\n\t"                                       \
         : "=d"((r)),                                        \
-          "+r"((v))                                         \
+          "=r"((v))                                         \
         :  "I"((bit)),                                      \
           "M"((uint8_t)((a) & 0xFF)),                       \
           "M"((uint8_t)((b) & 0xFF))                        \
@@ -338,7 +338,7 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
     "sbrs %1, %2\n\t"                                       \
     "ldi  %0, %4\n\t"                                       \
         : "=d"(__result),                                   \
-          "+r"((v))                                         \
+          "=r"((v))                                         \
         : "I"((bit)),                                       \
           "M"((a) & 0xFF),                                  \
           "M"((b) & 0xFF)                                   \
