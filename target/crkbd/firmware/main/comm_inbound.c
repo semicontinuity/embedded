@@ -18,6 +18,7 @@ void comm_inbound__thread__handle_event(uint8_t event) {
 
 
 void comm_inbound__thread__start(void) {
+    __asm__ __volatile__("comm_inbound__thread__start:");
     usart0__rx__enabled__set(1);
 }
 

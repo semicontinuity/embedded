@@ -8,6 +8,7 @@
 
 
 void comm_keyboard__start(void) {
+    __asm__ __volatile__("comm_keyboard__start:");
     tx_ring_buffer__start();
 }
 
@@ -53,6 +54,7 @@ inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
 
 
 void comm_keyboard__thread__start(void) {
+    __asm__ __volatile__("comm_keyboard__thread__start:");
     usart0__tx__enabled__set(1);
 }
 

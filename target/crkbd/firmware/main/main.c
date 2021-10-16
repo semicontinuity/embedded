@@ -78,6 +78,7 @@ int main(void) {
     application__init();
     application__start();
 
+    __asm__ __volatile__("sei:");
     sei();
 
 #if !defined(__AVR_ARCH__)
