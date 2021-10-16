@@ -20,7 +20,7 @@ uint8_t keyboard__pins__port_f__pin_for_button(const uint8_t button) {
 
 #if defined(IN__BUTTON34__PORT) && defined(IN__BUTTON34__PIN)
 #if SINGLEQUOTED(IN__BUTTON34__PORT) == 'F'
-    if (button == 33) return IN__BUTTON34__PIN;
+    if (button == 34) return IN__BUTTON34__PIN;
 #endif
 #endif
 

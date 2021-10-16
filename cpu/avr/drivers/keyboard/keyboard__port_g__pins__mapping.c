@@ -1,5 +1,4 @@
 #include "cpu/avr/drivers/keyboard/keyboard__port_g__pins__mapping.h"
-#include "cpu/avr/macros.h"
 
 /**
  * Provides pin number for the given button (if it pertains to port G)
@@ -20,7 +19,7 @@ uint8_t keyboard__pins__port_g__pin_for_button(const uint8_t button) {
 
 #if defined(IN__BUTTON34__PORT) && defined(IN__BUTTON34__PIN)
 #if SINGLEQUOTED(IN__BUTTON34__PORT) == 'G'
-    if (button == 33) return IN__BUTTON34__PIN;
+    if (button == 34) return IN__BUTTON34__PIN;
 #endif
 #endif
 
