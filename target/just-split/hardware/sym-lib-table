@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name just-split-rescue)(type Legacy)(uri ${KIPRJMOD}/just-split-rescue.lib)(options "")(descr ""))
+)
