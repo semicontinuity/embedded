@@ -16,11 +16,11 @@
 
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
             |Multi|     |     |Mouse|     | Fun |     |     | Num |
-            | Esc |Space|Shift| Tab |     |BkSpc|Enter|Raise| Del |
+            | Esc |Space|Shift| Tab |     |BkSpc|Enter|Lower| Del |
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
 ```
 Design decisions:
-* Dedicated (not dual-purpose) Space, Shift, Enter and Raise keys
+* Dedicated (not dual-purpose) Space, Shift, Enter and Lower keys
 * Shift is one-shot, double-tab shift to capitalize next word, hold shift to capitalize while Shift is held 
 * `,` and `.` on home row of inner columns, like in Engram, because `,` and `.` are very frequent
 * `q` and `z` on top of inner rows (used less frequently than `,` and `.`)
@@ -30,7 +30,7 @@ Design decisions:
 * `?` is a 'general conversation character', so it is kept on the base layer (shifted)
 
 
-#### Raise layer (symbols + navigation)
+#### Lower layer (symbols + navigation)
 
 ```
       +-----+-----+-----+                             +-----+-----+-----+
@@ -48,11 +48,11 @@ Design decisions:
 
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
             |     |     |     |     |     |     |     |     |     |
-            |  #  |Space|  $  |     |     |     |     >RAISE<     |
+            |  #  |Space|     |  $  |     |     |     >LOWER<     |
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
 ```
 Design decisions and mnemonic rules:
-* Dedicated Raise key right under thumb, for fastest typing without dual-key delays.
+* Dedicated Lower key right under thumb, for fastest typing without dual-key delays.
 * Navigation - on the home row and on the lower row, just like in miryoku layout
 * Parens, brackets, triangle brackets often come together - placed in pairs at the most convenient positions
 * Parens are more frequent, so they are on the home row
@@ -74,6 +74,8 @@ Design decisions and mnemonic rules:
 * `|`: resembles `1`, on the same row where `1` is on keypad
 * `^`: points upwards - on the upper row.
 * `Space` remains `Space` for easy typing - usually, spaces are around operator characters.
+* `#` occurs (as comment) in the beginning of strings - so it is in the beginning of the thumb cluster keys.
+* `$` is 'end of string' regexp - so it is in the end of the thumb cluster keys.
 
 Questionable decisions:
 * `-`, `+` are all on pinky - but they combine well with `=`
