@@ -54,7 +54,9 @@ inline static bool eeprom__is_writing(void) {
 
 inline static unsigned char eeprom__read_byte_unchecked(unsigned char *address) {
     /* Set up address register */
+#if defined EEARH
     EEARH = ((int)address >> 8);
+#endif
     EEARL = ((int)address & 0xFF);
     /* Start eeprom read*/
     EECR |= (1 << EERE);
@@ -73,7 +75,9 @@ inline static void eeprom__write_byte(unsigned char *address, unsigned char data
     /* Wait for completion of previous write */
     while(eeprom__is_writing());
     /* Set up address and Data Registers */
+#if defined EEARH
     EEARH = ((int)address >> 8);
+#endif
     EEARL = ((int)address & 0xFF);
     EEDR = data;
     eeprom__write();
