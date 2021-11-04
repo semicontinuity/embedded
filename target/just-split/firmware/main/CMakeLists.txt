@@ -76,10 +76,11 @@ set(SOURCE_FILES
 
         keyboard_handler.c
 
-        comm_keyboard.h
-        comm_keyboard.c
+        comm_usart_outbound__thread.h
+        comm_usart_outbound__thread.c
 
-        comm_inbound.c
+        comm_usart_inbound__thread.h
+        comm_usart_inbound__thread.c
 
         ../../bsp/services/tracer.h
         ../../bsp/services/tracer__nop.c

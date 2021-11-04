@@ -15,13 +15,13 @@
 
 #include "cpu/avr/services/keyboard/keyboard.h"
 
-#include "comm_keyboard.h"
+#include "comm_usart_outbound__thread.h"
 
 #include <services/tracer.h>
 #include <services/tx_ring_buffer.h>
 
 #include "cpu/avr/usart0.h"
-#include "comm_inbound.h"
+#include "comm_usart_inbound__thread.h"
 
 
 // application
@@ -36,7 +36,6 @@ void application__init(void) {
     io_matrix__scanner__thread__timer__init();
 
     keyboard__init();
-    comm_inbound__init();
 
     usart0__init();
 }
@@ -50,8 +49,8 @@ void application__start(void) {
     __asm__ __volatile__("comm_keyboard__start:");
     tx_ring_buffer__start();
 
-    comm_keyboard__thread__start();
-    comm_inbound__thread__start();
+    comm_usart_outbound__thread__start();
+    comm_usart_inbound__thread__start();
 }
 
 
@@ -75,13 +74,13 @@ int main(void) {
         keyboard__run();
 
         __asm__ __volatile__("main__loop__2:");
-        while (comm_keyboard__thread__is_runnable()) {
-            comm_keyboard__thread__run();
+        while (comm_usart_outbound__thread__is_runnable()) {
+            comm_usart_outbound__thread__run();
         }
 
         __asm__ __volatile__("main__loop__3:");
-        if (comm_inbound__thread__is_runnable()) {
-            comm_inbound__thread__run();
+        if (comm_usart_inbound__thread__is_runnable()) {
+            comm_usart_inbound__thread__run();
         }
     }
 

@@ -40,9 +40,9 @@
 #include "keyboard_handler.c"
 
 // Comm
-#include "comm_keyboard.c"
+#include "comm_usart_outbound__thread.c"
 //#include "comm_twi.c"
-#include "comm_inbound.c"
+#include "comm_usart_inbound__thread.c"
 
 #include "services/tracer__nop.c"
 

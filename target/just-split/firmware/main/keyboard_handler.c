@@ -1,10 +1,9 @@
-#include "comm_keyboard.h"
 #include <cpu/avr/asm.h>
 #include "services/tx_ring_buffer.h"
 #include "cpu/avr/services/keyboard/keyboard.h"
 
 
-// keyboard tweaks
+// keyboard callbacks
 // -----------------------------------------------------------------------------
 
 
@@ -24,9 +23,6 @@ void keyboard__debounce_timer__d__expired(void) {
     keyboard__port_d__mask__reset();
 }
 
-
-// keyboard callbacks
-// -----------------------------------------------------------------------------
 
 #define EVENT_MASK_KEY_PRESSED 0
 #define EVENT_MASK_KEY_RELEASED 64
