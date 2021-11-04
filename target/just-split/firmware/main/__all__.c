@@ -37,6 +37,8 @@
 #include "cpu/avr/services/keyboard/keyboard__port_c__buttons.c"
 #include "cpu/avr/services/keyboard/keyboard__port_d__buttons.c"
 
+#include "keyboard_handler.c"
+
 // Comm
 #include "comm_keyboard.c"
 //#include "comm_twi.c"

@@ -23,27 +23,6 @@
 #include "comm_inbound.h"
 
 
-// keyboard tweaks
-// -----------------------------------------------------------------------------
-
-
-void keyboard__debounce_timer__a__expired(void) {
-    keyboard__port_a__mask__reset();
-}
-
-void keyboard__debounce_timer__b__expired(void) {
-    keyboard__port_b__mask__reset();
-}
-
-void keyboard__debounce_timer__c__expired(void) {
-    keyboard__port_c__mask__reset();
-}
-
-void keyboard__debounce_timer__d__expired(void) {
-    keyboard__port_d__mask__reset();
-}
-
-
 // application
 // -----------------------------------------------------------------------------
 
