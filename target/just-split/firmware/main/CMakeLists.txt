@@ -85,6 +85,13 @@ set(SOURCE_FILES
         ../../bsp/services/tracer.h
         ../../bsp/services/tracer__nop.c
 
+        comm_twi__outbound.c
+        comm_twi__inbound.c
+
+        twi_slave__handler.h
+        twi_slave__handler.c
+        twi_slave__handler__callbacks.h
+
         main.c
         __all__.c
         ../../../../cpu/avr/asm_bit_var.h)

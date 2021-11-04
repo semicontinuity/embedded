@@ -29,8 +29,8 @@ include config.keyboard.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.tx_ring_buffer.properties)
 include config.tx_ring_buffer.properties
 
-#CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.twi_slave_handler.properties)
-#include config.twi_slave_handler.properties
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.twi_slave__handler.properties)
+include config.twi_slave__handler.properties
 
 CDEFS += -fwhole-program -Wl,--relax
 

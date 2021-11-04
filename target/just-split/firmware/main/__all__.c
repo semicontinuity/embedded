@@ -41,8 +41,12 @@
 
 // Comm
 #include "comm_usart_outbound__thread.c"
-//#include "comm_twi.c"
 #include "comm_usart_inbound__thread.c"
+
+#include "comm_twi__outbound.c"
+#include "comm_twi__inbound.c"
+
+#include "twi_slave__handler.c"
 
 #include "services/tracer__nop.c"
 

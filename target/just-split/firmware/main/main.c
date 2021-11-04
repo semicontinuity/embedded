@@ -20,8 +20,13 @@
 #include <services/tracer.h>
 #include <services/tx_ring_buffer.h>
 
+#include <cpu/avr/twi.h>
+#include "twi_slave__handler.h"
+
 #include "cpu/avr/usart0.h"
 #include "comm_usart_inbound__thread.h"
+
+uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
 
 
 // application
@@ -37,7 +42,10 @@ void application__init(void) {
 
     keyboard__init();
 
-    usart0__init();
+//    usart0__init();
+
+    __asm__ __volatile__("application__init__twi:");
+    twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
 }
 
 void application__start(void) {
@@ -46,11 +54,13 @@ void application__start(void) {
 
     io_matrix__scanner__thread__timer__start();
 
-    __asm__ __volatile__("comm_keyboard__start:");
     tx_ring_buffer__start();
 
-    comm_usart_outbound__thread__start();
-    comm_usart_inbound__thread__start();
+//    comm_usart_outbound__thread__start();
+//    comm_usart_inbound__thread__start();
+
+    __asm__ __volatile__("application__start__twi:");
+    twi__slave__start();
 }
 
 
@@ -73,14 +83,18 @@ int main(void) {
         __asm__ __volatile__("main__loop__1:");
         keyboard__run();
 
-        __asm__ __volatile__("main__loop__2:");
-        while (comm_usart_outbound__thread__is_runnable()) {
-            comm_usart_outbound__thread__run();
-        }
+//        __asm__ __volatile__("main__loop__2:");
+//        while (comm_usart_outbound__thread__is_runnable()) {
+//            comm_usart_outbound__thread__run();
+//        }
+//
+//        __asm__ __volatile__("main__loop__3:");
+//        if (comm_usart_inbound__thread__is_runnable()) {
+//            comm_usart_inbound__thread__run();
+//        }
 
-        __asm__ __volatile__("main__loop__3:");
-        if (comm_usart_inbound__thread__is_runnable()) {
-            comm_usart_inbound__thread__run();
+        if (twi__slave__handler__is_runnable()) {
+            twi__slave__handler__run();
         }
     }
 

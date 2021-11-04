@@ -1,6 +1,6 @@
 # Firmware for Just Split keyboard
 
-## Register allocations
+## Register allocation
 
 |    |                                                                 |
 |----|-----------------------------------------------------------------|

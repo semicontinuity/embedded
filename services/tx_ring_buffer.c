@@ -50,6 +50,7 @@ volatile uint8_t* tx_ring_buffer__head;
  * Initialize the buffer.
  */ 
 void tx_ring_buffer__start(void) {
+    __asm__ __volatile__("tx_ring_buffer__start:");
     tx_ring_buffer__tail = tx_ring_buffer__data;
     tx_ring_buffer__head = tx_ring_buffer__tail;
     tx_ring_buffer__not_empty__set(0);
