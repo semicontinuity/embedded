@@ -49,6 +49,7 @@ void keyboard__debounce_timer__d__expired(void) {
 
 void application__init(void) {
     io_matrix__out_columns__init();
+    io_matrix__out_rows__init();
     io_matrix__in__init();
 
     io_matrix__scanner__thread__init();
