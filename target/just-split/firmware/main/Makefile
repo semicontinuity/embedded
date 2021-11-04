@@ -26,10 +26,10 @@ include config.io_matrix.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.keyboard.properties)
 include config.keyboard.properties
 
-CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_keyboard.properties)
-include config.comm_keyboard.properties
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.tx_ring_buffer.properties)
+include config.tx_ring_buffer.properties
 
-#CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.tei_slave_handler.properties)
+#CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.twi_slave_handler.properties)
 #include config.twi_slave_handler.properties
 
 CDEFS += -fwhole-program -Wl,--relax
