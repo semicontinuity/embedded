@@ -74,6 +74,8 @@ set(SOURCE_FILES
         ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.h
         ../../../../cpu/avr/services/keyboard/keyboard__port_d__buttons.c
 
+        keyboard_handler.c
+
         comm_keyboard.h
         comm_keyboard.c
 

@@ -17,30 +17,10 @@
 #include "comm_keyboard.h"
 
 #include <services/tracer.h>
+#include <services/tx_ring_buffer.h>
 
 #include "cpu/avr/usart0.h"
 #include "comm_inbound.h"
-
-
-// keyboard tweaks
-// -----------------------------------------------------------------------------
-
-
-void keyboard__debounce_timer__a__expired(void) {
-    keyboard__port_a__mask__reset();
-}
-
-void keyboard__debounce_timer__b__expired(void) {
-    keyboard__port_b__mask__reset();
-}
-
-void keyboard__debounce_timer__c__expired(void) {
-    keyboard__port_c__mask__reset();
-}
-
-void keyboard__debounce_timer__d__expired(void) {
-    keyboard__port_d__mask__reset();
-}
 
 
 // application
@@ -65,7 +45,8 @@ void application__start(void) {
 
     io_matrix__scanner__thread__timer__start();
 
-    comm_keyboard__start();
+    __asm__ __volatile__("tx_ring_buffer__start:");
+    tx_ring_buffer__start();
     comm_keyboard__thread__start();
     comm_inbound__thread__start();
 }
