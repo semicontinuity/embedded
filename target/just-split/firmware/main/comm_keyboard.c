@@ -7,12 +7,6 @@
 #include "services/tx_ring_buffer.h"
 
 
-void comm_keyboard__start(void) {
-    __asm__ __volatile__("comm_keyboard__start:");
-    tx_ring_buffer__start();
-}
-
-
 // comm_keyboard__thread:
 // extracts events from the ring buffer and sends them via USART
 // runs in the context of main thread

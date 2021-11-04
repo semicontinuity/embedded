@@ -18,6 +18,7 @@
 #include "comm_keyboard.h"
 
 #include <services/tracer.h>
+#include <services/tx_ring_buffer.h>
 
 #include "cpu/avr/usart0.h"
 #include "comm_inbound.h"
@@ -46,7 +47,9 @@ void application__start(void) {
 
     io_matrix__scanner__thread__timer__start();
 
-    comm_keyboard__start();
+    __asm__ __volatile__("comm_keyboard__start:");
+    tx_ring_buffer__start();
+
     comm_keyboard__thread__start();
     comm_inbound__thread__start();
 }
