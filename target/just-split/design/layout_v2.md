@@ -48,11 +48,13 @@ No symbols on the shift layer.
 
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
             |     |     |     |     |     |     |     |     |     |
-            |     |     |     |     |     |     |     >LOWER<     |
+            >MULTI<     >RAISE<     |     |     |     >LOWER<     |
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
 ```
-* Perhaps, part of "Lower" layer, comprising numbers + navigation (in this case, there is delay)
-* Perhaps, navigation layer will be activated with holding Lower key
+* Hold `Raise` + keys:           navigation
+* Hold `Raise` + `Lower` + keys: `Shift` + navigation
+* Hold `Multi` + keys:           `Ctrl` + navigation
+* Hold `Multi` + `Lower` + keys: `Ctrl` + `Shift` + navigation
 
 
 #### Lower layer (symbols) - if Lower key also activates Navigation layer
