@@ -75,7 +75,7 @@ No symbols on the shift layer.
 
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
             |     |     |     |     |     |     |     |     |     |
-            |  #  |Space|  $  |     |     |     |     >LOWER<     |
+            |  #  |Space|  _  |  $  |     |     |     >LOWER<     |
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
 ```
 Perhaps, symbols on navigation keys will be activated with leader Lower key only (it influences heavily all design decisions) -
@@ -94,19 +94,19 @@ Design decisions and mnemonic rules:
       +-----+-----+-----+                             +-----+-----+-----+
       |     |     |     |                             |     |     |     |
 +-----+  <  |  >  |  &  +-----+                 +-----+  @  |  *  |  /  +-----+
-|     +-----+-----+-----+     |                 |     +-----+-----+-----+     |
+|     +-----+-----+-----+  %  |                 |  ~  +-----+-----+-----+     |
 |  -  |     |     |     |     |                 |     |     |     |     |  `  |
 +-----+  (  |  )  |  =  +-----+                 +-----+  ;  |  {  |  }  +-----+
-|     +-----+-----+-----+  %  |                 |  ~  +-----+-----+-----+     |
+|     +-----+-----+-----+  0  |                 |  2  +-----+-----+-----+     |
 |  +  |     |     |     |     |                 |     |     |     |     |  "  |
 +-----+  [  |  ]  |  |  +-----+                 +-----+  :  |  ^  |  \  +-----+
-|     +-----+-----+-----+     |                 |     +-----+-----+-----+  '  |
+|     +-----+-----+-----+  1  |                 |  3  +-----+-----+-----+  '  |
 |  !  |                 |     |                 |     |                 |     |
 +-----+                 +-----+                 +-----+                 +-----+
 
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
             |     |     |     |     |     |     |     |     |     |
-            |  #  |Space|     |  $  |     |     |     >LOWER<     |
+            |  #  |Space|  _  |  $  |     |     |     >LOWER<     |
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
 ```
 * Double-quote `"` on home row; again, then come in pairs, but auto-completed by IDEs.
@@ -114,3 +114,28 @@ Design decisions and mnemonic rules:
 * `:` is under `;`
 * `\` is under `/`
 * All string-literal-related characters in one column
+* Underscore s unavailable from QWERTY layer - put it next to space
+* Frequent numbers 0..3 are available, to avoid layer switching; optimized for typing "= " + number
+
+
+#### Java Generics layer (concurrent with Multi Layer)
+
+```
+      +-----+-----+-----+                             +-----+-----+-----+
+      |     |     |     |                             | Lin |     |     |
++-----+     |     |     +-----+                 +-----+ ked |Array|List >+-----+
+|     +-----+-----+-----+     |                 |Prio.+-----+-----+-----+     |
+|     |     |     |     |     |                 |Queue|     |     |     |Deque|
++-----+     |     |     +-----+                 +-----+  <  |  ,  |Space+-----+
+|     +-----+-----+-----+     |                 |Compa+-----+-----+-----+     |
+|     |     |     |     |     |                 |rator|     |     |     |  >  |
++-----+     |     |     +-----+                 +-----+Tree |Hash |Map  +-----+
+|     +-----+-----+-----+     |                 |.     +-----+-----+-----+     |
+|     |                 |     |                 |Entry|                 | Set |
++-----+                 +-----+                 +-----+                 +-----+
+
+            +-----+-----+-----+-----+     +-----+-----+-----+-----+
+            |     |     |     |     |     |     |     |     |     |
+            >MULTI<     |     |     |     | new_|Int. |Str. |Char.|
+            +-----+-----+-----+-----+     +-----+-----+-----+-----+
+```
