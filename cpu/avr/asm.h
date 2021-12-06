@@ -836,21 +836,21 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
     );                          
 
 #define __LDS(result, addr)             \
-    __asm__                             \
+    do { __asm__ __volatile__           \
     (                                   \
         "lds %0, %1" "\n\t"             \
         : "=r" (result)                 \
-        : "n" (_SFR_MEM_ADDR(addr))     \
-    );
+        : "i" (_SFR_MEM_ADDR(addr))     \
+    ); } while(0)
 
 #define __STS(addr, value)              \
-    __asm__                             \
+    do { __asm__ __volatile__           \
     (                                   \
         "sts %0, %1" "\n\t"             \
         :                               \
-        :"n" (_SFR_MEM_ADDR(addr)),     \
+        :"i" (_SFR_MEM_ADDR(addr)),     \
          "r" (value)                    \
-    );
+    ); } while(0)
 
 
 
