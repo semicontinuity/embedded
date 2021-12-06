@@ -86,16 +86,16 @@ void io_matrix__out_columns__init(void) {
 void io_matrix__out_columns__start(void) {
     __asm__ __volatile__("io_matrix__out_columns__start:");
 #if defined(IO_MATRIX__OUT__COLUMN0__PORT) && defined(IO_MATRIX__OUT__COLUMN0__PIN)
-    io_matrix__out__column0__set(1);
+    io_matrix__out__column0__set(0);
 #endif
 #if defined(IO_MATRIX__OUT__COLUMN1__PORT) && defined(IO_MATRIX__OUT__COLUMN1__PIN)
-    io_matrix__out__column1__set(1);
+    io_matrix__out__column1__set(0);
 #endif
 #if defined(IO_MATRIX__OUT__COLUMN2__PORT) && defined(IO_MATRIX__OUT__COLUMN2__PIN)
-    io_matrix__out__column2__set(1);
+    io_matrix__out__column2__set(0);
 #endif
 #if defined(IO_MATRIX__OUT__COLUMN3__PORT) && defined(IO_MATRIX__OUT__COLUMN3__PIN)
-    io_matrix__out__column3__set(1);
+    io_matrix__out__column3__set(0);
 #endif
 }
 

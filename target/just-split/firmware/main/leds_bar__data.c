@@ -1,6 +1,6 @@
 #include "leds_bar__data.h"
 
-uint8_t leds_bar__data[4] __attribute__((aligned(4)));
+volatile uint8_t leds_bar__data[4] __attribute__((aligned(4)));
 
 #ifdef LEDS_BAR__DATA__PTR__REG
 register volatile uint8_t* leds_bar__data__ptr asm(QUOTE(LEDS_BAR__DATA__PTR__REG));

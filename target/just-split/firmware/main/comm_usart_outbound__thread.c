@@ -22,6 +22,5 @@ bool comm_usart_outbound__thread__is_runnable(void) {
 
 void comm_usart_outbound__thread__run(void) {
     __asm__ __volatile__("comm_usart_outbound__thread__run:");
-    uint8_t event = tx_ring_buffer__get();
-    usart0__out__write(event);
+    usart0__out__write((char) tx_ring_buffer__get());
 }
