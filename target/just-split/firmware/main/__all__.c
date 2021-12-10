@@ -4,6 +4,7 @@
 #endif
 
 #include "leds_bar__data.c"
+#include "leds_bar__wdt.c"
 
 // I/O matrix
 #include "cpu/avr/drivers/io_matrix/io_matrix__scanner__thread__timer__timer1.c"

@@ -21,6 +21,7 @@
 #include <services/tx_ring_buffer.h>
 
 #include <cpu/avr/twi.h>
+#include <cpu/avr/wdt.h>
 #include "twi_slave__handler.h"
 
 #include "cpu/avr/usart0.h"
@@ -41,32 +42,35 @@ void application__init(void) {
     io_matrix__scanner__thread__init();
     io_matrix__scanner__thread__timer__init();
 
-//    keyboard__init();
+    keyboard__init();
 
-//    usart0__init();
+    usart0__init();
 
 //    __asm__ __volatile__("application__init__twi:");
 //    twi__slave_address__set(eeprom__read_byte_unchecked(&ee__twi__slave__address));
 }
 
 void application__start(void) {
-    leds_bar__data[0] = 3;
+    leds_bar__data[0] = 1;
     leds_bar__data[1] = 0;
     leds_bar__data[2] = 0;
-    leds_bar__data[3] = 3;
+    leds_bar__data[3] = 0x80;
 
     io_matrix__out_columns__start();
     io_matrix__in__start();
 
     io_matrix__scanner__thread__timer__start();
 
-//    tx_ring_buffer__start();
+    tx_ring_buffer__start();
 
-//    comm_usart_outbound__thread__start();
-//    comm_usart_inbound__thread__start();
+    comm_usart_outbound__thread__start();
+    comm_usart_inbound__thread__start();
 
 //    __asm__ __volatile__("application__start__twi:");
 //    twi__slave__start();
+
+    wdt__prescaler_set(WDTO_15MS);
+    wdt__enable_interrupt();
 }
 
 
@@ -86,18 +90,18 @@ int main(void) {
 #endif
     __asm__ __volatile__("main__loop:");
     for(;;) {
-//        __asm__ __volatile__("main__loop__1:");
-//        keyboard__run();
+        __asm__ __volatile__("main__loop__1:");
+        keyboard__run();
 
-//        __asm__ __volatile__("main__loop__2:");
-//        while (comm_usart_outbound__thread__is_runnable()) {
-//            comm_usart_outbound__thread__run();
-//        }
-//
-//        __asm__ __volatile__("main__loop__3:");
-//        if (comm_usart_inbound__thread__is_runnable()) {
-//            comm_usart_inbound__thread__run();
-//        }
+        __asm__ __volatile__("main__loop__2:");
+        while (comm_usart_outbound__thread__is_runnable()) {
+            comm_usart_outbound__thread__run();
+        }
+
+        __asm__ __volatile__("main__loop__3:");
+        if (comm_usart_inbound__thread__is_runnable()) {
+            comm_usart_inbound__thread__run();
+        }
 
 //        if (twi__slave__handler__is_runnable()) {
 //            twi__slave__handler__run();

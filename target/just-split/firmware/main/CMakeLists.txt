@@ -92,6 +92,10 @@ set(SOURCE_FILES
         twi_slave__handler.c
         twi_slave__handler__callbacks.h
 
+        leds_bar__data.h
+        leds_bar__data.c
+        leds_bar__wdt.c
+
         main.c
         __all__.c
         ../../../../cpu/avr/asm_bit_var.h)

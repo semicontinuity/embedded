@@ -55,9 +55,15 @@ void io_matrix__scanner__thread__init(void) {
 //io_matrix__out__column##curr##__set(1);                                     \
 //VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, label);
 
+//#define io_matrix__scanner__thread__render_column(prev, curr, data, label)  \
+//io_matrix__out__column##prev##__set(0);                                     \
+//io_matrix__out_rows__set(data);                                             \
+//io_matrix__out__column##curr##__set(1);                                     \
+//VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, label);
+
 #define io_matrix__scanner__thread__render_column(prev, curr, data, label)  \
+io_matrix__in__column##prev##__state__update();                             \
 io_matrix__out__column##prev##__set(0);                                     \
-io_matrix__out_rows__set(data);                                             \
 io_matrix__out__column##curr##__set(1);                                     \
 VT_Z_YIELD_WITH_MARK_RETI(io_matrix__scanner__thread, io_matrix__scanner__thread__ip, label);
 
