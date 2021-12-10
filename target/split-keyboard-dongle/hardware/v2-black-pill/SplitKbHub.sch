@@ -1,0 +1,282 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A3 16535 11693
+encoding utf-8
+Sheet 1 1
+Title ""
+Date "29 sep 2012"
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+Wire Wire Line
+	14400 1000 14700 1000
+Text Label 12550 2600 0    50   ~ 0
+VCC
+Text Label 12550 2700 0    50   ~ 0
+GND
+Text Label 14450 1000 0    50   ~ 0
+GND
+Wire Wire Line
+	12800 1400 12550 1400
+Wire Wire Line
+	12800 1500 12550 1500
+Text Label 12550 1400 0    50   ~ 0
+TX1
+Text Label 12550 1500 0    50   ~ 0
+RX1
+$Comp
+L component:RESISTOR R1
+U 1 1 619519F2
+P 10600 1075
+F 0 "R1" H 10671 1121 50  0000 L CNN
+F 1 "4k7" H 10671 1030 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" H 10600 1075 60  0001 C CNN
+F 3 "" H 10600 1075 60  0000 C CNN
+	1    10600 1075
+	1    0    0    -1  
+$EndComp
+$Comp
+L component:VCC #PWR05
+U 1 1 61955356
+P 10600 825
+F 0 "#PWR05" H 10600 925 30  0001 C CNN
+F 1 "VCC" H 10600 925 30  0000 C CNN
+F 2 "" H 10600 825 60  0001 C CNN
+F 3 "" H 10600 825 60  0001 C CNN
+	1    10600 825 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	10600 1325 10600 1625
+Text Label 10600 1475 0    50   ~ 0
+SCL1
+Wire Notes Line
+	10500 3100 16050 3100
+Wire Notes Line
+	500  5500 16050 5500
+Wire Notes Line
+	11800 9950 11800 5500
+Wire Notes Line
+	10500 500  10500 5500
+Wire Notes Line
+	11800 7200 16050 7200
+Wire Wire Line
+	10875 1325 10875 1625
+$Comp
+L component:VCC #PWR06
+U 1 1 619596BD
+P 10875 825
+F 0 "#PWR06" H 10875 925 30  0001 C CNN
+F 1 "VCC" H 10875 925 30  0000 C CNN
+F 2 "" H 10875 825 60  0001 C CNN
+F 3 "" H 10875 825 60  0001 C CNN
+	1    10875 825 
+	1    0    0    -1  
+$EndComp
+$Comp
+L component:RESISTOR R2
+U 1 1 6194D901
+P 10875 1075
+F 0 "R2" H 10946 1121 50  0000 L CNN
+F 1 "4k7" H 10946 1030 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" H 10875 1075 60  0001 C CNN
+F 3 "" H 10875 1075 60  0000 C CNN
+	1    10875 1075
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	15250 2000 14950 2000
+$Comp
+L keebio:TRRS U5
+U 1 1 611A4EF9
+P 15600 2400
+F 0 "U5" H 15828 2703 60  0000 L CNN
+F 1 "TRRS" H 15828 2597 60  0000 L CNN
+F 2 "Keebio-Parts:TRRS-PJ-320A" H 15750 2400 60  0001 C CNN
+F 3 "" H 15750 2400 60  0001 C CNN
+	1    15600 2400
+	1    0    0    -1  
+$EndComp
+Text Label 15000 1000 0    50   ~ 0
+GND
+Text Label 15000 2800 0    50   ~ 0
+GND
+Text Label 15000 2200 0    50   ~ 0
+GND
+Text Label 15000 2300 0    50   ~ 0
+VCC
+Text Label 15000 2900 0    50   ~ 0
+VCC
+Wire Wire Line
+	15250 2900 14950 2900
+Wire Wire Line
+	15250 2800 14950 2800
+Wire Wire Line
+	15250 2300 14950 2300
+Wire Wire Line
+	15250 2200 14950 2200
+Wire Wire Line
+	15250 2100 14950 2100
+Wire Wire Line
+	15250 1100 14950 1100
+Wire Wire Line
+	15250 1000 14950 1000
+Wire Wire Line
+	15250 900  14950 900 
+Wire Wire Line
+	15250 800  14950 800 
+$Comp
+L keebio:TRRS U6
+U 1 1 611A54B9
+P 15600 3000
+F 0 "U6" H 15828 3303 60  0000 L CNN
+F 1 "TRRS" H 15828 3197 60  0000 L CNN
+F 2 "Keebio-Parts:TRRS-PJ-320A" H 15750 3000 60  0001 C CNN
+F 3 "" H 15750 3000 60  0001 C CNN
+	1    15600 3000
+	1    0    0    -1  
+$EndComp
+$Comp
+L keebio:TRRS U3
+U 1 1 61161536
+P 15600 1200
+F 0 "U3" H 15828 1503 60  0000 L CNN
+F 1 "TRRS" H 15828 1397 60  0000 L CNN
+F 2 "Keebio-Parts:TRRS-PJ-320A" H 15750 1200 60  0001 C CNN
+F 3 "" H 15750 1200 60  0001 C CNN
+	1    15600 1200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	15250 2700 14950 2700
+Text Label 15000 2700 0    50   ~ 0
+SDA1
+Wire Wire Line
+	15250 2600 14950 2600
+Text Label 15000 2600 0    50   ~ 0
+SCL1
+Wire Wire Line
+	12800 2700 12550 2700
+Wire Wire Line
+	12800 2600 12550 2600
+Wire Wire Line
+	12800 2300 12550 2300
+Wire Wire Line
+	12800 2200 12550 2200
+Text Label 12550 2200 0    50   ~ 0
+SCL1
+Text Label 12550 2300 0    50   ~ 0
+SDA1
+$Comp
+L YAAJ_BluePill_Part_Like:YAAJ_BluePill_Part_Like U2
+U 1 1 6112B838
+P 13600 1800
+F 0 "U2" H 13600 2965 50  0000 C CNN
+F 1 "YAAJ_BluePill_Part_Like" H 13600 2874 50  0000 C CNN
+F 2 "Footprints:YAAJ_BluePill_1" H 14300 800 50  0001 C CNN
+F 3 "" H 14300 800 50  0001 C CNN
+	1    13600 1800
+	1    0    0    -1  
+$EndComp
+Text Label 15000 2000 0    50   ~ 0
+SCL2
+Text Label 15000 2100 0    50   ~ 0
+SDA2
+Wire Wire Line
+	12800 1900 12550 1900
+Text Label 12550 1900 0    50   ~ 0
+SDA2
+Wire Wire Line
+	14400 900  14700 900 
+Text Label 14450 900  0    50   ~ 0
+VCC
+Text Label 15000 1100 0    50   ~ 0
+VCC
+Text Label 10875 1475 0    50   ~ 0
+SDA1
+$Comp
+L component:RESISTOR R3
+U 1 1 615801A7
+P 11150 1075
+F 0 "R3" H 11221 1121 50  0000 L CNN
+F 1 "4k7" H 11221 1030 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" H 11150 1075 60  0001 C CNN
+F 3 "" H 11150 1075 60  0000 C CNN
+	1    11150 1075
+	1    0    0    -1  
+$EndComp
+$Comp
+L component:VCC #PWR0101
+U 1 1 615801AD
+P 11150 825
+F 0 "#PWR0101" H 11150 925 30  0001 C CNN
+F 1 "VCC" H 11150 925 30  0000 C CNN
+F 2 "" H 11150 825 60  0001 C CNN
+F 3 "" H 11150 825 60  0001 C CNN
+	1    11150 825 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	11150 1325 11150 1625
+Wire Wire Line
+	11425 1325 11425 1625
+$Comp
+L component:VCC #PWR0102
+U 1 1 615801B6
+P 11425 825
+F 0 "#PWR0102" H 11425 925 30  0001 C CNN
+F 1 "VCC" H 11425 925 30  0000 C CNN
+F 2 "" H 11425 825 60  0001 C CNN
+F 3 "" H 11425 825 60  0001 C CNN
+	1    11425 825 
+	1    0    0    -1  
+$EndComp
+$Comp
+L component:RESISTOR R4
+U 1 1 615801BC
+P 11425 1075
+F 0 "R4" H 11496 1121 50  0000 L CNN
+F 1 "4k7" H 11496 1030 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric_Pad1.20x1.40mm_HandSolder" H 11425 1075 60  0001 C CNN
+F 3 "" H 11425 1075 60  0000 C CNN
+	1    11425 1075
+	1    0    0    -1  
+$EndComp
+Text Label 11150 1475 0    50   ~ 0
+SCL2
+Text Label 11425 1475 0    50   ~ 0
+SDA2
+Wire Wire Line
+	12800 2000 12550 2000
+Wire Wire Line
+	12800 1300 12550 1300
+Text Label 12550 2000 0    50   ~ 0
+SDA3
+Text Label 12550 1300 0    50   ~ 0
+SCL3
+Wire Wire Line
+	14400 1400 14700 1400
+Text Label 14450 1400 0    50   ~ 0
+SCL2
+Text Notes 14750 2600 0    50   ~ 0
+TX1
+Text Notes 14750 2700 0    50   ~ 0
+RX1
+Text Label 15000 800  0    50   ~ 0
+TX2
+Text Label 15000 900  0    50   ~ 0
+RX2
+Wire Wire Line
+	14400 2100 14675 2100
+Wire Wire Line
+	14400 2000 14675 2000
+Text Label 14500 2100 0    50   ~ 0
+TX2
+Text Label 14500 2000 0    50   ~ 0
+RX2
+$EndSCHEMATC
