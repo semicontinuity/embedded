@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys
 import serial
@@ -7,10 +7,10 @@ import threading
 from threading import Thread
 
 if len(sys.argv) != 3:
-    print "Please supply COM port name and speed"
+    print("Please supply COM port name and speed")
     sys.exit()
 
-print sys.argv[1]
+#print sys.argv[1]
 #port = serial.Serial(sys.argv[1], int(sys.argv[2]))
 port = serial.Serial()
 #port.dsrdtr=False
@@ -38,7 +38,7 @@ class PortReader(Thread):
       while not self.stopped():
         while port.inWaiting() > 0:
           c = port.read(1)
-          print "%02X " % ord(c)
+          print("%02X " % ord(c))
 
    def stop(self):
       self._stop.set()

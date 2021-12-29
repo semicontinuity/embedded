@@ -59,4 +59,8 @@ inline void io_matrix__out_rows__set(const uint8_t value) {
     OUT(IO_MATRIX__OUT__ROWS, value);
 }
 
+inline void io_matrix__out_rows__set_from_temp_reg(void) {
+    __asm__ ( "out %0, r0" "\n\t" : :"I" (_SFR_IO_ADDR(PORT_REG(IO_MATRIX__OUT__ROWS__PORT))));
+}
+
 #endif

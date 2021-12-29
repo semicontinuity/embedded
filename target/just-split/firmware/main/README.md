@@ -1,5 +1,10 @@
 # Firmware for Just Split keyboard
 
+## Base USART feature set
+* Sends duplicate button key press/release reports via USART @ 38400.
+* Receives 4-byte LED brightness reports via USART @ 38400.
+* WDT used to auto-reset to the beginning of RX packet boundary after 15ms of RX inactivity.
+
 ## Register allocation
 
 |    |                                                                 |
