@@ -16,7 +16,7 @@
 
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
             |Multi|     |     |Mouse|     | Fun |     |     | Num |
-            | Esc |Space|Shift| Tab |     |BkSpc|Enter|Lower| Del |
+            | Esc |Space|Raise| Tab |     |BkSpc|Enter|Lower| Del |
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
 ```
 Design decisions:

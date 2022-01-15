@@ -94,29 +94,65 @@ Design decisions and mnemonic rules:
       +-----+-----+-----+                             +-----+-----+-----+
       |     |     |     |                             |     |     |     |
 +-----+  <  |  >  |  &  +-----+                 +-----+  @  |  *  |  /  +-----+
-|     +-----+-----+-----+  %  |                 |  ~  +-----+-----+-----+     |
+|     +-----+-----+-----+  ^  |                 |  ~  +-----+-----+-----+     |
 |  -  |     |     |     |     |                 |     |     |     |     |  `  |
 +-----+  (  |  )  |  =  +-----+                 +-----+  ;  |  {  |  }  +-----+
 |     +-----+-----+-----+  0  |                 |  2  +-----+-----+-----+     |
 |  +  |     |     |     |     |                 |     |     |     |     |  "  |
-+-----+  [  |  ]  |  |  +-----+                 +-----+  :  |  ^  |  \  +-----+
++-----+  [  |  ]  |  |  +-----+                 +-----+  :  |  $  |  %  +-----+
 |     +-----+-----+-----+  1  |                 |  3  +-----+-----+-----+  '  |
 |  !  |                 |     |                 |     |                 |     |
 +-----+                 +-----+                 +-----+                 +-----+
 
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
             |     |     |     |     |     |     |     |     |     |
-            |  #  |Space|  _  |  $  |     |     |     >LOWER<     |
+            |  #  |Space|  _  |  \  |     |     |     >LOWER<     |
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
 ```
 * Double-quote `"` on home row; again, then come in pairs, but auto-completed by IDEs.
 * `;` on the home row, on the stronger index finger
 * `:` is under `;`
-* `\` is under `/`
+* `%` is under `/` (also has `/` inside; percent sign is "at the end" - after number)
+* `$` is "at the beginning" - before number
+* `$%` is in the same order, as on regular keyboard
 * All string-literal-related characters in one column
 * Underscore s unavailable from QWERTY layer - put it next to space
 * Frequent numbers 0..3 are available, to avoid layer switching; optimized for typing "= " + number
 
+Alt thumbs layout:
+
+```
+            +-----+-----+-----+-----+     +-----+-----+-----+-----+
+            |     |     |     |     |     |     |     >LOWER<     |
+            |  #  |  .  |  _  |  $  |     |  ~  |  ?  |  ,  |  %  |
+            +-----+-----+-----+-----+     +-----+-----+-----+-----+
+```
+* Makes possible to type all characters without lateral palm motion
+* `~` `?` `,` `%` are on the right side, because these characters are unlikely to be repeated
+* No way to auto-repeat `,`, but can be implemented with tap dance
+* `,` on the LOWER key - for relatively fast typing by double-tap
+* `.` on the SPACE key - no thumb motion
+
+
+Alt thumbs layout 2:
+
+```
+            +-----+-----+-----+-----+     +-----+-----+-----+-----+
+            |     |     >RAISE<     |     |     |     |     |     |
+            |     |     |     |     |     |     |  ,  |  .  |  ?  |
+            +-----+-----+-----+-----+     +-----+-----+-----+-----+
+```
+```
+            +-----+-----+-----+-----+     +-----+-----+-----+-----+
+            |     |     |     |     |     |     |     >LOWER<     |
+            |  #  |Space|  _  |  \  |     |  ^  |     |     |  ~  |
+            +-----+-----+-----+-----+     +-----+-----+-----+-----+
+```
+* Common characters `,.?` are on the other side to the SPACE key - SPACE often follows them - for easier typing
+* `Lower+Space` is `Space` to prevent typos
+* `#` is "at start of the string" (comment char)
+* `\` is "at end of the string" (continuation char)
+* `^~` are the rarest chars, so they require same-finger motion (or dedicated keys in central column)
 
 #### Java Generics layer (concurrent with Multi Layer)
 
