@@ -10,6 +10,10 @@
 #  include "services/gp_ring_buffer.c"
 #endif
 
+#if defined(GP_BUFFER__SIZE)
+#  include "services/gp_buffer.c"
+#endif
+
 #include "leds_bar__data.c"
 #include "leds_bar__wdt.c"
 

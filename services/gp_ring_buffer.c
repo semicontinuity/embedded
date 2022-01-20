@@ -29,6 +29,8 @@
 //
 // To write data, it is necessary to set the buffer to the read mode first.
 // The pointer is adjusted from TAIL to HEAD.
+//
+// All methods are non-atomic, no locking is performed.
 // =============================================================================
 
 #include "services/gp_ring_buffer.h"
@@ -58,7 +60,7 @@ volatile uint8_t* gp_ring_buffer__ptr;
 #endif
 
 /**
- * Points to the the current write position (head).
+ * Number of bytes in the buffer.
  */
 #ifndef GP_RING_BUFFER__SIZE__REG
 volatile uint8_t gp_ring_buffer__size;

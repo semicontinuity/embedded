@@ -29,6 +29,8 @@
 //
 // To write data, it is necessary to set the buffer to the read mode first.
 // The pointer is adjusted from TAIL to HEAD.
+//
+// All methods are non-atomic, no locking is performed.
 // =============================================================================
 
 #ifndef GP_RING_BUFFER_H

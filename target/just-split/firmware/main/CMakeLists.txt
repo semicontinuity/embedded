@@ -6,6 +6,9 @@ set(CMAKE_C_STANDARD 11)
 
 
 set(SOURCE_FILES
+        ../../../../services/gp_buffer.c
+        ../../../../services/gp_buffer.h
+
         ../../../../services/gp_ring_buffer.c
         ../../../../services/gp_ring_buffer.h
 

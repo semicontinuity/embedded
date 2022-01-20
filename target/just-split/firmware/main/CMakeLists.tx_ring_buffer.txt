@@ -14,6 +14,8 @@ add_definitions(-DTX_RING_BUFFER__NOT_FULL__IN_BIT_IO_MEM=1)
 
 add_definitions(-DGP_RING_BUFFER__ALIGNED=1)
 add_definitions(-DGP_RING_BUFFER__SIZE=128)
+add_definitions(-DGP_RING_BUFFER__PTR__REG=26)
+add_definitions(-DGP_RING_BUFFER__SIZE__REG=15)
 
 add_definitions(-DGP_RING_BUFFER__NOT_EMPTY__HOST=GPIOR0)
 add_definitions(-DGP_RING_BUFFER__NOT_EMPTY__BIT=0)
@@ -22,3 +24,8 @@ add_definitions(-DGP_RING_BUFFER__NOT_EMPTY__IN_BIT_IO_MEM=1)
 add_definitions(-DGP_RING_BUFFER__NOT_FULL__HOST=GPIOR0)
 add_definitions(-DGP_RING_BUFFER__NOT_FULL__BIT=1)
 add_definitions(-DGP_RING_BUFFER__NOT_FULL__IN_BIT_IO_MEM=1)
+
+
+add_definitions(-DGP_BUFFER__SIZE=20)
+add_definitions(-DGP_BUFFER__PTR__REG=28)
+add_definitions(-DGP_BUFFER__SIZE__REG=16)
