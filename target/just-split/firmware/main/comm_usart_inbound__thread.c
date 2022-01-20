@@ -6,15 +6,17 @@
 #include "leds_bar__data.h"
 #include <cpu/avr/usart0.h>
 #include <cpu/avr/wdt.h>
+#include <services/gp_buffer.h>
 
 
 void comm_usart_inbound__thread__handle_event(uint8_t event) {
     __asm__ __volatile__("comm_usart_inbound__thread__handle_event:");
     wdt__reset();
 
-    if (!leds_bar__data__put(event)) {
-        leds_bar__data__put_position_reset();
-    }
+    gp_buffer__put(event);
+//    if (!leds_bar__data__put(event)) {
+//        leds_bar__data__put_position_reset();
+//    }
 }
 
 

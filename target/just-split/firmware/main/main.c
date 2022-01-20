@@ -23,6 +23,7 @@
 
 #include <cpu/avr/twi.h>
 #include <cpu/avr/wdt.h>
+#include <services/gp_buffer.h>
 #include "twi_slave__handler.h"
 
 #include "cpu/avr/usart0.h"
@@ -64,6 +65,7 @@ void application__start(void) {
 
 //    tx_ring_buffer__start();
     gp_ring_buffer__start();
+    gp_buffer__start();
 
     comm_usart_outbound__thread__start();
     comm_usart_inbound__thread__start();
@@ -107,6 +109,14 @@ int main(void) {
         __asm__ __volatile__("main__loop__5:");
         if (comm_usart_inbound__thread__is_runnable()) {
             comm_usart_inbound__thread__run();
+
+            if (gp_buffer__size__get() == 4) {
+                gp_buffer__start();
+                leds_bar__data[0] = gp_buffer__get();
+                leds_bar__data[1] = gp_buffer__get();
+                leds_bar__data[2] = gp_buffer__get();
+                leds_bar__data[3] = gp_buffer__get();
+            }
         }
 
 //        if (twi__slave__handler__is_runnable()) {

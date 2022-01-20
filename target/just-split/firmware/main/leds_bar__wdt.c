@@ -1,7 +1,9 @@
 #include <avr/interrupt.h>
-#include "leds_bar__data.h"
+#include <services/gp_buffer.h>
+//#include "leds_bar__data.h"
 
 
 ISR(WDT_vect) {
-    leds_bar__data__put_position_reset();
+    gp_buffer__start();
+//    leds_bar__data__put_position_reset();
 }
