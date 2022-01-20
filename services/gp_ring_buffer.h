@@ -52,6 +52,19 @@ inline bool gp_ring_buffer__is_writable(void) { return gp_ring_buffer__not_full_
 inline bool gp_ring_buffer__is_readable(void) { return gp_ring_buffer__not_empty__is_set(); }
 
 
+/**
+ * Switches the buffer to write mode.
+ * Buffer must be in read mode.
+ */
+void gp_ring_buffer__to_write_mode(void);
+
+/**
+ * Switches the buffer to read mode.
+ * Buffer must be in write mode.
+ */
+void gp_ring_buffer__to_read_mode(void);
+
+
 #ifndef QUOTE
 #define _QUOTE(x) #x
 #define QUOTE(x) _QUOTE(x)

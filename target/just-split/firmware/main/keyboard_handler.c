@@ -1,5 +1,6 @@
 #include <cpu/avr/asm.h>
-#include "services/tx_ring_buffer.h"
+//#include "services/tx_ring_buffer.h"
+#include "services/gp_ring_buffer.h"
 #include "cpu/avr/services/keyboard/keyboard.h"
 
 
@@ -45,11 +46,22 @@ inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
             (uint8_t) (EVENT_MASK_KEY_PRESSED | button));
     // Send the scan code twice, for the rare case when some kind of EMI destroys serial packet.
     // The receiving side must maintain the keyboard state, and ignore no-effect events (copies).
+
+    if (__builtin_expect(gp_ring_buffer__is_writable(), true)) {
+        gp_ring_buffer__put(event);
+    }
+    if (__builtin_expect(gp_ring_buffer__is_writable(), true)) {
+        gp_ring_buffer__put(event);
+    }
+
+    /*
     if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
         tx_ring_buffer__put(event);
     }
     if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
         tx_ring_buffer__put(event);
     }
+    */
+
     return true;
 }

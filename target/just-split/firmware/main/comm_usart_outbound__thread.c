@@ -4,11 +4,10 @@
 // -----------------------------------------------------------------------------
 #include "comm_usart_outbound__thread.h"
 
-#include <cpu/avr/asm.h>
-
 #include <cpu/avr/usart0.h>
 #include <cpu/avr/usart0__tx_polled.h>
-#include "services/tx_ring_buffer.h"
+//#include "services/tx_ring_buffer.h"
+#include "services/gp_ring_buffer.h"
 
 
 void comm_usart_outbound__thread__start(void) {
@@ -17,10 +16,12 @@ void comm_usart_outbound__thread__start(void) {
 }
 
 bool comm_usart_outbound__thread__is_runnable(void) {
-    return __builtin_expect(tx_ring_buffer__is_readable(), false);
+//    return __builtin_expect(tx_ring_buffer__is_readable(), false);
+    return __builtin_expect(gp_ring_buffer__is_readable(), false);
 }
 
 void comm_usart_outbound__thread__run(void) {
     __asm__ __volatile__("comm_usart_outbound__thread__run:");
-    usart0__out__write((char) tx_ring_buffer__get());
+//    usart0__out__write((char) tx_ring_buffer__get());
+    usart0__out__write((char) gp_ring_buffer__get());
 }

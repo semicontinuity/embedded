@@ -18,7 +18,8 @@
 #include "comm_usart_outbound__thread.h"
 
 #include <services/tracer.h>
-#include <services/tx_ring_buffer.h>
+//#include <services/tx_ring_buffer.h>
+#include <services/gp_ring_buffer.h>
 
 #include <cpu/avr/twi.h>
 #include <cpu/avr/wdt.h>
@@ -61,7 +62,8 @@ void application__start(void) {
 
     io_matrix__scanner__thread__timer__start();
 
-    tx_ring_buffer__start();
+//    tx_ring_buffer__start();
+    gp_ring_buffer__start();
 
     comm_usart_outbound__thread__start();
     comm_usart_inbound__thread__start();
@@ -91,14 +93,18 @@ int main(void) {
     __asm__ __volatile__("main__loop:");
     for(;;) {
         __asm__ __volatile__("main__loop__1:");
-        keyboard__run();
-
+        gp_ring_buffer__to_write_mode();
         __asm__ __volatile__("main__loop__2:");
+        keyboard__run();
+        __asm__ __volatile__("main__loop__3:");
+        gp_ring_buffer__to_read_mode();
+
+        __asm__ __volatile__("main__loop__4:");
         while (comm_usart_outbound__thread__is_runnable()) {
             comm_usart_outbound__thread__run();
         }
 
-        __asm__ __volatile__("main__loop__3:");
+        __asm__ __volatile__("main__loop__5:");
         if (comm_usart_inbound__thread__is_runnable()) {
             comm_usart_inbound__thread__run();
         }
