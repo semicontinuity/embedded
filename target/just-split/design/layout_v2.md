@@ -93,13 +93,13 @@ Design decisions and mnemonic rules:
 ```
       +-----+-----+-----+                             +-----+-----+-----+
       |     |     |     |                             |     |     |     |
-+-----+  *  |  /  |  &  +-----+                 +-----+  @  |  [  |  ]  +-----+
++-----+  <  |  >  |  &  +-----+                 +-----+  @  |  [  |  ]  +-----+
 |     +-----+-----+-----+  ^  |                 |  ~  +-----+-----+-----+     |
 |  !  |     |     |     |     |                 |     |     |     |     |  `  |
 +-----+  (  |  )  |  =  +-----+                 +-----+  ;  |  {  |  }  +-----+
 |     +-----+-----+-----+  0  |                 |  2  +-----+-----+-----+     |
 |  -  |     |     |     |     |                 |     |     |     |     |  "  |
-+-----+  <  |  >  |  |  +-----+                 +-----+  :  |  $  |  %  +-----+
++-----+  *  |  /  |  |  +-----+                 +-----+  :  |  $  |  %  +-----+
 |     +-----+-----+-----+  1  |                 |  3  +-----+-----+-----+  '  |
 |  +  |                 |     |                 |     |                 |     |
 +-----+                 +-----+                 +-----+                 +-----+
@@ -120,7 +120,7 @@ Design decisions and mnemonic rules:
 * `$%` is in the same order, as on regular keyboard
 * `{}` is frequent: on the home row
 * `[]` is less frequent, but quite frequent: above `{}`
-* `<>` is not very frequent, can be used with `=`: on the same side as `=`
+* `<>` is not very frequent, can be used with `=`: on the same side as `=`: on the top for convenience
 * `!` is almost in the same location, as on regular keyboard (inconvenient)
 * All string-literal-related characters in one column
 * Underscore s unavailable from QWERTY layer - put it next to space
@@ -152,7 +152,7 @@ Alt thumbs layout 2:
 ```
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
             |     |     |     |     |     |     |     >LOWER<     |
-            |  #  |Space|  _  |  \  |     |  ^  |     |     |  ~  |
+            |  #  |Space|  _  | ^/  |     |  ^  |  \  |     |  ~  |
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
 ```
 * Common characters `,.?` are on the other side to the SPACE key - SPACE often follows them - for easier typing

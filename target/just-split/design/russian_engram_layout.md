@@ -57,7 +57,7 @@
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
 ```
 
-#### Lower layer (symbols) - if activated from Russian Engram layer 
+#### Lower layer (symbols) - if activated from Russian Engram layer (OLD)
 
 ```
       +-----+-----+-----+                             +-----+-----+-----+
@@ -82,7 +82,7 @@
 * Can be used for Ё Щ Ъ Ь Э Ю Я
 
 
-#### Lower layer (symbols) - if activated from Russian Engram layer - with extra Russian chars
+#### Lower layer (symbols) - if activated from Russian Engram layer - with extra Russian chars (OLD)
 
 ```
       +-----+-----+-----+                             +-----+-----+-----+
@@ -111,3 +111,35 @@
 * `ь` is over `т`, to type `ть` without moving a finger
 * `ъ` is below `ь`
 * `щ` is below `ш`
+
+
+#### Lower layer (symbols) - if activated from Russian Engram layer - with extra Russian chars - NEW
+
+```
+      +-----+-----+-----+                             +-----+-----+-----+
+      |     |     |     |                             |     |     |     |
++-----+  э  |  ё  |  ю  +-----+                 +-----+     |     |  щ  +-----+
+|     +-----+-----+-----+  ^  |                 |     +-----+-----+-----+     |
+|  -  |     |     |     |     |                 |     |     |     |     |     |
++-----+  (  |  )  |  =  +-----+                 +-----+  ;  |  ь  |  ъ  +-----+
+|     +-----+-----+-----+  0  |                 |  2  +-----+-----+-----+     |
+|  +  |     |     |     |     |                 |     |     |     |     |  "  |
++-----+  *  |  /  |  я  +-----+                 +-----+  :  |     |  \  +-----+
+|     +-----+-----+-----+  1  |                 |  3  +-----+-----+-----+     |
+|  !  |                 |     |                 |     |                 |     |
++-----+                 +-----+                 +-----+                 +-----+
+
+            +-----+-----+-----+-----+     +-----+-----+-----+-----+
+            |     |     |     |     |     |     |     |  ,  |     |
+            |  №  |Space|  _  |     |     |     |     >LOWER<     |
+            +-----+-----+-----+-----+     +-----+-----+-----+-----+
+```
+* Fill unused space, preferring stronger fingers
+* Following general Engram logic, vowels are on the left, consonants on the right
+* `ё` is over `о`
+* `э` is next to `ё`
+* `я` is below its relative `а`
+* `ю` is over `у`
+* `ь` is over `т`, to type `ть` without moving a finger
+* `ъ` is next to `ь`
+* `щ` is over `ш`
