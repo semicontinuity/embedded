@@ -93,15 +93,15 @@ Design decisions and mnemonic rules:
 ```
       +-----+-----+-----+                             +-----+-----+-----+
       |     |     |     |                             |     |     |     |
-+-----+  <  |  >  |  &  +-----+                 +-----+  @  |  *  |  /  +-----+
++-----+  *  |  /  |  &  +-----+                 +-----+  @  |  [  |  ]  +-----+
 |     +-----+-----+-----+  ^  |                 |  ~  +-----+-----+-----+     |
-|  -  |     |     |     |     |                 |     |     |     |     |  `  |
+|  !  |     |     |     |     |                 |     |     |     |     |  `  |
 +-----+  (  |  )  |  =  +-----+                 +-----+  ;  |  {  |  }  +-----+
 |     +-----+-----+-----+  0  |                 |  2  +-----+-----+-----+     |
-|  +  |     |     |     |     |                 |     |     |     |     |  "  |
-+-----+  [  |  ]  |  |  +-----+                 +-----+  :  |  $  |  %  +-----+
+|  -  |     |     |     |     |                 |     |     |     |     |  "  |
++-----+  <  |  >  |  |  +-----+                 +-----+  :  |  $  |  %  +-----+
 |     +-----+-----+-----+  1  |                 |  3  +-----+-----+-----+  '  |
-|  !  |                 |     |                 |     |                 |     |
+|  +  |                 |     |                 |     |                 |     |
 +-----+                 +-----+                 +-----+                 +-----+
 
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
@@ -110,11 +110,18 @@ Design decisions and mnemonic rules:
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
 ```
 * Double-quote `"` on home row; again, then come in pairs, but auto-completed by IDEs.
-* `;` on the home row, on the stronger index finger
+* `=` is used frequently, so it is on the home row
+* Frequent combinations with `=` are comfortable inward rolls: `!=`, `+=`, `-=`, `<=`, `>=`
+* `-` is frequent: on the home row
+* `+` is less frequent than `-`: below `-`
 * `:` is under `;`
-* `%` is under `/` (also has `/` inside; percent sign is "at the end" - after number)
+* `%` has `/` inside; percent sign is "after numbers" - in the end
 * `$` is "at the beginning" - before number
 * `$%` is in the same order, as on regular keyboard
+* `{}` is frequent: on the home row
+* `[]` is less frequent, but quite frequent: above `{}`
+* `<>` is not very frequent, can be used with `=`: on the same side as `=`
+* `!` is almost in the same location, as on regular keyboard (inconvenient)
 * All string-literal-related characters in one column
 * Underscore s unavailable from QWERTY layer - put it next to space
 * Frequent numbers 0..3 are available, to avoid layer switching; optimized for typing "= " + number
@@ -139,7 +146,7 @@ Alt thumbs layout 2:
 ```
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
             |     |     >RAISE<     |     |     |     |     |     |
-            |     |     |     |     |     |     |  ,  |  .  |  ?  |
+            | ^C  | ^V  |     | ^X  |     | ^W  |  ,  |  .  |  ?  |
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
 ```
 ```
