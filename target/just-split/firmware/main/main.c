@@ -18,7 +18,6 @@
 #include "comm_usart_outbound__thread.h"
 
 #include <services/tracer.h>
-//#include <services/tx_ring_buffer.h>
 #include <services/gp_ring_buffer.h>
 
 #include <cpu/avr/twi.h>
@@ -30,7 +29,7 @@
 #include "comm_usart_inbound__thread.h"
 #include "leds_bar__data.h"
 
-uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
+//uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
 
 
 // application
@@ -53,17 +52,11 @@ void application__init(void) {
 }
 
 void application__start(void) {
-//    leds_bar__data[0] = 1;
-//    leds_bar__data[1] = 0;
-//    leds_bar__data[2] = 0;
-//    leds_bar__data[3] = 0x80;
-
     io_matrix__out_columns__start();
     io_matrix__in__start();
 
     io_matrix__scanner__thread__timer__start();
 
-//    tx_ring_buffer__start();
     gp_ring_buffer__start();
     __asm__ __volatile__("gp_buffer__start:");
     gp_buffer__start();

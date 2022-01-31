@@ -26,8 +26,11 @@ include config.io_matrix.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.keyboard.properties)
 include config.keyboard.properties
 
-CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.tx_ring_buffer.properties)
-include config.tx_ring_buffer.properties
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.gp_ring_buffer.properties)
+include config.gp_ring_buffer.properties
+
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.gp_buffer.properties)
+include config.gp_buffer.properties
 
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.twi_slave__handler.properties)
 include config.twi_slave__handler.properties

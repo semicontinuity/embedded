@@ -1,5 +1,4 @@
 #include <cpu/avr/asm.h>
-//#include "services/tx_ring_buffer.h"
 #include "services/gp_ring_buffer.h"
 #include "cpu/avr/services/keyboard/keyboard.h"
 
@@ -53,15 +52,6 @@ inline bool keyboard__handle_button_event(uint8_t button, uint8_t state, uint8_t
     if (__builtin_expect(gp_ring_buffer__is_writable(), true)) {
         gp_ring_buffer__put(event);
     }
-
-    /*
-    if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
-        tx_ring_buffer__put(event);
-    }
-    if (__builtin_expect(tx_ring_buffer__is_writable(), true)) {
-        tx_ring_buffer__put(event);
-    }
-    */
 
     return true;
 }
