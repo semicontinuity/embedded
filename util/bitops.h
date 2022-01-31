@@ -9,10 +9,10 @@
 #define QUOTE(x) _QUOTE(x)
 #endif
 
-typedef union { 
-    uint8_t bytes[2]; 
-    uint16_t word; 
-} u16_as_bytes; 
+typedef union {
+    uint8_t bytes[2];
+    uint16_t word;
+} u16_as_bytes;
 
 #define U16(lo, hi) \
 ({                        \
@@ -30,29 +30,29 @@ typedef union {
 #define BITVAR_GET(host, bit) ((host) & (1 << (bit)))
 
 
-#define DECLARE_BITVAR(name)                    \
-	inline void name##__set(char v);        \
-	inline bool name##__is_set(void);       \
-	inline char name##__get(void);
+#define DECLARE_BITVAR(name)                \
+    INLINE void name##__set(char v);        \
+    INLINE bool name##__is_set(void);       \
+    INLINE char name##__get(void);
 
-#define DEFINE_BITVAR(name, host, bit)                                                                  \
-	inline void name##__set_from_bit_opt(const unsigned char v, const unsigned char v_bit)	{           \
-	  (host) &= ~(1U << (bit));                                                                         \
-	  if ((v & (1U << v_bit))) (host) |= (1U << (bit));                                                 \
-	}                                                                                                   \
-	inline void name##__set(char v)	{ if ((v)) (host) |= (1U << (bit)); else (host) &= ~(1U << (bit));} \
-	inline bool name##__is_set(void)	{ return (host) & (1U << (bit)); }                              \
-	inline char name##__get(void)	{ return (host) & (1U << (bit)); }
+#define DEFINE_BITVAR(name, host, bit)                                                                      \
+    INLINE void name##__set_from_bit_opt(const unsigned char v, const unsigned char v_bit) {                \
+        (host) &= ~(1U << (bit));                                                                           \
+        if ((v & (1U << v_bit))) (host) |= (1U << (bit));                                                   \
+    }                                                                                                       \
+    INLINE void name##__set(char v)     { if ((v)) (host) |= (1U << (bit)); else (host) &= ~(1U << (bit));} \
+    INLINE bool name##__is_set(void)    { return (host) & (1U << (bit)); }                                  \
+    INLINE char name##__get(void)       { return (host) & (1U << (bit)); }
 
 #define DECLARE_FAKE_BITVAR(name) \
-	inline void name##__set(char v)	{}	\
-	inline bool name##__is_set(void)	{ return false; }
+    INLINE void name##__set(char v)  {} \
+    INLINE bool name##__is_set(void) { return false; }
 
 
 #define DECLARE_BITVAR_WITH_BINDING(name, host, bit) \
 INLINE void name##__on_set_0(void);      \
 INLINE void name##__on_set_1(void);      \
-static inline void name##__set(char v)	{       \
+static INLINE void name##__set(char v) {        \
     if (v) {                                    \
         (host) |= (1 << (bit));                 \
         name##__on_set_1();                     \
@@ -62,17 +62,10 @@ static inline void name##__set(char v)	{       \
         name##__on_set_0();                     \
     }                                           \
 }                                               \
-static inline bool name##__is_set(void)	{       \
+static INLINE bool name##__is_set(void) {       \
     return (host) & (1 << (bit));               \
 }
 
-/*
-#define DECLARE_BITVAR(name, host, bit) \
-	static inline void name##__setv(char v)	{ if ((v)) (host) |= (1 << (bit)); else (host) &= ~(1 << (bit));}	\
-	static inline void name##__set(void)	{ (host) |= (1 << (bit)); }	\
-	static inline void name##__clear(void)	{ (host) &= ~(1 << (bit)); }	\
-	static inline int name##__is_set(void)	{ return (host) & (1 << (bit)); }
-*/
 
 // =============================================================================
 // Helper macros to translate bit number in the 32-bit big endian value
@@ -83,10 +76,10 @@ static inline bool name##__is_set(void)	{       \
 // =============================================================================
 
 // offset of byte 32-bit value in memory containing given bit
-#define UINT32_BIGENDIAN_BYTE_OFFSET(bit)	((bit)/8)
+#define UINT32_BIGENDIAN_BYTE_OFFSET(bit) ((bit)/8)
 
 // offset of bit inside a byte of 32-bit value in memory containing given bit
-#define UINT32_BIGENDIAN_BIT_IN_BYTE(bit)	(7 - ((bit)%8))
+#define UINT32_BIGENDIAN_BIT_IN_BYTE(bit) (7 - ((bit)%8))
 
 
 #endif

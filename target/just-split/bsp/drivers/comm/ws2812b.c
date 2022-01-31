@@ -100,12 +100,12 @@ uint8_t ws2812__data__read(void) {
 }
 
 
-void inline ws2812_sendarray_mask(/*uint8_t *data,*/ uint16_t datlen, uint8_t maskhi)
+void ws2812_sendarray_mask(/*uint8_t *data,*/ uint16_t datlen, uint8_t maskhi)
 {
   ws2812__ptr = leds__data;
   uint8_t curbyte,ctr,masklo;
   uint8_t sreg_prev;
-  
+
   sreg_prev=SREG;
   cli();
 
