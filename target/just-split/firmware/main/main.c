@@ -53,10 +53,10 @@ void application__init(void) {
 }
 
 void application__start(void) {
-    leds_bar__data[0] = 1;
-    leds_bar__data[1] = 0;
-    leds_bar__data[2] = 0;
-    leds_bar__data[3] = 0x80;
+//    leds_bar__data[0] = 1;
+//    leds_bar__data[1] = 0;
+//    leds_bar__data[2] = 0;
+//    leds_bar__data[3] = 0x80;
 
     io_matrix__out_columns__start();
     io_matrix__in__start();
@@ -65,6 +65,7 @@ void application__start(void) {
 
 //    tx_ring_buffer__start();
     gp_ring_buffer__start();
+    __asm__ __volatile__("gp_buffer__start:");
     gp_buffer__start();
 
     comm_usart_outbound__thread__start();
@@ -116,6 +117,7 @@ int main(void) {
                 leds_bar__data[1] = gp_buffer__get();
                 leds_bar__data[2] = gp_buffer__get();
                 leds_bar__data[3] = gp_buffer__get();
+                gp_buffer__start();
             }
         }
 

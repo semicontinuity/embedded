@@ -160,6 +160,16 @@ unsigned char __builtin_avr_insert_bits (unsigned long map, unsigned char bits, 
 } while(0)
 
 
+// not optimal: uses extra register for k
+#define SUB_LO8(var, k)	do {            \
+  __asm__ __volatile__ (                \
+    "sub %A0, %1\n\t"                   \
+        : "=d"(var)                     \
+        : "d"(k)                        \
+  );                                    \
+} while(0)
+
+
 #define LOAD_ADDRESS(var, addr)	do {	\
   __asm__ __volatile__ (		\
     "ldi %A0, lo8(" #addr ")\n\t"	\

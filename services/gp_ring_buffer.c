@@ -71,6 +71,7 @@ volatile uint8_t gp_ring_buffer__size;
  * Starts the buffer.
  */
 void gp_ring_buffer__start(void) {
+    __asm__ __volatile__("gp_ring_buffer__start:");
     gp_ring_buffer__ptr = gp_ring_buffer__data;
     gp_ring_buffer__size = 0;
     gp_ring_buffer__not_empty__set(0);
@@ -121,8 +122,12 @@ void gp_ring_buffer__to_write_mode(void) {
  * Buffer must be in write mode.
  */
 void gp_ring_buffer__to_read_mode(void) {
-    gp_ring_buffer__ptr -= gp_ring_buffer__size;
+    #ifdef GP_RING_BUFFER__ALIGNED
+    SUB_LO8(gp_ring_buffer__ptr, gp_ring_buffer__size); // not optimal: extra register used by GCC
     gp_ring_buffer__wrap_at_ptr_underflow();
+    #else
+    gp_ring_buffer__ptr -= gp_ring_buffer__size;
+    #endif
 }
 
 
