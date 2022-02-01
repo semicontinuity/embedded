@@ -33,3 +33,8 @@ void comm_usart_inbound__thread__run(void) {
     __asm__ __volatile__("comm_usart_inbound__thread__run:");
     comm_usart_inbound__thread__handle_event(usart0__getc());
 }
+
+void comm_usart_inbound__thread__reset() {
+    __asm__ __volatile__("comm_usart_inbound__thread__reset:");
+    gp_buffer__start();
+}

@@ -9,4 +9,6 @@ bool comm_usart_inbound__thread__is_runnable(void);
 
 void comm_usart_inbound__thread__run(void);
 
+void comm_usart_inbound__thread__reset(void);
+
 #endif

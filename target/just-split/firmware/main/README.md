@@ -2,8 +2,23 @@
 
 ## Base USART feature set
 * Sends duplicate button key press/release reports via USART @ 38400.
-* Receives 4-byte LED brightness reports via USART @ 38400.
+* Incoming commands via USART @ 38400 to paint on OLED display and/or control LEDs.
 * WDT used to auto-reset to the beginning of RX packet boundary after 15ms of RX inactivity.
+
+## USART commands format
+
+```
+
+MSB     |                                                                                     LSB     
+--------+----------------------------------------------------------------------------------------
+bit 7=0 | bits 0-6: length of I2C data packet that follows           
+bit 7=1 | bit 6=1 | bits 0-5: values of 6 individual LED channels           
+        | bit 6=0 | bit 5=1 | Set LED bar bits from the following 4 bytes of data           
+        | bit 6=0 | bit 5=0 | bits 0-4 == 31: Set all N LEDs from the following 3*N bytes of data
+        | bit 6=0 | bit 5=0 | bits 0-4 == 30: Set all N LEDs from the following 3 bytes of data
+        | bit 6=0 | bit 5=0 | bits 0-4 == N: Set LED number N from the following 3 bytes of data
+
+```
 
 ## Register allocation
 
