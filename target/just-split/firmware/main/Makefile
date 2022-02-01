@@ -35,6 +35,9 @@ include config.gp_buffer.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.twi_slave__handler.properties)
 include config.twi_slave__handler.properties
 
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_usart_inbound__thread.properties)
+include config.comm_usart_inbound__thread.properties
+
 CDEFS += -fwhole-program -Wl,--relax
 
 ifdef BOARD_ADDRESS

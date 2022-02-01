@@ -9,6 +9,16 @@
 #include <services/gp_buffer.h>
 
 
+#if defined(COMM_USART_INBOUND__THREAD__HEADER_RECEIVED__HOST) && defined(COMM_USART_INBOUND__THREAD__HEADER_RECEIVED__BIT)
+DEFINE_BITVAR(comm_usart_inbound__thread__header_received, COMM_USART_INBOUND__THREAD__HEADER_RECEIVED__HOST, COMM_USART_INBOUND__THREAD__HEADER_RECEIVED__BIT);
+#endif
+
+
+void comm_usart_inbound__thread__reset() {
+    __asm__ __volatile__("comm_usart_inbound__thread__reset:");
+    gp_buffer__start();
+}
+
 void comm_usart_inbound__thread__handle_event(uint8_t event) {
     __asm__ __volatile__("comm_usart_inbound__thread__handle_event:");
     wdt__reset();
@@ -18,7 +28,6 @@ void comm_usart_inbound__thread__handle_event(uint8_t event) {
 //        leds_bar__data__put_position_reset();
 //    }
 }
-
 
 void comm_usart_inbound__thread__start(void) {
     __asm__ __volatile__("comm_usart_inbound__thread__start:");
@@ -32,9 +41,4 @@ bool comm_usart_inbound__thread__is_runnable(void) {
 void comm_usart_inbound__thread__run(void) {
     __asm__ __volatile__("comm_usart_inbound__thread__run:");
     comm_usart_inbound__thread__handle_event(usart0__getc());
-}
-
-void comm_usart_inbound__thread__reset() {
-    __asm__ __volatile__("comm_usart_inbound__thread__reset:");
-    gp_buffer__start();
 }
