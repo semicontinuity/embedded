@@ -12,6 +12,7 @@ from collections import defaultdict
 g = gerber.read('/dev/stdin')
 R2D = 180.0 / math.pi
 ANGLE_DIGITS=5
+ANGLE_STEP=5
 
 
 def arc_points(l: Arc, flip: bool):
@@ -33,9 +34,9 @@ def arc_points(l: Arc, flip: bool):
         end_angle -= 360.0
 
     if end_angle > start_angle:
-        return c+f"[ for(a = [{start_angle}:1:{end_angle}]) [{l.center[0]} + {l.radius} * cos(a), {l.center[1]} + {l.radius} * sin(a)] ]"
+        return c+f"[ for(a = [{start_angle}:{ANGLE_STEP}:{end_angle}]) [{l.center[0]} + {l.radius} * cos(a), {l.center[1]} + {l.radius} * sin(a)] ]"
     else:
-        return c+f"[ for(a = [{start_angle}:-1:{end_angle}]) [{l.center[0]} + {l.radius} * cos(a), {l.center[1]} + {l.radius} * sin(a)] ]"
+        return c+f"[ for(a = [{start_angle}:-{ANGLE_STEP}:{end_angle}]) [{l.center[0]} + {l.radius} * cos(a), {l.center[1]} + {l.radius} * sin(a)] ]"
 
 
 def line_points(l, flip: bool):
