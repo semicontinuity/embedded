@@ -38,6 +38,9 @@ include config.twi_slave__handler.properties
 CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.comm_usart_inbound__thread.properties)
 include config.comm_usart_inbound__thread.properties
 
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh config.leds_backlight.properties)
+include config.leds_backlight.properties
+
 
 CDEFS += -fwhole-program -Wl,--relax
 

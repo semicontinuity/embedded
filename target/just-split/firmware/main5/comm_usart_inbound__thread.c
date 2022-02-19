@@ -53,18 +53,23 @@ void comm_usart_inbound__thread__handle_event(uint8_t octet) {
 
                         if (gp_buffer__size__get() >= 3*LEDS_BACKLIGHT__COUNT + 3) {// buffer area in the end filled up
 
+                            const uint8_t a = gp_buffer__data[3 * LEDS_BACKLIGHT__COUNT + 0];
+                            const uint8_t b = gp_buffer__data[3 * LEDS_BACKLIGHT__COUNT + 1];
+                            const uint8_t c = gp_buffer__data[3 * LEDS_BACKLIGHT__COUNT + 2];
+
                             if (comm_usart_inbound__thread__event_header == 0x9E) { // Set all N LEDs from the following 3 bytes of data
-                                for (uint8_t led = 19; led > 0; --led) {
-                                    gp_buffer__put(gp_buffer__data[3*LEDS_BACKLIGHT__COUNT + 0]);
-                                    gp_buffer__put(gp_buffer__data[3*LEDS_BACKLIGHT__COUNT + 1]);
-                                    gp_buffer__put(gp_buffer__data[3*LEDS_BACKLIGHT__COUNT + 2]);
+                                gp_buffer__start();
+                                for (uint8_t led = LEDS_BACKLIGHT__COUNT; led > 0; --led) {
+                                    gp_buffer__put(a);
+                                    gp_buffer__put(b);
+                                    gp_buffer__put(c);
                                 }
                             } else {                                                // Set LED number N from the following 3 bytes of data
                                 uint8_t led = comm_usart_inbound__thread__event_header & 0x1F;
                                 gp_buffer__size__set(led + led + led);
-                                gp_buffer__put(gp_buffer__data[3*LEDS_BACKLIGHT__COUNT + 0]);
-                                gp_buffer__put(gp_buffer__data[3*LEDS_BACKLIGHT__COUNT + 1]);
-                                gp_buffer__put(gp_buffer__data[3*LEDS_BACKLIGHT__COUNT + 2]);
+                                gp_buffer__put(a);
+                                gp_buffer__put(b);
+                                gp_buffer__put(c);
                             }
 
                             comm_usart_inbound__thread__header_received__set(0);

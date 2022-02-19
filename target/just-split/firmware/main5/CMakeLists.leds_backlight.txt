@@ -1,0 +1,3 @@
+add_definitions(-DLEDS_BACKLIGHT__COUNT=19)
+add_definitions(-DLEDS_BACKLIGHT__REFRESH__HOST=GPIOR0)
+add_definitions(-DLEDS_BACKLIGHT__REFRESH__BIT=7)

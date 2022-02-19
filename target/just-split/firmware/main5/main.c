@@ -28,6 +28,7 @@
 #include "cpu/avr/usart0.h"
 #include "comm_usart_inbound__thread.h"
 #include "leds_bar__data.h"
+#include "leds_backlight.h"
 
 uint8_t __attribute__((section(".eeprom"))) ee__twi__slave__address = TWI__SLAVE__ADDRESS;
 
@@ -111,6 +112,11 @@ int main(void) {
         __asm__ __volatile__("main__loop__5:");
         if (comm_usart_inbound__thread__is_runnable()) {
             comm_usart_inbound__thread__run();
+        }
+
+        __asm__ __volatile__("main__loop__6:");
+        if (leds_backlight__refresh__thread__is_runnable()) {
+            leds_backlight__refresh__thread__run();
         }
 
 //        if (twi__slave__handler__is_runnable()) {
