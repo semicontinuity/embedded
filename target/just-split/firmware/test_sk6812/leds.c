@@ -30,7 +30,7 @@ void leds__run(void) {
     if (leds__refresh__is_set()) {
         leds__refresh__set(0);
 //        __asm__ __volatile__("leds__run__before_send:");
-        ws2812_sendarray_mask(LEDS__COUNT * 3, _BV(ws2812_pin));
+        ws2812_sendarray_mask(leds__data, LEDS__COUNT * 3, _BV(ws2812_pin));
 //        __asm__ __volatile__("leds__run__after_send:");
     }
 }

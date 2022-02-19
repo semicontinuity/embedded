@@ -32,7 +32,8 @@ void comm_usart_inbound__thread__handle_event(uint8_t octet) {
                 if (comm_usart_inbound__thread__event_header & 0x20U) {             // Set LED bar command
 
                     if (gp_buffer__size__get() >= 3*LEDS_BACKLIGHT__COUNT + 4) {    // buffer area in the end filled up
-                        gp_buffer__start();
+                        // size is also updated (unnecessary here)
+                        gp_buffer__size__set(3*LEDS_BACKLIGHT__COUNT);
                         leds_bar__data[0] = gp_buffer__get();
                         leds_bar__data[1] = gp_buffer__get();
                         leds_bar__data[2] = gp_buffer__get();
@@ -93,10 +94,10 @@ void comm_usart_inbound__thread__handle_event(uint8_t octet) {
         if (((comm_usart_inbound__thread__event_header & 0x80U) == 0x00U) ||
             (comm_usart_inbound__thread__event_header == 0x9F)) {
             // Comm proxy command or Set all N LEDs from the following 3*N bytes of data command
-            // Write incoming bytes from the start of the buffer.
+            // Will write incoming bytes from the start of the buffer.
             gp_buffer__start();
         } else {
-            // Write incoming bytes to the buffer area in the end, after space for backlight LEDs data.
+            // Will write incoming bytes to the buffer area in the end, after space for backlight LEDs data.
             gp_buffer__size__set(3*LEDS_BACKLIGHT__COUNT);
         }
     }

@@ -16,7 +16,7 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include <cpu/avr/asm.h>
-#include "leds.h"
+//#include "leds.h"
 
 /*
   This routine writes an array of bytes with RGB values to the Dataout pin
@@ -100,9 +100,9 @@ uint8_t ws2812__data__read(void) {
 }
 
 
-void ws2812_sendarray_mask(/*uint8_t *data,*/ uint16_t datlen, uint8_t maskhi)
+void ws2812_sendarray_mask(uint8_t *data, uint16_t datlen, uint8_t maskhi)
 {
-  ws2812__ptr = leds__data;
+  ws2812__ptr = data;
   uint8_t curbyte,ctr,masklo;
   uint8_t sreg_prev;
 

@@ -1,3 +1,7 @@
+add_definitions(-Dws2812_port=D)
+add_definitions(-Dws2812_pin=7)
+add_definitions(-DWS2812__PTR__REG=28)
+
 add_definitions(-DLEDS_BACKLIGHT__COUNT=19)
 add_definitions(-DLEDS_BACKLIGHT__REFRESH__HOST=GPIOR0)
 add_definitions(-DLEDS_BACKLIGHT__REFRESH__BIT=7)

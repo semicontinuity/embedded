@@ -9,6 +9,9 @@
 DECLARE_BITVAR(leds_backlight__refresh);
 #endif
 
+
+void leds_backlight__init(void);
+
 bool leds_backlight__refresh__thread__is_runnable(void);
 
 void leds_backlight__refresh__thread__run(void);

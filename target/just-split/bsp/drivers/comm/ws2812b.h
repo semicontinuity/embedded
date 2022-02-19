@@ -42,7 +42,7 @@
 #define ws2812_pin  1   // Data out pin
 #endif
 
-void ws2812_sendarray_mask(/*uint8_t *array,*/uint16_t length, uint8_t pinmask);
+void ws2812_sendarray_mask(uint8_t *array, uint16_t length, uint8_t pinmask);
 
 
 /*

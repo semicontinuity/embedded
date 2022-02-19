@@ -59,6 +59,8 @@ void application__start(void) {
     leds_bar__data[3] = 0;
     leds_bar__data__put_position_reset();
 
+    leds_backlight__init();
+
     io_matrix__out_columns__start();
     io_matrix__in__start();
 
