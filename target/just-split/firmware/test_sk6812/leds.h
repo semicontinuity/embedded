@@ -5,7 +5,7 @@
 #include "util/bitops.h"
 
 /** Contains color data, 3 bytes per LED, in native format (GRB?) */
-extern uint8_t leds__data[16 * 3];
+extern uint8_t leds__data[LEDS__COUNT * 3];
 
 DECLARE_BITVAR(leds__refresh);
 

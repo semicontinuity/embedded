@@ -11,7 +11,7 @@
 
 #include "util/bitops.h"
 
-uint8_t leds__data[16 * 3];
+uint8_t leds__data[LEDS__COUNT * 3];
 
 
 #if defined(LEDS__REFRESH__HOST) && defined(LEDS__REFRESH__BIT)
@@ -26,12 +26,12 @@ char leds__refresh__get(void) { return (leds__refresh); }
 
 
 void leds__run(void) {
-    __asm__ __volatile__("leds__run:");
+//    __asm__ __volatile__("leds__run:");
     if (leds__refresh__is_set()) {
         leds__refresh__set(0);
-        __asm__ __volatile__("leds__run__before_send:");
+//        __asm__ __volatile__("leds__run__before_send:");
         ws2812_sendarray_mask(LEDS__COUNT * 3, _BV(ws2812_pin));
-        __asm__ __volatile__("leds__run__after_send:");
+//        __asm__ __volatile__("leds__run__after_send:");
     }
 }
 
