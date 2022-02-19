@@ -23,7 +23,11 @@ set(SOURCE_FILES
 #        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__debounce_timer__timer2b.c
 
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__physical.c
-        ../../../../cpu/avr/drivers/keyboard/keyboard__pins.h
+
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_b__pins.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_c__pins.h
+        ../../../../cpu/avr/drivers/keyboard/keyboard__port_d__pins.h
+
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping.h
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_b.c
         ../../../../cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_c.c
