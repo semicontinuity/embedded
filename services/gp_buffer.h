@@ -25,6 +25,7 @@
 #define QUOTE(x) _QUOTE(x)
 #endif
 
+extern uint8_t gp_buffer__data[GP_BUFFER__SIZE];
 
 #ifdef GP_BUFFER__PTR__REG
 register volatile uint8_t* gp_buffer__ptr asm(QUOTE(GP_BUFFER__PTR__REG));
@@ -45,6 +46,11 @@ extern volatile uint8_t gp_buffer__size;
  * Starts the buffer.
  */
 void gp_buffer__start(void);
+
+/**
+ * Adjusts the number of bytes in the buffer.
+ */
+void gp_buffer__size__set(const uint8_t size);
 
 /**
  * Number of bytes in the buffer.

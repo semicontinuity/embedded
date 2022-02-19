@@ -71,7 +71,6 @@ volatile uint8_t gp_ring_buffer__size;
  * Starts the buffer.
  */
 void gp_ring_buffer__start(void) {
-    __asm__ __volatile__("gp_ring_buffer__start:");
     gp_ring_buffer__ptr = gp_ring_buffer__data;
     gp_ring_buffer__size = 0;
     gp_ring_buffer__not_empty__set(0);

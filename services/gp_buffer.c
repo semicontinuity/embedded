@@ -36,6 +36,7 @@ volatile uint8_t gp_buffer__size;
 #endif
 #endif
 
+
 /**
  * Starts (or resets) the buffer.
  */
@@ -43,6 +44,16 @@ void gp_buffer__start(void) {
     gp_buffer__ptr = gp_buffer__data;
 #if defined(GP_BUFFER__SIZE__USED) && GP_BUFFER__SIZE__USED > 0
     gp_buffer__size = 0;
+#endif
+}
+
+/**
+ * Adjusts the number of bytes in the buffer.
+ */
+void gp_buffer__size__set(const uint8_t size) {
+    gp_buffer__ptr = gp_buffer__data + size;
+#if defined(GP_BUFFER__SIZE__USED) && GP_BUFFER__SIZE__USED > 0
+    gp_buffer__size = size;
 #endif
 }
 
