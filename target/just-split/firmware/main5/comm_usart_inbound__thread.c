@@ -9,11 +9,18 @@
 #include <cpu/avr/wdt.h>
 #include "util/bitops.h"
 #include <services/gp_buffer.h>
+#include <avr/interrupt.h>
 
 
 #if defined(COMM_USART_INBOUND__THREAD__HEADER_RECEIVED__HOST) && defined(COMM_USART_INBOUND__THREAD__HEADER_RECEIVED__BIT)
 DEFINE_BITVAR(comm_usart_inbound__thread__header_received, COMM_USART_INBOUND__THREAD__HEADER_RECEIVED__HOST, COMM_USART_INBOUND__THREAD__HEADER_RECEIVED__BIT);
+
+ISR(WDT_vect, ISR_NAKED) {
+    comm_usart_inbound__thread__header_received__set(0);
+    reti();
+}
 #endif
+
 
 uint8_t comm_usart_inbound__thread__event_header;
 
@@ -88,7 +95,7 @@ void comm_usart_inbound__thread__handle_event(uint8_t octet) {
             }
         }
 
-    } else {
+    } else {                                                                        // About to receive header byte
         comm_usart_inbound__thread__header_received__set(1);
         comm_usart_inbound__thread__event_header = octet;
         if (((comm_usart_inbound__thread__event_header & 0x80U) == 0x00U) ||

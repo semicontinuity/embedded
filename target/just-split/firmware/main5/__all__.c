@@ -8,7 +8,6 @@
 #endif
 
 #include "leds_bar__data.c"
-#include "leds_bar__wdt.c"
 
 #include "drivers/comm/ws2812b.c"
 #include "leds_backlight.c"

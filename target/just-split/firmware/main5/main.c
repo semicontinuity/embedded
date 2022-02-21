@@ -77,8 +77,8 @@ void application__start(void) {
 //    __asm__ __volatile__("application__start__twi:");
 //    twi__slave__start();
 
-//    wdt__prescaler_set(WDTO_15MS);
-//    wdt__enable_interrupt();
+    wdt__prescaler_set(WDTO_15MS);
+    wdt__enable_interrupt();
 }
 
 

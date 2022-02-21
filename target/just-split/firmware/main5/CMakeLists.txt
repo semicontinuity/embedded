@@ -97,7 +97,6 @@ set(SOURCE_FILES
 
         leds_bar__data.h
         leds_bar__data.c
-        leds_bar__wdt.c
 
         leds_backlight.h
         leds_backlight.c

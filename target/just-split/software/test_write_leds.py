@@ -13,7 +13,7 @@ n_bytes = len(d) // 2
 for i in range(n_bytes):
   b.append(16*d[2*i] + d[2*i + 1])
 
-b.reverse()
+#b.reverse()
 
 port = serial.Serial(sys.argv[1], int(sys.argv[2]))
 port.write(b)
