@@ -38,20 +38,23 @@ volatile uint8_t gp_buffer__size;
 
 
 /**
- * Starts (or resets) the buffer.
+ * Adjusts the pointer of the buffer.
  */
-void gp_buffer__start(void) {
-    gp_buffer__ptr = gp_buffer__data;
-#if defined(GP_BUFFER__SIZE__USED) && GP_BUFFER__SIZE__USED > 0
-    gp_buffer__size = 0;
-#endif
+void gp_buffer__ptr__set(volatile uint8_t* ptr) {
+    gp_buffer__ptr = ptr;
+}
+
+/**
+ * Adjusts the offset of the buffer.
+ */
+void gp_buffer__offset__set(const uint8_t offset) {
+    gp_buffer__ptr = gp_buffer__data + offset;
 }
 
 /**
  * Adjusts the number of bytes in the buffer.
  */
 void gp_buffer__size__set(const uint8_t size) {
-    gp_buffer__ptr = gp_buffer__data + size;
 #if defined(GP_BUFFER__SIZE__USED) && GP_BUFFER__SIZE__USED > 0
     gp_buffer__size = size;
 #endif
@@ -59,7 +62,16 @@ void gp_buffer__size__set(const uint8_t size) {
 
 
 /**
- * Number of bytes in the buffer.
+ * Starts (or resets) the buffer.
+ */
+void gp_buffer__start(void) {
+    gp_buffer__offset__set(0);
+    gp_buffer__size__set(0);
+}
+
+
+/**
+ * Returns the number of bytes in the buffer.
  */
 uint8_t gp_buffer__size__get(void) {
 #if defined(GP_BUFFER__SIZE__USED) && GP_BUFFER__SIZE__USED > 0
@@ -71,15 +83,9 @@ uint8_t gp_buffer__size__get(void) {
 
 
 /**
- * Gets the 8-bit value from the buffer.
- * Non-atomic: get() and put() must be called mutually exclusively.
- * Overflow check is not performed.
+ * Gets the 8-bit value from the buffer, without affecting gp_buffer__size
  */
-uint8_t gp_buffer__get(void) {
-#if defined(GP_BUFFER__SIZE__USED) && GP_BUFFER__SIZE__USED > 0
-    ++gp_buffer__size;
-#endif
-
+uint8_t gp_buffer__get_raw(void) {
     uint8_t b;
 #if defined(GP_BUFFER__PTR__REG) && GP_BUFFER__PTR__REG == 26
     b = LOAD_XPLUS(gp_buffer__ptr);
@@ -96,11 +102,22 @@ uint8_t gp_buffer__get(void) {
 
 
 /**
- * Puts the 8-bit value into the buffer.
- * Non-atomic: get() or put() must be called mutually exclusively, e.g. both in interrupt handlers.
+ * Gets the 8-bit value from the buffer.
+ * Non-atomic: get() and put() must be called mutually exclusively.
  * Overflow check is not performed.
  */
-void gp_buffer__put(const uint8_t value) {
+uint8_t gp_buffer__get(void) {
+#if defined(GP_BUFFER__SIZE__USED) && GP_BUFFER__SIZE__USED > 0
+    ++gp_buffer__size;
+#endif
+    return gp_buffer__get_raw();
+}
+
+
+/**
+ * Puts the 8-bit value into the buffer, without affecting gp_buffer__size
+ */
+void gp_buffer__put_raw(const uint8_t value) {
 #if defined(GP_BUFFER__PTR__REG) && GP_BUFFER__PTR__REG == 26
     STORE_XPLUS(gp_buffer__ptr, value);
 #elif defined(GP_BUFFER__PTR__REG) && GP_BUFFER__PTR__REG == 28
@@ -110,6 +127,16 @@ void gp_buffer__put(const uint8_t value) {
 #else
     *gp_buffer__ptr++ = value;
 #endif
+}
+
+
+/**
+ * Puts the 8-bit value into the buffer.
+ * Non-atomic: get() or put() must be called mutually exclusively, e.g. both in interrupt handlers.
+ * Overflow check is not performed.
+ */
+void gp_buffer__put(const uint8_t value) {
+    gp_buffer__put_raw(value);
 
 #if defined(GP_BUFFER__SIZE__USED) && GP_BUFFER__SIZE__USED > 0
     ++gp_buffer__size;

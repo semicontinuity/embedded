@@ -47,6 +47,17 @@ extern volatile uint8_t gp_buffer__size;
  */
 void gp_buffer__start(void);
 
+
+/**
+ * Adjusts the pointer of the buffer.
+ */
+void gp_buffer__ptr__set(volatile uint8_t* ptr);
+
+/**
+ * Adjusts the offset of the buffer.
+ */
+void gp_buffer__offset__set(const uint8_t offset);
+
 /**
  * Adjusts the number of bytes in the buffer.
  */
@@ -58,6 +69,11 @@ void gp_buffer__size__set(const uint8_t size);
 uint8_t gp_buffer__size__get(void);
 
 /**
+ * Gets the 8-bit value from the buffer, without affecting gp_buffer__size
+ */
+uint8_t gp_buffer__get_raw(void);
+
+/**
  * Gets the 8-bit value from the buffer.
  * Non-atomic: get() and put() must be called mutually exclusively, e.g. both in interrupt handlers.
  * Overflow check is not performed.
@@ -65,11 +81,15 @@ uint8_t gp_buffer__size__get(void);
 uint8_t gp_buffer__get(void);
 
 /**
+ * Puts the 8-bit value into the buffer, without affecting gp_buffer__size
+ */
+void gp_buffer__put_raw(const uint8_t value);
+
+/**
  * Puts the 8-bit value into the buffer.
  * Non-atomic: get() or put() must be called mutually exclusively, e.g. both in interrupt handlers.
  * Overflow check is not performed.
  */
 void gp_buffer__put(const uint8_t value);
-
 
 #endif
