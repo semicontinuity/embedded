@@ -69,9 +69,34 @@ uint16_t interlace_bits(uint8_t sl, uint8_t sh) {
     return (rh << 8U) | (rl & 0xFFU);
 }
 
+#define INTERLACE_BITS_L(l, h)                              \
+(__extension__({                                            \
+    uint8_t __result;                                       \
+    __asm__ __volatile__(                                   \
+    "bst  %1, 0\r\n"                                        \
+    "bld  %0, 0\r\n"                                        \
+    "bst  %1, 2\r\n"                                        \
+    "bld  %0, 1\r\n"                                        \
+    "bst  %1, 4\r\n"                                        \
+    "bld  %0, 2\r\n"                                        \
+    "bst  %1, 6\r\n"                                        \
+    "bld  %0, 3\r\n"                                        \
+    "bst  %2, 0\r\n"                                        \
+    "bld  %0, 4\r\n"                                        \
+    "bst  %2, 2\r\n"                                        \
+    "bld  %0, 5\r\n"                                        \
+    "bst  %2, 4\r\n"                                        \
+    "bld  %0, 6\r\n"                                        \
+    "bst  %2, 6\r\n"                                        \
+    "bld  %0, 7\r\n"                                        \
+    : "=&r"(__result)                                        \
+    : "r"((l)), "r"((h))                                    \
+    );                                                      \
+    __result;                                               \
+}))
 
-uint8_t interlace_bits_l(uint8_t sl, uint8_t sh) {
-    uint8_t rl;
+
+uint8_t interlace_bits_l0(uint8_t rl, uint8_t sl, uint8_t sh) {
     COPY_BIT(sl, 0, rl, 0);
     COPY_BIT(sl, 2, rl, 1);
     COPY_BIT(sl, 4, rl, 2);
@@ -83,8 +108,35 @@ uint8_t interlace_bits_l(uint8_t sl, uint8_t sh) {
     return rl;
 }
 
-uint8_t interlace_bits_h(uint8_t sl, uint8_t sh) {
-    uint8_t rh;
+
+#define INTERLACE_BITS_H(l, h)                              \
+(__extension__({                                            \
+    uint8_t __result;                                       \
+    __asm__ __volatile__(                                   \
+    "bst  %1, 1\r\n"                                        \
+    "bld  %0, 0\r\n"                                        \
+    "bst  %1, 3\r\n"                                        \
+    "bld  %0, 1\r\n"                                        \
+    "bst  %1, 5\r\n"                                        \
+    "bld  %0, 2\r\n"                                        \
+    "bst  %1, 7\r\n"                                        \
+    "bld  %0, 3\r\n"                                        \
+    "bst  %2, 1\r\n"                                        \
+    "bld  %0, 4\r\n"                                        \
+    "bst  %2, 3\r\n"                                        \
+    "bld  %0, 5\r\n"                                        \
+    "bst  %2, 5\r\n"                                        \
+    "bld  %0, 6\r\n"                                        \
+    "bst  %2, 7\r\n"                                        \
+    "bld  %0, 7\r\n"                                        \
+    : "=&r"(__result)                                        \
+    : "r"((l)), "r"((h))                                    \
+    );                                                      \
+    __result;                                               \
+}))
+
+
+uint8_t interlace_bits_h0(uint8_t rh, uint8_t sl, uint8_t sh) {
     COPY_BIT(sl, 1, rh, 0);
     COPY_BIT(sl, 3, rh, 1);
     COPY_BIT(sl, 5, rh, 2);
@@ -95,5 +147,6 @@ uint8_t interlace_bits_h(uint8_t sl, uint8_t sh) {
     COPY_BIT(sh, 6, rh, 7);
     return rh;
 }
+
 
 #endif

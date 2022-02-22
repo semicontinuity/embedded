@@ -1,6 +1,7 @@
 // comm_usart_inbound__thread:
-// receives and interprets bytes from USART
-// runs in the context of main thread
+//
+// Receives and interprets bytes from USART, according to the comm protocol.
+// Runs in the context of main thread.
 // -----------------------------------------------------------------------------
 #include "comm_usart_inbound__thread.h"
 #include "leds_bar__data.h"
@@ -10,17 +11,22 @@
 #include "util/bitops.h"
 #include <services/gp_buffer.h>
 #include <avr/interrupt.h>
+#include <cpu/avr/asm_bit_util.h>
 
 
 #if defined(COMM_USART_INBOUND__THREAD__HEADER_RECEIVED__HOST) && defined(COMM_USART_INBOUND__THREAD__HEADER_RECEIVED__BIT)
+
 DEFINE_BITVAR(comm_usart_inbound__thread__header_received, COMM_USART_INBOUND__THREAD__HEADER_RECEIVED__HOST, COMM_USART_INBOUND__THREAD__HEADER_RECEIVED__BIT);
 
 ISR(WDT_vect, ISR_NAKED) {
     comm_usart_inbound__thread__header_received__set(0);
     reti();
 }
+
 #endif
 
+
+#define BUFFER_OFFSET 3*LEDS_BACKLIGHT__COUNT
 
 uint8_t comm_usart_inbound__thread__event_header;
 
@@ -38,12 +44,20 @@ void comm_usart_inbound__thread__handle_event(uint8_t octet) {
 
                 if (comm_usart_inbound__thread__event_header & 0x20U) {             // Set LED bar command
 
-                    if (gp_buffer__size__get() >= 3*LEDS_BACKLIGHT__COUNT + 4) {    // buffer area in the end filled up
-                        gp_buffer__offset__set(3*LEDS_BACKLIGHT__COUNT);
-                        leds_bar__data[0] = gp_buffer__get_raw();
-                        leds_bar__data[1] = gp_buffer__get_raw();
-                        leds_bar__data[2] = gp_buffer__get_raw();
-                        leds_bar__data[3] = gp_buffer__get_raw();
+                    if (gp_buffer__size__get() >= BUFFER_OFFSET + 4) {    // buffer area in the end filled up
+                        __asm__ __volatile__("comm_usart_inbound__thread__handle_event__led_bar__r:");
+                        uint8_t r0 = gp_buffer__data[BUFFER_OFFSET + 0];
+                        uint8_t r1 = gp_buffer__data[BUFFER_OFFSET + 1];
+                        leds_bar__data[0] = INTERLACE_BITS_L(r0, r1);
+                        leds_bar__data[1] = INTERLACE_BITS_H(r0, r1);
+
+                        __asm__ __volatile__("comm_usart_inbound__thread__handle_event__led_bar__g:");
+                        uint8_t g0 = gp_buffer__data[BUFFER_OFFSET + 2];
+                        uint8_t g1 = gp_buffer__data[BUFFER_OFFSET + 3];
+                        leds_bar__data[2] = INTERLACE_BITS_L(g0, g1);
+                        leds_bar__data[3] = INTERLACE_BITS_H(g0, g1);
+
+                        __asm__ __volatile__("comm_usart_inbound__thread__handle_event__led_bar__done:");
                         comm_usart_inbound__thread__header_received__set(0);
                     }
 
@@ -51,14 +65,14 @@ void comm_usart_inbound__thread__handle_event(uint8_t octet) {
 
                     if (comm_usart_inbound__thread__event_header == 0x9F) {         // Set all N LEDs from the following 3*N bytes of data
 
-                        if (gp_buffer__size__get() >= 3*LEDS_BACKLIGHT__COUNT) {    // All data received
+                        if (gp_buffer__size__get() >= BUFFER_OFFSET) {    // All data received
                             comm_usart_inbound__thread__header_received__set(0);
                             leds_backlight__refresh__set(1);
                         }
 
                     } else  {
 
-                        if (gp_buffer__size__get() >= 3*LEDS_BACKLIGHT__COUNT + 3) {// buffer area in the end filled up
+                        if (gp_buffer__size__get() >= BUFFER_OFFSET + 3) {// buffer area in the end filled up
 
                             const uint8_t a = gp_buffer__data[3 * LEDS_BACKLIGHT__COUNT + 0];
                             const uint8_t b = gp_buffer__data[3 * LEDS_BACKLIGHT__COUNT + 1];
@@ -104,8 +118,8 @@ void comm_usart_inbound__thread__handle_event(uint8_t octet) {
             gp_buffer__start();
         } else {
             // Will write incoming bytes to the buffer area in the end, after space for backlight LEDs data.
-            gp_buffer__offset__set(3*LEDS_BACKLIGHT__COUNT);
-            gp_buffer__size__set(3*LEDS_BACKLIGHT__COUNT);
+            gp_buffer__offset__set(BUFFER_OFFSET);
+            gp_buffer__size__set(BUFFER_OFFSET);
         }
     }
 }
