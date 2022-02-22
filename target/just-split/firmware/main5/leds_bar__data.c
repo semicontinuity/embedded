@@ -18,7 +18,9 @@ void leds_bar__data__put_position_reset(void) {
 #ifdef LEDS_BAR__DATA__PTR__REG
     leds_bar__data__ptr = leds_bar__data;
 #else
+#  ifdef LEDS_BAR__DATA__INDEX__REG
     leds_bar__data__index = 0;
+#  endif
 #endif
 }
 
@@ -30,6 +32,8 @@ bool leds_bar__data__put(const uint8_t value) {
 #elif defined(LEDS_BAR__DATA__PTR__REG) && LEDS_BAR__DATA__PTR__REG==30
     STORE_ZPLUS(leds_bar__data__ptr, value);
 #else
+
+#  ifdef LEDS_BAR__DATA__INDEX__REG
     // For the case, when all pointer registers are occupied
     if (leds_bar__data__index < 2) {
         if (leds_bar__data__index++ == 0) {
@@ -48,5 +52,7 @@ bool leds_bar__data__put(const uint8_t value) {
             return false;
         }
     }
+#  endif
+
 #endif
 }

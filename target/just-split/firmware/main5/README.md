@@ -39,9 +39,9 @@
 | 12 | KEYBOARD__PORT_C__MASK__REG                                     |
 | 13 | KEYBOARD__PORT_D__MASK__REG                                     |
 | 14 | KEYBOARD__COMMON_MASK__REG                                      |
-| 15 | LEDS_BAR__DATA__INDEX__REG                                      |
+| 15 | GP_RING_BUFFER__SIZE__REG                                       |
 | 16 | GP_BUFFER__SIZE__REG                                            |
-| 17 | GP_RING_BUFFER__SIZE__REG                                       |
+| 17 | allocated by compiler                                           |
 | 18 | allocated by compiler                                           |
 | 19 | allocated by compiler                                           |
 | 20 | allocated by compiler                                           |
