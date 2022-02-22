@@ -39,12 +39,11 @@ void comm_usart_inbound__thread__handle_event(uint8_t octet) {
                 if (comm_usart_inbound__thread__event_header & 0x20U) {             // Set LED bar command
 
                     if (gp_buffer__size__get() >= 3*LEDS_BACKLIGHT__COUNT + 4) {    // buffer area in the end filled up
-                        // size is also updated (unnecessary here)
-                        gp_buffer__size__set(3*LEDS_BACKLIGHT__COUNT);
-                        leds_bar__data[0] = gp_buffer__get();
-                        leds_bar__data[1] = gp_buffer__get();
-                        leds_bar__data[2] = gp_buffer__get();
-                        leds_bar__data[3] = gp_buffer__get();
+                        gp_buffer__offset__set(3*LEDS_BACKLIGHT__COUNT);
+                        leds_bar__data[0] = gp_buffer__get_raw();
+                        leds_bar__data[1] = gp_buffer__get_raw();
+                        leds_bar__data[2] = gp_buffer__get_raw();
+                        leds_bar__data[3] = gp_buffer__get_raw();
                         comm_usart_inbound__thread__header_received__set(0);
                     }
 
@@ -66,18 +65,18 @@ void comm_usart_inbound__thread__handle_event(uint8_t octet) {
                             const uint8_t c = gp_buffer__data[3 * LEDS_BACKLIGHT__COUNT + 2];
 
                             if (comm_usart_inbound__thread__event_header == 0x9E) { // Set all N LEDs from the following 3 bytes of data
-                                gp_buffer__start();
+                                gp_buffer__offset__set(0);
                                 for (uint8_t led = LEDS_BACKLIGHT__COUNT; led > 0; --led) {
-                                    gp_buffer__put(a);
-                                    gp_buffer__put(b);
-                                    gp_buffer__put(c);
+                                    gp_buffer__put_raw(a);
+                                    gp_buffer__put_raw(b);
+                                    gp_buffer__put_raw(c);
                                 }
                             } else {                                                // Set LED number N from the following 3 bytes of data
                                 uint8_t led = comm_usart_inbound__thread__event_header & 0x1F;
-                                gp_buffer__size__set(led + led + led);
-                                gp_buffer__put(a);
-                                gp_buffer__put(b);
-                                gp_buffer__put(c);
+                                gp_buffer__offset__set(led + led + led);
+                                gp_buffer__put_raw(a);
+                                gp_buffer__put_raw(b);
+                                gp_buffer__put_raw(c);
                             }
 
                             comm_usart_inbound__thread__header_received__set(0);
@@ -105,6 +104,7 @@ void comm_usart_inbound__thread__handle_event(uint8_t octet) {
             gp_buffer__start();
         } else {
             // Will write incoming bytes to the buffer area in the end, after space for backlight LEDs data.
+            gp_buffer__offset__set(3*LEDS_BACKLIGHT__COUNT);
             gp_buffer__size__set(3*LEDS_BACKLIGHT__COUNT);
         }
     }
