@@ -1,16 +1,17 @@
 $fn = 72;
-SS = 14;
-THICK = 2;
+SS = 13.8;
+KEYCAP_SIZE=19;
+THICK = 1.8;
+TOP_THICK=2.5;
 
-FINGER_AREA_WIDTH = 26;
+FINGER_AREA_WIDTH = 20;
 FINGER_AREA_DEPTH = 18;
-FINGER_AREA_HEIGHT = 19;
 
 SWITCH_AREA_SIZE = 9;
 
 INN_WIDTH = SWITCH_AREA_SIZE + FINGER_AREA_WIDTH + SWITCH_AREA_SIZE;
 INN_DEPTH = SWITCH_AREA_SIZE + FINGER_AREA_DEPTH + SWITCH_AREA_SIZE;
-INN_HEIGHT = 19;
+INN_HEIGHT = SWITCH_AREA_SIZE + KEYCAP_SIZE;
 
 OUT_WIDTH = THICK + INN_WIDTH + THICK;
 OUT_DEPTH = THICK + INN_DEPTH + THICK;
@@ -81,12 +82,12 @@ module switch_cutout_z() {
 }
 
 module switch_cutout_x() {
-  translate([0, 0, INN_HEIGHT/2])
+  translate([0, 0, SWITCH_AREA_SIZE + KEYCAP_SIZE/2])
   color("red") cube([SS, THICK, SS], center = true);
 }
 
 module switch_cutout_y() {
-  translate([0, 0, INN_HEIGHT/2])
+  translate([0, 0, SWITCH_AREA_SIZE + KEYCAP_SIZE/2])
   color("red") cube([THICK, SS, SS], center = true);
 }
 
