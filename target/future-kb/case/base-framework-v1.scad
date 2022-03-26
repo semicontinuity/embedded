@@ -2,13 +2,13 @@ $fn             = 72;
 
 SS              = 19;
 OUT_WIDTH       = 64;
-OUT_DEPTH       = 95;
+OUT_DEPTH       = 114;
 
 BASE_HEIGHT     = 25;
 HEIGHT=5*SS;
 
 STAND_WIDTH     = 20;
-STAND_DEPTH     = 20;
+STAND_DEPTH     = 17;
 
 WALL_THICK      = 3;
 
@@ -94,7 +94,7 @@ module x_melt_hole() {
 
 module y_plate() {
   translate([OUT_WIDTH - WALL_THICK/2, 0, HEIGHT/2])
-  cube([WALL_THICK, STAND_WIDTH, HEIGHT], center=true);
+  cube([WALL_THICK, STAND_DEPTH, HEIGHT], center=true);
 }
 
 module y_melt_hole() {
