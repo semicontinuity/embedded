@@ -1,15 +1,25 @@
-$fn       =200;
+$fn         = 72;
 
-HEIGHT    = 19;
-THICK     = 3;
-PLATE     = 1.8;
-DIG       = THICK - PLATE;
+WIDTH       = 114-5;
+MOUNT_WIDTH = 90;
+SPACING     = 80;
+// =======================================================================================================
+PAD_THICK   = 6;    // test values: 0, 2, 4, 6 
+PAD_WIDTH   = 19;
+PAD_OFFSET  = (WIDTH - PAD_WIDTH)/2;
+// =======================================================================================================
+HEIGHT      = 19;
+THICK       = 3;
+PLATE       = 1.8;
+DIG         = THICK - PLATE;
 
-SW_M_S    = 14; // Switch mount size is 14x14 mm
-SW_M_SPC  = 15; // Switch mount size is 14x14 mm + 0.5 mm space
+SW_M_S      = 14; // Switch mount size is 14x14 mm
+SW_M_SPC    = 15; // Switch mount size is 14x14 mm + 0.5 mm space
 
-SS        = 17; // (Horizontal) Area occupied by the switch - compact placement, for keycaps 17.7 x 16.7
-SH        = 9;  // (Vertical)   Area occupied by the switch and keycap
+SS          = 17; // (Horizontal) Area occupied by the switch - compact placement, for keycaps 17.7 x 16.7
+SH          = 9;  // (Vertical)   Area occupied by the switch and keycap
+
+MOUNT_CUT_H = 13;
 
 // P: point
 // A: angle
@@ -34,10 +44,6 @@ SH        = 9;  // (Vertical)   Area occupied by the switch and keycap
 //                                  PB02 PB00  PB01
 //
 
-WIDTH       = 114;
-MOUNT_WIDTH = 90;
-TOP_Y       = 24;
-
 A20         = 30;
 A02         = 90 - A20;
 A01         = 20;
@@ -55,6 +61,8 @@ D_P1        = SH / tan(A1/2);       // distance from P1 to any switch cutout
 
 P0_X        = 0;
 P0_Y        = 0;
+TOP_Y       = 24;
+TOP_CENT_Y  = TOP_Y - THICK/2;
 
 P02_X       = P0_X - D_P0*sin(A20);
 P02_Y       = P0_Y + D_P0*cos(A20);
@@ -97,7 +105,7 @@ PBF_Y       = PF_Y - THICK;
 PB3_X       = P3_X + THICK/tan(A3/2);
 PB3_Y       = PBF_Y;
 
-TOP_X       = (PS_X + PF_X)/2;
+CENTER_X    = (PS_X + PF_X)/2;
 // =========================================================================
 
 PB02_X      = P0_X - THICK*cos(A20);
@@ -142,9 +150,17 @@ outline_points = concat(
 [ [PB13_X,  PB13_Y  ] ]
 );
 
+module pad() {
+  translate([0, TOP_Y - THICK - PAD_THICK/2, 0])
+  color("blue") cube([PAD_WIDTH, PAD_THICK, HEIGHT], center=true);
+}
+
 module raw_part() {
-  translate([0, 0, -HEIGHT/2])
-  linear_extrude(height = HEIGHT) polygon(outline_points);
+  union() {
+    translate([0, 0, -HEIGHT/2]) linear_extrude(height = HEIGHT) polygon(outline_points);
+    translate([CENTER_X - PAD_OFFSET, 0, 0]) pad();
+    translate([CENTER_X + PAD_OFFSET, 0, 0]) pad();
+  }
 }
 
 
@@ -164,7 +180,7 @@ module switch_cutout() {
 module mounting_cutout() { 
   color("red")
   rotate([90, 0, 0])
-  linear_extrude(height = THICK*2) offset(r=1.5) polygon([ [-5, -0.1], [-5, 0.1], [5, 0.1], [5, -0.1] ]);
+  linear_extrude(height = MOUNT_CUT_H) offset(r=1.5) polygon([ [-5, -0.1], [-5, 0.1], [5, 0.1], [5, -0.1] ]);
 }
 
 
@@ -176,8 +192,8 @@ module part() {
     translate([PCB_X, PCB_Y, 0]) rotate([0, 0, +A01]) switch_cutout();
     translate([PCC_X, PCC_Y, 0]) rotate([0, 0, +A13]) switch_cutout();
     
-    translate([TOP_X - MOUNT_WIDTH/2, TOP_Y, 0]) mounting_cutout();
-    translate([TOP_X + MOUNT_WIDTH/2, TOP_Y, 0]) mounting_cutout();
+    translate([CENTER_X - MOUNT_WIDTH/2, TOP_Y, 0]) mounting_cutout();
+    translate([CENTER_X + MOUNT_WIDTH/2, TOP_Y, 0]) mounting_cutout();
   }
 }
 
