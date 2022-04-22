@@ -50,10 +50,10 @@ bit 7=1 | bit 6=1 | bits 0-5: values of 6 individual LED channels
 | 23 | allocated by compiler                                           |
 | 24 | allocated by compiler                                           |
 | 25 | allocated by compiler                                           |
-| 26 | TX_RING_BUFFER__HEAD__REG (L)                                   |
-| 27 | TX_RING_BUFFER__HEAD__REG (H)                                   |
-| 28 | TX_RING_BUFFER__TAIL__REG (L)                                   |
-| 29 | TX_RING_BUFFER__TAIL__REG (H)                                   |
+| 26 | GP_RING_BUFFER__PTR__REG (L)                                    |
+| 27 | GP_RING_BUFFER__PTR__REG (H)                                    |
+| 28 | GP_BUFFER__PTR__REG (L)                                         |
+| 29 | GP_BUFFER__PTR__REG (H)                                         |
 | 30 | IO_MATRIX__SCANNER__THREAD__IP__REG (L)                         |
 | 31 | IO_MATRIX__SCANNER__THREAD__IP__REG (H)                         |
 

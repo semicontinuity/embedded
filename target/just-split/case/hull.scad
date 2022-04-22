@@ -1,9 +1,9 @@
 $fn=200;
 HEIGHT = 6;
-EXTENSION = 4;
+EXTENSION = 3;
 THICK  = 2;
 OP_BEVEL = 1;
-CUTOUT_H = 1;
+CUTOUT_H = 2.5;
 
 outline_points = concat(
 // LINE (205.73576, -153.29278)->(190.49576, -138.05278); flip=False
@@ -35,7 +35,7 @@ opening_points = concat(
 
 // this is a base, that will be enlarged by minkowski to make beveled shape.
 module hull_base() {
-  linear_extrude(height = HEIGHT - THICK) offset(r=-THINK) polygon(outline_points);
+  linear_extrude(height = HEIGHT - THICK) offset(r=-THICK) polygon(outline_points);
 }
 
 module beveled_solid_hull() {
@@ -82,13 +82,26 @@ module opening_bevel() {
 
 
 module cutout_usart_l() {
-  translate([178.7, -64.27278 + 1, 0]) {
+  translate([178.7, -64.27278 - 2, 0]) {
     color("red") cube([184.8-178.7, 3, CUTOUT_H]);
   }
 } 
 
 module cutout_i2c_l() {
-  translate([198.7, -64.27278 + 1, 0]) {
+  translate([198.7, -64.27278 - 2, 0]) {
+    color("red") cube([204.8-198.7, 3, CUTOUT_H]);
+  }
+} 
+
+
+module cutout_usart_r() {
+  translate([176.9, -64.27278 - 2, 0]) {
+    color("red") cube([184.8-178.7, 3, CUTOUT_H]);
+  }
+} 
+
+module cutout_i2c_r() {
+  translate([196.9, -64.27278 - 2, 0]) {
     color("red") cube([204.8-198.7, 3, CUTOUT_H]);
   }
 } 
@@ -101,15 +114,16 @@ module part() {
       opening();
       opening_bevel();
       
-      cutout_usart_l();
-      cutout_i2c_l();
+      cutout_usart_r();
+      cutout_i2c_r();
     }
     stand1();
     stand2();
   }  
 }
 
-
+mirror([1,0,0])
+rotate(a=[0,180,0])
 translate([-200, 100, 0])
 part();
 //opening_bevel();

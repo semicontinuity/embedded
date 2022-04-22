@@ -127,6 +127,18 @@ module cutout_i2c_l() {
   }
 } 
 
+module cutout_usart_r() {
+  translate([176.9, -64.27278 - HOOK, HEIGHT]) {
+    cube([184.8-178.7, (HOOK + (THICK-BEVEL)), TOP]);
+  }
+} 
+
+module cutout_i2c_r() {
+  translate([196.9, -64.27278 - HOOK, HEIGHT]) {
+    cube([204.8-198.7, (HOOK + (THICK-BEVEL)), TOP]);
+  }
+} 
+
 
 module part() {
  intersection() {
@@ -139,13 +151,14 @@ module part() {
     };
     body();
     inner_margin();
-    cutout_usart_l();
-    cutout_i2c_l();
+    cutout_usart_r();
+    cutout_i2c_r();
   }
- }  
+ }
 }
 
- 
+
+mirror([1,0,0]) 
 rotate(a=[0,180,0])
 translate([-150, 100, 0])
 part();
