@@ -2,33 +2,33 @@
 
 $fn         = 72;
 
-WIDTH       = 114-5;
+WIDTH       = 114-2;
 MOUNT_WIDTH = 90;
 SPACING     = 80;
 
 HEIGHT      = 18;
-THICK       = 5;
+THICK       = 4;
 PLATE       = 1.8;
 DIG         = THICK - PLATE;
 
-SW_M_S      = 13.8; // Switch mount size is 13.8x13.8 mm
+SW_M_S      = 13.9; // Switch mount size is 13.8x13.8 mm
 SW_M_SPC    = 14.6; // Space, occupied by switch legs (14.5mm + 0.1mm leeway)
 
-SS          = 17; // (Horizontal) Area occupied by the switch - compact placement, for keycaps 17.7 x 16.7
-SH          = 9;  // (Vertical)   Area occupied by the switch and keycap
+SS          = 16.8; // (Horizontal) Area occupied by the switch - compact placement, for keycaps 17.7 x 16.7
+SH          = 8;  // (Vertical)   Area occupied by the switch and keycap
 
 EPS         = 0.00001;
 // =======================================================================================================
-SW_CO_LEN         = 2.2;    // body is sinked 2.2 mm deep
+SW_CO_LEN         = 2.2;    // body is sinked 2.3 mm deep (2.2 mm on drawing)
 SW_CO_REST_LEN    = THICK - SW_CO_LEN;
 
-SW_CO_CENT_STEM_R = 3.3/2;  // central stem is 3.2 mm diam.
-SW_CO_SIDE_STEM_R = 1.9/2;  // side stem is 3.2 mm diam.
+SW_CO_CENT_STEM_R = 3.4/2;  // central stem is 3.2 mm diam.
+SW_CO_SIDE_STEM_R = 2.0/2;  // side stem is 3.2 mm diam.
 SW_CO_SIDE_OFS    = 5;      // side stem is 5 off center.
 
-SW_CO_LOCK_CAVITY_W  = 3.2;
-SW_CO_LOCK_CAVITY_H  = 1;
-SW_CO_LOCK_CAVITY_D  = 1;    // 0.9 mm on drawing
+SW_CO_LOCK_CAVITY_W  = 3.4;
+SW_CO_LOCK_CAVITY_H  = 1.2;
+SW_CO_LOCK_CAVITY_D  = 1.2;    // 0.9 mm on drawing
 SW_CO_LOCK_CAVITY_DX = 7;
 SW_CO_LOCK_CAVITY_DY = SW_M_S + SW_CO_LOCK_CAVITY_H;
 SW_CO_LOCK_CAVITY_OFS_Z = -SW_CO_LEN + SW_CO_LOCK_CAVITY_D/2; 
@@ -40,23 +40,35 @@ SW_CO_SIDE_PIN_DY    = 5;  // side pin is 5 mm down center.
 SW_CO_PIN_HOLE_R     = 3/2;  // appx R of hot-swap pin housing
 
 // =======================================================================================================
-PAD_THICK   = 2;    // test values: 0, 2, 4, 6 
-PAD_WIDTH   = 19;
+PAD_THICK   = 0;    // test values: 0, 2, 4, 6 
+//PAD_WIDTH   = 19;
+PAD_WIDTH   = 25;
+
 PAD_OFFSET  = (WIDTH - PAD_WIDTH)/2;
 // =======================================================================================================
 MOUNT_D = THICK + PAD_THICK;
+//MOUNT_H = 13.1;        // rounded rect; height
+MOUNT_H = HEIGHT;
+
 MOUNT_W = PAD_WIDTH;   // rounded rect; width
-MOUNT_H = 13.1;        // rounded rect; height
 MOUNT_R = 3;           // rounded rect; radius
 MOUNT_BASE_W = MOUNT_W/2 - MOUNT_R;
 MOUNT_BASE_H = MOUNT_H/2 - MOUNT_R;
 // =======================================================================================================
-MOUNT_CUT_D = THICK + PAD_THICK;
-MOUNT_CUT_W = 13;   // rounded rect; width
 MOUNT_CUT_H = 3.1;  // rounded rect; height
 MOUNT_CUT_R = 1.5;  // rounded rect; radius
+
+MOUNT_CUT_D = THICK + PAD_THICK;
+//MOUNT_CUT_W = 13;                      // rounded rect; width
+MOUNT_CUT_W = MOUNT_W - 3*MOUNT_CUT_R;   // rounded rect; width
+
 MOUNT_CUT_BASE_W = MOUNT_CUT_W/2 - MOUNT_CUT_R;
 MOUNT_CUT_BASE_H = MOUNT_CUT_H/2 - MOUNT_CUT_R;
+
+MOUNT_CUT_HOLES = 6;
+MOUNT_CUT_PITCH = (MOUNT_CUT_W - MOUNT_CUT_HOLES*2*MOUNT_CUT_R) / (MOUNT_CUT_HOLES - 1);
+MOUNT_CUT_DX = (MOUNT_CUT_PITCH + 2*MOUNT_CUT_R)/2;
+
 // =======================================================================================================
 MX = 3*MOUNT_W/4;  // mount margin
 
@@ -274,12 +286,13 @@ module switch_co_leg_cavity() {
 module switch_cutout() {
   union() {  
     switch_co_bottom();
+
     switch_co_center_stem();
     translate([0, 0, +SW_CO_SIDE_OFS]) switch_co_side_stem();
     translate([0, 0, -SW_CO_SIDE_OFS]) switch_co_side_stem();
-    translate([-SW_CO_CENT_PIN_DX, 0, +SW_CO_CENT_PIN_DY]) switch_co_pin();
-    translate([-SW_CO_SIDE_PIN_DX, 0, -SW_CO_SIDE_PIN_DY]) switch_co_pin();
-    
+
+    translate([+SW_CO_SIDE_PIN_DX, 0, +SW_CO_SIDE_PIN_DY]) switch_co_pin();
+
     translate([-SW_CO_LOCK_CAVITY_DX/2, 0, -SW_CO_LOCK_CAVITY_DY/2]) switch_co_leg_cavity();
     translate([-SW_CO_LOCK_CAVITY_DX/2, 0, +SW_CO_LOCK_CAVITY_DY/2]) switch_co_leg_cavity();
     translate([+SW_CO_LOCK_CAVITY_DX/2, 0, -SW_CO_LOCK_CAVITY_DY/2]) switch_co_leg_cavity();
@@ -287,6 +300,7 @@ module switch_cutout() {
   }
 }
 
+/*
 module mounting_cutout() { 
   color("red")
   rotate([90, 0, 0])
@@ -298,18 +312,34 @@ module mounting_cutout() {
     [MOUNT_CUT_BASE_W, -MOUNT_CUT_BASE_H]
   ]);
 }
+*/
+
+module mounting_cutout() { 
+  color("red")
+  rotate([-90, 0, 0])
+  union() {
+    translate([-1*MOUNT_CUT_DX, 0, -THICK/2]) cylinder(h=THICK+EPS, r1=MOUNT_CUT_R, r2=MOUNT_CUT_R, center=true);
+    translate([+1*MOUNT_CUT_DX, 0, -THICK/2]) cylinder(h=THICK+EPS, r1=MOUNT_CUT_R, r2=MOUNT_CUT_R, center=true);
+  
+    translate([-3*MOUNT_CUT_DX, 0, -THICK/2]) cylinder(h=THICK+EPS, r1=MOUNT_CUT_R, r2=MOUNT_CUT_R, center=true);
+    translate([+3*MOUNT_CUT_DX, 0, -THICK/2]) cylinder(h=THICK+EPS, r1=MOUNT_CUT_R, r2=MOUNT_CUT_R, center=true);
+    
+    translate([-5*MOUNT_CUT_DX, 0, -THICK/2]) cylinder(h=THICK+EPS, r1=MOUNT_CUT_R, r2=MOUNT_CUT_R, center=true);
+    translate([+5*MOUNT_CUT_DX, 0, -THICK/2]) cylinder(h=THICK+EPS, r1=MOUNT_CUT_R, r2=MOUNT_CUT_R, center=true);
+  }
+}
 
 
 module part() {
   difference() {
-    raw_part();   
-    
+    raw_part();
+
     translate([PCA_X, PCA_Y, 0]) rotate([0, 0, -A02]) switch_cutout();
     translate([PCB_X, PCB_Y, 0]) rotate([0, 0, +A01]) switch_cutout();
     translate([PCC_X, PCC_Y, 0]) rotate([0, 0, +A13]) switch_cutout();
-    
-    translate([CENTER_X - MOUNT_WIDTH/2, TOP_Y, 0]) mounting_cutout();
-    translate([CENTER_X + MOUNT_WIDTH/2, TOP_Y, 0]) mounting_cutout();
+
+    translate([CENTER_X - PAD_OFFSET, TOP_Y, 0]) mounting_cutout();
+    translate([CENTER_X + PAD_OFFSET, TOP_Y, 0]) mounting_cutout();
   }
 }
 
