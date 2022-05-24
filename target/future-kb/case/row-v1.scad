@@ -1,25 +1,65 @@
+// See Kailh Choc dimensions at https://keycapsss.com/media/image/12/7a/49/kailh-choc-switch-low-profile-dimensions.png
+
 $fn         = 72;
 
 WIDTH       = 114-5;
 MOUNT_WIDTH = 90;
 SPACING     = 80;
-// =======================================================================================================
-PAD_THICK   = 6;    // test values: 0, 2, 4, 6 
-PAD_WIDTH   = 19;
-PAD_OFFSET  = (WIDTH - PAD_WIDTH)/2;
-// =======================================================================================================
-HEIGHT      = 19;
-THICK       = 3;
+
+HEIGHT      = 18;
+THICK       = 5;
 PLATE       = 1.8;
 DIG         = THICK - PLATE;
 
-SW_M_S      = 14; // Switch mount size is 14x14 mm
-SW_M_SPC    = 15; // Switch mount size is 14x14 mm + 0.5 mm space
+SW_M_S      = 13.8; // Switch mount size is 13.8x13.8 mm
+SW_M_SPC    = 14.6; // Space, occupied by switch legs (14.5mm + 0.1mm leeway)
 
 SS          = 17; // (Horizontal) Area occupied by the switch - compact placement, for keycaps 17.7 x 16.7
 SH          = 9;  // (Vertical)   Area occupied by the switch and keycap
 
-MOUNT_CUT_H = 13;
+EPS         = 0.00001;
+// =======================================================================================================
+SW_CO_LEN         = 2.2;    // body is sinked 2.2 mm deep
+SW_CO_REST_LEN    = THICK - SW_CO_LEN;
+
+SW_CO_CENT_STEM_R = 3.3/2;  // central stem is 3.2 mm diam.
+SW_CO_SIDE_STEM_R = 1.9/2;  // side stem is 3.2 mm diam.
+SW_CO_SIDE_OFS    = 5;      // side stem is 5 off center.
+
+SW_CO_LOCK_CAVITY_W  = 3.2;
+SW_CO_LOCK_CAVITY_H  = 1;
+SW_CO_LOCK_CAVITY_D  = 1;    // 0.9 mm on drawing
+SW_CO_LOCK_CAVITY_DX = 7;
+SW_CO_LOCK_CAVITY_DY = SW_M_S + SW_CO_LOCK_CAVITY_H;
+SW_CO_LOCK_CAVITY_OFS_Z = -SW_CO_LEN + SW_CO_LOCK_CAVITY_D/2; 
+
+SW_CO_CENT_PIN_DX    = 5.9;  // central pin is 5.9 mm off center.
+SW_CO_CENT_PIN_DY    = 0;
+SW_CO_SIDE_PIN_DX    = 3.8;  // side pin is 3.8 mm off center.
+SW_CO_SIDE_PIN_DY    = 5;  // side pin is 5 mm down center.
+SW_CO_PIN_HOLE_R     = 3/2;  // appx R of hot-swap pin housing
+
+// =======================================================================================================
+PAD_THICK   = 2;    // test values: 0, 2, 4, 6 
+PAD_WIDTH   = 19;
+PAD_OFFSET  = (WIDTH - PAD_WIDTH)/2;
+// =======================================================================================================
+MOUNT_D = THICK + PAD_THICK;
+MOUNT_W = PAD_WIDTH;   // rounded rect; width
+MOUNT_H = 13.1;        // rounded rect; height
+MOUNT_R = 3;           // rounded rect; radius
+MOUNT_BASE_W = MOUNT_W/2 - MOUNT_R;
+MOUNT_BASE_H = MOUNT_H/2 - MOUNT_R;
+// =======================================================================================================
+MOUNT_CUT_D = THICK + PAD_THICK;
+MOUNT_CUT_W = 13;   // rounded rect; width
+MOUNT_CUT_H = 3.1;  // rounded rect; height
+MOUNT_CUT_R = 1.5;  // rounded rect; radius
+MOUNT_CUT_BASE_W = MOUNT_CUT_W/2 - MOUNT_CUT_R;
+MOUNT_CUT_BASE_H = MOUNT_CUT_H/2 - MOUNT_CUT_R;
+// =======================================================================================================
+MX = 3*MOUNT_W/4;  // mount margin
+
 
 // P: point
 // A: angle
@@ -124,30 +164,30 @@ PB13_X      = P1_X + THICK*sin(A13);
 PB13_Y      = P1_Y - THICK*cos(A13);
 
 
-PCA_X       = (P02_X + P20_X)/2; // center of switch A cutout
-PCA_Y       = (P02_Y + P20_Y)/2; // center of switch A cutout
-PCB_X       = (P01_X + P10_X)/2; // center of switch B cutout
-PCB_Y       = (P01_Y + P10_Y)/2; // center of switch B cutout
-PCC_X       = (P13_X + P31_X)/2; // center of switch C cutout
-PCC_Y       = (P13_Y + P31_Y)/2; // center of switch C cutout
+PCA_X       = (P02_X + P20_X)/2; // center of switch A cutout on top surface
+PCA_Y       = (P02_Y + P20_Y)/2; // center of switch A cutout on top surface
+PCB_X       = (P01_X + P10_X)/2; // center of switch B cutout on top surface
+PCB_Y       = (P01_Y + P10_Y)/2; // center of switch B cutout on top surface
+PCC_X       = (P13_X + P31_X)/2; // center of switch C cutout on top surface
+PCC_Y       = (P13_Y + P31_Y)/2; // center of switch C cutout on top surface
 
 
 outline_points = concat(
-[ [PB3_X,   PB3_Y   ] ],
-[ [PBF_X,   PBF_Y   ] ],
-[ [PF_X,    PF_Y    ] ],
-[ [P3_X,    P3_Y    ] ],
-[ [P1_X,    P1_Y    ] ],
-[ [P0_X,    P0_Y    ] ],
-[ [P2_X,    P2_Y    ] ],
-[ [PS_X,    PS_Y    ] ],
-[ [PBS_X,   PBS_Y   ] ],
-[ [PB2_X,   PB2_Y   ] ],
-[ [PB02_X,  PB02_Y  ] ],
-[ [PB00_X,  PB00_Y  ] ],
-[ [PB01_X,  PB01_Y  ] ],
-[ [PB10_X,  PB10_Y  ] ],
-[ [PB13_X,  PB13_Y  ] ]
+[ [PB3_X,      PB3_Y   ] ],
+[ [PBF_X - MX, PBF_Y   ] ],
+[ [PF_X  - MX, PF_Y    ] ],
+[ [P3_X,       P3_Y    ] ],
+[ [P1_X,       P1_Y    ] ],
+[ [P0_X,       P0_Y    ] ],
+[ [P2_X,       P2_Y    ] ],
+[ [PS_X  + MX, PS_Y    ] ],
+[ [PBS_X + MX, PBS_Y   ] ],
+[ [PB2_X,      PB2_Y   ] ],
+[ [PB02_X,     PB02_Y  ] ],
+[ [PB00_X,     PB00_Y  ] ],
+[ [PB01_X,     PB01_Y  ] ],
+[ [PB10_X,     PB10_Y  ] ],
+[ [PB13_X,     PB13_Y  ] ]
 );
 
 module pad() {
@@ -155,32 +195,108 @@ module pad() {
   color("blue") cube([PAD_WIDTH, PAD_THICK, HEIGHT], center=true);
 }
 
+module pad_left() {
+  translate([CENTER_X - PAD_OFFSET, 0, 0]) pad();
+}
+
+module pad_right() {
+  translate([CENTER_X + PAD_OFFSET, 0, 0]) pad();
+}
+
+
+module mount() { 
+  color("orange")
+  rotate([90, 0, 0])
+  linear_extrude(height = MOUNT_D) offset(r=MOUNT_R)
+  polygon([
+    [-MOUNT_BASE_W, -MOUNT_BASE_H],
+    [-MOUNT_BASE_W, +MOUNT_BASE_H],
+    [+MOUNT_BASE_W, +MOUNT_BASE_H],
+    [+MOUNT_BASE_W, -MOUNT_BASE_H]
+  ]);
+}
+
+module mount_left() {
+  translate([CENTER_X - PAD_OFFSET, TOP_Y, 0]) mount();
+}
+
+module mount_right() {
+  translate([CENTER_X + PAD_OFFSET, TOP_Y, 0]) mount();
+}
+
+
 module raw_part() {
   union() {
     translate([0, 0, -HEIGHT/2]) linear_extrude(height = HEIGHT) polygon(outline_points);
-    translate([CENTER_X - PAD_OFFSET, 0, 0]) pad();
-    translate([CENTER_X + PAD_OFFSET, 0, 0]) pad();
+    mount_left();
+    mount_right();
+    
+   /*
+    color("cyan") translate([PCA_X, PCA_Y, 0]) rotate([0, 0, -A02]) switch_cutout();
+    color("cyan") translate([PCB_X, PCB_Y, 0]) rotate([0, 0, +A01]) switch_cutout();
+    color("cyan") translate([PCC_X, PCC_Y, 0]) rotate([0, 0, +A13]) switch_cutout();
+   */ 
   }
 }
 
 
+module switch_co_bottom() {
+  translate([0, -SW_CO_LEN/2, 0])
+  cube([SW_M_S, SW_CO_LEN + EPS, SW_M_S], center=true);
+}
+
+module switch_co_center_stem() {
+  rotate([-90, 0, 0])
+  translate([0, 0, -THICK + SW_CO_REST_LEN/2])
+  cylinder(h=SW_CO_REST_LEN+EPS, r1=SW_CO_CENT_STEM_R, r2=SW_CO_CENT_STEM_R, center=true);
+}
+
+module switch_co_side_stem() {
+  rotate([-90, 0, 0])
+  translate([0, 0, -THICK + SW_CO_REST_LEN/2])
+  cylinder(h=SW_CO_REST_LEN+EPS, r1=SW_CO_SIDE_STEM_R, r2=SW_CO_SIDE_STEM_R, center=true);
+}
+
+
+module switch_co_pin() {
+  rotate([-90, 0, 0])
+  translate([0, 0, -THICK + SW_CO_REST_LEN/2])
+  cylinder(h=SW_CO_REST_LEN+EPS, r1=SW_CO_PIN_HOLE_R, r2=SW_CO_PIN_HOLE_R, center=true);
+}
+
+module switch_co_leg_cavity() {
+  translate([0, SW_CO_LOCK_CAVITY_OFS_Z, 0])
+  color("blue") cube([SW_CO_LOCK_CAVITY_W, SW_CO_LOCK_CAVITY_D, SW_CO_LOCK_CAVITY_H], center=true);
+}
+
+
+
 module switch_cutout() {
   union() {  
-    rotate([90, 0, 0])
-    color("red")
-    cube([SW_M_S, SW_M_S, THICK*3], center=true);
-
-    rotate([-90, 0, 0])
-    color("red")
-    translate([0, 0, -DIG/2 - PLATE]) 
-    cube([SW_M_SPC, SW_M_SPC, DIG], center=true);
+    switch_co_bottom();
+    switch_co_center_stem();
+    translate([0, 0, +SW_CO_SIDE_OFS]) switch_co_side_stem();
+    translate([0, 0, -SW_CO_SIDE_OFS]) switch_co_side_stem();
+    translate([-SW_CO_CENT_PIN_DX, 0, +SW_CO_CENT_PIN_DY]) switch_co_pin();
+    translate([-SW_CO_SIDE_PIN_DX, 0, -SW_CO_SIDE_PIN_DY]) switch_co_pin();
+    
+    translate([-SW_CO_LOCK_CAVITY_DX/2, 0, -SW_CO_LOCK_CAVITY_DY/2]) switch_co_leg_cavity();
+    translate([-SW_CO_LOCK_CAVITY_DX/2, 0, +SW_CO_LOCK_CAVITY_DY/2]) switch_co_leg_cavity();
+    translate([+SW_CO_LOCK_CAVITY_DX/2, 0, -SW_CO_LOCK_CAVITY_DY/2]) switch_co_leg_cavity();
+    translate([+SW_CO_LOCK_CAVITY_DX/2, 0, +SW_CO_LOCK_CAVITY_DY/2]) switch_co_leg_cavity();
   }
 }
 
 module mounting_cutout() { 
   color("red")
   rotate([90, 0, 0])
-  linear_extrude(height = MOUNT_CUT_H) offset(r=1.5) polygon([ [-5, -0.1], [-5, 0.1], [5, 0.1], [5, -0.1] ]);
+  linear_extrude(height = MOUNT_CUT_D) offset(r=MOUNT_CUT_R)
+  polygon([
+    [-MOUNT_CUT_BASE_W, -MOUNT_CUT_BASE_H],
+    [-MOUNT_CUT_BASE_W, MOUNT_CUT_BASE_H],
+    [MOUNT_CUT_BASE_W, MOUNT_CUT_BASE_H],
+    [MOUNT_CUT_BASE_W, -MOUNT_CUT_BASE_H]
+  ]);
 }
 
 
