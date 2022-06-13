@@ -155,7 +155,13 @@ class GCode(object):
             f'(deep_rect_depth_first at x_from={x_from}, y_from={y_to}, x_to={x_to}, y_to={y_to})',
             self.position(x_from, y_from),
             self.position_z(),
-            strokes[order[0]], strokes[order[1]], strokes[order[2]], strokes[order[3]],
+            (
+              (
+                '',
+                f'(deep_rect_depth_first at x_from={x_from}, y_from={y_to}, x_to={x_to}, y_to={y_to} side={side})',
+                strokes[side],
+              ) for side in order
+            ),
             self.mill_up(),
         )
 
