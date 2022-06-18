@@ -13,17 +13,19 @@ WIDTH  = 112
 HEIGHT = OP_DY * 5
 
 SIDE_W         = 20
-SIDE_MOUNT_OFS = 15
+SIDE_MOUNT_OFS = 20
 
 #NUT_D     = 22
-NUT_OFS   = 20
-NUT_DEPTH = 5
+NUT_DEPTH = 5.5
+NUT_OFS   = 25
 
 def milling_program(g):
     return g.program(
         g.with_spindle(
             nut_opening(g, +HEIGHT/2 - NUT_OFS),
+            screw_hole(g, +HEIGHT/2 - NUT_OFS),
             nut_opening(g, -HEIGHT/2 + NUT_OFS),
+            screw_hole(g, -HEIGHT/2 + NUT_OFS),
         )
     )
 
@@ -32,17 +34,21 @@ def nut_opening(g, center_y):
     return (
         # for 22mmx32, 3 mm mill
         '',
-        'nut opening at {center_y}',
-        g.deep_round_rect_at(0, center_y, width=22 - 0*3 - 2*RM, height=32 - 0*3 - 2*RM, r=11 - RM, center=True, z_to=-5),
-        g.deep_round_rect_at(0, center_y, width=22 - 1*3 - 2*RM, height=32 - 1*3 - 2*RM, r=11 - RM, center=True, z_to=-5),
-        g.deep_round_rect_at(0, center_y, width=22 - 2*3 - 2*RM, height=32 - 2*3 - 2*RM, r=11 - RM, center=True, z_to=-5),
-        g.deep_round_rect_at(0, center_y, width=22 - 3*3 - 2*RM, height=32 - 3*3 - 2*RM, r=11 - RM, center=True, z_to=-5),
-        g.deep_round_rect_at(0, center_y, width=22 - 4*3 - 2*RM, height=32 - 4*3 - 2*RM, r=11 - RM, center=True, z_to=-5),
-        g.deep_round_rect_at(0, center_y, width=22 - 5*3 - 2*RM, height=32 - 5*3 - 2*RM, r=11 - RM, center=True, z_to=-5),
-        g.deep_round_rect_at(0, center_y, width=22 - 6*3 - 2*RM, height=32 - 6*3 - 2*RM, r=11 - RM, center=True, z_to=-5),
+        f'(nut opening at {center_y})',
+        g.deep_round_rect_at(0, center_y, width=22 - 0*3 - 2*RM, height=32 - 0*3 - 2*RM, r=11 - RM, center=True, z_to=-NUT_DEPTH),
+        g.deep_round_rect_at(0, center_y, width=22 - 1*3 - 2*RM, height=32 - 1*3 - 2*RM, r=11 - RM, center=True, z_to=-NUT_DEPTH),
+        g.deep_round_rect_at(0, center_y, width=22 - 2*3 - 2*RM, height=32 - 2*3 - 2*RM, r=11 - RM, center=True, z_to=-NUT_DEPTH),
+        g.deep_round_rect_at(0, center_y, width=22 - 3*3 - 2*RM, height=32 - 3*3 - 2*RM, r=11 - RM, center=True, z_to=-NUT_DEPTH),
+        g.deep_round_rect_at(0, center_y, width=22 - 4*3 - 2*RM, height=32 - 4*3 - 2*RM, r=11 - RM, center=True, z_to=-NUT_DEPTH),
+        g.deep_round_rect_at(0, center_y, width=22 - 5*3 - 2*RM, height=32 - 5*3 - 2*RM, r=11 - RM, center=True, z_to=-NUT_DEPTH),
+        g.deep_round_rect_at(0, center_y, width=22 - 6*3 - 2*RM, height=32 - 6*3 - 2*RM, r=11 - RM, center=True, z_to=-NUT_DEPTH),
+    )
 
-        'screw hole at {center_y}',
-        g.deep_round_rect_at(0, center_y, width=7 - 0*3 - 2*RM, height=17 - 0*3 - 2*RM, r=7/2 - RM, center=True, z_from=-5),
+
+def screw_hole(g, center_y):
+    return (
+        f'(screw hole at {center_y})',
+        g.deep_round_rect_at(0, center_y, width=7 - 0*3 - 2*RM, height=17 - 0*3 - 2*RM, r=7/2 - RM, center=True, z_from=-NUT_DEPTH),
     )
 
 
