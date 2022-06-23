@@ -34,7 +34,7 @@ module bulk() {
 
 module cavity() {
   translate([0, 0, INN_HEIGHT/2])
-  cube([INN_WIDTH, INN_DEPTH, INN_HEIGHT], center = true);
+  cube([INN_WIDTH, INN_DEPTH, INN_HEIGHT*1.001], center = true);
 }
 
 module stand() {
@@ -78,23 +78,23 @@ module base() {
 
 
 module switch_cutout_z() {  
-  cube([SS, SS, THICK], center = true);
+  cube([SS, SS, THICK*1.005], center = true);
 }
 
 module switch_cutout_x() {
   translate([0, 0, SWITCH_AREA_SIZE + KEYCAP_SIZE/2])
-  color("red") cube([SS, THICK, SS], center = true);
+  color("red") cube([SS, THICK*1.005, SS], center = true);
 }
 
 module switch_cutout_y() {
   translate([0, 0, SWITCH_AREA_SIZE + KEYCAP_SIZE/2])
-  color("red") cube([THICK, SS, SS], center = true);
+  color("red") cube([THICK*1.005, SS, SS], center = true);
 }
 
 
 module mount_hole() {
   translate([0, 0, OUT_HEIGHT/2 - THICK])
-  cylinder(h = OUT_HEIGHT, r = 2, center= true);
+  cylinder(h = OUT_HEIGHT*1.005, r = 2, center= true);
 }
 
 
