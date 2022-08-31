@@ -40,6 +40,7 @@ void send_humidity(int reading_14bits) {
 // Install SoftI2CMaster library from https://github.com/felias-fogg/SoftI2CMaster
 #include <SoftI2CMaster.h>
 
+uint8_t failed = 0;
 // ============================================================================================================================
 // Adopted from https://github.com/enjoyneering/AHTxx to use SoftI2CMaster library
 
@@ -65,41 +66,43 @@ void send_humidity(int reading_14bits) {
 uint8_t aht10_readings_raw[6];
 
 
-void aht10_reset(void) {
+uint8_t aht10_reset(void) {
     if (!i2c_start((AHT10_ADDRESS_7BIT<<1)|I2C_WRITE)) {
-        return;
+        return 1;
     }
     i2c_write(AHTXX_SOFT_RESET_REG);
     i2c_stop();
+    return 0;
 }
 
-void aht10_initialize(uint8_t value) {
+uint8_t aht10_initialize(uint8_t value) {
     if (!i2c_start((AHT10_ADDRESS_7BIT<<1)|I2C_WRITE)) {
-        return;
+        return 1;
     }
     i2c_write(AHT1X_INIT_REG);
     i2c_write(value);
     i2c_write(AHTXX_INIT_CTRL_NOP);
     i2c_stop();
+    return 0;
 }
 
-void aht10_set_normal_mode(void) {
-    aht10_initialize(AHTXX_INIT_CTRL_CAL_ON | AHT1X_INIT_CTRL_NORMAL_MODE);
+uint8_t aht10_set_normal_mode(void) {
+    return aht10_initialize(AHTXX_INIT_CTRL_CAL_ON | AHT1X_INIT_CTRL_NORMAL_MODE);
 }
 
-void aht10_read_raw(void) {
+uint8_t aht10_read_raw(void) {
     if (!i2c_start((AHT10_ADDRESS_7BIT<<1)|I2C_WRITE)) {
-        return;
+        return 1;
     }
     i2c_write(AHTXX_START_MEASUREMENT_REG);
     i2c_write(AHTXX_START_MEASUREMENT_CTRL);
     i2c_write(AHTXX_START_MEASUREMENT_CTRL_NOP);
     i2c_stop();
 
-    delay(AHTXX_MEASUREMENT_DELAY - AHTXX_CMD_DELAY);
+    midi.delay(AHTXX_MEASUREMENT_DELAY - AHTXX_CMD_DELAY);
 
     if (!i2c_start((AHT10_ADDRESS_7BIT<<1)|I2C_READ)) {
-        return;
+        return 1;
     }
     aht10_readings_raw[0] = i2c_read(false);
     aht10_readings_raw[1] = i2c_read(false);
@@ -108,24 +111,27 @@ void aht10_read_raw(void) {
     aht10_readings_raw[4] = i2c_read(false);
     aht10_readings_raw[5] = i2c_read(true);
     i2c_stop();
+    return 0;
 }
 
 
 // ============================================================================================================================
 
 void setup() {
+  if (!i2c_init()) {
+    failed = 1;
+    return;
+  }
   
-  if (!i2c_init()) return;
-  aht10_reset();
-  delay(100);
-  aht10_set_normal_mode();
+  failed |= aht10_reset();
+  midi.delay(100);
+  failed |= aht10_set_normal_mode();
 }
 
 // ============================================================================================================================
 
 void loop() {
-  midi.update();
-
+  midi.delay(1000); // important to have delay between setup() and first reading.
   aht10_read_raw();
 
   // 20-bit value truncated to 14-bit
@@ -137,6 +143,4 @@ void loop() {
   temperature_bits <<= 2;
   temperature_bits |= (aht10_readings_raw[5] & 3); // attach 2 more lower bits => 14 bits total
   send_temperature((uint16_t)temperature_bits);
-
-  delay(1000);
 }
