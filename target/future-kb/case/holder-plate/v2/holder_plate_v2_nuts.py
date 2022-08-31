@@ -1,5 +1,7 @@
 from gcode import *
 
+OP_DY  = 19
+
 DM=3.0
 RM=DM/2
 

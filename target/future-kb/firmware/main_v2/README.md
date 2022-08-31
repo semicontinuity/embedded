@@ -1,7 +1,8 @@
 # Firmware for the Harmony keyboard (hw v2)
 
-## Pinout
+## Button codes
 ```
+
 | 0x04 | 0x03 | 0x02 | 0x01 | 0x00 |
 | 0x0C | 0x0B | 0x0A | 0x09 | 0x08 |
 | 0x14 | 0x13 | 0x12 | 0x11 | 0x10 |
@@ -13,7 +14,10 @@
 
 
 | 0x0E |
+```
 
+## Pinout and buttons mapping
+```
                  +--------+
        PC6 RESET |1     28| PC5  0X0B
 0x16         PD0 |2     27| PC4  0x0A
@@ -42,15 +46,15 @@
 |----|-----------------------------------------------------------------|
 |  0 | compiler temp                                                   |
 |  1 | compiler zero                                                   |
-|  2 | IO_MATRIX__IN__COLUMN0__STATE__REG                              |
-|  3 | IO_MATRIX__IN__COLUMN1__STATE__REG                              |
-|  4 | IO_MATRIX__IN__COLUMN2__STATE__REG                              |
-|  5 | IO_MATRIX__IN__COLUMN3__STATE__REG                              |
-|  6 | KEYBOARD__PORT_A__PREVIOUS_STATE__REG                           |
+|  2 |                                                                 |
+|  3 |                                                                 |
+|  4 |                                                                 |
+|  5 |                                                                 |
+|  6 |                                                                 |
 |  7 | KEYBOARD__PORT_B__PREVIOUS_STATE__REG                           |
 |  8 | KEYBOARD__PORT_C__PREVIOUS_STATE__REG                           |
 |  9 | KEYBOARD__PORT_D__PREVIOUS_STATE__REG                           |
-| 10 | KEYBOARD__PORT_A__MASK__REG                                     |
+| 10 |                                                                 |
 | 11 | KEYBOARD__PORT_B__MASK__REG                                     |
 | 12 | KEYBOARD__PORT_C__MASK__REG                                     |
 | 13 | KEYBOARD__PORT_D__MASK__REG                                     |
@@ -70,8 +74,8 @@
 | 27 | GP_RING_BUFFER__PTR__REG (H)                                    |
 | 28 | allocated by compiler                                           |
 | 29 | allocated by compiler                                           |
-| 30 | IO_MATRIX__SCANNER__THREAD__IP__REG (L)                         |
-| 31 | IO_MATRIX__SCANNER__THREAD__IP__REG (H)                         |
+| 30 |                                                                 |
+| 31 |                                                                 |
 
 
 ## Programming with arduino bootloader (untested)

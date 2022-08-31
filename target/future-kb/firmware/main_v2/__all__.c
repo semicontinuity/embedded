@@ -10,7 +10,6 @@
 #include "cpu/avr/drivers/keyboard/keyboard__pins__physical.c"
 
 #include "cpu/avr/services/keyboard/keyboard.c"
-#include "cpu/avr/services/keyboard/keyboard__port_a.c"
 #include "cpu/avr/services/keyboard/keyboard__port_b.c"
 #include "cpu/avr/services/keyboard/keyboard__port_c.c"
 #include "cpu/avr/services/keyboard/keyboard__port_d.c"
@@ -19,7 +18,6 @@
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_c.c"
 #include "cpu/avr/drivers/keyboard/keyboard__pins__mapping__port_d.c"
 
-#include "cpu/avr/services/keyboard/keyboard__port_a__buttons.c"
 #include "cpu/avr/services/keyboard/keyboard__port_b__buttons.c"
 #include "cpu/avr/services/keyboard/keyboard__port_c__buttons.c"
 #include "cpu/avr/services/keyboard/keyboard__port_d__buttons.c"

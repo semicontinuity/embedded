@@ -7,10 +7,6 @@
 // -----------------------------------------------------------------------------
 
 
-void keyboard__debounce_timer__a__expired(void) {
-    keyboard__port_a__mask__reset();
-}
-
 void keyboard__debounce_timer__b__expired(void) {
     keyboard__port_b__mask__reset();
 }

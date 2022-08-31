@@ -1,5 +1,21 @@
-#include "cpu/avr/drivers/keyboard/keyboard__pins.h"
+#if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
+#include "cpu/avr/drivers/keyboard/keyboard__port_a__pins.h"
+#endif
+
+#if defined(KEYBOARD__PORT_B__USED) && KEYBOARD__PORT_B__USED == 1
+#include "cpu/avr/drivers/keyboard/keyboard__port_b__pins.h"
+#endif
+
+#if defined(KEYBOARD__PORT_C__USED) && KEYBOARD__PORT_C__USED == 1
+#include "cpu/avr/drivers/keyboard/keyboard__port_c__pins.h"
+#endif
+
+#if defined(KEYBOARD__PORT_D__USED) && KEYBOARD__PORT_D__USED == 1
+#include "cpu/avr/drivers/keyboard/keyboard__port_d__pins.h"
+#endif
+
 #include "cpu/avr/gpio.h"
+
 
 void keyboard__pins__init(void) {
 #if defined(IN__BUTTON0__PORT) && defined(IN__BUTTON0__PIN)
@@ -85,6 +101,22 @@ void keyboard__pins__init(void) {
 #if defined(IN__BUTTON19__PORT) && defined(IN__BUTTON19__PIN)
     USE_AS_INPUT(IN__BUTTON19);
     ENABLE_PULLUP(IN__BUTTON19);
+#endif
+#if defined(IN__BUTTON20__PORT) && defined(IN__BUTTON20__PIN)
+    USE_AS_INPUT(IN__BUTTON20);
+    ENABLE_PULLUP(IN__BUTTON20);
+#endif
+#if defined(IN__BUTTON21__PORT) && defined(IN__BUTTON21__PIN)
+    USE_AS_INPUT(IN__BUTTON21);
+    ENABLE_PULLUP(IN__BUTTON21);
+#endif
+#if defined(IN__BUTTON22__PORT) && defined(IN__BUTTON22__PIN)
+    USE_AS_INPUT(IN__BUTTON22);
+    ENABLE_PULLUP(IN__BUTTON22);
+#endif
+#if defined(IN__BUTTON23__PORT) && defined(IN__BUTTON23__PIN)
+    USE_AS_INPUT(IN__BUTTON23);
+    ENABLE_PULLUP(IN__BUTTON23);
 #endif
 
 
