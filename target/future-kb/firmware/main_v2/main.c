@@ -7,6 +7,7 @@
 #include <cpu/avr/asm.h>
 #include <cpu/avr/eeprom.h>
 
+#include "cpu/avr/drivers/keyboard/keyboard__pins__physical.h"
 #include "cpu/avr/services/keyboard/keyboard.h"
 
 #include "comm_usart_outbound__thread.h"
@@ -21,6 +22,7 @@
 // -----------------------------------------------------------------------------
 
 void application__init(void) {
+    keyboard__pins__init();
     keyboard__init();
 
     usart0__init();
