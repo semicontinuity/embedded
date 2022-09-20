@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name "just-split-rescue")(type "Legacy")(uri "${KIPRJMOD}/just-split-rescue.lib")(options "")(descr ""))
+  (lib (name "wireless-v1")(type "KiCad")(uri "${KIPRJMOD}/wireless-v1.symbol/jiran-ble.kicad_sym")(options "")(descr ""))
+)
