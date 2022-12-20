@@ -1,6 +1,6 @@
 # Firmware for the Harmony keyboard (hw v2)
 
-## Button codes
+## Button codes (left half)
 ```
 
 | 0x04 | 0x03 | 0x02 | 0x01 | 0x00 |
@@ -18,23 +18,26 @@
 
 ## Pinout and buttons mapping
 ```
-                 +--------+
-       PC6 RESET |1     28| PC5  0X0B
-0x16         PD0 |2     27| PC4  0x0A
-             TXD |3     26| PC3  0x09
-0x10         PD2 |4     25| PC2  0x08
-0x11         PD3 |5     24| PC1  0x0D
-0x12         PD4 |6     23| PC0  0x0C
-             VCC |7     22|
-             GND |8     21|
-0x06         PB6 |9     20|
-0x0E         PB7 |10    19| PB5  0x03
-0x13         PD5 |11    18| PB4  0x02
-0x14         PD6 |12    17| PB3  0x01
-0x15         PD7 |13    16| PB2  0x00
-0x04         PB0 |14    15| PB1  0x05
-                 +--------+
+                                 +---==---+
+                       PC6 RESET |1     28| PC5  0X0B
+                0x16         PD0 |2     27| PC4  0x0A
+                             TXD |3     26| PC3  0x09
+"50" only (b#2) 0x10         PD2 |4     25| PC2  0x08 <- "48" only (both)
+                0x11         PD3 |5     24| PC1  0x0D
+                0x12         PD4 |6     23| PC0  0x0C
+                             VCC |7     22|
+                             GND |8     21|
+                0x06         PB6 |9     20|
+                0x0E         PB7 |10    19| PB5  0x03
+                0x13         PD5 |11    18| PB4  0x02
+                0x14         PD6 |12    17| PB3  0x01
+                0x15         PD7 |13    16| PB2  0x00 <- fail (b#1)
+                0x04         PB0 |14    15| PB1  0x05
+                                 +--------+
 ```
+Codes 0x00, 0x08, 0x10 do not work as expected (perhaps, framing errors because of baud rate difference - although there were no problems before).
+Will leave these codes out - 1 column is also removed, so it's OK.
+
 
 ## Base USART feature set
 * Sends duplicate button key press/release reports via USART @ 38400.

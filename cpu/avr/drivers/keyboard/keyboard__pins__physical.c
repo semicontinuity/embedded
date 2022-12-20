@@ -1,3 +1,5 @@
+#include "cpu/avr/drivers/keyboard/keyboard__pins__physical.h"
+
 #if defined(KEYBOARD__PORT_A__USED) && KEYBOARD__PORT_A__USED == 1
 #include "cpu/avr/drivers/keyboard/keyboard__port_a__pins.h"
 #endif

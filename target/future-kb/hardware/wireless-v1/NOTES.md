@@ -9,6 +9,7 @@
 * VDD and VDDH are shortcircuited inside the QFN48 package. Therefore the QFN48 device is only usable in Normal Voltage supply mode, and not High Voltage supply mode.
 * The output of the REG0 regulator stage is configured in the UICR, https://infocenter.nordicsemi.com/topic/ps_nrf52840/uicr.html?cp=4_0_0_3_4_0_7#register.REGOUT0
 * VDD max = 3.6V
+* Ref circ: https://infocenter.nordicsemi.com/index.jsp?topic=%2Fps_nrf52840%2Fref_circuitry.html
 
 2. HolyIOT 18010
 * MAY have inductors
@@ -25,3 +26,5 @@
 * https://crtv-club.readthedocs.io/ru/latest/nrf52_stlink_flashing.html
 * ? https://devzone.nordicsemi.com/f/nordic-q-a/69423/nrf52840-and-st-link-v2
 * https://pcbreflux.blogspot.com/2016/09/nrf52832-first-steps-with-st-link-v2.html
+* https://github.com/blackmagic-debug/blackmagic/issues/381
+* "ST-LINK/V2 needs CMSIS-DAP patch or Blackmagic firmware"
