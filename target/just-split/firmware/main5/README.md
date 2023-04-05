@@ -1,19 +1,19 @@
-# Firmware for Just Split keyboard
+# Firmware for `Just Split` keyboard
 
-## Base USART feature set
-* Sends duplicate button key press/release reports via USART @ 38400.
-* Receives 4-byte LED brightness reports via USART @ 38400.
+## USART communication overview
+
+* USART speed: 38400 baud.
+* Every key press/release event sends 2 identical 1-byte reports (redundancy to offset possible data corruption due to interference).
 * WDT used to auto-reset to the beginning of RX packet boundary after 15ms of RX inactivity.
-
 
 ## USART commands format
 
 ```
 |MSB     |                                                                                     LSB|
 |--------|----------------------------------------------------------------------------------------|
-|bit 7=0 | bits 0-6: length of I2C data packet that follows                                       |
-|bit 7=1 | bit 6=1 | bits 0-5: values of 6 individual LED channels                                |
-|        | bit 6=0 | bit 5=1 | bits 0-4 any:   Set LED bar bits from the following 4 bytes of data                |
+|bit 7=0 | bits 0-6: length of I2C data packet that follows (unused at the moment)                |
+|bit 7=1 | bit 6=1 | bits 0-5: values of 6 individual LED channels (Caps Lock, Scroll Lock, etc.) |
+|        | bit 6=0 | bit 5=1 | bits 0-4 any:   Set LED bar bits from the following 4 bytes of data|
 |        | bit 6=0 | bit 5=0 | bits 0-4 == 31: Set all N LEDs from the following 3*N bytes of data|
 |        | bit 6=0 | bit 5=0 | bits 0-4 == 30: Set all N LEDs from the following 3 bytes of data  |
 |        | bit 6=0 | bit 5=0 | bits 0-4 == N: Set LED number N from the following 3 bytes of data |

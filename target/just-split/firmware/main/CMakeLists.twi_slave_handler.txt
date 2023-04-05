@@ -1,1 +1,0 @@
-add_definitions(-DTWI__SLAVE__ADDRESS=0x30)
