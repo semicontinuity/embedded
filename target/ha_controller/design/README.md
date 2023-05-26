@@ -8,27 +8,27 @@
   (parellel with buttons)    Power          Water leak sensors
   V V V V                     | |               V V V V
 +----------------------------------------------------------------+
-| Contactor                    Cold water          Hot water     |
-|  Control +          ( )      Control +           Control +     |
-|  Status                      Status              Status        |
-|   ( ) White                ON (  ) Yellow    OFF (  ) Yellow   |
-| LED+button 12mm     ( )    LED+button 12mm   LED+button 12mm   |
+|     X            X               X                 X           | 5mm
+|                                                                |
+|                              Cold water          Hot water     |
+|  +------------------+        Control +           Control +     |
+|  | 0.91'' OLED      |        Status              Status        | 17.5mm (<)
+|  +------------------+      ON (  ) Yellow    OFF (  ) Yellow   |
+|                            LED+button 12mm   LED+button 12mm   |
 |                                                                |
 |                                                                |
 |                                                                |
 |                                                                |
-|  Alarm                       Cold water          Hot water     |
-|  Status +           ( )      Control +           Control +     |
-|  Reset                       Status              Status        |
-|   ( ) Red                     (  ) Green         (  ) Green    |
-| LED+button 12mm     ( )       OFF                OFF           |
-|                                                                |
-|                      \__  Water leak sensors status            |
-|                           R+G bi-color leds                    |
+|  Contactor + Alarm           Cold water          Hot water     |
+|  Status +                    Control +           Control +     | 17.5mm (<)
+|  Control                       Status              Status      |
+|   ( )White ( )Red            (  ) Green         (  ) Green     |
+|   LED+button 12mm            OFF                OFF            |
 +----------------------------------------------------------------+
   V V V V                 ^ V                   ^ ^ ^ ^
   4x Valves Control       Contactor Control      4x Valve Status
   (24V open drain)        Contactor Output       (24V negative)
+
 ```
 
 * All outputs are open-collector type, 24V compatible
@@ -72,3 +72,30 @@
 * Alarm output
 * RS-485 interface
 * Serial interface or SIM module
+
+
+
+#### Parts
+[Buttons drawing](https://www.google.com/imgres?imgurl=https%3A%2F%2Fstore.nerokas.co.ke%2Fimage%2Fcatalog%2FLed%2Ftactile%2520push%2520putton%2520with%2520led.jpg&tbnid=CuapTxC5KNGawM&vet=12ahUKEwiR5PXSj5P_AhXIE3cKHStmBrQQMygjegUIARCbAg..i&imgrefurl=https%3A%2F%2Fstore.nerokas.co.ke%2Findex.php%3Froute%3Dproduct%2Fproduct%26product_id%3D1356&docid=ClL0ARckmi5yWM&w=607&h=602&q=push%20button%20with%20led%2012%20mm%20dimensions&ved=2ahUKEwiR5PXSj5P_AhXIE3cKHStmBrQQMygjegUIARCbAg)
+
+
+#### MCU pin assignment (ATMega16)
+
+* Valve control inputs:         4x (physically connected with 4x buttons)
+* Valve control outputs:        4x
+
+* Valve status inputs:          4x
+* Water leak sensors:           4x (physically connected with 4x LEDs)
+
+* Valve status LEDs in buttons: 4x
+* LEDs in 2 extra buttons:      2x
+* 2 extra buttons               2x (with external contacts: contactor in + alarm in)
+
+* 2 extra outputs               2x (contactor + alarm out) 
+* I2C                           2x
+* RS485                         2x
+* Serial                        2x
+
+
+#### Schematics ideas
+* [KC868-E16T](https://habr.com/ru/companies/timeweb/articles/736428/)
