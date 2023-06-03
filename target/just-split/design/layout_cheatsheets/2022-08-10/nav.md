@@ -23,8 +23,8 @@ fontsize: 12pt
 +-----+                 +-----+                 +-----+                 +-----+
 
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
-            |     |  ^  |     |     |     |     |     |LOWER| WIN |
-            | Tab |Enter| NAV | Esc |     | Del |Enter|     | Bksp|
+            |     |  ^  | NAV |     |     |     |     |LOWER| WIN |
+            | Tab |Enter|     | Esc |     | Del |Enter|     | Bksp|
             +-----+-----+-----+-----+     +-----+-----+-----+-----+
 ```
 * Hold `LOWER` to add `Shift` to main cluster keys or enter `Alt+Tab`, `Alt+Enter`, `Alt+Esc` on thumb cluster
