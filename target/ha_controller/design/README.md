@@ -1,7 +1,7 @@
 #### UI and connections
 
 
-3 DIN units, 52mm: (!!!)
+4 DIN units
 
 ```
   4x Valve Control Inputs     24V           24V Negative 
@@ -89,12 +89,67 @@
 
 * Valve status LEDs in buttons: 4x
 * LEDs in 2 extra buttons:      2x
-* 2 extra buttons               2x (with external contacts: contactor in + alarm in)
+* 2 extra buttons               2x
 
-* 2 extra outputs               2x (contactor + alarm out) 
+* 2 extra inputs		2x (contactor state in + alarm in)
+* 2 extra outputs               2x (contactor out + alarm out) 
 * I2C                           2x
-* RS485                         2x
-* Serial                        2x
+* RS485 / Serial                2x
+
+
+#### Pin assignment - layout
+
+Layer 1
+```
+  Valve state               Valve control in        Extra input
+    V V V V                    V V V V                V V 
++----------------------------------------------------------------+
+|                                                                | 
+|                                                                |
+|                                                                |
+|                                                                |
+|                                                                |
+|                                                                |
+| [Valve state in][Leak sensors]     [Valve ctrl in][x in][I2C]  |
+|                                                                |
+|                                                                |
+|   [Valves out  ][ x led + btn]     [RXTX][Valve LEDs][x out]   |
+|                                                                |
+|                                                                |
+|                                                                | 
+|                                                                |
+|                                                                |
+|                                                                |
++----------------------------------------------------------------+
+  V V V V                 |  |           |   |            |  |
+  4x Valves Control                               
+  (24V open drain)       24V (coils)   RS-485           Extra out
+
+```
+
+
+Layer 2
+```
+                  Water leak sensors + power
+                    V V V V                V V V V
++----------------------------------------------------------------+
+|                                                                | 
+|                                                                |
+|                                                                |
+|                                                                |
+|                 [Leak sensors]            [Valve ctrl]  [I2C]  |
+|                                                                |
+|                                                                |
+|                 [ x led + btn]            [Valve LEDs ]        |
+|                                                                |
+|                                                                |
+|                                                                |
+|                                                                |
++----------------------------------------------------------------+
+                                | |
+                               5V supply
+
+```
 
 
 #### Schematics ideas
