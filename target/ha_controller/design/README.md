@@ -4,31 +4,22 @@
 4 DIN units
 
 ```
-  4x Valve Control Inputs     24V           24V Negative 
-  (parellel with buttons)    Power          Water leak sensors
-  V V V V                     | |               V V V V
 +----------------------------------------------------------------+
-|     X            X               X                 X           | 5mm
-|                                                                |
-|                              Cold water          Hot water     |
-|  +------------------+        Control +           Control +     |
-|  | 0.91'' OLED      |        Status              Status        | 17.5mm (<)
-|  +------------------+      ON (  ) Yellow    OFF (  ) Yellow   |
-|                            LED+button 12mm   LED+button 12mm   |
+|  Contactor        RG LED     Cold water          Hot water     |
+|  Status           Sensor A   Control +           Control +     |
+|  + Control                   Status              Status        |
+|  ( ) White        RG LED     ON (  ) Yellow    OFF (  ) Yellow |
+|  LED+button 12mm  Sensor B   LED+button 12mm   LED+button 12mm |
 |                                                                |
 |                                                                |
 |                                                                |
 |                                                                |
-|  Contactor + Alarm           Cold water          Hot water     |
-|  Status +                    Control +           Control +     | 17.5mm (<)
+|  Alarm            RG LED     Cold water          Hot water     |
+|  Status +         Sensor C   Control +           Control +     |
 |  Control                       Status              Status      |
-|   ( )White ( )Red            (  ) Green         (  ) Green     |
-|   LED+button 12mm            OFF                OFF            |
+|  ( ) Red          RG LED     (  ) Green         (  ) Green     |
+|  LED+button 12mm  Sensor D   OFF                OFF            |
 +----------------------------------------------------------------+
-  V V V V                 ^ V                   ^ ^ ^ ^
-  4x Valves Control       Contactor Control      4x Valve Status
-  (24V open drain)        Contactor Output       (24V negative)
-
 ```
 
 * All outputs are open-collector type, 24V compatible
@@ -110,10 +101,10 @@ Layer 1
 |                                                                |
 |                                                                |
 |                                                                |
-| [Valve state in][Leak sensors]     [Valve ctrl in][x in][I2C]  |
+| [Valve state in][Leak sensors]     [Valve ctrl in][AUX in][I2C]|
 |                                                                |
 |                                                                |
-|   [Valves out  ][ x led + btn]     [RXTX][Valve LEDs][x out]   |
+| [AUX led + btn][Valves out]        [RXTX][Valve LEDs][AUX out] |
 |                                                                |
 |                                                                |
 |                                                                | 
@@ -130,17 +121,17 @@ Layer 1
 
 Layer 2
 ```
-                  Water leak sensors + power
-                    V V V V                V V V V
+                  Water leak sensors + power out
+                    V V         V V V V         V V
 +----------------------------------------------------------------+
 |                                                                | 
 |                                                                |
 |                                                                |
 |                                                                |
-|                 [Leak sensors]            [Valve ctrl]  [I2C]  |
 |                                                                |
 |                                                                |
-|                 [ x led + btn]            [Valve LEDs ]        |
+|                                                                |
+|                                                                |
 |                                                                |
 |                                                                |
 |                                                                |
