@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name "pcb")(type "KiCad")(uri "pcb")(options "")(descr ""))
+  (lib (name "wireless-v1")(type "KiCad")(uri "/home/igorkarpov/Projects/github.com/semicontinuity/embedded/target/future-kb/hardware/wireless-v1/wireless-v1.pretty")(options "")(descr ""))
+)
