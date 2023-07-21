@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name "usb-ps2-rescue")(type "Legacy")(uri "${KIPRJMOD}/usb-ps2-rescue.lib")(options "")(descr ""))
+)
