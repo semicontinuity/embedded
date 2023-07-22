@@ -13,26 +13,90 @@
 // -----------------------------------------------------------------------------
 
 #if defined(MODBUS_SERVER__HANDLE_READ_COILS) && MODBUS_SERVER__HANDLE_READ_COILS > 0
+/**
+ * Process READ COILS request.
+ * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][COUNT_H][COUNT_L]
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: populated with response bytes except CRC; buffer write position: after payload bytes.
+ *       Payload: [BYTE_COUNT_TO_FOLLOW][BYTES...]
+ *   Else:
+ *     Buffer: retain address and function code.
+ */
 modbus_exception modbus_server__read_coils(void);
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS) && MODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS > 0
+/**
+ * Process READ DESCRETE INPUTS request.
+ * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][COUNT_H][COUNT_L]
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: populated with response bytes except CRC; buffer write position: after payload bytes.
+ *       Payload: [BYTE_COUNT_TO_FOLLOW][BYTES...]
+ *   Else:
+ *     Buffer: retain address and function code.
+ */
 //modbus_exception modbus_server__read_discrete_inputs(void);
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS) && MODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS > 0
+/**
+ * Process READ HOLDING REGISTERS request.
+ * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][COUNT_H][COUNT_L]
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: populated with response bytes except CRC; buffer write position: after payload bytes.
+ *       Payload: [BYTE_COUNT_TO_FOLLOW][BYTES...]
+ *   Else:
+ *     Buffer: retain address and function code.
+ */
 modbus_exception modbus_server__read_holding_registers(uint16_t register_address, uint16_t register_count);
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS) && MODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS > 0
+/**
+ * Process READ INPUT REGISTERS request.
+ * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][COUNT_H][COUNT_L]
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: populated with response bytes except CRC; buffer write position: after payload bytes.
+ *       Payload: [BYTE_COUNT_TO_FOLLOW][BYTES...]
+ *   Else:
+ *     Buffer: retain address and function code.
+ */
 modbus_exception modbus_server__read_input_registers(uint16_t register_address, uint16_t register_count);
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL) && MODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL > 0
+/**
+ * Process WRITE SINGLE COIL request.
+ * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][VALUE_H][VALUE_L]
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: retained as is, buffer write position: after payload bytes.
+ *   Else:
+ *     Buffer: retain address and function code.
+ */
 modbus_exception modbus_server__write_single_coil(uint16_t register_address, uint8_t active);
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_WRITE_REGISTER) && MODBUS_SERVER__HANDLE_WRITE_REGISTER > 0
+/**
+ * Process WRITE HOLDING REGISTER request.
+ * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][VALUE_H][VALUE_L]
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: retained as is, buffer write position: after payload bytes.
+ *   Else:
+ *     Buffer: retain address and function code.
+ */
 modbus_exception modbus_server__write_holding_register(uint16_t register_address, uint16_t register_value);
 #endif
 

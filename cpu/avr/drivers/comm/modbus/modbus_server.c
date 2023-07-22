@@ -10,7 +10,17 @@
 
 #if defined(MODBUS_SERVER__HANDLE_READ_COILS) && MODBUS_SERVER__HANDLE_READ_COILS > 0
 /**
- * Handle reading of coils.
+ * Handle READ COILS request frame.
+ * Supports only reading of all COILS at once!
+ *
+ * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][COUNT_H][COUNT_L]
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: populated with response bytes except CRC; buffer write position: after payload bytes.
+ *       Payload: [BYTE_COUNT_TO_FOLLOW][BYTES...]
+ *   Else:
+ *     Buffer: retain address and function code.
  */
 modbus_exception modbus_server__handle_read_coils(void) {
     __asm__ __volatile__( "modbus_server__handle_read_coils:");
@@ -26,7 +36,6 @@ modbus_exception modbus_server__handle_read_coils(void) {
     if (address != MODBUS_SERVER__COIL_ADDRESSES_START || count != MODBUS_SERVER__COIL_COUNT)
         return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
 
-
     buffer__put_u8((uint8_t) ((MODBUS_SERVER__COIL_COUNT + 7) >> 3) ); // byte count; the rest of the response is written by the handler
     return modbus_server__read_coils();
 }
@@ -35,7 +44,15 @@ modbus_exception modbus_server__handle_read_coils(void) {
 
 #if defined(MODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS) && MODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS > 0
 /**
- * Handle reading of holding registers.
+ * Handle READ HOLDING REGISTERS request frame.
+ * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][COUNT_H][COUNT_L]
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: populated with response bytes except CRC; buffer write position: after payload bytes.
+ *       Payload: [BYTE_COUNT_TO_FOLLOW][BYTES...]
+ *   Else:
+ *     Buffer: retain address and function code.
  */
 modbus_exception modbus_server__handle_read_holding_registers(void) {
     __asm__ __volatile__( "modbus_server__handle_read_holding_registers:");
@@ -64,7 +81,15 @@ modbus_exception modbus_server__handle_read_holding_registers(void) {
 
 #if defined(MODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS) && MODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS > 0
 /**
- * Handle reading of input registers.
+ * Handle READ INPUT REGISTERS request frame.
+ * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][COUNT_H][COUNT_L]
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: populated with response bytes except CRC; buffer write position: after payload bytes.
+ *       Payload: [BYTE_COUNT_TO_FOLLOW][BYTES...]
+ *   Else:
+ *     Buffer: retain address and function code.
  */
 modbus_exception modbus_server__handle_read_input_registers(void) {
     __asm__ __volatile__( "modbus_server__handle_read_input_registers:");
@@ -93,7 +118,14 @@ modbus_exception modbus_server__handle_read_input_registers(void) {
 
 #if defined(MODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL) && MODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL > 0
 /**
- * Handle writing of single coil.
+ * Handle WRITE SINGLE COIL request frame.
+ * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][VALUE_H][VALUE_L]
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: retained as is, buffer write position: after payload bytes.
+ *   Else:
+ *     Buffer: retain address and function code.
  */
 modbus_exception modbus_server__handle_write_single_coil(void) {
     __asm__ __volatile__( "modbus_server__handle_write_single_coil:");
@@ -113,7 +145,7 @@ modbus_exception modbus_server__handle_write_single_coil(void) {
         || address >= MODBUS_SERVER__COIL_ADDRESSES_START + MODBUS_SERVER__COIL_COUNT)
         return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
 
-    buffer__sync();    // will return the same data as arrived in the request (echo)
+    buffer__sync();    // When returning, write pointer must point after payload bytes. Returning the same data as arrived in the request (echo)
     return modbus_server__write_single_coil(address, value_h);
 }
 #endif
@@ -121,7 +153,14 @@ modbus_exception modbus_server__handle_write_single_coil(void) {
 
 #if defined(MODBUS_SERVER__HANDLE_WRITE_REGISTER) && MODBUS_SERVER__HANDLE_WRITE_REGISTER > 0
 /**
- * Handle writing of holding register.
+ * Handle WRITE HOLDING REGISTER request frame.
+ * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][VALUE_H][VALUE_L]
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: retained as is, buffer write position: after payload bytes.
+ *   Else:
+ *     Buffer: retain address and function code.
  */
 modbus_exception modbus_server__handle_write_register(void) {
     __asm__ __volatile__( "modbus_server__handle_write_register:");
@@ -136,12 +175,22 @@ modbus_exception modbus_server__handle_write_register(void) {
         || register_address >= MODBUS_SERVER__HOLDING_REGISTERS_START + MODBUS_SERVER__HOLDING_REGISTERS_COUNT)
         return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
 
-    buffer__sync();    // will return the same data as arrived in the request (echo)
+    buffer__sync();    // When returning, write pointer must point after payload bytes. Returning the same data as arrived in the request (echo)
     return modbus_server__write_holding_register(register_address, register_value);
 }
 #endif
 
 
+/**
+ * Process MODBUS request frame.
+ * Buffer reading position: at function code byte.
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: populated with response bytes except CRC; buffer write position: after payload bytes.
+ *   Else:
+ *     Buffer: retain address and function code.
+ */
 modbus_exception modbus_server__process_frame(void) {
     const uint8_t function = buffer__get_u8();
     switch (function) {
@@ -204,8 +253,8 @@ bool modbus_rtu_driver__on_frame_received(void) {
                 const modbus_exception exception = modbus_server__process_frame();
                 if (exception) {
                     __asm__ __volatile__("modbus_rtu_driver__on_frame_received__render_exception_frame:");
-                    buffer__clear();
-                    buffer__get_u8();   // skip address
+                    buffer__rewind();   // will read from the beginning of the buffer
+                    buffer__get_u8();   // skip address field byte and point to function code field byte
                     buffer__sync();     // will write to function code field
                     uint8_t function = (uint8_t) (buffer__get_u8() | (uint8_t) 0x80);
                     buffer__put_u8(function);

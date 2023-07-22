@@ -83,14 +83,14 @@ void buffer__position__set(const uint16_t position) {
 
 
 /**
- * Gets the buffer's limit.
+ * Gets the buffer's limit (number of bytes written).
  */
 uint16_t buffer__limit__get(void) {
     return buffer__limit_ptr - buffer__data;
 }
 
 /**
- * Sets the buffer's limit.
+ * Sets the buffer's limit (number of bytes written).
  */
 void buffer__limit__set(const uint16_t limit) {
     buffer__limit_ptr = buffer__data + limit;
