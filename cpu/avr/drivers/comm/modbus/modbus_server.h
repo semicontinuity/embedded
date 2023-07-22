@@ -15,7 +15,9 @@
 #if defined(MODBUS_SERVER__HANDLE_READ_COILS) && MODBUS_SERVER__HANDLE_READ_COILS > 0
 /**
  * Process READ COILS request.
- * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][COUNT_H][COUNT_L]
+ * Reads all coils at once!
+ * Buffer write pointer: after BYTE COUNT field (already written), ready to write bytes with coil bits.
+ * Write exactly MODBUS_SERVER__COIL_COUNT bits to the buffer.
  * Returns:
  *   Code: modbus_exception
  *   If OK:
@@ -30,7 +32,9 @@ modbus_exception modbus_server__read_coils(void);
 #if defined(MODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS) && MODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS > 0
 /**
  * Process READ DESCRETE INPUTS request.
- * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][COUNT_H][COUNT_L]
+ * Reads all discrete inputs at once!
+ * Buffer write pointer: after BYTE COUNT field (already written), ready to write bytes with input bits.
+ * Write exactly MODBUS_SERVER__DISCRETE_INPUT_COUNT bits to the buffer.
  * Returns:
  *   Code: modbus_exception
  *   If OK:
@@ -39,13 +43,13 @@ modbus_exception modbus_server__read_coils(void);
  *   Else:
  *     Buffer: retain address and function code.
  */
-//modbus_exception modbus_server__read_discrete_inputs(void);
+modbus_exception modbus_server__read_discrete_inputs(void);
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS) && MODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS > 0
 /**
  * Process READ HOLDING REGISTERS request.
- * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][COUNT_H][COUNT_L]
+ * Buffer write position: after BYTE COUNT field (already written), ready to write holding register bytes.
  * Returns:
  *   Code: modbus_exception
  *   If OK:
@@ -60,7 +64,7 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
 #if defined(MODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS) && MODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS > 0
 /**
  * Process READ INPUT REGISTERS request.
- * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][COUNT_H][COUNT_L]
+ * Buffer write position: after BYTE COUNT field (already written), ready to write holding register bytes.
  * Returns:
  *   Code: modbus_exception
  *   If OK:
@@ -75,13 +79,9 @@ modbus_exception modbus_server__read_input_registers(uint16_t register_address, 
 #if defined(MODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL) && MODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL > 0
 /**
  * Process WRITE SINGLE COIL request.
- * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][VALUE_H][VALUE_L]
+ * Buffer: do not read or write.
  * Returns:
  *   Code: modbus_exception
- *   If OK:
- *     Buffer: retained as is, buffer write position: after payload bytes.
- *   Else:
- *     Buffer: retain address and function code.
  */
 modbus_exception modbus_server__write_single_coil(uint16_t register_address, uint8_t active);
 #endif
@@ -89,13 +89,9 @@ modbus_exception modbus_server__write_single_coil(uint16_t register_address, uin
 #if defined(MODBUS_SERVER__HANDLE_WRITE_REGISTER) && MODBUS_SERVER__HANDLE_WRITE_REGISTER > 0
 /**
  * Process WRITE HOLDING REGISTER request.
- * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][VALUE_H][VALUE_L]
+ * Buffer: do not read or write.
  * Returns:
  *   Code: modbus_exception
- *   If OK:
- *     Buffer: retained as is, buffer write position: after payload bytes.
- *   Else:
- *     Buffer: retain address and function code.
  */
 modbus_exception modbus_server__write_holding_register(uint16_t register_address, uint16_t register_value);
 #endif
