@@ -50,7 +50,10 @@
 # Environment variables:
 #   PROXY_PORT:     port, on which tcp_serial_redirect is running on localhost
 #   DEVICE_ADDRESS: address of MODBUS device to communicate with
-
+#   OF:             output format (yaml or json)
+#
+# Watching device:
+# watch -d -n 0.2 -t --color 'OF=json PROXY_PORT=8000 DEVICE_ADDRESS=2 python3 -m modbus_rtu_tool read all modbus-device-spec.yaml | python3 -m datatools.json.json2ansi'
 # ==============================================================================
 # Exit codes:
 # ==============================================================================
@@ -67,6 +70,8 @@ EXIT_CODE_SYNTAX_ERROR = 40
 EXIT_CODE_INVALID_COIL_ADDRESS = 41
 EXIT_CODE_INVALID_COIL_COUNT = 42
 EXIT_CODE_INVALID_COIL_VALUE = 43
+EXIT_CODE_INVALID_DISCRETE_INPUT_ADDRESS = 44
+EXIT_CODE_INVALID_DISCRETE_INPUT_COUNT = 45
 # ==============================================================================
 
 import os
@@ -142,6 +147,14 @@ def get_coil_count(s) -> int:
     return get_uint16(s, f"Coil count is invalid", EXIT_CODE_INVALID_COIL_COUNT)
 
 
+def get_discrete_input_address(s) -> int:
+    return get_uint16(s, f"Discrete input address is invalid", EXIT_CODE_INVALID_DISCRETE_INPUT_ADDRESS)
+
+
+def get_discrete_input_count(s) -> int:
+    return get_uint16(s, f"Discrete input count is invalid", EXIT_CODE_INVALID_DISCRETE_INPUT_COUNT)
+
+
 def get_coil_value(s) -> int:
     if s == '1':
         return 1
@@ -168,7 +181,16 @@ def usage():
 # ==============================================================================
 
 MF_READ_COILS = 1
+MF_READ_DISCRETE_INPUTS = 2
+MF_READ_HOLDING_REGISTERS = 3
+MF_READ_INPUT_REGISTERS = 4
 MF_WRITE_SINGLE_COIL = 5
+MF_WRITE_SINGLE_REGISTER = 6
+MF_WRITE_MULTIPLE_COILS = 15
+MF_WRITE_MULTIPLE_REGISTERS = 16
+MF_READ_FILE_RECORD = 20
+MF_WRITE_FILE_RECORD = 21
+MF_READ_FIFO_QUEUE = 24
 
 
 def exchange(data):
@@ -198,18 +220,14 @@ def exchange(data):
 
 # ==============================================================================
 
-def read_coils(proxy_port: int, device_address: int, coil_address: int, coil_count: int, ans: List[int]):
-    """
-    coil_address: coil address (0-based)
-    returns process exit code
-    """
+def read_bit_data(proxy_port: int, device_address: int, address: int, count: int, func: int, ans: List[int]):
     data = bytearray(8)
     data[0] = device_address
-    data[1] = MF_READ_COILS
-    data[2] = coil_address >> 8
-    data[3] = coil_address & 0xFF
-    data[4] = coil_count >> 8
-    data[5] = coil_count & 0xFF
+    data[1] = func
+    data[2] = address >> 8
+    data[3] = address & 0xFF
+    data[4] = count >> 8
+    data[5] = count & 0xFF
 
     crc = crc16(0xFFFF, data, 6)
 
@@ -218,22 +236,49 @@ def read_coils(proxy_port: int, device_address: int, coil_address: int, coil_cou
 
     result = exchange(data)
 
-    if len(result) != 5 + ((coil_count + 7) // 8):
+    if result[0] != data[0]:
         sys.stderr.write(repr(result))
         return EXIT_CODE_FAILURE
-    if result[0] != data[0]:
+    if result[1] == 0x80 | data[1]:
+        exception_code = result[2]
+        if exception_code == 1:
+            print('MODBUS_EXCEPTION__ILLEGAL_FUNCTION', file=sys.stderr)
+        elif exception_code == 2:
+            print('MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS', file=sys.stderr)
+        elif exception_code == 3:
+            print('MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE', file=sys.stderr)
         sys.stderr.write(repr(result))
         return EXIT_CODE_FAILURE
     if result[1] != data[1]:
         sys.stderr.write(repr(result))
         return EXIT_CODE_FAILURE
+    if len(result) != 5 + ((count + 7) // 8):
+        sys.stderr.write(repr(result))
+        return EXIT_CODE_FAILURE
+
     # Check CRC
 
     bits = result[3:-2]
-    for i in range(coil_count):
+    for i in range(count):
         b = bits[i >> 3]
         ans.append((b >> (i % 8)) & 1)
     return EXIT_CODE_OK
+
+
+def read_coils(proxy_port: int, device_address: int, address: int, count: int, ans: List[int]):
+    """
+    address: coil address (0-based)
+    returns process exit code
+    """
+    return read_bit_data(proxy_port, device_address, coil_address, coil_count, MF_READ_COILS, ans)
+
+
+def read_discrete_inputs(proxy_port: int, device_address: int, address: int, count: int, ans: List[int]):
+    """
+    address: discrete input address (0-based)
+    returns process exit code
+    """
+    return read_bit_data(proxy_port, device_address, address, count, MF_READ_DISCRETE_INPUTS, ans)
 
 
 def write_coil(proxy_port: int, device_address: int, coil_address: int, value: int):
@@ -274,6 +319,16 @@ def read_all(proxy_port: int, device_address: int, spec):
             for i, coil_spec in enumerate(coil_specs):
                 coil_spec['value'] = coil_values[i]
 
+    discrete_inputs = spec.get('discrete_inputs')
+    if discrete_inputs:
+        for block in discrete_inputs:
+            input_specs = block['contents']
+            input_values = []
+            code = read_discrete_inputs(proxy_port, device_address, block['address'], len(input_specs), input_values)
+            if code != EXIT_CODE_OK: return code
+            for i, input_spec in enumerate(input_specs):
+                input_spec['value'] = input_values[i]
+
     return EXIT_CODE_OK
 
 # ==============================================================================
@@ -309,8 +364,25 @@ def main():
         result = read_coils(
             proxy_port=proxy_port,
             device_address=device_address,
-            coil_address=get_coil_address(sys.argv[3]),
-            coil_count=get_coil_count(sys.argv[4]),
+            address=get_coil_address(sys.argv[3]),
+            count=get_coil_count(sys.argv[4]),
+            ans=ans
+        )
+        if result == EXIT_CODE_OK:
+            print(ans)
+        else:
+            exit(result)
+    elif sys.argv[1] == 'read' and sys.argv[2] == 'inputs':
+        if len(sys.argv) != 5:
+            print("Usage:", file=sys.stderr)
+            print("modbus_rtu_tool read inputs <address> <count>", file=sys.stderr)
+            sys.exit(EXIT_CODE_SYNTAX_ERROR)
+        ans = []
+        result = read_discrete_inputs(
+            proxy_port=proxy_port,
+            device_address=device_address,
+            address=get_discrete_input_address(sys.argv[3]),
+            count=get_discrete_input_count(sys.argv[4]),
             ans=ans
         )
         if result == EXIT_CODE_OK:

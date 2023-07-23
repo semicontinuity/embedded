@@ -4,6 +4,7 @@
 4 DIN units
 
 ```
+Layer 3 (front panel)
 +----------------------------------------------------------------+
 |  Contactor        RG LED     Cold water          Hot water     |
 |  Status           Sensor A   Control +           Control +     |
@@ -92,7 +93,7 @@
 
 Layer 1
 ```
-  Valve state               Valve control in        Extra input
+  Valve limit switches     Valve control in        Extra input
     V V V V                    V V V V                V V 
 +----------------------------------------------------------------+
 |                                                                | 
@@ -121,8 +122,8 @@ Layer 1
 
 Layer 2
 ```
-                  Water leak sensors + power out
-                    V V         V V V V         V V
+   Power out             Water leak sensors            Power out
+     ^ ^                      V V V V                     ^ ^
 +----------------------------------------------------------------+
 |                                                                | 
 |                                                                |
@@ -137,8 +138,8 @@ Layer 2
 |                                                                |
 |                                                                |
 +----------------------------------------------------------------+
-                                | |
-                               5V supply
+    ^  ^                                                     ^ ^
+ Optional 230V presence detection input             5V/24V supply
 
 ```
 

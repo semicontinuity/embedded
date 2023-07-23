@@ -42,6 +42,40 @@ modbus_exception modbus_server__handle_read_coils(void) {
 #endif
 
 
+#if defined(MODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS) && MODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS > 0
+/**
+ * Handle READ DISCRETE INPUTS request frame.
+ * Supports only reading of all DISCRETE INPUTS at once!
+ *
+ * Buffer reading position: after function code byte, at payload bytes [ADDR_H][ADDR_L][COUNT_H][COUNT_L]
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: populated with response bytes except CRC; buffer write position: after payload bytes.
+ *       Payload: [BYTE_COUNT_TO_FOLLOW][BYTES...]
+ *   Else:
+ *     Buffer: retain address and function code.
+ */
+modbus_exception modbus_server__handle_read_discrete_inputs(void) {
+    __asm__ __volatile__( "modbus_server__handle_read_discrete_inputs:");
+    const uint16_t length = buffer__limit__get();
+    if (length != MODBUS_FRAME_SIZE_MIN + MODBUS_FUNCTION__READ_DISCRETE_INPUTS__PAYLOAD_SIZE)
+        return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
+
+    buffer__sync(); // will write to the beginning of the payload section
+
+    uint16_t address = buffer__get_u16();
+    uint16_t count = buffer__get_u16();
+
+    if (address != MODBUS_SERVER__DISCRETE_INPUTS_ADDRESSES_START || count != MODBUS_SERVER__DISCRETE_INPUTS_COUNT)
+        return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
+
+    buffer__put_u8((uint8_t) ((MODBUS_SERVER__DISCRETE_INPUTS_COUNT + 7) >> 3) ); // byte count; the rest of the response is written by the handler
+    return modbus_server__read_discrete_inputs();
+}
+#endif
+
+
 #if defined(MODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS) && MODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS > 0
 /**
  * Handle READ HOLDING REGISTERS request frame.
@@ -200,8 +234,8 @@ modbus_exception modbus_server__process_frame(void) {
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS) && MODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS > 0
-        return modbus_server__handle_read_discrete_inputs();
     case MODBUS_FUNCTION_READ_DISCRETE_INPUTS:
+        return modbus_server__handle_read_discrete_inputs();
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS) && MODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS > 0
