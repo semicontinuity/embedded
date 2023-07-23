@@ -91,7 +91,7 @@ inline uint16_t timer0__conf__ctc_started(const uint8_t compare_a_value, const u
 
 #if defined(TIMER0__PERIOD) && !defined(TIMER0__CONF__INITIALIZED)
 #  if TIMER0__PERIOD <= 0
-#    error "Invalid period setting for Timer 2"
+#    error "Invalid period setting for Timer 0"
 #  elif TIMER0__PERIOD <= 256
 #    define TIMER0__CONF__INITIALIZED  (TIMER0_CONF_STOPPED | TIMER0_CONF_TOP((TIMER0__PERIOD) - 1))
 #  elif TIMER0__PERIOD <= 256*8
@@ -103,13 +103,13 @@ inline uint16_t timer0__conf__ctc_started(const uint8_t compare_a_value, const u
 #  elif TIMER0__PERIOD <= 256*1024
 #    define TIMER0__CONF__INITIALIZED  (TIMER0_CONF_STOPPED | TIMER0_CONF_TOP((TIMER0__PERIOD/1024) - 1))
 #  else
-#    error "Period setting for Timer 2 is out of range"
+#    error "Period setting for Timer 0 is out of range"
 #  endif
 #endif
 
 #if defined(TIMER0__PERIOD) && !defined(TIMER0__CONF__STARTED)
 #  if TIMER0__PERIOD <= 0
-#    error "Invalid period setting for Timer 2"
+#    error "Invalid period setting for Timer 0"
 #  elif TIMER0__PERIOD <= 256
 #    define TIMER0__CONF__STARTED  (TIMER0_CONF_WGM_CTC | TIMER0_CONF_NO_PRESCALER | TIMER0_CONF_TOP((TIMER0__PERIOD) - 1))
 #  elif TIMER0__PERIOD <= 256*8
@@ -121,7 +121,7 @@ inline uint16_t timer0__conf__ctc_started(const uint8_t compare_a_value, const u
 #  elif TIMER0__PERIOD <= 256*1024
 #    define TIMER0__CONF__STARTED  (TIMER0_CONF_WGM_CTC | TIMER0_CONF_PRESCALER_1024 | TIMER0_CONF_TOP((TIMER0__PERIOD/1024) - 1))
 #  else
-#    error "Period setting for Timer 2 is out of range"
+#    error "Period setting for Timer 0 is out of range"
 #  endif
 #endif
 
