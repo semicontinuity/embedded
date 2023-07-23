@@ -15,6 +15,8 @@
 
 #include <avr/interrupt.h>
 
+#include "fast_timer.h"
+
 
 void modbus_rtu_driver__on_char_received(void) {
 }
@@ -131,10 +133,13 @@ static void application__init(void) {
     button__e__init();
     button__f__init();
 
+    fast_timer__init();
+
     modbus_rtu_driver__configure(USART0_DIVISOR(4800L));
 }
 
 static void application__start(void) {
+    fast_timer__start();
     modbus_rtu_driver__start();
 }
 
@@ -154,6 +159,9 @@ int main(void) {
     __asm__ __volatile__( "main__loop:");
     for(;;) {
         __asm__ __volatile__( "main__modbus_rtu_driver:");
+        if (fast_timer__is_runnable()) {
+            fast_timer__run();
+        }
         if (modbus_rtu_driver__is_runnable()) {
             modbus_rtu_driver__run();
         }
