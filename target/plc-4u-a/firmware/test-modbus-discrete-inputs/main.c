@@ -15,6 +15,7 @@
 
 #include <avr/interrupt.h>
 
+#include "discrete_inputs.h"
 #include "fast_timer.h"
 
 
@@ -76,7 +77,8 @@ void modbus_server__on_invalid_frame_received(void) {
  *     Buffer: retain address and function code.
  */
 modbus_exception modbus_server__read_discrete_inputs(void) {
-     __asm__ __volatile__( "modbus_server__read_discrete_inputs:");
+    __asm__ __volatile__( "modbus_server__read_discrete_inputs:");
+/*
 
     uint8_t byte0;
     LOAD_CONST8(byte0, 0);
@@ -101,8 +103,12 @@ modbus_exception modbus_server__read_discrete_inputs(void) {
     if (button__e__is_on()) byte1 |= _BV(6);
     if (button__f__is_on()) byte1 |= _BV(7);
     buffer__put_u8(byte1);
+*/
 
-     __asm__ __volatile__( "modbus_server__read_discrete_inputs__done:");
+    buffer__put_u8(discrete_inputs__byte0);
+    buffer__put_u8(discrete_inputs__byte1);
+
+    __asm__ __volatile__( "modbus_server__read_discrete_inputs__done:");
     return MODBUS_EXCEPTION__NONE;
 }
 
@@ -113,26 +119,7 @@ modbus_exception modbus_server__read_discrete_inputs(void) {
 
 
 static void application__init(void) {
-    water_leak_sensor__a__init();
-    water_leak_sensor__b__init();
-    water_leak_sensor__c__init();
-    water_leak_sensor__d__init();
-
-    valve_limit_switch__a__init();
-    valve_limit_switch__b__init();
-    valve_limit_switch__c__init();
-    valve_limit_switch__d__init();
-
-    extra_input__a__init();
-    extra_input__b__init();
-
-    button__a__init();
-    button__b__init();
-    button__c__init();
-    button__d__init();
-    button__e__init();
-    button__f__init();
-
+    discrete_inputs__init();
     fast_timer__init();
 
     modbus_rtu_driver__configure(USART0_DIVISOR(4800L));

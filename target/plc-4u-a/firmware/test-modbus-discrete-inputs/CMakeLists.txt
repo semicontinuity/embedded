@@ -33,8 +33,8 @@ set(SOURCE_FILES
         ../../../../cpu/avr/drivers/comm/modbus/modbus_server.h
         ../../../../cpu/avr/drivers/comm/modbus/modbus_server.c
 
-        discrete_inputs_debouncer.h
-        discrete_inputs_debouncer.c
+        discrete_inputs.h
+        discrete_inputs.c
         fast_timer.h
         fast_timer.c
         main.c
@@ -119,3 +119,9 @@ add_definitions(-DMODBUS_SERVER__ADDRESS=2)
 add_definitions(-DMODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS=1)
 add_definitions(-DMODBUS_SERVER__DISCRETE_INPUTS_ADDRESSES_START=0)
 add_definitions(-DMODBUS_SERVER__DISCRETE_INPUTS_COUNT=16)
+
+# Discrete inputs
+# ==============================================================================
+
+add_definitions(-Ddiscrete_inputs__byte0=GPIOR0)
+add_definitions(-Ddiscrete_inputs__byte1=GPIOR1)
