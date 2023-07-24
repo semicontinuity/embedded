@@ -128,5 +128,6 @@ add_definitions(-DMODBUS_SERVER__COIL_COUNT=4)
 # Discrete inputs
 # ==============================================================================
 
+add_definitions(-DDEBOUNCE_TIMEOUT_MS=50)
 add_definitions(-Ddiscrete_inputs__byte0=GPIOR0)
 add_definitions(-Ddiscrete_inputs__byte1=GPIOR1)

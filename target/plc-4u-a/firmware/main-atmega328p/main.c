@@ -78,36 +78,8 @@ void modbus_server__on_invalid_frame_received(void) {
  */
 modbus_exception modbus_server__read_discrete_inputs(void) {
     __asm__ __volatile__( "modbus_server__read_discrete_inputs:");
-/*
-
-    uint8_t byte0;
-    LOAD_CONST8(byte0, 0);
-    if (water_leak_sensor__a__is_on()) byte0 |= _BV(0);
-    if (water_leak_sensor__b__is_on()) byte0 |= _BV(1);
-    if (water_leak_sensor__c__is_on()) byte0 |= _BV(2);
-    if (water_leak_sensor__d__is_on()) byte0 |= _BV(3);
-    if (valve_limit_switch__a__is_on()) byte0 |= _BV(4);
-    if (valve_limit_switch__b__is_on()) byte0 |= _BV(5);
-    if (valve_limit_switch__c__is_on()) byte0 |= _BV(6);
-    if (valve_limit_switch__d__is_on()) byte0 |= _BV(7);
-    buffer__put_u8(byte0);
-
-    uint8_t byte1;
-    LOAD_CONST8(byte1, 0);
-    if (extra_input__a__is_on()) byte1 |= _BV(0);
-    if (extra_input__b__is_on()) byte1 |= _BV(1);
-    if (button__a__is_on()) byte1 |= _BV(2);
-    if (button__b__is_on()) byte1 |= _BV(3);
-    if (button__c__is_on()) byte1 |= _BV(4);
-    if (button__d__is_on()) byte1 |= _BV(5);
-    if (button__e__is_on()) byte1 |= _BV(6);
-    if (button__f__is_on()) byte1 |= _BV(7);
-    buffer__put_u8(byte1);
-*/
-
     buffer__put_u8(discrete_inputs__byte0);
     buffer__put_u8(discrete_inputs__byte1);
-
     __asm__ __volatile__( "modbus_server__read_discrete_inputs__done:");
     return MODBUS_EXCEPTION__NONE;
 }
@@ -166,7 +138,7 @@ int main(void) {
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
     __asm__ __volatile__( "main__loop:");
-    for(;;) {
+    for (;;) {
         __asm__ __volatile__( "main__modbus_rtu_driver:");
         if (fast_timer__is_runnable()) {
             fast_timer__run();

@@ -270,7 +270,7 @@ def read_coils(proxy_port: int, device_address: int, address: int, count: int, a
     address: coil address (0-based)
     returns process exit code
     """
-    return read_bit_data(proxy_port, device_address, coil_address, coil_count, MF_READ_COILS, ans)
+    return read_bit_data(proxy_port, device_address, address, count, MF_READ_COILS, ans)
 
 
 def read_discrete_inputs(proxy_port: int, device_address: int, address: int, count: int, ans: List[int]):

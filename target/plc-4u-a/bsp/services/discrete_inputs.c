@@ -9,6 +9,10 @@
 #include "cpu/avr/asm.h"
 
 
+#ifndef DEBOUNCE_TIMEOUT_MS
+#define DEBOUNCE_TIMEOUT_MS (50)
+#endif
+
 #ifndef discrete_inputs__byte0
 uint8_t discrete_inputs__byte0;
 #endif
@@ -17,7 +21,7 @@ uint8_t discrete_inputs__byte0;
 uint8_t discrete_inputs__byte1;
 #endif
 
-//int8_t discrete_inputs_debouncer__timeouts[16];
+int8_t discrete_inputs_debouncer__timeouts[16];
 
 
 void discrete_inputs__init(void) {
@@ -44,31 +48,269 @@ void discrete_inputs__init(void) {
 
 
 void discrete_inputs__debouncer__run(void) {
-//    int8_t *p_timeout = discrete_inputs_debouncer__timeouts;
+    int8_t *timeouts = discrete_inputs_debouncer__timeouts;
+    FIX_POINTER(timeouts);
+    int8_t timeout;
+    uint8_t bounced;
+    uint8_t debounced;
+    uint8_t changed;
 
-//    int8_t timeout;
+    __asm__ __volatile__("discrete_inputs__debouncer__run__byte_0:");
+    LOAD_CONST8(bounced, 0);
+    if (water_leak_sensor__a__is_on()) bounced |= _BV(0);
+    if (water_leak_sensor__b__is_on()) bounced |= _BV(1);
+    if (water_leak_sensor__c__is_on()) bounced |= _BV(2);
+    if (water_leak_sensor__d__is_on()) bounced |= _BV(3);
+    if (valve_limit_switch__a__is_on()) bounced |= _BV(4);
+    if (valve_limit_switch__b__is_on()) bounced |= _BV(5);
+    if (valve_limit_switch__c__is_on()) bounced |= _BV(6);
+    if (valve_limit_switch__d__is_on()) bounced |= _BV(7);
+    debounced = discrete_inputs__byte0;
+    changed = bounced ^ debounced;
 
-    uint8_t byte0;
-    LOAD_CONST8(byte0, 0);
-    if (water_leak_sensor__a__is_on()) byte0 |= _BV(0);
-    if (water_leak_sensor__b__is_on()) byte0 |= _BV(1);
-    if (water_leak_sensor__c__is_on()) byte0 |= _BV(2);
-    if (water_leak_sensor__d__is_on()) byte0 |= _BV(3);
-    if (valve_limit_switch__a__is_on()) byte0 |= _BV(4);
-    if (valve_limit_switch__b__is_on()) byte0 |= _BV(5);
-    if (valve_limit_switch__c__is_on()) byte0 |= _BV(6);
-    if (valve_limit_switch__d__is_on()) byte0 |= _BV(7);
-    discrete_inputs__byte0 = byte0;
 
-    uint8_t byte1;
-    LOAD_CONST8(byte1, 0);
-    if (extra_input__a__is_on()) byte1 |= _BV(0);
-    if (extra_input__b__is_on()) byte1 |= _BV(1);
-    if (button__a__is_on()) byte1 |= _BV(2);
-    if (button__b__is_on()) byte1 |= _BV(3);
-    if (button__c__is_on()) byte1 |= _BV(4);
-    if (button__d__is_on()) byte1 |= _BV(5);
-    if (button__e__is_on()) byte1 |= _BV(6);
-    if (button__f__is_on()) byte1 |= _BV(7);
-    discrete_inputs__byte1 = byte1;
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_0_0:");
+    timeout = timeouts[0x00];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 0, debounced, 0);
+        }
+        timeouts[0x00] = timeout;
+    } else {
+        if (changed & _BV(0)) {
+            timeouts[0x00] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_0_1:");
+    timeout = timeouts[0x01];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 1, debounced, 1);
+        }
+        timeouts[0x01] = timeout;
+    } else {
+        if (changed & _BV(1)) {
+            timeouts[0x01] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_0_2:");
+    timeout = timeouts[0x02];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 2, debounced, 2);
+        }
+        timeouts[0x02] = timeout;
+    } else {
+        if (changed & _BV(2)) {
+            timeouts[0x02] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_0_3:");
+    timeout = timeouts[0x03];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 3, debounced, 3);
+        }
+        timeouts[0x03] = timeout;
+    } else {
+        if (changed & _BV(3)) {
+            timeouts[0x03] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_0_4:");
+    timeout = timeouts[0x04];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 4, debounced, 4);
+        }
+        timeouts[0x04] = timeout;
+    } else {
+        if (changed & _BV(4)) {
+            timeouts[0x04] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_0_5:");
+    timeout = timeouts[0x05];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 5, debounced, 5);
+        }
+        timeouts[0x05] = timeout;
+    } else {
+        if (changed & _BV(5)) {
+            timeouts[0x05] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_0_6:");
+    timeout = timeouts[0x06];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 6, debounced, 6);
+        }
+        timeouts[0x06] = timeout;
+    } else {
+        if (changed & _BV(6)) {
+            timeouts[0x06] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_0_7:");
+    timeout = timeouts[0x07];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 7, debounced, 7);
+        }
+        timeouts[0x07] = timeout;
+    } else {
+        if (changed & _BV(7)) {
+            timeouts[0x07] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__byte_0__done:");
+    discrete_inputs__byte0 = debounced;
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__byte_1:");
+    LOAD_CONST8(bounced, 0);
+    if (extra_input__a__is_on()) bounced |= _BV(0);
+    if (extra_input__b__is_on()) bounced |= _BV(1);
+    if (button__a__is_on()) bounced |= _BV(2);
+    if (button__b__is_on()) bounced |= _BV(3);
+    if (button__c__is_on()) bounced |= _BV(4);
+    if (button__d__is_on()) bounced |= _BV(5);
+    if (button__e__is_on()) bounced |= _BV(6);
+    if (button__f__is_on()) bounced |= _BV(7);
+    debounced = discrete_inputs__byte0;
+    changed = bounced ^ debounced;
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_1_0:");
+    timeout = timeouts[0x08];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 0, debounced, 0);
+        }
+        timeouts[0x08] = timeout;
+    } else {
+        if (changed & _BV(0)) {
+            timeouts[0x08] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_1_1:");
+    timeout = timeouts[0x09];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 1, debounced, 1);
+        }
+        timeouts[0x09] = timeout;
+    } else {
+        if (changed & _BV(1)) {
+            timeouts[0x09] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_1_2:");
+    timeout = timeouts[0x0A];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 2, debounced, 2);
+        }
+        timeouts[0x0A] = timeout;
+    } else {
+        if (changed & _BV(2)) {
+            timeouts[0x0A] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_1_3:");
+    timeout = timeouts[0x0B];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 3, debounced, 3);
+        }
+        timeouts[0x0B] = timeout;
+    } else {
+        if (changed & _BV(3)) {
+            timeouts[0x0B] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_1_4:");
+    timeout = timeouts[0x0C];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 4, debounced, 4);
+        }
+        timeouts[0x0C] = timeout;
+    } else {
+        if (changed & _BV(4)) {
+            timeouts[0x0C] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_1_5:");
+    timeout = timeouts[0x0D];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 5, debounced, 5);
+        }
+        timeouts[0x0D] = timeout;
+    } else {
+        if (changed & _BV(5)) {
+            timeouts[0x0D] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_1_6:");
+    timeout = timeouts[0x0E];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 6, debounced, 6);
+        }
+        timeouts[0x0E] = timeout;
+    } else {
+        if (changed & _BV(6)) {
+            timeouts[0x0E] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__bit_1_7:");
+    timeout = timeouts[0x0F];
+    if (--timeout >= 0) {
+        if (timeout == 0) {
+            COPY_BIT(bounced, 7, debounced, 7);
+        }
+        timeouts[0x0F] = timeout;
+    } else {
+        if (changed & _BV(7)) {
+            timeouts[0x0F] = DEBOUNCE_TIMEOUT_MS;
+        }
+    }
+
+
+    __asm__ __volatile__("discrete_inputs__debouncer__run__byte_1__done:");
+    discrete_inputs__byte1 = debounced;
 }

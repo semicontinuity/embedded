@@ -185,6 +185,7 @@ void modbus_rtu_driver__stop(void) {
 
 
 void modbus_rtu_driver__handle_received_frame(void) {
+    __asm__ __volatile__("modbus_rtu_driver__handle_received_frame:");
     modbus_rtu_driver__on_frame_processing();
     modbus_rtu_driver__FRAME_RECEIVED_to_FRAME_PROCESSING();
     if (modbus_rtu_driver__on_frame_received()) {
