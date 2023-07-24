@@ -116,9 +116,14 @@ add_definitions(-DMODBUS_RTU_DRIVER__DELAY_TIMER__T35_VALUE=\(\(F_CPU/USART0__BA
 # ==============================================================================
 
 add_definitions(-DMODBUS_SERVER__ADDRESS=2)
+
 add_definitions(-DMODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS=1)
 add_definitions(-DMODBUS_SERVER__DISCRETE_INPUTS_ADDRESSES_START=0)
 add_definitions(-DMODBUS_SERVER__DISCRETE_INPUTS_COUNT=16)
+
+add_definitions(-DMODBUS_SERVER__HANDLE_READ_COILS=1)
+add_definitions(-DMODBUS_SERVER__COIL_ADDRESSES_START=0)
+add_definitions(-DMODBUS_SERVER__COIL_COUNT=4)
 
 # Discrete inputs
 # ==============================================================================

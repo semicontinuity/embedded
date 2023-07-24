@@ -18,3 +18,12 @@ discrete_inputs:
   - alias: BUTTON__D
   - alias: BUTTON__E
   - alias: BUTTON__F
+
+coils:
+-
+  address: 0
+  contents:
+  - alias: COIL_0
+  - alias: COIL_1
+  - alias: COIL_2
+  - alias: COIL_3

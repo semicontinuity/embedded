@@ -113,6 +113,28 @@ modbus_exception modbus_server__read_discrete_inputs(void) {
 }
 
 
+/**
+ * Process READ COILS request.
+ * Reads all coils at once!
+ * Buffer write pointer: after BYTE COUNT field (already written), ready to write bytes with coil bits.
+ * Write exactly MODBUS_SERVER__COIL_COUNT bits to the buffer.
+ * Returns:
+ *   Code: modbus_exception
+ *   If OK:
+ *     Buffer: populated with response bytes except CRC; buffer write position: after payload bytes.
+ *       Payload: [BYTE_COUNT_TO_FOLLOW][BYTES...]
+ *   Else:
+ *     Buffer: retain address and function code.
+ */
+modbus_exception modbus_server__read_coils(void) {
+    __asm__ __volatile__( "modbus_server__read_coils:");
+    uint8_t byte0 = 0;
+    __asm__ __volatile__( "modbus_server__read_coils_1:");
+    buffer__put_u8(byte0);
+    return MODBUS_EXCEPTION__NONE;
+}
+
+
 // =============================================================================
 // Application
 // =============================================================================
