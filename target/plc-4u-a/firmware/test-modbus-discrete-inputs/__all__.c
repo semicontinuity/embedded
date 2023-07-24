@@ -9,6 +9,6 @@
 #include "cpu/avr/drivers/comm/modbus/modbus_server.c"
 #include "cpu/avr/timer0.c"
 
-#include "discrete_inputs.c"
-#include "fast_timer.c"
+#include "services/discrete_inputs.c"
+#include "drivers/fast_timer.c"
 #include "main.c"

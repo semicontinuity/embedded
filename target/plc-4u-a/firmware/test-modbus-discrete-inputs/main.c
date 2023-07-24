@@ -15,8 +15,8 @@
 
 #include <avr/interrupt.h>
 
-#include "discrete_inputs.h"
-#include "fast_timer.h"
+#include "services/discrete_inputs.h"
+#include "drivers/fast_timer.h"
 
 
 void modbus_rtu_driver__on_char_received(void) {

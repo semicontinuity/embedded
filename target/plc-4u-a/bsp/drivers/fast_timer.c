@@ -1,6 +1,6 @@
 #include <stdbool.h>
-#include "fast_timer.h"
-#include "discrete_inputs.h"
+#include "drivers/fast_timer.h"
+#include "services/discrete_inputs.h"
 #include "cpu/avr/timer0.h"
 
 

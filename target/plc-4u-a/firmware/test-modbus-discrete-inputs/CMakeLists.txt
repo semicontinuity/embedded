@@ -33,10 +33,10 @@ set(SOURCE_FILES
         ../../../../cpu/avr/drivers/comm/modbus/modbus_server.h
         ../../../../cpu/avr/drivers/comm/modbus/modbus_server.c
 
-        discrete_inputs.h
-        discrete_inputs.c
-        fast_timer.h
-        fast_timer.c
+        ../../bsp/services/discrete_inputs.h
+        ../../bsp/services/discrete_inputs.c
+        ../../bsp/drivers/fast_timer.h
+        ../../bsp/drivers/fast_timer.c
         main.c
         __all__.c
 )

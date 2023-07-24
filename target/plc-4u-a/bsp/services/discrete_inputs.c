@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "discrete_inputs.h"
+#include "services/discrete_inputs.h"
 
 #include "drivers/in/buttons.h"
 #include "drivers/in/extra_inputs.h"
