@@ -1,0 +1,20 @@
+discrete_inputs:
+-
+  address: 0
+  contents:
+  - alias: WATER_LEAK_SENSOR__A
+  - alias: WATER_LEAK_SENSOR__B
+  - alias: WATER_LEAK_SENSOR__C
+  - alias: WATER_LEAK_SENSOR__D
+  - alias: VALVE_LIMIT_SWITCH__A
+  - alias: VALVE_LIMIT_SWITCH__B
+  - alias: VALVE_LIMIT_SWITCH__C
+  - alias: VALVE_LIMIT_SWITCH__D
+  - alias: EXTRA_INPUT__A
+  - alias: EXTRA_INPUT__B
+  - alias: BUTTON__A
+  - alias: BUTTON__B
+  - alias: BUTTON__C
+  - alias: BUTTON__D
+  - alias: BUTTON__E
+  - alias: BUTTON__F
