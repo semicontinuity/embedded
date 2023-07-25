@@ -21,7 +21,7 @@ uint8_t discrete_inputs__byte0;
 uint8_t discrete_inputs__byte1;
 #endif
 
-int8_t discrete_inputs_debouncer__timeouts[16];
+int8_t discrete_inputs_debouncer__timeouts[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
 void discrete_inputs__init(void) {
@@ -195,7 +195,7 @@ void discrete_inputs__debouncer__run(void) {
     if (button__d__is_on()) bounced |= _BV(5);
     if (button__e__is_on()) bounced |= _BV(6);
     if (button__f__is_on()) bounced |= _BV(7);
-    debounced = discrete_inputs__byte0;
+    debounced = discrete_inputs__byte1;
     changed = bounced ^ debounced;
 
 
