@@ -1,6 +1,5 @@
 #include <stdbool.h>
 #include "drivers/fast_timer.h"
-#include "services/discrete_inputs.h"
 #include "cpu/avr/timer0.h"
 
 
@@ -24,5 +23,6 @@ bool fast_timer__is_runnable(void) {
 }
 
 void fast_timer__run(void) {
-    discrete_inputs__debouncer__run();
+    timer0__compare_a__interrupt__pending__clear();
+    fast_timer__do_run();
 }

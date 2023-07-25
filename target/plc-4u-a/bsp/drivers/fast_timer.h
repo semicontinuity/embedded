@@ -10,5 +10,10 @@ bool fast_timer__is_runnable(void);
 
 void fast_timer__run(void);
 
+/**
+ * Implement
+ */
+void fast_timer__do_run(void);
+
 
 #endif

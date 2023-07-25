@@ -10,6 +10,11 @@ static inline void led_alarm__init(void) {
 }
 
 
+static inline void led_alarm__toggle(void) {
+    TOGGLE(LED_ALARM);
+}
+
+
 static inline void led_alarm__on(void) {
     OUT_1(LED_ALARM);
 }
