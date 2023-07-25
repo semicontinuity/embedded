@@ -47,6 +47,14 @@ void discrete_inputs__init(void) {
 }
 
 
+/**
+ * Implementation notes:
+ * - Unrolled code for speed and easy lookup in *.lss listing.
+ * - Using FIX_POINTER(timeouts) + direct index addressing; efficient, because uses LDD+STD instructions (offsets up to 64 bytes).
+ * - Checkeng for changed bit is hard, easier to compute 8 changed bits with XOR.
+ * - Could place COPY_BIT under if (changed), but not doing it: COPY_BIT is just 2 instructions,
+ *   adding "if" would just add overhead without any gains.
+ */
 void discrete_inputs__debouncer__run(void) {
     int8_t *timeouts = discrete_inputs_debouncer__timeouts;
     FIX_POINTER(timeouts);
@@ -74,6 +82,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 0, debounced, 0);
+#ifdef discrete_inputs__on_input_0_changed
+            if (changed & _BV(0)) {
+                discrete_inputs__on_input_0_changed();
+            }
+#endif
         }
         timeouts[0x00] = timeout;
     } else {
@@ -88,6 +101,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 1, debounced, 1);
+#ifdef discrete_inputs__on_input_1_changed
+            if (changed & _BV(1)) {
+                discrete_inputs__on_input_1_changed();
+            }
+#endif
         }
         timeouts[0x01] = timeout;
     } else {
@@ -102,6 +120,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 2, debounced, 2);
+#ifdef discrete_inputs__on_input_2_changed
+            if (changed & _BV(2)) {
+                discrete_inputs__on_input_2_changed();
+            }
+#endif
         }
         timeouts[0x02] = timeout;
     } else {
@@ -116,6 +139,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 3, debounced, 3);
+#ifdef discrete_inputs__on_input_3_changed
+            if (changed & _BV(3)) {
+                discrete_inputs__on_input_3_changed();
+            }
+#endif
         }
         timeouts[0x03] = timeout;
     } else {
@@ -130,6 +158,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 4, debounced, 4);
+#ifdef discrete_inputs__on_input_4_changed
+            if (changed & _BV(4)) {
+                discrete_inputs__on_input_4_changed();
+            }
+#endif
         }
         timeouts[0x04] = timeout;
     } else {
@@ -144,6 +177,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 5, debounced, 5);
+#ifdef discrete_inputs__on_input_5_changed
+            if (changed & _BV(5)) {
+                discrete_inputs__on_input_5_changed();
+            }
+#endif
         }
         timeouts[0x05] = timeout;
     } else {
@@ -158,6 +196,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 6, debounced, 6);
+#ifdef discrete_inputs__on_input_6_changed
+            if (changed & _BV(6)) {
+                discrete_inputs__on_input_6_changed();
+            }
+#endif
         }
         timeouts[0x06] = timeout;
     } else {
@@ -172,6 +215,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 7, debounced, 7);
+#ifdef discrete_inputs__on_input_7_changed
+            if (changed & _BV(7)) {
+                discrete_inputs__on_input_7_changed();
+            }
+#endif
         }
         timeouts[0x07] = timeout;
     } else {
@@ -204,6 +252,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 0, debounced, 0);
+#ifdef discrete_inputs__on_input_8_changed
+            if (changed & _BV(0)) {
+                discrete_inputs__on_input_8_changed();
+            }
+#endif
         }
         timeouts[0x08] = timeout;
     } else {
@@ -218,6 +271,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 1, debounced, 1);
+#ifdef discrete_inputs__on_input_9_changed
+            if (changed & _BV(1)) {
+                discrete_inputs__on_input_9_changed();
+            }
+#endif
         }
         timeouts[0x09] = timeout;
     } else {
@@ -232,6 +290,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 2, debounced, 2);
+#ifdef discrete_inputs__on_input_a_changed
+            if (changed & _BV(2)) {
+                discrete_inputs__on_input_a_changed();
+            }
+#endif
         }
         timeouts[0x0A] = timeout;
     } else {
@@ -246,6 +309,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 3, debounced, 3);
+#ifdef discrete_inputs__on_input_b_changed
+            if (changed & _BV(3)) {
+                discrete_inputs__on_input_b_changed();
+            }
+#endif
         }
         timeouts[0x0B] = timeout;
     } else {
@@ -260,6 +328,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 4, debounced, 4);
+#ifdef discrete_inputs__on_input_c_changed
+            if (changed & _BV(4)) {
+                discrete_inputs__on_input_c_changed();
+            }
+#endif
         }
         timeouts[0x0C] = timeout;
     } else {
@@ -274,6 +347,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 5, debounced, 5);
+#ifdef discrete_inputs__on_input_d_changed
+            if (changed & _BV(5)) {
+                discrete_inputs__on_input_d_changed();
+            }
+#endif
         }
         timeouts[0x0D] = timeout;
     } else {
@@ -288,6 +366,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 6, debounced, 6);
+#ifdef discrete_inputs__on_input_e_changed
+            if (changed & _BV(6)) {
+                discrete_inputs__on_input_e_changed();
+            }
+#endif
         }
         timeouts[0x0E] = timeout;
     } else {
@@ -302,6 +385,11 @@ void discrete_inputs__debouncer__run(void) {
     if (--timeout >= 0) {
         if (timeout == 0) {
             COPY_BIT(bounced, 7, debounced, 7);
+#ifdef discrete_inputs__on_input_f_changed
+            if (changed & _BV(7)) {
+                discrete_inputs__on_input_f_changed();
+            }
+#endif
         }
         timeouts[0x0F] = timeout;
     } else {

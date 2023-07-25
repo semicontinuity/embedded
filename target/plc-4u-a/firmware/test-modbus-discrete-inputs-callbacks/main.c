@@ -1,5 +1,6 @@
 // =============================================================================
 // Test MODBUS READ DISCRETE INPUTS function.
+// Test DISCRETE INPUT debouncer callbacks.
 // =============================================================================
 
 #include "drivers/in/buttons.h"
@@ -120,9 +121,13 @@ void fast_timer__do_run(void) {
 // Callbacks
 // =============================================================================
 
-//void discrete_inputs__on_button_f_changed(void) {
-//    led_alarm__on();
-//}
+void discrete_inputs__on_button_e_changed(void) {
+    led_alarm__on();
+}
+
+void discrete_inputs__on_button_f_changed(void) {
+    led_alarm__off();
+}
 
 // =============================================================================
 // Application
