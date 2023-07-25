@@ -10,6 +10,7 @@ discrete_inputs:
   - alias: VALVE_LIMIT_SWITCH__B
   - alias: VALVE_LIMIT_SWITCH__C
   - alias: VALVE_LIMIT_SWITCH__D
+
   - alias: EXTRA_INPUT__A
   - alias: EXTRA_INPUT__B
   - alias: BUTTON__A
@@ -23,7 +24,20 @@ coils:
 -
   address: 0
   contents:
-  - alias: COIL_0
-  - alias: COIL_1
-  - alias: COIL_2
-  - alias: COIL_3
+  - alias: VALVE_CONTROL__A__PWR
+  - alias: VALVE_CONTROL__A__DIR
+  - alias: VALVE_CONTROL__B__PWR
+  - alias: VALVE_CONTROL__B__DIR
+  - alias: RESERVED__A
+  - alias: RESERVED__B
+  - alias: RESERVED__C
+  - alias: RESERVED__D
+
+  - alias: EXTRA_OUTPUT__A
+  - alias: EXTRA_OUTPUT__B
+  - alias: BUTTON_LED__A
+  - alias: BUTTON_LED__B
+  - alias: BUTTON_LED__C
+  - alias: BUTTON_LED__D
+  - alias: BUTTON_LED__E
+  - alias: BUTTON_LED__F
