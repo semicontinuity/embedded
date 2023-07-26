@@ -35,6 +35,7 @@ set(SOURCE_FILES
 
         ../../bsp/services/discrete_inputs.h
         ../../bsp/services/discrete_inputs.c
+        ../../bsp/drivers/out/discrete_outputs.h
         ../../bsp/drivers/fast_timer.h
         ../../bsp/drivers/fast_timer.c
         main.c
@@ -89,6 +90,11 @@ add_definitions(-DBUTTON_LED__E__PORT=B)
 add_definitions(-DBUTTON_LED__E__PIN=4)
 add_definitions(-DBUTTON_LED__F__PORT=B)
 add_definitions(-DBUTTON_LED__F__PIN=5)
+
+# Discrete outputs aliases
+# ==============================================================================
+add_definitions(-Dbutton_led__alarm__set=discrete_output__f__set)
+
 
 # Discrete inputs
 # ==============================================================================

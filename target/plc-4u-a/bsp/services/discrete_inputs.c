@@ -64,15 +64,15 @@ void discrete_inputs__debouncer__run(void) {
     uint8_t changed;
 
     __asm__ __volatile__("discrete_inputs__debouncer__run__byte_0:");
-    LOAD_CONST8(bounced, 0);
-    if (water_leak_sensor__a__get()) bounced |= _BV(0);
-    if (water_leak_sensor__b__get()) bounced |= _BV(1);
-    if (water_leak_sensor__c__get()) bounced |= _BV(2);
-    if (water_leak_sensor__d__get()) bounced |= _BV(3);
-    if (valve_limit_switch__a__get()) bounced |= _BV(4);
-    if (valve_limit_switch__b__get()) bounced |= _BV(5);
-    if (valve_limit_switch__c__get()) bounced |= _BV(6);
-    if (valve_limit_switch__d__get()) bounced |= _BV(7);
+    LOAD_CONST8(bounced, 0xFF);
+    if (water_leak_sensor__a__get()) bounced &= ~_BV(0);
+    if (water_leak_sensor__b__get()) bounced &= ~_BV(1);
+    if (water_leak_sensor__c__get()) bounced &= ~_BV(2);
+    if (water_leak_sensor__d__get()) bounced &= ~_BV(3);
+    if (valve_limit_switch__a__get()) bounced &= ~_BV(4);
+    if (valve_limit_switch__b__get()) bounced &= ~_BV(5);
+    if (valve_limit_switch__c__get()) bounced &= ~_BV(6);
+    if (valve_limit_switch__d__get()) bounced &= ~_BV(7);
     debounced = discrete_inputs__byte0;
     changed = bounced ^ debounced;
 
@@ -234,15 +234,15 @@ void discrete_inputs__debouncer__run(void) {
 
 
     __asm__ __volatile__("discrete_inputs__debouncer__run__byte_1:");
-    LOAD_CONST8(bounced, 0);
-    if (extra_input__a__get()) bounced |= _BV(0);
-    if (extra_input__b__get()) bounced |= _BV(1);
-    if (button__a__get()) bounced |= _BV(2);
-    if (button__b__get()) bounced |= _BV(3);
-    if (button__c__get()) bounced |= _BV(4);
-    if (button__d__get()) bounced |= _BV(5);
-    if (button__e__get()) bounced |= _BV(6);
-    if (button__f__get()) bounced |= _BV(7);
+    LOAD_CONST8(bounced, 0xFF);
+    if (extra_input__a__get()) bounced &= ~_BV(0);
+    if (extra_input__b__get()) bounced &= ~_BV(1);
+    if (button__a__get()) bounced &= ~_BV(2);
+    if (button__b__get()) bounced &= ~_BV(3);
+    if (button__c__get()) bounced &= ~_BV(4);
+    if (button__d__get()) bounced &= ~_BV(5);
+    if (button__e__get()) bounced &= ~_BV(6);
+    if (button__f__get()) bounced &= ~_BV(7);
     debounced = discrete_inputs__byte1;
     changed = bounced ^ debounced;
 

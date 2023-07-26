@@ -8,8 +8,6 @@
 #include "drivers/in/valve_limit_switches.h"
 #include "drivers/in/water_leak_sensors.h"
 
-#include "drivers/out/led_alarm.h"
-
 #include "cpu/avr/asm.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/drivers/comm/modbus/buffer.h"
@@ -19,6 +17,7 @@
 #include <avr/interrupt.h>
 
 #include "services/discrete_inputs.h"
+#include "drivers/out/discrete_outputs.h"
 #include "drivers/fast_timer.h"
 
 
@@ -122,11 +121,11 @@ void fast_timer__do_run(void) {
 // =============================================================================
 
 void discrete_inputs__on_button_e_changed(void) {
-    led_alarm__on();
+    button_led__alarm__set(true);
 }
 
 void discrete_inputs__on_button_f_changed(void) {
-    led_alarm__off();
+    button_led__alarm__set(false);
 }
 
 // =============================================================================
@@ -135,7 +134,7 @@ void discrete_inputs__on_button_f_changed(void) {
 
 
 static void application__init(void) {
-    led_alarm__init();
+    discrete_outputs__init();
 
     discrete_inputs__init();
     fast_timer__init();
