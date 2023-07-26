@@ -116,6 +116,9 @@ modbus_exception modbus_server__read_coils(void) {
 
 void fast_timer__do_run(void) {
     discrete_inputs__run();
+
+    discrete_output__f__set(discrete_inputs__f__get());
+
     discrete_outputs__run();
 }
 

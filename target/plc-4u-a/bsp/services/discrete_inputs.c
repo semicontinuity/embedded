@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "services/discrete_inputs.h"
+#include "drivers/in/digital_inputs.h"
 
 #include "drivers/in/buttons.h"
 #include "drivers/in/extra_inputs.h"
@@ -22,6 +23,11 @@ uint8_t discrete_inputs__byte1;
 #endif
 
 int8_t discrete_inputs_debouncer__timeouts[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+
+bool discrete_inputs__f__get(void) {
+    return discrete_inputs__byte1 & _BV(7);
+}
 
 
 /**
