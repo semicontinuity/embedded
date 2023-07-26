@@ -12,9 +12,8 @@ extern uint8_t discrete_inputs__byte0;
 extern uint8_t discrete_inputs__byte1;
 #endif
 
-void discrete_inputs__init(void);
 
-void discrete_inputs__debouncer__run(void);
+void discrete_inputs__run(void);
 
 #ifdef discrete_inputs__on_input_0_changed
 void discrete_inputs__on_input_0_changed(void);

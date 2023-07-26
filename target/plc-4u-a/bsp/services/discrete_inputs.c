@@ -24,29 +24,6 @@ uint8_t discrete_inputs__byte1;
 int8_t discrete_inputs_debouncer__timeouts[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
-void discrete_inputs__init(void) {
-    water_leak_sensor__a__init();
-    water_leak_sensor__b__init();
-    water_leak_sensor__c__init();
-    water_leak_sensor__d__init();
-
-    valve_limit_switch__a__init();
-    valve_limit_switch__b__init();
-    valve_limit_switch__c__init();
-    valve_limit_switch__d__init();
-
-    extra_input__a__init();
-    extra_input__b__init();
-
-    button__a__init();
-    button__b__init();
-    button__c__init();
-    button__d__init();
-    button__e__init();
-    button__f__init();
-}
-
-
 /**
  * Implementation notes:
  * - Unrolled code for speed and easy lookup in *.lss listing.
@@ -55,7 +32,7 @@ void discrete_inputs__init(void) {
  * - Could place COPY_BIT under if (changed), but not doing it: COPY_BIT is just 2 instructions,
  *   adding "if" would just add overhead without any gains.
  */
-void discrete_inputs__debouncer__run(void) {
+void discrete_inputs__run(void) {
     int8_t *timeouts = discrete_inputs_debouncer__timeouts;
     FIX_POINTER(timeouts);
     int8_t timeout;

@@ -19,3 +19,25 @@ discrete_inputs:
   - alias: BUTTON__D
   - alias: BUTTON__E
   - alias: BUTTON__F
+
+coils:
+-
+  address: 0
+  contents:
+  - alias: VALVE_CONTROL__A__PWR
+  - alias: VALVE_CONTROL__A__DIR
+  - alias: VALVE_CONTROL__B__PWR
+  - alias: VALVE_CONTROL__B__DIR
+  - alias: RESERVED__A
+  - alias: RESERVED__B
+  - alias: RESERVED__C
+  - alias: RESERVED__D
+
+  - alias: EXTRA_OUTPUT__A
+  - alias: EXTRA_OUTPUT__B
+  - alias: BUTTON_LED__A
+  - alias: BUTTON_LED__B
+  - alias: BUTTON_LED__C
+  - alias: BUTTON_LED__D
+  - alias: BUTTON_LED__E
+  - alias: BUTTON_LED__F

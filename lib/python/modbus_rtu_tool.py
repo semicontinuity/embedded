@@ -235,8 +235,14 @@ def read_bit_data(proxy_port: int, device_address: int, address: int, count: int
     data[7] = crc >> 8
 
     result = exchange(data)
+    expected_response_length = 5 + ((count + 7) // 8)
 
+    if len(result) != expected_response_length:
+        print(f"Unexpected length of response: for {count} bits, expected response size is {expected_response_length}", file=sys.stderr)
+        sys.stderr.write(repr(result))
+        return EXIT_CODE_FAILURE
     if result[0] != data[0]:
+        print("Answer from another device", file=sys.stderr)
         sys.stderr.write(repr(result))
         return EXIT_CODE_FAILURE
     if result[1] == 0x80 | data[1]:
@@ -250,9 +256,7 @@ def read_bit_data(proxy_port: int, device_address: int, address: int, count: int
         sys.stderr.write(repr(result))
         return EXIT_CODE_FAILURE
     if result[1] != data[1]:
-        sys.stderr.write(repr(result))
-        return EXIT_CODE_FAILURE
-    if len(result) != 5 + ((count + 7) // 8):
+        print("Unexpected value in 'function' field", file=sys.stderr)
         sys.stderr.write(repr(result))
         return EXIT_CODE_FAILURE
 
