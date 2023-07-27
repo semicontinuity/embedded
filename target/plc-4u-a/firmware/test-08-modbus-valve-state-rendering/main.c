@@ -1,6 +1,6 @@
 // =============================================================================
-// Test MODBUS READ DISCRETE INPUTS function.
-// Test DISCRETE INPUT debouncer callbacks.
+// Test valve state rendering.
+// Discrete input F state is copied to discrete output F.
 // =============================================================================
 
 #include "drivers/in/buttons.h"
@@ -21,6 +21,7 @@
 #include "services/discrete_outputs.h"
 #include "drivers/out/digital_outputs.h"
 #include "drivers/fast_timer.h"
+#include "valve_controller.h"
 
 
 void modbus_rtu_driver__on_char_received(void) {
@@ -116,22 +117,8 @@ modbus_exception modbus_server__read_coils(void) {
 
 void fast_timer__do_run(void) {
     discrete_inputs__run();
-
-    discrete_output__f__set(discrete_inputs__f__get());
-
+    valve_controller__run();
     discrete_outputs__run();
-}
-
-// =============================================================================
-// Callbacks
-// =============================================================================
-
-void discrete_inputs__on_button_e_changed(void) {
-    button_led__alarm__set(true);
-}
-
-void discrete_inputs__on_button_f_changed(void) {
-    button_led__alarm__set(false);
 }
 
 // =============================================================================

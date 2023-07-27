@@ -194,8 +194,6 @@ add_definitions(-DDEBOUNCE_TIMEOUT_MS=50)
 add_definitions(-Ddiscrete_inputs__byte0=GPIOR0)
 add_definitions(-Ddiscrete_inputs__byte1=GPIOR1)
 
-add_definitions(-Ddiscrete_inputs__on_input_f_changed=discrete_inputs__on_button_f_changed)
-
 # Discrete outputs
 # ==============================================================================
 add_definitions(-Ddiscrete_outputs__byte0=OCR0B)

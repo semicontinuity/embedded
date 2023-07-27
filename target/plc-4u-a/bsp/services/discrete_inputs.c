@@ -25,6 +25,66 @@ uint8_t discrete_inputs__byte1;
 int8_t discrete_inputs_debouncer__timeouts[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
+bool discrete_inputs__0__get(void) {
+    return discrete_inputs__byte0 & _BV(0);
+}
+
+bool discrete_inputs__1__get(void) {
+    return discrete_inputs__byte0 & _BV(1);
+}
+
+bool discrete_inputs__2__get(void) {
+    return discrete_inputs__byte0 & _BV(2);
+}
+
+bool discrete_inputs__3__get(void) {
+    return discrete_inputs__byte0 & _BV(3);
+}
+
+bool discrete_inputs__4__get(void) {
+    return discrete_inputs__byte0 & _BV(4);
+}
+
+bool discrete_inputs__5__get(void) {
+    return discrete_inputs__byte0 & _BV(5);
+}
+
+bool discrete_inputs__6__get(void) {
+    return discrete_inputs__byte0 & _BV(6);
+}
+
+bool discrete_inputs__7__get(void) {
+    return discrete_inputs__byte0 & _BV(7);
+}
+
+bool discrete_inputs__8__get(void) {
+    return discrete_inputs__byte1 & _BV(0);
+}
+
+bool discrete_inputs__9__get(void) {
+    return discrete_inputs__byte1 & _BV(1);
+}
+
+bool discrete_inputs__a__get(void) {
+    return discrete_inputs__byte1 & _BV(2);
+}
+
+bool discrete_inputs__b__get(void) {
+    return discrete_inputs__byte1 & _BV(3);
+}
+
+bool discrete_inputs__c__get(void) {
+    return discrete_inputs__byte1 & _BV(4);
+}
+
+bool discrete_inputs__d__get(void) {
+    return discrete_inputs__byte1 & _BV(5);
+}
+
+bool discrete_inputs__e__get(void) {
+    return discrete_inputs__byte1 & _BV(6);
+}
+
 bool discrete_inputs__f__get(void) {
     return discrete_inputs__byte1 & _BV(7);
 }

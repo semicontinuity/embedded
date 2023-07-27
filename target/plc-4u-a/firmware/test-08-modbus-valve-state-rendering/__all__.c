@@ -13,4 +13,5 @@
 #include "drivers/in/digital_inputs.c"
 #include "services/discrete_inputs.c"
 #include "services/discrete_outputs.c"
+#include "valve_controller.c"
 #include "main.c"
