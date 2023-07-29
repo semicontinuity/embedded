@@ -17,6 +17,7 @@ extern uint8_t discrete_outputs__byte1;
 void discrete_output__0__set(bool value);
 
 void discrete_output__1__set(bool value);
+bool discrete_output__1__get(void);
 
 void discrete_output__2__set(bool value);
 

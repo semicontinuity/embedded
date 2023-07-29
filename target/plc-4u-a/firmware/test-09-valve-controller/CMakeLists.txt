@@ -49,6 +49,8 @@ set(SOURCE_FILES
         ../../bsp/services/slow_timer.c
 
         main.c
+        valve_controller__1.h
+        valve_controller__1.c
         __all__.c
 )
 

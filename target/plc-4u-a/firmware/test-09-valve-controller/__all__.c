@@ -15,5 +15,5 @@
 #include "services/discrete_inputs.c"
 #include "services/discrete_outputs.c"
 #include "services/internal_coils.c"
-#include "valve_controller.c"
+#include "valve_controller__1.c"
 #include "main.c"

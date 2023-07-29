@@ -15,6 +15,8 @@
 #include "cpu/avr/drivers/comm/modbus/modbus_server.h"
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
+
 #include <drivers/in/digital_inputs.h>
 #include <services/internal_coils.h>
 
@@ -23,7 +25,7 @@
 #include "services/slow_timer.h"
 #include "drivers/out/digital_outputs.h"
 #include "drivers/fast_timer.h"
-#include "valve_controller.h"
+#include "valve_controller__1.h"
 
 
 void modbus_rtu_driver__on_char_received(void) {
@@ -154,6 +156,11 @@ modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t acti
 
 void fast_timer__do_run(void) {
     discrete_inputs__run();
+
+    if (valve_controller__1__limit_switches_state_renderer__is_runnable()) {
+        valve_controller__1__limit_switches_state_renderer__run();
+    }
+
     slow_timer__run();
     discrete_outputs__run();
 }
