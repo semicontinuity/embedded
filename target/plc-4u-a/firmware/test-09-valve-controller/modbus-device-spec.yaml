@@ -1,0 +1,52 @@
+discrete_inputs:
+-
+  address: 0
+  contents:
+  - alias: WATER_LEAK_SENSOR__A
+  - alias: WATER_LEAK_SENSOR__B
+  - alias: WATER_LEAK_SENSOR__C
+  - alias: WATER_LEAK_SENSOR__D
+  - alias: VALVE_LIMIT_SWITCH__A
+  - alias: VALVE_LIMIT_SWITCH__B
+  - alias: VALVE_LIMIT_SWITCH__C
+  - alias: VALVE_LIMIT_SWITCH__D
+
+  - alias: EXTRA_INPUT__A
+  - alias: EXTRA_INPUT__B
+  - alias: BUTTON__A
+  - alias: BUTTON__B
+  - alias: BUTTON__C
+  - alias: BUTTON__D
+  - alias: BUTTON__E
+  - alias: BUTTON__F
+
+coils:
+-
+  address: 0
+  contents:
+  - alias: VALVE_CONTROL__A__PWR
+  - alias: VALVE_CONTROL__A__DIR
+  - alias: VALVE_CONTROL__B__PWR
+  - alias: VALVE_CONTROL__B__DIR
+  - alias: RESERVED__04
+  - alias: RESERVED__05
+  - alias: RESERVED__06
+  - alias: RESERVED__07
+
+  - alias: EXTRA_OUTPUT__A
+  - alias: EXTRA_OUTPUT__B
+  - alias: BUTTON_LED__A
+  - alias: BUTTON_LED__B
+  - alias: BUTTON_LED__C
+  - alias: BUTTON_LED__D
+  - alias: BUTTON_LED__E
+  - alias: BUTTON_LED__F
+
+  - alias: VALVE_CONTROLLER__1__ACTIVE
+  - alias: VALVE_CONTROLLER__1__TARGET_POSITION
+  - alias: VALVE_CONTROLLER__1__ERROR
+  - alias: VALVE_CONTROLLER__2__ACTIVE
+  - alias: VALVE_CONTROLLER__2__TARGET_POSITION
+  - alias: VALVE_CONTROLLER__2__ERROR
+  - alias: RESERVED__16
+  - alias: RESERVED__17
