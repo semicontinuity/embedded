@@ -18,12 +18,18 @@ void discrete_output__0__set(bool value) {
         discrete_outputs__byte0 &= ~_BV(0);
 }
 
+
 void discrete_output__1__set(bool value) {
     if (value)
         discrete_outputs__byte0 |= _BV(1);
     else
         discrete_outputs__byte0 &= ~_BV(1);
 }
+
+bool discrete_output__1__get(void) {
+    return discrete_outputs__byte0 & _BV(1);
+}
+
 
 void discrete_output__2__set(bool value) {
     if (value)

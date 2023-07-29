@@ -22,6 +22,7 @@
 // =============================================================================
 #include "valve_controller.h"
 #include "services/internal_coils.h"
+#include "services/discrete_inputs.h"
 #include "services/discrete_outputs.h"
 
 
@@ -63,6 +64,26 @@ void valve_controller__1__actuator_direction__set(bool opened) {
     discrete_output__1__set(opened);
 }
 
+bool valve_controller__1__actuator_direction__get(void) {
+    return discrete_output__1__get();
+}
+
+void valve_controller__1__led__valve_opening__set(bool on) {
+    discrete_output__a__set(on);
+}
+
+void valve_controller__1__led__valve_closing__set(bool on) {
+    discrete_output__b__set(on);
+}
+
+bool valve_controller__1__limit_switch__valve_open__get(void) {
+    return discrete_inputs__4__get();
+}
+
+bool valve_controller__1__limit_switch__valve_closed__get(void) {
+    return discrete_inputs__5__get();
+}
+
 
 void valve_controller__1__activate(bool open_valve) {
     valve_controller__1__target_position__set(open_valve);
@@ -75,6 +96,10 @@ void valve_controller__1__deactivate(bool error) {
     valve_controller__1__actuator_power__set(false);
     valve_controller__1__actuator_direction__set(false);
     valve_controller__1__active__set(false);
+
+    // set LEDS from sensors (not here)
+    valve_controller__1__led__valve_opening__set(false);
+    valve_controller__1__led__valve_closing__set(false);
 }
 
 
@@ -86,17 +111,49 @@ void valve_controller__1__run(void) {
     uint8_t timeout = valve_controller__1__timeout;
     if (timeout == 0) {
         // Timeout 0 means that the valve controller has been just activated.
-        valve_controller__1__timeout = 5*4;
+        valve_controller__1__timeout = 10*4;
         valve_controller__1__actuator_direction__set(valve_controller__1__target_position__get());
         valve_controller__1__actuator_power__set(true);
         valve_controller__1__error__set(false);
+        valve_controller__1__led__valve_opening__set(false);
+        valve_controller__1__led__valve_closing__set(false);
     }
     else {
         --timeout;
-        if (timeout == 0) {
-            // Timeout expired
-            valve_controller__1__deactivate(true);
-        }
         valve_controller__1__timeout = timeout;
+
+        // Blink LED on "valve open" button if opening
+        // Blink LED on "valve close" button if closing
+        bool led_on = timeout & 0x01;
+        if (valve_controller__1__actuator_direction__get())
+            valve_controller__1__led__valve_opening__set(led_on);
+        else
+            valve_controller__1__led__valve_closing__set(led_on);
+
+
+        // Check the state of limit switches.
+        // Assume, that on first invocation (in 250ms), the valve is in motion,
+        // and both limit switches are open (the one, that was closed, is already open).
+        bool error;
+        bool finished;
+        if (timeout == 0) {
+            // Reached timeout, but limit switch has not been hit yet.
+            error = true;
+            finished = false;
+        } else {
+            if (valve_controller__1__actuator_direction__get()) {
+                // opening
+                error = valve_controller__1__limit_switch__valve_closed__get();
+                finished = valve_controller__1__limit_switch__valve_open__get();
+            } else {
+                // closing
+                error = valve_controller__1__limit_switch__valve_open__get();
+                finished = valve_controller__1__limit_switch__valve_closed__get();
+            }
+        }
+
+        if (error || finished) {
+            valve_controller__1__deactivate(error);
+        }
     }
 }
