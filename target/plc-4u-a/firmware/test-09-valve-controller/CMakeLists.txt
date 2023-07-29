@@ -213,3 +213,5 @@ add_definitions(-Ddiscrete_inputs__byte1=GPIOR1)
 # Valve controller
 # ==============================================================================
 #add_definitions(-Dinternal_coils__byte0=internal_coil__0__get)
+add_definitions(-Ddiscrete_inputs__on_input_a_changed=valve_controller__1__button__open__changed)
+add_definitions(-Ddiscrete_inputs__on_input_b_changed=valve_controller__1__button__close__changed)
