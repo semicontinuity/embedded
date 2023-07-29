@@ -235,7 +235,11 @@ def read_bit_data(proxy_port: int, device_address: int, address: int, count: int
     data[7] = crc >> 8
 
     result = exchange(data)
-    expected_response_length = 5 + ((count + 7) // 8)
+    payload_size = ((count + 7) // 8)
+    expected_response_length = 5 + payload_size
+    # print(f"Response payload size: {result[2]} bytes", file=sys.stderr)
+    # sys.stderr.write(repr(result))
+    print(file=sys.stderr)
 
     if len(result) != expected_response_length:
         print(f"Unexpected length of response: for {count} bits, expected response size is {expected_response_length}", file=sys.stderr)
@@ -305,6 +309,21 @@ def write_coil(proxy_port: int, device_address: int, coil_address: int, value: i
 
     # sys.stderr.write(repr(data))
     result = exchange(data)
+
+    if result[0] != data[0]:
+        print("Answer from another device", file=sys.stderr)
+        sys.stderr.write(repr(result))
+        return EXIT_CODE_FAILURE
+    if result[1] == 0x80 | data[1]:
+        exception_code = result[2]
+        if exception_code == 1:
+            print('MODBUS_EXCEPTION__ILLEGAL_FUNCTION', file=sys.stderr)
+        elif exception_code == 2:
+            print('MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS', file=sys.stderr)
+        elif exception_code == 3:
+            print('MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE', file=sys.stderr)
+        sys.stderr.write(repr(result))
+        return EXIT_CODE_FAILURE
     if result != data:
         sys.stderr.write(repr(result))
         return EXIT_CODE_FAILURE

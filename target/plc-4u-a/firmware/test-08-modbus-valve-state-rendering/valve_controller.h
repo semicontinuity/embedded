@@ -2,6 +2,8 @@
 #define VALVE_CONTROLER__H
 
 
-void valve_controller__run(void);
+bool valve_controller__1__is_runnable(void);
+void valve_controller__1__run(void);
+
 
 #endif

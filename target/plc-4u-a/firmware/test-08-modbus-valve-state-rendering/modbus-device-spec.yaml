@@ -28,10 +28,10 @@ coils:
   - alias: VALVE_CONTROL__A__DIR
   - alias: VALVE_CONTROL__B__PWR
   - alias: VALVE_CONTROL__B__DIR
-  - alias: RESERVED__A
-  - alias: RESERVED__B
-  - alias: RESERVED__C
-  - alias: RESERVED__D
+  - alias: RESERVED__04
+  - alias: RESERVED__05
+  - alias: RESERVED__06
+  - alias: RESERVED__07
 
   - alias: EXTRA_OUTPUT__A
   - alias: EXTRA_OUTPUT__B
@@ -41,3 +41,12 @@ coils:
   - alias: BUTTON_LED__D
   - alias: BUTTON_LED__E
   - alias: BUTTON_LED__F
+
+  - alias: VALVE_CONTROLLER__1__ACTIVE
+  - alias: VALVE_CONTROLLER__1__TARGET_POSITION
+  - alias: VALVE_CONTROLLER__1__ERROR
+  - alias: VALVE_CONTROLLER__2__ACTIVE
+  - alias: VALVE_CONTROLLER__2__TARGET_POSITION
+  - alias: VALVE_CONTROLLER__2__ERROR
+  - alias: RESERVED__16
+  - alias: RESERVED__17

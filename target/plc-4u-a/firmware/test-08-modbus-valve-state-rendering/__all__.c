@@ -11,7 +11,9 @@
 
 #include "drivers/fast_timer.c"
 #include "drivers/in/digital_inputs.c"
+#include "services/slow_timer.c"
 #include "services/discrete_inputs.c"
 #include "services/discrete_outputs.c"
+#include "services/internal_coils.c"
 #include "valve_controller.c"
 #include "main.c"

@@ -14,11 +14,13 @@
 #include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver.h"
 #include "cpu/avr/drivers/comm/modbus/modbus_server.h"
 
-#include <avr/interrupt.h>
+#include <avr/io.h>
 #include <drivers/in/digital_inputs.h>
+#include <services/internal_coils.h>
 
 #include "services/discrete_inputs.h"
 #include "services/discrete_outputs.h"
+#include "services/slow_timer.h"
 #include "drivers/out/digital_outputs.h"
 #include "drivers/fast_timer.h"
 #include "valve_controller.h"
@@ -106,19 +108,64 @@ modbus_exception modbus_server__read_discrete_inputs(void) {
 modbus_exception modbus_server__read_coils(void) {
     __asm__ __volatile__( "modbus_server__read_coils:");
     buffer__put_u8(discrete_outputs__byte0);
+//    buffer__put_u8(0xAA);
+//    buffer__put_u8(0xAA);
     buffer__put_u8(discrete_outputs__byte1);
+    buffer__put_u8(internal_coils__byte0);
     __asm__ __volatile__( "modbus_server__read_coils__done:");
     return MODBUS_EXCEPTION__NONE;
 }
 
+modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t active) {
+    __asm__ __volatile__( "modbus_server__write_single_coil:");
+
+    if (address == 0x00) discrete_output__0__set(active);
+    if (address == 0x01) discrete_output__1__set(active);
+    if (address == 0x02) discrete_output__2__set(active);
+    if (address == 0x03) discrete_output__3__set(active);
+    if (address == 0x04) discrete_output__4__set(active);
+    if (address == 0x05) discrete_output__5__set(active);
+    if (address == 0x06) discrete_output__6__set(active);
+    if (address == 0x07) discrete_output__7__set(active);
+
+    if (address == 0x08) discrete_output__8__set(active);
+    if (address == 0x09) discrete_output__9__set(active);
+    if (address == 0x0A) discrete_output__a__set(active);
+    if (address == 0x0B) discrete_output__b__set(active);
+    if (address == 0x0C) discrete_output__c__set(active);
+    if (address == 0x0D) discrete_output__d__set(active);
+    if (address == 0x0E) discrete_output__e__set(active);
+    if (address == 0x0F) discrete_output__f__set(active);
+
+    if (address == 0x10) internal_coil__0__set(active);
+    if (address == 0x11) internal_coil__1__set(active);
+    if (address == 0x12) internal_coil__2__set(active);
+    if (address == 0x13) internal_coil__3__set(active);
+    if (address == 0x14) internal_coil__4__set(active);
+    if (address == 0x15) internal_coil__5__set(active);
+    if (address == 0x16) internal_coil__6__set(active);
+    if (address == 0x17) internal_coil__7__set(active);
+    return MODBUS_EXCEPTION__NONE;
+}
+
 // =============================================================================
-// Fast timer callback
+// Fast timer callback (every ms)
 // =============================================================================
 
 void fast_timer__do_run(void) {
     discrete_inputs__run();
-    valve_controller__run();
+    slow_timer__run();
     discrete_outputs__run();
+}
+
+// =============================================================================
+// Slow timer callback (every 250ms)
+// =============================================================================
+
+void slow_timer__do_run(void) {
+    if (valve_controller__1__is_runnable()) {
+        valve_controller__1__run();
+    }
 }
 
 // =============================================================================

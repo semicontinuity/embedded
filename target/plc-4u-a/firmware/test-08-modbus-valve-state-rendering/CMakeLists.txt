@@ -43,6 +43,10 @@ set(SOURCE_FILES
         ../../bsp/services/discrete_inputs.c
         ../../bsp/services/discrete_outputs.h
         ../../bsp/services/discrete_outputs.c
+        ../../bsp/services/internal_coils.h
+        ../../bsp/services/internal_coils.c
+        ../../bsp/services/slow_timer.h
+        ../../bsp/services/slow_timer.c
 
         main.c
         __all__.c
@@ -179,13 +183,14 @@ add_definitions(-DMODBUS_RTU_DRIVER__DELAY_TIMER__T35_VALUE=\(\(F_CPU/USART0__BA
 
 add_definitions(-DMODBUS_SERVER__ADDRESS=2)
 
-add_definitions(-DMODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS=1)
 add_definitions(-DMODBUS_SERVER__DISCRETE_INPUTS_ADDRESSES_START=0)
 add_definitions(-DMODBUS_SERVER__DISCRETE_INPUTS_COUNT=16)
+add_definitions(-DMODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS=1)
 
-add_definitions(-DMODBUS_SERVER__HANDLE_READ_COILS=1)
 add_definitions(-DMODBUS_SERVER__COIL_ADDRESSES_START=0)
-add_definitions(-DMODBUS_SERVER__COIL_COUNT=16)
+add_definitions(-DMODBUS_SERVER__COIL_COUNT=24)
+add_definitions(-DMODBUS_SERVER__HANDLE_READ_COILS=1)
+add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL=1)
 
 # Discrete inputs
 # ==============================================================================
@@ -196,5 +201,13 @@ add_definitions(-Ddiscrete_inputs__byte1=GPIOR1)
 
 # Discrete outputs
 # ==============================================================================
-add_definitions(-Ddiscrete_outputs__byte0=OCR0B)
-add_definitions(-Ddiscrete_outputs__byte1=GPIOR0)
+#add_definitions(-Ddiscrete_outputs__byte0=OCR0B)
+#add_definitions(-Ddiscrete_outputs__byte1=GPIOR2)
+
+# Internal coils
+# ==============================================================================
+#add_definitions(-Dinternal_coils__byte0=SPDR)
+
+# Valve controller
+# ==============================================================================
+#add_definitions(-Dinternal_coils__byte0=internal_coil__0__get)
