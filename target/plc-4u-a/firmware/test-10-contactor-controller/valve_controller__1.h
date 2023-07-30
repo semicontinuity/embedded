@@ -1,5 +1,11 @@
-#ifndef VALVE_CONTROLER__H
-#define VALVE_CONTROLER__H
+#ifndef VALVE_CONTROL__1__H
+#define VALVE_CONTROL__1__H
+
+#include <stdbool.h>
+
+
+void valve_controller__1__error__set(bool value);
+bool valve_controller__1__error__get(void);
 
 
 bool valve_controller__1__is_runnable(void);

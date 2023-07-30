@@ -17,4 +17,5 @@
 #include "services/internal_coils.c"
 #include "valve_controller__1.c"
 #include "contactor_control.c"
+#include "error_indicator.c"
 #include "main.c"

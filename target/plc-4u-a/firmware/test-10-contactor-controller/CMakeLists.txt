@@ -53,6 +53,8 @@ set(SOURCE_FILES
         valve_controller__1.c
         contactor_control.h
         contactor_control.c
+        error_indicator.h
+        error_indicator.c
         __all__.c
 )
 
@@ -222,3 +224,6 @@ add_definitions(-Dvalve_controller__1__button__close__get=discrete_inputs__b__ge
 
 add_definitions(-Ddiscrete_inputs__on_input_8_changed=contactor_control__button__changed)
 add_definitions(-Dcontactor_control__button__get=discrete_inputs__8__get)
+
+add_definitions(-Ddiscrete_inputs__on_input_f_changed=error_indicator__button__changed)
+add_definitions(-Derror_indicator__button__get=discrete_inputs__f__get)
