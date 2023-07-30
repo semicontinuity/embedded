@@ -28,7 +28,7 @@
 #include "valve_controller__1.h"
 #include "contactor_control.h"
 #include "water_leak_sensors_controller.h"
-#include "error_indicator.h"
+#include "failure_indicator.h"
 
 
 void modbus_rtu_driver__on_char_received(void) {
@@ -182,6 +182,7 @@ void fast_timer__do_run(void) {
     }
 
     contactor_control__actual_state_renderer__run();
+    failure_indicator__run();
 
     slow_timer__run();
     discrete_outputs__run();

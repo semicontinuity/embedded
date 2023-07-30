@@ -47,11 +47,11 @@ bool valve_controller__1__target_position__get(void) {
 }
 
 
-void valve_controller__1__error__set(bool value) {
+void valve_controller__1__failure__set(bool value) {
     internal_coil__8__set(value);
 }
 
-bool valve_controller__1__error__get(void) {
+bool valve_controller__1__failure__get(void) {
     return internal_coil__8__get();
 }
 
@@ -123,7 +123,7 @@ void valve_controller__1__run(void) {
         valve_controller__1__timeout = 10*4;
         valve_controller__1__actuator_direction__set(valve_controller__1__target_position__get());
         valve_controller__1__actuator_power__set(true);
-        valve_controller__1__error__set(false);
+        valve_controller__1__failure__set(false);
         valve_controller__1__led__valve_open__set(false);
         valve_controller__1__led__valve_closed__set(false);
     }
@@ -146,21 +146,21 @@ void valve_controller__1__run(void) {
         bool finished;
         if (timeout == 0) {
             // Reached timeout, but limit switch has not been hit yet.
-            valve_controller__1__error__set(true);
+            valve_controller__1__failure__set(true);
             finished = false;
         } else {
             if (valve_controller__1__actuator_direction__get()) {
                 // opening
-                if (valve_controller__1__limit_switch__valve_closed__get()) valve_controller__1__error__set(true);
+                if (valve_controller__1__limit_switch__valve_closed__get()) valve_controller__1__failure__set(true);
                 finished = valve_controller__1__limit_switch__valve_open__get();
             } else {
                 // closing
-                if (valve_controller__1__limit_switch__valve_open__get()) valve_controller__1__error__set(true);
+                if (valve_controller__1__limit_switch__valve_open__get()) valve_controller__1__failure__set(true);
                 finished = valve_controller__1__limit_switch__valve_closed__get();
             }
         }
 
-        if (valve_controller__1__error__get() || finished) {
+        if (valve_controller__1__failure__get() || finished) {
             valve_controller__1__deactivate();
         }
     }

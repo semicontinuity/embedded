@@ -45,11 +45,11 @@ bool contactor_control__target_position__get(void) {
 }
 
 
-void contactor_control__error__set(bool value) {
+void contactor_control__failure__set(bool value) {
     internal_coil__a__set(value);
 }
 
-bool contactor_control__error__get(void) {
+bool contactor_control__failure__get(void) {
     return internal_coil__a__get();
 }
 
@@ -89,7 +89,7 @@ void contactor_control__run(void) {
         // Timeout 0 means that the controller has been just activated.
         contactor_control__timeout = 50;
         contactor_control__coil__set(contactor_control__target_position__get());
-        contactor_control__error__set(false);
+        contactor_control__failure__set(false);
     }
     else {
         --timeout;
@@ -98,13 +98,13 @@ void contactor_control__run(void) {
         bool finished;
         if (timeout == 0) {
             // Reached timeout, but limit switch has not been hit yet.
-            contactor_control__error__set(true);
+            contactor_control__failure__set(true);
             finished = false;
         } else {
             finished = contactor_control__target_position__get() == contactor_control__feedback__get();
         }
 
-        if (contactor_control__error__get() || finished) {
+        if (contactor_control__failure__get() || finished) {
             contactor_control__deactivate();
         }
     }

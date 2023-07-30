@@ -17,6 +17,6 @@
 #include "services/internal_coils.c"
 #include "valve_controller__1.c"
 #include "contactor_control.c"
-#include "error_indicator.c"
+#include "failure_indicator.c"
 #include "water_leak_sensors_controller.c"
 #include "main.c"

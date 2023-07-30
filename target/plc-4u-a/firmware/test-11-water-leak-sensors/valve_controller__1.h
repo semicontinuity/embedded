@@ -6,8 +6,8 @@
 
 void valve_controller__1__close(void);
 
-void valve_controller__1__error__set(bool value);
-bool valve_controller__1__error__get(void);
+void valve_controller__1__failure__set(bool value);
+bool valve_controller__1__failure__get(void);
 
 
 bool valve_controller__1__is_runnable(void);

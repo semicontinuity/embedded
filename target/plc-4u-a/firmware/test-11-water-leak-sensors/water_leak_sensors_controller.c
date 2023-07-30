@@ -28,11 +28,11 @@ bool water_leak_sensor_controller__sensor__d__get(void) {
 }
 
 
-void water_leak_sensor_controller__error__set(bool value) {
+void water_leak_sensor_controller__failure__set(bool value) {
     internal_coil__b__set(value);
 }
 
-bool water_leak_sensor_controller__error__get(void) {
+bool water_leak_sensor_controller__failure__get(void) {
     return internal_coil__b__get();
 }
 
@@ -45,12 +45,12 @@ bool water_leak_sensor_controller__any_sensor_is_active(void) {
 
 
 bool water_leak_sensor_controller__is_runnable(void) {
-    return !water_leak_sensor_controller__error__get();
+    return !water_leak_sensor_controller__failure__get();
 }
 
 void water_leak_sensor_controller__run(void) {
     if (water_leak_sensor_controller__any_sensor_is_active()) {
-        water_leak_sensor_controller__error__set(true);
+        water_leak_sensor_controller__failure__set(true);
         valve_controller__1__close();
     }
 }

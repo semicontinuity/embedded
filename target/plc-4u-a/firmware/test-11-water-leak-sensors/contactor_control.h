@@ -5,8 +5,8 @@
 #include <stdbool.h>
 
 
-void contactor_control__error__set(bool value);
-bool contactor_control__error__get(void);
+void contactor_control__failure__set(bool value);
+bool contactor_control__failure__get(void);
 
 bool contactor_control__is_runnable(void);
 void contactor_control__run(void);
