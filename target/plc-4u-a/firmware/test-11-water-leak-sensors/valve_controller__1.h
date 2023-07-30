@@ -4,6 +4,8 @@
 #include <stdbool.h>
 
 
+void valve_controller__1__close(void);
+
 void valve_controller__1__error__set(bool value);
 bool valve_controller__1__error__get(void);
 

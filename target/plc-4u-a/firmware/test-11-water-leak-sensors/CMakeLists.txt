@@ -55,6 +55,8 @@ set(SOURCE_FILES
         contactor_control.c
         error_indicator.h
         error_indicator.c
+        water_leak_sensors_controller.h
+        water_leak_sensors_controller.c
         __all__.c
 )
 

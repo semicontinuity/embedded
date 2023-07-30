@@ -27,6 +27,7 @@
 #include "drivers/fast_timer.h"
 #include "valve_controller__1.h"
 #include "contactor_control.h"
+#include "water_leak_sensors_controller.h"
 #include "error_indicator.h"
 
 
@@ -175,9 +176,12 @@ void fast_timer__do_run(void) {
     if (contactor_control__is_runnable()) {
         contactor_control__run();
     }
-    contactor_control__actual_state_renderer__run();
 
-    error_indicator__run();
+    if (water_leak_sensor_controller__is_runnable()) {
+        water_leak_sensor_controller__run();
+    }
+
+    contactor_control__actual_state_renderer__run();
 
     slow_timer__run();
     discrete_outputs__run();

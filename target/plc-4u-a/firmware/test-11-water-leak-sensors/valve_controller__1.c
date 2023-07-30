@@ -99,6 +99,19 @@ void valve_controller__1__deactivate(void) {
 }
 
 
+void valve_controller__1__close(void) {
+    if (!valve_controller__1__limit_switch__valve_closed__get()) {
+        valve_controller__1__activate(false);
+    }
+}
+
+void valve_controller__1__open(void) {
+    if (!valve_controller__1__limit_switch__valve_open__get()) {
+        valve_controller__1__activate(true);
+    }
+}
+
+
 bool valve_controller__1__is_runnable(void) {
     return valve_controller__1__active__get();
 }
@@ -174,13 +187,13 @@ void valve_controller__1__limit_switches_state_renderer__run(void) {
 void valve_controller__1__button__open__changed() {
     if (valve_controller__1__button__open__get()) {
         // button pressed
-        valve_controller__1__activate(true);
+        valve_controller__1__open();
     }
 }
 
 void valve_controller__1__button__close__changed() {
     if (valve_controller__1__button__close__get()) {
         // button pressed
-        valve_controller__1__activate(false);
+        valve_controller__1__close();
     }
 }

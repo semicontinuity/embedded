@@ -6,6 +6,7 @@
 // =============================================================================
 #include "contactor_control.h"
 #include "valve_controller__1.h"
+#include "water_leak_sensors_controller.h"
 
 #include "services/discrete_outputs.h"
 
@@ -27,5 +28,6 @@ void error_indicator__button__changed() {
         // if pressed
         contactor_control__error__set(false);
         valve_controller__1__error__set(false);
+        water_leak_sensor_controller__error__set(false);
     }
 }
