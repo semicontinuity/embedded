@@ -200,8 +200,8 @@ add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL=1)
 # ==============================================================================
 
 add_definitions(-DDEBOUNCE_TIMEOUT_MS=50)
-add_definitions(-Ddiscrete_inputs__byte0=GPIOR0)
-add_definitions(-Ddiscrete_inputs__byte1=GPIOR1)
+#add_definitions(-Ddiscrete_inputs__byte0=GPIOR0)
+#add_definitions(-Ddiscrete_inputs__byte1=GPIOR1)
 
 # Discrete outputs
 # ==============================================================================
@@ -214,7 +214,11 @@ add_definitions(-Ddiscrete_inputs__byte1=GPIOR1)
 
 # Valve controller
 # ==============================================================================
-#add_definitions(-Dinternal_coils__byte0=internal_coil__0__get)
 add_definitions(-Ddiscrete_inputs__on_input_a_changed=valve_controller__1__button__open__changed)
+add_definitions(-Dvalve_controller__1__button__open__get=discrete_inputs__a__get)
+
 add_definitions(-Ddiscrete_inputs__on_input_b_changed=valve_controller__1__button__close__changed)
+add_definitions(-Dvalve_controller__1__button__close__get=discrete_inputs__b__get)
+
 add_definitions(-Ddiscrete_inputs__on_input_8_changed=contactor_control__button__changed)
+add_definitions(-Dcontactor_control__button__get=discrete_inputs__8__get)

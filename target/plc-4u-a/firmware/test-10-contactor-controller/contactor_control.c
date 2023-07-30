@@ -116,10 +116,13 @@ void contactor_control__actual_state_renderer__run(void) {
 }
 
 // =============================================================================
-// Button listeners
+// Button listener
 // =============================================================================
 
 void contactor_control__button__changed() {
-    contactor_control__target_position__set(!contactor_control__target_position__get());
-    contactor_control__activate();
+    if (contactor_control__button__get()) {
+        // if pressed
+        contactor_control__target_position__set(!contactor_control__target_position__get());
+        contactor_control__activate();
+    }
 }

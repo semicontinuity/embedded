@@ -172,9 +172,15 @@ void valve_controller__1__limit_switches_state_renderer__run(void) {
 // =============================================================================
 
 void valve_controller__1__button__open__changed() {
-    valve_controller__1__activate(true);
+    if (valve_controller__1__button__open__get()) {
+        // button pressed
+        valve_controller__1__activate(true);
+    }
 }
 
 void valve_controller__1__button__close__changed() {
-    valve_controller__1__activate(false);
+    if (valve_controller__1__button__close__get()) {
+        // button pressed
+        valve_controller__1__activate(false);
+    }
 }
