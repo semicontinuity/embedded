@@ -26,6 +26,7 @@
 #include "drivers/out/digital_outputs.h"
 #include "drivers/fast_timer.h"
 #include "valve_controller__1.h"
+#include "contactor_control.h"
 
 
 void modbus_rtu_driver__on_char_received(void) {
@@ -110,10 +111,9 @@ modbus_exception modbus_server__read_discrete_inputs(void) {
 modbus_exception modbus_server__read_coils(void) {
     __asm__ __volatile__( "modbus_server__read_coils:");
     buffer__put_u8(discrete_outputs__byte0);
-//    buffer__put_u8(0xAA);
-//    buffer__put_u8(0xAA);
     buffer__put_u8(discrete_outputs__byte1);
     buffer__put_u8(internal_coils__byte0);
+    buffer__put_u8(internal_coils__byte1);
     __asm__ __volatile__( "modbus_server__read_coils__done:");
     return MODBUS_EXCEPTION__NONE;
 }
@@ -147,6 +147,16 @@ modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t acti
     if (address == 0x15) internal_coil__5__set(active);
     if (address == 0x16) internal_coil__6__set(active);
     if (address == 0x17) internal_coil__7__set(active);
+
+    if (address == 0x18) internal_coil__8__set(active);
+    if (address == 0x19) internal_coil__9__set(active);
+    if (address == 0x1A) internal_coil__a__set(active);
+    if (address == 0x1B) internal_coil__b__set(active);
+    if (address == 0x1C) internal_coil__c__set(active);
+    if (address == 0x1D) internal_coil__d__set(active);
+    if (address == 0x1E) internal_coil__e__set(active);
+    if (address == 0x1F) internal_coil__f__set(active);
+
     return MODBUS_EXCEPTION__NONE;
 }
 
@@ -160,6 +170,11 @@ void fast_timer__do_run(void) {
     if (valve_controller__1__limit_switches_state_renderer__is_runnable()) {
         valve_controller__1__limit_switches_state_renderer__run();
     }
+
+    if (contactor_control__is_runnable()) {
+        contactor_control__run();
+    }
+    contactor_control__actual_state_renderer__run();
 
     slow_timer__run();
     discrete_outputs__run();

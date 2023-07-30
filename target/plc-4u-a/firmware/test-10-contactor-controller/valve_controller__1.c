@@ -48,11 +48,11 @@ bool valve_controller__1__target_position__get(void) {
 
 
 void valve_controller__1__error__set(bool value) {
-    internal_coil__2__set(value);
+    internal_coil__8__set(value);
 }
 
 bool valve_controller__1__error__get(void) {
-    return internal_coil__2__get();
+    return internal_coil__8__get();
 }
 
 

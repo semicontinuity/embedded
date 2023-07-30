@@ -51,6 +51,8 @@ set(SOURCE_FILES
         main.c
         valve_controller__1.h
         valve_controller__1.c
+        contactor_control.h
+        contactor_control.c
         __all__.c
 )
 
@@ -190,7 +192,7 @@ add_definitions(-DMODBUS_SERVER__DISCRETE_INPUTS_COUNT=16)
 add_definitions(-DMODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS=1)
 
 add_definitions(-DMODBUS_SERVER__COIL_ADDRESSES_START=0)
-add_definitions(-DMODBUS_SERVER__COIL_COUNT=24)
+add_definitions(-DMODBUS_SERVER__COIL_COUNT=32)
 add_definitions(-DMODBUS_SERVER__HANDLE_READ_COILS=1)
 add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL=1)
 
@@ -215,3 +217,4 @@ add_definitions(-Ddiscrete_inputs__byte1=GPIOR1)
 #add_definitions(-Dinternal_coils__byte0=internal_coil__0__get)
 add_definitions(-Ddiscrete_inputs__on_input_a_changed=valve_controller__1__button__open__changed)
 add_definitions(-Ddiscrete_inputs__on_input_b_changed=valve_controller__1__button__close__changed)
+add_definitions(-Ddiscrete_inputs__on_input_8_changed=contactor_control__button__changed)

@@ -24,11 +24,11 @@ coils:
 -
   address: 0
   contents:
-  - alias: VALVE_CONTROL__A__PWR
-  - alias: VALVE_CONTROL__A__DIR
-  - alias: VALVE_CONTROL__B__PWR
-  - alias: VALVE_CONTROL__B__DIR
-  - alias: RESERVED__04
+  - alias: VALVE_CONTROL__1__ACTUATOR_POWER
+  - alias: VALVE_CONTROL__1__ACTUATOR_DIRECTION
+  - alias: VALVE_CONTROL__2__ACTUATOR_POWER
+  - alias: VALVE_CONTROL__2__ACTUATOR_DIRECTION
+  - alias: CONTACTOR__COIL
   - alias: RESERVED__05
   - alias: RESERVED__06
   - alias: RESERVED__07
@@ -44,9 +44,18 @@ coils:
 
   - alias: VALVE_CONTROLLER__1__ACTIVE
   - alias: VALVE_CONTROLLER__1__TARGET_POSITION
-  - alias: VALVE_CONTROLLER__1__ERROR
   - alias: VALVE_CONTROLLER__2__ACTIVE
   - alias: VALVE_CONTROLLER__2__TARGET_POSITION
+  - alias: CONTACTOR_CONTROLLER__ACTIVE
+  - alias: CONTACTOR_CONTROLLER__TARGET_POSITION
+  - alias: RESERVED__22
+  - alias: RESERVED__23
+
+  - alias: VALVE_CONTROLLER__1__ERROR
   - alias: VALVE_CONTROLLER__2__ERROR
-  - alias: RESERVED__16
-  - alias: RESERVED__17
+  - alias: CONTACTOR_CONTROLLER__ERROR
+  - alias: RESERVED__27
+  - alias: RESERVED__28
+  - alias: RESERVED__29
+  - alias: RESERVED__30
+  - alias: RESERVED__31
