@@ -72,6 +72,12 @@ EXIT_CODE_INVALID_COIL_COUNT = 42
 EXIT_CODE_INVALID_COIL_VALUE = 43
 EXIT_CODE_INVALID_DISCRETE_INPUT_ADDRESS = 44
 EXIT_CODE_INVALID_DISCRETE_INPUT_COUNT = 45
+
+EXIT_CODE_INVALID_HOLDING_REGISTER_ADDRESS = 44
+EXIT_CODE_INVALID_HOLDING_REGISTER_COUNT = 45
+EXIT_CODE_INVALID_INPUT_REGISTER_ADDRESS = 44
+EXIT_CODE_INVALID_INPUT_REGISTER_COUNT = 45
+
 # ==============================================================================
 
 import os
@@ -127,10 +133,10 @@ def get_device_address():
         sys.exit(EXIT_CODE_INVALID_DEVICE_ADDRESS)
 
 
-def get_uint16(s, error_message, exit_code) -> int:
+def get_uint16(s, error_message, exit_code, max_value=65535) -> int:
     try:
         value = int(s)
-        if value >= 0 and value < 65536:
+        if value >= 0 and value < max_value:
             return value
         else:
             raise ValueError()
@@ -155,6 +161,22 @@ def get_discrete_input_count(s) -> int:
     return get_uint16(s, f"Discrete input count is invalid", EXIT_CODE_INVALID_DISCRETE_INPUT_COUNT)
 
 
+def get_holding_register_address(s) -> int:
+    return get_uint16(s, f"Holding register address is invalid", EXIT_CODE_INVALID_HOLDING_REGISTER_ADDRESS)
+
+
+def get_holding_register_count(s) -> int:
+    return get_uint16(s, f"Holding register count is invalid", EXIT_CODE_INVALID_HOLDING_REGISTER_COUNT, 128)
+
+
+def get_input_register_address(s) -> int:
+    return get_uint16(s, f"Input register address is invalid", EXIT_CODE_INVALID_INPUT_REGISTER_ADDRESS)
+
+
+def get_input_register_count(s) -> int:
+    return get_uint16(s, f"Input register count is invalid", EXIT_CODE_INVALID_INPUT_REGISTER_COUNT, 128)
+
+
 def get_coil_value(s) -> int:
     if s == '1':
         return 1
@@ -175,7 +197,7 @@ def get_spec(spec_file_name: str):
 
 def usage():
     print("Usage:", file=sys.stderr)
-    print("modbus_rtu_tool <read|write> <input|inputs|coil|coils|reg|regs>", file=sys.stderr)
+    print("modbus_rtu_tool <read|write> <input|inputs|coil|coils|holding-registers>", file=sys.stderr)
     sys.exit(EXIT_CODE_SYNTAX_ERROR)
 
 # ==============================================================================
@@ -219,6 +241,23 @@ def exchange(data):
     return result
 
 # ==============================================================================
+
+def read_entities(proxy_port: int, device_address: int, address: int, count: int, func: int):
+    data = bytearray(8)
+    data[0] = device_address
+    data[1] = func
+    data[2] = address >> 8
+    data[3] = address & 0xFF
+    data[4] = count >> 8
+    data[5] = count & 0xFF
+
+    crc = crc16(0xFFFF, data, 6)
+
+    data[6] = crc & 0xFF
+    data[7] = crc >> 8
+
+    return exchange(data)
+
 
 def read_bit_data(proxy_port: int, device_address: int, address: int, count: int, func: int, ans: List[int]):
     data = bytearray(8)
@@ -273,11 +312,49 @@ def read_bit_data(proxy_port: int, device_address: int, address: int, count: int
     return EXIT_CODE_OK
 
 
+
+def decode_uint16_data(response, device_address, func, count, ans: List[int]):
+    payload_size = count*2
+    expected_response_length = 5 + payload_size
+
+    if len(response) != expected_response_length:
+        print(f"Unexpected length of response: for {count} registers, expected response size is {expected_response_length}", file=sys.stderr)
+        sys.stderr.write(repr(response))
+        return EXIT_CODE_FAILURE
+    if response[0] != device_address:
+        print("Answer from another device", file=sys.stderr)
+        sys.stderr.write(repr(response))
+        return EXIT_CODE_FAILURE
+    if response[1] == 0x80 | func:
+        exception_code = response[2]
+        if exception_code == 1:
+            print('MODBUS_EXCEPTION__ILLEGAL_FUNCTION', file=sys.stderr)
+        elif exception_code == 2:
+            print('MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS', file=sys.stderr)
+        elif exception_code == 3:
+            print('MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE', file=sys.stderr)
+        sys.stderr.write(repr(response))
+        return EXIT_CODE_FAILURE
+    if response[1] != func:
+        print("Unexpected value in 'function' field", file=sys.stderr)
+        sys.stderr.write(repr(response))
+        return EXIT_CODE_FAILURE
+
+    # Check CRC
+
+    for i in range(count):
+        hi = response[3 + 2 * i]
+        lo = response[4 + 2 * i]
+        ans.append((hi << 8) | lo)
+    return EXIT_CODE_OK
+
+
 def read_coils(proxy_port: int, device_address: int, address: int, count: int, ans: List[int]):
     """
     address: coil address (0-based)
     returns process exit code
     """
+    # data, result = read_entities(proxy_port, device_address, address, count, MF_READ_COIL)
     return read_bit_data(proxy_port, device_address, address, count, MF_READ_COILS, ans)
 
 
@@ -287,6 +364,24 @@ def read_discrete_inputs(proxy_port: int, device_address: int, address: int, cou
     returns process exit code
     """
     return read_bit_data(proxy_port, device_address, address, count, MF_READ_DISCRETE_INPUTS, ans)
+
+
+def read_holding_registers(proxy_port: int, device_address: int, address: int, count: int, ans: List[int]):
+    """
+    address: holding register address (0-based)
+    returns process exit code
+    """
+    response = read_entities(proxy_port, device_address, address, count, MF_READ_HOLDING_REGISTERS)
+    return decode_uint16_data(response, device_address, MF_READ_HOLDING_REGISTERS, count, ans)
+
+
+def read_input_registers(proxy_port: int, device_address: int, address: int, count: int, ans: List[int]):
+    """
+    address: holding register address (0-based)
+    returns process exit code
+    """
+    response = read_entities(proxy_port, device_address, address, count, MF_READ_INPUT_REGISTERS)
+    return decode_uint16_data(response, device_address, MF_READ_INPUT_REGISTERS, count, ans)
 
 
 def write_coil(proxy_port: int, device_address: int, coil_address: int, value: int):
@@ -352,6 +447,27 @@ def read_all(proxy_port: int, device_address: int, spec):
             for i, input_spec in enumerate(input_specs):
                 input_spec['value'] = input_values[i]
 
+    holding_registers = spec.get('holding_registers')
+    if holding_registers:
+        for block in holding_registers:
+            block_contents = block['contents']
+            values = []
+            code = read_holding_registers(proxy_port, device_address, block['address'], len(block_contents), values)
+            if code != EXIT_CODE_OK: return code
+            for i, entry in enumerate(block_contents):
+                entry['value'] = values[i]
+
+
+    input_registers = spec.get('input_registers')
+    if input_registers:
+        for block in input_registers:
+            block_contents = block['contents']
+            values = []
+            code = read_input_registers(proxy_port, device_address, block['address'], len(block_contents), values)
+            if code != EXIT_CODE_OK: return code
+            for i, entry in enumerate(block_contents):
+                entry['value'] = values[i]
+
     return EXIT_CODE_OK
 
 # ==============================================================================
@@ -406,6 +522,40 @@ def main():
             device_address=device_address,
             address=get_discrete_input_address(sys.argv[3]),
             count=get_discrete_input_count(sys.argv[4]),
+            ans=ans
+        )
+        if result == EXIT_CODE_OK:
+            print(ans)
+        else:
+            exit(result)
+    elif sys.argv[1] == 'read' and sys.argv[2] == 'holding-registers':
+        if len(sys.argv) != 5:
+            print("Usage:", file=sys.stderr)
+            print("modbus_rtu_tool read holding-registers <address> <count>", file=sys.stderr)
+            sys.exit(EXIT_CODE_SYNTAX_ERROR)
+        ans = []
+        result = read_holding_registers(
+            proxy_port=proxy_port,
+            device_address=device_address,
+            address=get_holding_register_address(sys.argv[3]),
+            count=get_holding_register_count(sys.argv[4]),
+            ans=ans
+        )
+        if result == EXIT_CODE_OK:
+            print(ans)
+        else:
+            exit(result)
+    elif sys.argv[1] == 'read' and sys.argv[2] == 'input-registers':
+        if len(sys.argv) != 5:
+            print("Usage:", file=sys.stderr)
+            print("modbus_rtu_tool read input-registers <address> <count>", file=sys.stderr)
+            sys.exit(EXIT_CODE_SYNTAX_ERROR)
+        ans = []
+        result = read_input_registers(
+            proxy_port=proxy_port,
+            device_address=device_address,
+            address=get_input_register_address(sys.argv[3]),
+            count=get_input_register_count(sys.argv[4]),
             ans=ans
         )
         if result == EXIT_CODE_OK:
