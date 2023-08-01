@@ -8,6 +8,7 @@
 #include "drivers/in/valve_limit_switches.h"
 #include "drivers/in/water_leak_sensors.h"
 
+#include "cpu/avr/wdt.h"
 #include "cpu/avr/asm.h"
 #include "cpu/avr/usart0.h"
 #include "cpu/avr/drivers/comm/modbus/buffer.h"
@@ -196,6 +197,7 @@ modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t acti
 // =============================================================================
 
 void fast_timer__do_run(void) {
+    wdt__reset();
     discrete_inputs__run();
 
     if (valve_controller__1__limit_switches_state_renderer__is_runnable()) {
@@ -245,6 +247,8 @@ static void application__init(void) {
 static void application__start(void) {
     fast_timer__start();
     modbus_rtu_driver__start();
+
+    wdt__enable_unsafe(WDTO_15MS);
 }
 
 
