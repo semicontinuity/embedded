@@ -1,5 +1,6 @@
 // =============================================================================
 // Modbus communications.
+// Implementations of prototypes from modbus_rtu_driver.h and modbus_server.h
 // =============================================================================
 
 #include "cpu/avr/asm.h"
@@ -164,5 +165,18 @@ modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t acti
     if (address == 0x1E) internal_coil__e__set(active);
     if (address == 0x1F) internal_coil__f__set(active);
 
+    return MODBUS_EXCEPTION__NONE;
+}
+
+/**
+ * Process WRITE HOLDING REGISTER request.
+ * Buffer: do not read or write.
+ * Returns:
+ *   Code: modbus_exception
+ */
+modbus_exception modbus_server__write_holding_register(uint16_t register_address, uint16_t register_value) {
+    __asm__ __volatile__("modbus_server__write_holding_register:");
+    if (register_address == 0x00) holding_registers__set(0x00, register_value);
+    if (register_address == 0x01) holding_registers__set(0x01, register_value);
     return MODBUS_EXCEPTION__NONE;
 }
