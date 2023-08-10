@@ -58,7 +58,7 @@ modbus_exception modbus_server__read_discrete_inputs(void);
  *   Else:
  *     Buffer: retain address and function code.
  */
-modbus_exception modbus_server__read_holding_registers(uint16_t register_address, uint16_t register_count);
+modbus_exception modbus_server__read_holding_registers(/*uint16_t register_address, uint16_t register_count*/void);
 #endif
 
 #if defined(MODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS) && MODBUS_SERVER__HANDLE_READ_INPUT_REGISTERS > 0

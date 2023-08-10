@@ -205,9 +205,10 @@ add_definitions(-DMODBUS_SERVER__COIL_COUNT=32)
 add_definitions(-DMODBUS_SERVER__HANDLE_READ_COILS=1)
 add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL=1)
 
-add_definitions(-DMODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS=1)
 add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_START=0)
 add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_COUNT=2)
+add_definitions(-DMODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS=1)
+add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_REGISTER=1)
 
 # Discrete inputs
 # ==============================================================================

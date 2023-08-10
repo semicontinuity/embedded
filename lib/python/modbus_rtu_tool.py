@@ -13,8 +13,12 @@
 #
 # Usage of modbus_rtu_tool:
 #
-# ./modbus_rtu_tool read coils <COIL> <COUNT>
-# ./modbus_rtu_tool write coil <COIL> <VALUE>
+# ./modbus_rtu_tool read coils <ADDRESS> <COUNT>
+# ./modbus_rtu_tool read inputs <ADDRESS> <COUNT>
+# ./modbus_rtu_tool read holding-registers <ADDRESS> <COUNT>
+# ./modbus_rtu_tool read input-registers <ADDRESS> <COUNT>
+# ./modbus_rtu_tool write coil <ADDRESS> <VALUE>
+# ./modbus_rtu_tool write register <ADDRESS> <VALUE>
 #
 # ./modbus_rtu_tool read all <SPEC FILE>
 # Spec file is a YAML file with the folowing structure:
@@ -67,16 +71,10 @@ EXIT_CODE_INVALID_DEVICE_ADDRESS = 13
 EXIT_CODE_INVALID_SPEC = 19
 
 EXIT_CODE_SYNTAX_ERROR = 40
-EXIT_CODE_INVALID_COIL_ADDRESS = 41
-EXIT_CODE_INVALID_COIL_COUNT = 42
+EXIT_CODE_INVALID_ADDRESS = 41
+EXIT_CODE_INVALID_COUNT = 42
 EXIT_CODE_INVALID_COIL_VALUE = 43
-EXIT_CODE_INVALID_DISCRETE_INPUT_ADDRESS = 44
-EXIT_CODE_INVALID_DISCRETE_INPUT_COUNT = 45
-
-EXIT_CODE_INVALID_HOLDING_REGISTER_ADDRESS = 44
-EXIT_CODE_INVALID_HOLDING_REGISTER_COUNT = 45
-EXIT_CODE_INVALID_INPUT_REGISTER_ADDRESS = 44
-EXIT_CODE_INVALID_INPUT_REGISTER_COUNT = 45
+EXIT_CODE_INVALID_REGISTER_VALUE = 44
 
 # ==============================================================================
 
@@ -146,35 +144,35 @@ def get_uint16(s, error_message, exit_code, max_value=65535) -> int:
 
 
 def get_coil_address(s) -> int:
-    return get_uint16(s, f"Coil address is invalid", EXIT_CODE_INVALID_COIL_ADDRESS)
+    return get_uint16(s, f"Coil address is invalid", EXIT_CODE_INVALID_ADDRESS)
 
 
 def get_coil_count(s) -> int:
-    return get_uint16(s, f"Coil count is invalid", EXIT_CODE_INVALID_COIL_COUNT)
+    return get_uint16(s, f"Coil count is invalid", EXIT_CODE_INVALID_COUNT)
 
 
 def get_discrete_input_address(s) -> int:
-    return get_uint16(s, f"Discrete input address is invalid", EXIT_CODE_INVALID_DISCRETE_INPUT_ADDRESS)
+    return get_uint16(s, f"Discrete input address is invalid", EXIT_CODE_INVALID_ADDRESS)
 
 
 def get_discrete_input_count(s) -> int:
-    return get_uint16(s, f"Discrete input count is invalid", EXIT_CODE_INVALID_DISCRETE_INPUT_COUNT)
+    return get_uint16(s, f"Discrete input count is invalid", EXIT_CODE_INVALID_COUNT)
 
 
 def get_holding_register_address(s) -> int:
-    return get_uint16(s, f"Holding register address is invalid", EXIT_CODE_INVALID_HOLDING_REGISTER_ADDRESS)
+    return get_uint16(s, f"Holding register address is invalid", EXIT_CODE_INVALID_ADDRESS)
 
 
 def get_holding_register_count(s) -> int:
-    return get_uint16(s, f"Holding register count is invalid", EXIT_CODE_INVALID_HOLDING_REGISTER_COUNT, 128)
+    return get_uint16(s, f"Holding register count is invalid", EXIT_CODE_INVALID_COUNT, 128)
 
 
 def get_input_register_address(s) -> int:
-    return get_uint16(s, f"Input register address is invalid", EXIT_CODE_INVALID_INPUT_REGISTER_ADDRESS)
+    return get_uint16(s, f"Input register address is invalid", EXIT_CODE_INVALID_ADDRESS)
 
 
 def get_input_register_count(s) -> int:
-    return get_uint16(s, f"Input register count is invalid", EXIT_CODE_INVALID_INPUT_REGISTER_COUNT, 128)
+    return get_uint16(s, f"Input register count is invalid", EXIT_CODE_INVALID_COUNT, 128)
 
 
 def get_coil_value(s) -> int:
@@ -185,6 +183,10 @@ def get_coil_value(s) -> int:
     else:
         print(f"Coil value is invalid: {s}", file=sys.stderr)
         sys.exit(EXIT_CODE_INVALID_COIL_VALUE)
+
+
+def get_register_value(s) -> int:
+    return get_uint16(s, f"Register value is invalid", EXIT_CODE_INVALID_REGISTER_VALUE)
 
 
 def get_spec(spec_file_name: str):
@@ -314,11 +316,8 @@ def read_bit_data(proxy_port: int, device_address: int, address: int, count: int
 
 
 def decode_uint16_data(response, device_address, func, count, ans: List[int]):
-    payload_size = count*2
-    expected_response_length = 5 + payload_size
-
-    if len(response) != expected_response_length:
-        print(f"Unexpected length of response: for {count} registers, expected response size is {expected_response_length}", file=sys.stderr)
+    if len(response) < 2:
+        print(f"Response is too short", file=sys.stderr)
         sys.stderr.write(repr(response))
         return EXIT_CODE_FAILURE
     if response[0] != device_address:
@@ -337,6 +336,13 @@ def decode_uint16_data(response, device_address, func, count, ans: List[int]):
         return EXIT_CODE_FAILURE
     if response[1] != func:
         print("Unexpected value in 'function' field", file=sys.stderr)
+        sys.stderr.write(repr(response))
+        return EXIT_CODE_FAILURE
+
+    payload_size = count*2
+    expected_response_length = 5 + payload_size
+    if len(response) != expected_response_length:
+        print(f"Unexpected length of response: for {count} registers, expected response size is {expected_response_length}", file=sys.stderr)
         sys.stderr.write(repr(response))
         return EXIT_CODE_FAILURE
 
@@ -384,18 +390,18 @@ def read_input_registers(proxy_port: int, device_address: int, address: int, cou
     return decode_uint16_data(response, device_address, MF_READ_INPUT_REGISTERS, count, ans)
 
 
-def write_coil(proxy_port: int, device_address: int, coil_address: int, value: int):
+def write_entity(proxy_port: int, device_address: int, address: int, vh: int, vl: int, function: int):
     """
-    coil_address: coil address (0-based)
+    address: coil address (0-based)
     returns process exit code
     """
     data = bytearray(8)
     data[0] = device_address
-    data[1] = MF_WRITE_SINGLE_COIL
-    data[2] = coil_address >> 8
-    data[3] = coil_address & 0xFF
-    data[4] = 0x00 if value == 0 else 0xFF
-    data[5] = 0x00
+    data[1] = function
+    data[2] = address >> 8
+    data[3] = address & 0xFF
+    data[4] = vh
+    data[5] = vl
 
     crc = crc16(0xFFFF, data, 6)
 
@@ -423,6 +429,22 @@ def write_coil(proxy_port: int, device_address: int, coil_address: int, value: i
         sys.stderr.write(repr(result))
         return EXIT_CODE_FAILURE
     return EXIT_CODE_OK
+
+
+def write_coil(proxy_port: int, device_address: int, address: int, value: int):
+    """
+    address: coil address (0-based)
+    returns process exit code
+    """
+    return write_entity(proxy_port, device_address, address, 0x00 if value == 0 else 0xFF, 0x00, MF_WRITE_SINGLE_COIL)
+
+
+def write_register(proxy_port: int, device_address: int, address: int, value: int):
+    """
+    address: register address (0-based)
+    returns process exit code
+    """
+    return write_entity(proxy_port, device_address, address, value >> 8, value & 0xFF, MF_WRITE_SINGLE_REGISTER)
 
 # ==============================================================================
 
@@ -572,6 +594,18 @@ def main():
             device_address=device_address,
             coil_address=get_coil_address(sys.argv[3]),
             value=get_coil_value(sys.argv[4])
+        )
+        exit(EXIT_CODE_OK if result else EXIT_CODE_FAILURE)
+    elif sys.argv[1] == 'write' and sys.argv[2] == 'register':
+        if len(sys.argv) != 5:
+            print("Usage:", file=sys.stderr)
+            print("modbus_rtu_tool write register <address> <value>", file=sys.stderr)
+            sys.exit(EXIT_CODE_SYNTAX_ERROR)
+        result = write_register(
+            proxy_port=proxy_port,
+            device_address=device_address,
+            address=get_coil_address(sys.argv[3]),
+            value=get_register_value(sys.argv[4])
         )
         exit(EXIT_CODE_OK if result else EXIT_CODE_FAILURE)
     else:

@@ -99,16 +99,18 @@ modbus_exception modbus_server__handle_read_holding_registers(void) {
     uint16_t register_address = buffer__get_u16();
     uint16_t register_count = buffer__get_u16();
 
-    if (register_count == 0 || register_count > MODBUS_FUNCTION__READ_HOLDING_REGISTERS__MAX_COUNT)
-        return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
+//    if (register_count == 0 || register_count > MODBUS_FUNCTION__READ_HOLDING_REGISTERS__MAX_COUNT)
+//        return MODBUS_EXCEPTION__ILLEGAL_DATA_VALUE;
 
-    if (register_address < MODBUS_SERVER__HOLDING_REGISTERS_START
-        || register_address + register_count > MODBUS_SERVER__HOLDING_REGISTERS_START + MODBUS_SERVER__HOLDING_REGISTERS_COUNT)
+//    if (register_address < MODBUS_SERVER__HOLDING_REGISTERS_START
+//        || register_address + register_count > MODBUS_SERVER__HOLDING_REGISTERS_START + MODBUS_SERVER__HOLDING_REGISTERS_COUNT)
+//        return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
+
+    if (register_address != MODBUS_SERVER__HOLDING_REGISTERS_START || register_count != MODBUS_SERVER__HOLDING_REGISTERS_COUNT)
         return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
 
-
     buffer__put_u8((uint8_t) register_count << 1); // byte count; the rest of the response is written by the handler
-    return modbus_server__read_holding_registers(register_address, register_count);
+    return modbus_server__read_holding_registers();
 }
 #endif
 

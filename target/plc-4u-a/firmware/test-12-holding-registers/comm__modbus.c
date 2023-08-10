@@ -8,8 +8,10 @@
 #include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver.h"
 #include "cpu/avr/drivers/comm/modbus/modbus_server.h"
 
+#include "services/discrete_inputs.h"
 #include "services/discrete_outputs.h"
 #include "services/internal_coils.h"
+#include "services/holding_registers.h"
 
 
 void modbus_rtu_driver__on_char_received(void) {
@@ -112,7 +114,7 @@ modbus_exception modbus_server__read_coils(void) {
  *   Else:
  *     Buffer: retain address and function code.
  */
-modbus_exception modbus_server__read_holding_registers(uint16_t register_address, uint16_t register_count) {
+modbus_exception modbus_server__read_holding_registers(void) {
     buffer__put_u8(holding_registers__bytes[0]);
     buffer__put_u8(holding_registers__bytes[1]);
     buffer__put_u8(holding_registers__bytes[2]);
