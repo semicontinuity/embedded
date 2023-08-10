@@ -22,4 +22,5 @@
 #include "contactor_control.c"
 #include "failure_indicator.c"
 #include "water_leak_sensors_controller.c"
+#include "comm__modbus.c"
 #include "main.c"

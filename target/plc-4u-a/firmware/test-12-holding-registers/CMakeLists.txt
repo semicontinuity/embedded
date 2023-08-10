@@ -53,6 +53,7 @@ set(SOURCE_FILES
         ../../bsp/services/uptime_counter.c
 
         main.c
+        comm__modbus.c
         valve_controller__1.h
         valve_controller__1.c
         contactor_control.h
