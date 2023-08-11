@@ -45,6 +45,8 @@ set(SOURCE_FILES
         ../../bsp/services/seconds_timer.c
         ../../bsp/services/uptime_counter.h
         ../../bsp/services/uptime_counter.c
+        ../../bsp/services/basic_rtc.h
+        ../../bsp/services/basic_rtc.c
 
         ../../bsp/services/discrete_inputs.h
         ../../bsp/services/discrete_inputs.c
@@ -276,9 +278,12 @@ add_definitions(-DMODBUS_SERVER__HANDLE_READ_COILS=1)
 add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL=1)
 
 add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_START=0)
-add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_COUNT=2)
+add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_COUNT=3)
+add_definitions(-DHOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS=2)
+
 add_definitions(-DMODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS=1)
 add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_REGISTER=1)
+
 
 # Discrete inputs
 # ==============================================================================

@@ -119,6 +119,8 @@ modbus_exception modbus_server__read_holding_registers(void) {
     buffer__put_u8(holding_registers__buffer[1]);
     buffer__put_u8(holding_registers__buffer[2]);
     buffer__put_u8(holding_registers__buffer[3]);
+    buffer__put_u8(holding_registers__buffer[4]);
+    buffer__put_u8(holding_registers__buffer[5]);
     return MODBUS_EXCEPTION__NONE;
 }
 

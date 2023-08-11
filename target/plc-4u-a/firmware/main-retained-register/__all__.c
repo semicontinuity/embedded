@@ -16,6 +16,7 @@
 #include "services/slow_timer.c"
 #include "services/seconds_timer.c"
 #include "services/uptime_counter.c"
+#include "services/basic_rtc.c"
 
 #include "services/discrete_inputs.c"
 #include "services/discrete_outputs.c"

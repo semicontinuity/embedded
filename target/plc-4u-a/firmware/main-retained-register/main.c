@@ -10,6 +10,7 @@
 #include <avr/interrupt.h>
 #include <services/uptime_counter.h>
 #include <services/internal_coils.h>
+#include <services/basic_rtc.h>
 
 #include "drivers/in/digital_inputs.h"
 #include "drivers/out/digital_outputs.h"
@@ -67,6 +68,7 @@ void slow_timer__do_run(void) {
 
 void seconds_timer__do_run(void) {
     uptime_counter__run();
+    basic_rtc__run();
 }
 
 // =============================================================================
