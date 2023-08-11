@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11)
-project(main)
+project(main-retained-register)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_C_STANDARD 11)
@@ -33,11 +33,35 @@ set(SOURCE_FILES
         ../../../../cpu/avr/drivers/comm/modbus/modbus_server.h
         ../../../../cpu/avr/drivers/comm/modbus/modbus_server.c
 
-        ../../bsp/services/discrete_inputs.h
-        ../../bsp/services/discrete_inputs.c
+        ../../bsp/drivers/in/digital_inputs.h
+        ../../bsp/drivers/in/digital_inputs.c
+        ../../bsp/drivers/out/digital_outputs.h
         ../../bsp/drivers/fast_timer.h
         ../../bsp/drivers/fast_timer.c
+
+        ../../bsp/services/discrete_inputs.h
+        ../../bsp/services/discrete_inputs.c
+        ../../bsp/services/discrete_outputs.h
+        ../../bsp/services/discrete_outputs.c
+        ../../bsp/services/internal_coils.h
+        ../../bsp/services/internal_coils.c
+        ../../bsp/services/slow_timer.h
+        ../../bsp/services/slow_timer.c
+        ../../bsp/services/holding_registers.h
+        ../../bsp/services/holding_registers.c
+        ../../bsp/services/uptime_counter.h
+        ../../bsp/services/uptime_counter.c
+
         main.c
+        comm__modbus.c
+        valve_controller__1.h
+        valve_controller__1.c
+        contactor_control.h
+        contactor_control.c
+        failure_indicator.h
+        failure_indicator.c
+        water_leak_sensors_controller.h
+        water_leak_sensors_controller.c
         __all__.c
 )
 
@@ -52,10 +76,58 @@ add_definitions(-DF_CPU=16000000UL)
 
 add_definitions(-DUSART0__BAUD_RATE=4800)
 
+# Outputs
+# ==============================================================================
+# (from WATER_LEAK_SENSOR C,D)
+add_definitions(-DVALVE_CONTROL__A__PWR__PORT=D)
+add_definitions(-DVALVE_CONTROL__A__PWR__PIN=4)
+add_definitions(-DVALVE_CONTROL__A__DIR__PORT=D)
+add_definitions(-DVALVE_CONTROL__A__DIR__PIN=5)
+
+# (dummy, unused in atmega328p)
+add_definitions(-DVALVE_CONTROL__B__PWR__PORT=D)
+add_definitions(-DVALVE_CONTROL__B__PWR__PIN=4)
+add_definitions(-DVALVE_CONTROL__B__DIR__PORT=D)
+add_definitions(-DVALVE_CONTROL__B__DIR__PIN=5)
+
+# (from VALVE_LIMIT_SWITCH C,D)
+add_definitions(-DEXTRA_OUTPUT__A__PORT=B)
+add_definitions(-DEXTRA_OUTPUT__A__PIN=0)
+add_definitions(-DEXTRA_OUTPUT__B__PORT=B)
+add_definitions(-DEXTRA_OUTPUT__B__PIN=1)
+
+# (from BUTTON C,D)
+add_definitions(-DBUTTON_LED__A__PORT=C)
+add_definitions(-DBUTTON_LED__A__PIN=2)
+add_definitions(-DBUTTON_LED__B__PORT=C)
+add_definitions(-DBUTTON_LED__B__PIN=3)
+
+# (dummy, unused in atmega328p)
+add_definitions(-DBUTTON_LED__C__PORT=C)
+add_definitions(-DBUTTON_LED__C__PIN=2)
+add_definitions(-DBUTTON_LED__D__PORT=C)
+add_definitions(-DBUTTON_LED__D__PIN=3)
+
+# (CONTACTOR: from extra input C, ALARM: onboard LED)
+add_definitions(-DBUTTON_LED__E__PORT=B)
+add_definitions(-DBUTTON_LED__E__PIN=4)
+add_definitions(-DBUTTON_LED__F__PORT=B)
+add_definitions(-DBUTTON_LED__F__PIN=5)
+
+# Discrete outputs aliases
+# ==============================================================================
+add_definitions(-Dbutton_led__alarm__set=discrete_output__f__set)
+
+
+# Discrete inputs
+# ==============================================================================
+
 add_definitions(-DWATER_LEAK_SENSOR__A__PORT=D)
 add_definitions(-DWATER_LEAK_SENSOR__A__PIN=2)
 add_definitions(-DWATER_LEAK_SENSOR__B__PORT=D)
 add_definitions(-DWATER_LEAK_SENSOR__B__PIN=3)
+
+# (dummy, unused in atmega328p)
 add_definitions(-DWATER_LEAK_SENSOR__C__PORT=D)
 add_definitions(-DWATER_LEAK_SENSOR__C__PIN=4)
 add_definitions(-DWATER_LEAK_SENSOR__D__PORT=D)
@@ -65,6 +137,8 @@ add_definitions(-DVALVE_LIMIT_SWITCH__A__PORT=D)
 add_definitions(-DVALVE_LIMIT_SWITCH__A__PIN=6)
 add_definitions(-DVALVE_LIMIT_SWITCH__B__PORT=D)
 add_definitions(-DVALVE_LIMIT_SWITCH__B__PIN=7)
+
+# (dummy, unused in atmega328p)
 add_definitions(-DVALVE_LIMIT_SWITCH__C__PORT=B)
 add_definitions(-DVALVE_LIMIT_SWITCH__C__PIN=0)
 add_definitions(-DVALVE_LIMIT_SWITCH__D__PORT=B)
@@ -74,17 +148,22 @@ add_definitions(-DEXTRA_INPUT__A__PORT=B)
 add_definitions(-DEXTRA_INPUT__A__PIN=2)
 add_definitions(-DEXTRA_INPUT__B__PORT=B)
 add_definitions(-DEXTRA_INPUT__B__PIN=3)
-add_definitions(-DEXTRA_INPUT__C__PORT=B)
-add_definitions(-DEXTRA_INPUT__C__PIN=4)
+
+# (dummy, unused in atmega328p)
+#add_definitions(-DEXTRA_INPUT__C__PORT=B)
+#add_definitions(-DEXTRA_INPUT__C__PIN=4)
 
 add_definitions(-DBUTTON__A__PORT=C)
 add_definitions(-DBUTTON__A__PIN=0)
 add_definitions(-DBUTTON__B__PORT=C)
 add_definitions(-DBUTTON__B__PIN=1)
+
+# (dummy, unused in atmega328p)
 add_definitions(-DBUTTON__C__PORT=C)
 add_definitions(-DBUTTON__C__PIN=2)
 add_definitions(-DBUTTON__D__PORT=C)
 add_definitions(-DBUTTON__D__PIN=3)
+
 add_definitions(-DBUTTON__E__PORT=C)
 add_definitions(-DBUTTON__E__PIN=4)
 add_definitions(-DBUTTON__F__PORT=C)
@@ -117,17 +196,46 @@ add_definitions(-DMODBUS_RTU_DRIVER__DELAY_TIMER__T35_VALUE=\(\(F_CPU/USART0__BA
 
 add_definitions(-DMODBUS_SERVER__ADDRESS=2)
 
-add_definitions(-DMODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS=1)
 add_definitions(-DMODBUS_SERVER__DISCRETE_INPUTS_ADDRESSES_START=0)
 add_definitions(-DMODBUS_SERVER__DISCRETE_INPUTS_COUNT=16)
+add_definitions(-DMODBUS_SERVER__HANDLE_READ_DISCRETE_INPUTS=1)
 
-add_definitions(-DMODBUS_SERVER__HANDLE_READ_COILS=1)
 add_definitions(-DMODBUS_SERVER__COIL_ADDRESSES_START=0)
-add_definitions(-DMODBUS_SERVER__COIL_COUNT=4)
+add_definitions(-DMODBUS_SERVER__COIL_COUNT=32)
+add_definitions(-DMODBUS_SERVER__HANDLE_READ_COILS=1)
+add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL=1)
+
+add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_START=0)
+add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_COUNT=2)
+add_definitions(-DMODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS=1)
+add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_REGISTER=1)
 
 # Discrete inputs
 # ==============================================================================
 
 add_definitions(-DDEBOUNCE_TIMEOUT_MS=50)
-add_definitions(-Ddiscrete_inputs__byte0=GPIOR0)
-add_definitions(-Ddiscrete_inputs__byte1=GPIOR1)
+#add_definitions(-Ddiscrete_inputs__byte0=GPIOR0)
+#add_definitions(-Ddiscrete_inputs__byte1=GPIOR1)
+
+# Discrete outputs
+# ==============================================================================
+#add_definitions(-Ddiscrete_outputs__byte0=OCR0B)
+#add_definitions(-Ddiscrete_outputs__byte1=GPIOR2)
+
+# Internal coils
+# ==============================================================================
+#add_definitions(-Dinternal_coils__byte0=SPDR)
+
+# Valve controller
+# ==============================================================================
+add_definitions(-Ddiscrete_inputs__on_input_a_changed=valve_controller__1__button__open__changed)
+add_definitions(-Dvalve_controller__1__button__open__get=discrete_inputs__a__get)
+
+add_definitions(-Ddiscrete_inputs__on_input_b_changed=valve_controller__1__button__close__changed)
+add_definitions(-Dvalve_controller__1__button__close__get=discrete_inputs__b__get)
+
+add_definitions(-Ddiscrete_inputs__on_input_8_changed=contactor_control__button__changed)
+add_definitions(-Dcontactor_control__button__get=discrete_inputs__8__get)
+
+add_definitions(-Ddiscrete_inputs__on_input_f_changed=failure_indicator__button__changed)
+add_definitions(-Dfailure_indicator__button__get=discrete_inputs__f__get)

@@ -11,15 +11,15 @@ void uptime_counter__run(void) {
     if (--ticks == 0) {
         ticks = 4;
 
-        uint16_t seconds = holding_registers__get(0);
+        uint16_t seconds = holding_registers__buffer__get(0);
         ++seconds;
         if (seconds == 3600) {
             seconds = 0;
-            uint16_t hours = holding_registers__get(1);
+            uint16_t hours = holding_registers__buffer__get(1);
             ++hours;
-            holding_registers__set(1, hours);
+            holding_registers__buffer__set(1, hours);
         }
-        holding_registers__set(0, seconds);
+        holding_registers__buffer__set(0, seconds);
     }
     uptime_counter__ticks = ticks;
 }
