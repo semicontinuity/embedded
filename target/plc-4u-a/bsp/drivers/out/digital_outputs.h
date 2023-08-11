@@ -57,6 +57,23 @@ static inline void digital_output__f__set(bool value) {
 
 
 static inline void digital_outputs__init(void) {
+    // Initial setting for all outputs is 0: not active
+    digital_output__0__set(false);
+    digital_output__1__set(false);
+    digital_output__2__set(false);
+    digital_output__3__set(false);
+    digital_output__4__set(false);
+    digital_output__5__set(false);
+    digital_output__6__set(false);
+    digital_output__7__set(false);
+    digital_output__8__set(false);
+    digital_output__9__set(false);
+    digital_output__a__set(false);
+    digital_output__b__set(false);
+    digital_output__c__set(false);
+    digital_output__d__set(false);
+    digital_output__e__set(false);
+    digital_output__f__set(false);
 }
 
 

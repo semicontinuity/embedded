@@ -63,4 +63,8 @@ bool internal_coil__e__get(void);
 void internal_coil__f__set(bool value);
 bool internal_coil__f__get(void);
 
+
+void internal_coils__init(void);
+
+
 #endif

@@ -197,3 +197,10 @@ void internal_coil__f__set(bool value) {
 bool internal_coil__f__get(void) {
     return internal_coils__byte1 & _BV(7);
 }
+
+
+void internal_coils__init(void) {
+    internal_coils__byte0 = 0x00;
+    internal_coils__byte1 = 0x00;
+    // Need to init Failure bits
+}

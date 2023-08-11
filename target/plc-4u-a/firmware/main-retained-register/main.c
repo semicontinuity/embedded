@@ -9,6 +9,7 @@
 
 #include <avr/interrupt.h>
 #include <services/uptime_counter.h>
+#include <services/internal_coils.h>
 
 #include "drivers/in/digital_inputs.h"
 #include "drivers/out/digital_outputs.h"
@@ -70,6 +71,9 @@ void slow_timer__do_run(void) {
 static void application__init(void) {
     digital_inputs__init();
     digital_outputs__init();
+    discrete_outputs__init();
+
+    internal_coils__init();
 
     fast_timer__init();
 

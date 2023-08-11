@@ -62,6 +62,7 @@ bool discrete_output__e__get(void);
 void discrete_output__f__set(bool value);
 bool discrete_output__f__get(void);
 
+void discrete_outputs__init(void);
 void discrete_outputs__run(void);
 
 #endif

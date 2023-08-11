@@ -119,7 +119,74 @@ add_definitions(-DBUTTON_LED__F__PIN=5)
 add_definitions(-Dbutton_led__alarm__set=discrete_output__f__set)
 
 
-# Discrete inputs
+# Digital inputs
+# ==============================================================================
+
+# Water leak sensor A
+add_definitions(-DDIGITAL_INPUTS__0__PORT=D)
+add_definitions(-DDIGITAL_INPUTS__0__PIN=2)
+
+# Water leak sensor B
+add_definitions(-DDIGITAL_INPUTS__1__PORT=D)
+add_definitions(-DDIGITAL_INPUTS__1__PIN=3)
+
+# Water leak sensor C
+add_definitions(-DDIGITAL_INPUTS__2__PORT=D)
+add_definitions(-DDIGITAL_INPUTS__2__PIN=4)
+
+# Water leak sensor D
+add_definitions(-DDIGITAL_INPUTS__3__PORT=D)
+add_definitions(-DDIGITAL_INPUTS__3__PIN=5)
+
+# Valve limit switch A
+add_definitions(-DDIGITAL_INPUTS__4__PORT=D)
+add_definitions(-DDIGITAL_INPUTS__4__PIN=6)
+
+# Valve limit switch B
+add_definitions(-DDIGITAL_INPUTS__5__PORT=D)
+add_definitions(-DDIGITAL_INPUTS__5__PIN=7)
+
+# Valve limit switch C
+add_definitions(-DDIGITAL_INPUTS__6__PORT=B)
+add_definitions(-DDIGITAL_INPUTS__6__PIN=0)
+
+# Valve limit switch D
+add_definitions(-DDIGITAL_INPUTS__7__PORT=B)
+add_definitions(-DDIGITAL_INPUTS__7__PIN=1)
+
+# Extra Input A
+add_definitions(-DDIGITAL_INPUTS__8__PORT=B)
+add_definitions(-DDIGITAL_INPUTS__8__PIN=2)
+
+# Extra Input B
+add_definitions(-DDIGITAL_INPUTS__9__PORT=B)
+add_definitions(-DDIGITAL_INPUTS__9__PIN=3)
+
+# Button A
+add_definitions(-DDIGITAL_INPUTS__A__PORT=C)
+add_definitions(-DDIGITAL_INPUTS__A__PIN=0)
+
+# Button B
+add_definitions(-DDIGITAL_INPUTS__B__PORT=C)
+add_definitions(-DDIGITAL_INPUTS__B__PIN=1)
+
+# Button C
+add_definitions(-DDIGITAL_INPUTS__C__PORT=C)
+add_definitions(-DDIGITAL_INPUTS__C__PIN=2)
+
+# Button D
+add_definitions(-DDIGITAL_INPUTS__D__PORT=C)
+add_definitions(-DDIGITAL_INPUTS__D__PIN=3)
+
+# Button E
+add_definitions(-DDIGITAL_INPUTS__E__PORT=C)
+add_definitions(-DDIGITAL_INPUTS__E__PIN=4)
+
+# Button F
+add_definitions(-DDIGITAL_INPUTS__F__PORT=C)
+add_definitions(-DDIGITAL_INPUTS__F__PIN=5)
+
+# Digital inputs
 # ==============================================================================
 
 add_definitions(-DWATER_LEAK_SENSOR__A__PORT=D)
@@ -239,3 +306,5 @@ add_definitions(-Dcontactor_control__button__get=discrete_inputs__8__get)
 
 add_definitions(-Ddiscrete_inputs__on_input_f_changed=failure_indicator__button__changed)
 add_definitions(-Dfailure_indicator__button__get=discrete_inputs__f__get)
+
+add_definitions(-Dfailure_indicator__led__set=discrete_output__f__set)

@@ -9,11 +9,8 @@
 #include "water_leak_sensors_controller.h"
 
 #include "services/discrete_outputs.h"
+#include "services/discrete_inputs.h"
 
-
-void failure_indicator__led__set(bool on) {
-    discrete_output__f__set(on);
-}
 
 void failure_indicator__run(void) {
     failure_indicator__led__set(

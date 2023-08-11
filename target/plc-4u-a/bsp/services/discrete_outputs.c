@@ -203,5 +203,11 @@ bool discrete_output__f__get(void) {
 }
 
 
+void discrete_outputs__init(void) {
+    discrete_outputs__byte0 = 0x00;
+    discrete_outputs__byte1 = 0x00;
+}
+
 void discrete_outputs__run(void) {
+
 }
