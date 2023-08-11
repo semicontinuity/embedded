@@ -1,3 +1,22 @@
+// =============================================================================
+// Basic RTC
+//
+// Real time is maintaned in 2 holding registers:
+// HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS
+// - lo byte: seconds
+// - hi byte: minutes
+// HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH
+// - lo byte: hours (0-23)
+// - hi byte: dat of week, bit 0 = Sunday, .. bit 6 = Saturday
+//
+// Day of week is a bit mask for convenience,
+// to create bit-mask based rules.
+//
+// Adjusting RTC is only possible via MODBUS.
+// Since DOW bits are not set at startup,
+// they will not be updated, until set appropriately via MODBUS.
+// =============================================================================
+
 #include <stdint.h>
 #include "services/holding_registers.h"
 #include "services/basic_rtc.h"
@@ -10,13 +29,29 @@ void basic_rtc__run(void) {
     if (seconds == 60) {
         seconds = 0;
 
-        uint16_t minutes = holding_registers__buffer__get_u8_hi(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS);
+        uint8_t minutes = holding_registers__buffer__get_u8_hi(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS);
         ++minutes;
         if (minutes == 60) {
             minutes = 0;
+
+            uint8_t hours = holding_registers__buffer__get_u8_lo(HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH);
+            ++hours;
+            if (hours == 24) {
+                hours = 0;
+
+                uint8_t dow = holding_registers__buffer__get_u8_hi(HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH);
+                dow <<= 1;
+                if (dow == 0x80) {
+                    dow = 0x01;
+                }
+
+                holding_registers__buffer__set_u8_hi(HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH, dow);
+            }
+
+            holding_registers__buffer__set_u8_lo(HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH, hours);
         }
 
-        holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS, minutes);
+        holding_registers__buffer__set_u8_hi(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS, minutes);
     }
     holding_registers__buffer__set_u8_lo(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS, seconds);
 }

@@ -67,3 +67,4 @@ holding_registers:
   - alias: UPTIME_SECONDS
   - alias: UPTIME_HOURS
   - alias: RTC_MM_SS
+  - alias: RTC_DOW_HH

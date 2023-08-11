@@ -11,6 +11,7 @@
 #include <services/uptime_counter.h>
 #include <services/internal_coils.h>
 #include <services/basic_rtc.h>
+#include <services/holding_registers.h>
 
 #include "drivers/in/digital_inputs.h"
 #include "drivers/out/digital_outputs.h"
@@ -82,6 +83,7 @@ static void application__init(void) {
     discrete_outputs__init();
 
     internal_coils__init();
+    holding_registers__init();
 
     fast_timer__init();
 

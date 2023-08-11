@@ -24,4 +24,7 @@ void holding_registers__set(uint8_t address, uint16_t value);
 uint16_t holding_registers__get(uint8_t address);
 
 
+void holding_registers__init(void);
+
+
 #endif
