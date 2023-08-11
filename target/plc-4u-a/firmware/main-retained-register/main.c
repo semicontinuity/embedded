@@ -13,12 +13,14 @@
 
 #include "drivers/in/digital_inputs.h"
 #include "drivers/out/digital_outputs.h"
+#include "drivers/fast_timer.h"
+
+#include "services/slow_timer.h"
+#include "services/seconds_timer.h"
 
 #include "services/discrete_inputs.h"
 #include "services/discrete_outputs.h"
 
-#include "services/slow_timer.h"
-#include "drivers/fast_timer.h"
 #include "valve_controller__1.h"
 #include "contactor_control.h"
 #include "water_leak_sensors_controller.h"
@@ -60,6 +62,10 @@ void slow_timer__do_run(void) {
     if (valve_controller__1__is_runnable()) {
         valve_controller__1__run();
     }
+    seconds_timer__run();
+}
+
+void seconds_timer__do_run(void) {
     uptime_counter__run();
 }
 

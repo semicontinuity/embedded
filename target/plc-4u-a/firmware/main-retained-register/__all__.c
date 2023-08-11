@@ -9,14 +9,18 @@
 #include "cpu/avr/drivers/comm/modbus/modbus_server.c"
 #include "cpu/avr/timer0.c"
 
-#include "drivers/fast_timer.c"
 #include "drivers/in/digital_inputs.c"
+#include "drivers/out/digital_outputs.h"
+
+#include "drivers/fast_timer.c"
 #include "services/slow_timer.c"
+#include "services/seconds_timer.c"
+#include "services/uptime_counter.c"
+
 #include "services/discrete_inputs.c"
 #include "services/discrete_outputs.c"
 #include "services/internal_coils.c"
 #include "services/holding_registers.c"
-#include "services/uptime_counter.c"
 
 #include "valve_controller__1.c"
 #include "contactor_control.c"

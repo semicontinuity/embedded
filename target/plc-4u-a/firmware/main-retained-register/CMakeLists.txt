@@ -39,18 +39,21 @@ set(SOURCE_FILES
         ../../bsp/drivers/fast_timer.h
         ../../bsp/drivers/fast_timer.c
 
+        ../../bsp/services/slow_timer.h
+        ../../bsp/services/slow_timer.c
+        ../../bsp/services/seconds_timer.h
+        ../../bsp/services/seconds_timer.c
+        ../../bsp/services/uptime_counter.h
+        ../../bsp/services/uptime_counter.c
+
         ../../bsp/services/discrete_inputs.h
         ../../bsp/services/discrete_inputs.c
         ../../bsp/services/discrete_outputs.h
         ../../bsp/services/discrete_outputs.c
         ../../bsp/services/internal_coils.h
         ../../bsp/services/internal_coils.c
-        ../../bsp/services/slow_timer.h
-        ../../bsp/services/slow_timer.c
         ../../bsp/services/holding_registers.h
         ../../bsp/services/holding_registers.c
-        ../../bsp/services/uptime_counter.h
-        ../../bsp/services/uptime_counter.c
 
         main.c
         comm__modbus.c
