@@ -68,6 +68,9 @@ set(SOURCE_FILES
         failure_indicator.c
         water_leak_sensors_controller.h
         water_leak_sensors_controller.c
+        buzzer_control.h
+        buzzer_control.c
+
         __all__.c
 )
 
@@ -120,10 +123,9 @@ add_definitions(-DBUTTON_LED__E__PIN=4)
 add_definitions(-DBUTTON_LED__F__PORT=B)
 add_definitions(-DBUTTON_LED__F__PIN=5)
 
-# Discrete outputs aliases
-# ==============================================================================
-add_definitions(-Dbutton_led__alarm__set=discrete_output__f__set)
-
+# (Same as Button LED F = Failure LED, which is not driven yet)
+add_definitions(-DBUZZER__PORT=B)
+add_definitions(-DBUZZER__PIN=5)
 
 # Digital inputs
 # ==============================================================================

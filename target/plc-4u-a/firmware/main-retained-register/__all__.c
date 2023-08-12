@@ -11,6 +11,7 @@
 
 #include "drivers/in/digital_inputs.c"
 #include "drivers/out/digital_outputs.h"
+#include "drivers/out/buzzer.h"
 
 #include "drivers/fast_timer.c"
 #include "services/slow_timer.c"

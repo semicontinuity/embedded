@@ -10,6 +10,9 @@
 //   * If the coil value reads as 1, there is an actuator action in progress.
 //   * If the coil value reads as 0, there is no actuator action in progress.
 //
+//   * If 0 is written to the coil,
+//     control signals will be frozen in the current state.
+//
 // - TARGET_POSITION
 //   * 1: Opened
 //   * 0: Closed

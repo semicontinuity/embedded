@@ -27,6 +27,7 @@
 #include "contactor_control.h"
 #include "water_leak_sensors_controller.h"
 #include "failure_indicator.h"
+#include "buzzer_control.h"
 
 
 // =============================================================================
@@ -52,6 +53,8 @@ void fast_timer__do_run(void) {
     contactor_control__actual_state_renderer__run();
     failure_indicator__run();
 
+    buzzer_controller__on_fast_timer_tick();
+
     slow_timer__run();
     discrete_outputs__run();
 }
@@ -70,6 +73,7 @@ void slow_timer__do_run(void) {
 void seconds_timer__do_run(void) {
     uptime_counter__run();
     basic_rtc__run();
+    buzzer_controller__run();
 }
 
 // =============================================================================
