@@ -67,13 +67,25 @@ void slow_timer__do_run(void) {
     if (valve_controller__1__is_runnable()) {
         valve_controller__1__run();
     }
+
+    if (buzzer_controller__is_running()) {
+        if (buzzer_controller__is_requested()) {
+            buzzer_controller__run();
+        } else {
+            buzzer_controller__stop();
+        }
+    } else {
+        if (buzzer_controller__is_requested()) {
+            buzzer_controller__start();
+        }
+    }
+
     seconds_timer__run();
 }
 
 void seconds_timer__do_run(void) {
     uptime_counter__run();
     basic_rtc__run();
-    buzzer_controller__run();
 }
 
 // =============================================================================

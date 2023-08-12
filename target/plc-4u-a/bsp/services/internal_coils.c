@@ -102,6 +102,10 @@ void internal_coil__7__set(bool value) {
         internal_coils__byte0 &= ~_BV(7);
 }
 
+bool internal_coil__7__get(void) {
+    return internal_coils__byte0 & _BV(7);
+}
+
 
 void internal_coil__8__set(bool value) {
     if (value)

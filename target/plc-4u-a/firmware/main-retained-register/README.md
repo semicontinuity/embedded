@@ -27,3 +27,16 @@ PD6     IN      IN4 (Valve limit switch A)
 PD7     IN      IN5 (Valve limit switch B)
 
 ```
+
+
+#### Controlling long-running processes
+
+* Coil for starting/stopping a process: PROCESS__REQUEST
+  * Write 1 to start long-running process
+  * Write 0 to cancel long-running process, if it is running
+  * Coil is reset to 0 when the process has finished
+* Coil, indicating that the process is running: PROCESS__RUNNING
+  * User should not write to the coil
+  * If the process was requested to start, the coil becomes 1, when the process has been orderly started
+  * If the process has orderly finished, the coil becomes 0
+* Coil, indicating the result of the process: PROCESS__FAILURE

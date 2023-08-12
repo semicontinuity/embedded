@@ -49,7 +49,7 @@ coils:
   - alias: CONTACTOR_CONTROLLER__ACTIVE
   - alias: CONTACTOR_CONTROLLER__TARGET_POSITION
   - alias: RESERVED__22
-  - alias: RESERVED__23
+  - alias: BUZZER__REQUESTED
 
   - alias: VALVE_CONTROLLER__1__FAILURE
   - alias: VALVE_CONTROLLER__2__FAILURE
@@ -58,7 +58,7 @@ coils:
   - alias: RESERVED__28
   - alias: RESERVED__29
   - alias: RESERVED__30
-  - alias: RESERVED__31
+  - alias: BUZZER__RUNNING
 
 holding_registers:
 -
