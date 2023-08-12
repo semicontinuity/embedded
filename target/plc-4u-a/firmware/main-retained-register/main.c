@@ -31,12 +31,16 @@
 
 
 // =============================================================================
-// Fast timer callback (every ms)
+// Fast timer callback (every 1ms)
 // =============================================================================
 
 void fast_timer__do_run(void) {
     wdt__reset();
     discrete_inputs__run();
+
+    if (water_leak_sensor_controller__is_runnable()) {
+        water_leak_sensor_controller__run();
+    }
 
     if (valve_controller__1__limit_switches_state_renderer__is_runnable()) {
         valve_controller__1__limit_switches_state_renderer__run();
@@ -46,11 +50,8 @@ void fast_timer__do_run(void) {
         contactor_control__run();
     }
 
-    if (water_leak_sensor_controller__is_runnable()) {
-        water_leak_sensor_controller__run();
-    }
-
     contactor_control__actual_state_renderer__run();
+
     failure_indicator__run();
 
     buzzer_controller__on_fast_timer_tick();
@@ -83,15 +84,19 @@ void slow_timer__do_run(void) {
     seconds_timer__run();
 }
 
+// =============================================================================
+// Seconds timer callback (every second)
+// =============================================================================
+
 void seconds_timer__do_run(void) {
     uptime_counter__run();
     basic_rtc__run();
 }
 
+
 // =============================================================================
 // Application
 // =============================================================================
-
 
 static void application__init(void) {
     digital_inputs__init();
@@ -126,12 +131,13 @@ int main(void) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
-    __asm__ __volatile__( "main__loop:");
+    __asm__ __volatile__("main__loop:");
     for (;;) {
-        __asm__ __volatile__( "main__modbus_rtu_driver:");
+        __asm__ __volatile__("main__fast_timer:");
         if (fast_timer__is_runnable()) {
             fast_timer__run();
         }
+        __asm__ __volatile__("main__modbus_rtu_driver:");
         if (modbus_rtu_driver__is_runnable()) {
             modbus_rtu_driver__run();
         }

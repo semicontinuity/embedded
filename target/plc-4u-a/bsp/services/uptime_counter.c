@@ -5,13 +5,13 @@
 
 /** Must be invoked on every tick of the seconds timer */
 void uptime_counter__run(void) {
-    uint16_t seconds = holding_registers__buffer__get(0);
+    uint16_t seconds = holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS);
     ++seconds;
     if (seconds == 3600) {
         seconds = 0;
-        uint16_t hours = holding_registers__buffer__get(1);
+        uint16_t hours = holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__UPTIME__HOURS);
         ++hours;
-        holding_registers__buffer__set(1, hours);
+        holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__HOURS, hours);
     }
-    holding_registers__buffer__set(0, seconds);
+    holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS, seconds);
 }

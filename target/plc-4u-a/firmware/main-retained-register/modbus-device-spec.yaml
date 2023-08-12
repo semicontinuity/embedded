@@ -64,7 +64,7 @@ holding_registers:
 -
   address: 0
   contents:
-  - alias: UPTIME_SECONDS
-  - alias: UPTIME_HOURS
-  - alias: RTC_MM_SS
-  - alias: RTC_DOW_HH
+  - alias: BASIC_RTC__DOW_HH
+  - alias: BASIC_RTC__MM_SS
+  - alias: UPTIME__HOURS
+  - alias: UPTIME__SECONDS

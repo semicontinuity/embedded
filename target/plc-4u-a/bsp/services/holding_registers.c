@@ -39,10 +39,14 @@ uint16_t holding_registers__buffer__get(uint8_t address) {
 
 /* MSB first */
 void holding_registers__set(uint8_t address, uint16_t value) {
-    if (address == 0x00) holding_registers__buffer__set(0x00, value);
-    if (address == 0x01) holding_registers__buffer__set(0x01, value);
-    if (address == 0x02) holding_registers__buffer__set(0x02, value);
-    if (address == 0x03) holding_registers__buffer__set(0x03, value);
+    if (address == HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH)
+        holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH, value);
+    if (address == HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS)
+        holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS, value);
+    if (address == HOLDING_REGISTER__ADDRESS__UPTIME__HOURS)
+        holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__HOURS, value);
+    if (address == HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS)
+        holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS, value);
 }
 
 

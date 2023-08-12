@@ -1,7 +1,7 @@
 // =============================================================================
 // Basic RTC
 //
-// Real time is maintaned in 2 holding registers:
+// Real time is maintained in 2 holding registers:
 // HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS
 // - lo byte: seconds
 // - hi byte: minutes
