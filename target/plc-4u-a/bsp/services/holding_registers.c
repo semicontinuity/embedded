@@ -41,12 +41,14 @@ uint16_t holding_registers__buffer__get(uint8_t address) {
 void holding_registers__set(uint8_t address, uint16_t value) {
     if (address == HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH)
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH, value);
-    if (address == HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS)
+    else if (address == HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS)
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS, value);
-    if (address == HOLDING_REGISTER__ADDRESS__UPTIME__HOURS)
+    else if (address == HOLDING_REGISTER__ADDRESS__UPTIME__HOURS)
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__HOURS, value);
-    if (address == HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS)
+    else if (address == HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS)
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS, value);
+    else if (address == HOLDING_REGISTER__ADDRESS__REBOOT)
+        while(1) {} // WDT enabled - will restart in 15ms
 }
 
 

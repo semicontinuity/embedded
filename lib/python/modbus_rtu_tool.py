@@ -605,7 +605,7 @@ def main():
         result = write_coil(
             proxy_port=proxy_port,
             device_address=device_address,
-            coil_address=get_coil_address(sys.argv[3]),
+            address=get_coil_address(sys.argv[3]),
             value=get_coil_value(sys.argv[4])
         )
         exit(EXIT_CODE_OK if result else EXIT_CODE_FAILURE)

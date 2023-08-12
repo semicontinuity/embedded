@@ -83,7 +83,11 @@ add_definitions(-DCRC16__TABLE2x256__SECTION=.crc16_table2x256)
 
 add_definitions(-DF_CPU=16000000UL)
 
+# Parameters
+# ==============================================================================
 add_definitions(-DUSART0__BAUD_RATE=4800)
+add_definitions(-DBUZZER__TIMEOUT=240)
+
 
 # Outputs
 # ==============================================================================
@@ -281,15 +285,16 @@ add_definitions(-DMODBUS_SERVER__HANDLE_READ_COILS=1)
 add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL=1)
 
 add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_START=0)
-add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_COUNT=4)
+add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_COUNT=5)
+add_definitions(-DMODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS=1)
+add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_REGISTER=1)
 
 add_definitions(-DHOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH=0)
 add_definitions(-DHOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS=1)
 add_definitions(-DHOLDING_REGISTER__ADDRESS__UPTIME__HOURS=2)
 add_definitions(-DHOLDING_REGISTER__ADDRESS__UPTIME__SECONDS=3)
+add_definitions(-DHOLDING_REGISTER__ADDRESS__REBOOT=4)
 
-add_definitions(-DMODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS=1)
-add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_REGISTER=1)
 
 
 # Discrete inputs

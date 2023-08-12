@@ -12,6 +12,7 @@
 #include <services/internal_coils.h>
 #include <services/basic_rtc.h>
 #include <services/holding_registers.h>
+#include <drivers/out/buzzer.h>
 
 #include "drivers/in/digital_inputs.h"
 #include "drivers/out/digital_outputs.h"
@@ -69,18 +70,7 @@ void slow_timer__do_run(void) {
         valve_controller__1__run();
     }
 
-    if (buzzer_controller__is_running()) {
-        if (buzzer_controller__is_requested()) {
-            buzzer_controller__run();
-        } else {
-            buzzer_controller__stop();
-        }
-    } else {
-        if (buzzer_controller__is_requested()) {
-            buzzer_controller__start();
-        }
-    }
-
+    buzzer_controller__on_slow_timer_tick();
     seconds_timer__run();
 }
 
@@ -101,6 +91,8 @@ void seconds_timer__do_run(void) {
 static void application__init(void) {
     digital_inputs__init();
     digital_outputs__init();
+    buzzer__init();
+
     discrete_outputs__init();
 
     internal_coils__init();

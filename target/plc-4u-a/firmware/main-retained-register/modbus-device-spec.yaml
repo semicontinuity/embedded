@@ -68,3 +68,4 @@ holding_registers:
   - alias: BASIC_RTC__MM_SS
   - alias: UPTIME__HOURS
   - alias: UPTIME__SECONDS
+  - alias: REBOOT
