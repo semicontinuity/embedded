@@ -315,7 +315,7 @@ def read_bit_data(proxy_port: int, device_address: int, address: int, count: int
 
 
 
-def decode_uint16_data(response, device_address, func, count, ans: List[int]):
+def decode_register_data(response, device_address, func, count, ans: List[int]):
     if len(response) < 2:
         print(f"Response is too short", file=sys.stderr)
         sys.stderr.write(repr(response))
@@ -348,10 +348,23 @@ def decode_uint16_data(response, device_address, func, count, ans: List[int]):
 
     # Check CRC
 
-    for i in range(count):
-        hi = response[3 + 2 * i]
-        lo = response[4 + 2 * i]
-        ans.append((hi << 8) | lo)
+    if os.environ.get('BYTES') == '1':
+        for i in range(count):
+            hi = response[3 + 2 * i]
+            ans.append(hi)
+            lo = response[4 + 2 * i]
+            ans.append(lo)
+    else:
+        for i in range(count):
+            hi = response[3 + 2 * i]
+            lo = response[4 + 2 * i]
+            ans.append((hi << 8) | lo)
+
+    # for i in range(count):
+    #     hi = response[3 + 2 * i]
+    #     lo = response[4 + 2 * i]
+    #     ans.append((hi << 8) | lo)
+
     return EXIT_CODE_OK
 
 
@@ -378,7 +391,7 @@ def read_holding_registers(proxy_port: int, device_address: int, address: int, c
     returns process exit code
     """
     response = read_entities(proxy_port, device_address, address, count, MF_READ_HOLDING_REGISTERS)
-    return decode_uint16_data(response, device_address, MF_READ_HOLDING_REGISTERS, count, ans)
+    return decode_register_data(response, device_address, MF_READ_HOLDING_REGISTERS, count, ans)
 
 
 def read_input_registers(proxy_port: int, device_address: int, address: int, count: int, ans: List[int]):
@@ -387,7 +400,7 @@ def read_input_registers(proxy_port: int, device_address: int, address: int, cou
     returns process exit code
     """
     response = read_entities(proxy_port, device_address, address, count, MF_READ_INPUT_REGISTERS)
-    return decode_uint16_data(response, device_address, MF_READ_INPUT_REGISTERS, count, ans)
+    return decode_register_data(response, device_address, MF_READ_INPUT_REGISTERS, count, ans)
 
 
 def write_entity(proxy_port: int, device_address: int, address: int, vh: int, vl: int, function: int):

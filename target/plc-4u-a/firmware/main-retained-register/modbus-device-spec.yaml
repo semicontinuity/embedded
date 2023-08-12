@@ -28,7 +28,7 @@ coils:
   - alias: VALVE_CONTROL__1__ACTUATOR_DIRECTION
   - alias: VALVE_CONTROL__2__ACTUATOR_POWER
   - alias: VALVE_CONTROL__2__ACTUATOR_DIRECTION
-  - alias: CONTACTOR__COIL
+  - alias: RESERVED__04
   - alias: RESERVED__05
   - alias: RESERVED__06
   - alias: RESERVED__07

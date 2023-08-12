@@ -209,5 +209,6 @@ void discrete_outputs__init(void) {
 }
 
 void discrete_outputs__run(void) {
-
+    // uint8_t byte0 = discrete_outputs__byte0;
+    // copy discrete_outputs 0..f to digital outputs 0..f
 }

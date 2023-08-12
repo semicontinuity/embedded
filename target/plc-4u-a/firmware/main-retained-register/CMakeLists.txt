@@ -36,6 +36,7 @@ set(SOURCE_FILES
         ../../bsp/drivers/in/digital_inputs.h
         ../../bsp/drivers/in/digital_inputs.c
         ../../bsp/drivers/out/digital_outputs.h
+        ../../bsp/drivers/out/buzzer.h
         ../../bsp/drivers/fast_timer.h
         ../../bsp/drivers/fast_timer.c
 
