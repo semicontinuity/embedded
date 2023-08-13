@@ -23,6 +23,7 @@
 #include "services/discrete_outputs.c"
 #include "services/internal_coils.c"
 #include "services/holding_registers.c"
+#include "services/retained_registers.c"
 
 #include "valve_controller__1.c"
 #include "contactor_control.c"

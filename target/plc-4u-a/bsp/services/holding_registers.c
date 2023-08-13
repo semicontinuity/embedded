@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include "services/holding_registers.h"
+#include "services/retained_registers.h"
 
 
 uint8_t holding_registers__buffer[MODBUS_SERVER__HOLDING_REGISTERS_COUNT * 2];
@@ -49,8 +50,10 @@ void holding_registers__set(uint8_t address, uint16_t value) {
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS, value);
     } else if (address == HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS) {
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS, value);
+        retained_registers__set(HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS, value);
     } else if (address == HOLDING_REGISTER__ADDRESS__MODBUS__PORT_SPEED) {
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__MODBUS__PORT_SPEED, value);
+        retained_registers__set(HOLDING_REGISTER__ADDRESS__MODBUS__PORT_SPEED, value);
     } else if (address == HOLDING_REGISTER__ADDRESS__REBOOT) {
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__REBOOT, value);
     }
@@ -61,5 +64,7 @@ void holding_registers__init(void) {
     // retain RTC registers
     holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__HOURS, 0);
     holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS, 0);
+    holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS, retained_registers__get(HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS));
+    holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__MODBUS__PORT_SPEED, retained_registers__get(HOLDING_REGISTER__ADDRESS__MODBUS__PORT_SPEED));
     holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__REBOOT, 0);
 }

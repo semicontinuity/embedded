@@ -48,6 +48,8 @@ set(SOURCE_FILES
         ../../bsp/services/internal_coils.c
         ../../bsp/services/holding_registers.h
         ../../bsp/services/holding_registers.c
+        ../../bsp/services/retained_registers.h
+        ../../bsp/services/retained_registers.c
 
         ../../bsp/services/slow_timer.h
         ../../bsp/services/slow_timer.c
