@@ -461,48 +461,30 @@ def write_register(proxy_port: int, device_address: int, address: int, value: in
 
 # ==============================================================================
 
-def read_all(proxy_port: int, device_address: int, spec):
-    coil_blocks = spec.get('coils')
-    if coil_blocks:
-        for block in coil_blocks:
-            coil_specs = block['contents']
-            coil_values = []
-            code = read_coils(proxy_port, device_address, block['address'], len(coil_specs), coil_values)
-            if code != EXIT_CODE_OK: return code
-            for i, coil_spec in enumerate(coil_specs):
-                coil_spec['value'] = coil_values[i]
+read_f = {
+    'coils': read_coils,
+    'discrete_inputs': read_discrete_inputs,
+    'holding_registers': read_holding_registers,
+    'input_registers': read_input_registers,
+}
 
-    discrete_inputs = spec.get('discrete_inputs')
-    if discrete_inputs:
-        for block in discrete_inputs:
-            input_specs = block['contents']
-            input_values = []
-            code = read_discrete_inputs(proxy_port, device_address, block['address'], len(input_specs), input_values)
-            if code != EXIT_CODE_OK: return code
-            for i, input_spec in enumerate(input_specs):
-                input_spec['value'] = input_values[i]
-
-    holding_registers = spec.get('holding_registers')
-    if holding_registers:
-        for block in holding_registers:
-            block_contents = block['contents']
+def read_blocks(proxy_port: int, device_address: int, all_specs, what, read_f):
+    blocks = all_specs.get(what)
+    if blocks:
+        for block in blocks:
+            contents = block['contents']
             values = []
-            code = read_holding_registers(proxy_port, device_address, block['address'], len(block_contents), values)
+            code = read_f(proxy_port, device_address, block['address'], len(contents), values)
             if code != EXIT_CODE_OK: return code
-            for i, entry in enumerate(block_contents):
-                entry['value'] = values[i]
+            for i, spec in enumerate(contents):
+                spec['value'] = values[i]
 
-
-    input_registers = spec.get('input_registers')
-    if input_registers:
-        for block in input_registers:
-            block_contents = block['contents']
-            values = []
-            code = read_input_registers(proxy_port, device_address, block['address'], len(block_contents), values)
-            if code != EXIT_CODE_OK: return code
-            for i, entry in enumerate(block_contents):
-                entry['value'] = values[i]
-
+def read_all(proxy_port: int, device_address: int, all_specs, what: List[str]):
+    for w in what:
+        read_blocks(proxy_port, device_address, all_specs, w, read_f[w])
+    for w in list(read_f):
+        if w not in what and w in all_specs:
+            del all_specs[w]
     return EXIT_CODE_OK
 
 # ==============================================================================
@@ -514,22 +496,7 @@ def main():
 
     if len(sys.argv) < 3 or not (sys.argv[1] == 'read' or sys.argv[1] == 'write'):
         usage()
-    elif sys.argv[1] == 'read' and sys.argv[2] == 'all':
-        if len(sys.argv) != 4:
-            print("Usage:", file=sys.stderr)
-            print("modbus_rtu_tool read all <SPEC.yaml>", file=sys.stderr)
-            sys.exit(EXIT_CODE_SYNTAX_ERROR)
-        spec = get_spec(sys.argv[3])
-        result = read_all(
-            proxy_port=proxy_port,
-            device_address=device_address,
-            spec=spec
-        )
-        if result == EXIT_CODE_OK:
-            print(serialize(spec))
-        else:
-            exit(result)
-    elif sys.argv[1] == 'read' and sys.argv[2] == 'coils':
+    elif sys.argv[1] == 'read' and sys.argv[2] == 'coils' and len(sys.argv) == 5:
         if len(sys.argv) != 5:
             print("Usage:", file=sys.stderr)
             print("modbus_rtu_tool read coils <address> <count>", file=sys.stderr)
@@ -546,7 +513,7 @@ def main():
             print(ans)
         else:
             exit(result)
-    elif sys.argv[1] == 'read' and sys.argv[2] == 'inputs':
+    elif sys.argv[1] == 'read' and sys.argv[2] == 'inputs' and len(sys.argv) == 5:
         if len(sys.argv) != 5:
             print("Usage:", file=sys.stderr)
             print("modbus_rtu_tool read inputs <address> <count>", file=sys.stderr)
@@ -563,7 +530,7 @@ def main():
             print(ans)
         else:
             exit(result)
-    elif sys.argv[1] == 'read' and sys.argv[2] == 'holding-registers':
+    elif sys.argv[1] == 'read' and sys.argv[2] == 'holding-registers' and len(sys.argv) == 5:
         if len(sys.argv) != 5:
             print("Usage:", file=sys.stderr)
             print("modbus_rtu_tool read holding-registers <address> <count>", file=sys.stderr)
@@ -580,7 +547,7 @@ def main():
             print(ans)
         else:
             exit(result)
-    elif sys.argv[1] == 'read' and sys.argv[2] == 'input-registers':
+    elif sys.argv[1] == 'read' and sys.argv[2] == 'input-registers' and len(sys.argv) == 5:
         if len(sys.argv) != 5:
             print("Usage:", file=sys.stderr)
             print("modbus_rtu_tool read input-registers <address> <count>", file=sys.stderr)
@@ -595,6 +562,23 @@ def main():
         )
         if result == EXIT_CODE_OK:
             print(ans)
+        else:
+            exit(result)
+    elif sys.argv[1] == 'read':
+        if len(sys.argv) != 4:
+            print("Usage:", file=sys.stderr)
+            print("modbus_rtu_tool read [all|category,category..] <SPEC.yaml>", file=sys.stderr)
+            sys.exit(EXIT_CODE_SYNTAX_ERROR)
+        all_specs = get_spec(sys.argv[3])
+        what = list(read_f) if sys.argv[2] == 'all' else sys.argv[2].split(',')
+        result = read_all(
+            proxy_port=proxy_port,
+            device_address=device_address,
+            all_specs=all_specs,
+            what=what
+        )
+        if result == EXIT_CODE_OK:
+            print(serialize(all_specs))
         else:
             exit(result)
     elif sys.argv[1] == 'write' and sys.argv[2] == 'coil':
