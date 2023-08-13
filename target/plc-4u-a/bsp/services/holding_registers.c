@@ -47,13 +47,15 @@ void holding_registers__set(uint8_t address, uint16_t value) {
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__HOURS, value);
     else if (address == HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS)
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS, value);
-    else if (address == HOLDING_REGISTER__ADDRESS__REBOOT)
-        while(1) {} // WDT enabled - will restart in 15ms
+    else if (address == HOLDING_REGISTER__ADDRESS__REBOOT) {
+        holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__REBOOT, value);
+    }
 }
 
 
 void holding_registers__init(void) {
-    holding_registers__buffer__set(0, 0);
-    holding_registers__buffer__set(1, 0);
     // retain RTC registers
+    holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__HOURS, 0);
+    holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS, 0);
+    holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__REBOOT, 0);
 }

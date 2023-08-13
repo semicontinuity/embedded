@@ -8,6 +8,8 @@
 #include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver.h"
 
 #include <avr/interrupt.h>
+#include <util/delay.h>
+
 #include <services/uptime_counter.h>
 #include <services/internal_coils.h>
 #include <services/basic_rtc.h>
@@ -29,59 +31,6 @@
 #include "water_leak_sensors_controller.h"
 #include "failure_indicator.h"
 #include "buzzer_control.h"
-
-
-// =============================================================================
-// Fast timer callback (every 1ms)
-// =============================================================================
-
-void fast_timer__do_run(void) {
-    wdt__reset();
-    discrete_inputs__run();
-
-    if (water_leak_sensor_controller__is_runnable()) {
-        water_leak_sensor_controller__run();
-    }
-
-    if (valve_controller__1__limit_switches_state_renderer__is_runnable()) {
-        valve_controller__1__limit_switches_state_renderer__run();
-    }
-
-    if (contactor_control__is_runnable()) {
-        contactor_control__run();
-    }
-
-    contactor_control__actual_state_renderer__run();
-
-    failure_indicator__run();
-
-    buzzer_controller__on_fast_timer_tick();
-
-    slow_timer__run();
-    discrete_outputs__run();
-}
-
-// =============================================================================
-// Slow timer callback (every 250ms)
-// =============================================================================
-
-void slow_timer__do_run(void) {
-    if (valve_controller__1__is_runnable()) {
-        valve_controller__1__run();
-    }
-
-    buzzer_controller__on_slow_timer_tick();
-    seconds_timer__run();
-}
-
-// =============================================================================
-// Seconds timer callback (every second)
-// =============================================================================
-
-void seconds_timer__do_run(void) {
-    uptime_counter__run();
-    basic_rtc__run();
-}
 
 
 // =============================================================================
@@ -107,7 +56,73 @@ static void application__start(void) {
     fast_timer__start();
     modbus_rtu_driver__start();
 
-    wdt__enable_unsafe(WDTO_15MS);
+//    wdt__enable_unsafe(WDTO_15MS);
+//    wdt_enable(WDTO_15MS);
+}
+
+static void application__stop(void) {
+    fast_timer__stop();
+    modbus_rtu_driver__stop();
+}
+
+
+
+// =============================================================================
+// Fast timer callback (every 1ms)
+// =============================================================================
+
+void fast_timer__do_run(void) {
+    discrete_inputs__run();
+
+    if (water_leak_sensor_controller__is_runnable()) {
+        water_leak_sensor_controller__run();
+    }
+
+    if (valve_controller__1__limit_switches_state_renderer__is_runnable()) {
+        valve_controller__1__limit_switches_state_renderer__run();
+    }
+
+    if (contactor_control__is_runnable()) {
+        contactor_control__run();
+    }
+
+    contactor_control__actual_state_renderer__run();
+
+    failure_indicator__run();
+
+    buzzer_controller__on_fast_timer_tick();
+
+    slow_timer__run();
+    discrete_outputs__run();
+
+    if (holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__REBOOT) != 0) {
+        //        while(1) {} // WDT enabled - will restart in 15ms (endless restart)
+        _delay_ms(30);  // wait until response is sent: @4800, about 30ms
+        application__stop();
+        __asm__ __volatile__ ("rjmp 0\n\t");
+    }
+}
+
+// =============================================================================
+// Slow timer callback (every 250ms)
+// =============================================================================
+
+void slow_timer__do_run(void) {
+    if (valve_controller__1__is_runnable()) {
+        valve_controller__1__run();
+    }
+
+    buzzer_controller__on_slow_timer_tick();
+    seconds_timer__run();
+}
+
+// =============================================================================
+// Seconds timer callback (every second)
+// =============================================================================
+
+void seconds_timer__do_run(void) {
+    uptime_counter__run();
+    basic_rtc__run();
 }
 
 

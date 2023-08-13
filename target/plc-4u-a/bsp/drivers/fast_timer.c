@@ -18,6 +18,13 @@ void fast_timer__start(void) {
     );
 }
 
+void fast_timer__stop(void) {
+    timer0__switch_conf(
+            TIMER0_CONF_WGM_CTC | TIMER0_CONF_TOP(250) | TIMER0_CONF_PRESCALER_64,
+            TIMER0_CONF_WGM_CTC | TIMER0_CONF_TOP(250) | TIMER0_CONF_STOPPED
+    );
+}
+
 bool fast_timer__is_runnable(void) {
     return timer0__compare_a__interrupt__pending__get();
 }

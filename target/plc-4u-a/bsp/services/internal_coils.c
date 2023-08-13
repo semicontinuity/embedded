@@ -203,6 +203,27 @@ bool internal_coil__f__get(void) {
 }
 
 
+bool internal_coils__get(uint8_t coil) {
+    if (coil == 0x00) return internal_coil__0__get();
+    if (coil == 0x01) return internal_coil__1__get();
+    if (coil == 0x02) return internal_coil__2__get();
+    if (coil == 0x03) return internal_coil__3__get();
+    if (coil == 0x04) return internal_coil__4__get();
+    if (coil == 0x05) return internal_coil__5__get();
+    if (coil == 0x06) return internal_coil__6__get();
+    if (coil == 0x07) return internal_coil__7__get();
+    if (coil == 0x08) return internal_coil__8__get();
+    if (coil == 0x09) return internal_coil__9__get();
+    if (coil == 0x0A) return internal_coil__a__get();
+    if (coil == 0x0B) return internal_coil__b__get();
+    if (coil == 0x0C) return internal_coil__c__get();
+    if (coil == 0x0D) return internal_coil__d__get();
+    if (coil == 0x0E) return internal_coil__e__get();
+    if (coil == 0x0F) return internal_coil__f__get();
+    return false;
+}
+
+
 void internal_coils__init(void) {
     internal_coils__byte0 = 0x00;
     internal_coils__byte1 = 0x00;

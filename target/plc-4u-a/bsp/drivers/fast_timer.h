@@ -6,6 +6,8 @@ void fast_timer__init(void);
 
 void fast_timer__start(void);
 
+void fast_timer__stop(void);
+
 bool fast_timer__is_runnable(void);
 
 void fast_timer__run(void);

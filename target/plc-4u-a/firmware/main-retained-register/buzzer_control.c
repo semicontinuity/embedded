@@ -39,7 +39,7 @@ void buzzer_controller__running__set(bool running) {
 // Must be invoked on every tick of fast timer (every 1 ms)
 void buzzer_controller__on_fast_timer_tick(void) {
     if (buzzer_controller__is_running()) {
-        buzzer__set(!buzzer__is_set());
+        buzzer__set((buzzer__timeout & 0x01) && !buzzer__is_set());
     }
 }
 

@@ -119,6 +119,7 @@ bool valve_controller__1__is_runnable(void) {
     return valve_controller__1__active__get();
 }
 
+// Invoked on every tick of slow timer (every 250ms)
 void valve_controller__1__run(void) {
     uint8_t timeout = valve_controller__1__timeout;
     if (timeout == 0) {
