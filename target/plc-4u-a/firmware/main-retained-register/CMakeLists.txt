@@ -14,8 +14,8 @@ set(SOURCE_FILES
         ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/timer1.h
         ../../../../cpu/avr/timer1.c
-        ../../../../cpu/avr/timer2.h
-        ../../../../cpu/avr/timer2.c
+#        ../../../../cpu/avr/timer2.h
+#        ../../../../cpu/avr/timer2.c
 
         ../../../../cpu/avr/drivers/comm/modbus/buffer.h
         ../../../../cpu/avr/drivers/comm/modbus/buffer.c
@@ -40,15 +40,6 @@ set(SOURCE_FILES
         ../../bsp/drivers/fast_timer.h
         ../../bsp/drivers/fast_timer.c
 
-        ../../bsp/services/slow_timer.h
-        ../../bsp/services/slow_timer.c
-        ../../bsp/services/seconds_timer.h
-        ../../bsp/services/seconds_timer.c
-        ../../bsp/services/uptime_counter.h
-        ../../bsp/services/uptime_counter.c
-        ../../bsp/services/basic_rtc.h
-        ../../bsp/services/basic_rtc.c
-
         ../../bsp/services/discrete_inputs.h
         ../../bsp/services/discrete_inputs.c
         ../../bsp/services/discrete_outputs.h
@@ -58,8 +49,15 @@ set(SOURCE_FILES
         ../../bsp/services/holding_registers.h
         ../../bsp/services/holding_registers.c
 
-        main.c
-        comm__modbus.c
+        ../../bsp/services/slow_timer.h
+        ../../bsp/services/slow_timer.c
+        ../../bsp/services/seconds_timer.h
+        ../../bsp/services/seconds_timer.c
+        ../../bsp/services/uptime_counter.h
+        ../../bsp/services/uptime_counter.c
+        ../../bsp/services/basic_rtc.h
+        ../../bsp/services/basic_rtc.c
+
         valve_controller__1.h
         valve_controller__1.c
         contactor_control.h
@@ -70,6 +68,13 @@ set(SOURCE_FILES
         water_leak_sensors_controller.c
         buzzer_control.h
         buzzer_control.c
+
+        comm__modbus__callbacks.c
+        comm__modbus__coils.c
+        comm__modbus__holding_registers.c
+        comm__modbus__discrete_inputs.c
+
+        main.c
 
         __all__.c
 )
@@ -285,7 +290,7 @@ add_definitions(-DMODBUS_SERVER__HANDLE_READ_COILS=1)
 add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_SINGLE_COIL=1)
 
 add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_START=0)
-add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_COUNT=5)
+add_definitions(-DMODBUS_SERVER__HOLDING_REGISTERS_COUNT=7)
 add_definitions(-DMODBUS_SERVER__HANDLE_READ_HOLDING_REGISTERS=1)
 add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_REGISTER=1)
 
@@ -293,7 +298,9 @@ add_definitions(-DHOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH=0)
 add_definitions(-DHOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS=1)
 add_definitions(-DHOLDING_REGISTER__ADDRESS__UPTIME__HOURS=2)
 add_definitions(-DHOLDING_REGISTER__ADDRESS__UPTIME__SECONDS=3)
-add_definitions(-DHOLDING_REGISTER__ADDRESS__REBOOT=4)
+add_definitions(-DHOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS=4)
+add_definitions(-DHOLDING_REGISTER__ADDRESS__MODBUS__PORT_SPEED=5)
+add_definitions(-DHOLDING_REGISTER__ADDRESS__REBOOT=6)
 
 
 

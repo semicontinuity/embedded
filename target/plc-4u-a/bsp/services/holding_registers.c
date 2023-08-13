@@ -39,15 +39,19 @@ uint16_t holding_registers__buffer__get(uint8_t address) {
 
 /* MSB first */
 void holding_registers__set(uint8_t address, uint16_t value) {
-    if (address == HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH)
+    if (address == HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH) {
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH, value);
-    else if (address == HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS)
+    } else if (address == HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS) {
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS, value);
-    else if (address == HOLDING_REGISTER__ADDRESS__UPTIME__HOURS)
+    } else if (address == HOLDING_REGISTER__ADDRESS__UPTIME__HOURS) {
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__HOURS, value);
-    else if (address == HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS)
+    } else if (address == HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS) {
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS, value);
-    else if (address == HOLDING_REGISTER__ADDRESS__REBOOT) {
+    } else if (address == HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS) {
+        holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS, value);
+    } else if (address == HOLDING_REGISTER__ADDRESS__MODBUS__PORT_SPEED) {
+        holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__MODBUS__PORT_SPEED, value);
+    } else if (address == HOLDING_REGISTER__ADDRESS__REBOOT) {
         holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__REBOOT, value);
     }
 }

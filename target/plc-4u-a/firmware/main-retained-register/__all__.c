@@ -30,6 +30,9 @@
 #include "water_leak_sensors_controller.c"
 #include "buzzer_control.c"
 
-#include "comm__modbus.c"
+#include "comm__modbus__callbacks.c"
+#include "comm__modbus__coils.c"
+#include "comm__modbus__holding_registers.c"
+#include "comm__modbus__discrete_inputs.c"
 
 #include "main.c"

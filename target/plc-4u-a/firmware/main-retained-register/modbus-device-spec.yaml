@@ -68,4 +68,6 @@ holding_registers:
   - alias: BASIC_RTC__MM_SS
   - alias: UPTIME__HOURS
   - alias: UPTIME__SECONDS
+  - alias: MODBUS__DEVICE_ADDRESS
+  - alias: MODBUS__PORT_SPEED
   - alias: REBOOT
