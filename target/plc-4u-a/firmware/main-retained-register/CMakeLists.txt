@@ -14,8 +14,8 @@ set(SOURCE_FILES
         ../../../../cpu/avr/timer0.c
         ../../../../cpu/avr/timer1.h
         ../../../../cpu/avr/timer1.c
-#        ../../../../cpu/avr/timer2.h
-#        ../../../../cpu/avr/timer2.c
+        ../../../../cpu/avr/timer2.h
+        ../../../../cpu/avr/timer2.c
 
         ../../../../cpu/avr/drivers/comm/modbus/buffer.h
         ../../../../cpu/avr/drivers/comm/modbus/buffer.c
@@ -37,6 +37,8 @@ set(SOURCE_FILES
         ../../bsp/drivers/in/digital_inputs.c
         ../../bsp/drivers/out/digital_outputs.h
         ../../bsp/drivers/out/buzzer.h
+        ../../bsp/drivers/buzzer_timer.h
+        ../../bsp/drivers/buzzer_timer.c
         ../../bsp/drivers/fast_timer.h
         ../../bsp/drivers/fast_timer.c
 
@@ -344,3 +346,8 @@ add_definitions(-Ddiscrete_inputs__on_input_f_changed=failure_indicator__button_
 add_definitions(-Dfailure_indicator__button__get=discrete_inputs__f__get)
 
 add_definitions(-Dfailure_indicator__led__set=discrete_output__f__set)
+
+# Buzzer
+# ==============================================================================
+add_definitions(-Dtimer2__comp_a__run=buzzer_timer__run)
+add_definitions(-DTIMER2_COMPA_vect_naked=1)

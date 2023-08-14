@@ -8,10 +8,12 @@
 #include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver__usart_tx.c"
 #include "cpu/avr/drivers/comm/modbus/modbus_server.c"
 #include "cpu/avr/timer0.c"
+#include "cpu/avr/timer2.c"
 
 #include "drivers/in/digital_inputs.c"
 #include "drivers/out/digital_outputs.h"
 #include "drivers/out/buzzer.h"
+#include "drivers/buzzer_timer.c"
 
 #include "drivers/fast_timer.c"
 #include "services/slow_timer.c"
