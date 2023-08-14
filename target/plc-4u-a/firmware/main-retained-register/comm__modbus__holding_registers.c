@@ -20,27 +20,10 @@
  *     Buffer: retain address and function code.
  */
 modbus_exception modbus_server__read_holding_registers(void) {
-    buffer__put_u8(holding_registers__buffer[0]);
-    buffer__put_u8(holding_registers__buffer[1]);
-
-    buffer__put_u8(holding_registers__buffer[2]);
-    buffer__put_u8(holding_registers__buffer[3]);
-
-    buffer__put_u8(holding_registers__buffer[4]);
-    buffer__put_u8(holding_registers__buffer[5]);
-
-    buffer__put_u8(holding_registers__buffer[6]);
-    buffer__put_u8(holding_registers__buffer[7]);
-
-    buffer__put_u8(holding_registers__buffer[8]);
-    buffer__put_u8(holding_registers__buffer[9]);
-
-    buffer__put_u8(holding_registers__buffer[10]);
-    buffer__put_u8(holding_registers__buffer[11]);
-
-    buffer__put_u8(holding_registers__buffer[12]);
-    buffer__put_u8(holding_registers__buffer[13]);
-
+    uint8_t *p = holding_registers__buffer;
+    for (uint8_t a = 0; a < MODBUS_SERVER__HOLDING_REGISTERS_COUNT << 1; a++) {
+        buffer__put_u8(*p++);
+    }
     return MODBUS_EXCEPTION__NONE;
 }
 
