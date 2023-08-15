@@ -15,6 +15,7 @@
 #include <services/basic_rtc.h>
 #include <services/holding_registers.h>
 #include <drivers/out/buzzer.h>
+#include <drivers/buzzer_timer.h>
 
 #include "drivers/in/digital_inputs.h"
 #include "drivers/out/digital_outputs.h"
@@ -41,6 +42,8 @@ static void application__init(void) {
     digital_inputs__init();
     digital_outputs__init();
     buzzer__init();
+    buzzer_timer__init();
+    buzzer_controller__init();
 
     discrete_outputs__init();
 
@@ -89,8 +92,6 @@ void fast_timer__do_run(void) {
     contactor_control__actual_state_renderer__run();
 
     failure_indicator__run();
-
-    buzzer_controller__on_fast_timer_tick();
 
     slow_timer__run();
     discrete_outputs__run();

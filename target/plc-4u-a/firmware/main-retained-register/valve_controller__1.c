@@ -23,6 +23,7 @@
 //   * Write 1 to abort any action in progress.
 //     The actuator will be unpowered, possibly, in some half-open state.
 // =============================================================================
+#include <services/holding_registers.h>
 #include "valve_controller__1.h"
 #include "services/internal_coils.h"
 #include "services/discrete_inputs.h"
@@ -124,7 +125,7 @@ void valve_controller__1__run(void) {
     uint8_t timeout = valve_controller__1__timeout;
     if (timeout == 0) {
         // Timeout 0 means that the valve controller has been just activated.
-        valve_controller__1__timeout = 10*4;
+        valve_controller__1__timeout = holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__VALVE_CONTROLLER__1__TIMEOUT_TICKS);
         valve_controller__1__actuator_direction__set(valve_controller__1__target_position__get());
         valve_controller__1__actuator_power__set(true);
         valve_controller__1__failure__set(false);
