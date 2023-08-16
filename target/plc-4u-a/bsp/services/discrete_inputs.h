@@ -14,24 +14,7 @@ extern uint8_t discrete_inputs__byte1;
 #endif
 
 
-bool discrete_inputs__0__get(void);
-bool discrete_inputs__1__get(void);
-bool discrete_inputs__2__get(void);
-bool discrete_inputs__3__get(void);
-bool discrete_inputs__4__get(void);
-bool discrete_inputs__5__get(void);
-bool discrete_inputs__6__get(void);
-bool discrete_inputs__7__get(void);
-bool discrete_inputs__8__get(void);
-bool discrete_inputs__9__get(void);
-bool discrete_inputs__a__get(void);
-bool discrete_inputs__b__get(void);
-bool discrete_inputs__c__get(void);
-bool discrete_inputs__d__get(void);
-bool discrete_inputs__e__get(void);
-bool discrete_inputs__f__get(void);
-
-bool discrete_inputs__get(uint8_t input);
+inline bool __attribute__((always_inline)) discrete_inputs__get(uint8_t input);
 
 void discrete_inputs__run(void);
 

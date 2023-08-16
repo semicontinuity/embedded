@@ -15,8 +15,8 @@ discrete_inputs:
   - alias: EXTRA_INPUT__B
   - alias: BUTTON__VALVE_CONTROLLER__1__OPEN
   - alias: BUTTON__VALVE_CONTROLLER__1__CLOSE
-  - alias: BUTTON__C
-  - alias: BUTTON__D
+  - alias: BUTTON__VALVE_CONTROLLER__2__OPEN
+  - alias: BUTTON__VALVE_CONTROLLER__2__CLOSE
   - alias: BUTTON__CONTACTOR_CONTROL
   - alias: FAILURE_INDICATOR__BUTTON
 
@@ -33,14 +33,14 @@ coils:
   - alias: RESERVED__06
   - alias: RESERVED__07
 
-  - alias: EXTRA_OUTPUT__A
+  - alias: CONTACTOR__COIL
   - alias: EXTRA_OUTPUT__B
-  - alias: BUTTON_LED__A
-  - alias: BUTTON_LED__B
-  - alias: BUTTON_LED__C
-  - alias: BUTTON_LED__D
-  - alias: BUTTON_LED__E
-  - alias: FAILURE_INDICATOR__LED
+  - alias: LED__VALVE__1__OPEN
+  - alias: LED__VALVE__1__CLOSED
+  - alias: LED__VALVE__2__OPEN
+  - alias: LED__VALVE__2__CLOSED
+  - alias: LED__CONTACTOR
+  - alias: LED__FAILURE_INDICATOR
 
   - alias: VALVE_CONTROLLER__1__ACTIVE
   - alias: VALVE_CONTROLLER__1__TARGET_POSITION

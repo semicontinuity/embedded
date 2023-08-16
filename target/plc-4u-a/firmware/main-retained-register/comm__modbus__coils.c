@@ -42,41 +42,8 @@ modbus_exception modbus_server__read_coils(void) {
 modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t active) {
     __asm__ __volatile__( "modbus_server__write_single_coil:");
 
-    if (address == 0x00) discrete_output__0__set(active);
-    if (address == 0x01) discrete_output__1__set(active);
-    if (address == 0x02) discrete_output__2__set(active);
-    if (address == 0x03) discrete_output__3__set(active);
-    if (address == 0x04) discrete_output__4__set(active);
-    if (address == 0x05) discrete_output__5__set(active);
-    if (address == 0x06) discrete_output__6__set(active);
-    if (address == 0x07) discrete_output__7__set(active);
-
-    if (address == 0x08) discrete_output__8__set(active);
-    if (address == 0x09) discrete_output__9__set(active);
-    if (address == 0x0A) discrete_output__a__set(active);
-    if (address == 0x0B) discrete_output__b__set(active);
-    if (address == 0x0C) discrete_output__c__set(active);
-    if (address == 0x0D) discrete_output__d__set(active);
-    if (address == 0x0E) discrete_output__e__set(active);
-    if (address == 0x0F) discrete_output__f__set(active);
-
-    if (address == 0x10) internal_coil__0__set(active);
-    if (address == 0x11) internal_coil__1__set(active);
-    if (address == 0x12) internal_coil__2__set(active);
-    if (address == 0x13) internal_coil__3__set(active);
-    if (address == 0x14) internal_coil__4__set(active);
-    if (address == 0x15) internal_coil__5__set(active);
-    if (address == 0x16) internal_coil__6__set(active);
-    if (address == 0x17) internal_coil__7__set(active);
-
-    if (address == 0x18) internal_coil__8__set(active);
-    if (address == 0x19) internal_coil__9__set(active);
-    if (address == 0x1A) internal_coil__a__set(active);
-    if (address == 0x1B) internal_coil__b__set(active);
-    if (address == 0x1C) internal_coil__c__set(active);
-    if (address == 0x1D) internal_coil__d__set(active);
-    if (address == 0x1E) internal_coil__e__set(active);
-    if (address == 0x1F) internal_coil__f__set(active);
+    if (address < 0x10) discrete_outputs__set(address, active);
+    else if (address < 0x20) internal_coils__set(address - 0x10, active);
 
     return MODBUS_EXCEPTION__NONE;
 }
