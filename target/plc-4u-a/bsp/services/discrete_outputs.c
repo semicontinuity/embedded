@@ -208,6 +208,27 @@ void discrete_outputs__init(void) {
     discrete_outputs__byte1 = 0x00;
 }
 
+
+void discrete_outputs__set(uint8_t output, bool value) {
+    if (output == 0x00) discrete_output__0__set(value);
+    if (output == 0x01) discrete_output__1__set(value);
+    if (output == 0x02) discrete_output__2__set(value);
+    if (output == 0x03) discrete_output__3__set(value);
+    if (output == 0x04) discrete_output__4__set(value);
+    if (output == 0x05) discrete_output__5__set(value);
+    if (output == 0x06) discrete_output__6__set(value);
+    if (output == 0x07) discrete_output__7__set(value);
+    if (output == 0x08) discrete_output__8__set(value);
+    if (output == 0x09) discrete_output__9__set(value);
+    if (output == 0x0A) discrete_output__a__set(value);
+    if (output == 0x0B) discrete_output__b__set(value);
+    if (output == 0x0C) discrete_output__c__set(value);
+    if (output == 0x0D) discrete_output__d__set(value);
+    if (output == 0x0E) discrete_output__e__set(value);
+    if (output == 0x0F) discrete_output__f__set(value);
+}
+
+
 void discrete_outputs__run(void) {
     // uint8_t byte0 = discrete_outputs__byte0;
     // copy discrete_outputs 0..f to digital outputs 0..f

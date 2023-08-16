@@ -90,6 +90,28 @@ bool discrete_inputs__f__get(void) {
 }
 
 
+
+bool discrete_inputs__get(uint8_t input) {
+    if (input == 0x00) return discrete_inputs__0__get();
+    if (input == 0x01) return discrete_inputs__1__get();
+    if (input == 0x02) return discrete_inputs__2__get();
+    if (input == 0x03) return discrete_inputs__3__get();
+    if (input == 0x04) return discrete_inputs__4__get();
+    if (input == 0x05) return discrete_inputs__5__get();
+    if (input == 0x06) return discrete_inputs__6__get();
+    if (input == 0x07) return discrete_inputs__7__get();
+    if (input == 0x08) return discrete_inputs__8__get();
+    if (input == 0x09) return discrete_inputs__9__get();
+    if (input == 0x0A) return discrete_inputs__a__get();
+    if (input == 0x0B) return discrete_inputs__b__get();
+    if (input == 0x0C) return discrete_inputs__c__get();
+    if (input == 0x0D) return discrete_inputs__d__get();
+    if (input == 0x0E) return discrete_inputs__e__get();
+    if (input == 0x0F) return discrete_inputs__f__get();
+    return false;
+}
+
+
 /**
  * Implementation notes:
  * - Unrolled code for speed and easy lookup in *.lss listing.

@@ -31,6 +31,8 @@ bool discrete_inputs__d__get(void);
 bool discrete_inputs__e__get(void);
 bool discrete_inputs__f__get(void);
 
+bool discrete_inputs__get(uint8_t input);
+
 void discrete_inputs__run(void);
 
 

@@ -28,43 +28,43 @@ uint8_t contactor_control__timeout;
 
 
 void contactor_control__active__set(bool value) {
-    internal_coil__4__set(value);
+    internal_coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__ACTIVE, value);
 }
 
 bool contactor_control__active__get(void) {
-    return internal_coil__4__get();
+    return internal_coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__ACTIVE);
 }
 
 
 void contactor_control__target_position__set(bool opened) {
-    internal_coil__5__set(opened);
+    internal_coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__TARGET_POSITION, opened);
 }
 
 bool contactor_control__target_position__get(void) {
-    return internal_coil__5__get();
+    return internal_coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__TARGET_POSITION);
 }
 
 
 void contactor_control__failure__set(bool value) {
-    internal_coil__a__set(value);
+    internal_coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE, value);
 }
 
 bool contactor_control__failure__get(void) {
-    return internal_coil__a__get();
+    return internal_coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE);
 }
 
 
 void contactor_control__coil__set(bool on) {
-    discrete_output__4__set(on);
+    discrete_outputs__set(DISCRETE_OUTPUT__CONTACTOR__COIL, on);
 }
 
-void contactor_control__led__on__set(bool on) {
-    discrete_output__e__set(on);
+void contactor_control__led__set(bool on) {
+    discrete_outputs__set(DISCRETE_OUTPUT__CONTACTOR__LED, on);
 }
 
 
 bool contactor_control__feedback__get(void) {
-    return discrete_inputs__8__get();
+    return discrete_inputs__get(DISCRETE_INPUT__CONTACTOR__FEEDBACK);
 }
 
 
@@ -112,7 +112,7 @@ void contactor_control__run(void) {
 
 
 void contactor_control__actual_state_renderer__run(void) {
-    contactor_control__led__on__set(contactor_control__feedback__get());
+    contactor_control__led__set(contactor_control__feedback__get());
 }
 
 // =============================================================================

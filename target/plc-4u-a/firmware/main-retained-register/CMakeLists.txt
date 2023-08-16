@@ -319,17 +319,20 @@ add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_REGISTER=1)
 # ==============================================================================
 
 add_definitions(-DDEBOUNCE_TIMEOUT_MS=50)
-#add_definitions(-Ddiscrete_inputs__byte0=GPIOR0)
-#add_definitions(-Ddiscrete_inputs__byte1=GPIOR1)
+
+add_definitions(-DDISCRETE_INPUT__CONTACTOR__FEEDBACK=0x08)
 
 # Discrete outputs
 # ==============================================================================
-#add_definitions(-Ddiscrete_outputs__byte0=OCR0B)
-#add_definitions(-Ddiscrete_outputs__byte1=GPIOR2)
+add_definitions(-DDISCRETE_OUTPUT__CONTACTOR__COIL=0x04)
+add_definitions(-DDISCRETE_OUTPUT__CONTACTOR__LED=0x0E)
 
 # Internal coils
 # ==============================================================================
+add_definitions(-DINTERNAL_COIL__CONTACTOR_CONTROL__ACTIVE=0x04)
+add_definitions(-DINTERNAL_COIL__CONTACTOR_CONTROL__TARGET_POSITION=0x05)
 add_definitions(-DINTERNAL_COIL__BUZZER_CONTROLLER__REQUESTED=0x07)
+add_definitions(-DINTERNAL_COIL__CONTACTOR_CONTROL__FAILURE=0x0A)
 add_definitions(-DINTERNAL_COIL__BUZZER_CONTROLLER__RUNNING=0x0F)
 
 # Valve controller

@@ -64,8 +64,8 @@ void internal_coil__f__set(bool value);
 bool internal_coil__f__get(void);
 
 
-bool internal_coil__get(uint8_t coil);
-void internal_coil__set(uint8_t coil, bool value);
+bool internal_coils__get(uint8_t coil);
+void internal_coils__set(uint8_t coil, bool value);
 
 void internal_coils__init(void);
 
