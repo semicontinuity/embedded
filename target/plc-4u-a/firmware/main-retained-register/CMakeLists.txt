@@ -329,7 +329,8 @@ add_definitions(-DDEBOUNCE_TIMEOUT_MS=50)
 
 # Internal coils
 # ==============================================================================
-#add_definitions(-Dinternal_coils__byte0=SPDR)
+add_definitions(-DINTERNAL_COIL__BUZZER_CONTROLLER__REQUESTED=0x07)
+add_definitions(-DINTERNAL_COIL__BUZZER_CONTROLLER__RUNNING=0x0F)
 
 # Valve controller
 # ==============================================================================

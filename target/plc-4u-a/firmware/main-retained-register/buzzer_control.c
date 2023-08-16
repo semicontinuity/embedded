@@ -22,19 +22,19 @@ uint8_t buzzer__timeout;
 
 
 bool buzzer_controller__is_requested(void) {
-    return internal_coil__7__get();
+    return internal_coil__get(INTERNAL_COIL__BUZZER_CONTROLLER__REQUESTED);
 }
 
 void buzzer_controller__requested__set(bool requested) {
-    internal_coil__7__set(requested);
+    internal_coil__set(INTERNAL_COIL__BUZZER_CONTROLLER__REQUESTED, requested);
 }
 
 bool buzzer_controller__is_running(void) {
-    return internal_coil__f__get();
+    return internal_coil__get(INTERNAL_COIL__BUZZER_CONTROLLER__RUNNING);
 }
 
 void buzzer_controller__running__set(bool running) {
-    internal_coil__f__set(running);
+    internal_coil__set(INTERNAL_COIL__BUZZER_CONTROLLER__RUNNING, running);
 }
 
 

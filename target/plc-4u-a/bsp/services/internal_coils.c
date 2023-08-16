@@ -203,7 +203,7 @@ bool internal_coil__f__get(void) {
 }
 
 
-bool internal_coils__get(uint8_t coil) {
+bool internal_coil__get(uint8_t coil) {
     if (coil == 0x00) return internal_coil__0__get();
     if (coil == 0x01) return internal_coil__1__get();
     if (coil == 0x02) return internal_coil__2__get();
@@ -221,6 +221,26 @@ bool internal_coils__get(uint8_t coil) {
     if (coil == 0x0E) return internal_coil__e__get();
     if (coil == 0x0F) return internal_coil__f__get();
     return false;
+}
+
+
+void internal_coil__set(uint8_t coil, bool value) {
+    if (coil == 0x00) internal_coil__0__set(value);
+    if (coil == 0x01) internal_coil__1__set(value);
+    if (coil == 0x02) internal_coil__2__set(value);
+    if (coil == 0x03) internal_coil__3__set(value);
+    if (coil == 0x04) internal_coil__4__set(value);
+    if (coil == 0x05) internal_coil__5__set(value);
+    if (coil == 0x06) internal_coil__6__set(value);
+    if (coil == 0x07) internal_coil__7__set(value);
+    if (coil == 0x08) internal_coil__8__set(value);
+    if (coil == 0x09) internal_coil__9__set(value);
+    if (coil == 0x0A) internal_coil__a__set(value);
+    if (coil == 0x0B) internal_coil__b__set(value);
+    if (coil == 0x0C) internal_coil__c__set(value);
+    if (coil == 0x0D) internal_coil__d__set(value);
+    if (coil == 0x0E) internal_coil__e__set(value);
+    if (coil == 0x0F) internal_coil__f__set(value);
 }
 
 
