@@ -321,11 +321,13 @@ add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_REGISTER=1)
 add_definitions(-DDEBOUNCE_TIMEOUT_MS=50)
 
 add_definitions(-DDISCRETE_INPUT__CONTACTOR__FEEDBACK=0x08)
+add_definitions(-DDISCRETE_INPUT__FAILURE_INDICATOR__BUTTON=0x0F)
 
 # Discrete outputs
 # ==============================================================================
 add_definitions(-DDISCRETE_OUTPUT__CONTACTOR__COIL=0x04)
 add_definitions(-DDISCRETE_OUTPUT__CONTACTOR__LED=0x0E)
+add_definitions(-DDISCRETE_OUTPUT__FAILURE_INDICATOR__LED=0x0F)
 
 # Internal coils
 # ==============================================================================
@@ -347,9 +349,6 @@ add_definitions(-Ddiscrete_inputs__on_input_8_changed=contactor_control__button_
 add_definitions(-Dcontactor_control__button__get=discrete_inputs__8__get)
 
 add_definitions(-Ddiscrete_inputs__on_input_f_changed=failure_indicator__button__changed)
-add_definitions(-Dfailure_indicator__button__get=discrete_inputs__f__get)
-
-add_definitions(-Dfailure_indicator__led__set=discrete_output__f__set)
 
 # Buzzer
 # ==============================================================================

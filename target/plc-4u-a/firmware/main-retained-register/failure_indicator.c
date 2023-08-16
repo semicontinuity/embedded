@@ -12,6 +12,14 @@
 #include "services/discrete_inputs.h"
 
 
+void failure_indicator__led__set(bool value) {
+    discrete_outputs__set(DISCRETE_OUTPUT__FAILURE_INDICATOR__LED, value);
+}
+
+bool failure_indicator__button__get(void) {
+    return discrete_inputs__get(DISCRETE_INPUT__FAILURE_INDICATOR__BUTTON);
+}
+
 void failure_indicator__run(void) {
     failure_indicator__led__set(
             contactor_control__failure__get()

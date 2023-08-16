@@ -18,7 +18,7 @@ discrete_inputs:
   - alias: BUTTON__C
   - alias: BUTTON__D
   - alias: BUTTON__E
-  - alias: BUTTON__F
+  - alias: FAILURE_INDICATOR__BUTTON
 
 coils:
 -
@@ -40,7 +40,7 @@ coils:
   - alias: BUTTON_LED__C
   - alias: BUTTON_LED__D
   - alias: BUTTON_LED__E
-  - alias: BUTTON_LED__F
+  - alias: FAILURE_INDICATOR__LED
 
   - alias: VALVE_CONTROLLER__1__ACTIVE
   - alias: VALVE_CONTROLLER__1__TARGET_POSITION
