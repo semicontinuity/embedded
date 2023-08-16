@@ -11,13 +11,13 @@ discrete_inputs:
   - alias: VALVE_LIMIT_SWITCH__C
   - alias: VALVE_LIMIT_SWITCH__D
 
-  - alias: EXTRA_INPUT__A
+  - alias: CONTACTOR__FEEDBACK
   - alias: EXTRA_INPUT__B
-  - alias: BUTTON__A
-  - alias: BUTTON__B
+  - alias: BUTTON__VALVE_CONTROLLER__1__OPEN
+  - alias: BUTTON__VALVE_CONTROLLER__1__CLOSE
   - alias: BUTTON__C
   - alias: BUTTON__D
-  - alias: BUTTON__E
+  - alias: BUTTON__CONTACTOR_CONTROL
   - alias: FAILURE_INDICATOR__BUTTON
 
 coils:

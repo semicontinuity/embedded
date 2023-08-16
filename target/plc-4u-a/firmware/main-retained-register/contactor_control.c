@@ -26,6 +26,10 @@
 
 uint8_t contactor_control__timeout;
 
+bool contactor_control__button__get(void) {
+    return discrete_inputs__get(DISCRETE_INPUT__BUTTON__CONTACTOR_CONTROL);
+}
+
 
 void contactor_control__active__set(bool value) {
     internal_coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__ACTIVE, value);

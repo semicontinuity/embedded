@@ -321,13 +321,16 @@ add_definitions(-DMODBUS_SERVER__HANDLE_WRITE_REGISTER=1)
 add_definitions(-DDEBOUNCE_TIMEOUT_MS=50)
 
 add_definitions(-DDISCRETE_INPUT__CONTACTOR__FEEDBACK=0x08)
-add_definitions(-DDISCRETE_INPUT__FAILURE_INDICATOR__BUTTON=0x0F)
+add_definitions(-DDISCRETE_INPUT__BUTTON__VALVE_CONTROLLER__1__OPEN=0x0A)
+add_definitions(-DDISCRETE_INPUT__BUTTON__VALVE_CONTROLLER__1__CLOSE=0x0B)
+add_definitions(-DDISCRETE_INPUT__BUTTON__CONTACTOR_CONTROL=0x0E)
+add_definitions(-DDISCRETE_INPUT__BUTTON__FAILURE_INDICATOR=0x0F)
 
 # Discrete outputs
 # ==============================================================================
 add_definitions(-DDISCRETE_OUTPUT__CONTACTOR__COIL=0x04)
 add_definitions(-DDISCRETE_OUTPUT__CONTACTOR__LED=0x0E)
-add_definitions(-DDISCRETE_OUTPUT__FAILURE_INDICATOR__LED=0x0F)
+add_definitions(-DDISCRETE_OUTPUT__LED__FAILURE_INDICATOR=0x0F)
 
 # Internal coils
 # ==============================================================================
@@ -337,17 +340,11 @@ add_definitions(-DINTERNAL_COIL__BUZZER_CONTROLLER__REQUESTED=0x07)
 add_definitions(-DINTERNAL_COIL__CONTACTOR_CONTROL__FAILURE=0x0A)
 add_definitions(-DINTERNAL_COIL__BUZZER_CONTROLLER__RUNNING=0x0F)
 
-# Valve controller
+# Button listeners
 # ==============================================================================
 add_definitions(-Ddiscrete_inputs__on_input_a_changed=valve_controller__1__button__open__changed)
-add_definitions(-Dvalve_controller__1__button__open__get=discrete_inputs__a__get)
-
 add_definitions(-Ddiscrete_inputs__on_input_b_changed=valve_controller__1__button__close__changed)
-add_definitions(-Dvalve_controller__1__button__close__get=discrete_inputs__b__get)
-
 add_definitions(-Ddiscrete_inputs__on_input_8_changed=contactor_control__button__changed)
-add_definitions(-Dcontactor_control__button__get=discrete_inputs__8__get)
-
 add_definitions(-Ddiscrete_inputs__on_input_f_changed=failure_indicator__button__changed)
 
 # Buzzer

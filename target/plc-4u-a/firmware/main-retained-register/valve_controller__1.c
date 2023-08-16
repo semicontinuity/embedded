@@ -33,6 +33,15 @@
 uint8_t valve_controller__1__timeout;
 
 
+void valve_controller__1__led__valve_open__set(bool on) {
+    discrete_output__a__set(on);
+}
+
+void valve_controller__1__led__valve_closed__set(bool on) {
+    discrete_output__b__set(on);
+}
+
+
 void valve_controller__1__active__set(bool value) {
     internal_coil__0__set(value);
 }
@@ -72,13 +81,6 @@ bool valve_controller__1__actuator_direction__get(void) {
     return discrete_output__1__get();
 }
 
-void valve_controller__1__led__valve_open__set(bool on) {
-    discrete_output__a__set(on);
-}
-
-void valve_controller__1__led__valve_closed__set(bool on) {
-    discrete_output__b__set(on);
-}
 
 bool valve_controller__1__limit_switch__valve_open__get(void) {
     return discrete_inputs__4__get();
@@ -189,14 +191,22 @@ void valve_controller__1__limit_switches_state_renderer__run(void) {
 // Button listeners
 // =============================================================================
 
-void valve_controller__1__button__open__changed() {
+bool valve_controller__1__button__open__get(void) {
+    return discrete_inputs__get(DISCRETE_INPUT__BUTTON__VALVE_CONTROLLER__1__OPEN);
+}
+
+bool valve_controller__1__button__close__get(void) {
+    return discrete_inputs__get(DISCRETE_INPUT__BUTTON__VALVE_CONTROLLER__1__CLOSE);
+}
+
+void valve_controller__1__button__open__changed(void) {
     if (valve_controller__1__button__open__get()) {
         // button pressed
         valve_controller__1__open();
     }
 }
 
-void valve_controller__1__button__close__changed() {
+void valve_controller__1__button__close__changed(void) {
     if (valve_controller__1__button__close__get()) {
         // button pressed
         valve_controller__1__close();
