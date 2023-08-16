@@ -329,7 +329,9 @@ add_definitions(-DDISCRETE_INPUT__BUTTON__FAILURE_INDICATOR=0x0F)
 # Discrete outputs
 # ==============================================================================
 add_definitions(-DDISCRETE_OUTPUT__CONTACTOR__COIL=0x04)
-add_definitions(-DDISCRETE_OUTPUT__CONTACTOR__LED=0x0E)
+add_definitions(-DDISCRETE_OUTPUT__LED__VALVE__1__OPEN=0x0A)
+add_definitions(-DDISCRETE_OUTPUT__LED__VALVE__1__CLOSED=0x0B)
+add_definitions(-DDISCRETE_OUTPUT__LED__CONTACTOR=0x0E)
 add_definitions(-DDISCRETE_OUTPUT__LED__FAILURE_INDICATOR=0x0F)
 
 # Internal coils

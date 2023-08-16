@@ -34,11 +34,19 @@ uint8_t valve_controller__1__timeout;
 
 
 void valve_controller__1__led__valve_open__set(bool on) {
-    discrete_output__a__set(on);
+    discrete_outputs__set(DISCRETE_OUTPUT__LED__VALVE__1__OPEN, on);
 }
 
 void valve_controller__1__led__valve_closed__set(bool on) {
-    discrete_output__b__set(on);
+    discrete_outputs__set(DISCRETE_OUTPUT__LED__VALVE__1__CLOSED, on);
+}
+
+bool valve_controller__1__button__open__get(void) {
+    return discrete_inputs__get(DISCRETE_INPUT__BUTTON__VALVE_CONTROLLER__1__OPEN);
+}
+
+bool valve_controller__1__button__close__get(void) {
+    return discrete_inputs__get(DISCRETE_INPUT__BUTTON__VALVE_CONTROLLER__1__CLOSE);
 }
 
 
@@ -190,14 +198,6 @@ void valve_controller__1__limit_switches_state_renderer__run(void) {
 // =============================================================================
 // Button listeners
 // =============================================================================
-
-bool valve_controller__1__button__open__get(void) {
-    return discrete_inputs__get(DISCRETE_INPUT__BUTTON__VALVE_CONTROLLER__1__OPEN);
-}
-
-bool valve_controller__1__button__close__get(void) {
-    return discrete_inputs__get(DISCRETE_INPUT__BUTTON__VALVE_CONTROLLER__1__CLOSE);
-}
 
 void valve_controller__1__button__open__changed(void) {
     if (valve_controller__1__button__open__get()) {

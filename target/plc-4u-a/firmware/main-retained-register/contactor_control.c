@@ -26,6 +26,16 @@
 
 uint8_t contactor_control__timeout;
 
+
+
+void contactor_control__coil__set(bool on) {
+    discrete_outputs__set(DISCRETE_OUTPUT__CONTACTOR__COIL, on);
+}
+
+void contactor_control__led__set(bool on) {
+    discrete_outputs__set(DISCRETE_OUTPUT__LED__CONTACTOR, on);
+}
+
 bool contactor_control__button__get(void) {
     return discrete_inputs__get(DISCRETE_INPUT__BUTTON__CONTACTOR_CONTROL);
 }
@@ -55,15 +65,6 @@ void contactor_control__failure__set(bool value) {
 
 bool contactor_control__failure__get(void) {
     return internal_coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE);
-}
-
-
-void contactor_control__coil__set(bool on) {
-    discrete_outputs__set(DISCRETE_OUTPUT__CONTACTOR__COIL, on);
-}
-
-void contactor_control__led__set(bool on) {
-    discrete_outputs__set(DISCRETE_OUTPUT__CONTACTOR__LED, on);
 }
 
 
