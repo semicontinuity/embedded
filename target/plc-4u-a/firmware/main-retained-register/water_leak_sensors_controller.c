@@ -12,19 +12,19 @@
 
 
 bool water_leak_sensor_controller__sensor__a__get(void) {
-    return discrete_inputs__0__get();
+    return discrete_inputs__get(DISCRETE_INPUT__WATER_LEAK_SENSOR__A);
 }
 
 bool water_leak_sensor_controller__sensor__b__get(void) {
-    return discrete_inputs__1__get();
+    return discrete_inputs__get(DISCRETE_INPUT__WATER_LEAK_SENSOR__B);
 }
 
 bool water_leak_sensor_controller__sensor__c__get(void) {
-    return discrete_inputs__2__get();
+    return discrete_inputs__get(DISCRETE_INPUT__WATER_LEAK_SENSOR__C);
 }
 
 bool water_leak_sensor_controller__sensor__d__get(void) {
-    return discrete_inputs__3__get();
+    return discrete_inputs__get(DISCRETE_INPUT__WATER_LEAK_SENSOR__D);
 }
 
 
