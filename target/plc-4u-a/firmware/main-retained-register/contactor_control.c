@@ -28,9 +28,9 @@ uint8_t contactor_control__timeout;
 
 
 
-void contactor_control__coil__set(bool on) {
-    discrete_outputs__set(DISCRETE_OUTPUT__CONTACTOR__COIL, on);
-}
+// User interface I/O
+// -----------------------------------------------------------------------------
+
 
 void contactor_control__led__set(bool on) {
     discrete_outputs__set(DISCRETE_OUTPUT__LED__CONTACTOR, on);
@@ -40,6 +40,21 @@ bool contactor_control__button__get(void) {
     return discrete_inputs__get(DISCRETE_INPUT__BUTTON__CONTACTOR_CONTROL);
 }
 
+
+// Physical I/O
+// -----------------------------------------------------------------------------
+
+void contactor_control__coil__set(bool on) {
+    discrete_outputs__set(DISCRETE_OUTPUT__CONTACTOR__COIL, on);
+}
+
+bool contactor_control__feedback__get(void) {
+    return discrete_inputs__get(DISCRETE_INPUT__CONTACTOR__FEEDBACK);
+}
+
+
+// State
+// -----------------------------------------------------------------------------
 
 void contactor_control__active__set(bool value) {
     internal_coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__ACTIVE, value);
@@ -68,10 +83,8 @@ bool contactor_control__failure__get(void) {
 }
 
 
-bool contactor_control__feedback__get(void) {
-    return discrete_inputs__get(DISCRETE_INPUT__CONTACTOR__FEEDBACK);
-}
-
+// Logic
+// -----------------------------------------------------------------------------
 
 void contactor_control__activate(void) {
     contactor_control__active__set(true);

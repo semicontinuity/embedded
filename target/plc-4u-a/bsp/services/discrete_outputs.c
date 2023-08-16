@@ -229,6 +229,27 @@ inline __attribute__((always_inline)) void discrete_outputs__set(uint8_t output,
 }
 
 
+inline __attribute__((always_inline)) bool discrete_outputs__get(uint8_t output) {
+    if (output == 0x00) discrete_output__0__get();
+    if (output == 0x01) discrete_output__1__get();
+    if (output == 0x02) discrete_output__2__get();
+    if (output == 0x03) discrete_output__3__get();
+    if (output == 0x04) discrete_output__4__get();
+    if (output == 0x05) discrete_output__5__get();
+    if (output == 0x06) discrete_output__6__get();
+    if (output == 0x07) discrete_output__7__get();
+    if (output == 0x08) discrete_output__8__get();
+    if (output == 0x09) discrete_output__9__get();
+    if (output == 0x0A) discrete_output__a__get();
+    if (output == 0x0B) discrete_output__b__get();
+    if (output == 0x0C) discrete_output__c__get();
+    if (output == 0x0D) discrete_output__d__get();
+    if (output == 0x0E) discrete_output__e__get();
+    if (output == 0x0F) discrete_output__f__get();
+    return false;
+}
+
+
 void discrete_outputs__run(void) {
     // uint8_t byte0 = discrete_outputs__byte0;
     // copy discrete_outputs 0..f to digital outputs 0..f

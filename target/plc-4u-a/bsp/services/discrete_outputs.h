@@ -63,7 +63,8 @@ void discrete_output__f__set(bool value);
 bool discrete_output__f__get(void);
 
 void discrete_outputs__init(void);
-void discrete_outputs__set(uint8_t output, bool value);
+inline __attribute__((always_inline)) void discrete_outputs__set(uint8_t output, bool value);
+inline __attribute__((always_inline)) bool discrete_outputs__get(uint8_t output);
 void discrete_outputs__run(void);
 
 #endif
