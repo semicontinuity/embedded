@@ -336,6 +336,8 @@ add_definitions(-DDISCRETE_OUTPUT__LED__FAILURE_INDICATOR=0x0F)
 
 # Internal coils
 # ==============================================================================
+add_definitions(-DINTERNAL_COIL__VALVE_CONTROLLER__1__ACTIVE=0x00)
+add_definitions(-DINTERNAL_COIL__VALVE_CONTROLLER__1__TARGET_POSITION=0x01)
 add_definitions(-DINTERNAL_COIL__CONTACTOR_CONTROL__ACTIVE=0x04)
 add_definitions(-DINTERNAL_COIL__CONTACTOR_CONTROL__TARGET_POSITION=0x05)
 add_definitions(-DINTERNAL_COIL__BUZZER_CONTROLLER__REQUESTED=0x07)

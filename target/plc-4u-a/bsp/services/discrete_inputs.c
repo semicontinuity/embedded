@@ -90,8 +90,7 @@ bool discrete_inputs__f__get(void) {
 }
 
 
-
-bool discrete_inputs__get(uint8_t input) {
+inline __attribute__((always_inline)) bool discrete_inputs__get(uint8_t input) {
     if (input == 0x00) return discrete_inputs__0__get();
     if (input == 0x01) return discrete_inputs__1__get();
     if (input == 0x02) return discrete_inputs__2__get();

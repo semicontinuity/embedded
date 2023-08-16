@@ -51,20 +51,20 @@ bool valve_controller__1__button__close__get(void) {
 
 
 void valve_controller__1__active__set(bool value) {
-    internal_coil__0__set(value);
+    internal_coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__ACTIVE, value);
 }
 
 bool valve_controller__1__active__get(void) {
-    return internal_coil__0__get();
+    return internal_coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__ACTIVE);
 }
 
 
 void valve_controller__1__target_position__set(bool opened) {
-    internal_coil__1__set(opened);
+    internal_coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__TARGET_POSITION, opened);
 }
 
 bool valve_controller__1__target_position__get(void) {
-    return internal_coil__1__get();
+    return internal_coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__TARGET_POSITION);
 }
 
 

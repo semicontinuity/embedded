@@ -209,7 +209,7 @@ void discrete_outputs__init(void) {
 }
 
 
-inline void discrete_outputs__set(uint8_t output, bool value) {
+inline __attribute__((always_inline)) void discrete_outputs__set(uint8_t output, bool value) {
     if (output == 0x00) discrete_output__0__set(value);
     if (output == 0x01) discrete_output__1__set(value);
     if (output == 0x02) discrete_output__2__set(value);

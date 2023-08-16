@@ -203,7 +203,7 @@ bool internal_coil__f__get(void) {
 }
 
 
-bool internal_coils__get(uint8_t coil) {
+inline bool __attribute__((always_inline)) internal_coils__get(uint8_t coil) {
     if (coil == 0x00) return internal_coil__0__get();
     if (coil == 0x01) return internal_coil__1__get();
     if (coil == 0x02) return internal_coil__2__get();
@@ -224,7 +224,7 @@ bool internal_coils__get(uint8_t coil) {
 }
 
 
-void internal_coils__set(uint8_t coil, bool value) {
+inline __attribute__((always_inline)) void internal_coils__set(uint8_t coil, bool value) {
     if (coil == 0x00) internal_coil__0__set(value);
     if (coil == 0x01) internal_coil__1__set(value);
     if (coil == 0x02) internal_coil__2__set(value);
