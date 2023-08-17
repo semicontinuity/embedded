@@ -24,7 +24,7 @@ void failure_indicator__run(void) {
     failure_indicator__led__set(
             contactor_control__failure__get()
             || valve_controller__1__failure__get()
-            || water_leak_sensor_controller__failure__get()
+            || water_leak_sensor_controller__alarm__get()
     );
 }
 
@@ -33,10 +33,9 @@ void failure_indicator__run(void) {
 // =============================================================================
 
 void failure_indicator__button__changed() {
-    if (failure_indicator__button__get()) {
-        // if pressed
+    if (failure_indicator__button__get()) { // if pressed
         contactor_control__failure__set(false);
         valve_controller__1__failure__set(false);
-        water_leak_sensor_controller__failure__set(false);
+        water_leak_sensor_controller__alarm__reset();
     }
 }

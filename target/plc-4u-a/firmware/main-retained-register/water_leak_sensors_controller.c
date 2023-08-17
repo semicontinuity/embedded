@@ -8,6 +8,7 @@
 #include "water_leak_sensors_controller.h"
 #include "services/internal_coils.h"
 #include "services/discrete_inputs.h"
+#include "services/discrete_outputs.h"
 #include "valve_controller__1.h"
 
 
@@ -34,33 +35,81 @@ bool water_leak_sensor_controller__sensor__d__get(void) {
 // State
 // -----------------------------------------------------------------------------
 
-void water_leak_sensor_controller__failure__set(bool value) {
-    internal_coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR_CONTROLLER__FAILURE, value);
+void water_leak_sensor_controller__sensor__a__had_leak__set(bool value) {
+    discrete_outputs__set(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK, value);
 }
 
-bool water_leak_sensor_controller__failure__get(void) {
-    return internal_coils__get(INTERNAL_COIL__WATER_LEAK_SENSOR_CONTROLLER__FAILURE);
+void water_leak_sensor_controller__sensor__b__had_leak__set(bool value) {
+    discrete_outputs__set(INTERNAL_COIL__WATER_LEAK_SENSOR__B__HAD_LEAK, value);
+}
+
+void water_leak_sensor_controller__sensor__c__had_leak__set(bool value) {
+    discrete_outputs__set(INTERNAL_COIL__WATER_LEAK_SENSOR__C__HAD_LEAK, value);
+}
+
+void water_leak_sensor_controller__sensor__d__had_leak__set(bool value) {
+    discrete_outputs__set(INTERNAL_COIL__WATER_LEAK_SENSOR__D__HAD_LEAK, value);
+}
+
+bool water_leak_sensor_controller__sensor__a__had_leak__get(void) {
+    return discrete_outputs__get(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK);
+}
+
+bool water_leak_sensor_controller__sensor__b__had_leak__get(void) {
+    return discrete_outputs__get(INTERNAL_COIL__WATER_LEAK_SENSOR__B__HAD_LEAK);
+}
+
+bool water_leak_sensor_controller__sensor__c__had_leak__get(void) {
+    return discrete_outputs__get(INTERNAL_COIL__WATER_LEAK_SENSOR__C__HAD_LEAK);
+}
+
+bool water_leak_sensor_controller__sensor__d__had_leak__get(void) {
+    return discrete_outputs__get(INTERNAL_COIL__WATER_LEAK_SENSOR__D__HAD_LEAK);
 }
 
 
 // Logic
 // -----------------------------------------------------------------------------
 
-bool water_leak_sensor_controller__any_sensor_is_active(void) {
-    return water_leak_sensor_controller__sensor__a__get()
-    || water_leak_sensor_controller__sensor__b__get()
-    || water_leak_sensor_controller__sensor__c__get()
-    || water_leak_sensor_controller__sensor__d__get();
+bool water_leak_sensor_controller__alarm__get(void) {
+    return water_leak_sensor_controller__sensor__a__had_leak__get()
+    || water_leak_sensor_controller__sensor__b__had_leak__get()
+    || water_leak_sensor_controller__sensor__c__had_leak__get()
+    || water_leak_sensor_controller__sensor__d__had_leak__get();
+}
+
+void water_leak_sensor_controller__alarm__reset(void) {
+    water_leak_sensor_controller__sensor__a__had_leak__set(false);
+    water_leak_sensor_controller__sensor__b__had_leak__set(false);
+    water_leak_sensor_controller__sensor__c__had_leak__set(false);
+    water_leak_sensor_controller__sensor__d__had_leak__set(false);
 }
 
 
 bool water_leak_sensor_controller__is_runnable(void) {
-    return !water_leak_sensor_controller__failure__get();
+    return !water_leak_sensor_controller__alarm__get();
 }
 
 void water_leak_sensor_controller__run(void) {
-    if (water_leak_sensor_controller__any_sensor_is_active()) {
-        water_leak_sensor_controller__failure__set(true);
+    bool alarm = false;
+    if (water_leak_sensor_controller__sensor__a__get()) {
+        water_leak_sensor_controller__sensor__a__had_leak__set(true);
+        alarm = true;
+    }
+    if (water_leak_sensor_controller__sensor__b__get()) {
+        water_leak_sensor_controller__sensor__b__had_leak__set(true);
+        alarm = true;
+    }
+    if (water_leak_sensor_controller__sensor__c__get()) {
+        water_leak_sensor_controller__sensor__c__had_leak__set(true);
+        alarm = true;
+    }
+    if (water_leak_sensor_controller__sensor__d__get()) {
+        water_leak_sensor_controller__sensor__d__had_leak__set(true);
+        alarm = true;
+    }
+
+    if (alarm) {
         valve_controller__1__close();
     }
 }

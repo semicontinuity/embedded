@@ -4,8 +4,17 @@
 #include <stdbool.h>
 
 
-void water_leak_sensor_controller__failure__set(bool value);
-bool water_leak_sensor_controller__failure__get(void);
+bool water_leak_sensor_controller__alarm__get(void);
+void water_leak_sensor_controller__alarm__reset(void);
+
+void water_leak_sensor_controller__sensor__a__had_leak__set(bool value);
+void water_leak_sensor_controller__sensor__b__had_leak__set(bool value);
+void water_leak_sensor_controller__sensor__c__had_leak__set(bool value);
+void water_leak_sensor_controller__sensor__d__had_leak__set(bool value);
+bool water_leak_sensor_controller__sensor__a__had_leak__get(void);
+bool water_leak_sensor_controller__sensor__b__had_leak__get(void);
+bool water_leak_sensor_controller__sensor__c__had_leak__get(void);
+bool water_leak_sensor_controller__sensor__d__had_leak__get(void);
 
 bool water_leak_sensor_controller__is_runnable(void);
 void water_leak_sensor_controller__run(void);
