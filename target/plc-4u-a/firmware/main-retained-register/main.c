@@ -76,9 +76,7 @@ static void application__stop(void) {
 void fast_timer__do_run(void) {
     discrete_inputs__run();
 
-    if (water_leak_sensor_controller__is_runnable()) {
-        water_leak_sensor_controller__run();
-    }
+    water_leak_sensor_controller__run();
 
     if (valve_controller__1__limit_switches_state_renderer__is_runnable()) {
         valve_controller__1__limit_switches_state_renderer__run();

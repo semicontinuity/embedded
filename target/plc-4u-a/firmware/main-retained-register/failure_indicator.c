@@ -32,6 +32,11 @@ void failure_indicator__run(void) {
 // Button listener
 // =============================================================================
 
+/**
+ * TODO:
+ * Should memorize the combination of alarm conditions at the time of button press.
+ * If conditions are the same, do not light up LED and trigger buzzer.
+ */
 void failure_indicator__button__changed() {
     if (failure_indicator__button__get()) { // if pressed
         contactor_control__failure__set(false);

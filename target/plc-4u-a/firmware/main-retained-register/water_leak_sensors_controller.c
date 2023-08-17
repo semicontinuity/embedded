@@ -5,12 +5,19 @@
 // instructs water valve controllers to close valves.
 // * Turns on Failure Indicator and Buzzer (for 1 minute)
 // =============================================================================
+#include <services/holding_registers.h>
 #include "water_leak_sensors_controller.h"
 #include "services/coils.h"
-//#include "services/internal_coils.h"
 #include "services/discrete_inputs.h"
-//#include "services/coils.h"
 #include "valve_controller__1.h"
+
+
+// Configuration
+// -----------------------------------------------------------------------------
+
+bool water_leak_sensor_controller__engagement__is_enabled(void) {
+    return holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__WATER_LEAK_SENSORS_CONTROLLER__ENGAGEMENT__ENABLED);
+}
 
 
 // Physical I/O
@@ -87,30 +94,21 @@ void water_leak_sensor_controller__alarm__reset(void) {
 }
 
 
-bool water_leak_sensor_controller__is_runnable(void) {
-    return !water_leak_sensor_controller__alarm__get();
-}
-
 void water_leak_sensor_controller__run(void) {
-    bool alarm = false;
     if (water_leak_sensor_controller__sensor__a__get()) {
         water_leak_sensor_controller__sensor__a__had_leak__set(true);
-        alarm = true;
     }
     if (water_leak_sensor_controller__sensor__b__get()) {
         water_leak_sensor_controller__sensor__b__had_leak__set(true);
-        alarm = true;
     }
     if (water_leak_sensor_controller__sensor__c__get()) {
         water_leak_sensor_controller__sensor__c__had_leak__set(true);
-        alarm = true;
     }
     if (water_leak_sensor_controller__sensor__d__get()) {
         water_leak_sensor_controller__sensor__d__had_leak__set(true);
-        alarm = true;
     }
 
-    if (alarm) {
+    if (water_leak_sensor_controller__engagement__is_enabled() && water_leak_sensor_controller__alarm__get()) {
         valve_controller__1__close();
     }
 }
