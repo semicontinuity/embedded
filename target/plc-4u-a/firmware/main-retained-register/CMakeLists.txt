@@ -64,8 +64,8 @@ set(SOURCE_FILES
         valve_controller__1.c
         contactor_control.h
         contactor_control.c
-        failure_indicator.h
-        failure_indicator.c
+        alarm_controller.h
+        alarm_controller.c
         water_leak_sensors_controller.h
         water_leak_sensors_controller.c
         buzzer_control.h
@@ -323,7 +323,7 @@ add_definitions(-DDISCRETE_INPUT__BUTTON__VALVE_CONTROLLER__1__CLOSE=0x01)
 add_definitions(-DDISCRETE_INPUT__BUTTON__VALVE_CONTROLLER__2__OPEN=0x02)
 add_definitions(-DDISCRETE_INPUT__BUTTON__VALVE_CONTROLLER__2__CLOSE=0x03)
 add_definitions(-DDISCRETE_INPUT__BUTTON__CONTACTOR_CONTROL=0x04)
-add_definitions(-DDISCRETE_INPUT__BUTTON__FAILURE_INDICATOR=0x05)
+add_definitions(-DDISCRETE_INPUT__BUTTON__ALARM=0x05)
 add_definitions(-DDISCRETE_INPUT__CONTACTOR__FEEDBACK=0x06)
 add_definitions(-DDISCRETE_INPUT__EXTRA__B=0x07)
 add_definitions(-DDISCRETE_INPUT__VALVE_CONTROLLER__1__LIMIT_SWITCH__VALVE_OPEN=0x08)
@@ -343,7 +343,7 @@ add_definitions(-DDISCRETE_OUTPUT__LED__VALVE__1__CLOSED=0x01)
 add_definitions(-DDISCRETE_OUTPUT__LED__VALVE__1__OPEN=0x02)
 add_definitions(-DDISCRETE_OUTPUT__LED__VALVE__1__CLOSED=0x03)
 add_definitions(-DDISCRETE_OUTPUT__LED__CONTACTOR=0x04)
-add_definitions(-DDISCRETE_OUTPUT__LED__FAILURE_INDICATOR=0x05)
+add_definitions(-DDISCRETE_OUTPUT__LED__ALARM=0x05)
 add_definitions(-DDISCRETE_OUTPUT__CONTACTOR__COIL=0x06)
 add_definitions(-DDISCRETE_OUTPUT__EXTRA__B=0x07)
 
@@ -391,7 +391,7 @@ add_definitions(-DINTERNAL_COIL__RESERVED__27=0x27)
 add_definitions(-Ddiscrete_inputs__on_input_a_changed=valve_controller__1__button__open__changed)
 add_definitions(-Ddiscrete_inputs__on_input_b_changed=valve_controller__1__button__close__changed)
 add_definitions(-Ddiscrete_inputs__on_input_8_changed=contactor_control__button__changed)
-add_definitions(-Ddiscrete_inputs__on_input_f_changed=failure_indicator__button__changed)
+add_definitions(-Ddiscrete_inputs__on_input_f_changed=alarm_controller__button__changed)
 
 # Buzzer
 # ==============================================================================

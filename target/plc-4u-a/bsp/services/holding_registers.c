@@ -41,7 +41,7 @@ uint16_t holding_registers__buffer__get(uint8_t address) {
 /* MSB first */
 void holding_registers__set(uint8_t address, uint16_t value) {
     if (address >= HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS) {
-        retained_registers__set(HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS, value);
+        retained_registers__set(address, value);
     }
     holding_registers__buffer__set(address, value);
 }

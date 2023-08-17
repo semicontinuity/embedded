@@ -30,7 +30,7 @@
 #include "valve_controller__1.h"
 #include "contactor_control.h"
 #include "water_leak_sensors_controller.h"
-#include "failure_indicator.h"
+#include "alarm_controller.h"
 #include "buzzer_control.h"
 
 
@@ -88,7 +88,7 @@ void fast_timer__do_run(void) {
 
     contactor_control__actual_state_renderer__run();
 
-    failure_indicator__run();
+    alarm_controller__run();
 
     slow_timer__run();
 //    discrete_outputs__run();

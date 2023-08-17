@@ -28,7 +28,7 @@
 
 #include "valve_controller__1.c"
 #include "contactor_control.c"
-#include "failure_indicator.c"
+#include "alarm_controller.c"
 #include "water_leak_sensors_controller.c"
 #include "buzzer_control.c"
 
