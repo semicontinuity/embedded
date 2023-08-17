@@ -30,7 +30,7 @@
 #include "valve_controller__1.h"
 #include "contactor_control.h"
 #include "water_leak_sensors_controller.h"
-#include "alarm_controller.h"
+#include "alert_controller.h"
 #include "buzzer_control.h"
 
 

@@ -1,13 +1,30 @@
 // =============================================================================
-// Alarm controller
+// Alarm controller.
+// Manages Alert LED and Alamr Buzzer.
 //
-// Master Alarm LED (in button) is ON, 
-// when any of alarm or failure flags is ON. Also, buzzer is requested.
+// Maintains multiple alarm and failure flags on behalf of other controllers.
+// - Some controllers may set failure flags
+//   to indicate the failure of a long-running operation (PUSH mode).
+//   Alert is triggered, when the flag is set to True,
+//   and its previous value was False.
+// - Some controllers may compute alarm or failure flags on-demand (PULL mode).
+//   In this case, if a controller reports True alert condition,
+//   and the corresponding flag is False, the alert is triggered.
 //
-// Pressing the button acknowledges and resets all alarm and failure flags.
-// Alarm and failure flags may become ON again, set by respective controllers.
-// If current alarm and failure flags are acknowledged,
-// the LED will turn OFF.
+// - If any of the alarm or failure flags are set,
+//   Master Alarm LED (in button) is lighted.
+//
+// - If alert is triggered, buzzer is requested.
+//
+// - Pressing the button attempts to reset alarm and failure flags:
+//   - Flags, set using PUSH mode, are reset.
+//   - For flags, set using PULL mode, a query is issued
+//     to the corresponding controller for the current state of alert,
+//     and the flag is set to the current state of alert.
+//     Thus, is the flag is True, and the current alert is False,
+//     the flag is reset.
+//     If the current alert is True, the flag remains True.
+//     The buzzer will not be triggered, even though alert is active.
 // =============================================================================
 #include "contactor_control.h"
 #include "valve_controller__1.h"
@@ -32,6 +49,9 @@ bool alarm_controller__button__get(void) {
 // Logic
 // -----------------------------------------------------------------------------
 
+/**
+ * LED is on, when any
+ */
 void alarm_controller__run(void) {
     alarm_controller__led__set(
             contactor_control__failure__get()

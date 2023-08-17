@@ -1,5 +1,5 @@
-#ifndef ALARM_CONTROLLER__H
-#define ALARM_CONTROLLER__H
+#ifndef ALERT_CONTROLLER__H
+#define ALERT_CONTROLLER__H
 
 #include <stdbool.h>
 
