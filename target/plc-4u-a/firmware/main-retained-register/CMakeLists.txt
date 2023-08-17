@@ -44,10 +44,8 @@ set(SOURCE_FILES
 
         ../../bsp/services/discrete_inputs.h
         ../../bsp/services/discrete_inputs.c
-        ../../bsp/services/discrete_outputs.h
-        ../../bsp/services/discrete_outputs.c
-        ../../bsp/services/internal_coils.h
-        ../../bsp/services/internal_coils.c
+        ../../bsp/services/coils.h
+        ../../bsp/services/coils.c
         ../../bsp/services/holding_registers.h
         ../../bsp/services/holding_registers.c
         ../../bsp/services/retained_registers.h
@@ -338,7 +336,7 @@ add_definitions(-DDISCRETE_INPUT__WATER_LEAK_SENSOR__C=0x0E)
 add_definitions(-DDISCRETE_INPUT__WATER_LEAK_SENSOR__D=0x0F)
 
 
-# Discrete outputs
+# Discrete outputs (external coils)
 # ==============================================================================
 add_definitions(-DDISCRETE_OUTPUT__LED__VALVE__1__OPEN=0x00)
 add_definitions(-DDISCRETE_OUTPUT__LED__VALVE__1__CLOSED=0x01)
@@ -348,17 +346,18 @@ add_definitions(-DDISCRETE_OUTPUT__LED__CONTACTOR=0x04)
 add_definitions(-DDISCRETE_OUTPUT__LED__FAILURE_INDICATOR=0x05)
 add_definitions(-DDISCRETE_OUTPUT__CONTACTOR__COIL=0x06)
 add_definitions(-DDISCRETE_OUTPUT__EXTRA__B=0x07)
+
 add_definitions(-DDISCRETE_OUTPUT__VALVE_CONTROLLER__1__ACTUATOR_POWER=0x08)
 add_definitions(-DDISCRETE_OUTPUT__VALVE_CONTROLLER__1__ACTUATOR_DIRECTION=0x09)
 add_definitions(-DDISCRETE_OUTPUT__VALVE_CONTROLLER__2__ACTUATOR_POWER=0x0A)
 add_definitions(-DDISCRETE_OUTPUT__VALVE_CONTROLLER__2__ACTUATOR_DIRECTION=0x0B)
+
+# Internal coils (coils 0x0C +)
+# ==============================================================================
 add_definitions(-DINTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK=0x0C)
 add_definitions(-DINTERNAL_COIL__WATER_LEAK_SENSOR__B__HAD_LEAK=0x0D)
 add_definitions(-DINTERNAL_COIL__WATER_LEAK_SENSOR__C__HAD_LEAK=0x0E)
 add_definitions(-DINTERNAL_COIL__WATER_LEAK_SENSOR__D__HAD_LEAK=0x0F)
-
-# Internal coils
-# ==============================================================================
 
 add_definitions(-DINTERNAL_COIL__WATER_LEAK_SENSOR__A__FAILURE=0x10)
 add_definitions(-DINTERNAL_COIL__WATER_LEAK_SENSOR__B__FAILURE=0x11)

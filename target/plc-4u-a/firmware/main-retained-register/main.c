@@ -11,7 +11,7 @@
 #include <util/delay.h>
 
 #include <services/uptime_counter.h>
-#include <services/internal_coils.h>
+#include <services/coils.h>
 #include <services/basic_rtc.h>
 #include <services/holding_registers.h>
 #include <drivers/out/buzzer.h>
@@ -25,7 +25,7 @@
 #include "services/seconds_timer.h"
 
 #include "services/discrete_inputs.h"
-#include "services/discrete_outputs.h"
+//#include "services/discrete_outputs.h"
 
 #include "valve_controller__1.h"
 #include "contactor_control.h"
@@ -45,9 +45,8 @@ static void application__init(void) {
     buzzer_timer__init();
     buzzer_controller__init();
 
-    discrete_outputs__init();
+    coils__init();
 
-    internal_coils__init();
     holding_registers__init();
 
     fast_timer__init();
@@ -94,7 +93,7 @@ void fast_timer__do_run(void) {
     failure_indicator__run();
 
     slow_timer__run();
-    discrete_outputs__run();
+//    discrete_outputs__run();
 
     if (holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__REBOOT) != 0) {
         //        while(1) {} // WDT enabled - will restart in 15ms (endless restart)

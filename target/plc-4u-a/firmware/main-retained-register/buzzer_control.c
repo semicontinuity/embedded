@@ -14,7 +14,7 @@
 #include "buzzer_control.h"
 #include "drivers/out/buzzer.h"
 #include "drivers/buzzer_timer.h"
-#include "services/internal_coils.h"
+#include "services/coils.h"
 
 
 // Buzzer timeout in slow timer ticks
@@ -22,19 +22,19 @@ uint8_t buzzer__timeout;
 
 
 bool buzzer_controller__is_requested(void) {
-    return internal_coils__get(INTERNAL_COIL__BUZZER_CONTROLLER__REQUESTED);
+    return coils__get(INTERNAL_COIL__BUZZER_CONTROLLER__REQUESTED);
 }
 
 void buzzer_controller__requested__set(bool requested) {
-    internal_coils__set(INTERNAL_COIL__BUZZER_CONTROLLER__REQUESTED, requested);
+    coils__set(INTERNAL_COIL__BUZZER_CONTROLLER__REQUESTED, requested);
 }
 
 bool buzzer_controller__is_running(void) {
-    return internal_coils__get(INTERNAL_COIL__BUZZER_CONTROLLER__RUNNING);
+    return coils__get(INTERNAL_COIL__BUZZER_CONTROLLER__RUNNING);
 }
 
 void buzzer_controller__running__set(bool running) {
-    internal_coils__set(INTERNAL_COIL__BUZZER_CONTROLLER__RUNNING, running);
+    coils__set(INTERNAL_COIL__BUZZER_CONTROLLER__RUNNING, running);
 }
 
 

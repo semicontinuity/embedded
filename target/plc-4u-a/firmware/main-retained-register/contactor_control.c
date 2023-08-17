@@ -19,21 +19,18 @@
 //   * 0: Commutation has been successful
 // =============================================================================
 #include "contactor_control.h"
-#include "services/internal_coils.h"
+#include "services/coils.h"
 #include "services/discrete_inputs.h"
-#include "services/discrete_outputs.h"
 
 
 uint8_t contactor_control__timeout;
 
 
-
 // User interface I/O
 // -----------------------------------------------------------------------------
 
-
 void contactor_control__led__set(bool on) {
-    discrete_outputs__set(DISCRETE_OUTPUT__LED__CONTACTOR, on);
+    coils__set(DISCRETE_OUTPUT__LED__CONTACTOR, on);
 }
 
 bool contactor_control__button__get(void) {
@@ -45,7 +42,7 @@ bool contactor_control__button__get(void) {
 // -----------------------------------------------------------------------------
 
 void contactor_control__coil__set(bool on) {
-    discrete_outputs__set(DISCRETE_OUTPUT__CONTACTOR__COIL, on);
+    coils__set(DISCRETE_OUTPUT__CONTACTOR__COIL, on);
 }
 
 bool contactor_control__feedback__get(void) {
@@ -57,29 +54,29 @@ bool contactor_control__feedback__get(void) {
 // -----------------------------------------------------------------------------
 
 void contactor_control__active__set(bool value) {
-    internal_coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__ACTIVE, value);
+    coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__ACTIVE, value);
 }
 
 bool contactor_control__active__get(void) {
-    return internal_coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__ACTIVE);
+    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__ACTIVE);
 }
 
 
 void contactor_control__target_position__set(bool opened) {
-    internal_coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__TARGET_POSITION, opened);
+    coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__TARGET_POSITION, opened);
 }
 
 bool contactor_control__target_position__get(void) {
-    return internal_coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__TARGET_POSITION);
+    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__TARGET_POSITION);
 }
 
 
 void contactor_control__failure__set(bool value) {
-    internal_coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE, value);
+    coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE, value);
 }
 
 bool contactor_control__failure__get(void) {
-    return internal_coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE);
+    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE);
 }
 
 

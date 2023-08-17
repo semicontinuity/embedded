@@ -5,8 +5,7 @@
 
 #include "cpu/avr/drivers/comm/modbus/modbus_server.h"
 #include "cpu/avr/drivers/comm/modbus/buffer.h"
-#include "services/discrete_outputs.h"
-#include "services/internal_coils.h"
+#include "services/coils.h"
 
 
 /**
@@ -24,10 +23,11 @@
  */
 modbus_exception modbus_server__read_coils(void) {
     __asm__ __volatile__( "modbus_server__read_coils:");
-    buffer__put_u8(discrete_outputs__byte0);
-    buffer__put_u8(discrete_outputs__byte1);
-    buffer__put_u8(internal_coils__byte0);
-    buffer__put_u8(internal_coils__byte1);
+    buffer__put_u8(coils__byte0);
+    buffer__put_u8(coils__byte1);
+    buffer__put_u8(coils__byte2);
+    buffer__put_u8(coils__byte3);
+    buffer__put_u8(coils__byte4);
     __asm__ __volatile__( "modbus_server__read_coils__done:");
     return MODBUS_EXCEPTION__NONE;
 }
@@ -41,9 +41,6 @@ modbus_exception modbus_server__read_coils(void) {
  */
 modbus_exception modbus_server__write_single_coil(uint16_t address, uint8_t active) {
     __asm__ __volatile__( "modbus_server__write_single_coil:");
-
-    if (address < 0x10) discrete_outputs__set(address, active);
-    else if (address < 0x20) internal_coils__set(address - 0x10, active);
-
+    coils__set(address, active);
     return MODBUS_EXCEPTION__NONE;
 }

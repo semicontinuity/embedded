@@ -6,9 +6,10 @@
 // * Turns on Failure Indicator and Buzzer (for 1 minute)
 // =============================================================================
 #include "water_leak_sensors_controller.h"
-#include "services/internal_coils.h"
+#include "services/coils.h"
+//#include "services/internal_coils.h"
 #include "services/discrete_inputs.h"
-#include "services/discrete_outputs.h"
+//#include "services/coils.h"
 #include "valve_controller__1.h"
 
 
@@ -36,35 +37,35 @@ bool water_leak_sensor_controller__sensor__d__get(void) {
 // -----------------------------------------------------------------------------
 
 void water_leak_sensor_controller__sensor__a__had_leak__set(bool value) {
-    discrete_outputs__set(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK, value);
+    coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK, value);
 }
 
 void water_leak_sensor_controller__sensor__b__had_leak__set(bool value) {
-    discrete_outputs__set(INTERNAL_COIL__WATER_LEAK_SENSOR__B__HAD_LEAK, value);
+    coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR__B__HAD_LEAK, value);
 }
 
 void water_leak_sensor_controller__sensor__c__had_leak__set(bool value) {
-    discrete_outputs__set(INTERNAL_COIL__WATER_LEAK_SENSOR__C__HAD_LEAK, value);
+    coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR__C__HAD_LEAK, value);
 }
 
 void water_leak_sensor_controller__sensor__d__had_leak__set(bool value) {
-    discrete_outputs__set(INTERNAL_COIL__WATER_LEAK_SENSOR__D__HAD_LEAK, value);
+    coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR__D__HAD_LEAK, value);
 }
 
 bool water_leak_sensor_controller__sensor__a__had_leak__get(void) {
-    return discrete_outputs__get(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK);
+    return coils__get(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK);
 }
 
 bool water_leak_sensor_controller__sensor__b__had_leak__get(void) {
-    return discrete_outputs__get(INTERNAL_COIL__WATER_LEAK_SENSOR__B__HAD_LEAK);
+    return coils__get(INTERNAL_COIL__WATER_LEAK_SENSOR__B__HAD_LEAK);
 }
 
 bool water_leak_sensor_controller__sensor__c__had_leak__get(void) {
-    return discrete_outputs__get(INTERNAL_COIL__WATER_LEAK_SENSOR__C__HAD_LEAK);
+    return coils__get(INTERNAL_COIL__WATER_LEAK_SENSOR__C__HAD_LEAK);
 }
 
 bool water_leak_sensor_controller__sensor__d__had_leak__get(void) {
-    return discrete_outputs__get(INTERNAL_COIL__WATER_LEAK_SENSOR__D__HAD_LEAK);
+    return coils__get(INTERNAL_COIL__WATER_LEAK_SENSOR__D__HAD_LEAK);
 }
 
 

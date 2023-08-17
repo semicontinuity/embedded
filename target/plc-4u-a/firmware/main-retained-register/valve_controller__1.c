@@ -25,9 +25,8 @@
 // =============================================================================
 #include <services/holding_registers.h>
 #include "valve_controller__1.h"
-#include "services/internal_coils.h"
 #include "services/discrete_inputs.h"
-#include "services/discrete_outputs.h"
+#include "services/coils.h"
 
 
 uint8_t valve_controller__1__timeout;
@@ -37,11 +36,11 @@ uint8_t valve_controller__1__timeout;
 // -----------------------------------------------------------------------------
 
 void valve_controller__1__led__valve_open__set(bool on) {
-    discrete_outputs__set(DISCRETE_OUTPUT__LED__VALVE__1__OPEN, on);
+    coils__set(DISCRETE_OUTPUT__LED__VALVE__1__OPEN, on);
 }
 
 void valve_controller__1__led__valve_closed__set(bool on) {
-    discrete_outputs__set(DISCRETE_OUTPUT__LED__VALVE__1__CLOSED, on);
+    coils__set(DISCRETE_OUTPUT__LED__VALVE__1__CLOSED, on);
 }
 
 
@@ -58,15 +57,15 @@ bool valve_controller__1__button__close__get(void) {
 // -----------------------------------------------------------------------------
 
 void valve_controller__1__actuator_power__set(bool on) {
-    discrete_outputs__set(DISCRETE_OUTPUT__VALVE_CONTROLLER__1__ACTUATOR_POWER, on);
+    coils__set(DISCRETE_OUTPUT__VALVE_CONTROLLER__1__ACTUATOR_POWER, on);
 }
 
 void valve_controller__1__actuator_direction__set(bool opened) {
-    discrete_outputs__set(DISCRETE_OUTPUT__VALVE_CONTROLLER__1__ACTUATOR_DIRECTION, opened);
+    coils__set(DISCRETE_OUTPUT__VALVE_CONTROLLER__1__ACTUATOR_DIRECTION, opened);
 }
 
 bool valve_controller__1__actuator_direction__get(void) {
-    return discrete_outputs__get(DISCRETE_OUTPUT__VALVE_CONTROLLER__1__ACTUATOR_DIRECTION);
+    return coils__get(DISCRETE_OUTPUT__VALVE_CONTROLLER__1__ACTUATOR_DIRECTION);
 }
 
 
@@ -83,29 +82,29 @@ bool valve_controller__1__limit_switch__valve_closed__get(void) {
 // -----------------------------------------------------------------------------
 
 void valve_controller__1__active__set(bool value) {
-    internal_coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__ACTIVE, value);
+    coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__ACTIVE, value);
 }
 
 bool valve_controller__1__active__get(void) {
-    return internal_coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__ACTIVE);
+    return coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__ACTIVE);
 }
 
 
 void valve_controller__1__target_position__set(bool opened) {
-    internal_coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__TARGET_POSITION, opened);
+    coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__TARGET_POSITION, opened);
 }
 
 bool valve_controller__1__target_position__get(void) {
-    return internal_coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__TARGET_POSITION);
+    return coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__TARGET_POSITION);
 }
 
 
 void valve_controller__1__failure__set(bool value) {
-    internal_coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__FAILURE, value);
+    coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__FAILURE, value);
 }
 
 bool valve_controller__1__failure__get(void) {
-    return internal_coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__FAILURE);
+    return coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__FAILURE);
 }
 
 

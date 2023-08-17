@@ -8,12 +8,12 @@
 #include "valve_controller__1.h"
 #include "water_leak_sensors_controller.h"
 
-#include "services/discrete_outputs.h"
+#include "services/coils.h"
 #include "services/discrete_inputs.h"
 
 
 void failure_indicator__led__set(bool value) {
-    discrete_outputs__set(DISCRETE_OUTPUT__LED__FAILURE_INDICATOR, value);
+    coils__set(DISCRETE_OUTPUT__LED__FAILURE_INDICATOR, value);
 }
 
 bool failure_indicator__button__get(void) {

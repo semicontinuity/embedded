@@ -22,8 +22,7 @@
 #include "services/basic_rtc.c"
 
 #include "services/discrete_inputs.c"
-#include "services/discrete_outputs.c"
-#include "services/internal_coils.c"
+#include "services/coils.c"
 #include "services/holding_registers.c"
 #include "services/retained_registers.c"
 
