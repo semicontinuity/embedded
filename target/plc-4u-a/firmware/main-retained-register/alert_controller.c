@@ -75,6 +75,18 @@ void alerting__failure__contactor_controller__set(bool value) {
 }
 
 
+bool alerting__failure__valve_controller__1__get(void) {
+    return coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__FAILURE);
+}
+
+void alerting__failure__valve_controller__1__set(bool value) {
+    if (value && !alerting__failure__contactor_controller__get()) {
+        buzzer_controller__requested__set(true);
+    }
+    coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__FAILURE, value);
+}
+
+
 // Alarm flags
 // -----------------------------------------------------------------------------
 
@@ -154,7 +166,7 @@ void alert_controller__run(void) {
 
     alert_controller__led__set(
             alerting__failure__contactor_controller__get()
-            || valve_controller__1__failure__get()
+            || alerting__failure__valve_controller__1__get()
             || alerting__alarm__water_leak_sensor_controller__a__get()
             || alerting__alarm__water_leak_sensor_controller__b__get()
             || alerting__alarm__water_leak_sensor_controller__c__get()
@@ -174,6 +186,6 @@ void alert_controller__run(void) {
 void alert_controller__button__changed(void) {
     if (alert_controller__button__get()) { // if pressed
         alerting__failure__contactor_controller__set(false);
-        valve_controller__1__failure__set(false);
+//        valve_controller__1__failure__set(false);
     }
 }

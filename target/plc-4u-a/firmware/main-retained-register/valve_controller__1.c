@@ -23,8 +23,9 @@
 //   * Write 1 to abort any action in progress.
 //     The actuator will be unpowered, possibly, in some half-open state.
 // =============================================================================
-#include <services/holding_registers.h>
 #include "valve_controller__1.h"
+#include "alert_controller.h"
+#include <services/holding_registers.h>
 #include "services/discrete_inputs.h"
 #include "services/coils.h"
 
@@ -99,15 +100,6 @@ bool valve_controller__1__target_position__get(void) {
 }
 
 
-void valve_controller__1__failure__set(bool value) {
-    coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__FAILURE, value);
-}
-
-bool valve_controller__1__failure__get(void) {
-    return coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__FAILURE);
-}
-
-
 // Logic
 // -----------------------------------------------------------------------------
 
@@ -150,9 +142,9 @@ void valve_controller__1__run(void) {
         valve_controller__1__timeout = holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__VALVE_CONTROLLER__1__TIMEOUT_TICKS);
         valve_controller__1__actuator_direction__set(valve_controller__1__target_position__get());
         valve_controller__1__actuator_power__set(true);
-        valve_controller__1__failure__set(false);
         valve_controller__1__led__valve_open__set(false);
         valve_controller__1__led__valve_closed__set(false);
+        alerting__failure__valve_controller__1__set(false);
     }
     else {
         --timeout;
@@ -173,21 +165,23 @@ void valve_controller__1__run(void) {
         bool finished;
         if (timeout == 0) {
             // Reached timeout, but limit switch has not been hit yet.
-            valve_controller__1__failure__set(true);
+            alerting__failure__valve_controller__1__set(true);
             finished = false;
         } else {
             if (valve_controller__1__actuator_direction__get()) {
                 // opening
-                if (valve_controller__1__limit_switch__valve_closed__get()) valve_controller__1__failure__set(true);
+                if (valve_controller__1__limit_switch__valve_closed__get())
+                    alerting__failure__valve_controller__1__set(true);
                 finished = valve_controller__1__limit_switch__valve_open__get();
             } else {
                 // closing
-                if (valve_controller__1__limit_switch__valve_open__get()) valve_controller__1__failure__set(true);
+                if (valve_controller__1__limit_switch__valve_open__get())
+                    alerting__failure__valve_controller__1__set(true);
                 finished = valve_controller__1__limit_switch__valve_closed__get();
             }
         }
 
-        if (valve_controller__1__failure__get() || finished) {
+        if (alerting__failure__valve_controller__1__get() || finished) {
             valve_controller__1__deactivate();
         }
     }
