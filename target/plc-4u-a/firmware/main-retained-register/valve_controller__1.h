@@ -7,9 +7,7 @@
 void valve_controller__1__close(void);
 
 
-bool valve_controller__1__is_runnable(void);
-void valve_controller__1__run(void);
-
+void valve_controller__1__on_slow_timer_tick(void);
 
 bool valve_controller__1__limit_switches_state_renderer__is_runnable(void);
 void valve_controller__1__limit_switches_state_renderer__run(void);

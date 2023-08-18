@@ -78,10 +78,6 @@ void fast_timer__do_run(void) {
 
     water_leak_sensor_controller__run();
 
-    if (valve_controller__1__limit_switches_state_renderer__is_runnable()) {
-        valve_controller__1__limit_switches_state_renderer__run();
-    }
-
     contactor_controller__on_slow_timer_tick();
 
     contactor_controller__actual_state_renderer__run();
@@ -104,10 +100,7 @@ void fast_timer__do_run(void) {
 // =============================================================================
 
 void slow_timer__do_run(void) {
-    if (valve_controller__1__is_runnable()) {
-        valve_controller__1__run();
-    }
-
+    valve_controller__1__on_slow_timer_tick();
     buzzer_controller__on_slow_timer_tick();
     seconds_timer__run();
 }

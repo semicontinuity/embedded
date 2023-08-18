@@ -25,7 +25,7 @@
 // =============================================================================
 #include "valve_controller__1.h"
 #include "alert_controller.h"
-#include <services/holding_registers.h>
+#include "services/holding_registers.h"
 #include "services/discrete_inputs.h"
 #include "services/coils.h"
 
@@ -61,8 +61,8 @@ void valve_controller__1__actuator_power__set(bool on) {
     coils__set(DISCRETE_OUTPUT__VALVE_CONTROLLER__1__ACTUATOR_POWER, on);
 }
 
-void valve_controller__1__actuator_direction__set(bool opened) {
-    coils__set(DISCRETE_OUTPUT__VALVE_CONTROLLER__1__ACTUATOR_DIRECTION, opened);
+void valve_controller__1__actuator_direction__set(bool open) {
+    coils__set(DISCRETE_OUTPUT__VALVE_CONTROLLER__1__ACTUATOR_DIRECTION, open);
 }
 
 bool valve_controller__1__actuator_direction__get(void) {
@@ -100,15 +100,6 @@ bool valve_controller__1__is_requested(void) {
 }
 
 
-void valve_controller__1__active__set(bool value) {
-    coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__ACTIVE, value);
-}
-
-bool valve_controller__1__active__get(void) {
-    return coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__ACTIVE);
-}
-
-
 void valve_controller__1__running__set(bool requested) {
     coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__RUNNING, requested);
 }
@@ -123,14 +114,15 @@ bool valve_controller__1__is_running(void) {
 
 void valve_controller__1__activate(bool open_valve) {
     valve_controller__1__target_position__set(open_valve);
-    valve_controller__1__active__set(true);
+    valve_controller__1__requested__set(true);
 }
 
 
 void valve_controller__1__deactivate(void) {
     valve_controller__1__actuator_power__set(false);
     valve_controller__1__actuator_direction__set(false);
-    valve_controller__1__active__set(false);
+    valve_controller__1__running__set(false);
+    valve_controller__1__requested__set(false);
     valve_controller__1__timeout = 0;
 }
 
@@ -148,75 +140,101 @@ void valve_controller__1__open(void) {
 }
 
 
-bool valve_controller__1__is_runnable(void) {
-    return valve_controller__1__active__get();
+void valve_controller__1__start_requested(void) {
+    alerting__failure__valve_controller__1__push(false);
+    valve_controller__1__timeout = holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__VALVE_CONTROLLER__1__TIMEOUT_TICKS);
+    valve_controller__1__actuator_direction__set(valve_controller__1__target_position__get());
+    valve_controller__1__actuator_power__set(true);
+    valve_controller__1__led__valve_open__set(false);
+    valve_controller__1__led__valve_closed__set(false);
+    valve_controller__1__running__set(false);
 }
 
-// Invoked on every tick of slow timer (every 250ms)
 void valve_controller__1__run(void) {
     uint8_t timeout = valve_controller__1__timeout;
+
+    // Check the state of limit switches.
+    // Assume, that on first invocation (in 250ms), the valve is in motion,
+    // and both limit switches are open (the one, that was closed, is already open).
+    bool finished = false;
+    bool error = false;
     if (timeout == 0) {
-        // Timeout 0 means that the valve controller has been just activated.
-        valve_controller__1__timeout = holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__VALVE_CONTROLLER__1__TIMEOUT_TICKS);
-        valve_controller__1__actuator_direction__set(valve_controller__1__target_position__get());
-        valve_controller__1__actuator_power__set(true);
-        valve_controller__1__led__valve_open__set(false);
-        valve_controller__1__led__valve_closed__set(false);
-        alerting__failure__valve_controller__1__push(false);
-    }
-    else {
+        // Reached timeout, but limit switch has not been hit yet.
+        error = true;
+    } else {
         --timeout;
         valve_controller__1__timeout = timeout;
 
+        if (valve_controller__1__actuator_direction__get()) {
+            // opening
+            if (valve_controller__1__limit_switch__valve_closed__get()) {
+                error = true;
+            } else {
+                finished = valve_controller__1__limit_switch__valve_open__get();
+            }
+        } else {
+            // closing
+            if (valve_controller__1__limit_switch__valve_open__get()) {
+                error = true;
+            } else {
+                finished = valve_controller__1__limit_switch__valve_closed__get();
+            }
+        }
+    }
+
+    if (error) {
+        alerting__failure__valve_controller__1__push(true);
+    }
+    if (finished || error) {
+        valve_controller__1__deactivate();
+    }
+}
+
+void valve_controller__1__stop_requested(void) {
+    valve_controller__1__timeout = 0;
+}
+
+
+// =============================================================================
+// State renderer
+// =============================================================================
+
+void valve_controller__1__limit_switches_state_renderer__run(void) {
+    if (valve_controller__1__is_running()) {
+        // use RTC seconds value, so that LEDs for both valves blink synchronously
+        uint16_t seconds = holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS);
+
         // Blink LED in "valve open" button if opening
         // Blink LED in "valve close" button if closing
-        bool led_on = timeout & 0x01;
+        bool led_on = seconds & 0x01;
         if (valve_controller__1__actuator_direction__get())
             valve_controller__1__led__valve_open__set(led_on);
         else
             valve_controller__1__led__valve_closed__set(led_on);
-
-
-        // Check the state of limit switches.
-        // Assume, that on first invocation (in 250ms), the valve is in motion,
-        // and both limit switches are open (the one, that was closed, is already open).
-        bool finished;
-        if (timeout == 0) {
-            // Reached timeout, but limit switch has not been hit yet.
-            alerting__failure__valve_controller__1__push(true);
-            finished = false;
-        } else {
-            if (valve_controller__1__actuator_direction__get()) {
-                // opening
-                if (valve_controller__1__limit_switch__valve_closed__get())
-                    alerting__failure__valve_controller__1__push(true);
-                finished = valve_controller__1__limit_switch__valve_open__get();
-            } else {
-                // closing
-                if (valve_controller__1__limit_switch__valve_open__get())
-                    alerting__failure__valve_controller__1__push(true);
-                finished = valve_controller__1__limit_switch__valve_closed__get();
-            }
+    } else {
+        if (valve_controller__1__limit_switch__valve_open__get()) {
+            valve_controller__1__led__valve_open__set(false);
         }
-
-        if (alerting__failure__valve_controller__1__get() || finished) {
-            valve_controller__1__deactivate();
+        if (valve_controller__1__limit_switch__valve_closed__get()) {
+            valve_controller__1__led__valve_closed__set(false);
         }
     }
 }
 
-
-bool valve_controller__1__limit_switches_state_renderer__is_runnable(void) {
-    return !valve_controller__1__is_runnable();
-}
-
-void valve_controller__1__limit_switches_state_renderer__run(void) {
-    if (valve_controller__1__limit_switch__valve_open__get()) {
-        valve_controller__1__led__valve_open__set(false);
+// Must be invoked on every tick of slow timer (every 250 ms)
+void valve_controller__1__on_slow_timer_tick(void) {
+    if (valve_controller__1__is_running()) {
+        if (!valve_controller__1__is_requested()) {
+            valve_controller__1__stop_requested();
+        }
+        valve_controller__1__run();
+    } else {
+        if (valve_controller__1__is_requested()) {
+            valve_controller__1__start_requested();
+        }
     }
-    if (valve_controller__1__limit_switch__valve_closed__get()) {
-        valve_controller__1__led__valve_closed__set(false);
-    }
+
+    valve_controller__1__limit_switches_state_renderer__run();
 }
 
 // =============================================================================
