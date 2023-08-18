@@ -96,7 +96,7 @@ void contactor_controller__run(void) {
         // Timeout 0 means that the controller has been just activated.
         contactor_controller__timeout = 50;
         contactor_controller__coil__set(contactor_controller__target_position__get());
-        alerting__failure__contactor_controller__set(false);
+        alerting__failure__contactor_controller__push(false);
     }
     else {
         --timeout;
@@ -105,7 +105,7 @@ void contactor_controller__run(void) {
         bool finished;
         if (timeout == 0) {
             // Reached timeout, but limit switch has not been hit yet.
-            alerting__failure__contactor_controller__set(true);
+            alerting__failure__contactor_controller__push(true);
             finished = false;
         } else {
             finished = contactor_controller__target_position__get() == contactor_controller__feedback__get();

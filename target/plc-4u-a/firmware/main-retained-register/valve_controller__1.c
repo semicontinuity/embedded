@@ -144,7 +144,7 @@ void valve_controller__1__run(void) {
         valve_controller__1__actuator_power__set(true);
         valve_controller__1__led__valve_open__set(false);
         valve_controller__1__led__valve_closed__set(false);
-        alerting__failure__valve_controller__1__set(false);
+        alerting__failure__valve_controller__1__push(false);
     }
     else {
         --timeout;
@@ -165,18 +165,18 @@ void valve_controller__1__run(void) {
         bool finished;
         if (timeout == 0) {
             // Reached timeout, but limit switch has not been hit yet.
-            alerting__failure__valve_controller__1__set(true);
+            alerting__failure__valve_controller__1__push(true);
             finished = false;
         } else {
             if (valve_controller__1__actuator_direction__get()) {
                 // opening
                 if (valve_controller__1__limit_switch__valve_closed__get())
-                    alerting__failure__valve_controller__1__set(true);
+                    alerting__failure__valve_controller__1__push(true);
                 finished = valve_controller__1__limit_switch__valve_open__get();
             } else {
                 // closing
                 if (valve_controller__1__limit_switch__valve_open__get())
-                    alerting__failure__valve_controller__1__set(true);
+                    alerting__failure__valve_controller__1__push(true);
                 finished = valve_controller__1__limit_switch__valve_closed__get();
             }
         }
