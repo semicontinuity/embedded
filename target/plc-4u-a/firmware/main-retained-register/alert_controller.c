@@ -1,6 +1,6 @@
 // =============================================================================
-// Alarm controller.
-// Manages Alert LED and Alamr Buzzer.
+// Alert controller.
+// Manages Alert LED and Alarm Buzzer.
 //
 // Maintains multiple alarm and failure flags on behalf of other controllers.
 // - Some controllers may set failure flags
@@ -26,6 +26,7 @@
 //     If the current alert is True, the flag remains True.
 //     The buzzer will not be triggered, even though alert is active.
 // =============================================================================
+#include "alert_controller.h"
 #include "valve_controller__1.h"
 #include "water_leak_sensors_controller.h"
 
@@ -49,14 +50,26 @@ bool alerting__failure__contactor_controller__get(void) {
 }
 
 
+// Alarm flags
+// -----------------------------------------------------------------------------
+
+void alerting__alarm__water_leak_sensor_controller__a__set(bool value) {
+    coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK, value);
+}
+
+bool alerting__alarm__water_leak_sensor_controller__a__get(void) {
+    return coils__get(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK);
+}
+
+
 // Physical I/O
 // -----------------------------------------------------------------------------
 
-void alarm_controller__led__set(bool value) {
+void alert_controller__led__set(bool value) {
     coils__set(DISCRETE_OUTPUT__LED__ALARM, value);
 }
 
-bool alarm_controller__button__get(void) {
+bool alert_controller__button__get(void) {
     return discrete_inputs__get(DISCRETE_INPUT__BUTTON__ALARM);
 }
 
@@ -64,11 +77,11 @@ bool alarm_controller__button__get(void) {
 // Logic
 // -----------------------------------------------------------------------------
 
-/**
- * LED is on, when any
- */
-void alarm_controller__run(void) {
-    alarm_controller__led__set(
+void alert_controller__poll_alerts(void) {
+}
+
+void alert_controller__run(void) {
+    alert_controller__led__set(
             alerting__failure__contactor_controller__get()
             || valve_controller__1__failure__get()
             || water_leak_sensor_controller__alarm__get()
@@ -84,8 +97,8 @@ void alarm_controller__run(void) {
  * Should memorize the combination of alarm conditions at the time of button press.
  * If conditions are the same, do not light up LED and trigger buzzer.
  */
-void alarm_controller__button__changed() {
-    if (alarm_controller__button__get()) { // if pressed
+void alert_controller__button__changed(void) {
+    if (alert_controller__button__get()) { // if pressed
         alerting__failure__contactor_controller__set(false);
         valve_controller__1__failure__set(false);
         water_leak_sensor_controller__alarm__reset();

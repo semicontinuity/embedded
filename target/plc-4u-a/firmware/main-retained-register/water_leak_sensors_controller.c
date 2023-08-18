@@ -43,6 +43,24 @@ bool water_leak_sensor_controller__sensor__d__get(void) {
 // State
 // -----------------------------------------------------------------------------
 
+bool water_leak_sensor_controller__alarm__a__get(void) {
+    return water_leak_sensor_controller__sensor__a__get();
+}
+
+bool water_leak_sensor_controller__alarm__b__get(void) {
+    return water_leak_sensor_controller__sensor__b__get();
+}
+
+bool water_leak_sensor_controller__alarm__c__get(void) {
+    return water_leak_sensor_controller__sensor__c__get();
+}
+
+bool water_leak_sensor_controller__alarm__d__get(void) {
+    return water_leak_sensor_controller__sensor__d__get();
+}
+
+
+
 void water_leak_sensor_controller__sensor__a__had_leak__set(bool value) {
     coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK, value);
 }

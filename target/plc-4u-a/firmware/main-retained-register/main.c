@@ -88,7 +88,7 @@ void fast_timer__do_run(void) {
 
     contactor_controller__actual_state_renderer__run();
 
-    alarm_controller__run();
+    alert_controller__run();
 
     slow_timer__run();
 //    discrete_outputs__run();
