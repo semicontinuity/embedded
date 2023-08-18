@@ -68,7 +68,7 @@ coils:
   - alias: RESERVED__24
   - alias: RESERVED__25
   - alias: RESERVED__26
-  - alias: ALARM__ACKNOWLEDGED
+  - alias: RESERVED__27
 
 holding_registers:
 -

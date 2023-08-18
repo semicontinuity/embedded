@@ -27,7 +27,7 @@ inline void coils__byte0__set(uint8_t bit, bool value) {
     if (value)
         coils__byte0 |= _BV(bit);
     else
-        coils__byte0 &= ~_BV(0);
+        coils__byte0 &= ~_BV(bit);
 }
 
 inline bool coils__byte0__get(uint8_t bit) {
@@ -40,7 +40,7 @@ inline void coils__byte1__set(uint8_t bit, bool value) {
     if (value)
         coils__byte1 |= _BV(bit);
     else
-        coils__byte1 &= ~_BV(0);
+        coils__byte1 &= ~_BV(bit);
 }
 
 inline bool coils__byte1__get(uint8_t bit) {
@@ -52,7 +52,7 @@ inline void coils__byte2__set(uint8_t bit, bool value) {
     if (value)
         coils__byte2 |= _BV(bit);
     else
-        coils__byte2 &= ~_BV(0);
+        coils__byte2 &= ~_BV(bit);
 }
 
 inline bool coils__byte2__get(uint8_t bit) {
@@ -64,7 +64,7 @@ inline void coils__byte3__set(uint8_t bit, bool value) {
     if (value)
         coils__byte3 |= _BV(bit);
     else
-        coils__byte3 &= ~_BV(0);
+        coils__byte3 &= ~_BV(bit);
 }
 
 inline bool coils__byte3__get(uint8_t bit) {
@@ -76,7 +76,7 @@ inline void coils__byte4__set(uint8_t bit, bool value) {
     if (value)
         coils__byte4 |= _BV(bit);
     else
-        coils__byte4 &= ~_BV(0);
+        coils__byte4 &= ~_BV(bit);
 }
 
 inline bool coils__byte4__get(uint8_t bit) {
