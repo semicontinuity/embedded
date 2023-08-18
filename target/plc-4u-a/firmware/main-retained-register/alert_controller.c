@@ -44,8 +44,6 @@
 // Configuration
 // -----------------------------------------------------------------------------
 
-void alerting__alarm__water_leak_sensor_controller__a__set(bool value);
-
 bool alerting__buzzer__enabled(void) {
     return holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__BUZZER__ENABLED);
 }
