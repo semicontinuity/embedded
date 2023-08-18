@@ -62,8 +62,8 @@ set(SOURCE_FILES
 
         valve_controller__1.h
         valve_controller__1.c
-        contactor_control.h
-        contactor_control.c
+        contactor_controller.h
+        contactor_controller.c
         alert_controller.h
         alert_controller.c
         water_leak_sensors_controller.h

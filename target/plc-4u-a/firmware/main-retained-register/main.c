@@ -28,7 +28,7 @@
 //#include "services/discrete_outputs.h"
 
 #include "valve_controller__1.h"
-#include "contactor_control.h"
+#include "contactor_controller.h"
 #include "water_leak_sensors_controller.h"
 #include "alert_controller.h"
 #include "buzzer_control.h"
@@ -82,11 +82,11 @@ void fast_timer__do_run(void) {
         valve_controller__1__limit_switches_state_renderer__run();
     }
 
-    if (contactor_control__is_runnable()) {
-        contactor_control__run();
+    if (contactor_controller__is_runnable()) {
+        contactor_controller__run();
     }
 
-    contactor_control__actual_state_renderer__run();
+    contactor_controller__actual_state_renderer__run();
 
     alarm_controller__run();
 

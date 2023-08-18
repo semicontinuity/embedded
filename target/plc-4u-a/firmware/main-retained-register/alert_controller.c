@@ -26,12 +26,23 @@
 //     If the current alert is True, the flag remains True.
 //     The buzzer will not be triggered, even though alert is active.
 // =============================================================================
-#include "contactor_control.h"
 #include "valve_controller__1.h"
 #include "water_leak_sensors_controller.h"
 
 #include "services/coils.h"
 #include "services/discrete_inputs.h"
+
+
+// Failure flags
+// -----------------------------------------------------------------------------
+
+void alerting__failure__contactor_controller__set(bool value) {
+    coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE, value);
+}
+
+bool alerting__failure__contactor_controller__get(void) {
+    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE);
+}
 
 
 // Physical I/O
@@ -54,7 +65,7 @@ bool alarm_controller__button__get(void) {
  */
 void alarm_controller__run(void) {
     alarm_controller__led__set(
-            contactor_control__failure__get()
+            alerting__failure__contactor_controller__get()
             || valve_controller__1__failure__get()
             || water_leak_sensor_controller__alarm__get()
     );
@@ -71,7 +82,7 @@ void alarm_controller__run(void) {
  */
 void alarm_controller__button__changed() {
     if (alarm_controller__button__get()) { // if pressed
-        contactor_control__failure__set(false);
+        alerting__failure__contactor_controller__set(false);
         valve_controller__1__failure__set(false);
         water_leak_sensor_controller__alarm__reset();
     }

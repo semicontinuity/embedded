@@ -304,7 +304,7 @@ add_definitions(-DINTERNAL_COIL__RESERVED__27=0x27)
 # ==============================================================================
 add_definitions(-Ddiscrete_inputs__on_input_a_changed=valve_controller__1__button__open__changed)
 add_definitions(-Ddiscrete_inputs__on_input_b_changed=valve_controller__1__button__close__changed)
-add_definitions(-Ddiscrete_inputs__on_input_8_changed=contactor_control__button__changed)
+add_definitions(-Ddiscrete_inputs__on_input_8_changed=contactor_controller__button__changed)
 add_definitions(-Ddiscrete_inputs__on_input_f_changed=alarm_controller__button__changed)
 
 # Buzzer
