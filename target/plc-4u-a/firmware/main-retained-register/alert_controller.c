@@ -44,8 +44,8 @@
 // Configuration
 // -----------------------------------------------------------------------------
 
-bool water_leak_sensor_controller__engagement__is_enabled(void) {
-    return holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__WATER_LEAK_SENSORS_CONTROLLER__ENGAGEMENT__ENABLED);
+bool alerting__closure_of_water_valves_on_leak__enabled(void) {
+    return holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__CLOSURE_OF_WATER_VALVES_ON_LEAK__ENABLED);
 }
 
 
@@ -55,7 +55,7 @@ bool water_leak_sensor_controller__engagement__is_enabled(void) {
 void alerting__handle_water_leak_sensor_alert(void) {
     buzzer_controller__requested__set(true);
 
-    if (water_leak_sensor_controller__engagement__is_enabled()) {
+    if (alerting__closure_of_water_valves_on_leak__enabled()) {
         valve_controller__1__close();
     }
 }
