@@ -7,7 +7,7 @@ discrete_inputs:
   - alias: BUTTON__VALVE_CONTROLLER__2__OPEN
   - alias: BUTTON__VALVE_CONTROLLER__2__CLOSE
   - alias: BUTTON__CONTACTOR_CONTROL
-  - alias: BUTTON__ALARM
+  - alias: BUTTON__ALERTS_RESET
   - alias: CONTACTOR__FEEDBACK
   - alias: EXTRA_INPUT__B
 

@@ -182,7 +182,7 @@ void alert_controller__led__set(bool value) {
 }
 
 bool alert_controller__button__get(void) {
-    return discrete_inputs__get(DISCRETE_INPUT__BUTTON__ALARM);
+    return discrete_inputs__get(DISCRETE_INPUT__BUTTON__ALERTS_RESET);
 }
 
 
@@ -214,14 +214,13 @@ void alert_controller__run(void) {
 // Button listener
 // =============================================================================
 
-/**
- * TODO:
- * Should memorize the combination of alarm conditions at the time of button press.
- * If conditions are the same, do not light up LED and trigger buzzer.
- */
 void alert_controller__button__changed(void) {
     if (alert_controller__button__get()) { // if pressed
-        alerting__failure__contactor_controller__push(false);
-        alerting__failure__valve_controller__1__push(false);
+        alerting__failure__contactor_controller__set(false);
+        alerting__failure__valve_controller__1__set(false);
+        alerting__alarm__water_leak_sensor_controller__a__set(water_leak_sensor_controller__alarm__a__get());
+        alerting__alarm__water_leak_sensor_controller__b__set(water_leak_sensor_controller__alarm__b__get());
+        alerting__alarm__water_leak_sensor_controller__c__set(water_leak_sensor_controller__alarm__c__get());
+        alerting__alarm__water_leak_sensor_controller__d__set(water_leak_sensor_controller__alarm__d__get());
     }
 }
