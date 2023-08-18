@@ -74,11 +74,11 @@ holding_registers:
 -
   address: 0
   contents:
-  - alias: BASIC_RTC__DOW_HH
-  - alias: BASIC_RTC__MM_SS
+  - alias: REBOOT
   - alias: UPTIME__HOURS
   - alias: UPTIME__SECONDS
-  - alias: REBOOT
+  - alias: BASIC_RTC__DOW_HH
+  - alias: BASIC_RTC__MM_SS
 
   - alias: MODBUS__DEVICE_ADDRESS
   - alias: MODBUS__PORT_SPEED

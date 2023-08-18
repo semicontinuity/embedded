@@ -48,11 +48,11 @@ void holding_registers__set(uint8_t address, uint16_t value) {
 
 
 void holding_registers__init(void) {
-    // retain RTC registers
-
+    holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__REBOOT, 0);
     holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__HOURS, 0);
     holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS, 0);
-    holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__REBOOT, 0);
+
+    // retain RTC registers
 
     for (uint8_t a = HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS; a < MODBUS_SERVER__HOLDING_REGISTERS_COUNT; a++) {
         holding_registers__buffer__set(a, retained_registers__get(a));
