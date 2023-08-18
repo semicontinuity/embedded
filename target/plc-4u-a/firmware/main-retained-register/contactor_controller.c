@@ -18,6 +18,7 @@
 //   * 1: No feedback about successful commutation within timeout
 //   * 0: Commutation has been successful
 // =============================================================================
+#include <services/holding_registers.h>
 #include "contactor_controller.h"
 #include "services/coils.h"
 #include "services/discrete_inputs.h"
@@ -25,6 +26,14 @@
 
 
 uint8_t contactor_controller__timeout;
+
+
+// Configuration
+// -----------------------------------------------------------------------------
+
+uint8_t contactor_controller__timeout_ms(void) {
+    return holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__CONTACTOR__TIMEOUT_MS);
+}
 
 
 // User interface I/O
@@ -54,15 +63,6 @@ bool contactor_controller__feedback__get(void) {
 // State
 // -----------------------------------------------------------------------------
 
-void contactor_controller__active__set(bool value) {
-    coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__ACTIVE, value);
-}
-
-bool contactor_controller__active__get(void) {
-    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__ACTIVE);
-}
-
-
 void contactor_controller__target_position__set(bool opened) {
     coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__TARGET_POSITION, opened);
 }
@@ -72,47 +72,65 @@ bool contactor_controller__target_position__get(void) {
 }
 
 
+bool contactor_controller__is_running(void) {
+    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROLLER__RUNNING);
+}
+
+void contactor_controller__running__set(bool running) {
+    coils__set(INTERNAL_COIL__CONTACTOR_CONTROLLER__RUNNING, running);
+}
+
+
+bool contactor_controller__is_requested(void) {
+    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROLLER__REQUESTED);
+}
+
+void contactor_controller__requested__set(bool running) {
+    coils__set(INTERNAL_COIL__CONTACTOR_CONTROLLER__REQUESTED, running);
+}
+
+
 // Logic
 // -----------------------------------------------------------------------------
 
-void contactor_controller__activate(void) {
-    contactor_controller__active__set(true);
-}
 
-
-void contactor_controller__deactivate(void) {
-    contactor_controller__active__set(false);
-    contactor_controller__timeout = 0;
-}
-
-
-bool contactor_controller__is_runnable(void) {
-    return contactor_controller__active__get();
+void contactor_controller__start_requested(void) {
+    contactor_controller__timeout = contactor_controller__timeout_ms();
+    contactor_controller__coil__set(contactor_controller__target_position__get());
+    alerting__failure__contactor_controller__push(false);
+    contactor_controller__running__set(true);
 }
 
 void contactor_controller__run(void) {
     uint8_t timeout = contactor_controller__timeout;
     if (timeout == 0) {
-        // Timeout 0 means that the controller has been just activated.
-        contactor_controller__timeout = 50;
-        contactor_controller__coil__set(contactor_controller__target_position__get());
-        alerting__failure__contactor_controller__push(false);
-    }
-    else {
-        --timeout;
-        contactor_controller__timeout = timeout;
-
-        bool finished;
-        if (timeout == 0) {
-            // Reached timeout, but limit switch has not been hit yet.
-            alerting__failure__contactor_controller__push(true);
-            finished = false;
-        } else {
-            finished = contactor_controller__target_position__get() == contactor_controller__feedback__get();
+        // Reached timeout, but limit switch has not been hit yet.
+        alerting__failure__contactor_controller__push(true);
+    } else {
+        // Normally, must be finished before timeout
+        if (contactor_controller__target_position__get() == contactor_controller__feedback__get()) {
+            contactor_controller__running__set(false);
+            contactor_controller__requested__set(false);
         }
+    }
+}
 
-        if (alerting__failure__contactor_controller__get() || finished) {
-            contactor_controller__deactivate();
+void contactor_controller__stop_requested(void) {
+    // cancelling request makes little sense
+    contactor_controller__timeout = 0;
+}
+
+
+// Must be invoked on every tick of fast timer (every 1 ms)
+void contactor_controller__on_slow_timer_tick(void) {
+    if (contactor_controller__is_running()) {
+        if (!contactor_controller__is_requested()) {
+            contactor_controller__stop_requested();
+        }
+        contactor_controller__run();
+    } else {
+        if (contactor_controller__is_requested()) {
+            contactor_controller__start_requested();
         }
     }
 }
@@ -129,6 +147,6 @@ void contactor_controller__actual_state_renderer__run(void) {
 void contactor_controller__button__changed(void) {
     if (contactor_controller__button__get()) { // if pressed
         contactor_controller__target_position__set(!contactor_controller__target_position__get());
-        contactor_controller__activate();
+        contactor_controller__requested__set(true);
     }
 }

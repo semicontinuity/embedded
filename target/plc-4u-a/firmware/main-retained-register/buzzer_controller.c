@@ -21,6 +21,17 @@
 uint8_t buzzer__timeout;
 
 
+// Configuration
+// -----------------------------------------------------------------------------
+
+uint8_t buzzer_controller__duration_ticks(void) {
+    return holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__BUZZER__DURATION_TICKS);
+}
+
+
+// State
+// -----------------------------------------------------------------------------
+
 bool buzzer_controller__is_requested(void) {
     return coils__get(INTERNAL_COIL__BUZZER_CONTROLLER__REQUESTED);
 }
@@ -40,7 +51,7 @@ void buzzer_controller__running__set(bool running) {
 
 // Request buzzer start; to be invoked in STOPPED state
 void buzzer_controller__start_requested(void) {
-    buzzer__timeout = holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__BUZZER__DURATION_TICKS);
+    buzzer__timeout = buzzer_controller__duration_ticks();
     buzzer_controller__running__set(true);
     buzzer_timer__start();
 }
@@ -49,6 +60,7 @@ void buzzer_controller__start_requested(void) {
 void buzzer_controller__run(void) {
     uint8_t timeout = buzzer__timeout;
     if (timeout == 0) {
+        // timeout expired
         buzzer_timer__stop();
         buzzer__off();
         buzzer_controller__running__set(false);

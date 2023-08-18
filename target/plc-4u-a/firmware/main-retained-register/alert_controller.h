@@ -4,8 +4,8 @@
 #include <stdbool.h>
 
 
-void alerting__failure__contactor_controller__push(bool value);
 bool alerting__failure__contactor_controller__get(void);
+void alerting__failure__contactor_controller__push(bool value);
 
 bool alerting__failure__valve_controller__1__get(void);
 void alerting__failure__valve_controller__1__push(bool value);

@@ -5,8 +5,7 @@
 #include <stdbool.h>
 
 
-bool contactor_controller__is_runnable(void);
-void contactor_controller__run(void);
+void contactor_controller__on_slow_timer_tick(void);
 
 void contactor_controller__actual_state_renderer__run(void);
 
