@@ -38,27 +38,30 @@
 // Failure flags
 // -----------------------------------------------------------------------------
 
+bool alerting__failure__contactor_controller__get(void) {
+    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE);
+}
+
 void alerting__failure__contactor_controller__set(bool value) {
-    if (value && !coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE)) {
+    if (value && !alerting__failure__contactor_controller__get()) {
         buzzer_controller__requested__set(true);
     }
     coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE, value);
-}
-
-bool alerting__failure__contactor_controller__get(void) {
-    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE);
 }
 
 
 // Alarm flags
 // -----------------------------------------------------------------------------
 
-void alerting__alarm__water_leak_sensor_controller__a__set(bool value) {
-    coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK, value);
-}
-
 bool alerting__alarm__water_leak_sensor_controller__a__get(void) {
     return coils__get(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK);
+}
+
+void alerting__alarm__water_leak_sensor_controller__a__set(bool value) {
+    if (value && !alerting__alarm__water_leak_sensor_controller__a__get()) {
+        buzzer_controller__requested__set(true);
+    }
+    coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK, value);
 }
 
 
@@ -78,9 +81,13 @@ bool alert_controller__button__get(void) {
 // -----------------------------------------------------------------------------
 
 void alert_controller__poll_alerts(void) {
+    alerting__alarm__water_leak_sensor_controller__a__set(water_leak_sensor_controller__alarm__a__get());
 }
 
+// Invoked on every tick of fast timer (every 1ms)
 void alert_controller__run(void) {
+    alert_controller__poll_alerts();
+
     alert_controller__led__set(
             alerting__failure__contactor_controller__get()
             || valve_controller__1__failure__get()
