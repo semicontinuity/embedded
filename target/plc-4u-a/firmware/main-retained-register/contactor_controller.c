@@ -64,11 +64,11 @@ bool contactor_controller__feedback__get(void) {
 // -----------------------------------------------------------------------------
 
 void contactor_controller__target_position__set(bool opened) {
-    coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__TARGET_POSITION, opened);
+    coils__set(INTERNAL_COIL__CONTACTOR_CONTROLLER__TARGET_POSITION, opened);
 }
 
 bool contactor_controller__target_position__get(void) {
-    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__TARGET_POSITION);
+    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROLLER__TARGET_POSITION);
 }
 
 
@@ -93,7 +93,6 @@ void contactor_controller__requested__set(bool running) {
 // Logic
 // -----------------------------------------------------------------------------
 
-
 void contactor_controller__start_requested(void) {
     contactor_controller__timeout = contactor_controller__timeout_ms();
     contactor_controller__coil__set(contactor_controller__target_position__get());
@@ -106,8 +105,14 @@ void contactor_controller__run(void) {
     if (timeout == 0) {
         // Reached timeout, but limit switch has not been hit yet.
         alerting__failure__contactor_controller__push(true);
+        contactor_controller__running__set(false);
+        contactor_controller__requested__set(false);
+        // Contactor coil output remains in the target state, regardless of failure
+        // (Perhaps, make usage of feedback configurable)
     } else {
-        // Normally, must be finished before timeout
+        --timeout;
+        contactor_controller__timeout = timeout;
+        // Normally, target state must be reached before timeout
         if (contactor_controller__target_position__get() == contactor_controller__feedback__get()) {
             contactor_controller__running__set(false);
             contactor_controller__requested__set(false);
