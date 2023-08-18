@@ -30,7 +30,7 @@
 #include "contactor_controller.c"
 #include "alert_controller.c"
 #include "water_leak_sensors_controller.c"
-#include "buzzer_control.c"
+#include "buzzer_controller.c"
 
 #include "comm__modbus__callbacks.c"
 #include "comm__modbus__coils.c"

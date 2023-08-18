@@ -1,5 +1,5 @@
-#ifndef BUZZER_CONTROL__H
-#define BUZZER_CONTROL__H
+#ifndef BUZZER_CONTROLLER__H
+#define BUZZER_CONTROLLER__H
 
 #include <stdbool.h>
 

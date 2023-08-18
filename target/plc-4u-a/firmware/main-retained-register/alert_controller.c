@@ -31,12 +31,16 @@
 
 #include "services/coils.h"
 #include "services/discrete_inputs.h"
+#include "buzzer_controller.h"
 
 
 // Failure flags
 // -----------------------------------------------------------------------------
 
 void alerting__failure__contactor_controller__set(bool value) {
+    if (value && !coils__get(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE)) {
+        buzzer_controller__requested__set(true);
+    }
     coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE, value);
 }
 

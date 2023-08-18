@@ -11,7 +11,7 @@
 // - BUZZER__REQUESTED=0, BUZZER__RUNNING=1: STOP_REQUESTED
 // =============================================================================
 #include <services/holding_registers.h>
-#include "buzzer_control.h"
+#include "buzzer_controller.h"
 #include "drivers/out/buzzer.h"
 #include "drivers/buzzer_timer.h"
 #include "services/coils.h"

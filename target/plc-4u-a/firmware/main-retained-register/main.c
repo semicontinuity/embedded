@@ -31,7 +31,7 @@
 #include "contactor_controller.h"
 #include "water_leak_sensors_controller.h"
 #include "alert_controller.h"
-#include "buzzer_control.h"
+#include "buzzer_controller.h"
 
 
 // =============================================================================

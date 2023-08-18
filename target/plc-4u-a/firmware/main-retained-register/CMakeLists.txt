@@ -68,8 +68,8 @@ set(SOURCE_FILES
         alert_controller.c
         water_leak_sensors_controller.h
         water_leak_sensors_controller.c
-        buzzer_control.h
-        buzzer_control.c
+        buzzer_controller.h
+        buzzer_controller.c
 
         comm__modbus__callbacks.c
         comm__modbus__coils.c
