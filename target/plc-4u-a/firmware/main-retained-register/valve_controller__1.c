@@ -112,6 +112,10 @@ bool valve_controller__1__is_running(void) {
 // Logic
 // -----------------------------------------------------------------------------
 
+bool valve_controller__1__limit_switch__failure__get(void) {
+    return !valve_controller__1__is_running() && !(valve_controller__1__limit_switch__valve_open__get() ^ valve_controller__1__limit_switch__valve_closed__get());
+}
+
 void valve_controller__1__activate(bool open_valve) {
     valve_controller__1__target_position__set(open_valve);
     valve_controller__1__requested__set(true);

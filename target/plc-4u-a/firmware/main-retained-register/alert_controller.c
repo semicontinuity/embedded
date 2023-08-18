@@ -192,6 +192,8 @@ void alert_controller__poll_alerts(void) {
     alerting__alarm__water_leak_sensor_controller__b__push(water_leak_sensor_controller__alarm__b__get());
     alerting__alarm__water_leak_sensor_controller__c__push(water_leak_sensor_controller__alarm__c__get());
     alerting__alarm__water_leak_sensor_controller__d__push(water_leak_sensor_controller__alarm__d__get());
+
+    alerting__failure__valve_controller__1__push(valve_controller__1__limit_switch__failure__get());
 }
 
 // Invoked on every tick of fast timer (every 1ms)
@@ -208,17 +210,22 @@ void alert_controller__run(void) {
     );
 }
 
+void alert_controller__reset_alerts(void) {
+    alerting__failure__contactor_controller__set(false);
+    alerting__failure__valve_controller__1__set(false);
+    alerting__alarm__water_leak_sensor_controller__a__set(water_leak_sensor_controller__alarm__a__get());
+    alerting__alarm__water_leak_sensor_controller__b__set(water_leak_sensor_controller__alarm__b__get());
+    alerting__alarm__water_leak_sensor_controller__c__set(water_leak_sensor_controller__alarm__c__get());
+    alerting__alarm__water_leak_sensor_controller__d__set(water_leak_sensor_controller__alarm__d__get());
+    alerting__failure__valve_controller__1__set(valve_controller__1__limit_switch__failure__get());
+}
+
 // =============================================================================
 // Button listener
 // =============================================================================
 
 void alert_controller__button__changed(void) {
     if (alert_controller__button__get()) { // if pressed
-        alerting__failure__contactor_controller__set(false);
-        alerting__failure__valve_controller__1__set(false);
-        alerting__alarm__water_leak_sensor_controller__a__set(water_leak_sensor_controller__alarm__a__get());
-        alerting__alarm__water_leak_sensor_controller__b__set(water_leak_sensor_controller__alarm__b__get());
-        alerting__alarm__water_leak_sensor_controller__c__set(water_leak_sensor_controller__alarm__c__get());
-        alerting__alarm__water_leak_sensor_controller__d__set(water_leak_sensor_controller__alarm__d__get());
+        alert_controller__reset_alerts();
     }
 }
