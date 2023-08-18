@@ -44,6 +44,10 @@
 // Configuration
 // -----------------------------------------------------------------------------
 
+bool alerting__buzzer__enabled(void) {
+    return holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__BUZZER__ENABLED);
+}
+
 bool alerting__closure_of_water_valves_on_leak__enabled(void) {
     return holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__CLOSURE_OF_WATER_VALVES_ON_LEAK__ENABLED);
 }
@@ -52,8 +56,14 @@ bool alerting__closure_of_water_valves_on_leak__enabled(void) {
 // Alert handlers
 // -----------------------------------------------------------------------------
 
+void alerting__request_buzzer(void) {
+    if (alerting__buzzer__enabled()) {
+        buzzer_controller__requested__set(true);
+    }
+}
+
 void alerting__handle_water_leak_sensor_alert(void) {
-    buzzer_controller__requested__set(true);
+    alerting__request_buzzer();
 
     if (alerting__closure_of_water_valves_on_leak__enabled()) {
         valve_controller__1__close();
@@ -69,7 +79,7 @@ bool alerting__failure__contactor_controller__get(void) {
 
 void alerting__failure__contactor_controller__set(bool value) {
     if (value && !alerting__failure__contactor_controller__get()) {
-        buzzer_controller__requested__set(true);
+        alerting__request_buzzer();
     }
     coils__set(INTERNAL_COIL__CONTACTOR_CONTROL__FAILURE, value);
 }
@@ -81,7 +91,7 @@ bool alerting__failure__valve_controller__1__get(void) {
 
 void alerting__failure__valve_controller__1__set(bool value) {
     if (value && !alerting__failure__contactor_controller__get()) {
-        buzzer_controller__requested__set(true);
+        alerting__request_buzzer();
     }
     coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__FAILURE, value);
 }
