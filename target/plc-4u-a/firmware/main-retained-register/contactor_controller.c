@@ -72,21 +72,21 @@ bool contactor_controller__target_position__get(void) {
 }
 
 
-bool contactor_controller__is_running(void) {
-    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROLLER__RUNNING);
+void contactor_controller__requested__set(bool running) {
+    coils__set(INTERNAL_COIL__CONTACTOR_CONTROLLER__REQUESTED, running);
 }
-
-void contactor_controller__running__set(bool running) {
-    coils__set(INTERNAL_COIL__CONTACTOR_CONTROLLER__RUNNING, running);
-}
-
 
 bool contactor_controller__is_requested(void) {
     return coils__get(INTERNAL_COIL__CONTACTOR_CONTROLLER__REQUESTED);
 }
 
-void contactor_controller__requested__set(bool running) {
-    coils__set(INTERNAL_COIL__CONTACTOR_CONTROLLER__REQUESTED, running);
+
+void contactor_controller__running__set(bool running) {
+    coils__set(INTERNAL_COIL__CONTACTOR_CONTROLLER__RUNNING, running);
+}
+
+bool contactor_controller__is_running(void) {
+    return coils__get(INTERNAL_COIL__CONTACTOR_CONTROLLER__RUNNING);
 }
 
 

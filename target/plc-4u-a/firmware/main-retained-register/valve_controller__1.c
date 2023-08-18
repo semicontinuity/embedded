@@ -82,6 +82,24 @@ bool valve_controller__1__limit_switch__valve_closed__get(void) {
 // State
 // -----------------------------------------------------------------------------
 
+void valve_controller__1__target_position__set(bool opened) {
+    coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__TARGET_POSITION, opened);
+}
+
+bool valve_controller__1__target_position__get(void) {
+    return coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__TARGET_POSITION);
+}
+
+
+void valve_controller__1__requested__set(bool requested) {
+    coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__REQUESTED, requested);
+}
+
+bool valve_controller__1__is_requested(void) {
+    return coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__REQUESTED);
+}
+
+
 void valve_controller__1__active__set(bool value) {
     coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__ACTIVE, value);
 }
@@ -91,12 +109,12 @@ bool valve_controller__1__active__get(void) {
 }
 
 
-void valve_controller__1__target_position__set(bool opened) {
-    coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__TARGET_POSITION, opened);
+void valve_controller__1__running__set(bool requested) {
+    coils__set(INTERNAL_COIL__VALVE_CONTROLLER__1__RUNNING, requested);
 }
 
-bool valve_controller__1__target_position__get(void) {
-    return coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__TARGET_POSITION);
+bool valve_controller__1__is_running(void) {
+    return coils__get(INTERNAL_COIL__VALVE_CONTROLLER__1__RUNNING);
 }
 
 

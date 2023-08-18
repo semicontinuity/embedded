@@ -109,11 +109,11 @@ void alerting__failure__valve_controller__1__push(bool value) {
 // -----------------------------------------------------------------------------
 
 bool alerting__alarm__water_leak_sensor_controller__a__get(void) {
-    return coils__get(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK);
+    return coils__get(INTERNAL_COIL__ALARM__WATER_LEAK_SENSOR__A);
 }
 
 void alerting__alarm__water_leak_sensor_controller__a__set(bool value) {
-    coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR__A__HAD_LEAK, value);
+    coils__set(INTERNAL_COIL__ALARM__WATER_LEAK_SENSOR__A, value);
 }
 
 void alerting__alarm__water_leak_sensor_controller__a__push(bool value) {
@@ -125,11 +125,11 @@ void alerting__alarm__water_leak_sensor_controller__a__push(bool value) {
 
 
 bool alerting__alarm__water_leak_sensor_controller__b__get(void) {
-    return coils__get(INTERNAL_COIL__WATER_LEAK_SENSOR__B__HAD_LEAK);
+    return coils__get(INTERNAL_COIL__ALARM__WATER_LEAK_SENSOR__B);
 }
 
 void alerting__alarm__water_leak_sensor_controller__b__set(bool value) {
-    coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR__B__HAD_LEAK, value);
+    coils__set(INTERNAL_COIL__ALARM__WATER_LEAK_SENSOR__B, value);
 }
 
 void alerting__alarm__water_leak_sensor_controller__b__push(bool value) {
@@ -141,11 +141,11 @@ void alerting__alarm__water_leak_sensor_controller__b__push(bool value) {
 
 
 bool alerting__alarm__water_leak_sensor_controller__c__get(void) {
-    return coils__get(INTERNAL_COIL__WATER_LEAK_SENSOR__C__HAD_LEAK);
+    return coils__get(INTERNAL_COIL__ALARM__WATER_LEAK_SENSOR__C);
 }
 
 void alerting__alarm__water_leak_sensor_controller__c__set(bool value) {
-    coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR__C__HAD_LEAK, value);
+    coils__set(INTERNAL_COIL__ALARM__WATER_LEAK_SENSOR__C, value);
 }
 
 void alerting__alarm__water_leak_sensor_controller__c__push(bool value) {
@@ -157,11 +157,11 @@ void alerting__alarm__water_leak_sensor_controller__c__push(bool value) {
 
 
 bool alerting__alarm__water_leak_sensor_controller__d__get(void) {
-    return coils__get(INTERNAL_COIL__WATER_LEAK_SENSOR__D__HAD_LEAK);
+    return coils__get(INTERNAL_COIL__ALARM__WATER_LEAK_SENSOR__C);
 }
 
 void alerting__alarm__water_leak_sensor_controller__d__set(bool value) {
-    coils__set(INTERNAL_COIL__WATER_LEAK_SENSOR__D__HAD_LEAK, value);
+    coils__set(INTERNAL_COIL__ALARM__WATER_LEAK_SENSOR__C, value);
 }
 
 void alerting__alarm__water_leak_sensor_controller__d__push(bool value) {
