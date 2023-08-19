@@ -113,6 +113,7 @@ void slow_timer__do_run(void) {
 void seconds_timer__do_run(void) {
     uptime_counter__run();
     basic_rtc__run();
+    prophylactic_engagement_controller__on_seconds_timer_tick();
 }
 
 // =============================================================================
@@ -122,7 +123,7 @@ void seconds_timer__do_run(void) {
 void basic_rtc__on_minutes_timer_tick(void) {
     basic_rtc__run_every_minute();
     valve_controller__1__on_minutes_timer_tick();
-    prophylactic_engagement_controller__run();
+    prophylactic_engagement_controller__on_minutes_timer_tick();
 }
 
 

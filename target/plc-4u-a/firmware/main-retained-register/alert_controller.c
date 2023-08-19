@@ -31,13 +31,13 @@
 // - When any of the water leak sensors is becomes ON,
 //   instructs water valve controllers to close valves (if enabled).
 // =============================================================================
-#include <services/holding_registers.h>
 #include "alert_controller.h"
 #include "valve_controller__1.h"
 #include "water_leak_sensors_controller.h"
-
 #include "services/coils.h"
+
 #include "services/discrete_inputs.h"
+#include <services/holding_registers.h>
 #include "buzzer_controller.h"
 
 
@@ -66,7 +66,7 @@ void alerting__handle_water_leak_sensor_alert(void) {
     alerting__request_buzzer();
 
     if (alerting__closure_of_water_valves_on_leak__enabled()) {
-        valve_controller__1__close();
+        valve_controller__1__try_close();
     }
 }
 
@@ -82,10 +82,12 @@ void alerting__failure__contactor_controller__set(bool value) {
 }
 
 void alerting__failure__contactor_controller__push(bool value) {
-    if (value && !alerting__failure__contactor_controller__get()) {
-        alerting__request_buzzer();
+    if (value) {
+        alerting__failure__contactor_controller__set(value);
+        if (!alerting__failure__contactor_controller__get()) {
+            alerting__request_buzzer();
+        }
     }
-    alerting__failure__contactor_controller__set(value);
 }
 
 
@@ -98,12 +100,26 @@ void alerting__failure__valve_controller__1__set(bool value) {
 }
 
 void alerting__failure__valve_controller__1__push(bool value) {
-    if (value && !alerting__failure__contactor_controller__get()) {
-        alerting__request_buzzer();
+    if (value) {
+        alerting__failure__valve_controller__1__set(true);
+        if (!alerting__failure__contactor_controller__get()) {
+            alerting__request_buzzer();
+        }
     }
-    alerting__failure__valve_controller__1__set(value);
 }
 
+
+bool alerting__failure__prophylactic_engagement_controller__get(void) {
+    return coils__get(INTERNAL_COIL__PROPHYLACTIC_ENGAGEMENT__FAILURE);
+}
+
+void alerting__failure__prophylactic_engagement_controller__set(bool value) {
+    coils__set(INTERNAL_COIL__PROPHYLACTIC_ENGAGEMENT__FAILURE, value);
+}
+
+void alerting__failure__prophylactic_engagement_controller__push(bool value) {
+    alerting__failure__prophylactic_engagement_controller__set(value || alerting__failure__prophylactic_engagement_controller__get());
+}
 
 // Alarm flags
 // -----------------------------------------------------------------------------
@@ -196,23 +212,30 @@ void alert_controller__poll_alerts(void) {
     alerting__failure__valve_controller__1__push(valve_controller__1__limit_switch__failure__get());
 }
 
+inline bool alert_controller__has_water_alerts(void) {
+    // Add WATER_LEAK_SENSOR__*__FAILURE
+    return alerting__failure__valve_controller__1__get()
+           || alerting__alarm__water_leak_sensor_controller__a__get()
+           || alerting__alarm__water_leak_sensor_controller__b__get()
+           || alerting__alarm__water_leak_sensor_controller__c__get()
+           || alerting__alarm__water_leak_sensor_controller__d__get();
+}
+
 // Invoked on every tick of fast timer (every 1ms)
 void alert_controller__run(void) {
     alert_controller__poll_alerts();
 
     alert_controller__led__set(
             alerting__failure__contactor_controller__get()
-            || alerting__failure__valve_controller__1__get()
-            || alerting__alarm__water_leak_sensor_controller__a__get()
-            || alerting__alarm__water_leak_sensor_controller__b__get()
-            || alerting__alarm__water_leak_sensor_controller__c__get()
-            || alerting__alarm__water_leak_sensor_controller__d__get()
+            || alert_controller__has_water_alerts()
     );
 }
 
 void alert_controller__reset_alerts(void) {
     alerting__failure__contactor_controller__set(false);
     alerting__failure__valve_controller__1__set(false);
+    alerting__failure__prophylactic_engagement_controller__set(false);
+
     alerting__alarm__water_leak_sensor_controller__a__set(water_leak_sensor_controller__alarm__a__get());
     alerting__alarm__water_leak_sensor_controller__b__set(water_leak_sensor_controller__alarm__b__get());
     alerting__alarm__water_leak_sensor_controller__c__set(water_leak_sensor_controller__alarm__c__get());

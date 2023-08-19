@@ -4,11 +4,15 @@
 #include <stdbool.h>
 
 
-bool alerting__failure__contactor_controller__get(void);
 void alerting__failure__contactor_controller__push(bool value);
 
-bool alerting__failure__valve_controller__1__get(void);
 void alerting__failure__valve_controller__1__push(bool value);
+
+void alerting__failure__prophylactic_engagement_controller__push(bool value);
+
+
+bool alert_controller__has_water_alerts(void);
+
 
 void alert_controller__run(void);
 
