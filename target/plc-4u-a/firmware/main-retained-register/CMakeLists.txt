@@ -69,6 +69,8 @@ set(SOURCE_FILES
         water_leak_sensors_controller.c
         buzzer_controller.h
         buzzer_controller.c
+        prophylactic_engagement_controller.h
+        prophylactic_engagement_controller.c
 
         comm__modbus__callbacks.c
         comm__modbus__coils.c
