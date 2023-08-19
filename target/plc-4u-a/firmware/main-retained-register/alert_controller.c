@@ -66,7 +66,7 @@ void alerting__handle_water_leak_sensor_alert(void) {
     alerting__request_buzzer();
 
     if (alerting__closure_of_water_valves_on_leak__enabled()) {
-        valve_controller__1__try_close();
+        valve_controller__1__close();
     }
 }
 

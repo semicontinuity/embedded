@@ -5,9 +5,12 @@
 #include <stdint.h>
 
 
-void valve_controller__1__try_close(void);
+bool valve_controller__1__is_requested(void);
 
-void valve_controller__1__try_toggle(void);
+
+void valve_controller__1__close(void);
+
+void valve_controller__1__toggle(void);
 
 
 void valve_controller__1__on_minutes_timer_tick(void);

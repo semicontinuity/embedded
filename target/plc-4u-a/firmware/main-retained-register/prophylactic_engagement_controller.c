@@ -63,17 +63,40 @@ bool prophylactic_engagement_controller__phase_2__running__get(void) {
 // Logic
 // -----------------------------------------------------------------------------
 
+void prophylactic_engagement_controller__finish(bool error) {
+    prophylactic_engagement_controller__requested__set(false);
+    prophylactic_engagement_controller__phase_1__running__set(false);
+    prophylactic_engagement_controller__phase_2__running__set(false);
+    alerting__failure__prophylactic_engagement_controller__push(error);
+    valve_controller__1__close();
+}
+
 // run every second
+// TODO: check for conflicts with alerting__handle_water_leak_sensor_alert()
 void prophylactic_engagement_controller__on_seconds_timer_tick(void) {
     if (prophylactic_engagement_controller__phase_1__running__get()) {
-        valve_controller__1__try_toggle();
+        if (alert_controller__has_water_alerts()) {
+            prophylactic_engagement_controller__finish(true);
+        } else if (!valve_controller__1__is_requested()) {
+            // request handled
+            prophylactic_engagement_controller__phase_1__running__set(false);
+            prophylactic_engagement_controller__phase_2__running__set(true);
+            valve_controller__1__toggle();
+        }
     } else if (prophylactic_engagement_controller__phase_2__running__get()) {
-
+        // request handled
+        if (alert_controller__has_water_alerts()) {
+            prophylactic_engagement_controller__finish(true);
+        } else if (!valve_controller__1__is_requested()) {
+            // request handled
+            prophylactic_engagement_controller__phase_2__running__set(false);
+            prophylactic_engagement_controller__requested__set(false);
+        }
     } else if (prophylactic_engagement_controller__requested__get()) {
         if (alert_controller__has_water_alerts()) {
-            alerting__failure__prophylactic_engagement_controller__push(true);
-            prophylactic_engagement_controller__requested__set(false);
+            prophylactic_engagement_controller__finish(true);
         } else {
+            valve_controller__1__toggle();
             prophylactic_engagement_controller__phase_1__running__set(true);
         }
     }

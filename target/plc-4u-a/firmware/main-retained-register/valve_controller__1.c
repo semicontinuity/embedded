@@ -23,6 +23,7 @@
 //   * Write 1 to abort any action in progress.
 //     The actuator will be unpowered, possibly, in some half-open state.
 //
+// TODO: for mode limit switch-less operation
 // TODO: verify case when control buttons are pressed when the valve is engaged.
 // =============================================================================
 #include "valve_controller__1.h"
@@ -151,21 +152,22 @@ void valve_controller__1__deactivate(void) {
 }
 
 
-void valve_controller__1__try_close(void) {
-    if (!valve_controller__1__limit_switch__valve_closed__get()) {
-        valve_controller__1__activate(false);
-    }
+void valve_controller__1__close(void) {
+    // disregard limit switches state:
+    // closing is important
+    valve_controller__1__activate(false);
 }
 
-void valve_controller__1__try_open(void) {
-    if (!valve_controller__1__limit_switch__valve_open__get()) {
-        valve_controller__1__activate(true);
-    }
+void valve_controller__1__open(void) {
+    valve_controller__1__activate(true);
 }
 
-void valve_controller__1__try_toggle(void) {
-    valve_controller__1__try_close();
-    valve_controller__1__try_open();
+void valve_controller__1__toggle(void) {
+    if (valve_controller__1__limit_switch__valve_closed__get()) {
+        valve_controller__1__open();
+    } else {
+        valve_controller__1__close();
+    }
 }
 
 
@@ -280,13 +282,13 @@ void valve_controller__1__on_minutes_timer_tick(void) {
 void valve_controller__1__button__open__changed(void) {
     if (valve_controller__1__button__open__get()) {
         // button pressed
-        valve_controller__1__try_open();
+        valve_controller__1__open();
     }
 }
 
 void valve_controller__1__button__close__changed(void) {
     if (valve_controller__1__button__close__get()) {
         // button pressed
-        valve_controller__1__try_close();
+        valve_controller__1__close();
     }
 }
