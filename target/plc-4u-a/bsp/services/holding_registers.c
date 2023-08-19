@@ -40,7 +40,7 @@ uint16_t holding_registers__buffer__get(uint8_t address) {
 
 /* MSB first */
 void holding_registers__set(uint8_t address, uint16_t value) {
-    if (address >= HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS) {
+    if (address >= HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS && address < HOLDING_REGISTER__ADDRESS__VALVE_CONTROLLER__1__IDLE_TIME_MINUTES) {
         retained_registers__set(address, value);
     }
     holding_registers__buffer__set(address, value);
@@ -52,9 +52,11 @@ void holding_registers__init(void) {
     holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__HOURS, 0);
     holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS, 0);
 
-    // retain RTC registers
+    // do not re-init RTC registers
 
-    for (uint8_t a = HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS; a < MODBUS_SERVER__HOLDING_REGISTERS_COUNT; a++) {
+    for (uint8_t a = HOLDING_REGISTER__ADDRESS__MODBUS__DEVICE_ADDRESS; a < HOLDING_REGISTER__ADDRESS__VALVE_CONTROLLER__1__IDLE_TIME_MINUTES; a++) {
         holding_registers__buffer__set(a, retained_registers__get(a));
     }
+
+    // do not re-init IDLE_TIME registers
 }

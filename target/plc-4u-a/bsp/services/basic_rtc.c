@@ -17,7 +17,6 @@
 // they will not be updated, until set appropriately via MODBUS.
 // =============================================================================
 
-#include <stdint.h>
 #include "services/holding_registers.h"
 #include "services/basic_rtc.h"
 
@@ -59,4 +58,12 @@ void basic_rtc__run(void) {
         basic_rtc__on_minutes_timer_tick();
     }
     holding_registers__buffer__set_u8_lo(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS, seconds);
+}
+
+uint8_t basic_rtc__get_seconds(void) {
+    return holding_registers__buffer__get_u8_lo(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS);
+}
+
+uint8_t basic_rtc__get_minutes(void) {
+    return holding_registers__buffer__get_u8_hi(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS);
 }

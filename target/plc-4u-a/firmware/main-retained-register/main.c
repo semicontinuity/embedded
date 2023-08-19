@@ -120,6 +120,7 @@ void seconds_timer__do_run(void) {
 
 void basic_rtc__on_minutes_timer_tick(void) {
     basic_rtc__run_every_minute();
+    valve_controller__1__on_minutes_timer_tick();
 }
 
 

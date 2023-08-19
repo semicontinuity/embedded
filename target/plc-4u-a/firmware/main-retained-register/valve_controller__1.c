@@ -23,6 +23,7 @@
 //   * Write 1 to abort any action in progress.
 //     The actuator will be unpowered, possibly, in some half-open state.
 // =============================================================================
+#include <services/basic_rtc.h>
 #include "valve_controller__1.h"
 #include "alert_controller.h"
 #include "services/holding_registers.h"
@@ -31,6 +32,13 @@
 
 
 uint8_t valve_controller__1__timeout;
+
+// Configuration
+// -----------------------------------------------------------------------------
+
+uint16_t valve_controller__1__timeout_ticks__get(void) {
+    return holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__VALVE_CONTROLLER__1__TIMEOUT_TICKS);
+}
 
 
 // User interface I/O
@@ -109,6 +117,15 @@ bool valve_controller__1__is_running(void) {
 }
 
 
+uint16_t valve_controller__1__idle_time_minutes__get(void) {
+    return holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__VALVE_CONTROLLER__1__IDLE_TIME_MINUTES);
+}
+
+void valve_controller__1__idle_time_minutes__set(uint16_t value) {
+    return holding_registers__buffer__set(HOLDING_REGISTER__ADDRESS__VALVE_CONTROLLER__1__IDLE_TIME_MINUTES, value);
+}
+
+
 // Logic
 // -----------------------------------------------------------------------------
 
@@ -146,12 +163,13 @@ void valve_controller__1__open(void) {
 
 void valve_controller__1__start_requested(void) {
     alerting__failure__valve_controller__1__push(false);
-    valve_controller__1__timeout = holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__VALVE_CONTROLLER__1__TIMEOUT_TICKS);
-    valve_controller__1__actuator_direction__set(valve_controller__1__target_position__get());
-    valve_controller__1__actuator_power__set(true);
     valve_controller__1__led__valve_open__set(false);
     valve_controller__1__led__valve_closed__set(false);
-    valve_controller__1__running__set(false);
+
+    valve_controller__1__timeout = valve_controller__1__timeout_ticks__get();
+    valve_controller__1__actuator_direction__set(valve_controller__1__target_position__get());
+    valve_controller__1__actuator_power__set(true);
+    valve_controller__1__running__set(true);
 }
 
 void valve_controller__1__run(void) {
@@ -206,7 +224,7 @@ void valve_controller__1__stop_requested(void) {
 void valve_controller__1__limit_switches_state_renderer__run(void) {
     if (valve_controller__1__is_running()) {
         // use RTC seconds value, so that LEDs for both valves blink synchronously
-        uint16_t seconds = holding_registers__buffer__get(HOLDING_REGISTER__ADDRESS__UPTIME__SECONDS);
+        uint16_t seconds = basic_rtc__get_seconds();
 
         // Blink LED in "valve open" button if opening
         // Blink LED in "valve close" button if closing
@@ -232,6 +250,7 @@ void valve_controller__1__on_slow_timer_tick(void) {
             valve_controller__1__stop_requested();
         }
         valve_controller__1__run();
+        valve_controller__1__idle_time_minutes__set(0);
     } else {
         if (valve_controller__1__is_requested()) {
             valve_controller__1__start_requested();
@@ -239,6 +258,11 @@ void valve_controller__1__on_slow_timer_tick(void) {
     }
 
     valve_controller__1__limit_switches_state_renderer__run();
+}
+
+// Must be invoked on every tick of the minute timer
+void valve_controller__1__on_minutes_timer_tick(void) {
+    valve_controller__1__idle_time_minutes__set(valve_controller__1__idle_time_minutes__get() + 1);
 }
 
 // =============================================================================
