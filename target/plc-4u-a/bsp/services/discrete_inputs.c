@@ -129,14 +129,14 @@ void discrete_inputs__run(void) {
 
     __asm__ __volatile__("discrete_inputs__debouncer__run__byte_0:");
     LOAD_CONST8(bounced, 0xFF);
-    if (water_leak_sensor__a__get()) bounced &= ~_BV(0);
-    if (water_leak_sensor__b__get()) bounced &= ~_BV(1);
-    if (water_leak_sensor__c__get()) bounced &= ~_BV(2);
-    if (water_leak_sensor__d__get()) bounced &= ~_BV(3);
-    if (valve_limit_switch__a__get()) bounced &= ~_BV(4);
-    if (valve_limit_switch__b__get()) bounced &= ~_BV(5);
-    if (valve_limit_switch__c__get()) bounced &= ~_BV(6);
-    if (valve_limit_switch__d__get()) bounced &= ~_BV(7);
+    if (IS_1(DIGITAL_INPUTS__0)) bounced &= ~_BV(0);
+    if (IS_1(DIGITAL_INPUTS__1)) bounced &= ~_BV(1);
+    if (IS_1(DIGITAL_INPUTS__2)) bounced &= ~_BV(2);
+    if (IS_1(DIGITAL_INPUTS__3)) bounced &= ~_BV(3);
+    if (IS_1(DIGITAL_INPUTS__4)) bounced &= ~_BV(4);
+    if (IS_1(DIGITAL_INPUTS__5)) bounced &= ~_BV(5);
+    if (IS_1(DIGITAL_INPUTS__6)) bounced &= ~_BV(6);
+    if (IS_1(DIGITAL_INPUTS__7)) bounced &= ~_BV(7);
     debounced = discrete_inputs__byte0;
     changed = bounced ^ debounced;
 

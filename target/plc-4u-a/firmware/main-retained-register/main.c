@@ -39,6 +39,45 @@
 // Application
 // =============================================================================
 
+#define BUTTONS_COMBINATION(b1, b2, b3, b4) (\
+((b1) ? _BV(0) : 0) |\
+((b2) ? _BV(1) : 0) |\
+((b3) ? _BV(2) : 0) |\
+((b4) ? _BV(3) : 0)\
+)
+
+// USART rates, selected, when starting with corresponding buttons pressed.
+// Rate code = USART baud rate / 100
+// (better to use U2X mode, it is more accurate)
+const uint16_t PROGMEM USART_RATE_CODES[16] = {
+        [BUTTONS_COMBINATION(1, 1, 1, 1)] = 2500L,
+        [BUTTONS_COMBINATION(1, 1, 1, 0)] = 1152L,
+        [BUTTONS_COMBINATION(1, 1, 0, 1)] = 576L,
+        [BUTTONS_COMBINATION(1, 1, 0, 0)] = 384L,
+        [BUTTONS_COMBINATION(1, 0, 1, 1)] = 288L,
+        [BUTTONS_COMBINATION(1, 0, 1, 0)] = 192L,
+        [BUTTONS_COMBINATION(1, 0, 0, 1)] = 144L,
+        [BUTTONS_COMBINATION(1, 0, 0, 0)] = 96L,    // (default: will not be read)
+        [BUTTONS_COMBINATION(0, 1, 1, 1)] = 96L,
+        [BUTTONS_COMBINATION(0, 1, 1, 0)] = 48L,
+        [BUTTONS_COMBINATION(0, 1, 0, 1)] = 24L,
+        [BUTTONS_COMBINATION(0, 1, 0, 0)] = 96L,    // (default: will not be read)
+        [BUTTONS_COMBINATION(0, 0, 1, 1)] = 12L,
+        [BUTTONS_COMBINATION(0, 0, 1, 0)] = 96L,    // (default: will not be read)
+        [BUTTONS_COMBINATION(0, 0, 0, 1)] = 96L,    // (default: will not be read)
+        [BUTTONS_COMBINATION(0, 0, 0, 0)] = 96L,    // (default: will not be read)
+};
+
+uint8_t application__startup_buttons_state(void) {
+    uint8_t state;
+    LOAD_CONST8(state, 0x0F);
+    if (IS_1(DIGITAL_INPUTS__0)) state &= ~_BV(0);
+    if (IS_1(DIGITAL_INPUTS__1)) state &= ~_BV(1);
+    if (IS_1(DIGITAL_INPUTS__2)) state &= ~_BV(2);
+    if (IS_1(DIGITAL_INPUTS__3)) state &= ~_BV(3);
+    return state;
+}
+
 static void application__init(void) {
     digital_inputs__init();
     digital_outputs__init();
@@ -52,7 +91,10 @@ static void application__init(void) {
 
     fast_timer__init();
 
-    modbus_rtu_driver__configure(USART0_DIVISOR(4800L));
+    _delay_ms(50);
+    uint8_t startup_buttons_state = application__startup_buttons_state();
+    uint16_t baud_rate_code = pgm_read_word(&USART_RATE_CODES[startup_buttons_state]);
+    modbus_rtu_driver__configure(USART0_DIVISOR(baud_rate_code * 100));
 }
 
 static void application__start(void) {
