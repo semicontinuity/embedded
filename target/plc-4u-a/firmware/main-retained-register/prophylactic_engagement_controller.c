@@ -1,6 +1,7 @@
 #include "prophylactic_engagement_controller.h"
 #include <services/basic_rtc.h>
 #include <services/holding_registers.h>
+#include <services/coils.h>
 #include "valve_controller__1.h"
 
 
@@ -25,6 +26,36 @@ uint8_t prophylactic_engagement_controller__hours__get(void) {
 
 uint8_t prophylactic_engagement_controller__minutes__get(void) {
     return holding_registers__buffer__get_u8_lo(HOLDING_REGISTER__ADDRESS__PROPHYLACTIC_ENGAGEMENT__TIME_HH_MM);
+}
+
+
+// State
+// -----------------------------------------------------------------------------
+
+void prophylactic_engagement_controller__requested__set(bool value) {
+    coils__set(INTERNAL_COIL__PROPHYLACTIC_ENGAGEMENT__REQUESTED, value);
+}
+
+bool prophylactic_engagement_controller__requested__get(void) {
+    return coils__get(INTERNAL_COIL__PROPHYLACTIC_ENGAGEMENT__REQUESTED);
+}
+
+
+void prophylactic_engagement_controller__phase_1__running__set(bool value) {
+    coils__set(INTERNAL_COIL__PROPHYLACTIC_ENGAGEMENT__PHASE_1__RUNNING, value);
+}
+
+bool prophylactic_engagement_controller__phase_1__running__get(void) {
+    return coils__get(INTERNAL_COIL__PROPHYLACTIC_ENGAGEMENT__PHASE_1__RUNNING);
+}
+
+
+void prophylactic_engagement_controller__phase_2__running__set(bool value) {
+    coils__set(INTERNAL_COIL__PROPHYLACTIC_ENGAGEMENT__PHASE_2__RUNNING, value);
+}
+
+bool prophylactic_engagement_controller__phase_2__running__get(void) {
+    return coils__get(INTERNAL_COIL__PROPHYLACTIC_ENGAGEMENT__PHASE_2__RUNNING);
 }
 
 
