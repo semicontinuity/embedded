@@ -17,8 +17,8 @@
 // they will not be updated, until set appropriately via MODBUS.
 // =============================================================================
 
-#include "services/holding_registers.h"
 #include "services/basic_rtc.h"
+#include "services/holding_registers.h"
 
 
 /** Must be invoked on every tick of the minutes timer */
@@ -60,10 +60,19 @@ void basic_rtc__run(void) {
     holding_registers__buffer__set_u8_lo(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS, seconds);
 }
 
-uint8_t basic_rtc__get_seconds(void) {
+
+uint8_t basic_rtc__seconds__get(void) {
     return holding_registers__buffer__get_u8_lo(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS);
 }
 
-uint8_t basic_rtc__get_minutes(void) {
+uint8_t basic_rtc__minutes__get(void) {
     return holding_registers__buffer__get_u8_hi(HOLDING_REGISTER__ADDRESS__BASIC_RTC__MM_SS);
+}
+
+uint8_t basic_rtc__hours__get(void) {
+    return holding_registers__buffer__get_u8_lo(HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH);
+}
+
+uint8_t basic_rtc__day_of_week_bits__get(void) {
+    return holding_registers__buffer__get_u8_hi(HOLDING_REGISTER__ADDRESS__BASIC_RTC__DOW_HH);
 }

@@ -32,6 +32,7 @@
 #include "water_leak_sensors_controller.h"
 #include "alert_controller.h"
 #include "buzzer_controller.h"
+#include "prophylactic_engagement_controller.h"
 
 
 // =============================================================================
@@ -121,6 +122,7 @@ void seconds_timer__do_run(void) {
 void basic_rtc__on_minutes_timer_tick(void) {
     basic_rtc__run_every_minute();
     valve_controller__1__on_minutes_timer_tick();
+    prophylactic_engagement_controller__run();
 }
 
 

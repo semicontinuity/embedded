@@ -23,15 +23,16 @@
 //   * Write 1 to abort any action in progress.
 //     The actuator will be unpowered, possibly, in some half-open state.
 // =============================================================================
-#include <services/basic_rtc.h>
 #include "valve_controller__1.h"
 #include "alert_controller.h"
+#include <services/basic_rtc.h>
 #include "services/holding_registers.h"
 #include "services/discrete_inputs.h"
 #include "services/coils.h"
 
 
 uint8_t valve_controller__1__timeout;
+
 
 // Configuration
 // -----------------------------------------------------------------------------
@@ -224,7 +225,7 @@ void valve_controller__1__stop_requested(void) {
 void valve_controller__1__limit_switches_state_renderer__run(void) {
     if (valve_controller__1__is_running()) {
         // use RTC seconds value, so that LEDs for both valves blink synchronously
-        uint16_t seconds = basic_rtc__get_seconds();
+        uint16_t seconds = basic_rtc__seconds__get();
 
         // Blink LED in "valve open" button if opening
         // Blink LED in "valve close" button if closing

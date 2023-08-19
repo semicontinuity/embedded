@@ -11,8 +11,13 @@ void basic_rtc__on_minutes_timer_tick(void);
 void basic_rtc__run_every_minute(void);
 
 
-uint8_t basic_rtc__get_seconds(void);
+uint8_t basic_rtc__seconds__get(void);
 
-uint8_t basic_rtc__get_minutes(void);
+uint8_t basic_rtc__minutes__get(void);
+
+uint8_t basic_rtc__hours__get(void);
+
+uint8_t basic_rtc__day_of_week_bits__get(void);
+
 
 #endif
