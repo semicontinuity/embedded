@@ -33,11 +33,11 @@ class PortReader(Thread):
       self._stop.set()
 
    def stopped(self):
-      return self._stop.isSet()
+      return self._stop.is_set()
 
 
 class Fx3u:
-    def __init__(self, station_no: int = 1, plc_no: int = 0xFF, wait_time: int = 3, sum_check = False, cr_lf = False):
+    def __init__(self, station_no: int = 1, wait_time: int = 3):
         self.station_no = station_no
         self.wait_time = wait_time
 
