@@ -62,6 +62,12 @@ class Fx3u:
     def bc_6025(self):
         return b'\x02\x45\x38\x37\x36\x36\x30\x03\x35\x33'
 
+    def bs_6023(self):
+        return b'\x02\x45\x37\x33\x33\x36\x30\x03\x34\x41'
+
+    def bs_6024(self):
+        return b'\x02\x45\x37\x32\x34\x36\x30\x03\x34\x42'
+
 
 port = serial.Serial(
     "/dev/ttyUSB0",
@@ -145,6 +151,22 @@ time.sleep(0.4)
 ########################################
 
 s1 = fx3u.bc_6025()
+print(s1)
+port.write(s1)
+
+########################################
+time.sleep(0.1)
+########################################
+
+s1 = fx3u.bs_6023()
+print(s1)
+port.write(s1)
+
+########################################
+time.sleep(0.1)
+########################################
+
+s1 = fx3u.bs_6024()
 print(s1)
 port.write(s1)
 
