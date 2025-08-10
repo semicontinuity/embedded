@@ -59,6 +59,9 @@ class Fx3u:
     def lock_flash(self):
         return b'\x02\x42\x03\x34\x35'
 
+    def bc_6025(self):
+        return b'\x02\x45\x38\x37\x36\x36\x30\x03\x35\x33'
+
 
 port = serial.Serial(
     "/dev/ttyUSB0",
@@ -130,10 +133,18 @@ print(s1)
 port.write(s1)
 
 ########################################
-time.sleep(0.1)
+time.sleep(0.4)
 ########################################
 
 s1 = fx3u.lock_flash()
+print(s1)
+port.write(s1)
+
+########################################
+time.sleep(0.4)
+########################################
+
+s1 = fx3u.bc_6025()
 print(s1)
 port.write(s1)
 
