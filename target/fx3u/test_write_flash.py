@@ -38,6 +38,9 @@ class Fx3u:
         data[0] = 0x05
         return data
 
+    def bs_6025(self):
+        return b'\x02\x45\x37\x32\x35\x36\x30\x03\x34\x43'
+
     def write_flash(self):
         return b'\x02\x45\x31\x31\x38\x30\x35\x43\x30\x41\x30\x31\x32\x34\x30\x31\x43\x35\x31\x43\x30\x30\x30\x46\x30\x30\x30\x46\x30\x30\x03\x31\x42'
 
@@ -62,19 +65,29 @@ except (KeyboardInterrupt, SystemExit):
 
 fx3u = Fx3u()
 
-
 s = fx3u.enq()
 print(s)
 port.write(s)
 
+########################################
 time.sleep(0.1)
+########################################
+
+s1 = fx3u.bs_6025()
+print(s1)
+port.write(s1)
+
+########################################
+time.sleep(0.1)
+########################################
 
 s1 = fx3u.write_flash()
 print(s1)
 port.write(s1)
 
-
+########################################
 time.sleep(0.1)
+########################################
 
 s1 = fx3u.lock_flash()
 print(s1)
