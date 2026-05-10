@@ -1,11 +1,19 @@
 // =============================================================================
 // 1-wire client.
-// Implemented with bit-banging, timer 0 and timer 2:
+// Implementation without USART: with bit-banging, timer 0 and timer 2:
 //
 // Theory of operation:
 // --------------------
 // For 16MHz crystal, use prescaler 8 for both timers (64 for reset pulse).
-// Thus, 1uS=2TQ (1TQ=4uS for reset pulse).
+// Thus:
+//   for bits:
+//     1TQ = 16_000_000 / 8 / 256 ~= 8000 cycles ~= 0.5uSec
+//     1uS=2TQ
+//     short pulse = 6uS = 12TQ
+//     long pulse = 60uS = 120TQ
+//   for reset pulse:
+//     1TQ=4uS
+//     reset pulse length = 480uS = 120TQ
 //
 // The bit is started with 1->0 transition at T=0.
 //
@@ -256,7 +264,7 @@ ISR(timer2__overflow__interrupt__VECTOR, ISR_NAKED) {
 
 /**
  * Reset 1-wire bus.
- * The result is available via onewire__bitbang_thread__data__get().
+ * The result is available via onewire__thread__data__get().
  * If presence pulse is generated, onewire__thread__data will be false.
  */
 void onewire__thread__reset_bus(void) {
@@ -278,7 +286,7 @@ void onewire__thread__reset_bus(void) {
  * 1-wire thread function.
  * Implemets 1-wire transaction protocol for one transaction.
  * Invoke it while thread is alive (while transaction is not finished)
- * and the thread runnable (has something to do).
+ * and the thread is runnable (has something to do).
  * Other interrupts in the system should not take much time (say, less than 3uS) not to skrew up 1-wire timings!
  */
 void onewire__thread__run(void) {

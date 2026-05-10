@@ -27,6 +27,9 @@ void onewire__thread__data__set(const uint8_t data);
 
 void onewire__thread__crc__set(const uint8_t crc);
 
+/** Returns CRC of received data */
+uint8_t onewire__crc__get(void);
+
 
 /** Initializes the thread */
 void onewire__thread__init(void);
@@ -50,21 +53,10 @@ void onewire__thread__run(void);
 void onewire__thread__reset_bus(void);
 
 
-/** Check whether the thread can be scheduled */
-bool onewire__bitbang_thread__runnable__get(void);
-
-/** Thread function */
-void onewire__bitbang_thread__run(void);
-
-/** Callback to be implemented */
-void onewire__bitbang_thread__terminated(void);
-
 
 void onewire__init(void);
 
 void onewire__shutdown(void);
 
-/** Returns CRC of received data */
-uint8_t onewire__crc__get(void);
 
 #endif
