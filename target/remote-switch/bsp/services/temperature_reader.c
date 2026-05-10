@@ -1,16 +1,30 @@
-//#include "drivers/out/led1.h"
-//#include "drivers/out/led2.h"
+// =============================================================================
+// Temperature Reader Service
+//
+// This service continuously reads temperature from a DS18X20 1-wire sensor.
+// It uses virtual threads (vthreads) to perform non-blocking operations,
+// allowing the main program to continue execution while temperature readings
+// are being acquired.
+//
+// The process works in a continuous loop:
+// 1. Send a CONVERT_T command to trigger temperature conversion
+// 2. Wait for the conversion to complete (750ms for DS18B20)
+// 3. Send a READ command to retrieve the temperature data
+// 4. Process and store the temperature reading
+// 5. Repeat
+//
+// Uses 1-wire client functions for communication with the sensor.
+// =============================================================================
 
 #include "services/temperature_reader.h"
-
 #include "services/comm/onewire_client.h"
 #include "cpu/avr/util/vthreads.h"
 #include "cpu/avr/timer0.h"
 
 
-#define OW_SKIP_ROM	    0xCC
+#define OW_SKIP_ROM         0xCC
 #define DS18X20_CONVERT_T   0x44
-#define DS18X20_READ	    0xBE
+#define DS18X20_READ        0xBE
 #define DS18X20_SP_SIZE     9
 
 uint16_t temperature_reader__reading;
@@ -50,11 +64,9 @@ void temperature_reader__thread__run(void) {
     timer0__overflow__interrupt__pending__clear();
     for (;;) {
         __asm__ __volatile__( "temperature_reader__thread__conversion_request:");
-//        led1__set(1);
-//        led2__set(1);
 
-        onewire__setup_transaction((uint8_t) sizeof(command_convert), 0, command_convert, 0);
-        onewire__transaction();
+        onewire__transaction__setup((uint8_t) sizeof(command_convert), 0, command_convert, 0);
+        onewire__transaction__run();
         do {
             VT_YIELD_WITH_MARK(temperature_reader__thread, temperature_reader__thread__ip, COMMAND_CONVERT);
             onewire__thread__run();
@@ -63,8 +75,6 @@ void temperature_reader__thread__run(void) {
 
 
         __asm__ __volatile__( "temperature_reader__thread__conversion_await:");
-//        led1__set(1);
-//        led2__set(0);
 
         onewire__thread__delay_counter = 46;
         timer0__conf__set(TIMER0_CONF_PRESCALER_1024|TIMER0_CONF_WGM_NORMAL);
@@ -76,11 +86,9 @@ void temperature_reader__thread__run(void) {
 
 
         __asm__ __volatile__( "temperature_reader__thread__conversion_read:");
-//        led1__set(0);
-//        led2__set(1);
 
-        onewire__setup_transaction(sizeof(command), sizeof(response), command, response);
-        onewire__transaction();
+        onewire__transaction__setup(sizeof(command), sizeof(response), command, response);
+        onewire__transaction__run();
         do {
             VT_YIELD_WITH_MARK(temperature_reader__thread, temperature_reader__thread__ip, COMMAND_READ);
             onewire__thread__run();
@@ -89,8 +97,6 @@ void temperature_reader__thread__run(void) {
 
 
         __asm__ __volatile__( "temperature_reader__thread__conversion_report:");
-//        led1__set(0);
-//        led2__set(0);
 
         temperature_reader__reading = (response[0] | (response[1] << 8)) << 4;
         temperature_reader__reading__on_changed();

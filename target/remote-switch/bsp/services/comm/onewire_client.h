@@ -10,12 +10,12 @@
 /**
  * Setup 1-wire transaction.
  */
-void onewire__setup_transaction(uint8_t command_length, uint8_t response_length, uint8_t *command, uint8_t *response);
+void onewire__transaction__setup(uint8_t command_length, uint8_t response_length, uint8_t *command, uint8_t *response);
 
 /**
  * Perform 1-wire transaction.
  * Poll onewire__thread__is_alive() for completion status.
  */
-void onewire__transaction(void);
+void onewire__transaction__run(void);
 
 #endif

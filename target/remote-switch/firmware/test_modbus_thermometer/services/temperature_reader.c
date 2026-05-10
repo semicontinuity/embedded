@@ -54,8 +54,8 @@ void temperature_reader__thread__run(void) {
         led1__set(1);
         led2__set(1);
 
-        onewire__setup_transaction((uint8_t) sizeof(command_convert), 0, command_convert, 0);
-        onewire__transaction();
+        onewire__transaction__setup((uint8_t) sizeof(command_convert), 0, command_convert, 0);
+        onewire__transaction__run();
         do {
             VT_YIELD_WITH_MARK(temperature_reader__thread, temperature_reader__thread__ip, COMMAND_CONVERT);
             onewire__thread__run();
@@ -76,8 +76,8 @@ void temperature_reader__thread__run(void) {
         led1__set(0);
         led2__set(1);
 
-        onewire__setup_transaction(sizeof(command), sizeof(response), command, response);
-        onewire__transaction();
+        onewire__transaction__setup(sizeof(command), sizeof(response), command, response);
+        onewire__transaction__run();
         do {
             VT_YIELD_WITH_MARK(temperature_reader__thread, temperature_reader__thread__ip, COMMAND_READ);
             onewire__thread__run();
