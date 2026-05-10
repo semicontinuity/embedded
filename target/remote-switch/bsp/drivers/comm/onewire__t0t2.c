@@ -69,7 +69,7 @@
 // Handles one 1-wire transaction.
 // -----------------------------------------------------------------------------
 
-/** Alive flag */
+/** Alive flag: true = 1-wire transaction is running; false = transaction has finished  */
 #if defined(ONEWIRE__THREAD__ALIVE__HOST) && defined(ONEWIRE__THREAD__ALIVE__BIT)
 DEFINE_BITVAR(onewire__thread__alive, ONEWIRE__THREAD__ALIVE__HOST, ONEWIRE__THREAD__ALIVE__BIT);
 #else
@@ -219,7 +219,7 @@ uint8_t onewire__thread__crc__get(void) {
 /** Initializes the thread */
 void onewire__thread__init(void) {
     __asm__ __volatile__( "onewire__thread__init:");
-    onewire__thread__bit_count__init();    
+    onewire__thread__bit_count__init();
 }
 
 /** Starts the thread */
@@ -276,8 +276,10 @@ void onewire__thread__reset_bus(void) {
 
 /**
  * 1-wire thread function.
- * Invoked multiple times to perform transaction on the bus until the thread is not alive.
- * Other interrupts in the system should not take much time (say, less than 3uS) not to skrew up 1-wire timings.
+ * Implemets 1-wire transaction protocol for one transaction.
+ * Invoke it while thread is alive (while transaction is not finished)
+ * and the thread runnable (has something to do).
+ * Other interrupts in the system should not take much time (say, less than 3uS) not to skrew up 1-wire timings!
  */
 void onewire__thread__run(void) {
     VT_BEGIN(onewire__thread, onewire__thread__ip);
@@ -346,16 +348,3 @@ void onewire__thread__run(void) {
 }
 
 
-// -----------------------------------------------------------------------------
-// 1-wire client
-// -----------------------------------------------------------------------------
-
-/**
- * Perform 1-wire transaction.
- */
-void onewire__transaction(void) {
-    onewire__thread__data__set(0);  // start with 0; received 1 bits are ORed with it
-    onewire__thread__crc__set(0);
-    onewire__thread__start();
-    onewire__thread__reset_bus();
-}

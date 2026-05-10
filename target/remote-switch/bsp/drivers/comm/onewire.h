@@ -46,6 +46,9 @@ bool onewire__thread__is_runnable(void);
 /** Thread function */
 void onewire__thread__run(void);
 
+/** Reset 1-wire bus (starts reset pulse and presence detection) */
+void onewire__thread__reset_bus(void);
+
 
 /** Check whether the thread can be scheduled */
 bool onewire__bitbang_thread__runnable__get(void);
@@ -60,26 +63,6 @@ void onewire__bitbang_thread__terminated(void);
 void onewire__init(void);
 
 void onewire__shutdown(void);
-
-/**
- * Setup 1-wire transaction.
- */
-//void onewire__setup_transaction(uint8_t command_length, uint8_t response_length, uint8_t *command, uint8_t *response);
-/**
- * Setup 1-wire transaction.
- */
-inline void onewire__setup_transaction(uint8_t command_length, uint8_t response_length, uint8_t *command, uint8_t *response) {
-    onewire__thread__tx__ptr__set(command);
-    onewire__thread__tx__remaining__set(command_length);
-    onewire__thread__rx__ptr__set(response);
-    onewire__thread__rx__remaining__set(response_length);
-}
-
-/**
- * Perform 1-wire transaction.
- * Poll onewire__thread__is_running() for completion status.
- */
-void onewire__transaction(void);
 
 /** Returns CRC of received data */
 uint8_t onewire__crc__get(void);

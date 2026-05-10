@@ -11,6 +11,7 @@
 
 #include "services/temperature_reader.c"
 #include "services/buttons_handler.c"
+#include "services/comm/onewire_client.c"
 
 #include "drivers/comm/onewire__t0t2.c"
 #include "drivers/comm/onewire__bus__direct.c"
