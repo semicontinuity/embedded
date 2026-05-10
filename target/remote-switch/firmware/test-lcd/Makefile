@@ -16,7 +16,7 @@ OPT += $(FIXED_REGISTERS)
 endif
 
 # Configuration
-CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
+CONF  = $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh)
 CDEFS += $(CONF)
 
 #CDEFS += -fno-tree-loop-optimize -fno-unswitch-loops

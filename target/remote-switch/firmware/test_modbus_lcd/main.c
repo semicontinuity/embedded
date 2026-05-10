@@ -76,6 +76,12 @@ void modbus_rtu_driver__on_frame_sent(void) {
     ++frames_sent;
 }
 
+void modbus_rtu_driver__on_char_format_error(void) {
+}
+
+void modbus_rtu_driver__on_char_lost(void) {
+}
+
 void modbus_rtu_driver__on_protocol_error(void) {
     ++protocol_errors;
 }
@@ -142,29 +148,38 @@ modbus_exception modbus_server__read_input_registers(uint16_t register_address, 
 /**
  * Handle reading of holding registers.
  */
-modbus_exception modbus_server__read_holding_registers(uint16_t register_address, uint16_t register_count) {
-    do {
-        switch (register_address++) {
-        case SERVER__REGISTER__VALID_FRAMES_RECEIVED:
-            buffer__put_u16(valid_frames_received);
-            break;
-        case SERVER__REGISTER__INVALID_FRAMES_RECEIVED:
-            buffer__put_u16(invalid_frames_received);
-            break;
-        case SERVER__REGISTER__FRAMES_SENT:
-            buffer__put_u16(frames_sent);
-            break;
-        case SERVER__REGISTER__PROTOCOL_ERRORS:
-            buffer__put_u16(protocol_errors);
-            break;
-        case SERVER__REGISTER__BUFFER_OVERFLOWS:
-            buffer__put_u16(buffer_overflows);
-            break;
-        default:
-            return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
-        }
-    }
-    while (--register_count);
+//modbus_exception modbus_server__read_holding_registers(uint16_t register_address, uint16_t register_count) {
+//    do {
+//        switch (register_address++) {
+//        case SERVER__REGISTER__VALID_FRAMES_RECEIVED:
+//            buffer__put_u16(valid_frames_received);
+//            break;
+//        case SERVER__REGISTER__INVALID_FRAMES_RECEIVED:
+//            buffer__put_u16(invalid_frames_received);
+//            break;
+//        case SERVER__REGISTER__FRAMES_SENT:
+//            buffer__put_u16(frames_sent);
+//            break;
+//        case SERVER__REGISTER__PROTOCOL_ERRORS:
+//            buffer__put_u16(protocol_errors);
+//            break;
+//        case SERVER__REGISTER__BUFFER_OVERFLOWS:
+//            buffer__put_u16(buffer_overflows);
+//            break;
+//        default:
+//            return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
+//        }
+//    }
+//    while (--register_count);
+//    return MODBUS_EXCEPTION__NONE;
+//}
+
+modbus_exception modbus_server__read_holding_registers(void) {
+    buffer__put_u16(valid_frames_received);
+    buffer__put_u16(invalid_frames_received);
+    buffer__put_u16(frames_sent);
+    buffer__put_u16(protocol_errors);
+    buffer__put_u16(buffer_overflows);
     return MODBUS_EXCEPTION__NONE;
 }
 

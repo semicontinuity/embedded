@@ -9,6 +9,7 @@
 #include "cpu/avr/drivers/comm/modbus/modbus_server.c"
 #include "util/crc16_table2x256.c"
 
+#include "services/comm/onewire_client.c"
 #include "services/temperature_reader.c"
 #include "drivers/comm/onewire__t0t2.c"
 #include "drivers/comm/onewire__bus__direct.c"

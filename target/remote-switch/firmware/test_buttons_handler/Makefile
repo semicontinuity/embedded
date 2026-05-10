@@ -20,7 +20,7 @@ endif
 CDEFS += -Wl,--relax
 
 # Configuration
-PROPS  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
+PROPS  = $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh)
 CDEFS += $(PROPS)
 
 # Compile all sources in one compilation unit (because of the absent link-time optimizations)
