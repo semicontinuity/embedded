@@ -1,5 +1,5 @@
 // =============================================================================
-// Remote switch (without LCD)
+// Remote switch (without LCD),
 // =============================================================================
 
 #include "drivers/out/led1.h"
@@ -66,13 +66,13 @@ static void application__loop(void) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
-    __asm__ __volatile__( "main__loop:");
+    __asm__ __volatile__( "application__loop:");
     for(;;) {
-        __asm__ __volatile__( "main__modbus_rtu_driver:");
+        __asm__ __volatile__( "application__loop__modbus_rtu_driver:");
         if (modbus_rtu_driver__is_runnable()) {
             modbus_rtu_driver__run();
         }
-        __asm__ __volatile__( "main__temperature_reader__thread:");
+        __asm__ __volatile__( "application__loop__temperature_reader__thread:");
         if (temperature_reader__thread__is_runnable()) {
             temperature_reader__thread__run();
         }
