@@ -10,20 +10,14 @@ vpath %.c $(BSP) $(ROOT)
 
 include $(TARGET_CONF)
 
-ifdef FIXED_REGISTERS
-OPT += $(FIXED_REGISTERS)
-endif
-
 # Configuration
-CONF  = $(shell TARGET=$(TARGET) sh $(ROOT)/parse_properties.sh)
-CDEFS += $(CONF)
-
-#CDEFS += -fno-tree-loop-optimize -fno-unswitch-loops
+CDEFS += $(shell TARGET=$(TARGET) bash $(ROOT)/parse_properties.sh)
 CDEFS += -fwhole-program -Wl,--relax
 
 # Firmware
 SRC += __all__.c
 
+include $(ROOT)/cpu/avr/Makefile.fixed_registers.mk
 include $(ROOT)/cpu/avr/Makefile
 
 ifdef CRC16__TABLE2x256__SECTION

@@ -160,7 +160,8 @@ modbus_exception modbus_server__read_input_registers(uint16_t register_address, 
 /**
  * Handle reading of holding registers.
  */
-modbus_exception modbus_server__read_holding_registers(uint16_t register_address, uint16_t register_count) {
+/*
+modbus_exception modbus_server__read_holding_registers(/*uint16_t register_address, uint16_t register_count*\/void) {
     __asm__ __volatile__( "modbus_server__read_holding_registers:");
     do {
         switch (register_address++) {
@@ -184,6 +185,26 @@ modbus_exception modbus_server__read_holding_registers(uint16_t register_address
         }
     }
     while (--register_count);
+    return MODBUS_EXCEPTION__NONE;
+}
+*/
+
+modbus_exception modbus_server__read_holding_registers(void) {
+    // Read register address and count from buffer
+    uint16_t register_address = buffer__get_u16();
+    uint16_t register_count = buffer__get_u16();
+    
+    // Check if the request is for all holding registers
+    if (register_address != MODBUS_SERVER__HOLDING_REGISTERS_START || register_count != MODBUS_SERVER__HOLDING_REGISTERS_COUNT)
+        return MODBUS_EXCEPTION__ILLEGAL_DATA_ADDRESS;
+    
+    // Provide all registers
+    buffer__put_u16(valid_frames_received);
+    buffer__put_u16(invalid_frames_received);
+    buffer__put_u16(frames_sent);
+    buffer__put_u16(protocol_errors);
+    buffer__put_u16(buffer_overflows);
+    
     return MODBUS_EXCEPTION__NONE;
 }
 

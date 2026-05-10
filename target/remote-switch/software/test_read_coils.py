@@ -8,17 +8,18 @@ from threading import Thread
 from crc16 import crc16
 
 if len(sys.argv) != 5:
-    print "Please supply COM port name and speed, starting coil number, coil count"
+    print("Please supply COM port name and speed, starting coil number, coil count")
+    print(f"({len(sys.argv)} args given)")
     sys.exit()
 
 coil_number = int(sys.argv[3])
 if coil_number < 0 or coil_number > 255:
-    print "Invalid coil number"
+    print("Invalid coil number")
     sys.exit()
 
 coil_count = int(sys.argv[4])
 if coil_count <= 0 or coil_count > 255:
-    print "Invalid coil count"
+    print("Invalid coil count")
     sys.exit()
 
 port = serial.Serial()
@@ -41,13 +42,13 @@ class PortReader(Thread):
       while not self.stopped():
         while port.inWaiting() > 0:
           c = port.read(1)
-          print "%02X " % ord(c)
+          print("%02X " % ord(c))
 
    def stop(self):
       self._stop.set()
 
    def stopped(self):
-      return self._stop.isSet()
+      return self._stop.is_set()
 
 
 
@@ -79,7 +80,8 @@ data[7] = crc >> 8
 #data[6] = 0x44
 #data[7] = 0x09
 port.write(data)
-print data
+print("Sending:")
+print(data)
 
 sys.stdin.readline()
 portReader.stop()
