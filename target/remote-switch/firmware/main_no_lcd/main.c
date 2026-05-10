@@ -62,29 +62,11 @@ static void application__start(void) {
     modbus_rtu_driver__start();
 }
 
-
-// main
-// -----------------------------------------------------------------------------
-int main(void) __attribute__ ((naked));
-int main(void) {
-    application__init();
-    application__start();
-    sei();
-
+static void application__loop(void) {
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 #endif
-//    for(;;) {
-//        if (modbus_rtu_driver__is_runnable()) {
-//            modbus_rtu_driver__run();
-//        }
-//        else {
-//            sei();
-//            sleep_cpu();
-//            cli();
-//        }
-//    }
     __asm__ __volatile__( "main__loop:");
     for(;;) {
         __asm__ __volatile__( "main__modbus_rtu_driver:");
@@ -99,6 +81,17 @@ int main(void) {
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic pop
 #endif
+}
+
+
+// main
+// -----------------------------------------------------------------------------
+int main(void) __attribute__ ((naked));
+int main(void) {
+    application__init();
+    application__start();
+    sei();
+    application__loop();
 
 #if !defined(__AVR_ARCH__)
 #pragma clang diagnostic push
