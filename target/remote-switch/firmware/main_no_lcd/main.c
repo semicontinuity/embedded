@@ -17,7 +17,6 @@
 
 #include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver.h"
 
-#include "services/comm/modbus_server.h"
 #include "services/eeprom_config.h"
 #include "services/temperature_reader.h"
 #include "services/buttons_handler.h"
