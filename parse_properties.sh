@@ -8,7 +8,7 @@ else
   CONF_FILE=$TARGET.conf
 fi
 
-cat ${CONF_FILE} | while read line; do
+cat ${CONF_FILE} | tr -d '\r' | while read line; do
   if [ x"$line" != x ]; then
     chr=${line:0:1}
     case $chr in

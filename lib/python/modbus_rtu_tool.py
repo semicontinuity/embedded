@@ -544,7 +544,8 @@ def main():
             ans=ans
         )
         if result == EXIT_CODE_OK:
-            print(ans)
+            for v in ans:
+                print(f"{v:04x}")
         else:
             exit(result)
     elif sys.argv[1] == 'read' and sys.argv[2] == 'input-registers' and len(sys.argv) == 5:
@@ -561,7 +562,8 @@ def main():
             ans=ans
         )
         if result == EXIT_CODE_OK:
-            print(ans)
+            for v in ans:
+                print(f"{v:04x}")
         else:
             exit(result)
     elif sys.argv[1] == 'read':
