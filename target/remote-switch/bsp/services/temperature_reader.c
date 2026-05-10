@@ -45,6 +45,34 @@ volatile void *temperature_reader__thread__ip;
 volatile uint8_t onewire__thread__delay_counter;
 
 
+// Helper function to request temperature conversion
+void temperature_reader__conversion_request(void) {
+    onewire__transaction__setup((uint8_t) sizeof(command_convert), 0, command_convert, 0);
+    onewire__transaction__run();
+}
+
+
+// Helper function to wait for conversion to complete
+void temperature_reader__conversion_await(void) {
+    onewire__thread__delay_counter = TEMPERATURE_READER__CONVERSION_DELAY_COUNT;
+    timer0__conf__set(TIMER0_CONF_PRESCALER_1024|TIMER0_CONF_WGM_NORMAL);
+}
+
+
+// Helper function to read the converted temperature
+void temperature_reader__conversion_read(void) {
+    onewire__transaction__setup(sizeof(command), sizeof(response), command, response);
+    onewire__transaction__run();
+}
+
+
+// Helper function to report the temperature reading
+void temperature_reader__conversion_report(void) {
+    temperature_reader__reading = (response[0] | (response[1] << 8)) << 4;
+    temperature_reader__reading__on_changed();
+}
+
+
 void temperature_reader__thread__start(void) {
     VT_INIT(temperature_reader__thread, temperature_reader__thread__ip);
     timer0__conf__set(TIMER0_CONF_PRESCALER_1024|TIMER0_CONF_WGM_NORMAL);
@@ -64,42 +92,31 @@ void temperature_reader__thread__run(void) {
     timer0__overflow__interrupt__pending__clear();
     for (;;) {
         __asm__ __volatile__( "temperature_reader__thread__conversion_request:");
-
-        onewire__transaction__setup((uint8_t) sizeof(command_convert), 0, command_convert, 0);
-        onewire__transaction__run();
+        temperature_reader__conversion_request();
         do {
-            VT_YIELD_WITH_MARK(temperature_reader__thread, temperature_reader__thread__ip, COMMAND_CONVERT);
+            VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
             onewire__thread__run();
         }
         while (onewire__thread__is_alive());
 
-
         __asm__ __volatile__( "temperature_reader__thread__conversion_await:");
-
-        onewire__thread__delay_counter = 46;
-        timer0__conf__set(TIMER0_CONF_PRESCALER_1024|TIMER0_CONF_WGM_NORMAL);
+        temperature_reader__conversion_await();
         for (;;) {
-            VT_YIELD_WITH_MARK(temperature_reader__thread, temperature_reader__thread__ip, SLEEP);
+            VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
             timer0__overflow__interrupt__pending__clear();
             if (--onewire__thread__delay_counter == 0) break;
         }
 
-
         __asm__ __volatile__( "temperature_reader__thread__conversion_read:");
-
-        onewire__transaction__setup(sizeof(command), sizeof(response), command, response);
-        onewire__transaction__run();
+        temperature_reader__conversion_read();
         do {
-            VT_YIELD_WITH_MARK(temperature_reader__thread, temperature_reader__thread__ip, COMMAND_READ);
+            VT_YIELD(temperature_reader__thread, temperature_reader__thread__ip);
             onewire__thread__run();
         }
         while (onewire__thread__is_alive());
 
-
         __asm__ __volatile__( "temperature_reader__thread__conversion_report:");
-
-        temperature_reader__reading = (response[0] | (response[1] << 8)) << 4;
-        temperature_reader__reading__on_changed();
+        temperature_reader__conversion_report();
     }
     VT_UNREACHEABLE_END(temperature_reader__thread);
 }
