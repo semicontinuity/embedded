@@ -2,7 +2,7 @@
 // Remote switch MODBUS server: counters and server callbacks.
 // =============================================================================
 
-#include "services/modbus_server.h"
+#include "services/comm/modbus_server.h"
 
 #include "cpu/avr/drivers/comm/modbus/buffer.h"
 #include "cpu/avr/drivers/comm/modbus/modbus_rtu_driver.h"
