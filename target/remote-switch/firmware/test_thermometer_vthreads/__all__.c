@@ -2,6 +2,7 @@
 #include "init.c"
 #include "main.c"
 
+#include "services/comm/onewire_client.c"
 #include "services/temperature_reader.c"
 
 #include "drivers/comm/onewire__t0t2.c"
